@@ -1,0 +1,5 @@
+Task: Split the C host into a library and its command-line front end
+- port/macos/host/halo_host.h: halo_host_run, halo_host_default_image_path
+- port/macos/cli/main.c: the thin main
+- tools/macos_build.py: macos_host_archive (llvm-ar --format=darwin) -> build/macos/libhalo_host.a; halo_host links main.c.o + the library
+- tests: test_macos_graph asserts the archive and link inputs (continuations joined)
