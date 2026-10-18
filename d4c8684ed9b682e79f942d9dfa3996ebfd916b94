@@ -1,0 +1,1 @@
+Task: System calls (with unit tests for the number and errno mapping). Files: port/macos/tests/host_syscall_test.c, tools/test_macos_vm.py (test_the_hosts_system_calls_natively). Implementation in 76bead7 (host_syscall.c). Also covered end to end by vm_runtime.c's files case (EEXIST, ENOENT, EAGAIN == 11, O_APPEND, F_GETFL).
