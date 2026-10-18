@@ -1,0 +1,1 @@
+Task: Write tools/test_macos_build.py (red). Files: tools/test_macos_build.py. Checked: nix shell nixpkgs#python3Packages.pytest nixpkgs#ninja -c pytest -q tools/test_macos_build.py -> 1 passed (Android stubs), 3 failed.
