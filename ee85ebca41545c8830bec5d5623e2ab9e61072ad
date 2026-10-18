@@ -1,0 +1,5 @@
+Task: UniFFI bindings from the Rust runtime to Swift
+- swift.rs: GuestMemoryView (with_ranges, page_size, is_mapped, host_address, read, write), running_guest_memory, GuestMemoryError
+- ffi.rs: the guest's memory in an Arc, registered as the running guest's
+- src/bin/uniffi-bindgen.rs; ninja rules macos_swift_bindings and macos_app_test
+- Tests: 7 cargo tests, 5 Swift tests, pytest graph check and a Swift test run
