@@ -1,0 +1,5 @@
+Phase 2 verification report (Nix flake and the macOS build)
+Automated: nix develop -c python -m pytest -q tools/test_macos_build.py tools/test_macos_spikes.py tools/test_android_asm_convert.py tools/harness -> macOS tests 7 passed + 2 xfailed, asm convert passed; tools/harness 449 failed (same on main: -m32 becomes armv4t on macOS, '-fzero-call-used-regs' unsupported). nix build .#host from the committed tree -> builds; result/bin/halo_host -> VM created, 224 imports.
+Unchanged graphs: ninja -t commands linux/android/android_apk identical to before Phase 2 (stand-in NDK).
+Manual: nix build .#host; ./result/bin/halo_host; nix develop -c sh -c 'python configure.py && ninja macos'.
+User confirmed: yes. Decision: run the harness's tests as arm64_32 guests in the VM host (task added to Phase 4).
