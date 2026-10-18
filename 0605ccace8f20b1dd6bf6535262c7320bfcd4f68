@@ -1,0 +1,1 @@
+Phase 1 verification. Automated: cargo test 51 passed; macOS pytest suites 40 passed, 1 skipped (lo0 aliases), 2 xfailed; Swift tests 10 passed. Manual (confirmed by the user 2026-10-19): the missing-maps dialog and Show the Folder; with maps, the app runs the game to the main menu headless and quits from the Dock.
