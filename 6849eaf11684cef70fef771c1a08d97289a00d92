@@ -1,0 +1,1 @@
+Task: Spike thread_pointer. Files: port/macos/spikes/thread_pointer.c. Result: overwritten. TPIDR_EL0 is 0x2006 at start; thread 0 loses its value at round 1.
