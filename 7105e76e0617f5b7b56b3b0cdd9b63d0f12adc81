@@ -1,0 +1,1 @@
+Task: Spike low_memory. Files: port/macos/spikes/low_memory.c. Result: refused. -pagezero_size,0x4000 -> SIGKILL (137) at exec, no log line, otool shows vmsize 0x4000. Default page-zero -> mmap hint placed at 0x105624000; mach_vm_allocate FIXED -> invalid address, also after mach_vm_deallocate.
