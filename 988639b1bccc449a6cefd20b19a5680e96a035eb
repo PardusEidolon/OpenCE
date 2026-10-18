@@ -1,0 +1,1 @@
+Task: Run main-thread imports on the main thread. host_main_thread.c queues MAIN_THREAD imports to the main dispatch queue; vCPU waits; shutdown fails requests with ECANCELED. Tests: host_main_thread_test.c (native), vm_sdl window_from_thread with HALO_HOST_MAIN_LOOP=1, dispatcher test. Limitation: SDL_GetError is per thread.
