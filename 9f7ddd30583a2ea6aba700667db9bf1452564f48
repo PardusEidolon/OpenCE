@@ -1,0 +1,20 @@
+Phase 5 verification report: A headless game, and the final build
+
+Automated tests (nix develop): python -m pytest -q tools/test_macos_spikes.py
+tools/test_macos_build.py tools/test_macos_vm.py tools/test_macos_host.py
+tools/harness tools/test_touch_menu.py tools/test_cache_file_formats.py
+tools/test_bmp_files.py tools/test_profile.py -> 678 passed, 8 skipped,
+2 xfailed, 3 failed (tools/test_profile.py: two sanitizer runs and the
+32-bit libc skip; the same on main on this Mac). cargo test: 44 passed;
+clippy -D warnings and fmt --check clean. After the last test commit:
+test_macos_host + test_macos_vm 19 passed, 1 skipped (join: no lo0 aliases).
+
+Final build: nix build .#host succeeded from the committed tree; the
+built halo_host carries com.apple.security.hypervisor, finds
+share/opence/halo_guest.elf and hosted bloodgulch headless, status 0.
+
+Manual verification: hosted bloodgulch headless with exit_after=30 and
+HALO_HOST_IMPORT_COUNTS; player state each second; exit report.
+Baseline: 503035 exits/s (host_syscall 248k/s, host_sdl_ticks 164k/s).
+
+User confirmed: Yes.
