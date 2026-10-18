@@ -1,0 +1,1 @@
+Task: Write tools/test_macos_host.py smoke test (red). Checked: python -m pytest tools/test_macos_host.py -> 1 failed (no 'guest image' line yet), 1 skipped (no assets/maps on this machine).
