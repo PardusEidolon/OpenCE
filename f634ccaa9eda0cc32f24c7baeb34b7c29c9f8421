@@ -1,0 +1,1 @@
+Task: Write tests for the ELF image checks (red). Files: port/macos/runtime/src/image.rs, src/lib.rs. Checked: cargo test -> 29 passed, 8 failed.
