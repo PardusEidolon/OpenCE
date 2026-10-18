@@ -1,0 +1,1 @@
+Task: Add the VM import stubs. Files: tools/android_imports.py (--svc, --host-names). Checked: pytest tools/test_macos_build.py -k stubs -> 2 passed; old vs new script on port/android/host_imports.list -> identical .s and host table; --svc on the real list: 63 imports, host_syscall index 0.
