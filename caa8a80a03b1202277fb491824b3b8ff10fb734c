@@ -1,0 +1,1 @@
+Task: Write tests for the guest's address-space plan (red). Files: port/macos/runtime/src/plan.rs, src/lib.rs. Layout: guard <0x200000; runtime 0x200000-0x400000; pools 0-6 at 0x10000000..0x80000000, 7-11 at 0x90000000..0xe0000000 (256 MB each); window 0x80000000-0x88000000; image 0x88000000-0x8c000000. Checked: cargo test -> 9 passed, 9 failed.
