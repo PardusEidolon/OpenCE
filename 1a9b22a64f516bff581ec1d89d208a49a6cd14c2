@@ -1,0 +1,1 @@
+Task: Implement GuestPtr and the guest memory. Files: port/macos/runtime/src/memory.rs. Checked: nix develop -c cargo test -> 9 passed; clippy --all-targets -D warnings clean; cargo fmt; cargo check --target wasm32-unknown-unknown ok.
