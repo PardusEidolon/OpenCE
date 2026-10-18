@@ -1,0 +1,1 @@
+Phase 5 task 3: exit counts per second (HALO_HOST_IMPORT_COUNTS). Baseline, hosted bloodgulch, null renderer, 30 s: 503035 exits/s; host_syscall 248175/s, host_sdl_ticks 164133/s, host_errno 32401/s, socket_last_error 12124/s, socket_recv 9096/s.
