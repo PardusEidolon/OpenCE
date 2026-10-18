@@ -1,0 +1,4 @@
+Phase 3 verification report (The Rust runtime crate)
+Automated: in nix develop, port/macos/runtime: cargo test -> 44 passed; cargo clippy --all-targets -D warnings -> 0 diagnostics; cargo llvm-cov --summary-only -> 97.70% lines (ffi 94.84, image 98.22, memory 98.53, page_tables 99.24, plan 97.89, platform 95.35); python -m pytest tools/test_macos_build.py tools/test_macos_spikes.py -> 8 passed, 2 xfailed; nix build .#host from the committed tree -> builds; result/bin/halo_host -> VM created, 224 imports.
+Manual: cargo test in the dev shell; read build/macos/runtime/opence_runtime.h (functions and types only).
+User confirmed: yes.
