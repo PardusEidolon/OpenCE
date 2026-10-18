@@ -1,0 +1,6 @@
+Task: Build OpenCE.app with Nix (nix build .#app)
+- port/macos/app: Package.swift (tools 6.2, macOS 26), CHaloHost system module over halo_host.h, HaloHost.swift (the guest's main on an 8 MB thread), main.swift (NSApplication, alerts on failure)
+- tools/macos_app.py: Info.plist (org.opence.OpenCE), bundle layout, /usr/bin/codesign with the entitlement, staged then renamed
+- tools/macos_build.py: macos_app rule (env -u SDKROOT/DEVELOPER_DIR..., SwiftPM caches in build/macos/swift)
+- flake.nix: packages.app; tech-stack.md: SwiftPM under Xcode, impure
+- Decision: nixpkgs swift 6.2.4 fails to link with SDK 26.5
