@@ -1,0 +1,1 @@
+Task: The data root, and a dialog for missing maps. DataRoot.resolve (HALO_DATA_ROOT, else Application Support/OpenCE) and missingMapsMessage (ui.map required) in OpenCEShell; main.swift sets HALO_DATA_ROOT and shows an NSAlert with Show the Folder / Quit.
