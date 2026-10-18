@@ -1,0 +1,1 @@
+Task: Write docs/macos_host.md and update tech-stack.md. Records each spike's commands and output, options A (Hypervisor.framework) and B (rewritten guest code), recommends A. Approach pending the user's decision.
