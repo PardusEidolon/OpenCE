@@ -1,0 +1,1 @@
+Task: Write tests for GuestPtr(u32) and the guest memory (red). Files: port/macos/runtime/{Cargo.toml,Cargo.lock,.cargo/config.toml,src/lib.rs,src/platform.rs,src/memory.rs}. Deps: thiserror 2, libc 0.2 (unix). Target dir build/macos/cargo. Checked: nix develop -c cargo test -> 0 passed, 9 failed.
