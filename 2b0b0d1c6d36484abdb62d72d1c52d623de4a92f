@@ -1,0 +1,4 @@
+Phase 4 verification report (The VM host)
+Automated (nix develop): port/macos/runtime cargo test -> 44 passed; python -m pytest tools/test_macos_vm.py tools/test_macos_host.py tools/test_macos_build.py tools/test_macos_spikes.py tools/harness -> 481 passed, 1 skipped (no assets/maps), 2 xfailed; nix build .#host from the committed tree -> builds; result/bin/halo_host (its image from ../share/opence), private HOME -> guest start-up to 'no valid map directory exists', exit 0, nothing written to the home folder.
+Manual: nix build .#host and a headless run in a scratch folder; the harness on the Mac (452 passed).
+User confirmed: yes. Game data: the user will add assets/maps for Phase 5.
