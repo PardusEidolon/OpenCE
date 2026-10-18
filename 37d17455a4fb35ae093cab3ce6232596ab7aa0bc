@@ -1,0 +1,1 @@
+Phase 2 coverage: added test_host_creates_its_vm and test_guest_image_is_the_vm_guest for port/macos/host/host_main.c and the built image (host_main.c had no test). Checked: 7 passed, 2 xfailed.
