@@ -1,0 +1,4 @@
+Phase 1 verification report (Feasibility spike on macOS)
+Automated: nix shell nixpkgs#python3Packages.pytest -c pytest -q -rxX tools/test_macos_spikes.py -> 1 passed (hypervisor), 2 xfailed (low_memory, thread_pointer; strict).
+Manual: run port/macos/spikes/hypervisor.c signed with hypervisor.entitlements -> x0 = 100000, ~1000 ns per round trip, PASS; read docs/macos_host.md.
+User confirmed: yes. Decision: approach A, the guest in a VM under Hypervisor.framework; Phases 3-5 to be rewritten around it.
