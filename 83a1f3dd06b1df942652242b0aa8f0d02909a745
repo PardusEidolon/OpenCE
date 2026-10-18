@@ -1,0 +1,4 @@
+Task: Write tools/test_macos_spikes.py (red)
+Changes: new tools/test_macos_spikes.py; conductor/tracks.md marks the track in progress.
+Why: TDD for Phase 1; the spikes settle the macOS host's three risks.
+Checked: nix shell nixpkgs#python3Packages.pytest -c pytest -q tools/test_macos_spikes.py -> 3 failed (spikes missing).
