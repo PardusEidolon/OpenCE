@@ -1,0 +1,1 @@
+Phase 5 tasks 1-2: hosted bloodgulch network game headless in the VM. Fixed Linux/Darwin sockaddr layouts in posix_net.c (in: bind/connect/sendto when byte 1 is 0; out: accept/recvfrom/getsockname/getpeername) and debug.exit_after without a window. Test: tools/test_macos_host.py::test_a_hosted_network_game_plays_headless.
