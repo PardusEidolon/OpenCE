@@ -1,0 +1,1 @@
+Task: Add flake.nix and flake.lock. Files: flake.nix, flake.lock, rust-toolchain.toml. Versions: python 3.14.7, ninja 1.13.2, rustc 1.98.1, cargo-llvm-cov 0.9.0, LLVM/LLD/clang 22.1.8 (guest), host cc clang-wrapper 21.1.8, SDL3 3.4.16, apple-sdk 26.5, sigtool 0.1.3. Checked: hypervisor spike via nix cc + sigtool codesign --entitlements -> PASS, 1037 ns per exit.
