@@ -1,0 +1,1 @@
+Task: Sound with AVAudioEngine. host_audio.c gives callback streams an AVAudioEngine each (OpenCEAudio/GameAudio.swift) fed from an SPSC float ring; a feeder thread keeps max(30 ms, 1536 frames) queued. Tests: host_audio_test.c (native), GameAudioTests (offline), dispatcher mapping; vm_sdl audio unchanged.
