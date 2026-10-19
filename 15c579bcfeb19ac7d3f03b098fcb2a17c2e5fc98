@@ -1,0 +1,1 @@
+Task: The Swift Metal backend (phase 3). MetalRenderer in Sources/OpenCERender, RenderBackend in the app; 11 offscreen pixel tests in MetalRendererTests.swift; docs/macos_host.md 'The renderer'. All gates green.
