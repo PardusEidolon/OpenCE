@@ -1,0 +1,4 @@
+Task: Offscreen captures and golden-frame checks
+Summary: HALO_HOST_CAPTURE draws the window off the screen and writes one frame to a PNG; HALO_HOST_GUEST_IMAGE runs another guest program in the app; tools/frame_compare.py compares with a tolerance; tools/test_macos_frames.py checks vm_render's scene against port/macos/tests/frames/scene.png.
+Files: FrameCapture.swift (new), RenderWindow.swift, MetalRenderer.swift, RenderBackend.swift, main.swift, vm_render.c, frame_compare.py, test_frame_compare.py, test_macos_frames.py, test_macos_render.py, docs/macos_host.md
+Why: golden frames catch renderer regressions that read-backs of single pixels miss.
