@@ -1,0 +1,4 @@
+Phase 2 verification: Window, native input and audio.
+Automated: nix develop -c sh -c 'python -m pytest -q tools/test_macos_spikes.py tools/test_macos_build.py tools/test_macos_vm.py tools/test_macos_host.py tools/test_macos_app.py && cargo test -q --manifest-path port/macos/runtime/Cargo.toml && ninja macos_app_test' -> 43 passed, 1 skipped (lo0 aliases), 2 xfailed (spikes); cargo 51 passed; Swift 24 passed.
+Manual (by the user): nix build .#app; open result/OpenCE.app; window opens Retina-sharp, live resize, fullscreen; click captures the pointer and Cmd-Tab releases it; keys and mouse reach the menus (menu sounds); menu music plays and survives an output-device change.
+User confirmed: Yes, all good.
