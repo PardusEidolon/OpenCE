@@ -1,0 +1,1 @@
+Task: Leave gamepads out (keyboard and mouse only). GameController support was written, then dropped at the user's request. host_input_poll_event skips SDL's events 0x600-0x6ff when the app has windows, so the guest opens no pad. The command-line host keeps SDL's pads. Tests: host_input_test, 38 pytest, 21 Swift tests.
