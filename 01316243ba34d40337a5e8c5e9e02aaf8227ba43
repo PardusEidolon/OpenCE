@@ -1,0 +1,5 @@
+Task: The window and its Metal layer
+Summary: The app's AppKit window with a CAMetalLayer replaces SDL's window. It is installed through halo_host_set_window_backend; the CLI host still uses SDL.
+Files: port/macos/host/host_window.c, halo_host.h, host.h, tools/macos_dispatch.py, app Sources/OpenCEWindow, OpenCE/WindowBackend.swift, MainMenu.swift, OpenCEShell/WindowLayout.swift, tests, docs/macos_host.md
+Why: The guest needs a native window before the Metal renderer can draw in it.
+Checked: 31 pytest, 51 cargo and 16 Swift tests pass; the window check was confirmed by hand.
