@@ -1,0 +1,6 @@
+Task: Keyboard and mouse from NSEvent
+- host_input.c: AppKit events to SDL events (scancode table, modifier device bits, coalesced motion, wheel, focus), queued before SDL's
+- Relative mouse capture through the app (SystemPointer), released on focus loss
+- Stand-in GL context for the app's windows so the guest's event loop runs (create_context on the main thread)
+- macos_app rule removes SwiftPM's product so host-library changes relink
+Verified: native tests, 38 pytest, Swift tests, traced app run with menu sounds on keys
