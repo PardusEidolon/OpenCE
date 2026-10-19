@@ -1,0 +1,4 @@
+Task: Resources and Xbox texture formats
+- xbox_textures.c (HALO_METAL): metal_upload, direct BC1-3 or BGRA8 conversion, channel orders
+- d3d8_metal.c: ring, staging, mirror (4 MB segments, volatile pages), stream buffer, render targets
+- tests: tools/test_macos_textures.py with vm_textures.c; 160 readbacks, BC within 2
