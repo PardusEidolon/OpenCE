@@ -1,0 +1,1 @@
+Task: The benchmark. Crowd scene paced by game ticks; Jolt on 3 workers + caller with deterministic simulation. Results: step p50 0.45 ms, p99 2.82 ms, max 2.96 ms; 30 ragdolls, 118 casing bodies. Frame p99 29 ms is the stock renderer's (25.4 ms with both settings off vs 25.9 ms on). Tests: benchmark 4 passed; physics+harness 735 passed; golden frames.
