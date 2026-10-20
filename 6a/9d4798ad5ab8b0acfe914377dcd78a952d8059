@@ -1,0 +1,3 @@
+Phase 1 (Jolt in the host) checkpoint.
+Automated: python -m pytest -q tools/test_macos_physics.py, 10 passed; ninja macos macos_app built and signed.
+Manual verification deferred to the user, who asked to verify at the end of the track.
