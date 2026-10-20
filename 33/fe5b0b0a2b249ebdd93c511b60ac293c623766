@@ -1,0 +1,1 @@
+High-res HUD and text: text_hires atlas through the ring; motion sensor feedback copy; fixed seed under frame_clock; 1280x960 golden frames main_menu_native and hud_native. Gates: 518 passed + 5 frame tests.
