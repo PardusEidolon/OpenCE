@@ -1,0 +1,3 @@
+Task: Breakable joints
+Summary: explosions (grenade/HE/mounted categories) tear ragdoll joints past per-species thresholds, weighed by closeness and a per-part chance; game.dismemberment setting.
+Tests: tools/harness (624 passed), tools/test_ragdoll_profiles.py, tools/test_physics_settings.py; ninja macos macos_app.
