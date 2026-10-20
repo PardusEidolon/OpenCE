@@ -1,0 +1,9 @@
+Task: Golden frames of dismemberment
+Summary: Approved three dismemberment frames (flying, at rest, bullet kill
+whole) and re-approved the ragdoll frames; stumps now come from the tick's
+node matrices, not interpolation's.
+Files: ragdolls.c, network_test.c, port_config.c, README.md,
+tools/test_macos_frames.py, tools/harness/tests/ragdolls.c and
+test_ragdolls.py, port/macos/tests/frames/*.png.
+Why: golden frames show torn bodies are drawn piece by piece; the at-rest
+shove scene ends two ways by load timing, so both endings are approved.
