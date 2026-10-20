@@ -1,0 +1,5 @@
+Task: Golden frames of ragdolls
+Tests: test_macos_frames.py -k "ragdolls or bloodgulch_draws_as" 5 passed;
+harness 568; test_ragdoll_physics 5; test_ragdoll_profiles 10;
+test_macos_physics 19.
+Collision steps raised from 2 to 4 a tick to stop fast vehicles tunnelling.
