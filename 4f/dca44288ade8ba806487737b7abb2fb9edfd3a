@@ -1,0 +1,4 @@
+Task: Vendor Jolt Physics
+Changes: port/third_party/jolt (Jolt/, LICENSE copied unchanged from v5.6.0, README.md ours); tools/macos_build.py (macos_host_cxx rule, Jolt objects in libhalo_host.a, -lc++); tools/test_macos_physics.py (README and tree checksum).
+Why: Jolt is the ragdolls' and debris' physics, in the host, deterministic.
+Checked: nix develop -c python -m pytest -q tools/test_macos_physics.py; ninja macos; ninja macos_app.
