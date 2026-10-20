@@ -1,0 +1,5 @@
+Task: The shared region's format
+Files: port/macos/include/host_physics.h, port/macos/host/physics/physics_bridge.{c,h},
+port/macos/tests/host_physics_bridge_test.c, tools/test_macos_physics.py, tools/macos_build.py,
+port/macos/host/physics/physics.cpp (temp allocator sized by bodies).
+Why: one import a tick, everything copied then checked; ids chosen by the guest.
