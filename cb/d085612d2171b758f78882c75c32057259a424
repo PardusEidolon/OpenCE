@@ -1,0 +1,3 @@
+Task: The C wrapper
+Files: port/macos/host/physics/physics.{h,cpp}, port/macos/tests/host_physics_test.c, tools/test_macos_physics.py, tools/macos_build.py
+Tests: python -m pytest -q tools/test_macos_physics.py (10 passed); ninja macos macos_app built.
