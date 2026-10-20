@@ -1,0 +1,1 @@
+Tested with tools/harness/tests/test_ragdoll_bodies.py (26 passed) and tools/test_ragdoll_profiles.py against the stock maps (10 passed).
