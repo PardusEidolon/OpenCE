@@ -1,0 +1,3 @@
+Task: Golden frames of debris
+Tests: tools/test_macos_frames.py -k debris (3 passed after approval), tools/harness (684 passed), tools/test_ragdoll_physics.py (6 passed), port/macos/tests physics suites (26 passed).
+The casings are 16 mm across: in the frames they are specks, and the log's counts are the stronger check. Which casings are left, and how many, varies from run to run with the game's random lifetimes; the test checks that every one left is at rest or a body still settling.
