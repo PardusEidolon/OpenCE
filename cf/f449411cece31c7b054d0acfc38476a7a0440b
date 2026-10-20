@@ -1,0 +1,1 @@
+Task: A network game. Hosted crowd test (127.0.0.1, headless) passed; network version unchanged vs main. The two-copy tests (plain and with both settings) skipped: no lo0 aliases for 127.0.0.2/.3; left for the user to run.
