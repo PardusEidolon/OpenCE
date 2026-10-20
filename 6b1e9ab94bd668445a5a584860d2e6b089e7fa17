@@ -1,0 +1,1 @@
+Main menu golden frame: debug.frame_clock makes captures deterministic (two runs identical); main_menu.png approved after viewing; 541 macOS/harness tests pass.
