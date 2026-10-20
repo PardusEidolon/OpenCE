@@ -1,0 +1,1 @@
+Optimise until the target is met: stage-2 write tracking (c0ff161a) took bloodgulch at 4K from 80 to 13 ms; WRITE_BUFFER (f4d0aa74) took it to p50 4.17 / p99 4.78 ms, GPU 0.53 ms, 79 exits and 3 encoders a frame. Golden frames, XCTests, cargo and host tests green.
