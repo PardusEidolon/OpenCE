@@ -1,0 +1,1 @@
+Automated: harness 539 passed, test_macos_physics 16 passed, ninja macos. The motors following the animation were checked natively (host_physics_test); in-game look deferred to the user.
