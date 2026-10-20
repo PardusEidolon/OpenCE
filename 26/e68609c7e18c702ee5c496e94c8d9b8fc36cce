@@ -1,0 +1,1 @@
+Task: debug.physics_draw and documentation. Wireframes of ragdoll parts and debris from the host's last poses via render_debug(); harness tests incl. negative controls pass; docs/macos_host.md Physics section added.
