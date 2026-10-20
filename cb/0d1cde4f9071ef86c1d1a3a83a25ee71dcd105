@@ -1,0 +1,3 @@
+Task: host_physics_step and the level geometry
+Files: host_physics.c, physics_jolt.c/.h, imports, scenario.c/game.c hooks, vm_physics test, harness physics_level test
+Tests: test_macos_physics*.py, test_macos_render.py, tools/harness: 498 passed
