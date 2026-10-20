@@ -1,0 +1,4 @@
+Phase 6: Performance, network and documentation.
+Automated: tools/test_macos_benchmark.py 4 passed (crowd at 4K: step p50 0.45 ms, p99 2.82 ms, max 2.96 ms; frame p99 29 ms, the stock renderer's: 25.4 ms with both settings off); tools/test_macos_host.py 5 passed, 2 two-copy tests skipped (no lo0 aliases); test_ragdoll_physics.py, test_macos_physics.py and the harness 735 passed; test_physics_settings and the physics_draw tests 99 passed; test_macos_frames.py 17 passed, with the known HUD failure and ragdoll_shoved_at_rest once at a third Warthog angle (passed on rerun).
+Not met: the 8.33 ms frame p99 and the 1 ms peak physics step.
+Manual verification deferred to the user.
