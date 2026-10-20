@@ -1,0 +1,1 @@
+Phase 6 task 1: guest-side SDL_GetTicks (CNTVCT_EL0), errno in w1 from hostposix stubs, memory watch in the guest. Exits 503k/s -> ~24k/s on hosted bloodgulch. Stub frame after svc keeps stack args at the caller's sp.
