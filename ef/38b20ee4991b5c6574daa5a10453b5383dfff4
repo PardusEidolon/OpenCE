@@ -1,0 +1,1 @@
+Phase 6 checkpoint. Automated: test_macos_frames 9 passed; test_macos_benchmark 2 passed (4K bloodgulch p50 4.17 ms, p99 4.78 ms, target 8.33); macos_app_test 41 passed; cargo test 90 passed; build/vm/host/render 42 passed 1 skipped; spikes/post/frame_compare/harness 484 passed 2 xfailed. Manual verification skipped at the user's instruction (offscreen runs only).
