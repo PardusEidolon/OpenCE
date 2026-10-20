@@ -1,0 +1,1 @@
+Task: Render states, draws and render targets. d3d8_metal_device.c implements D3D8 into the ring; tests: tools/harness/tests/test_metal_state.py (13), tools/test_macos_draw.py (3); all macOS suites green.
