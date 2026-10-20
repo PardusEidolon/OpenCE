@@ -1,0 +1,15 @@
+Task: Forces and collisions
+
+- The push (ragdolls.c) is damage.c's: direction plus 0.45 up, normalised,
+  times share, times instantaneous acceleration, times acceleration scale,
+  times mass, on the nearest part. The share is 0.5 for the killing hit and
+  1.0 on a corpse.
+- Measured on Jolt against an unpushed twin. The centre of mass is weighted
+  by Jolt's stabilised masses (RagdollSettings::Stabilize clamps parent to
+  child ratios to 0.8..1.2 and keeps the total).
+  - marine: 1.819 against 1.824 expected; elite 1.091/1.094; grunt
+    1.637/1.641; hunter 0.909/0.912.
+- Rest: 18 of 19 bodies sleep in 8 s. flood_captain (a cinematic body, one
+  3x4x4 unit box) creeps under 0.01 units/s.
+- Warthog: the hull is 0.96 x 0.45 x 0.29 half extents. It shoved the
+  marine 4.07 units and was inside him on no tick.
