@@ -1,0 +1,3 @@
+Task: Limbs as bodies of their own
+Summary: native test that torn limbs fly clear and all pieces rest within limits, deterministically; ragdoll_part_piece for each part's piece root from the host's mask.
+Tests: tools/test_macos_physics.py (20 passed), tools/harness/tests/test_ragdolls.py (100 passed); ninja macos macos_app.
