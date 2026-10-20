@@ -1,0 +1,1 @@
+Phase 4: Dismemberment. Automated: ragdoll harness (breakable joints, tearing by blasts, pieces drawn and bleeding), ragdoll and dismemberment goldens 7 (ragdoll_falling, ragdoll_shoved, ragdoll_shoved_at_rest with its other ending, dismemberment_flying, dismemberment_at_rest, dismemberment_bullet_whole). Manual verification deferred to the user.
