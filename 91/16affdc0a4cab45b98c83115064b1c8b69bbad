@@ -1,0 +1,7 @@
+Task: Particles as rigid bodies
+Tests: harness test_physics_debris 44 (17 cases, 24 negative controls);
+harness ragdolls+debris 161; physics vm/native/settings 34; ragdoll physics
+and profiles 16.
+Profiles: bloodgulch casings stones 2.4/0.1/0.35, Warthog old stones
+2.4/0.2/0.5, smoke 0.0004-0.00115.
+Menu XML line edited to match port_settings.py (PC tags unavailable).
