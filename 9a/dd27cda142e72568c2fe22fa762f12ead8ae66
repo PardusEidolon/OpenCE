@@ -1,0 +1,3 @@
+Task: The settings
+Files: port_config.c, README settings table, port_settings.py, ce/ video_settings + new physics screen, menus.json, tools/test_physics_settings.py
+Tests: test_physics_settings.py 10 passed; test_linux_port -k "menu or config" 3 passed; screen captured offscreen
