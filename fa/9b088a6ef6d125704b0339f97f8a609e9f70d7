@@ -1,0 +1,2 @@
+Task: Garbage objects
+Tests: harness test_physics_debris 58 (21 cases, 33 negative controls, 4 source checks).
