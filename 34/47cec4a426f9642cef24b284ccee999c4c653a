@@ -1,0 +1,1 @@
+Post-processing, incl. SMAA: FXAA and SMAA in MSL (d3d8_metal_post.c), compile test (test_macos_post.py), golden frames bloodgulch_fxaa/smaa approved after viewing. ssaa2x/msaa off on Metal.
