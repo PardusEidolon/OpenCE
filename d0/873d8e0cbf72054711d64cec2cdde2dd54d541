@@ -1,0 +1,1 @@
+Phase 2: The bridge to the guest. Automated: test_macos_physics*.py, harness physics_level, test_physics_settings.py, render tests pass. Manual verification deferred to the user.
