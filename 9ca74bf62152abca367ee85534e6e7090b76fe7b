@@ -1,0 +1,1 @@
+Bloodgulch draws: debug.network_test_camera, the frame clock's real-time steps while no frame is shown, test_bloodgulch_draws_as_approved with a 2% tolerance for the clouds and trees. Nothing in the frame was drawn wrong.
