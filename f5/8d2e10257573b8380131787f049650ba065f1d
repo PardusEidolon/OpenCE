@@ -1,0 +1,1 @@
+Phase 0 checkpoint. Automated: cargo test --workspace (34), clippy -D warnings, fmt, tools/test_engine_build.py (5: app layout, --version, codesign --verify, XCTests, cargo deny). Manual verification deferred to the one check at the end of the track, as the user asked.
