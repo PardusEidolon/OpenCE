@@ -1,0 +1,1 @@
+Host plays inputs by client tick; clients predict and correct position, velocity and facing; UDP and delayed, lossy test network checked on Blood Gulch
