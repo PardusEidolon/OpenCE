@@ -1,0 +1,1 @@
+Task: The registry of commands and variables (dev_tooling_20261021). opence_dev crate (registry, typed args/vars, bind/exec/help/set/reset/vars, completion) and opence_script Runtime::evaluate_text (console parser and typed compiler). Tests: dev 20, script console 5; clippy and fmt clean; coverage dev 95%, script 84%. Swift FFI deferred to 'The first commands'.
