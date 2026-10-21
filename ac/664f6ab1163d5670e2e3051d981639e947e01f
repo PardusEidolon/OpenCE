@@ -1,0 +1,1 @@
+Workspace of seven crates, the Swift package, tools/engine_build.py and the flake's engine package; 4 pytest checks pass, nix build .#engine builds.
