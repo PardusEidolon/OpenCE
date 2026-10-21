@@ -1,0 +1,1 @@
+Task: Record the new engine in the tech stack and the product guide. Changed conductor/tech-stack.md (new section: the engine/ workspace, crates, rkyv .ocpak, the UniFFI and cbindgen contract, MetalFX, SwiftUI, determinism, cargo deny) and conductor/product.md (vision, core value, architecture). Why: workflow principle 2. Checked: read back.
