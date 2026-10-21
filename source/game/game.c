@@ -388,6 +388,9 @@ void game_tick(
 		profile_scope(game_tick_hs_section, hs_update();)
 	profile_scope(game_tick_recorded_animations_section, recorded_animations_update();)
 	profile_scope(game_tick_objects_section, objects_update();)
+	/* port: the dead bipeds' ragdolls follow their death animations, then
+	fall (port/linux/game/physics_jolt.c) */
+	physics_jolt_update(seconds_per_tick);
 	profile_scope(game_tick_players_after_section, players_update_after_game();)
 	profile_scope(game_tick_hud_section, hud_update();)
 	profile_scope(game_tick_player_effect_section, player_effect_update();)
@@ -937,6 +940,8 @@ void game_dispose_from_old_map(
 	game_allegiance_dispose_from_old_map();
 	update_server_delete();
 	game_engine_dispose_from_old_map();
+	/* port: the host's ragdolls, debris and level go with the map (port/linux/game/physics_jolt.c) */
+	physics_jolt_dispose_from_old_map();
 	scenario_dispose_from_old_map();
 	game_time_dispose_from_old_map();
 	ui_widgets_close_all();

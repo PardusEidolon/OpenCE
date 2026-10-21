@@ -47,6 +47,7 @@ SMAA_ASSETS = Path("port/third_party/smaa")
 SMAA_FILES = (("SMAA.hlsl", "xgpu_smaa_shader"), ("area_tex.zlib", "xgpu_smaa_area_texture"),
               ("search_tex.zlib", "xgpu_smaa_search_texture"))
 # the desktop windows' icon (tools/app_icon.py; port/linux/src/sdl_platform.c)
+RAGDOLL_OVERRIDES = Path("port/assets/ragdolls/ragdolls.txt")
 WINDOW_ICON = Path("port/assets/icon/opence-icon-256.png")
 PNG_SIGNATURE = b"\x89PNG\r\n\x1a\n"
 
@@ -90,6 +91,7 @@ def hud_asset_inputs() -> List[Path]:
     return [*inputs, *(folder / f"{asset['name']}.png" for folder, asset, _ in textures()),
             *(FONT_ASSETS / name for name in font_files()), *(MENU_ASSETS / name for name in menu_files()),
             *(SMAA_ASSETS / name for name, _ in smaa_files()),
+            *([RAGDOLL_OVERRIDES] if (ROOT / RAGDOLL_OVERRIDES).is_file() else []),
             *([WINDOW_ICON] if (ROOT / WINDOW_ICON).is_file() else [])]
 
 
@@ -223,10 +225,19 @@ def main() -> None:
     lines.append("};")
     lines.append(f"const unsigned int menu_files_embedded_count = {len(menus)};")
     lines.append("")
+    # the ragdolls' overrides (port/linux/game/ragdoll_bodies.c), text of
+    # size 0 where the checkout has none
+    data = (ROOT / RAGDOLL_OVERRIDES).read_bytes() if (ROOT / RAGDOLL_OVERRIDES).is_file() else b""
+    lines.append("const unsigned int ragdoll_overrides_embedded[] = {")
+    lines.extend(words(data) if data else ["\t0,"])
+    lines.append("};")
+    lines.append(f"const unsigned long ragdoll_overrides_embedded_size = {len(data)};")
+    lines.append("")
     # SMAA's shader, as text a GLSL compiler takes (ASCII, ending in a NUL),
     # and its lookup textures (xgpu_post.c); each of size 0 that the
-    # checkout does not have. The OpenGL ES renderer has no SMAA.
-    lines.append("#ifndef HALO_GLES")
+    # checkout does not have. The OpenGL ES renderer has no SMAA; the macOS
+    # app's Metal one (port/macos/guest/d3d8_metal_post.c) has.
+    lines.append("#if !defined(HALO_GLES) || defined(HALO_METAL)")
     present = dict(smaa_files())
     for name, symbol in SMAA_FILES:
         data = (ROOT / SMAA_ASSETS / name).read_bytes() if name in present else b""
