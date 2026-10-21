@@ -1,0 +1,1 @@
+UniFFI Engine object, #[repr(C)] snapshot in a lock-free triple buffer (not double: the writer must never fill the slot being read), cbindgen header, Swift SnapshotReader; 13 cargo tests, 3 XCTests.
