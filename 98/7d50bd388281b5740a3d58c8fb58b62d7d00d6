@@ -1,0 +1,1 @@
+Fixed 60 Hz clock (alpha kept below 1), input record file, FNV-1a world hash, single-threaded schedule in SimSet order, free camera; FFI advance/set_input; clippy bans std transcendental floats and mul_add. A 3600-tick replay hash is pinned (0xa42649864ed8b740).
