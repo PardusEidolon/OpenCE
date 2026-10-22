@@ -1,0 +1,1 @@
+The outputs: directional lightmap pages, an ambient-cube probe grid and reflection probes baked on the GPU, kept in a keyed cache file, and drawn in place of the stock lightmaps when done.
