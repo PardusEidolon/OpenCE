@@ -1,0 +1,1 @@
+Every shader class: transparent generic, glass, meter, plasma and water read, packed and drawn (dual-source tint and add). Gaps: plasma 3D noise, meter value, generic combiners, water ripples.
