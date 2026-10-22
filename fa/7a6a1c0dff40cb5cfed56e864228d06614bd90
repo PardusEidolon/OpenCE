@@ -1,0 +1,1 @@
+Screen-space effects: GTAO, contact shadows, SSR in ScreenPass.swift/screen.metal; shell switches render.*; tests ScreenTests + devtools; a30 goldens re-approved (objects' occlusion).
