@@ -1,0 +1,1 @@
+Environment shaders: bump, self-illumination (with plasma band), specular (Toksvig), cube reflection, micro detail, scrolling; periodic functions ported; mip bias for the temporal scaler. Verified with cargo/Swift tests and headless frames of bloodgulch, a10, c40, b40.
