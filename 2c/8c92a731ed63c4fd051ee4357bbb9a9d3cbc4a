@@ -1,0 +1,1 @@
+Dynamic lights: clustered lights (lights.rs, LightPass.swift, level.metal dynamic_light), gels, 4 cube shadows, flashlight on Q. Tests: cargo, 109 app tests incl. LightTests.
