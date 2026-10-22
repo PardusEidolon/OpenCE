@@ -1,0 +1,1 @@
+Phase 3 (Dynamic lighting): sun shadows, dynamic lights, screen-space effects, the camera. Automated: cargo test, clippy, fmt, Swift suite with goldens. Manual verification deferred to the end of the run.
