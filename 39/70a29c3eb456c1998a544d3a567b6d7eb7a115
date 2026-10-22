@@ -1,0 +1,1 @@
+Sun shadows: cascaded maps (4 x 2048, depth32), level map and combined map; objects lit by the combined map, level surfaces subtract only object shadows. Tests: render_shadow (8), BakeTests shadow test, full suite 108/108.
