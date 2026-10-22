@@ -1,0 +1,1 @@
+Phase 1 checkpoint: flat maps found, material model, environment, model and every transparent shader class drawn. Automated: cargo tests, 96 Swift tests, goldens re-approved (Blood Gulch emblem and sky). Manual verification deferred to the end of the run.
