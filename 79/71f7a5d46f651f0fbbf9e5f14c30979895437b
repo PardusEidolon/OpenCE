@@ -1,0 +1,1 @@
+Test driver and profiling marks: dev/script.rs (the runner), ffi/script.rs (headless, socket, window), dev/profile.rs (scopes, stat frame, Chrome trace), Swift profiled(); the CLI watch race fixed. Tests: ffi devtools/profile, cli, Swift ProfilingTests.
