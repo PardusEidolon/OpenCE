@@ -1,0 +1,1 @@
+Task: The stations. Added devmap ramps/slope solids and STATIONS, sim crates, ffi stations.rs and the station command. Tests: ffi/tests/stations.rs, sim/tests/crates.rs, devmap unit tests. Finding: plasma pistol fires no shots.
