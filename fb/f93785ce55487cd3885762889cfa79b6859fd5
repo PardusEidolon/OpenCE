@@ -1,0 +1,1 @@
+Task: Find why some maps are drawn flat. Six BSPs without lightmap groups now lit from normals (no_lightmap approximation); b30 metal -> Environment shaders; sotr etc -> Every shader class.
