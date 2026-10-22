@@ -1,0 +1,1 @@
+Objects lit by the world: probe ambient cube + sun x probe visibility + nearest reflection probe; BAKE_VERSION 4 carries the sun; fallback is even light. Golden frames renewed (HUD, a30), old ones kept as *.before-object-light.png.
