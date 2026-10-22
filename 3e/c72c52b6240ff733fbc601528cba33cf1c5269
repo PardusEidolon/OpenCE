@@ -1,0 +1,1 @@
+The documentation: docs/engine.md's developer tools section; the shell's frame command and an always-present frame servant in the window. Tests: control.rs the_shells_frame_is_queued_for_the_app.
