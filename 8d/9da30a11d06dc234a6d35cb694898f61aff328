@@ -1,0 +1,1 @@
+Dynamic decals: impacts and detonations lay their effects' decals with lifetime, fade, chains and recycling at 2048; decals on objects follow them; snapshot decals drawn by surface kind. Tests: opence_ffi dynamic_decals/decals/snapshot, Swift DecalTests/SnapshotTests. Coverage dynamic_decals.rs 93%.
