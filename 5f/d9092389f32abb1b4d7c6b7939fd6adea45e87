@@ -1,0 +1,1 @@
+Effects: sim/effects.rs (events, parts, attachments, triggers), ffi/effects.rs (object markers, snapshot), lights and decals consume fired parts. Gaps: damage ignores delays; air and violent assumed; attachments not gated by primary_scale; particle/sound parts fired but not consumed yet; weapon effects lay no decals; part velocity ignores origin velocity.
