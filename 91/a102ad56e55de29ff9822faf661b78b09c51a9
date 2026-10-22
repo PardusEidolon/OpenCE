@@ -1,0 +1,1 @@
+Tasks 'The first commands' and 'The headless mode and the control socket': the engine runs shell lines through the registry with the world as context, with completion and variables for Swift, a log book, and a JSON-lines control socket; the app runs headless. Workspace tests pass; clippy clean.
