@@ -1,0 +1,1 @@
+Task 'The terminal': LineEditor, ShellHistory, Scrollback, ShellOverlay; wired into EngineView/EngineWindow/main.swift. ShellTests pass; app builds.
