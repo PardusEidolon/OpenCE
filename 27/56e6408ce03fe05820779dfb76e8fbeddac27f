@@ -1,0 +1,1 @@
+The bake's inputs: sky lights, ambients and shader radiosity imported; opence_bake scene, texel decoding and BVH. Tests and clippy pass; coverage 97.7%.
