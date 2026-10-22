@@ -1,0 +1,1 @@
+The camera: auto exposure (per-BSP area from cluster skies), bloom, lens flare occlusion and sprites, glows and light volumes. Tests: CameraTests (5), camera.rs unit tests, import cluster skies.
