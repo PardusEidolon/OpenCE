@@ -1,0 +1,1 @@
+Live shader reload: Shaders/*.metal, ShaderSources/ShaderWatcher/ShaderReloader, reloadShaders(source:) on every pass, required functions, main.swift polls each second and logs to target 'shaders'. Tests: ShaderTests (5).
