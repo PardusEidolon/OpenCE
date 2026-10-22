@@ -1,0 +1,1 @@
+Phase 2 (The bake) complete: inputs, GPU path tracer, outputs, mood check. Automated: cargo tests, clippy, coverage 97.8%, BakeTests 9/9. Manual verification deferred to the end of the run.
