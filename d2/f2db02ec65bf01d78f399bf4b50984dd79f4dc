@@ -1,0 +1,1 @@
+Task: Recording the reference game's placements. debug.placement_trace hook in object_new_from_scenario and game_tick; tools/engine_placement_traces.py records 23 stock maps to build/placement_traces. Tests: tools/test_engine_placement_traces.py (6 passed).
