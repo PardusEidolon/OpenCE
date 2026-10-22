@@ -1,0 +1,1 @@
+Debug drawing: dev::draw (immediate mode, layers, lifetimes), snapshot v5 debug lines/labels, DebugPass in the HDR pass with depth, labels via TextPass, shell commands debug_line/box/sphere/text/clear. Tests: dev, ffi, Swift DebugDrawTests.
