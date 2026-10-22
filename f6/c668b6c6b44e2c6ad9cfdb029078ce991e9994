@@ -1,0 +1,1 @@
+Path tracer: trace.rs (CPU reference), layout.rs (known-light scenes), bake.metal + PathTracer.swift (GPU), FFI BakeScene. Tests: bake crate unit tests, BakeTests (GPU vs layouts and CPU). Coverage 98.7%.
