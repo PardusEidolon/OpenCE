@@ -1,0 +1,1 @@
+Phase 1 checkpoint: the typed graph (f8a0b81d) and the blender (0d718fe9). Automated: sim tests, the bit-exact reference (376 lines), Blood Gulch's animations. Manual verification deferred to the end.
