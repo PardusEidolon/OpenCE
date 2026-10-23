@@ -1,0 +1,1 @@
+Phase 1 checkpoint: every stock sound decodes (Xbox ADPCM, PCM, Vorbis); the mixer plays impulses through Core Audio. Manual verification deferred to the end of the run.
