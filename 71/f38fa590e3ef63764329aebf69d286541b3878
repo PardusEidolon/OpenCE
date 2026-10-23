@@ -1,0 +1,1 @@
+Task: Every screen reached. ui_walk.rs reaches 30 screens (needs assets/maps); HaloMenu XCTest; 131 Swift tests; coverage ui 92%, ffi 94%. Post-game widgets: none found in ui.map; profile editing and controller settings unwired.
