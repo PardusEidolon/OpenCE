@@ -1,0 +1,1 @@
+Events: snd! effect parts, animation sounds and footsteps by material are gathered in the tick and played after it. Pack 40, importer 28. Gates: fmt, clippy, tests, coverage 93.4%, deny, engine build.
