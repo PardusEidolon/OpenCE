@@ -1,0 +1,1 @@
+Half-resolution occlusion and fewer samples; screen pass 5.4 -> 2.9 ms. Benchmark p99 14.19 ms at 4K TAA scale 1, above the 8.33 bar (MetalFX 6.4 ms fixed). Tests: Swift 130, Rust, clippy, fmt.
