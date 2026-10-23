@@ -1,0 +1,1 @@
+Phase 2 checkpoint: biped states (45 states, 1,980 pairs against units.c) and the first-person machine (19,152 cases against first_person_weapons.c). Sim tests pass; clippy and fmt clean. Manual verification deferred to the end.
