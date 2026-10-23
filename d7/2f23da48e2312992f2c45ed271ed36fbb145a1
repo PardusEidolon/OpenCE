@@ -1,0 +1,1 @@
+Keyboard and mouse: pointer.rs (Key, targets, hover/click/wheel), ffi Menu input + take_sounds; 6+2 tests, Swift UiTests 3/3, opence_ui 91.5% lines; clippy clean.
