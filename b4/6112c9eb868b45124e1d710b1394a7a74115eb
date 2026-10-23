@@ -1,0 +1,1 @@
+First-person machine: all 24 states and 18 messages against the game's own (19,152 cases), sway, jitter, blends, needler refill; idle times imported (pack 36). Gaps: overheated_exit and charge not tracked by WeaponState; first-person sounds not played; aiming false; misfires not sent.
