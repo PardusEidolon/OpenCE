@@ -1,0 +1,1 @@
+Phase 2 (The widget system) of halo_ui: tests pass (cargo test -p opence_content/opence_ui/opence_ffi, Swift UiTests); manual verification deferred to the end of the run.
