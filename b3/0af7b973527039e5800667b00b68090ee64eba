@@ -1,0 +1,1 @@
+UI pack: widgets, collections, string lists, fonts (metrics + pixels), colour tables, virtual keyboards read from ui.map into Ui in the level pack. ui.map imports as a full level (1 bsp, 17 shaders, 146 bitmaps). Gaps: fonts have no kerning pairs yet (Fonts task); events 26-33 use PC names; negative glyph extents treated as empty.
