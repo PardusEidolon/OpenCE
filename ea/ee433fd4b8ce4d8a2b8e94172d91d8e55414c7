@@ -1,0 +1,1 @@
+Transitions: LoadedLevel.prepare draws the first frame on the loader's thread; TransitionTests a10→a30 worst 14.2 ms (<33 ms); loading screen golden frame; docs/engine.md 'The Halo UI'.
