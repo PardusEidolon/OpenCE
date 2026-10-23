@@ -1,0 +1,1 @@
+Mixer: choice.rs (permutations, promotion), mixer.rs (voices, pan, distance, travel delay), player.rs (impulse as sound_impulse_start), ffi audio.rs + SoundOutput.swift. Samples decode on first play and are cached. Coverage 96.4%.
