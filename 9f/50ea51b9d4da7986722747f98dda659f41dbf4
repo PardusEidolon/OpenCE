@@ -1,0 +1,1 @@
+Vehicles and seats: vehicle overlays and suspension; unit tests and the Warthog asset test; coverage 99% of vehicle_animation.rs. Gaps: level-only suspension cast, no suspension sound, seat acceleration and enter/exit not wired to riders.
