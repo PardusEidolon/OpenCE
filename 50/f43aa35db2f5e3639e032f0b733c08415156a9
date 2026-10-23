@@ -1,0 +1,1 @@
+Drawing the UI: opence_ui draw list, ffi Menu + glyph atlas + ui_textures, UiPass/ui.metal; XCTest main menu over ui.map, 4K pass 0.26 ms CPU / 0.23 ms GPU; 132 Swift tests pass.
