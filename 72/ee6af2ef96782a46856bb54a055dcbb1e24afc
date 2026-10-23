@@ -1,0 +1,1 @@
+The screen: loading screen model (ui/loading.rs), its FFI, LoadingPass (Metal, trail ping-pong, additive light, composite), ChantPlayer (AVAudioEngine, 4 varispeed voices), off-main-thread loading with progress, skip on key, 0.5 s crossfade, next mission on a win. Tests: 7 ui, 3 ffi, 9 Swift; coverage 81%/96%.
