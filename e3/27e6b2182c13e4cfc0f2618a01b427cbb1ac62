@@ -1,0 +1,1 @@
+Biped states: unit_states.rs (44 states, set_state, update, biped_desired_state); reference from units.c via tools/engine_unit_state_reference.py, 2028 lines all matched. Coverage 91%. Gaps: riding biped's desired state, 64-biped timing.
