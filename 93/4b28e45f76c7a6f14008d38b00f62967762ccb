@@ -1,0 +1,1 @@
+Task: Sound tags and decoding. Typed snd!/lsnd tags in the level, kept encoded; opence_audio decodes Xbox ADPCM, PCM and Ogg (IMA is refused: no stock map uses it). Tests: decoders, every stock map's permutations, 93% coverage. CE resource-map sounds are not imported yet.
