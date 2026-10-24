@@ -1,0 +1,1 @@
+Vehicles: seat camera from its marker and camera track (IMPORTER_VERSION 31). Sim/import/content tests, clippy, rustfmt, ffi build passed; the Warthog driver test sees from 2.4 behind the seat, weapon hidden.
