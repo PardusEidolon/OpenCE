@@ -1,0 +1,1 @@
+Task: The launcher's Developer tab. Added DeveloperLaunch (arguments to and from the game), DeveloperModel/DeveloperTab in the launcher, test_stations in the ffi, and startDeveloper in main.swift that applies --set/--view and runs station/frame after load. Tests: DeveloperTests (6), LauncherTests updated; HudTests golden failure pre-existing.
