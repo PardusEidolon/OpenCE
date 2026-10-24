@@ -1,0 +1,1 @@
+Task: The dev state model. One shared dev state (render.*, tune.*, dev.panel) counted by a generation; tuning per map in tuning/<map>.toml; Developer tab Lighting sliders. Tests: crates/ffi/tests/dev_state.rs, DevStateTests.swift; full suite 185 tests, 1 known HudTests failure.
