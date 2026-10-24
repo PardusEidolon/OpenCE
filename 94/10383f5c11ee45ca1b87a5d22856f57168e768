@@ -1,0 +1,5 @@
+Phase 1 verification (devgulch and the launcher's Developer tab).
+Automated: nix develop -c python3 tools/engine_build.py --test (all pass but HudTests' bloodgulch_hud golden, 3.4% off from the rifle's first-person pose, predating the phase); then --filter DeveloperTests|LauncherTests|CameraTests|ScreenTests|ParticleTests|DecalTests after the review fixes; cargo test -p opence_ffi; nix build .#engine; nix run .#engine -- --version.
+Manual: nix run .#engine, Developer, pick a station, Launch.
+User feedback addressed: resizable launcher window (a9ab57e), nix run for the engine (a9ab57e), only wired switches and devgulch in the tab (1f4de12).
+User confirmation: 'yes, it meets expectations: checkpoint Phase 1 and start Phase 2'.
