@@ -1,0 +1,1 @@
+Task: Bake and probes out of play. LoadedLevel bakes at load (BakeAtLoad .full/.quick/.cachedOnly, LevelLight .stock/.cached/.traced); bakeInBackground removed. Tests: 4 new BakeTests; full suite 167 with the known HudTests failure.
