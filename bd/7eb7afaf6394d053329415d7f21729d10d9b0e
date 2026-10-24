@@ -1,0 +1,3 @@
+Phase 4 verification: Lighting and shaders.
+Automated: (pending; the full cargo and Swift suites were running at checkpoint, results to follow in this note)
+(automated verification only: the user asked for all phases to run to completion without manual stops)
