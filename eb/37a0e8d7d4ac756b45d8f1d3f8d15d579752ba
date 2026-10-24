@@ -1,0 +1,5 @@
+Phase 2 verification: Stop the heat, see the cost.
+Automated: nix develop -c python3 tools/engine_build.py --test — 181 tests, 1 failure (HudTests golden 3.4% off, known before this phase, not re-approved).
+Manual: nix run .#engine -- --map devgulch; 60 fps cap; idle when unfocused; overlay gpu ms; perf.log a line a second; no bake in play.
+Known: LightPass lists made each frame (Phase 10); temporal scaler ~0.6 s on resize; frame pacing unseen on a display; MetalFX untimed.
+User confirmed: Yes, checkpoint.
