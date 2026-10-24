@@ -1,0 +1,1 @@
+Task: devgulch from bloodgulch.map. content::devgulch (NAME, DONOR, STATIONS on Blood Gulch's floor, ground, level), CollisionBsp::ground_at and surface_ring, LevelGeometry::devgulch and the load mapping, ffi tests/devgulch.rs.
