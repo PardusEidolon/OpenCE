@@ -1,0 +1,1 @@
+Task: Seams. Seam::find/stitch/SeamStep in bake/src/seam.rs, applied in BakePlan::finish after hold_fireflies; StockPage in mood.rs; LevelBake.seams in ffi. Blood Gulch: 514 seams, baked mean step 0.024 vs stock 0.039, share over 0.05: 11% vs 21%. Tests: opence_bake, opence_ffi, Swift Bake/Exposure/ShaderClass/Seam (19).
