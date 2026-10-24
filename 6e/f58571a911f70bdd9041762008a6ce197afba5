@@ -1,0 +1,1 @@
+Task: Black artifacts, flicker and blotchy emissives. Fireflies held (filter.rs), AMBIENT_EXPOSURE 3.0 -> 0.5, BAKE_VERSION 6, ShaderClassTests added; ExposureTests all views within 10%. Open: caves dark against stock (one exposure per BSP).
