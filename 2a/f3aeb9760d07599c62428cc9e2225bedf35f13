@@ -1,0 +1,1 @@
+Thermals and idling: video.frame_cap (60), FramePacing (cap/10 fps unfocused/paused hidden, keepsRunning for network and control), CAMetalDisplayLink with preferredFrameLatency 2, FramesInFlight(2) skip-not-wait. 173 tests, 1 known failure (HudTests golden).
