@@ -1,0 +1,1 @@
+Phase 1 review fix: resizable launcher window, scrolling Developer tab with Back/Launch pinned below; flake apps.engine for nix run. Tests: DeveloperTests 7, LauncherTests 5 pass; nix build .#engine and nix run .#engine -- --version work.
