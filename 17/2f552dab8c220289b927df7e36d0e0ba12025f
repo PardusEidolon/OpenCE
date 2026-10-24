@@ -1,0 +1,1 @@
+Script timing: the waits match scripted_sound_time (longest permutation ms * 30 / 1000 game ticks); the scale is pinned to 0..1 as the original pins it. The settings' volumes were already applied through setVolumes.
