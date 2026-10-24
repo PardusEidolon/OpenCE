@@ -1,0 +1,1 @@
+Shadow edges: footprint spread (radius = texel side). Edges 2.13% hard vs stock 2.17%; ExposureTests down view expected-failure at 11.3% under (pre-existing, full bake 12%).
