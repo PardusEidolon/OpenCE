@@ -1,3 +1,4 @@
 Phase 4 verification: Lighting and shaders.
-Automated: (pending; the full cargo and Swift suites were running at checkpoint, results to follow in this note)
+Automated: cargo test --workspace: 48 test binaries passed; 1 failed: opence_net a_client_plays_slayer_over_udp (3458 of 3479 within the tolerance, the known flaky test).
+Swift (engine_build.py --test): 199 XCTests, 3 failures: HudTests.testTheRifleAndHudAreDrawn (the known golden difference, 3.4%, not re-approved), TransitionTests a10-to-a30 frame 43.5 ms over 33 ms and UiTests UI pass 1.10 ms over 1.0 ms at 4K (both timings, run while cargo's suites loaded the machine).
 (automated verification only: the user asked for all phases to run to completion without manual stops)
