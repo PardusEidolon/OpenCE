@@ -1,0 +1,1 @@
+Task: The stations. devgulch's nine stations, placed relative to each station on the ground; devmap's six unchanged in place. Tests: devgulch_stations.rs (asset-gated), stations unit tests, COURSE bounds. MapLibrary resolves devgulch and devmap.
