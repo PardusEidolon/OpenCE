@@ -1,0 +1,1 @@
+Determinism and the station: station.rs (rest, tunnelling, bitwise repeat, 500 bodies < 2 ms), sim crates.rs (two simulations agree, collide_point), particle_collision.rs, docs Physics section. Gates all green, coverage 92.74%.
