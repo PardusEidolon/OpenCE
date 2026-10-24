@@ -1,0 +1,1 @@
+Particle physics: sim point_physics module; ffi particle step/animate and event routing through sound_events::gather_particles. Water is not detected yet; collision effects' scale is recorded but not applied.
