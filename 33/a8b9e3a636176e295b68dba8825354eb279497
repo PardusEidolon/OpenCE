@@ -1,0 +1,1 @@
+Collision and rest: friction by material (SurfaceMaterials grid over the BSP), vehicles at rest not stepped and woken, vehicle-vehicle mass point collisions, item impact effects and sounds by material. Gates: fmt, clippy, tests, coverage 92.70%, deny, engine build.
