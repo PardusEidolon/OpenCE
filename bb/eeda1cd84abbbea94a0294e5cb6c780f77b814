@@ -1,0 +1,1 @@
+Task: Lighting controls. tune.* applied in level.metal (tuned(), the baked sun/bounce split, stock lightmaps, probes, objects, self-illumination), screen.metal (occlusion) and the tone pass (exposure, bloom, curve). Tests: LightingControlTests (2). Full suite: 190 tests, only the known HudTests failure.
