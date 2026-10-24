@@ -1,0 +1,1 @@
+Vehicles: flipping back over (Approach, Upending, the globals' minimum flipping angle) and entry only while still. No reference traces of the manoeuvres exist; tests are by property. Entry ignores vertical speed (the mover leaves the ground walking downhill).
