@@ -1,0 +1,1 @@
+Responsiveness: camera look published with the pending turn (0 ticks of look latency, was up to ~1.5 ticks = 25 ms at 60 Hz). Tests: ffi lib 176 ok, sim+ffi integration all ok, clippy/rustfmt clean.
