@@ -1,0 +1,1 @@
+Review fixes: negative-mass NaN guard in vehicle collision, doc wrap. Gates: clippy, workspace tests ok; nix build ok.
