@@ -1,0 +1,1 @@
+Task: View modes and the stock lightmap reference view. Frame.debug selects albedo/light views and flat lighting; Draw.stockLightmap keeps the map's lightmap for render.view stock; wireframe/objects/hud switches wired in LevelRenderer. Tests: ViewModeTests (3), DeveloperTests, devtools.rs.
