@@ -1,0 +1,1 @@
+Music and dialogue: campaign/src/sounds.rs and conversations.rs keep the scripts' sounds and run conversations; ffi/src/campaign.rs plays them; audio ducks other sounds under dialogue. Simplifications: speakers found by object name, no nearby-waits, unit speech played as a scripted sound, ducking applies only to sounds started after it.
