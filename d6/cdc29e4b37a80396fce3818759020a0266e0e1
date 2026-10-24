@@ -1,0 +1,1 @@
+Lighting and limits: probes+sun in particle.metal, dynamic lights packed in modes.w, particles.limit setting (1..=2048, default 1024).
