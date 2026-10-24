@@ -1,0 +1,1 @@
+Task: Black artifacts, flicker and blotchy emissives (part 1). Emitters glow from their front only (CPU and Metal), EMITTER_EXPOSURE 0.2; the exposure fit averages 4x4 texel squares before clamping, so noisy quick bakes no longer fit at the cap. BAKE_VERSION 5. Still to do: start view to 10%, NaN/black checks per shader class, emissive golden frames.
