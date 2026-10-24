@@ -1,0 +1,1 @@
+Forces: damage pushes objects and players; vehicles strike players with the vehicle collision damage, owned by the driver. Gaps: no biped facing snap, a shove stands in for collision_fix_pill, vehicle_killed_unit_damage unused, no projectile pushes.
