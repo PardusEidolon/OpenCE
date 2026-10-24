@@ -1,0 +1,1 @@
+Phase 1 review fix: Developer tab offers only RenderSwitches.flags (11 wired flags; wireframe/lightmaps/objects/hud deferred to Phase 3 in plan.md) and devgulch alone (MapLibrary.developerMaps). Tests: DeveloperTests 8, LauncherTests 5 pass.
