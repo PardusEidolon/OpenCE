@@ -1,0 +1,1 @@
+Devices carrying objects: kinematic platforms from machines' collision nodes (LAYER_PLATFORM), character carried by ground velocity. Gaps: boxes from node bounds not meshes; only Machine kinds; unposed machines place only node-0 pieces; the carry lags a tick.
