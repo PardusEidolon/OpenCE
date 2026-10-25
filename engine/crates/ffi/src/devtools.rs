@@ -1091,7 +1091,7 @@ fn step(state: &mut State, args: &Args) -> Result<Output, CommandError> {
     Ok(Output::with_data(format!("tick {tick}"), Data::from(tick)))
 }
 
-/// An object's row: its id, kind, tag and place.
+/// An object's row: its id, kind, tag and place, and whether it is drawn.
 fn row(running: &Running, handle: ObjectHandle) -> Option<(String, Data)> {
     let object = running.simulation.object(handle)?;
     let at = running.simulation.transform(handle)?;
@@ -1109,6 +1109,7 @@ fn row(running: &Running, handle: ObjectHandle) -> Option<(String, Data)> {
         "kind": kind_name(object.kind),
         "tag": object.tag.path,
         "position": position(&at),
+        "drawn": running.simulation.component::<Appearance>(handle).is_some(),
     });
     Some((text, data))
 }

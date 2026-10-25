@@ -1348,6 +1348,15 @@ impl Simulation {
         objects::spawn(&mut self.world, spawn)
     }
 
+    /// The objects made since this was last called, oldest first: the
+    /// app gives each its model and animation.
+    pub fn take_spawned(&mut self) -> Vec<ObjectHandle> {
+        self.world
+            .get_resource_mut::<objects::Spawned>()
+            .map(|mut spawned| std::mem::take(&mut spawned.0))
+            .unwrap_or_default()
+    }
+
     /// Makes every object the game places as `level` starts in its
     /// structure BSP `structure_bsp` ([`objects::level_placements`]).
     pub fn spawn_scenario(

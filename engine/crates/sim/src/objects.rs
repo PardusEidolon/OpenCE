@@ -275,8 +275,14 @@ pub(crate) fn spawn(world: &mut World, spawn: ObjectSpawn) -> Result<ObjectHandl
         object.insert(Team(team));
     }
     hook(&mut object);
+    world.get_resource_or_init::<Spawned>().0.push(handle);
     Ok(handle)
 }
+
+/// The objects made since the app last took them, for it to give each its
+/// model (a thrown grenade, a dropped weapon, a respawned item).
+#[derive(Resource, Debug, Default)]
+pub(crate) struct Spawned(pub(crate) Vec<ObjectHandle>);
 
 /// Removes the object `handle` is; false if it was gone already.
 pub(crate) fn remove(world: &mut World, handle: ObjectHandle) -> bool {

@@ -731,6 +731,8 @@ pub(crate) struct Running {
     sound_world: sound_world::SoundWorld,
     /// The frame's looping sounds (kept for their memory).
     loops: Vec<sound_world::Looping>,
+    /// The models objects made in play are dressed in.
+    wardrobe: Wardrobe,
 }
 
 /// The models and animation graphs objects are drawn and posed with,
@@ -891,6 +893,7 @@ impl Engine {
             particle_rows: Vec::new(),
             sound_world: sound_world::SoundWorld::default(),
             loops: Vec::new(),
+            wardrobe: Wardrobe::default(),
         });
         publish(&mut state, &self.snapshots, 0.0);
         *audio::lock(&self.audio) = None;
@@ -944,6 +947,7 @@ impl Engine {
             particle_rows: Vec::new(),
             sound_world: sound_world::SoundWorld::new(&geometry.content),
             loops: Vec::new(),
+            wardrobe,
         });
         publish(&mut state, &self.snapshots, 0.0);
         let bank: Arc<dyn opence_audio::SoundBank> = geometry.content.clone();
@@ -1640,8 +1644,24 @@ pub(crate) fn run_ticks(state: &mut State, ticks: u32) -> Result<(), EngineError
     if let (Some(_), Some(level)) = (&running.network, &running.level) {
         running.dressed = network::dress_players(&mut running.simulation, level, running.dressed);
     }
+    let spawned = running.simulation.take_spawned();
     if let Some(campaign) = &mut running.campaign {
         campaign.dress(&mut running.simulation);
+    } else if let Some(level) = &running.level {
+        // (a thrown grenade, a dropped weapon: drawn from the tick it is
+        // made)
+        for handle in spawned {
+            if running.simulation.component::<Appearance>(handle).is_none()
+                && running
+                    .simulation
+                    .component::<AnimationPlayer>(handle)
+                    .is_none()
+            {
+                running
+                    .wardrobe
+                    .dress(&mut running.simulation, level, handle);
+            }
+        }
     }
     Ok(())
 }

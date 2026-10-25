@@ -291,6 +291,7 @@ impl Engine {
             stepped: Vec::new(),
             sound_world: crate::sound_world::SoundWorld::new(&level),
             loops: Vec::new(),
+            wardrobe: crate::Wardrobe::default(),
             level: Some(level),
             network: Some(network),
             dressed,
