@@ -113,10 +113,10 @@ Found in play: shadows on the far hills break into large blocky triangles across
 - [x] Task: Shadows on the far hills edc25f4f
     - [x] Write tests: on the far hills' views, a shadow edge crosses the triangles' edges without stepping more often than on the stock pages; no texel larger than the stock's
     - [x] The fixes
-- [ ] Task: The bunker interiors
-    - [ ] Write tests: no light leaks (texels on the inside lit by the sun through a wall); a flat wall's texels vary no more than the stock's; golden frames of each bunker's interior
-    - [ ] The fixes
-- [ ] Task: Conductor - User Manual Verification 'Phase 10: Lightmap resolution and interiors' (Protocol in workflow.md)
+- [x] Task: The bunker interiors fe63e023
+    - [x] Write tests: no light leaks (texels on the inside lit by the sun through a wall); a flat wall's texels vary no more than the stock's; golden frames of each bunker's interior
+    - [x] The fixes
+- [x] Task: Conductor - User Manual Verification 'Phase 10: Lightmap resolution and interiors' (Protocol in workflow.md) (superseded: automated verification only, at the user's instruction)
 
 ## Phase 11: Matching the source
 Lighting, shaders and graphics are rewritten and enhanced. AI, particles, animation, sound, script logic and gameplay are ported from `source/` first, matched to it, and only then extended; this phase finds where they still differ.
