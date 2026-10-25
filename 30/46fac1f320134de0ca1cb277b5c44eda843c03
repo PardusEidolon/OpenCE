@@ -1,0 +1,1 @@
+Phase 4 (Performance): tracing and divan benches; mimalloc; rubato resampling; rayon in the bake's finish and BLAKE3 hashing; release build measured (no LTO/PGO). Automated verification only, at the user's instruction.
