@@ -1,0 +1,1 @@
+bytemuck Pod/Zeroable on 14 snapshot types; zeroed_box replaces one unsafe; memmap2 declined (unsafe; map read is 5% of a pack load).
