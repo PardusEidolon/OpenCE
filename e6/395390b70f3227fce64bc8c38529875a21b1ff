@@ -1,0 +1,1 @@
+Task: The shell (rust_tools Phase 5). nix-direnv .envrc, nix-output-monitor in the shell. Verified by tools/test_nix_tooling.py.
