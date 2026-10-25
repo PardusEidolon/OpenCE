@@ -1,0 +1,1 @@
+Task: The sound emitters. Each sound class's emitter on devgulch voices once (20 classes, 6 only through skippable sounds, retried); none fail; the audio view's census matches. Fixed: the teleporter loop stood beyond its 2.5 m maximum distance. Verified by devgulch_stations and the workspace tests.
