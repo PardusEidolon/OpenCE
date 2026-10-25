@@ -1,0 +1,1 @@
+Impacts by material: the Impact carries the struck material, overridden by the damage outcome (shield's when shield damage > body damage); effects are the response's default plus its detonation effect when it detonates. Not ported: potential responses, the impact_velocity > 1/120 gate, fused projectiles' bounce effects.
