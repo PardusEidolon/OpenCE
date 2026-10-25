@@ -107,12 +107,12 @@ The menus and the rest of the UI are left to the UI rewrite's own track.
 
 ## Phase 10: Lightmap resolution and interiors
 Found in play: shadows on the far hills break into large blocky triangles across the cliffs and ground, and the bunker interiors are lit coarsely, with leaks and blotches on the walls.
-- [ ] Task: Measure the lightmaps' density
-    - [ ] Write tests: a sweep of each surface's world size per lightmap texel on Blood Gulch and devgulch, the far hills and the bunker interiors, against the stock lightmaps'
-    - [ ] The sweep, and the causes listed in docs/engine.md
-- [ ] Task: Shadows on the far hills
-    - [ ] Write tests: on the far hills' views, a shadow edge crosses the triangles' edges without stepping more often than on the stock pages; no texel larger than the stock's
-    - [ ] The fixes
+- [x] Task: Measure the lightmaps' density e7bda8b1
+    - [x] Write tests: a sweep of each surface's world size per lightmap texel on Blood Gulch and devgulch, the far hills and the bunker interiors, against the stock lightmaps'
+    - [x] The sweep, and the causes listed in docs/engine.md
+- [x] Task: Shadows on the far hills edc25f4f
+    - [x] Write tests: on the far hills' views, a shadow edge crosses the triangles' edges without stepping more often than on the stock pages; no texel larger than the stock's
+    - [x] The fixes
 - [ ] Task: The bunker interiors
     - [ ] Write tests: no light leaks (texels on the inside lit by the sun through a wall); a flat wall's texels vary no more than the stock's; golden frames of each bunker's interior
     - [ ] The fixes
