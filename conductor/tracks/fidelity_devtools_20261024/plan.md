@@ -158,9 +158,9 @@ Found in play (2026-10-25): getting in and out is too quick; vehicles collide on
 - [x] Task: Collision with the world d82e292b
     - [x] Write tests: vehicles collide with the structure, scenery, crates, bipeds and devices; none passes through on the vehicles station's paths
     - [x] The fixes
-- [ ] Task: Animations driven by their functions
-    - [ ] Write tests: a turret, barrel or other overlay moves only when its function (aim, firing, speed) changes, as the original's object functions say; the warthog's chaingun barrel stays still with no gunner
-    - [ ] The fixes
+- [x] Task: Animations driven by their functions 084e3c0c
+    - [x] Write tests: a turret, barrel or other overlay moves only when its function (aim, firing, speed) changes, as the original's object functions say; the warthog's chaingun barrel stays still with no gunner
+    - [x] The fixes
 - [ ] Task: Wheels and tracks
     - [ ] Write tests: wheels turn at the ground speed over their radius and tracks scroll with speed, against the original's functions; golden frames of a moving wheel show no smear between ticks
     - [ ] The fixes
