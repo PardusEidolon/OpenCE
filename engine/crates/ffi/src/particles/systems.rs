@@ -20,9 +20,8 @@ use rustc_hash::FxHashMap;
 
 use super::{blend, mix, rgba, Pictures, Random, TICK};
 use crate::lights::marker_frames;
-use crate::snapshot::{
-    ParticleSnapshot, MAX_PARTICLES, PARTICLE_FACING_AXIS, PARTICLE_FACING_SCREEN,
-};
+use crate::snapshot::{ParticleSnapshot, MAX_PARTICLES};
+use crate::sprite::{self, Orientation};
 
 /// The most systems running at once.
 const MAX_SYSTEMS: usize = 64;
@@ -594,10 +593,7 @@ impl Bit {
         out: &mut Vec<ParticleSnapshot>,
     ) {
         let along = self.velocity.normalize_or_zero();
-        let facing = match kind.sprite_render_mode {
-            1 | 2 if along != Vec3::ZERO => PARTICLE_FACING_AXIS,
-            _ => PARTICLE_FACING_SCREEN,
-        };
+        let orientation = Orientation::from_tag(kind.sprite_render_mode);
         let by = &multiplier.randomized;
         let tinted = rgba(by.color);
         let mut draw = |state: &ParticleState, look: &Look, weight: f32| {
@@ -622,7 +618,7 @@ impl Bit {
                 modes: [
                     frame.picture,
                     blend(state.shader.framebuffer_blend_function),
-                    facing,
+                    sprite::facing(orientation, along, state.shader.fade_mode, [false; 2]),
                     0,
                 ],
             });

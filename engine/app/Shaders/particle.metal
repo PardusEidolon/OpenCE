@@ -33,7 +33,10 @@ struct Particle {
     float4 color;      // rgba
     float4 uv;         // the picture's rectangle: u0, v0, u1, v1
     float4 shape;      // half height, fade begins, fade ends, 0
-    uint4 modes;       // picture, blend, facing, lit (the frame's lights, packed)
+    // picture, blend, facing, lit (the frame's lights, packed); the facing's
+    // lowest byte faces it (sprite.rs), its next its shader's fade mode, and
+    // bits 16 and 17 mirror its picture across and up and down
+    uint4 modes;
 };
 
 struct ParticleVertex {
@@ -90,7 +93,8 @@ vertex ParticleVertex particle_vertex(uint vid [[vertex_id]], uint instance [[in
                                       texture3d<float> pz [[texture(4)]], texture3d<float> nz [[texture(5)]]) {
     Particle p = particles[first + instance];
     float2 c = corners[vid];
-    if (p.modes.z == 3) {
+    uint facing = p.modes.z & 0xff;
+    if (facing == 3) {
         // A quad: the near edge's two corners, then the far edge's.
         float3 far = float3(p.position.w, p.axis.w, p.shape.w);
         float3 world = c.x < 0 ? (c.y < 0 ? p.position.xyz : p.axis.xyz)
@@ -107,19 +111,41 @@ vertex ParticleVertex particle_vertex(uint vid [[vertex_id]], uint instance [[in
     float3 up;
     float width = p.position.w;
     float height = p.shape.x > 0 ? p.shape.x : width;
-    if (p.modes.z == 2) {
+    // (the face's normal, for a sprite that fades as it turns edge on)
+    float3 normal = float3(0);
+    if (facing == 2) {
         // A segment: from its position to its axis, across the view.
         float3 along = p.axis.xyz - centre;
         float3 view = normalize(frame.eye.xyz - centre);
         side = normalize(cross(along, view) + float3(0, 0, 1e-6)) * width;
         centre += along * 0.5;
         up = along * 0.5;
-    } else if (p.modes.z == 1) {
+    } else if (facing == 1) {
         // On its axis: up the axis, across the view.
         float3 axis = normalize(p.axis.xyz + float3(0, 0, 1e-6));
         float3 view = normalize(frame.eye.xyz - centre);
         side = normalize(cross(axis, view) + float3(1e-6, 0, 0)) * width;
         up = axis * height;
+    } else if (facing == 4 || facing == 5) {
+        // Along its direction, turned about it to the camera, or across it,
+        // as build_sprite_compute_basis lays them, then turned by its turn.
+        float3 d = p.axis.xyz;
+        float3 x;
+        float3 y;
+        if (facing == 4) {
+            x = normalize(d);
+            y = normalize(cross(centre - frame.eye.xyz, x) + float3(0, 0, 1e-6));
+        } else {
+            float3 reference = d.z * d.z > dot(d, d) * 0.99 ? float3(0, 1, 0) : float3(0, 0, 1);
+            x = normalize(cross(d, reference));
+            float3 n = normalize(d);
+            y = n * dot(n, x) + cross(x, n);
+        }
+        normal = cross(x, y);
+        float s = sin(p.axis.w);
+        float k = cos(p.axis.w);
+        side = (x * k + y * s) * width;
+        up = (y * k - x * s) * height;
     } else {
         float s = sin(p.axis.w);
         float k = cos(p.axis.w);
@@ -132,9 +158,17 @@ vertex ParticleVertex particle_vertex(uint vid [[vertex_id]], uint instance [[in
         float d = distance(frame.eye.xyz, p.position.xyz);
         fade = 1.0 - saturate((d - p.shape.y) / (p.shape.z - p.shape.y));
     }
+    uint fade_mode = (p.modes.z >> 8) & 0xff;
+    if (fade_mode != 0 && dot(normal, normal) > 0) {
+        // (build_sprite_compute_vertex_fade: by how much it faces the camera)
+        float toward = abs(dot(normal, normalize(centre - frame.eye.xyz + float3(0, 0, 1e-6))));
+        fade *= fade_mode == 2 ? 1.0 - toward : toward;
+    }
     ParticleVertex out;
     out.position = frame.worldToClip * float4(world, 1);
     float2 t = c * 0.5 + 0.5;
+    // (a mirrored picture is drawn from its rectangle's other side)
+    t = float2((p.modes.z & (1u << 16)) ? 1.0 - t.x : t.x, (p.modes.z & (1u << 17)) ? 1.0 - t.y : t.y);
     out.uv = float2(mix(p.uv.x, p.uv.z, t.x), mix(p.uv.w, p.uv.y, t.y));
     float3 color = p.color.rgb;
     if ((p.modes.w >> 24) != 0) {

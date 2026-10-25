@@ -21,6 +21,7 @@ use crate::snapshot::{
     LightSnapshot, ParticleSnapshot, LIGHT_SPOT, MAX_PARTICLES, PARTICLE_FACING_AXIS,
     PARTICLE_FACING_SCREEN, PARTICLE_LIT, PARTICLE_NO_PICTURE,
 };
+use crate::sprite::{self, Orientation};
 use contrails::Contrails;
 pub(crate) use weather::ParticleView;
 
@@ -411,6 +412,12 @@ struct Live {
     frame: f32,
     /// It settled and stopped: it moves no more.
     at_rest: bool,
+    /// The way it lies along or across: the way it was emitted, then the
+    /// way it moves while it moves fast enough (`particle->direction`).
+    direction: Vec3,
+    /// Its picture is mirrored across and up and down, as its random
+    /// mirroring drew it.
+    mirrors: [bool; 2],
     /// The effect it stays with, and where that was at the last tick.
     anchor: Option<(u32, Vec3)>,
 }
@@ -489,6 +496,12 @@ impl Live {
                 .map(|fps| 1.0 / fps),
             frame: 0.0,
             at_rest: false,
+            direction,
+            mirrors: [
+                Particle::RANDOM_HORIZONTAL_MIRRORING,
+                Particle::RANDOM_VERTICAL_MIRRORING,
+            ]
+            .map(|flag| particle.flags & flag != 0 && random.next() < 0.5),
             anchor: attached.then_some((effect.number, origin.position)),
         }
     }
@@ -575,12 +588,16 @@ impl Live {
             }
             (None, _) => self.position += self.velocity * TICK,
         }
-        if settled && self.velocity.length_squared() < AT_REST_SPEED_SQUARED {
-            if particle.flags & Particle::DIES_AT_REST != 0 {
-                events.died(particle, self.position, self.velocity);
-                return false;
+        if self.velocity.length_squared() < AT_REST_SPEED_SQUARED {
+            if settled {
+                if particle.flags & Particle::DIES_AT_REST != 0 {
+                    events.died(particle, self.position, self.velocity);
+                    return false;
+                }
+                self.at_rest = true;
             }
-            self.at_rest = true;
+        } else {
+            self.direction = self.velocity;
         }
         self.rotation += self.spin * TICK;
         true
@@ -621,11 +638,13 @@ impl Live {
             self.sequence,
             self.frame as usize,
         );
-        let along = self.velocity.normalize_or_zero();
-        let facing = match particle.orientation {
-            1 | 3 if along != Vec3::ZERO => PARTICLE_FACING_AXIS,
-            _ => PARTICLE_FACING_SCREEN,
-        };
+        let along = self.direction;
+        let facing = sprite::facing(
+            Orientation::from_tag(particle.orientation),
+            along,
+            particle.shader.fade_mode,
+            self.mirrors,
+        );
         let [r, g, b, a] = self.color;
         let lighting = if particle.flags & Particle::SELF_ILLUMINATED == 0 {
             PARTICLE_LIT | pack_light(lights_at(lights, self.position))
@@ -985,6 +1004,9 @@ pub(crate) fn detail_objects(level: &Level, structure: &StructureBsp) -> Vec<Par
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::snapshot::{
+        PARTICLE_FACING_PARALLEL, PARTICLE_FACING_PERPENDICULAR, PARTICLE_FADE_SHIFT,
+    };
     use opence_content::{
         DetailObject, DetailObjectCollection, DetailObjectType, Effect, EffectEvent, Group,
         PointPhysics, Sequence, Sprite,
@@ -1103,6 +1125,8 @@ mod tests {
             frame_span: Some(0.1),
             frame: 0.0,
             at_rest: false,
+            direction: Vec3::Z,
+            mirrors: [false; 2],
             anchor: None,
         }
     }
@@ -1360,6 +1384,78 @@ mod tests {
         particles.tick(&level, &mut simulation, (&[], &[], &[]), 0);
         assert!(particles.live.is_empty(), "it dies at a second");
         assert!(particles.emitted.is_empty());
+    }
+
+    #[test]
+    fn a_particle_lies_the_way_it_moves_while_it_moves_fast_enough() {
+        let mut events = ParticleEvents::default();
+        let mut fast = live(10.0, Vec3::new(3.0, 0.0, 0.0));
+        assert!(fast.step(&pebble(0), Vec3::ZERO, floor, &mut events));
+        assert_eq!(fast.direction, fast.velocity);
+        // (slower than the game's half a unit a second, it keeps the way it
+        // was emitted)
+        let mut slow = live(10.0, Vec3::new(0.1, 0.0, 0.0));
+        assert!(slow.step(&pebble(0), Vec3::ZERO, floor, &mut events));
+        assert!(slow.velocity.length() < 0.25, "{}", slow.velocity);
+        assert_eq!(slow.direction, Vec3::Z);
+    }
+
+    #[test]
+    fn a_particle_faces_by_its_orientation_and_fades_by_its_shader() {
+        let gathered = |orientation: i16, fade_mode: i16| {
+            let mut level = level(EffectParticles::START, 1);
+            level.particles[0].orientation = orientation;
+            level.particles[0].shader.fade_mode = fade_mode;
+            let mut particles = LevelParticles::new(&level);
+            let effect = [running(0, 30)];
+            particles.tick(&level, &mut Simulation::empty(), (&effect, &effect, &[]), 0);
+            let mut out = Vec::new();
+            particles.gather(&level, &ParticleView::at(Vec3::ZERO), &[], &mut out);
+            let direction = particles.live.first().map(|live| live.direction);
+            (out.first().copied(), direction)
+        };
+        let (screen, _) = gathered(0, 1);
+        assert_eq!(screen.map(|out| out.modes[2]), Some(PARTICLE_FACING_SCREEN));
+        let (parallel, direction) = gathered(1, 1);
+        let parallel = parallel.unwrap_or_default();
+        assert_eq!(
+            parallel.modes[2],
+            PARTICLE_FACING_PARALLEL | 1 << PARTICLE_FADE_SHIFT
+        );
+        let direction = direction.unwrap_or_default();
+        assert_eq!(&parallel.axis[..3], &direction.to_array());
+        assert!(direction.length() > 0.5, "{direction}");
+        let (perpendicular, _) = gathered(2, 0);
+        assert_eq!(
+            perpendicular.map(|out| out.modes[2]),
+            Some(PARTICLE_FACING_PERPENDICULAR)
+        );
+        // (the game has three; a fourth faces the screen)
+        let (fourth, _) = gathered(3, 0);
+        assert_eq!(fourth.map(|out| out.modes[2]), Some(PARTICLE_FACING_SCREEN));
+    }
+
+    #[test]
+    fn a_particles_picture_is_mirrored_at_random_only_by_its_flags() {
+        let mirrors = |flags: u32| {
+            let mut level = level(EffectParticles::START, 64);
+            level.particles[0].flags |= flags;
+            let mut particles = LevelParticles::new(&level);
+            let effect = [running(0, 30)];
+            particles.tick(&level, &mut Simulation::empty(), (&effect, &effect, &[]), 0);
+            particles
+                .live
+                .iter()
+                .map(|live| live.mirrors)
+                .collect::<Vec<_>>()
+        };
+        assert!(mirrors(0).iter().all(|&drawn| drawn == [false; 2]));
+        let across = mirrors(Particle::RANDOM_HORIZONTAL_MIRRORING);
+        assert!(across.iter().any(|drawn| drawn[0]) && across.iter().any(|drawn| !drawn[0]));
+        assert!(across.iter().all(|drawn| !drawn[1]));
+        let both =
+            mirrors(Particle::RANDOM_HORIZONTAL_MIRRORING | Particle::RANDOM_VERTICAL_MIRRORING);
+        assert!(both.iter().any(|drawn| drawn[1]) && both.iter().any(|drawn| !drawn[1]));
     }
 
     #[test]

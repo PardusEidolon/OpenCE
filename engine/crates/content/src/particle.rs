@@ -89,8 +89,8 @@ pub struct Particle {
     pub looping_sequences: i16,
     /// How many it may end with.
     pub final_sequences: i16,
-    /// The way its sprite faces: 0 the screen, 1 parallel to its
-    /// velocity, 2 across it, 3 along it.
+    /// The way its sprite faces: 0 the screen, 1 along its direction
+    /// (turned about it to the camera), 2 across it.
     pub orientation: i16,
     /// How it is blended.
     pub shader: SpriteShader,

@@ -11,9 +11,8 @@ use opence_sim::{point_physics, Quat, Vec3};
 
 use super::wind::Air;
 use super::{blend, mix, rgba, Pictures, Random, TICK};
-use crate::snapshot::{
-    ParticleSnapshot, MAX_PARTICLES, PARTICLE_FACING_AXIS, PARTICLE_FACING_SCREEN,
-};
+use crate::snapshot::{ParticleSnapshot, MAX_PARTICLES};
+use crate::sprite::{self, Orientation};
 
 /// The most weather particles, of every kind.
 const MAX_DROPS: usize = 512;
@@ -404,11 +403,14 @@ impl Weather {
                     drop.velocity
                 };
                 let along = source.normalize_or_zero();
-                let (facing, axis) = match (kind.render_mode, along == Vec3::ZERO) {
-                    (0, _) => (PARTICLE_FACING_SCREEN, along),
-                    (_, true) => (PARTICLE_FACING_AXIS, Vec3::Z),
-                    (_, false) => (PARTICLE_FACING_AXIS, along),
-                };
+                // (a drop that is not moving stands upright)
+                let axis = if along == Vec3::ZERO { Vec3::Z } else { along };
+                let facing = sprite::facing(
+                    Orientation::from_tag(kind.render_mode),
+                    axis,
+                    kind.shader.fade_mode,
+                    [false; 2],
+                );
                 let frame = pictures.frame(
                     level,
                     kind.bitmap.as_ref(),

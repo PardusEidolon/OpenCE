@@ -35,6 +35,7 @@ pub mod settings;
 pub mod snapshot;
 mod sound_events;
 mod sound_world;
+pub mod sprite;
 mod stations;
 pub mod ui;
 mod ui_host;

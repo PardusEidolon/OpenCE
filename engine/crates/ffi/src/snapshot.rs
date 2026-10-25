@@ -260,6 +260,24 @@ pub const PARTICLE_FACING_SEGMENT: u32 = 2;
 /// from its colour at the near edge to the packed colour of its modes at
 /// the far (a contrail's piece between two of its points).
 pub const PARTICLE_FACING_QUAD: u32 = 3;
+/// `ParticleSnapshot::modes`' facing: lying along its axis (its
+/// direction), turned about it to the camera, then by its rotation
+/// (`parallel to direction`).
+pub const PARTICLE_FACING_PARALLEL: u32 = 4;
+/// `ParticleSnapshot::modes`' facing: lying across its axis (its
+/// direction), turned in its plane by its rotation (`perpendicular to
+/// direction`).
+pub const PARTICLE_FACING_PERPENDICULAR: u32 = 5;
+/// `ParticleSnapshot::modes`' facing, its second byte: how a sprite lying
+/// along or across its axis fades as it turns (its shader's fade mode: 0
+/// not, 1 the more edge on, 2 the more face on).
+pub const PARTICLE_FADE_SHIFT: u32 = 8;
+/// `ParticleSnapshot::modes`' facing: its picture is mirrored across, as
+/// a particle's random horizontal mirroring draws it.
+pub const PARTICLE_MIRROR_U: u32 = 1 << 16;
+/// `ParticleSnapshot::modes`' facing: its picture is mirrored up and down,
+/// as a particle's random vertical mirroring draws it.
+pub const PARTICLE_MIRROR_V: u32 = 1 << 17;
 /// `ParticleSnapshot::modes`' lighting, its top byte: the sprite is lit by
 /// the level's light about it (its lowest three bytes are the frame's
 /// lights there, red, green and blue from the lowest, linear and held to
@@ -274,7 +292,8 @@ pub struct ParticleSnapshot {
     /// Its centre, then its half width (for `PARTICLE_FACING_QUAD`, its
     /// near edge's first corner and the far edge's second corner's x).
     pub position: [f32; 4],
-    /// Its axis (`PARTICLE_FACING_AXIS`) or its strip's end
+    /// Its axis (`PARTICLE_FACING_AXIS`, `PARTICLE_FACING_PARALLEL` and
+    /// `PARTICLE_FACING_PERPENDICULAR`) or its strip's end
     /// (`PARTICLE_FACING_SEGMENT`), then its rotation, radians (for
     /// `PARTICLE_FACING_QUAD`, its near edge's second corner and the far
     /// edge's second corner's y).
@@ -288,7 +307,8 @@ pub struct ParticleSnapshot {
     /// its far edge's first corner and the far edge's second corner's z).
     pub shape: [f32; 4],
     /// Its picture (among the level's particle pictures, or
-    /// `PARTICLE_NO_PICTURE`), its blend function, its facing, then its
+    /// `PARTICLE_NO_PICTURE`), its blend function, its facing (its lowest
+    /// byte; with its fade and mirrors above), then its
     /// lighting (`PARTICLE_LIT` and the frame's lights, or 0: unlit; for
     /// `PARTICLE_FACING_QUAD`, its far edge's colour, a byte each of red,
     /// green, blue and opacity from the lowest).
