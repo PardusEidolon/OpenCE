@@ -1,0 +1,1 @@
+Phase 12 checkpoint: automated checks only. Rust workspace tests + clippy pass. Swift: 210 tests, 2 golden failures (HudTests stale; weapons station changed by 50558697 particle facing, to re-approve).
