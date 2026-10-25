@@ -44,6 +44,7 @@ pub mod units;
 pub mod vehicle;
 pub mod vehicle_animation;
 pub mod weapon;
+pub mod weapon_markers;
 
 use bevy_ecs::prelude::*;
 use bevy_ecs::schedule::SingleThreadedExecutor;
@@ -197,6 +198,8 @@ pub struct Simulation {
     ragdolls: ragdoll::Ragdolls,
     /// The spent casings, in the player's physics world.
     debris: debris::Debris,
+    /// The level's weapons' markers, where their effects are made.
+    markers: weapon_markers::WeaponMarkers,
     /// The physics station's crates, in the player's physics world.
     crates: crates::Crates,
     /// The machines, as platforms in the player's physics world.
@@ -337,6 +340,7 @@ impl Simulation {
             first_person: first_person::FirstPersonWeapon::default(),
             ragdolls: ragdoll::Ragdolls::default(),
             debris: debris::Debris::default(),
+            markers: weapon_markers::WeaponMarkers::default(),
             crates: crates::Crates::default(),
             platforms: platforms::Platforms::default(),
             queued_detonations: Vec::new(),
@@ -509,8 +513,76 @@ impl Simulation {
         forces::apply(&mut self.world, &mut self.rides, &mut self.players, &pushes);
         self.schedule.run(&mut self.world);
         functions::update(&mut self.world, &mut self.queries.functions);
+        self.place_ejections(&mut ejections);
         self.update_physics(&ejections);
         self.effects = ejections;
+    }
+
+    /// Puts each weapon's effects at its markers, as `weapon_effect_new`
+    /// makes them at the weapon's: the local player's first-person
+    /// weapon's, posed from the camera, or else the weapon's own model's,
+    /// held at its grip in its holder's hand. Each is at the first of its
+    /// locations found, with every one found among its locations.
+    fn place_ejections(&self, ejections: &mut [debris::Ejection]) {
+        let camera = self.world.resource::<Camera>().transform;
+        let local = self.players.first().map(Player::handle);
+        for ejection in ejections.iter_mut() {
+            let (Some(holder), Some(weapon)) = (ejection.holder, ejection.weapon.as_ref()) else {
+                continue;
+            };
+            let first_person = self
+                .first_person
+                .posed()
+                .filter(|(shown, _)| local == Some(holder) && *shown == weapon)
+                .map(|(_, posed)| *posed)
+                .filter(|_| {
+                    self.players
+                        .first()
+                        .is_some_and(|player| player.view() == View::FirstPerson)
+                });
+            let hand = match first_person {
+                Some(_) => None,
+                None => self.held_hand(holder),
+            };
+            let mut found = Vec::new();
+            for name in self.markers.locations(&ejection.effect) {
+                let matrix = match (&first_person, &hand) {
+                    (Some(posed), _) => {
+                        self.markers
+                            .first_person(self.first_person.models(), posed, &camera, name)
+                    }
+                    (None, Some((matrix, grip))) => self.markers.held(weapon, matrix, grip, name),
+                    (None, None) => None,
+                };
+                if let Some(matrix) = matrix {
+                    let (position, rotation) = weapon_markers::frame(&matrix);
+                    found.push((name.clone(), position, rotation));
+                }
+            }
+            if let Some(&(_, position, rotation)) = found.first() {
+                ejection.position = position;
+                ejection.rotation = rotation;
+            }
+            ejection.locations = found;
+        }
+    }
+
+    /// The hand marker of the unit `holder` that holds its weapon, in the
+    /// world at the last tick, and the weapon's marker it grips.
+    fn held_hand(&self, holder: ObjectHandle) -> Option<(animation::NodeMatrix, String)> {
+        let player = self.component::<AnimationPlayer>(holder)?;
+        let model = player.model.as_ref()?;
+        let nodes = self.component::<NodeMatrices>(holder)?;
+        let animator = self.component::<unit_animator::UnitAnimator>(holder)?;
+        let seat = animator.animation.seat?;
+        let class = player
+            .graph
+            .unit_seats
+            .get(seat.seat)?
+            .weapon_classes
+            .get(seat.class)?;
+        let hand = seats::marker_matrix(model, &nodes.current, &class.hand_marker)?;
+        Some((hand, class.grip_marker.clone()))
     }
 
     /// The physics of the dead, the spent and the dropped: the items lying
@@ -638,6 +710,7 @@ impl Simulation {
         // casings with it)
         self.ragdolls = self.ragdolls.for_level(level);
         self.debris = self.debris.for_level(level);
+        self.markers = weapon_markers::WeaponMarkers::for_level(level);
         self.crates.forget();
         self.platforms = platforms::Platforms::for_level(level);
         self.queued_detonations.clear();

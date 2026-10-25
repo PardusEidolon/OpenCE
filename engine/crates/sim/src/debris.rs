@@ -11,6 +11,7 @@ use glam::{Quat, Vec3};
 use opence_content::{EffectDebris, Level, TagRef};
 use opence_physics::{BodyId, Material, Motion, Pose, Shape, World as PhysicsWorld};
 
+use crate::objects::ObjectHandle;
 use crate::random::RandomSeed;
 
 /// The most pieces at once, unless set otherwise (the C port's
@@ -38,6 +39,27 @@ pub struct Ejection {
     pub rotation: Quat,
     /// How fast what made it moves, in world units a second.
     pub velocity: Vec3,
+    /// Its locations by name, a point and a turn (the markers of the
+    /// weapon that made it); a location not among them is at its frame.
+    pub locations: Vec<(String, Vec3, Quat)>,
+    /// The unit that holds the weapon that made it.
+    pub holder: Option<ObjectHandle>,
+    /// That weapon, held in the hands (none for a vehicle's).
+    pub weapon: Option<TagRef>,
+}
+
+impl Ejection {
+    /// Where its location `name` is: its point and turn, or its own frame
+    /// for one not among its locations.
+    pub fn place(&self, name: &str) -> (Vec3, Quat) {
+        self.locations
+            .iter()
+            .find(|(location, _, _)| !name.is_empty() && location.eq_ignore_ascii_case(name))
+            .map_or(
+                (self.position, self.rotation),
+                |&(_, position, rotation)| (position, rotation),
+            )
+    }
 }
 
 /// A piece of debris.
@@ -65,8 +87,9 @@ impl Piece {
 /// The debris of a game.
 #[derive(Clone, Debug)]
 pub struct Debris {
-    /// Each effect's particles that are bodies, by the effect's tag.
-    effects: BTreeMap<TagRef, Vec<EffectDebris>>,
+    /// Each effect's locations and its particles that are bodies, by the
+    /// effect's tag.
+    effects: BTreeMap<TagRef, (Vec<String>, Vec<EffectDebris>)>,
     /// The pieces, oldest first.
     pieces: Vec<Piece>,
     /// The most pieces at once.
@@ -93,7 +116,12 @@ impl Debris {
                 .effects
                 .iter()
                 .filter(|effect| !effect.debris.is_empty())
-                .map(|effect| (effect.tag.clone(), effect.debris.clone()))
+                .map(|effect| {
+                    (
+                        effect.tag.clone(),
+                        (effect.locations.clone(), effect.debris.clone()),
+                    )
+                })
                 .collect(),
             pieces: Vec::new(),
             cap: self.cap,
@@ -133,11 +161,18 @@ impl Debris {
 
     /// Throws out each of `ejection`'s effect's pieces.
     pub fn eject(&mut self, physics: &mut PhysicsWorld, ejection: &Ejection) {
-        let Some(kinds) = self.effects.get(&ejection.effect) else {
+        let Some((locations, kinds)) = self.effects.get(&ejection.effect) else {
             return;
         };
         let mut thrown = Vec::new();
         for kind in kinds {
+            // (from its location: the casing's from the ejection port)
+            let name = usize::try_from(kind.location)
+                .ok()
+                .and_then(|index| locations.get(index));
+            let (at, rotation) = name.map_or((ejection.position, ejection.rotation), |name| {
+                ejection.place(name)
+            });
             let [lower, upper] = kind.count;
             let count = if upper > lower {
                 self.seed.next_range(lower, upper.saturating_add(1))
@@ -151,9 +186,8 @@ impl Debris {
                     kind.velocity_cone_angle,
                     &mut self.seed,
                 );
-                let velocity = ejection.rotation * direction * speed + ejection.velocity;
-                let position =
-                    ejection.position + ejection.rotation * Vec3::from_array(kind.offset);
+                let velocity = rotation * direction * speed + ejection.velocity;
+                let position = at + rotation * Vec3::from_array(kind.offset);
                 thrown.push((kind.clone(), position, velocity));
             }
         }

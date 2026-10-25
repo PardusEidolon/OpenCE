@@ -1402,7 +1402,7 @@ fn shoot(
         } else {
             fired
                 .ejections
-                .push(ejection(effect.clone(), eyes, aim, shooter.velocity));
+                .push(ejection(effect.clone(), shooter, &definition.tag));
         }
     }
     for shot in shots {
@@ -1413,7 +1413,7 @@ fn shoot(
         {
             fired
                 .ejections
-                .push(ejection(effect, eyes, aim, shooter.velocity));
+                .push(ejection(effect, shooter, &definition.tag));
         }
         let (Some(trigger), Some(Some((tag, projectile)))) = (
             weapon.triggers.get(shot.trigger),
@@ -1578,18 +1578,24 @@ pub(crate) fn move_player(
     }
 }
 
-/// Where a shot's effect is made, from the eyes and the aim: by the
-/// weapon's ejection port, to the right of and below the view, facing
-/// right and up, as the first-person weapons' markers are (the sim has no
-/// first-person markers to put it at).
-fn ejection(effect: TagRef, eyes: Vec3, aim: Quat, velocity: Vec3) -> Ejection {
+/// Where a shot's effect is made, before the simulation puts it at the
+/// weapon's markers: by the weapon's ejection port, to the right of and
+/// below the view, facing right and up, as the first-person weapons'
+/// markers are; at the muzzle for a mounted weapon, which has none.
+fn ejection(effect: TagRef, shooter: &Shooter, weapon: &TagRef) -> Ejection {
+    let (eyes, aim) = (shooter.eyes, shooter.aim);
     Ejection {
         effect,
-        position: eyes + aim * Vec3::new(0.2, -0.08, -0.08),
+        position: shooter
+            .muzzle
+            .unwrap_or_else(|| eyes + aim * Vec3::new(0.2, -0.08, -0.08)),
         rotation: aim
             * Quat::from_rotation_z(-std::f32::consts::FRAC_PI_2)
             * Quat::from_rotation_y(-0.5),
-        velocity,
+        velocity: shooter.velocity,
+        locations: Vec::new(),
+        holder: Some(shooter.owner),
+        weapon: shooter.muzzle.is_none().then(|| weapon.clone()),
     }
 }
 

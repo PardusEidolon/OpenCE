@@ -5,9 +5,9 @@
 //! bytes each, a marker's name) a block at 0x28 and its events (0x44 bytes
 //! each) a block at 0x34. An event's skip fraction is at 0x04, its delay
 //! bounds at 0x08 and its duration bounds at 0x10, its parts (0x68 bytes
-//! each) a block at 0x2C and its particles (0xE8 bytes each) one at 0x38.
-//! A part's environment is at 0x00, its mode at 0x02, its location at 0x04,
-//! its flags at 0x06, its tag a reference at 0x18, its velocity bounds at
+//! each) a block at 0x2C and its particles (0xE8 bytes each) one at 0x38,
+//! each with its location at 0x08. A part's environment is at 0x00, its
+//! mode at 0x02, its location at 0x04, its flags at 0x06, its tag a reference at 0x18, its velocity bounds at
 //! 0x40, its cone at 0x48, its angular velocity bounds at 0x4C and its
 //! radius modifier bounds at 0x54. A particle (`part`, 0x164 bytes) names
 //! its point physics (`pphy`, 0x40 bytes) at 0x14 and its least radius at
@@ -134,6 +134,7 @@ fn import_debris(
     let modifier = vector::<2>(particles, 0xA0, "radius")?;
     let radius = particle.f32(0x74, "radius")? * 0.5 * (modifier[0] + modifier[1]);
     Ok(Some(EffectDebris {
+        location: particles.i16(0x08, "location")?,
         count: [particles.i16(0x6C, "count")?, particles.i16(0x6E, "count")?],
         offset: vector(particles, 0x14, "relative offset")?,
         direction: vector(particles, 0x0C, "relative direction")?,

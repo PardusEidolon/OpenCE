@@ -281,6 +281,7 @@ impl Effects {
         for shot in simulation.effects() {
             let origin = Origin {
                 velocity: shot.velocity,
+                locations: shot.locations.clone(),
                 ..Origin::at(shot.position, shot.rotation)
             };
             self.start(level, &shot.effect, origin);

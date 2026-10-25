@@ -613,6 +613,9 @@ impl EffectPart {
 /// (`pphy`) is dense, so each tumbles and comes to rest as a body would.
 #[derive(Clone, Debug, PartialEq, Archive, Serialize, Deserialize)]
 pub struct EffectDebris {
+    /// The effect's location they leave from, in its locations (none
+    /// past them: the effect's own frame).
+    pub location: i16,
     /// The fewest and most of them an event emits.
     pub count: [i16; 2],
     /// Where they leave from, in the effect's frame.

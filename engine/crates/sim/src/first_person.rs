@@ -265,6 +265,8 @@ pub struct FirstPersonWeapon {
     orientations: Vec<Orientation>,
     original: Vec<Orientation>,
     models: Vec<FirstPersonModel>,
+    /// The camera its models were posed from.
+    camera: Transform,
     /// The sound its animation reached in the last tick.
     sound: Option<TagRef>,
 }
@@ -352,6 +354,14 @@ impl FirstPersonWeapon {
     /// weapon.
     pub fn models(&self) -> &[FirstPersonModel] {
         &self.models
+    }
+
+    /// The weapon its models show, and the camera they were posed from.
+    pub fn posed(&self) -> Option<(&TagRef, &Transform)> {
+        self.weapon
+            .as_ref()
+            .filter(|_| !self.models.is_empty())
+            .map(|weapon| (weapon, &self.camera))
     }
 
     /// Tells the state machine of `message`, as the weapon does.
@@ -484,6 +494,7 @@ impl FirstPersonWeapon {
         let orientations = full_pose(&rig.graph, &self.machine, &shown, &self.original);
         let matrices = node_matrices(&rig.graph.nodes, &orientations, &root_matrix(camera));
         self.orientations = orientations;
+        self.camera = *camera;
         let fresh = self.models.len() != rig.models.len();
         let models: Vec<FirstPersonModel> = rig
             .models
