@@ -1,0 +1,1 @@
+Bake and import in parallel: rayon in the firefly hold and the exposure fit (bit-identical on 1/2/8 threads), BLAKE3 update_rayon for fingerprints; import kept serial, meshopt declined. Suite 1120 passed, 3 skipped.
