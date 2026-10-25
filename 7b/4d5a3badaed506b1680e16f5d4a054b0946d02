@@ -1,0 +1,1 @@
+nextest+deny in the test step: 1026 tests in 74.0 s under nextest (test-opt) vs 290.8 s serial; forbidden licence fails the check.
