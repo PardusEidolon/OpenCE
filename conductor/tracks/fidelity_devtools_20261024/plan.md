@@ -120,13 +120,13 @@ Found in play: shadows on the far hills break into large blocky triangles across
 
 ## Phase 11: Matching the source
 Lighting, shaders and graphics are rewritten and enhanced. AI, particles, animation, sound, script logic and gameplay are ported from `source/` first, matched to it, and only then extended; this phase finds where they still differ.
-- [ ] Task: A reference map of each system
-    - [ ] Write tests: each function of `source/` that AI, particles, animation, sound, scripts and gameplay port has a reference trace, or is listed with a reason; `--check` fails on a stale trace
-    - [ ] The list (in docs/engine.md), and `tools/engine_*_reference.py` scripts for the systems that have none
-- [ ] Task: The divergences
-    - [ ] Write tests: the engine against each new trace
-    - [ ] A sweep report: each function that differs, and by how much; Phases 12 to 15 take their order from it
-- [ ] Task: Conductor - User Manual Verification 'Phase 11: Matching the source' (Protocol in workflow.md)
+- [x] Task: A reference map of each system 58444298
+    - [x] Write tests: each function of `source/` that AI, particles, animation, sound, scripts and gameplay port has a reference trace, or is listed with a reason; `--check` fails on a stale trace
+    - [x] The list (in docs/engine.md), and `tools/engine_*_reference.py` scripts for the systems that have none
+- [x] Task: The divergences a5d59c2c
+    - [x] Write tests: the engine against each new trace
+    - [x] A sweep report: each function that differs, and by how much; Phases 12 to 15 take their order from it
+- [x] Task: Conductor - User Manual Verification 'Phase 11: Matching the source' (Protocol in workflow.md) (superseded: automated verification only, at the user's instruction)
 
 ## Phase 12: Weapons, particles and effects
 Found in play (2026-10-25): each weapon's firing effects are in the wrong place, and in first person they come from the face, not the gun; thrown grenades can't be seen; particles still face the camera; explosions are missing parts; blood decals on metal; impacts blur where bullets hit the ground.
