@@ -184,10 +184,20 @@ pub(crate) fn convert(image: &StoredImage<'_>, layout: CacheKind) -> Result<Text
     }
     let longest = usize::from(image.width.max(image.height).max(image.depth));
     let full_chain = floor_log2(longest) + 1;
+    // (a compressed chain ends where its longer side is a block, as
+    // rasterizer_xbox_bitmap_get_max_mipmap_count ends it: the stock maps
+    // hold the levels below as zeros, black where they are drawn)
+    let chain = match texel {
+        Texel::Block(..) => {
+            let blocks = (image.width / 4).max(image.height / 4).max(image.depth);
+            floor_log2(usize::from(blocks)) + 1
+        }
+        Texel::Bytes(_) => full_chain,
+    };
     let claimed = if linear {
         1
     } else {
-        (usize::from(image.mipmap_count) + 1).min(full_chain)
+        (usize::from(image.mipmap_count) + 1).min(chain)
     };
 
     // each level's bytes in the cache: a linear level's rows are padded on
@@ -231,8 +241,8 @@ pub(crate) fn convert(image: &StoredImage<'_>, layout: CacheKind) -> Result<Text
         }
     };
     let needed = |levels: usize| offset(levels, faces - 1, levels - 1) + stored_bytes[levels - 1];
-    // (the stock maps' non-square DXT bitmaps claim a level more than they
-    // hold, their chains ending at 1x2: the levels held are kept)
+    // (a chain that claims more levels than its bytes hold keeps the
+    // levels held)
     let mut levels = claimed;
     while levels > 1 && needed(levels) > image.pixels.len() {
         levels -= 1;
@@ -406,13 +416,35 @@ mod tests {
 
     #[test]
     fn a_chain_shorter_than_claimed_keeps_the_levels_held() {
-        // 4x16 DXT5 claims 5 levels (64, 32, 16, 16 and 16 bytes), holds 4
+        // 8x8 A8 claims 4 levels (64, 16, 4 and 1 bytes), holds 3
+        let stored: Vec<u8> = (0..84).collect();
+        let mut stored_image = image(8, 8, A8, &stored);
+        stored_image.mipmap_count = 3;
+        let texture =
+            convert(&stored_image, CacheKind::CustomEdition).unwrap_or_else(|e| panic!("{e}"));
+        assert_eq!(texture.levels.len(), 3);
+        assert_eq!(texture.levels[2].len(), 2 * 2 * 4);
+    }
+
+    #[test]
+    fn a_compressed_chain_ends_at_a_block() {
+        // 16x16 DXT1 claims 5 levels down to 1x1: the levels smaller than a
+        // block (their bytes zero in the stock maps, black when drawn) are
+        // not kept, as rasterizer_xbox_bitmap_get_max_mipmap_count stops
+        // the chain at 4 texels along the longer side
+        let stored: Vec<u8> = (0..184).collect();
+        let mut stored_image = image(16, 16, DXT1, &stored);
+        stored_image.mipmap_count = 4;
+        let texture = convert(&stored_image, CacheKind::Xbox).unwrap_or_else(|e| panic!("{e}"));
+        assert_eq!(texture.levels.len(), 3);
+        assert_eq!(texture.levels[2], stored[160..168]);
+        // and a 4x16 one ends at 4x4, below its first level's block columns
         let stored: Vec<u8> = (0..128).collect();
         let mut stored_image = image(4, 16, DXT5, &stored);
         stored_image.mipmap_count = 4;
         let texture = convert(&stored_image, CacheKind::Xbox).unwrap_or_else(|e| panic!("{e}"));
-        assert_eq!(texture.levels.len(), 4);
-        assert_eq!(texture.levels[3], stored[112..]);
+        assert_eq!(texture.levels.len(), 3);
+        assert_eq!(texture.levels[2], stored[96..112]);
     }
 
     #[test]

@@ -16,6 +16,8 @@ constant float SURFACE_OFFSET = 1e-3;
 constant float SPREAD_SHORT_OF = 0.9f;
 // trace.rs's SPREAD_RADIUS
 constant float SPREAD_RADIUS = 1.0f;
+// trace.rs's SPREAD_FLOOR
+constant float SPREAD_FLOOR = 0.5f;
 constant float RAY_LENGTH = 1.0e5;
 constant uint SURE_BOUNCES = 2;
 constant uint MAX_BOUNCES = 16;
@@ -464,16 +466,16 @@ static float3 bake_radiance(BakeScene scene, float3 origin, float3 direction, fl
     return light;
 }
 
-// A point within `footprint` of `centre` across the surface facing
-// `normal`, evenly over the disc, short of anything between them
-// (trace.rs's Tracer::spread).
+// A point within `footprint` (at least SPREAD_FLOOR) of `centre` across
+// the surface facing `normal`, evenly over the disc, short of anything
+// between them (trace.rs's Tracer::spread).
 static float3 bake_spread(BakeScene scene, float3 centre, float3 normal, float footprint, thread uint &state) {
     if (!(footprint > 0.0f)) {
         return centre;
     }
     float u = bake_random(state);
     float v = bake_random(state);
-    float reach = footprint * SPREAD_RADIUS * sqrt(u);
+    float reach = max(footprint * SPREAD_RADIUS, SPREAD_FLOOR) * sqrt(u);
     float angle = 2.0f * M_PI_F * v;
     float3 tangent, bitangent;
     bake_basis(normal, tangent, bitangent);

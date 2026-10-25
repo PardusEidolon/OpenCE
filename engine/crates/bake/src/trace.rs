@@ -31,6 +31,13 @@ pub const SPREAD_SHORT_OF: f32 = 0.9;
 /// than a disc only as large as the texel (2.13% of Blood Gulch's
 /// neighbours step hard against 2.26%, `ShadowEdgeTests`).
 pub const SPREAD_RADIUS: f32 = 1.0;
+/// The least radius a texel's paths start in (world units): a stock
+/// texel's side where the baked texels are smallest, so that a shadow's
+/// edge on the ground beside the cliffs, whose stock texels are twice as
+/// wide as the baked, is no sharper than stock draws it: outside the
+/// bases, texels under half a unit step hard on 0.2% of Blood Gulch's
+/// pairs against stock's 0.5% (`ShadowEdgeTests`).
+pub const SPREAD_FLOOR: f32 = 0.5;
 /// How far a ray goes.
 pub const RAY_LENGTH: f32 = 1.0e5;
 /// The bounces after which Russian roulette may end a path.
@@ -127,7 +134,7 @@ impl Tracer<'_> {
     /// [`Self::irradiance`] over the surface within `footprint` of `point`
     /// (a lightmap texel's, [`crate::chart::BakePoint::footprint`]): each
     /// path starts at a point of the disc [`SPREAD_RADIUS`] footprints wide
-    /// about it.
+    /// (at least [`SPREAD_FLOOR`]) about it.
     pub fn irradiance_over(
         &self,
         point: [f32; 3],
@@ -476,9 +483,10 @@ impl Tracer<'_> {
         None
     }
 
-    /// A point within `footprint` of `centre` across the surface facing
-    /// `normal`, evenly over the disc: short of anything between them (a
-    /// wall at a corner), so that no path starts behind it.
+    /// A point within `footprint` (at least [`SPREAD_FLOOR`]) of `centre`
+    /// across the surface facing `normal`, evenly over the disc: short of
+    /// anything between them (a wall at a corner), so that no path starts
+    /// behind it.
     fn spread(
         &self,
         centre: [f32; 3],
@@ -490,7 +498,7 @@ impl Tracer<'_> {
             return centre;
         }
         let (u, v) = (random.next_f32(), random.next_f32());
-        let reach = footprint * SPREAD_RADIUS * u.sqrt();
+        let reach = (footprint * SPREAD_RADIUS).max(SPREAD_FLOOR) * u.sqrt();
         let angle = 2.0 * core::f32::consts::PI * v;
         let [tangent, bitangent] = basis(normal);
         let direction = add(
@@ -827,6 +835,28 @@ mod tests {
             [1.0; 3]
         );
         assert_eq!(untouched.next_u32(), Random::new(11).next_u32());
+    }
+
+    #[test]
+    fn a_small_footprint_spreads_over_the_floor() {
+        // a texel a tenth of a unit wide still starts its paths across a
+        // disc of SPREAD_FLOOR, as wide as the stock texel it stands for
+        let open = scene(Vec::new(), vec![material(0.5, 0.0, 1.0)], 1.0);
+        let bvh = Bvh::build(&open.triangles);
+        let tracer = Tracer {
+            scene: &open,
+            bvh: &bvh,
+            occlusion_distance: OCCLUSION_DISTANCE,
+        };
+        let mut random = Random::new(5);
+        let mut widest = 0.0f32;
+        for _ in 0..4096 {
+            let start = tracer.spread([0.0; 3], [0.0, 0.0, 1.0], 0.1, &mut random);
+            let reach = dot(start, start).sqrt();
+            assert!(reach <= SPREAD_FLOOR + 1e-4, "{start:?}");
+            widest = widest.max(reach);
+        }
+        assert!(widest > SPREAD_FLOOR * 0.95, "{widest}");
     }
 
     #[test]

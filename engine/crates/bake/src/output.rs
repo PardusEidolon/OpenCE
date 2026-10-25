@@ -29,7 +29,7 @@ use crate::scene::Scene;
 use crate::seam::{self, Seam, SeamStep};
 
 /// The baker's version: raised with any change to what it makes.
-pub const BAKE_VERSION: u32 = 8;
+pub const BAKE_VERSION: u32 = 9;
 /// The cache file's first eight bytes.
 pub const MAGIC: [u8; 8] = *b"OCEBAKE\0";
 
