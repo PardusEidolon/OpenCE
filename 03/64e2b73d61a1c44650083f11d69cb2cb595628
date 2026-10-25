@@ -1,0 +1,1 @@
+The audio thread: non-blocking pull with 512-frame mix-ahead; rubato FFT resampling to 48 kHz at decode. Suite 1116 passed, 3 skipped.
