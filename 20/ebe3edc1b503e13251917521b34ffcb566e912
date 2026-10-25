@@ -1,0 +1,1 @@
+Checkpoint Phase 5: Nix tooling. Automated verification only, at the user's instruction: nix flake check, test_nix_tooling.py, Rust and Swift suites (HudTests' stale frame pre-existing). Findings for the report: 4K benchmark p99 9.7 ms vs 8.33 ms budget; 17 old-port pytest failures present at HEAD.
