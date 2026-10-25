@@ -118,7 +118,7 @@ Found in play: shadows on the far hills break into large blocky triangles across
     - [x] The fixes
 - [x] Task: Conductor - User Manual Verification 'Phase 10: Lightmap resolution and interiors' (Protocol in workflow.md) (superseded: automated verification only, at the user's instruction)
 
-## Phase 11: Matching the source
+## Phase 11: Matching the source [checkpoint: 1a4f2fdf]
 Lighting, shaders and graphics are rewritten and enhanced. AI, particles, animation, sound, script logic and gameplay are ported from `source/` first, matched to it, and only then extended; this phase finds where they still differ.
 - [x] Task: A reference map of each system 58444298
     - [x] Write tests: each function of `source/` that AI, particles, animation, sound, scripts and gameplay port has a reference trace, or is listed with a reason; `--check` fails on a stale trace
