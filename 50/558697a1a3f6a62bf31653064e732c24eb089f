@@ -1,0 +1,1 @@
+How particles face: sprite basis and fade matched to build_sprite_compute_basis/vertex_fade (600-case reference, worst 3.5e-7); direction kept while moving; random mirrors by flags; shader fade modes. 118 suites pass.
