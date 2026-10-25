@@ -731,6 +731,165 @@ The app measures each frame itself, with no trace running:
 
 The frame-time overlay adds the last frame's GPU time.
 
+## The reference map
+
+Each function of the original that the ported systems (AI, particles,
+animation, sound, scripts and gameplay) name in their doc comments is either
+compiled into a reference trace by a `tools/engine_*_reference.py` script,
+or listed with the reason it has none: mostly that it reads the object, tag
+and map world, which the fake worlds do not hold, and the phase that checks
+it another way. `python tools/engine_reference_map.py` writes the table;
+`--check` fails when a ported function has neither, when a reason is stale,
+when the table is not the one the code writes, or when any trace is stale.
+
+<!-- reference map: tools/engine_reference_map.py writes this table -->
+| Function | System | Source | Ported in | Trace, or why none |
+| --- | --- | --- | --- | --- |
+| `actor_action_handle_surprise` | AI | source/ai/actions.c | sim/src/ai_impulse.rs:6 | AI; reads the object, tag and map world, which the fake worlds do not hold (the actor and its prop); Phase 11's divergences |
+| `actor_action_try_to_dive` | AI | source/ai/actions.c | sim/src/ai_impulse.rs:5 | AI; reads the object, tag and map world, which the fake worlds do not hold (the actor and its prop); Phase 11's divergences |
+| `ai_conversation_line` | AI | source/ai/ai_communication.c | campaign/src/conversations.rs:36 | AI; reads the object, tag and map world, which the fake worlds do not hold (the scenario's conversations); campaign/tests/flow.rs |
+| `ai_conversation_status` | AI | source/ai/ai_communication.c | campaign/src/conversations.rs:19 | AI; reads the object, tag and map world, which the fake worlds do not hold (the scenario's conversations); campaign/tests/flow.rs |
+| `aiming_screen_apply` | animation | source/models/model_animations.c | sim/src/animation.rs:760 | `tools/engine_animation_reference.py` |
+| `animation_choose_random_permutation_internal` | animation | source/models/model_animations.c | sim/src/animation.rs:1212 | draws from the game's random seed; checked through the animation trace's permutation weights |
+| `animation_data_contains` | animation | source/models/model_animations.c | sim/src/animation.rs:290 | `tools/engine_animation_reference.py` |
+| `animation_frame_valid` | animation | source/models/model_animations.c | sim/src/animation.rs:320 | `tools/engine_animation_reference.py` |
+| `animation_get_keyframe_rotation` | animation | source/models/model_animations.c | sim/src/animation.rs:446 | `tools/engine_animation_reference.py` |
+| `animation_get_node_orientations` | animation | source/models/model_animations.c | sim/src/animation.rs:692 | `tools/engine_animation_reference.py` |
+| `animation_graph_node_matrices_from_orientations` | animation | source/models/model_animations.c | sim/src/animation.rs:1144 | `tools/engine_animation_reference.py` |
+| `animation_keyframe_search` | animation | source/models/model_animations.c | sim/src/animation.rs:520 | `tools/engine_animation_reference.py` |
+| `animation_update_internal` | animation | source/models/model_animations.c | sim/src/animation.rs:1237 | reads the object, tag and map world, which the fake worlds do not hold (the animation tag's frames); checked by the animation trace's frame counts |
+| `build_damage_animation_index` | animation | source/models/model_animations.c | sim/src/animation_graph.rs:360 | the damage animations; reads the object, tag and map world, which the fake worlds do not hold (the animation graph) |
+| `interpolate_node_orientations` | animation | source/models/model_animations.c | sim/src/animation.rs:1120 | `tools/engine_animation_reference.py` |
+| `model_get_node_orientations` | animation | source/models/models.c | sim/src/animation.rs:681 | `tools/engine_animation_reference.py` |
+| `overlay_animation_apply` | animation | source/models/model_animations.c | sim/src/animation.rs:737 | `tools/engine_animation_reference.py` |
+| `overlay_animation_apply_continuous` | animation | source/models/model_animations.c | sim/src/animation.rs:878 | `tools/engine_animation_reference.py` |
+| `overlay_animation_apply_continuous_scaled` | animation | source/models/model_animations.c | sim/src/animation.rs:891 | checked through the animation trace's overlays |
+| `overlay_animation_apply_scaled` | animation | source/models/model_animations.c | sim/src/animation.rs:842 | `tools/engine_animation_reference.py` |
+| `quaternion_decompress_6byte` | animation | source/models/model_animations.c | sim/src/animation.rs:270 | `tools/engine_animation_reference.py` |
+| `quaternion_decompress_8byte` | animation | source/models/model_animations.c | sim/src/animation.rs:258 | `tools/engine_animation_reference.py` |
+| `replacement_animation_apply` | animation | source/models/model_animations.c | sim/src/animation.rs:724 | `tools/engine_animation_reference.py` |
+| `accelerate_to_position` | gameplay | source/math/real_math.c | sim/src/device_animation.rs:3 | a first-person weapon's sway; checked through first_person_weapon_update's trace |
+| `angle_between_vectors3d` | gameplay | source/math/real_math.c | sim/src/vehicle.rs:913 | `tools/engine_math_reference.py` |
+| `area_of_effect_cause_damage_to_object` | gameplay | source/objects/damage.c | sim/src/damage.rs:5 | damage; reads the object, tag and map world, which the fake worlds do not hold; Phase 12's explosions |
+| `biped_start_limp_body_physics` | gameplay | source/units/bipeds.c | sim/src/unit_states.rs:409 | death; reads the object, tag and map world, which the fake worlds do not hold; Phase 14's ragdoll |
+| `biped_update_turning` | gameplay | source/units/bipeds.c | sim/src/unit_states.rs:722 | a biped's turning; reads the object, tag and map world, which the fake worlds do not hold; Phase 11's divergences |
+| `blip_size_get` | gameplay | source/interface/motion_sensor.c | sim/src/hud.rs:67 | the motion sensor's blips; checked by sim/tests/hud.rs |
+| `camera_track_splut` | gameplay | source/camera/following_camera.c | sim/src/player.rs:1485 | cutscene cameras; reads the object, tag and map world, which the fake worlds do not hold (the camera track tag); campaign/tests/cutscenes.rs |
+| `create_ghost_effect` | gameplay | source/units/vehicles.c | sim/src/seats.rs:1180 | a vehicle's effects; reads the object, tag and map world, which the fake worlds do not hold; Phase 13's effects on the move |
+| `create_pelican_effect` | gameplay | source/units/vehicles.c | sim/src/seats.rs:1181 | a vehicle's effects; reads the object, tag and map world, which the fake worlds do not hold; Phase 13's effects on the move |
+| `device_export_function_values` | gameplay | source/devices/devices.c | sim/src/device_animation.rs:5 | devices; reads the object, tag and map world, which the fake worlds do not hold |
+| `device_preprocess_node_orientations` | gameplay | source/devices/devices.c | sim/src/device_animation.rs:6 | devices; reads the object, tag and map world, which the fake worlds do not hold (the device's model) |
+| `director_desired_perspective` | gameplay | source/camera/director.c | sim/src/seats.rs:1137 | the camera; reads the object, tag and map world, which the fake worlds do not hold (the unit's seat); Phase 14's death camera |
+| `equipment_handle_pickup` | gameplay | source/items/equipment.c | sim/src/player.rs:1115 | items; reads the object, tag and map world, which the fake worlds do not hold |
+| `euler_angles2d_from_vector3d` | gameplay | source/math/real_math.c | sim/src/animation_blend.rs:131 | `tools/engine_math_reference.py` |
+| `first_person_animation_type_from_weapon_state` | gameplay | source/interface/first_person_weapons.c | sim/src/first_person_states.rs:166 | `tools/engine_first_person_reference.py` |
+| `first_person_weapon_animation_fits` | gameplay | source/interface/first_person_weapons.c | sim/src/first_person.rs:88 | reads the object, tag and map world, which the fake worlds do not hold (the first-person model's nodes); sim/tests/first_person.rs |
+| `first_person_weapon_build_node_matrices` | gameplay | source/interface/first_person_weapons.c | sim/src/first_person.rs:160 | reads the object, tag and map world, which the fake worlds do not hold (the first-person model's nodes); sim/tests/first_person.rs |
+| `first_person_weapon_message` | gameplay | source/interface/first_person_weapons.c | sim/src/first_person_states.rs:633 | `tools/engine_first_person_reference.py` |
+| `first_person_weapon_next_state` | gameplay | source/interface/first_person_weapons.c | sim/src/first_person_states.rs:686 | `tools/engine_first_person_reference.py` |
+| `first_person_weapon_set_state` | gameplay | source/interface/first_person_weapons.c | sim/src/first_person_states.rs:197 | `tools/engine_first_person_reference.py` |
+| `first_person_weapon_start_interpolation` | gameplay | source/interface/first_person_weapons.c | sim/src/first_person_states.rs:543 | `tools/engine_first_person_reference.py` |
+| `first_person_weapon_state_from_weapon_message` | gameplay | source/interface/first_person_weapons.c | sim/src/first_person_states.rs:315 | `tools/engine_first_person_reference.py` |
+| `first_person_weapon_switch_weapons` | gameplay | source/interface/first_person_weapons.c | sim/src/first_person_states.rs:616 | `tools/engine_first_person_reference.py` |
+| `first_person_weapon_update` | gameplay | source/interface/first_person_weapons.c | sim/src/first_person_states.rs:751 | reads the object, tag and map world, which the fake worlds do not hold (the weapon tag); its states are first_person_reference's |
+| `following_camera_update` | gameplay | source/camera/following_camera.c | sim/src/player.rs:737 | the camera; reads the object, tag and map world, which the fake worlds do not hold; Phase 14's death camera |
+| `game_difficulty_get_team_value` | gameplay | source/game/game_globals.c | campaign/tests/flow.rs:123 | the difficulty table; reads the object, tag and map world, which the fake worlds do not hold (the globals tag) |
+| `get_edge_vertex` | gameplay | source/math/geometry.c | sim/src/random.rs:224 | `tools/engine_math_reference.py` |
+| `get_face_vertex` | gameplay | source/math/geometry.c | sim/src/random.rs:193 | `tools/engine_math_reference.py` |
+| `get_material_type` | gameplay | source/physics/physics.c | physics/src/ground.rs:3 | the ground's material; reads the object, tag and map world, which the fake worlds do not hold (the structure's collision) |
+| `hud_show_action_response` | gameplay | source/interface/hud.c | sim/src/hud.rs:290 | the HUD's messages; reads the object, tag and map world, which the fake worlds do not hold |
+| `item_adjust_for_angular_velocity_change` | gameplay | source/items/items.c | sim/src/item_physics.rs:393 | `tools/engine_item_reference.py` |
+| `item_align_to_normal_and_point` | gameplay | source/items/items.c | sim/src/item_physics.rs:376 | `tools/engine_item_reference.py` |
+| `matrix4x3_from_orientation` | gameplay | source/math/matrix_math.c | sim/src/animation.rs:102 | `tools/engine_animation_reference.py` |
+| `matrix4x3_from_point_and_vectors` | gameplay | source/math/matrix_math.c | sim/src/animation.rs:91 | `tools/engine_animation_reference.py` |
+| `matrix4x3_inverse_transform_normal` | gameplay | source/math/matrix_math.c | sim/src/animation_blend.rs:130 | `tools/engine_math_reference.py` |
+| `matrix4x3_rotation_from_angles` | gameplay | source/math/matrix_math.c | sim/src/objects.rs:393 | rotations; checked through the item trace's object matrices |
+| `matrix4x3_transform_normal` | gameplay | source/math/matrix_math.c | sim/src/animation.rs:167 | `tools/engine_math_reference.py` |
+| `model_build_remapping_table_for_animation_graph` | gameplay | source/interface/first_person_weapons.c | sim/src/first_person.rs:75 | reads the object, tag and map world, which the fake worlds do not hold (the model's and graph's node names) |
+| `motion_sensor_update` | gameplay | source/interface/motion_sensor.c | sim/src/hud.rs:122 | the motion sensor; reads the object, tag and map world, which the fake worlds do not hold; sim/tests/hud.rs |
+| `object_cause_damage` | gameplay | source/objects/damage.c | sim/src/damage.rs:175 | damage; reads the object, tag and map world, which the fake worlds do not hold; Phase 12 |
+| `object_compute_function_values` | gameplay | source/objects/objects.c | sim/src/functions.rs:1 | object functions; reads the object, tag and map world, which the fake worlds do not hold; Phase 13's animations driven by their functions |
+| `object_damage_aftermath` | gameplay | source/objects/damage.c | sim/src/forces.rs:2 | damage; reads the object, tag and map world, which the fake worlds do not hold; Phase 12 |
+| `object_export_function_values` | gameplay | source/objects/objects.c | sim/src/functions.rs:153 | object functions; reads the object, tag and map world, which the fake worlds do not hold; Phase 13's animations driven by their functions |
+| `object_new_from_scenario` | gameplay | source/objects/objects.c | sim/src/objects.rs:355 | placement; reads the object, tag and map world, which the fake worlds do not hold; tools/engine_placement_traces.py records its results |
+| `object_start_interpolation` | gameplay | source/objects/objects.c | sim/src/animation.rs:1327 | interpolation; reads the object, tag and map world, which the fake worlds do not hold; Phase 12's impacts |
+| `object_types_disconnect_from_structure_bsp` | gameplay | source/objects/object_types.c | sim/src/objects.rs:450 | placement; reads the object, tag and map world, which the fake worlds do not hold |
+| `object_types_place_all` | gameplay | source/objects/object_types.c | sim/src/objects.rs:374 | placement; reads the object, tag and map world, which the fake worlds do not hold; tools/engine_placement_traces.py records its results |
+| `object_types_place_objects` | gameplay | source/objects/object_types.c | sim/src/objects.rs:307 | placement; reads the object, tag and map world, which the fake worlds do not hold; tools/engine_placement_traces.py records its results |
+| `periodic_function_build_table` | gameplay | source/math/periodic_functions.c | sim/src/periodic.rs:93 | `tools/engine_periodic_reference.py` |
+| `periodic_function_build_variable_period_x_table` | gameplay | source/math/periodic_functions.c | sim/src/periodic.rs:73 | `tools/engine_periodic_reference.py` |
+| `periodic_function_evaluate` | gameplay | source/math/periodic_functions.c | sim/src/periodic.rs:165 | `tools/engine_periodic_reference.py` |
+| `periodic_functions_initialize` | gameplay | source/math/periodic_functions.c | sim/src/periodic.rs:45 | `tools/engine_periodic_reference.py` |
+| `physics_compute_biped_collision` | gameplay | source/physics/physics.c | sim/src/seats.rs:319 | physics; Jolt stands for the original's collision; tools/engine_movement_traces.py |
+| `player_examine_nearby_objects` | gameplay | source/game/players.c | sim/src/hud.rs:296 | the action button; reads the object, tag and map world, which the fake worlds do not hold |
+| `players_update_after_game` | gameplay | source/game/players.c | campaign/src/lib.rs:474 | the end of a level; reads the object, tag and map world, which the fake worlds do not hold; campaign/tests/flow.rs |
+| `point_physics_update` | gameplay | source/physics/point_physics.c | sim/src/point_physics.rs:1 | particles; reads the object, tag and map world, which the fake worlds do not hold (the point physics tag); Phase 12's particles |
+| `quaternions_interpolate_and_normalize` | gameplay | source/math/real_math.c | sim/src/animation.rs:200 | `tools/engine_animation_reference.py` |
+| `real_seed_random` | gameplay | source/math/random_math.c | sim/src/random.rs:36 | `tools/engine_item_reference.py` |
+| `real_seed_random_range` | gameplay | source/math/random_math.c | sim/src/random.rs:49 | `tools/engine_math_reference.py` |
+| `rotate_vector_about_axis` | gameplay | source/math/real_math.c | sim/src/item_physics.rs:412 | `tools/engine_item_reference.py` |
+| `scenario_location_water_depth` | gameplay | source/scenario/scenario.c | sim/src/vehicle.rs:351 | water; reads the object, tag and map world, which the fake worlds do not hold (the structure's fog planes) |
+| `scripted_camera_update` | gameplay | source/camera/camera_scripting.c | campaign/src/cinematic.rs:122 | cutscene cameras; reads the object, tag and map world, which the fake worlds do not hold; campaign/tests/cutscenes.rs |
+| `seed_random_direction3d` | gameplay | source/math/random_math.c | sim/src/random.rs:55 | `tools/engine_item_reference.py` |
+| `seed_random_range` | gameplay | source/math/random_math.c | sim/src/random.rs:42 | `tools/engine_math_reference.py` |
+| `seed_random_vector_in_cone3d` | gameplay | source/math/random_math.c | sim/src/random.rs:66 | `tools/engine_math_reference.py` |
+| `transition_function_build_table` | gameplay | source/math/periodic_functions.c | sim/src/periodic.rs:199 | `tools/engine_periodic_reference.py` |
+| `transition_function_evaluate` | gameplay | source/math/periodic_functions.c | sim/src/damage.rs:37 | `tools/engine_periodic_reference.py` |
+| `unit_animation_aiming_screen` | gameplay | source/units/units.c | sim/src/animation_blend.rs:119 | checked through unit_animation_state_get_aiming_screen_index's trace |
+| `unit_animation_compute_interpolation_frame_count` | gameplay | source/units/units.c | sim/src/unit_states.rs:276 | `tools/engine_unit_state_reference.py` |
+| `unit_animation_get_fitting` | gameplay | source/units/units.c | sim/src/animation_blend.rs:104 | reads the object, tag and map world, which the fake worlds do not hold (the unit's model and graph) |
+| `unit_animation_impulse_get_index` | gameplay | source/units/units.c | sim/src/ai_impulse.rs:3 | AI's impulses; reads the object, tag and map world, which the fake worlds do not hold (the animation graph) |
+| `unit_animation_overlay_action_loops` | gameplay | source/units/units.c | sim/src/unit_states.rs:268 | `tools/engine_unit_state_reference.py` |
+| `unit_animation_set_state` | gameplay | source/units/units.c | sim/src/unit_states.rs:3 | checked through the unit state trace's rules |
+| `unit_animation_state_can_be_entered_without_animation` | gameplay | source/units/units.c | sim/src/unit_states.rs:205 | `tools/engine_unit_state_reference.py` |
+| `unit_animation_state_get_aiming_screen_index` | gameplay | source/units/units.c | sim/src/unit_states.rs:290 | `tools/engine_unit_state_reference.py` |
+| `unit_animation_state_interruptable` | gameplay | source/units/units.c | sim/src/unit_states.rs:220 | `tools/engine_unit_state_reference.py` |
+| `unit_animation_state_loops` | gameplay | source/units/units.c | sim/src/unit_states.rs:242 | `tools/engine_unit_state_reference.py` |
+| `unit_can_play_animation_impulse` | gameplay | source/units/units.c | sim/src/ai_impulse.rs:3 | AI's impulses; reads the object, tag and map world, which the fake worlds do not hold (the animation graph) |
+| `unit_cause_melee_damage` | gameplay | source/units/units.c | sim/src/unit_states.rs:403 | damage; reads the object, tag and map world, which the fake worlds do not hold; Phase 12 |
+| `unit_custom_animation_at_frame` | gameplay | source/units/units.c | sim/src/animation.rs:1405 | scripts' custom animations; reads the object, tag and map world, which the fake worlds do not hold |
+| `unit_detach_from_parent` | gameplay | source/units/units.c | sim/src/vehicle_animation.rs:315 | seats; reads the object, tag and map world, which the fake worlds do not hold; Phase 13's getting in and out |
+| `unit_enter_seat` | gameplay | source/units/units.c | sim/src/unit_states.rs:544 | seats; reads the object, tag and map world, which the fake worlds do not hold; Phase 13's getting in and out |
+| `unit_exit_seat_end` | gameplay | source/units/units.c | sim/src/unit_states.rs:412 | seats; reads the object, tag and map world, which the fake worlds do not hold; Phase 13's getting in and out |
+| `unit_find_nearby_seat` | gameplay | source/units/units.c | sim/src/seats.rs:4 | seats; reads the object, tag and map world, which the fake worlds do not hold; Phase 13's getting in and out |
+| `unit_get_camera_position` | gameplay | source/units/units.c | sim/src/seats.rs:69 | seats; reads the object, tag and map world, which the fake worlds do not hold (the seat's camera marker) |
+| `unit_get_seat_entrance_point` | gameplay | source/units/units.c | sim/src/seats.rs:61 | seats; reads the object, tag and map world, which the fake worlds do not hold (the seat's marker) |
+| `unit_preprocess_node_orientations` | gameplay | source/units/units.c | sim/src/animation_blend.rs:5 | checked through the animation trace's aiming blends |
+| `unit_seat_update` | gameplay | source/units/units.c | sim/src/vehicle_animation.rs:5 | seats; reads the object, tag and map world, which the fake worlds do not hold; Phase 13 |
+| `unit_set_or_test_seat_and_weapon_label` | gameplay | source/units/units.c | sim/src/animation_graph.rs:256 | checked through the animation trace's labels |
+| `unit_start_animation_impulse` | gameplay | source/units/units.c | sim/src/ai_impulse.rs:4 | AI's impulses; reads the object, tag and map world, which the fake worlds do not hold (the animation graph) |
+| `unit_test_animation_impulse` | gameplay | source/units/units.c | sim/src/ai_impulse.rs:131 | AI's impulses; reads the object, tag and map world, which the fake worlds do not hold (the animation graph) |
+| `unit_throw_grenade_release` | gameplay | source/units/units.c | sim/src/unit_states.rs:398 | grenades; reads the object, tag and map world, which the fake worlds do not hold; Phase 12's thrown grenades |
+| `unit_update_animation` | gameplay | source/units/units.c | sim/src/unit_animator.rs:1 | checked through the unit state trace's rules |
+| `vehicle_is_flipped` | gameplay | source/units/vehicles.c | sim/src/vehicle.rs:68 | vehicles; reads the object, tag and map world, which the fake worlds do not hold (the vehicle's physics); Phase 13 |
+| `vehicle_preprocess_node_orientations` | gameplay | source/units/vehicles.c | sim/src/vehicle_animation.rs:3 | vehicles; reads the object, tag and map world, which the fake worlds do not hold (the vehicle's model); Phase 13's wheels and tracks |
+| `weapon_effect_new` | gameplay | source/items/weapons.c | sim/src/player.rs:1381 | weapons; reads the object, tag and map world, which the fake worlds do not hold; Phase 12's effects |
+| `weapon_magazine_finish_reload` | gameplay | source/items/weapons.c | sim/src/weapon.rs:583 | weapons; reads the object, tag and map world, which the fake worlds do not hold (the weapon tag) |
+| `weapon_magazine_start_reload` | gameplay | source/items/weapons.c | sim/src/weapon.rs:223 | weapons; reads the object, tag and map world, which the fake worlds do not hold (the weapon tag) |
+| `weapon_trigger_begin_firing` | gameplay | source/items/weapons.c | sim/src/weapon.rs:439 | weapons; reads the object, tag and map world, which the fake worlds do not hold (the weapon tag) |
+| `weapon_trigger_can_fire_again` | gameplay | source/items/weapons.c | sim/src/weapon.rs:423 | weapons; reads the object, tag and map world, which the fake worlds do not hold (the weapon tag) |
+| `weapon_trigger_fire` | gameplay | source/items/weapons.c | sim/src/weapon.rs:495 | weapons; reads the object, tag and map world, which the fake worlds do not hold (the weapon tag); Phase 12 |
+| `weapon_trigger_recover` | gameplay | source/items/weapons.c | sim/src/weapon.rs:488 | weapons; reads the object, tag and map world, which the fake worlds do not hold (the weapon tag) |
+| `weapon_trigger_release_charge` | gameplay | source/items/weapons.c | sim/src/weapon.rs:465 | weapons; reads the object, tag and map world, which the fake worlds do not hold (the weapon tag) |
+| `effect_new_unattached_from_markers` | particles | source/effects/effects.c | sim/src/effects.rs:64 | particles; reads the object, tag and map world, which the fake worlds do not hold (the effect tag); Phase 12's explosions |
+| `hs_thread_main` | scripts | source/hs/hs_runtime.c | script/src/lib.rs:552 | scripts; reads the object, tag and map world, which the fake worlds do not hold (the scenario's compiled scripts); script/tests |
+| `detail_sound_random_offset` | sound | source/sound/sound_manager.c | audio/src/player/looping.rs:672 | a looping sound's details; draws from the game's random seed; Phase 15 |
+| `process_looping_sounds` | sound | source/sound/sound_manager.c | audio/src/player/looping.rs:1 | sound; reads the object, tag and map world, which the fake worlds do not hold; Phase 15 |
+| `scripted_sound_time` | sound | source/sound/game_sound.c | campaign/src/sounds.rs:181 | sound; reads the object, tag and map world, which the fake worlds do not hold (the sound tag); campaign/tests/sounds.rs |
+| `sound_channel_summary_build` | sound | source/sound/sound_manager.c | audio/src/player.rs:293 | the mixer's channels; reads the object, tag and map world, which the fake worlds do not hold (the sound manager); Phase 15 |
+| `sound_class_set_gain` | sound | source/sound/sound_classes.c | audio/src/classes.rs:4 | the sound classes; reads the object, tag and map world, which the fake worlds do not hold (the sound manager); Phase 15 |
+| `sound_classes_update` | sound | source/sound/sound_classes.c | audio/src/classes.rs:579 | the sound classes; reads the object, tag and map world, which the fake worlds do not hold (the sound manager); Phase 15 |
+| `sound_definition_find_pitch_range_by_pitch` | sound | source/sound/sound_definitions.c | audio/src/choice.rs:80 | `tools/engine_sound_choice_reference.py` |
+| `sound_definition_next_permutation` | sound | source/sound/sound_definitions.c | audio/src/choice.rs:163 | `tools/engine_sound_choice_reference.py` |
+| `sound_find_like_channel` | sound | source/sound/sound_manager.c | audio/src/player.rs:293 | the mixer's channels; reads the object, tag and map world, which the fake worlds do not hold (the sound manager); Phase 15 |
+| `sound_manager_master_gain` | sound | source/sound/sound_manager.c | audio/src/player.rs:230 | the sound manager's gain; reads the object, tag and map world, which the fake worlds do not hold; Phase 15 |
+| `sound_new_impulse` | sound | source/sound/sound_manager.c | audio/src/player.rs:1 | sound; reads the object, tag and map world, which the fake worlds do not hold; Phase 15 |
+| `sound_refresh_looping` | sound | source/sound/sound_manager.c | audio/src/player/looping.rs:1 | sound; reads the object, tag and map world, which the fake worlds do not hold; Phase 15 |
+| `sound_scale_random_value` | sound | source/sound/sound_manager.c | audio/src/choice.rs:56 | `tools/engine_sound_choice_reference.py` |
+| `sound_scale_value` | sound | source/sound/sound_manager.c | audio/src/choice.rs:50 | `tools/engine_sound_choice_reference.py` |
+| `try_to_reset_permutations` | sound | source/sound/sound_definitions.c | audio/src/choice.rs:134 | `tools/engine_sound_choice_reference.py` |
+<!-- end of the reference map -->
+
 ## The developer tools
 
 The engine's tools reach into a running world: a shell in the game, the

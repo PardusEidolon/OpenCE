@@ -17,8 +17,8 @@ def read(relative):
 
 
 def function(source, name):
-    """A function's definition (static, inline or not), taken by matching braces; LookupError if not found."""
-    match = re.search(r"^(?:static |__inline )?[\w *]+?\b" + re.escape(name) + r"\(\s*[^;{]*\)\s*\{", source, re.M)
+    """A function's definition (static, inline or not, its type on the line before or not), taken by matching braces; LookupError if not found."""
+    match = re.search(r"^(?:static |__inline )?[\w *]+?\n?\b" + re.escape(name) + r"\(\s*[^;{]*\)\s*\{", source, re.M)
     if not match:
         raise LookupError(f"function not found in the sources: {name}")
     end = source.index("{", match.start()) + 1
