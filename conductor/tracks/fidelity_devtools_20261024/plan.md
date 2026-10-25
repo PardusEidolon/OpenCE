@@ -139,9 +139,9 @@ Found in play (2026-10-25): each weapon's firing effects are in the wrong place,
 - [x] Task: How particles face 50558697
     - [x] Write tests: each particle's orientation follows its tag (facing the screen, parallel to its direction, vertical, local), against the original's particle functions' trace
     - [x] The fixes
-- [ ] Task: Explosions
-    - [ ] Write tests: each explosion spawns every event and part its effect tag lists (particles, systems, lights, sounds, decals, damage), counted against the tag
-    - [ ] The fixes
+- [x] Task: Explosions b53f0fca
+    - [x] Write tests: each explosion spawns every event and part its effect tag lists (particles, systems, lights, sounds, decals, damage), counted against the tag
+    - [x] The fixes
 - [ ] Task: Impacts by material
     - [ ] Write tests: an impact on each material type uses the effect and decal the material table names (no blood on metal)
     - [ ] The fixes
