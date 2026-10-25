@@ -1,0 +1,1 @@
+Fuzz targets: sound and bitmap added, seeds, replay; 7.7M runs over six targets, no crash; suite 1047 passed.
