@@ -1,0 +1,1 @@
+Task: The checks (rust_tools Phase 5). nix flake check: fmt, clippy -D warnings, tests (test-opt), deny, llvm-cov (lcov, 77.1% lines), treefmt. Verified by building each check.
