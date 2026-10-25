@@ -128,7 +128,7 @@ Lighting, shaders and graphics are rewritten and enhanced. AI, particles, animat
     - [x] A sweep report: each function that differs, and by how much; Phases 12 to 15 take their order from it
 - [x] Task: Conductor - User Manual Verification 'Phase 11: Matching the source' (Protocol in workflow.md) (superseded: automated verification only, at the user's instruction)
 
-## Phase 12: Weapons, particles and effects
+## Phase 12: Weapons, particles and effects [checkpoint: bb968047]
 Found in play (2026-10-25): each weapon's firing effects are in the wrong place, and in first person they come from the face, not the gun; thrown grenades can't be seen; particles still face the camera; explosions are missing parts; blood decals on metal; impacts blur where bullets hit the ground.
 - [x] Task: Where the effects start 8de1a254
     - [x] Write tests: each weapon's firing effects start at the marker the original uses (in first person, the first-person model's; in third person, the weapon's), within a tolerance; the old engine's (`port/macos`) positions recorded as the reference
@@ -148,7 +148,7 @@ Found in play (2026-10-25): each weapon's firing effects are in the wrong place,
 - [x] Task: No blur on impacts 592bb028
     - [x] Write tests: frame interpolation never blends a spawned, teleported or attached object from a place it wasn't; golden frames of a bullet hitting the ground (stood in for by a structural test: sprites mark the scaler's reactive mask)
     - [x] The fixes
-- [ ] Task: Conductor - User Manual Verification 'Phase 12: Weapons, particles and effects' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 12: Weapons, particles and effects' (Protocol in workflow.md) (superseded: automated verification only, at the user's instruction)
 
 ## Phase 13: Vehicles
 Found in play (2026-10-25): getting in and out is too quick; vehicles collide only with other vehicles; turret and gun animations play over and over with no one using them (the warthog's chaingun barrel spins on its own); wheels and tracks don't turn properly and blur; driving sprays too many sprites, the same on every surface; the vehicle HUDs have the wrong icons and meters.
