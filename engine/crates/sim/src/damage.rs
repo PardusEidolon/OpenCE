@@ -160,6 +160,10 @@ pub struct Outcome {
     pub headshot: bool,
     /// It killed.
     pub killed: bool,
+    /// The material type it struck (-1: none), which chooses what a
+    /// projectile makes there: the material's, or the shield's when the
+    /// shield took more of it than the body.
+    pub material_type: i16,
 }
 
 /// The material a hit takes its multipliers from: the one struck, else the
@@ -179,7 +183,11 @@ pub fn cause_damage(
     effect: &DamageEffect,
     hit: &DamageHit,
 ) -> Outcome {
-    let mut outcome = Outcome::default();
+    let material = hit_material(model, hit.material);
+    let mut outcome = Outcome {
+        material_type: material.map_or(-1, |material| material.material_type),
+        ..Outcome::default()
+    };
     if vitality.dead {
         return outcome;
     }
@@ -188,7 +196,6 @@ pub fn cause_damage(
     let ranged = lower + (upper - lower) * hit.random.clamp(0.0, 1.0);
     let scale = hit.scale.clamp(0.0, 1.0);
     let mut total = (1.0 - scale) * effect.damage_minimum + ranged * scale;
-    let material = hit_material(model, hit.material);
     let modifier = |kind: i16| {
         usize::try_from(kind)
             .ok()
@@ -208,6 +215,7 @@ pub fn cause_damage(
     // of it the lower it is below its failure threshold)
     let maximum_shield = model.maximum_shield_vitality * hit.shield;
     let maximum_body = model.maximum_body_vitality * hit.vitality;
+    let (mut shielded, mut bodily) = (0.0, 0.0);
     if flags & DamageEffect::SKIPS_SHIELDS == 0 && maximum_shield > 0.0 {
         let mut shield_damage = 0.0;
         if vitality.shield > 0.0 {
@@ -245,6 +253,7 @@ pub fn cause_damage(
         {
             vitality.stun_ticks = (model.stun_time * clock::TICKS_PER_SECOND as f32) as u32;
         }
+        shielded = shield_damage;
     }
 
     // (then the body)
@@ -259,6 +268,7 @@ pub fn cause_damage(
         if hit.friendly {
             amount *= 1.0 - model.friendly_damage_resistance;
         }
+        bodily = amount;
         let kind = material.map_or(-1, |material| material.material_type);
         let mut actual = amount / maximum_body * modifier(kind);
         let head =
@@ -288,6 +298,10 @@ pub fn cause_damage(
     if outcome.killed {
         vitality.body = vitality.body.min(0.0);
         vitality.dead = true;
+    }
+    // (`_real_epsilon`)
+    if shielded > bodily && shielded > 0.0001 {
+        outcome.material_type = model.shield_material_type;
     }
     outcome
 }
@@ -792,12 +806,13 @@ pub fn first_target(targets: &[Target], from: Vec3, path: Vec3) -> Option<(Targe
         .min_by(|a, b| a.1.total_cmp(&b.1))
 }
 
-/// Does each impact's damage to the object it struck; what each did.
-/// `player` is the player's biped, whom headshots do not kill outright in
+/// Does each impact's damage to the object it struck; what each did. An
+/// impact that does damage takes the material it struck from it (the
+/// shield's, if the shield took most of it). `player` is the player's biped, whom headshots do not kill outright in
 /// the campaign.
 pub fn apply_impacts(
     world: &mut World,
-    impacts: &[Impact],
+    impacts: &mut [Impact],
     player: Option<ObjectHandle>,
 ) -> Vec<DamageEvent> {
     let mut events = Vec::new();
@@ -848,6 +863,11 @@ pub fn apply_impacts(
                 ..hit(world, entity, damageable, random)
             },
         ) {
+            // (projectile_collision: the material the damage struck, which
+            // its effect is chosen by)
+            if outcome.material_type != -1 {
+                impact.material = outcome.material_type;
+            }
             events.push(DamageEvent {
                 object,
                 owner,
@@ -1159,7 +1179,10 @@ fn damage_object(
 ) -> Option<Outcome> {
     let entity = world.resource::<ObjectTable>().entity(object)?;
     if world.get::<Invulnerable>(entity).is_some() {
-        return Some(Outcome::default());
+        return Some(Outcome {
+            material_type: -1,
+            ..Outcome::default()
+        });
     }
     let random = world.get_resource_or_init::<RandomSeed>().next_real();
     let table = world.get_resource::<DamageTable>()?;
@@ -1336,9 +1359,28 @@ mod tests {
         let outcome = cause_damage(&mut vitality, &model, &bullet(70.0, 0), &at(1));
         assert!(outcome.killed && vitality.dead);
         assert!(vitality.body <= 0.0);
-        // (the dead take no more)
+        // (the dead take no more, though what was struck is still known)
         let after = cause_damage(&mut vitality, &model, &bullet(70.0, 0), &at(1));
-        assert_eq!(after, Outcome::default());
+        let struck = model.materials[1].material_type;
+        assert_eq!(
+            after,
+            Outcome {
+                material_type: struck,
+                ..Outcome::default()
+            }
+        );
+    }
+
+    #[test]
+    fn the_material_struck_is_the_shields_while_the_shield_takes_the_hit() {
+        let model = cyborg();
+        let mut vitality = Vitality::new(&model);
+        let outcome = cause_damage(&mut vitality, &model, &bullet(15.0, 0), &at(1));
+        assert_eq!(outcome.material_type, model.shield_material_type);
+        // (the shield down, the body takes it, and its own material is struck)
+        cause_damage(&mut vitality, &model, &bullet(75.0, 0), &at(1));
+        let outcome = cause_damage(&mut vitality, &model, &bullet(10.0, 0), &at(1));
+        assert_eq!(outcome.material_type, model.materials[1].material_type);
     }
 
     #[test]

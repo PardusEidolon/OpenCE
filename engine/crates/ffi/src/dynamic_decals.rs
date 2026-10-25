@@ -6,7 +6,6 @@
 use opence_content::{Bitmap, Decal, Level, TagRef};
 use opence_sim::effects::FiredPart;
 use opence_sim::objects::ObjectHandle;
-use opence_sim::projectile::Impact;
 use opence_sim::{Simulation, Transform, Vec3};
 use rustc_hash::FxHashMap;
 
@@ -182,26 +181,6 @@ impl DynamicDecals {
             None,
             part.radius_modifier,
         );
-    }
-
-    /// The material of the surface `impact` struck on BSP `bsp` (-1: one
-    /// not known): an object's, its collision model's first.
-    pub(crate) fn material(
-        &mut self,
-        level: &Level,
-        simulation: &Simulation,
-        bsp: usize,
-        impact: &Impact,
-    ) -> i16 {
-        if let Some(handle) = impact.object {
-            return simulation
-                .object(handle)
-                .and_then(|object| level.object(&object.tag)?.collision_model.clone())
-                .and_then(|model| level.collision_model(&model))
-                .and_then(|model| model.materials.first())
-                .map_or(-1, |material| material.material_type);
-        }
-        self.surface_material(level, bsp, impact.point, impact.normal)
     }
 
     /// The material type of BSP `bsp`'s surface at `point`, whose normal

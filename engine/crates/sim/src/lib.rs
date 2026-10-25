@@ -472,7 +472,8 @@ impl Simulation {
             ejections.append(&mut fired.ejections);
             self.sounds.append(&mut fired.sounds);
             let handle = player.handle();
-            let mut damage = damage::apply_impacts(&mut self.world, &fired.impacts, Some(handle));
+            let mut damage =
+                damage::apply_impacts(&mut self.world, &mut fired.impacts, Some(handle));
             damage.extend(damage::apply_detonations(
                 &mut self.world,
                 &fired.detonations,

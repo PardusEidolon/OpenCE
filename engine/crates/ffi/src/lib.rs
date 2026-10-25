@@ -1554,9 +1554,7 @@ pub(crate) fn run_ticks(state: &mut State, ticks: u32) -> Result<(), EngineError
                 .campaign
                 .as_ref()
                 .map_or(shell.bsp, campaign::Campaign::bsp);
-            running
-                .effects
-                .tick(level, &mut running.simulation, &mut running.decals, bsp);
+            running.effects.tick(level, &mut running.simulation);
             let fired = running.effects.fired();
             running.lights.tick(level, fired);
             running.decals.tick(level, &running.simulation, bsp, fired);

@@ -390,6 +390,7 @@ mod tests {
             direction: Vec3::Y * 20.0,
             struck: Struck::Other,
             object,
+            material: -1,
         };
         let pushes = impact_pushes(
             &world,

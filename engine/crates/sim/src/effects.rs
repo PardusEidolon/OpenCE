@@ -10,10 +10,11 @@
 use std::collections::BTreeSet;
 
 use glam::{Quat, Vec3};
-use opence_content::{Effect, EffectPart, Level, MaterialEffects, Projectile, TagRef};
+use opence_content::{
+    Effect, EffectPart, Level, MaterialEffects, MaterialResponse, Projectile, TagRef,
+};
 
 use crate::objects::ObjectHandle;
-use crate::projectile::Impact;
 use crate::random::RandomSeed;
 use crate::Simulation;
 
@@ -168,16 +169,29 @@ fn between(seed: &mut RandomSeed, [lower, upper]: [f32; 2]) -> f32 {
     lower + (upper - lower) * seed.next_real()
 }
 
-/// The effect a projectile makes where it strikes a surface of
-/// `material` (-1: one not known): its response's, else its detonation's.
-pub fn response_effect(projectile: &Projectile, material: i16) -> Option<&TagRef> {
-    let response = projectile
-        .material_responses
-        .get(usize::try_from(material).ok()?)?;
+/// The effects a projectile makes where it strikes a surface of
+/// `material` (-1: one not known), on an object or not (`on_object`): its
+/// response's effect (`projectile_collision`), and if the response
+/// detonates it, the response's detonation effect (`projectile_detonate`).
+/// A material past its responses takes the default response, which makes
+/// none.
+pub fn response_effects(projectile: &Projectile, material: i16, on_object: bool) -> Vec<&TagRef> {
+    let Some(response) = usize::try_from(material)
+        .ok()
+        .and_then(|material| projectile.material_responses.get(material))
+    else {
+        return Vec::new();
+    };
+    // (overpenetrating the level, a projectile with no timer detonates)
+    let detonates = response.default_response == MaterialResponse::DETONATE
+        || (response.default_response == MaterialResponse::OVERPENETRATE
+            && !on_object
+            && projectile.timer[1] == 0.0);
     response
         .default_effect
-        .as_ref()
-        .or(response.detonation_effect.as_ref())
+        .iter()
+        .chain(response.detonation_effect.iter().filter(|_| detonates))
+        .collect()
 }
 
 /// The turn whose x axis is `forward`.
@@ -270,14 +284,9 @@ impl Effects {
     }
 
     /// Starts the effects this tick of `simulation` made: its weapons'
-    /// shots, its projectiles' impacts (each by the `material` of the
-    /// surface struck) and its detonations.
-    pub fn trigger(
-        &mut self,
-        level: &Level,
-        simulation: &Simulation,
-        mut material: impl FnMut(&Impact) -> i16,
-    ) {
+    /// shots, its projectiles' impacts (each by the material it struck) and
+    /// its detonations.
+    pub fn trigger(&mut self, level: &Level, simulation: &Simulation) {
         for shot in simulation.effects() {
             let origin = Origin {
                 velocity: shot.velocity,
@@ -293,19 +302,18 @@ impl Effects {
             else {
                 continue;
             };
-            let Some(effect) = response_effect(projectile, material(impact)) else {
-                continue;
-            };
-            let origin = Origin {
-                surface: Some(Surface {
-                    point: impact.point,
-                    normal: impact.normal,
-                    direction: impact.direction,
-                    object: impact.object,
-                }),
-                ..Origin::at(impact.point, facing(impact.normal))
-            };
-            self.start(level, &effect.clone(), origin);
+            for effect in response_effects(projectile, impact.material, impact.object.is_some()) {
+                let origin = Origin {
+                    surface: Some(Surface {
+                        point: impact.point,
+                        normal: impact.normal,
+                        direction: impact.direction,
+                        object: impact.object,
+                    }),
+                    ..Origin::at(impact.point, facing(impact.normal))
+                };
+                self.start(level, effect, origin);
+            }
         }
         for detonation in simulation.detonations() {
             let Some(effect) = detonation.effect.as_ref() else {
@@ -537,7 +545,7 @@ fn place(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use opence_content::{EffectEvent, Group, MaterialResponse};
+    use opence_content::{EffectEvent, Group};
 
     fn tag(group: &[u8; 4], path: &str) -> TagRef {
         TagRef {
@@ -788,26 +796,39 @@ mod tests {
     }
 
     #[test]
-    fn impacts_choose_their_effect_by_the_material_struck() {
-        let response = |effect: Option<&str>, detonation: Option<&str>| MaterialResponse {
-            default_effect: effect.map(|path| tag(b"effe", path)),
-            detonation_effect: detonation.map(|path| tag(b"effe", path)),
-            ..MaterialResponse::default()
-        };
+    fn impacts_choose_their_effects_by_the_material_struck() {
+        let response =
+            |kind: i16, effect: Option<&str>, detonation: Option<&str>| MaterialResponse {
+                default_response: kind,
+                default_effect: effect.map(|path| tag(b"effe", path)),
+                detonation_effect: detonation.map(|path| tag(b"effe", path)),
+                ..MaterialResponse::default()
+            };
         let projectile = Projectile {
             material_responses: vec![
-                response(Some("dirt"), None),
-                response(None, Some("metal")),
-                response(None, None),
+                response(MaterialResponse::DISAPPEAR, Some("dirt"), Some("unmade")),
+                response(MaterialResponse::DETONATE, Some("metal"), Some("sparks")),
+                response(MaterialResponse::OVERPENETRATE, None, Some("through")),
+                response(MaterialResponse::REFLECT, None, Some("unmade")),
             ],
             ..Projectile::default()
         };
-        let path = |material| response_effect(&projectile, material).map(|tag| tag.path.as_str());
-        assert_eq!(path(0), Some("dirt"));
-        assert_eq!(path(1), Some("metal"));
-        assert_eq!(path(2), None);
-        assert_eq!(path(3), None);
-        assert_eq!(path(-1), None);
+        let paths = |material, on_object| -> Vec<&str> {
+            response_effects(&projectile, material, on_object)
+                .into_iter()
+                .map(|tag| tag.path.as_str())
+                .collect()
+        };
+        // (the response's effect, and its detonation's only where it
+        // detonates)
+        assert_eq!(paths(0, false), ["dirt"]);
+        assert_eq!(paths(1, false), ["metal", "sparks"]);
+        assert_eq!(paths(2, false), ["through"]);
+        assert!(paths(2, true).is_empty());
+        assert!(paths(3, false).is_empty());
+        // (past its responses, or none known, the default makes none)
+        assert!(paths(4, false).is_empty());
+        assert!(paths(-1, false).is_empty());
         // (an effect made where it strikes faces out of the surface)
         assert!((facing(Vec3::Z) * Vec3::X - Vec3::Z).length() < 1e-5);
         assert_eq!(facing(Vec3::ZERO), Quat::IDENTITY);

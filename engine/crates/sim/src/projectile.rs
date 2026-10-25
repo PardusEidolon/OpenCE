@@ -226,6 +226,9 @@ pub struct Impact {
     pub struck: Struck,
     /// The object it hit, if it hit one.
     pub object: Option<ObjectHandle>,
+    /// The material type it struck (-1: none), which chooses the effect it
+    /// makes there.
+    pub material: i16,
 }
 
 /// What a tick of flight came to.
@@ -388,7 +391,13 @@ impl Flight {
         }
         self.age += 1;
         if path.length_squared() > 0.0 {
-            if let Some(Contact { hit, object, .. }) = cast(self.position, path, None) {
+            if let Some(Contact {
+                hit,
+                object,
+                material,
+                ..
+            }) = cast(self.position, path, None)
+            {
                 return Flew::Hit(Impact {
                     projectile: self.tag.clone(),
                     owner: self.owner,
@@ -398,6 +407,7 @@ impl Flight {
                     direction: path.normalize_or_zero(),
                     struck: hit.struck,
                     object,
+                    material,
                 });
             }
         }

@@ -1083,6 +1083,7 @@ impl Player {
             direction: path.normalize_or_zero(),
             struck: Struck::Other,
             object: Some(target.handle),
+            material: target.material,
         })
     }
 

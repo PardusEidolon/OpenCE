@@ -13,7 +13,6 @@ use opence_sim::seats::default_pose;
 use opence_sim::{Mat3, Quat, Simulation, Vec3};
 use rustc_hash::FxHashMap;
 
-use crate::dynamic_decals::DynamicDecals;
 use crate::lights::marker_frames;
 use crate::snapshot::{EffectSnapshot, MAX_EFFECTS};
 
@@ -115,22 +114,10 @@ impl LevelEffects {
     }
 
     /// One tick, after the simulation's: this tick's shots, impacts (by
-    /// the materials `decals` finds on BSP `bsp`) and detonations make
-    /// their effects, objects start those they carry, and every effect
-    /// runs on.
-    pub(crate) fn tick(
-        &mut self,
-        level: &Level,
-        simulation: &mut Simulation,
-        decals: &mut DynamicDecals,
-        bsp: usize,
-    ) {
-        {
-            let world = &*simulation;
-            self.effects.trigger(level, world, |impact| {
-                decals.material(level, world, bsp, impact)
-            });
-        }
+    /// the materials they struck) and detonations make their effects,
+    /// objects start those they carry, and every effect runs on.
+    pub(crate) fn tick(&mut self, level: &Level, simulation: &mut Simulation) {
+        self.effects.trigger(level, simulation);
         let handles: FxHashMap<u32, ObjectHandle> = simulation
             .objects()
             .into_iter()
@@ -335,7 +322,6 @@ mod tests {
         let mut effects = LevelEffects::new(&level);
         assert_eq!(effects.carried.len(), 1);
         let mut simulation = Simulation::empty();
-        let mut decals = DynamicDecals::new(&level);
         let spawned = simulation.spawn(ObjectSpawn {
             kind: ObjectKind::Scenery,
             tag: tag(b"scen", "rock"),
@@ -350,7 +336,7 @@ mod tests {
         let Ok(handle) = spawned else {
             panic!("the rock was not made");
         };
-        effects.tick(&level, &mut simulation, &mut decals, 0);
+        effects.tick(&level, &mut simulation);
         let fired = effects.fired();
         assert_eq!(fired.len(), 1, "{fired:?}");
         assert_eq!(fired[0].tag.path, "puff");
@@ -362,10 +348,10 @@ mod tests {
         assert_eq!(out[0].position[..3], [1.0, 2.0, 3.0]);
         assert_eq!(out[0].ids[2], handle.index);
         // (started once in the rock's life)
-        effects.tick(&level, &mut simulation, &mut decals, 0);
+        effects.tick(&level, &mut simulation);
         assert_eq!(effects.effects.running().len(), 1);
         assert!(simulation.remove(handle));
-        effects.tick(&level, &mut simulation, &mut decals, 0);
+        effects.tick(&level, &mut simulation);
         assert!(effects.effects.running().is_empty());
     }
 
