@@ -1,0 +1,1 @@
+Formatting of the tree (rust_tools Phase 5, with c1778fd5): 79 Swift, 118 Python and the Nix files; layout only. Swift suite as before (HudTests' stale frame only), pytest failures all old-port and present at HEAD.
