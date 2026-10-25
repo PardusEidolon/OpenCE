@@ -1,0 +1,1 @@
+Faster debug loop: dev deps opt-level 2; debug suites 10-25% faster, cold +20 s, touch unchanged; sccache omitted (no incremental caching).
