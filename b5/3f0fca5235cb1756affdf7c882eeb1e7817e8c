@@ -1,0 +1,1 @@
+Explosions: decal parts draw their radius modifier after velocity; detonations carry a 'gravity' location facing down; a decal part in the air is laid where its velocity's ray meets the structure (decal_new). Unit tests in sim effects and ffi dynamic_decals.
