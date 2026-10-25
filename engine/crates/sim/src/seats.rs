@@ -247,6 +247,25 @@ impl Rides {
         &self.thrusts
     }
 
+    /// Each moving vehicle's mass points: each one's centre, radius and
+    /// velocity, in world units a second (what pushes the crates).
+    pub(crate) fn pushers(&self) -> Vec<(Vec3, f32, Vec3)> {
+        let per_second = f32::from(u8::try_from(vehicle::GAME_TICKS_PER_SECOND).unwrap_or(30));
+        self.rides
+            .iter()
+            .filter(|ride| !ride.state.at_rest)
+            .filter_map(|ride| Some((ride, &self.kinds.get(ride.kind)?.physics)))
+            .flat_map(|(ride, physics)| {
+                let state = &ride.state;
+                vehicle::spheres(state, physics).map(move |(centre, radius)| {
+                    let velocity =
+                        state.velocity + state.angular_velocity.cross(centre - state.position);
+                    (centre, radius, velocity * per_second)
+                })
+            })
+            .collect()
+    }
+
     /// Each vehicle that moved this game tick meets those before it and
     /// those at rest (physics.c's unit collisions, after each vehicle's
     /// update), for their next steps.

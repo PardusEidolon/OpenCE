@@ -1243,7 +1243,7 @@ fn compute_new(
 
         // (the ground under it, or the depths of hell)
         let (normal, depth, material) =
-            match world.sphere_contact(position, point.radius, Layers::LEVEL)? {
+            match world.sphere_contact(position, point.radius, Layers::GROUND)? {
                 Some(contact) => {
                     // (the material under it, on the plane it meets)
                     let under = position - contact.normal * (point.radius - contact.depth);
@@ -1381,7 +1381,7 @@ fn compute_new(
             {
                 let probe = point.radius + definition.antigrav_height;
                 if let Some(hit) =
-                    world.cast_ray(position, Vec3::new(0.0, 0.0, -probe), Layers::LEVEL)?
+                    world.cast_ray(position, Vec3::new(0.0, 0.0, -probe), Layers::GROUND)?
                 {
                     let height = probe * hit.fraction - point.radius;
                     let upright = pin_fraction(
@@ -1468,7 +1468,7 @@ fn physics_update(
             if delta.dot(delta) <= 0.0 {
                 continue;
             }
-            if let Some(hit) = world.cast_ray(before.position, delta, Layers::LEVEL)? {
+            if let Some(hit) = world.cast_ray(before.position, delta, Layers::GROUND)? {
                 if earliest.is_none_or(|(fraction, _, _)| hit.fraction < fraction) {
                     earliest = Some((hit.fraction, hit.normal, delta));
                 }

@@ -27,6 +27,8 @@ pub struct Crate {
     pub speed: f32,
     /// Whether the physics has put it to sleep.
     pub asleep: bool,
+    /// Its mass, in kilograms.
+    mass: f32,
     /// The ticks it has been slow for.
     still: u32,
 }
@@ -89,6 +91,7 @@ impl Crates {
             half_extents,
             speed: 0.0,
             asleep: false,
+            mass,
             still: 0,
         });
         true
@@ -104,6 +107,59 @@ impl Crates {
     /// Forgets every crate, whose bodies went with their physics world.
     pub fn forget(&mut self) {
         self.crates.clear();
+    }
+
+    /// Pushes each crate that one of `pushers` (a sphere's centre, radius
+    /// and velocity in world units a second: a vehicle's mass points)
+    /// reaches into, so that it goes at least as fast as the sphere away
+    /// from it across the ground: a vehicle shoves a crate ahead rather
+    /// than stopping at it.
+    /// Whether any was pushed.
+    pub fn push_by(&mut self, physics: &mut PhysicsWorld, pushers: &[(Vec3, f32, Vec3)]) -> bool {
+        let mut pushed = false;
+        for one in &mut self.crates {
+            let (position, rotation) = (one.pose.position, one.pose.rotation);
+            for &(centre, radius, velocity) in pushers {
+                // (the crate's nearest point to the sphere's centre)
+                let local = rotation.inverse() * (centre - position);
+                let nearest = local.clamp(-one.half_extents, one.half_extents);
+                let apart = local - nearest;
+                let distance = apart.length();
+                if distance >= radius {
+                    continue;
+                }
+                // (out of the crate towards the sphere, across the ground:
+                // a wheel rolling onto one would press it into the level's
+                // mesh, which holds it only by its surface; from inside it,
+                // against the way the sphere goes)
+                let out = if distance > 0.0 {
+                    rotation * apart
+                } else {
+                    -velocity
+                };
+                let Some(normal) = Vec3::new(out.x, out.y, 0.0).try_normalize() else {
+                    continue;
+                };
+                let point = position + rotation * nearest;
+                let Ok((linear, angular)) = physics.body_velocity(one.body) else {
+                    continue;
+                };
+                let at = linear + angular.cross(point - position);
+                let short = (velocity - at).dot(-normal);
+                if short <= 0.0 {
+                    continue;
+                }
+                if physics
+                    .push_body(one.body, -normal * (one.mass * short), point)
+                    .is_ok()
+                {
+                    one.still = 0;
+                    one.asleep = false;
+                    pushed = true;
+                }
+            }
+        }
+        pushed
     }
 
     /// After the physics steps: each crate's pose and speed.

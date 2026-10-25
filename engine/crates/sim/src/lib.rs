@@ -37,6 +37,7 @@ pub mod point_physics;
 pub mod projectile;
 pub mod ragdoll;
 pub mod random;
+pub mod scenery;
 pub mod seats;
 pub mod unit_animator;
 pub mod unit_states;
@@ -204,6 +205,8 @@ pub struct Simulation {
     crates: crates::Crates,
     /// The machines, as platforms in the player's physics world.
     platforms: platforms::Platforms,
+    /// The scenery, in the level's collision in the players' worlds.
+    scenery: scenery::SceneryCollision,
     /// Detonations to do in the next tick (a script's).
     queued_detonations: Vec<projectile::Detonation>,
     /// What the items lying about met this tick.
@@ -347,6 +350,7 @@ impl Simulation {
             markers: weapon_markers::WeaponMarkers::default(),
             crates: crates::Crates::default(),
             platforms: platforms::Platforms::default(),
+            scenery: scenery::SceneryCollision::default(),
             queued_detonations: Vec::new(),
             item_impacts: Vec::new(),
             effects: Vec::new(),
@@ -392,6 +396,7 @@ impl Simulation {
         self.world.insert_resource(CurrentInput(first));
         self.world
             .insert_resource(player::ProjectilePoses::default());
+        self.update_scenery();
         self.impacts.clear();
         self.detonations.clear();
         self.damage.clear();
@@ -463,6 +468,12 @@ impl Simulation {
             actions.push(action && !seated);
         }
         self.rides.step(&mut self.world, &mut self.players, &inputs);
+        if !self.crates.all().is_empty() {
+            let pushers = self.rides.pushers();
+            if let Some(player) = self.players.first() {
+                self.crates.push_by(&mut player.physics(), &pushers);
+            }
+        }
         for strike in self.rides.strike(&self.world, &mut self.players) {
             self.damage.extend(damage::apply_collision(
                 &mut self.world,
@@ -692,8 +703,32 @@ impl Simulation {
             player.physics().set_level(&mesh)?;
         }
         self.rides.set_bsp(level, bsp);
+        self.scenery.set_bsp(level, bsp);
         self.world.insert_resource(self.rides.surfaces());
         Ok(())
+    }
+
+    /// Builds the level's collision again in each player's physics world
+    /// if the scenery placed has changed (each world once: the actors
+    /// share the local player's).
+    fn update_scenery(&mut self) {
+        if !self.scenery.stale(&mut self.world) {
+            return;
+        }
+        let mut worlds: Vec<player::SharedPhysics> = Vec::new();
+        for physics in self.players.iter().map(Player::shared_physics) {
+            if !worlds
+                .iter()
+                .any(|other| std::sync::Arc::ptr_eq(other, &physics))
+            {
+                worlds.push(physics);
+            }
+        }
+        let mut guards: Vec<_> = worlds.iter().map(player::lock).collect();
+        // (a mesh the physics refuses leaves the level as it was)
+        let _ = self
+            .scenery
+            .update(&mut self.world, guards.iter_mut().map(|guard| &mut **guard));
     }
 
     /// Makes the player: its biped standing at `level`'s player start
@@ -729,6 +764,8 @@ impl Simulation {
             .unwrap_or(0);
         self.rides.set_bsp(level, usize::from(bsp));
         self.world.insert_resource(self.rides.surfaces());
+        self.scenery = scenery::SceneryCollision::for_level(level);
+        self.scenery.set_bsp(level, usize::from(bsp));
         self.players.push(player);
         self.sensor = hud::MotionSensor::default();
         self.sensor_settings = level

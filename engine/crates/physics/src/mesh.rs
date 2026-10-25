@@ -36,11 +36,18 @@ impl LevelMesh {
     /// Adds a collision BSP's surfaces (another structure BSP's, or an
     /// object's) to the mesh.
     pub fn append(&mut self, bsp: &CollisionBsp) {
+        self.append_placed(bsp, |point| point);
+    }
+
+    /// Adds a collision BSP's surfaces with each vertex moved by `place`
+    /// (an object's, from its origin to where it stands): a rotation and a
+    /// scale above 0 keep each triangle's winding.
+    pub fn append_placed(&mut self, bsp: &CollisionBsp, place: impl Fn([f32; 3]) -> [f32; 3]) {
         let Ok(base) = u32::try_from(self.vertices.len()) else {
             return;
         };
         self.vertices
-            .extend(bsp.vertices.iter().map(|vertex| vertex.point));
+            .extend(bsp.vertices.iter().map(|vertex| place(vertex.point)));
         let mut ring = Vec::with_capacity(RING_MAX);
         for (index, surface) in bsp.surfaces.iter().enumerate() {
             if !surface_ring(bsp, index, &mut ring) || ring.len() < 3 {
