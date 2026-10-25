@@ -1,0 +1,1 @@
+Allocation in the frame: mimalloc + stats_alloc counter, stat allocations; Carried.rest in lights; sim::cached::Cached query states. devgulch AI frame 823 -> 708 -> 151 allocations (budget 200). Suite 1110 passed, 3 skipped.
