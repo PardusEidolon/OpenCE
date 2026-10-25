@@ -1,0 +1,1 @@
+Task: Measure the starting point. Baseline: tests 3349.6 s, debug cold 47.2 s, release lib cold 52.3 s, devgulch p99 9.74 ms.
