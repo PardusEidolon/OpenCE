@@ -1,0 +1,1 @@
+Deterministic maps: contrails in slots (data.c's order), rustc_hash elsewhere, std hash maps banned in clippy.toml; 1028 tests pass.
