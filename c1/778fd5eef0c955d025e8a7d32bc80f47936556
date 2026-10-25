@@ -1,0 +1,1 @@
+Task: Formatting and hooks (rust_tools Phase 5). treefmt-nix (rustfmt, swift-format, nixfmt, ruff format) as nix fmt; git-hooks.nix pre-commit (treefmt, clippy -D warnings). Formatting of the tree in 41e8fdba. Verified by tools/test_nix_tooling.py and nix flake check.
