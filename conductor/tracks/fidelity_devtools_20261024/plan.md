@@ -105,7 +105,7 @@ The menus and the rest of the UI are left to the UI rewrite's own track.
     - [x] The fixes
 - [x] Task: Conductor - User Manual Verification 'Phase 9: The HUD' (Protocol in workflow.md) (superseded: automated verification only, at the user's instruction)
 
-## Phase 10: Lightmap resolution and interiors
+## Phase 10: Lightmap resolution and interiors [checkpoint: b73bb281]
 Found in play: shadows on the far hills break into large blocky triangles across the cliffs and ground, and the bunker interiors are lit coarsely, with leaks and blotches on the walls.
 - [x] Task: Measure the lightmaps' density e7bda8b1
     - [x] Write tests: a sweep of each surface's world size per lightmap texel on Blood Gulch and devgulch, the far hills and the bunker interiors, against the stock lightmaps'
