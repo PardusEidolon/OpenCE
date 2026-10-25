@@ -1,0 +1,1 @@
+Phase 1 checkpoint: 1029 Rust tests pass under nextest; pytest 11/12, the failure a stale approved HUD frame (pre-lighting-controls) and another session's ZZ scratch test. Manual verification superseded: automated only, at the user's instruction.
