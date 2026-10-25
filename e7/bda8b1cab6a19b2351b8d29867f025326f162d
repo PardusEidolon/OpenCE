@@ -1,0 +1,1 @@
+Task: Measure the lightmaps' density (Phase 10). The sweep (lightmap_density, d774d093) finds every baked texel half a stock texel's side on Blood Gulch; no surface is coarser than stock, so density is not the far hills' cause. This commit records the finding in docs/engine.md.
