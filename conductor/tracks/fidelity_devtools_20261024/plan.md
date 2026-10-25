@@ -133,9 +133,9 @@ Found in play (2026-10-25): each weapon's firing effects are in the wrong place,
 - [x] Task: Where the effects start 8de1a254
     - [x] Write tests: each weapon's firing effects start at the marker the original uses (in first person, the first-person model's; in third person, the weapon's), within a tolerance; the old engine's (`port/macos`) positions recorded as the reference
     - [x] The fixes
-- [ ] Task: Thrown grenades
-    - [ ] Write tests: a thrown grenade is drawn every frame from the throw to its detonation, in first and third person
-    - [ ] The fixes
+- [x] Task: Thrown grenades 9ff49e69
+    - [x] Write tests: a thrown grenade is drawn every frame from the throw to its detonation, in first and third person
+    - [x] The fixes
 - [ ] Task: How particles face
     - [ ] Write tests: each particle's orientation follows its tag (facing the screen, parallel to its direction, vertical, local), against the original's particle functions' trace
     - [ ] The fixes
