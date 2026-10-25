@@ -306,6 +306,7 @@ impl Simulation {
         world.insert_resource(ObjectTable::default());
         world.insert_resource(ObjectKinds::default());
         world.insert_resource(random::RandomSeed::default());
+        world.insert_resource(Snaps::default());
         let mut schedule = Schedule::default();
         // (one thread: systems in parallel would be ordered by chance)
         schedule.set_executor(SingleThreadedExecutor::new());
@@ -325,7 +326,9 @@ impl Simulation {
                 animation::play_animations,
             )
                 .in_set(SimSet::Simulate),
-            (place_camera, advance_tick).chain().in_set(SimSet::Finish),
+            (snap_transforms, place_camera, advance_tick)
+                .chain()
+                .in_set(SimSet::Finish),
         ));
         Self {
             world,
@@ -862,12 +865,18 @@ impl Simulation {
     /// Puts player `index`'s biped at `position`, standing still; false
     /// if there is no such player, it is seated or the physics refused.
     pub fn teleport_player(&mut self, index: usize, position: Vec3) -> bool {
-        let moved = self
-            .players
-            .get_mut(index)
-            .is_some_and(|player| player.teleport(position));
-        if moved && index == 0 {
-            self.place_player_camera();
+        let Some(player) = self.players.get_mut(index) else {
+            return false;
+        };
+        let moved = player.teleport(position);
+        if moved {
+            // (its object is put there by the next tick, and drawn there
+            // from the first, not blended across from where it was)
+            let handle = player.handle();
+            self.world.resource_mut::<Snaps>().0.push(handle);
+            if index == 0 {
+                self.place_player_camera();
+            }
         }
         moved
     }
@@ -1627,6 +1636,13 @@ impl Simulation {
         true
     }
 
+    /// Puts an object at `transform` at once, as if it had always been
+    /// there (a script's teleport: the renderer does not blend it across
+    /// from where it was); false if `handle` is not in the world.
+    pub fn place(&mut self, handle: ObjectHandle, transform: Transform) -> bool {
+        self.insert(handle, transform) && self.insert(handle, PreviousTransform(transform))
+    }
+
     /// Removes an object; false if `handle` is not in the world.
     pub fn remove(&mut self, handle: ObjectHandle) -> bool {
         objects::remove(&mut self.world, handle)
@@ -1818,6 +1834,26 @@ pub struct PreviousTransform(pub Transform);
 fn remember_transforms(mut objects: Query<(&Transform, &mut PreviousTransform)>) {
     for (transform, mut previous) in &mut objects {
         previous.0 = *transform;
+    }
+}
+
+/// The objects put somewhere this tick rather than moved there (a
+/// teleport), which the renderer must not blend from where they were.
+#[derive(Resource, Clone, Debug, Default)]
+struct Snaps(Vec<ObjectHandle>);
+
+fn snap_transforms(
+    mut snaps: ResMut<Snaps>,
+    table: Res<ObjectTable>,
+    mut objects: Query<(&Transform, &mut PreviousTransform)>,
+) {
+    for handle in snaps.0.drain(..) {
+        if let Some((transform, mut previous)) = table
+            .entity(handle)
+            .and_then(|entity| objects.get_mut(entity).ok())
+        {
+            previous.0 = *transform;
+        }
     }
 }
 
@@ -2036,6 +2072,43 @@ mod tests {
             permutation: None,
             team: None,
         }
+    }
+
+    #[test]
+    fn a_spawned_or_placed_object_is_drawn_from_where_it_is_put(
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        let mut simulation = Simulation::empty();
+        let mut spawn = rock(1.0);
+        spawn.transform.position = Vec3::new(4.0, 5.0, 6.0);
+        let handle = simulation.spawn(spawn)?;
+        let drawn = |simulation: &Simulation| {
+            simulation
+                .transform(handle)
+                .zip(simulation.component::<PreviousTransform>(handle))
+                .map(|(now, PreviousTransform(then))| (then.position, now.position))
+        };
+        // (spawned: never blended in from the origin)
+        let at = Vec3::new(4.0, 5.0, 6.0);
+        assert_eq!(drawn(&simulation), Some((at, at)));
+        // (a script's teleport, between ticks and after one)
+        let far = Transform {
+            position: Vec3::new(-90.0, 30.0, 2.0),
+            ..Transform::default()
+        };
+        assert!(simulation.place(handle, far));
+        assert_eq!(drawn(&simulation), Some((far.position, far.position)));
+        simulation.step(TickInput::default());
+        assert_eq!(drawn(&simulation), Some((far.position, far.position)));
+        // (a moved one is still blended: only what is put is snapped)
+        assert!(simulation.insert(
+            handle,
+            Transform {
+                position: at,
+                ..far
+            }
+        ));
+        assert_eq!(drawn(&simulation), Some((far.position, at)));
+        Ok(())
     }
 
     #[test]

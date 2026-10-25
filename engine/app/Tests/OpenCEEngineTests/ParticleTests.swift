@@ -57,11 +57,13 @@ final class ParticleTests: XCTestCase {
     }
 
     /// The frame's red at its centre and corner after `rows` are drawn over
-    /// a frame of red 0.25, with `details` as the level's detail objects.
+    /// a frame of red 0.25, with `details` as the level's detail objects,
+    /// and with `reactive`, MetalFX's reactive mask at its centre (nil when
+    /// the pass drew nothing).
     private func draw(
         _ rows: [OCEParticleSnapshot], details: [OCEParticleSnapshot] = [],
-        eye: SIMD3<Float> = .zero, probes: UInt32? = nil
-    ) throws -> (centre: Float, corner: Float) {
+        eye: SIMD3<Float> = .zero, probes: UInt32? = nil, reactive: Bool = false
+    ) throws -> (centre: Float, corner: Float, cover: Float?) {
         let device = try XCTUnwrap(MTLCreateSystemDefaultDevice(), "no Metal device")
         let queue = try XCTUnwrap(device.makeCommandQueue())
         let pass = try ParticlePass(
@@ -100,13 +102,27 @@ final class ParticleTests: XCTestCase {
                 probes: Array(repeating: volume, count: 6), probeOrigin: [0, 0, 0, 1],
                 probeCounts: [1, 1, 1, 1], sunTowards: .zero, sunColor: .zero)
         }
-        pass.encode(
-            into: commands, frame: frame, depth: depth, worldToClip: camera.viewProjection(aspect: 1),
+        let mask = reactive ? try texture(device, .r8Unorm) : nil
+        let drew = pass.encode(
+            into: commands, frame: frame, depth: depth, reactive: mask,
+            worldToClip: camera.viewProjection(aspect: 1),
             eye: eye, right: [0, -1, 0], up: [0, 0, 1], sprites: rows, lighting: lighting)
+        let centre = (size / 2) * size + size / 2
+        let covers = try XCTUnwrap(device.makeBuffer(length: size * size, options: .storageModeShared))
+        if let mask, drew {
+            let blit = try XCTUnwrap(commands.makeBlitCommandEncoder())
+            blit.copy(
+                from: mask, sourceSlice: 0, sourceLevel: 0, sourceOrigin: MTLOrigin(x: 0, y: 0, z: 0),
+                sourceSize: MTLSize(width: size, height: size, depth: 1), to: covers,
+                destinationOffset: 0, destinationBytesPerRow: size, destinationBytesPerImage: size * size)
+            blit.endEncoding()
+        }
         commands.commit()
         commands.waitUntilCompleted()
         let red = try reds(frame, queue: queue)
-        return (red[(size / 2) * size + size / 2], red[0])
+        let cover =
+            mask != nil && drew ? Float(covers.contents().load(fromByteOffset: centre, as: UInt8.self)) / 255 : nil
+        return (red[centre], red[0], cover)
     }
 
     func testASpriteFacingTheScreenIsAddedToTheFrame() throws {
@@ -178,6 +194,23 @@ final class ParticleTests: XCTestCase {
         XCTAssertEqual(try draw([], details: [sprite()]).centre, 1.25, accuracy: 0.01)
         XCTAssertEqual(try draw([sprite()], details: [sprite()]).centre, 2.25, accuracy: 0.01)
         XCTAssertEqual(try draw([]).centre, 0.25)
+    }
+
+    /// Drawn into MetalFX's input, the sprites mark its reactive mask by how
+    /// much of the pixel they cover, so the scaler takes them from the frame
+    /// they are drawn in rather than smearing them along the camera's
+    /// motion; the still detail objects do not, and the colour is the same.
+    func testSpritesMarkTheReactiveMaskAndDetailObjectsDoNot() throws {
+        let marked = try draw([sprite(alpha: 0.5)], reactive: true)
+        XCTAssertEqual(marked.centre, 0.75, accuracy: 0.01)
+        XCTAssertEqual(try XCTUnwrap(marked.cover), 0.5, accuracy: 0.01)
+        // (the most of the sprites over it, not their sum)
+        let two = try draw([sprite(alpha: 0.5), sprite(alpha: 0.25)], reactive: true)
+        XCTAssertEqual(try XCTUnwrap(two.cover), 0.5, accuracy: 0.01)
+        let still = try draw([], details: [sprite()], reactive: true)
+        XCTAssertEqual(still.centre, 1.25, accuracy: 0.01)
+        XCTAssertEqual(try XCTUnwrap(still.cover), 0, accuracy: 0.01)
+        XCTAssertNil(try draw([], reactive: true).cover, "an empty pass drew")
     }
 
     func testRowsThatShareAPictureAreOneRun() {

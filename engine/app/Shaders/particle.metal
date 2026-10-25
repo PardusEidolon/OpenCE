@@ -44,6 +44,8 @@ struct ParticleVertex {
     float2 uv;
     float4 color;
     uint blend [[flat]];
+    // 1 for a moving row (a sprite), 0 for a still one (a detail object)
+    float moving [[flat]];
 };
 
 // the bake's irradiance as a display value (level.metal's baked_shown)
@@ -88,6 +90,7 @@ vertex ParticleVertex particle_vertex(uint vid [[vertex_id]], uint instance [[in
                                       constant ParticleFrame &frame [[buffer(0)]],
                                       const device Particle *particles [[buffer(1)]],
                                       constant uint &first [[buffer(2)]],
+                                      constant uint &moving_from [[buffer(3)]],
                                       texture3d<float> px [[texture(0)]], texture3d<float> nx [[texture(1)]],
                                       texture3d<float> py [[texture(2)]], texture3d<float> ny [[texture(3)]],
                                       texture3d<float> pz [[texture(4)]], texture3d<float> nz [[texture(5)]]) {
@@ -104,6 +107,7 @@ vertex ParticleVertex particle_vertex(uint vid [[vertex_id]], uint instance [[in
         out.uv = float2(c.x < 0 ? p.uv.x : p.uv.z, c.y < 0 ? p.uv.y : p.uv.w);
         out.color = c.x < 0 ? p.color : unpack_unorm4x8_to_float(p.modes.w);
         out.blend = p.modes.y;
+        out.moving = first + instance >= moving_from ? 1.0 : 0.0;
         return out;
     }
     float3 centre = p.position.xyz;
@@ -178,14 +182,13 @@ vertex ParticleVertex particle_vertex(uint vid [[vertex_id]], uint instance [[in
     }
     out.color = float4(color, p.color.a * fade);
     out.blend = p.modes.y;
+    out.moving = first + instance >= moving_from ? 1.0 : 0.0;
     return out;
 }
 
-fragment float4 particle_fragment(ParticleVertex in [[stage_in]], float4 dst [[color(0)]],
-                                  texture2d<float> picture [[texture(0)]],
-                                  sampler linear [[sampler(0)]]) {
-    float4 s = picture.sample(linear, in.uv) * in.color;
-    switch (in.blend) {
+// `s` blended onto `dst` by `blend`
+float4 particle_blend(float4 s, float4 dst, uint blend) {
+    switch (blend) {
     case 1: return float4(dst.rgb * mix(float3(1), s.rgb, s.a), dst.a);
     case 2: return float4(dst.rgb * mix(float3(1), 2 * s.rgb, s.a), dst.a);
     case 3: return float4(dst.rgb + s.rgb * s.a, dst.a);
@@ -195,4 +198,29 @@ fragment float4 particle_fragment(ParticleVertex in [[stage_in]], float4 dst [[c
     case 7: return float4(dst.rgb * (1 - s.a) + s.rgb, dst.a);
     default: return float4(mix(dst.rgb, s.rgb, s.a), dst.a);
     }
+}
+
+fragment float4 particle_fragment(ParticleVertex in [[stage_in]], float4 dst [[color(0)]],
+                                  texture2d<float> picture [[texture(0)]],
+                                  sampler linear [[sampler(0)]]) {
+    return particle_blend(picture.sample(linear, in.uv) * in.color, dst, in.blend);
+}
+
+// Drawn into MetalFX's input: the colour, and how much of the pixel is a
+// moving sprite (its reactive mask, max-blended), so the scaler takes it
+// from this frame rather than smearing it along the camera's motion.
+struct ParticleReactiveOut {
+    float4 color [[color(0)]];
+    float reactive [[color(1)]];
+};
+
+fragment ParticleReactiveOut particle_reactive_fragment(ParticleVertex in [[stage_in]],
+                                                        float4 dst [[color(0)]],
+                                                        texture2d<float> picture [[texture(0)]],
+                                                        sampler linear [[sampler(0)]]) {
+    float4 s = picture.sample(linear, in.uv) * in.color;
+    ParticleReactiveOut out;
+    out.color = particle_blend(s, dst, in.blend);
+    out.reactive = saturate(s.a) * in.moving;
+    return out;
 }

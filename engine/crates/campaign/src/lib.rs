@@ -537,12 +537,12 @@ impl Mission {
                 if self.sim.teleport_player(player, transform.position) {
                     if let Some(mut now) = self.sim.transform(handle) {
                         now.position = transform.position;
-                        self.sim.insert(handle, now);
+                        self.sim.place(handle, now);
                     }
                 }
             }
             None => {
-                self.sim.insert(handle, transform);
+                self.sim.place(handle, transform);
             }
         }
     }

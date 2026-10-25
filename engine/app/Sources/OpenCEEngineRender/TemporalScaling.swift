@@ -1,7 +1,9 @@
 // Temporal anti-aliasing and upscaling with MetalFX: the video settings,
 // the jitter sequence, and the scaler with its inputs (the level drawn
 // jittered at the render scale, its depth, and its motion, which for the
-// still level is the camera's alone, rebuilt from depth).
+// still level is the camera's alone, rebuilt from depth, so the sprites,
+// which move on their own, are marked in its reactive mask and taken from
+// the frame they are drawn in).
 
 import Metal
 import MetalFX
@@ -89,12 +91,15 @@ final class TemporalScaling {
     let color: MTLTexture
     let depth: MTLTexture
     let motion: MTLTexture
+    /// How much of each pixel is a sprite (the particle pass writes it).
+    let reactive: MTLTexture
     let output: MTLTexture
     var frame = 0
     /// The last frame's unjittered view-projection (nil: no history).
     var previous: simd_float4x4?
 
     static let motionFormat = MTLPixelFormat.rg16Float
+    static let reactiveFormat = MTLPixelFormat.r8Unorm
 
     static func isSupported(_ device: MTLDevice) -> Bool {
         MTLFXTemporalScalerDescriptor.supportsDevice(device)
@@ -111,6 +116,8 @@ final class TemporalScaling {
         descriptor.motionTextureFormat = Self.motionFormat
         descriptor.outputTextureFormat = LevelRenderer.frameFormat
         descriptor.isAutoExposureEnabled = false
+        descriptor.isReactiveMaskTextureEnabled = true
+        descriptor.reactiveMaskTextureFormat = Self.reactiveFormat
         guard let scaler = descriptor.makeTemporalScaler(device: device) else { return nil }
         scaler.isDepthReversed = true
         // (the motion pass writes uv units; MetalFX wants pixels)
@@ -136,12 +143,14 @@ final class TemporalScaling {
             let depth = texture(
                 LevelRenderer.depthFormat, input, scaler.depthTextureUsage.union([.renderTarget, .shaderRead])),
             let motion = texture(Self.motionFormat, input, scaler.motionTextureUsage.union(.renderTarget)),
+            let reactive = texture(Self.reactiveFormat, input, scaler.reactiveTextureUsage.union(.renderTarget)),
             let out = texture(LevelRenderer.frameFormat, output, scaler.outputTextureUsage.union(.shaderRead))
         else { return nil }
         self.scaler = scaler
         self.color = color
         self.depth = depth
         self.motion = motion
+        self.reactive = reactive
         self.output = out
     }
 
@@ -174,11 +183,13 @@ final class TemporalScaling {
         return MotionUniforms(reprojection: float, size: SIMD2(Float(inputWidth), Float(inputHeight)))
     }
 
-    /// Gathers this frame (drawn at `jitter`) into `output`.
-    func encode(into commands: MTLCommandBuffer, jitter: SIMD2<Float>) {
+    /// Gathers this frame (drawn at `jitter`) into `output`, taking the
+    /// sprites from it where `reactive` was written this frame.
+    func encode(into commands: MTLCommandBuffer, jitter: SIMD2<Float>, reacting: Bool) {
         scaler.colorTexture = color
         scaler.depthTexture = depth
         scaler.motionTexture = motion
+        scaler.reactiveMaskTexture = reacting ? reactive : nil
         scaler.outputTexture = output
         scaler.jitterOffsetX = jitter.x
         scaler.jitterOffsetY = jitter.y

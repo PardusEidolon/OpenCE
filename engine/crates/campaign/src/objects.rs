@@ -250,7 +250,7 @@ fn object_set_facing(mission: &mut Mission, arguments: &[Value]) -> Value {
     };
     if let Some(mut transform) = mission.sim.transform(handle) {
         transform.rotation = rotation_from_angles([flag.facing[0], flag.facing[1], 0.0]);
-        mission.sim.insert(handle, transform);
+        mission.sim.place(handle, transform);
     }
     Value::Void
 }
@@ -273,6 +273,13 @@ fn objects_attach(mission: &mut Mission, arguments: &[Value]) -> Value {
     {
         mission.attachments.retain(|&(_, c)| c != child);
         mission.attachments.push((parent, child));
+        // (put on its parent at once, then carried along with it)
+        if let (Some(at), Some(mut transform)) =
+            (mission.sim.transform(parent), mission.sim.transform(child))
+        {
+            transform.position = at.position;
+            mission.sim.place(child, transform);
+        }
     }
     Value::Void
 }

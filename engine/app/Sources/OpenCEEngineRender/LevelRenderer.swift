@@ -791,11 +791,12 @@ public final class LevelRenderer {
             // (the scaler's input samples its maps as the output would, as
             // MetalFX asks: log2 of the scale, a level sharper at half)
             let mipBias = log2(Float(temporal.inputWidth) / Float(max(target.width, 1)))
+            var reacting = false
             profiled("level", scopes) {
-                drawLevel(
+                reacting = drawLevel(
                     into: commands, frame: temporal.color, depth: temporal.depth, keepDepth: true,
                     viewProjection: jittered, camera: camera, objects: objects, debugLines: debugLines,
-                    mipBias: mipBias)
+                    mipBias: mipBias, reactive: temporal.reactive)
             }
             var uniforms = temporal.motionUniforms(current: viewProjection)
             let motionPass = MTLRenderPassDescriptor()
@@ -808,13 +809,13 @@ public final class LevelRenderer {
             encoder.setFragmentBytes(&uniforms, length: MemoryLayout<MotionUniforms>.stride, index: 0)
             encoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: 3)
             encoder.endEncoding()
-            temporal.encode(into: commands, jitter: jitter)
+            temporal.encode(into: commands, jitter: jitter, reacting: reacting)
             lastInputSize = (temporal.inputWidth, temporal.inputHeight)
             shown = temporal.output
         } else {
             guard let (frame, depth) = targets(width: target.width, height: target.height) else { return }
             profiled("level", scopes) {
-                drawLevel(
+                _ = drawLevel(
                     into: commands, frame: frame, depth: depth, keepDepth: false,
                     viewProjection: viewProjection, camera: camera, objects: objects, debugLines: debugLines)
             }
@@ -868,12 +869,14 @@ public final class LevelRenderer {
     }
 
     /// The level's opaque draws and the objects' then the blended ones of
-    /// both into `frame`.
+    /// both into `frame`, and the sprites' cover into `reactive` when it is
+    /// given; true when that cover was drawn.
+    @discardableResult
     private func drawLevel(
         into commands: MTLCommandBuffer, frame: MTLTexture, depth: MTLTexture, keepDepth: Bool,
         viewProjection: simd_float4x4, camera: ViewCamera, objects: [DrawnObject],
-        debugLines: [DebugSegment], mipBias: Float = 0
-    ) {
+        debugLines: [DebugSegment], mipBias: Float = 0, reactive: MTLTexture? = nil
+    ) -> Bool {
         let skyObject = sky?.model.map { model in
             DrawnObject(
                 model: Int(model), transform: simd_float4x4(translation: camera.position),
@@ -979,7 +982,7 @@ public final class LevelRenderer {
         pass.depthAttachment.clearDepth = 0
         guard screenTargets != nil,
             let encoder = commands.timedRenderEncoder("level opaque", descriptor: pass)
-        else { return }
+        else { return false }
         bind(encoder)
         models.encodeSky(prepared, into: encoder)
         encoder.setVertexBuffer(vertices, offset: 0, index: 0)
@@ -998,7 +1001,7 @@ public final class LevelRenderer {
 
         // the decals on the level's surfaces, then occlusion and
         // reflections from what the opaque pass left
-        guard let screenTargets else { return }
+        guard let screenTargets else { return false }
         if switches.decals {
             decals.encode(
                 into: commands, frame: frame, depth: depth, surface: screenTargets.surface,
@@ -1025,7 +1028,7 @@ public final class LevelRenderer {
         over.depthAttachment.texture = depth
         over.depthAttachment.loadAction = .load
         over.depthAttachment.storeAction = keepDepth ? .store : .dontCare
-        guard let blendedEncoder = commands.timedRenderEncoder("level blended", descriptor: over) else { return }
+        guard let blendedEncoder = commands.timedRenderEncoder("level blended", descriptor: over) else { return false }
         screen.resolve(screenTargets, uniforms: screenUniforms, into: blendedEncoder)
         bind(blendedEncoder)
         blendedEncoder.setDepthStencilState(depthTest)
@@ -1061,10 +1064,11 @@ public final class LevelRenderer {
         }
         screen.view(screenTargets, uniforms: screenUniforms, into: blendedEncoder)
         blendedEncoder.endEncoding()
+        var reacting = false
         if switches.particles {
             profiled("particles", scopes) {
-                particles.encode(
-                    into: commands, frame: frame, depth: depth, worldToClip: viewProjection,
+                reacting = particles.encode(
+                    into: commands, frame: frame, depth: depth, reactive: reactive, worldToClip: viewProjection,
                     eye: camera.position, right: camera.rotation.act([0, -1, 0]),
                     up: camera.rotation.act([0, 0, 1]), sprites: laidParticles,
                     lighting: ParticleLighting(
@@ -1074,6 +1078,7 @@ public final class LevelRenderer {
                         sunColor: uniforms.sunColor))
             }
         }
+        return reacting
     }
 
     /// The temporal scaler for an output `width` by `height`, made again

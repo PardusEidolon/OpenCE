@@ -46,6 +46,8 @@ public final class ParticlePass {
     private static let framesInFlight = 3
     private let device: MTLDevice
     private var pipeline: MTLRenderPipelineState
+    /// (drawing into MetalFX's input: the colour and the reactive mask)
+    private var reactivePipeline: MTLRenderPipelineState
     private let depthState: MTLDepthStencilState
     private let sampler: MTLSamplerState
     private let white: MTLTexture
@@ -60,7 +62,8 @@ public final class ParticlePass {
         self.device = device
         self.pictures = pictures
         self.details = details
-        pipeline = try Self.pipeline(device: device, source: source)
+        pipeline = try Self.pipeline(device: device, source: source, reactive: false)
+        reactivePipeline = try Self.pipeline(device: device, source: source, reactive: true)
         let depth = MTLDepthStencilDescriptor()
         depth.depthCompareFunction = .greaterEqual
         depth.isDepthWriteEnabled = false
@@ -95,13 +98,28 @@ public final class ParticlePass {
         buffers = []
     }
 
-    private static func pipeline(device: MTLDevice, source: String) throws -> MTLRenderPipelineState {
+    private static func pipeline(device: MTLDevice, source: String, reactive: Bool) throws
+        -> MTLRenderPipelineState
+    {
         do {
             let library = try device.makeLibrary(source: source, options: nil)
             let descriptor = MTLRenderPipelineDescriptor()
             descriptor.vertexFunction = try library.required("particle_vertex")
-            descriptor.fragmentFunction = try library.required("particle_fragment")
+            descriptor.fragmentFunction = try library.required(
+                reactive ? "particle_reactive_fragment" : "particle_fragment")
             descriptor.colorAttachments[0].pixelFormat = LevelRenderer.frameFormat
+            if reactive {
+                // (the most of any sprite over the pixel)
+                let mask = descriptor.colorAttachments[1]!
+                mask.pixelFormat = TemporalScaling.reactiveFormat
+                mask.isBlendingEnabled = true
+                mask.rgbBlendOperation = .max
+                mask.alphaBlendOperation = .max
+                mask.sourceRGBBlendFactor = .one
+                mask.destinationRGBBlendFactor = .one
+                mask.sourceAlphaBlendFactor = .one
+                mask.destinationAlphaBlendFactor = .one
+            }
             descriptor.depthAttachmentPixelFormat = LevelRenderer.depthFormat
             return try device.makeRenderPipelineState(descriptor: descriptor)
         } catch let error as LevelRendererError {
@@ -113,7 +131,9 @@ public final class ParticlePass {
 
     /// Compiles the pass from `source` again; kept as it was if it fails.
     func reloadShaders(source: String) throws {
-        pipeline = try Self.pipeline(device: device, source: source)
+        let plain = try Self.pipeline(device: device, source: source, reactive: false)
+        reactivePipeline = try Self.pipeline(device: device, source: source, reactive: true)
+        pipeline = plain
     }
 
     /// The runs of `rows` that share a picture: their first row, their
@@ -131,14 +151,17 @@ public final class ParticlePass {
     }
 
     /// Draws `sprites` and the level's detail objects into `frame`, the lit
-    /// ones by `lighting` (white without it).
+    /// ones by `lighting` (white without it), and the sprites' cover into
+    /// `reactive` (MetalFX's reactive mask, cleared here) when it is given;
+    /// false when there was nothing to draw (and `reactive` is untouched).
+    @discardableResult
     public func encode(
-        into commands: MTLCommandBuffer, frame: MTLTexture, depth: MTLTexture,
+        into commands: MTLCommandBuffer, frame: MTLTexture, depth: MTLTexture, reactive: MTLTexture? = nil,
         worldToClip: simd_float4x4, eye: SIMD3<Float>, right: SIMD3<Float>, up: SIMD3<Float>,
         sprites: [OCEParticleSnapshot], lighting: ParticleLighting? = nil
-    ) {
+    ) -> Bool {
         let rows = details + sprites
-        guard !rows.isEmpty else { return }
+        guard !rows.isEmpty else { return false }
         let size = rows.count * MemoryLayout<OCEParticleSnapshot>.stride
         if buffers.count < Self.framesInFlight {
             guard
@@ -147,7 +170,7 @@ public final class ParticlePass {
                     {
                         device.makeBuffer(length: max(size, 4096), options: .storageModeShared)
                     })
-            else { return }
+            else { return false }
             buffers.append(buffer)
             slot = buffers.count - 1
         } else {
@@ -159,7 +182,7 @@ public final class ParticlePass {
                         {
                             device.makeBuffer(length: size * 2, options: .storageModeShared)
                         })
-                else { return }
+                else { return false }
                 buffers[slot] = buffer
             }
         }
@@ -178,13 +201,21 @@ public final class ParticlePass {
         pass.colorAttachments[0].texture = frame
         pass.colorAttachments[0].loadAction = .load
         pass.colorAttachments[0].storeAction = .store
+        if let reactive {
+            pass.colorAttachments[1].texture = reactive
+            pass.colorAttachments[1].loadAction = .clear
+            pass.colorAttachments[1].clearColor = MTLClearColor(red: 0, green: 0, blue: 0, alpha: 0)
+            pass.colorAttachments[1].storeAction = .store
+        }
         pass.depthAttachment.texture = depth
         pass.depthAttachment.loadAction = .load
         pass.depthAttachment.storeAction = .store
-        guard let encoder = commands.timedRenderEncoder("particles", descriptor: pass) else { return }
-        encoder.setRenderPipelineState(pipeline)
+        guard let encoder = commands.timedRenderEncoder("particles", descriptor: pass) else { return false }
+        encoder.setRenderPipelineState(reactive == nil ? pipeline : reactivePipeline)
         encoder.setDepthStencilState(depthState)
         encoder.setVertexBytes(&uniforms, length: MemoryLayout<Frame>.stride, index: 0)
+        var movingFrom = UInt32(details.count)
+        encoder.setVertexBytes(&movingFrom, length: 4, index: 3)
         encoder.setVertexBuffer(buffer, offset: 0, index: 1)
         encoder.setVertexTextures(probes, range: 0..<6)
         encoder.setFragmentSamplerState(sampler, index: 0)
@@ -196,5 +227,6 @@ public final class ParticlePass {
             encoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: 6, instanceCount: run.count)
         }
         encoder.endEncoding()
+        return true
     }
 }
