@@ -1,0 +1,1 @@
+Tasks 'The effects row' and 'Effects of play' (Phase 8). Effects row: the station starts each effect; started lists them; EffectsRowTests. Play: material and vehicle effects imported; slips (308 in 90 frames); thruster blasts (Ghost: none, no hover thruster markers, as stock); frags; sound class limit (vehicle_collision 85 -> 4). Not ported: per-object sound limit.
