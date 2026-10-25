@@ -1,0 +1,1 @@
+The release build: frame bench on devgulch; fat LTO, thin LTO and PGO measured slower and declined; cargo-show-asm deferred to the Nix restructure. Suite 1120 passed, 3 skipped.
