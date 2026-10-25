@@ -142,9 +142,9 @@ Found in play (2026-10-25): each weapon's firing effects are in the wrong place,
 - [x] Task: Explosions b53f0fca
     - [x] Write tests: each explosion spawns every event and part its effect tag lists (particles, systems, lights, sounds, decals, damage), counted against the tag
     - [x] The fixes
-- [ ] Task: Impacts by material
-    - [ ] Write tests: an impact on each material type uses the effect and decal the material table names (no blood on metal)
-    - [ ] The fixes
+- [x] Task: Impacts by material 563f12b3
+    - [x] Write tests: an impact on each material type uses the effect and decal the material table names (no blood on metal)
+    - [x] The fixes
 - [ ] Task: No blur on impacts
     - [ ] Write tests: frame interpolation never blends a spawned, teleported or attached object from a place it wasn't; golden frames of a bullet hitting the ground
     - [ ] The fixes
