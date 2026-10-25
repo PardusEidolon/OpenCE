@@ -1,0 +1,1 @@
+Phase 2 check: coverage floors all met; mutation testing physics 240->44, script 164->10; golden frames all nine match; a_client_plays_slayer_over_udp flaky (3/3) under llvm-cov.
