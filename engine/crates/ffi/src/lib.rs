@@ -794,15 +794,17 @@ impl Wardrobe {
             .or_insert_with(|| level.animation_graph(graph).cloned().map(Arc::new))
             .clone();
         if let Some(graph) = graph {
-            let unit = matches!(object.kind, ObjectKind::Biped | ObjectKind::Vehicle);
-            let animation = animation::standing_animation(&graph, unit);
             let model = model.map(|model| {
                 self.models
                     .entry(model)
                     .or_insert_with(|| Arc::new(level.models[model].clone()))
                     .clone()
             });
-            let player = AnimationPlayer::new(graph, model, animation);
+            // (scenery's permutation by a constant of its own, not the
+            // game's seed, which a client and its host draw from alike)
+            let mixed = handle.index.wrapping_mul(0x9E37_79B9) ^ handle.salt;
+            let random = (mixed >> 16) as f32 / 65535.0;
+            let player = AnimationPlayer::for_object(graph, model, object.kind, random);
             if object.kind == ObjectKind::Biped {
                 simulation.animate_unit(handle, player);
             } else {

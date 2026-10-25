@@ -15,12 +15,14 @@ use std::sync::Arc;
 use bevy_ecs::prelude::*;
 use glam::Vec3;
 use opence_content::{
-    Animation, AnimationGraph, AnimationKind, AnimationNode, Model, ScreenBounds, TagRef,
+    Animation, AnimationGraph, AnimationKind, AnimationNode, Model, ObjectFunction, ObjectKind,
+    ScreenBounds, TagRef,
 };
 
-use crate::animation_blend::unit_pose;
+use crate::animation_blend::{apply_object_overlays, unit_pose, FunctionValue, OUTGOING_FUNCTIONS};
 use crate::device_animation::{apply_device_overlays, DevicePose};
-use crate::objects::ObjectTable;
+use crate::functions::{FunctionTable, FunctionValues};
+use crate::objects::{Object, ObjectTable};
 use crate::random::RandomSeed;
 use crate::seats::VehicleMotions;
 use crate::unit_animator::{unit_layers, UnitAnimator};
@@ -1297,6 +1299,9 @@ pub struct AnimationPlayer {
     /// Its unit's state machine set its frame in this tick (it plays on by
     /// itself no further).
     driven: bool,
+    /// It plays at the game's frame for it, not its own
+    /// (`_object_animates_automatically_bit`: scenery).
+    automatic: bool,
 }
 
 /// What an object's animation did in a tick that is heard.
@@ -1337,33 +1342,70 @@ struct Blend {
 /// ends.
 const RESUME_FRAMES: u16 = 6;
 
-/// The animation an object stands still with: for a unit, its standing
-/// seat's (else its first seat's) unarmed (else first) weapon class's
-/// idle; for anything else, or a unit whose graph has none, the graph's
-/// first.
-pub fn standing_animation(graph: &AnimationGraph, unit: bool) -> u16 {
+/// No animation: an object without one stands in its model's default pose
+/// (`NONE`, as `object_new` leaves it).
+pub const NO_ANIMATION: u16 = u16::MAX;
+
+/// What an object of `kind` plays from the start, and whether it plays
+/// at the game's frame: a unit its idle (none if its graph has no seats); scenery one of its
+/// graph's first animation's permutations (by `random`), at the game's
+/// frame (`scenery_new`); a weapon its idle (its state's animation, which
+/// is idle until it is used); anything else none, its overlays alone
+/// posing it.
+pub fn object_animation(graph: &AnimationGraph, kind: ObjectKind, random: f32) -> (u16, bool) {
+    match kind {
+        ObjectKind::Biped | ObjectKind::Vehicle => {
+            (unit_idle(graph).unwrap_or(NO_ANIMATION), false)
+        }
+        ObjectKind::Scenery if !graph.animations.is_empty() => (
+            choose_permutation(&graph.animations, Some(0), random).unwrap_or(0),
+            true,
+        ),
+        ObjectKind::Weapon => (
+            graph
+                .weapon
+                .first()
+                .copied()
+                .flatten()
+                .filter(|&idle| usize::from(idle) < graph.animations.len())
+                .unwrap_or(NO_ANIMATION),
+            false,
+        ),
+        _ => (NO_ANIMATION, false),
+    }
+}
+
+/// A unit's idle: its standing seat's (else its first seat's) unarmed
+/// (else first) weapon class's idle; none for a graph without seats
+/// (`unit_set_or_test_seat_and_weapon_label` finds none, and the unit's
+/// animation stays as `object_new` left it).
+fn unit_idle(graph: &AnimationGraph) -> Option<u16> {
     /// `_unit_weapon_class_animation_idle`.
     const IDLE: usize = 0;
-    let idle = || {
-        let seat = graph
-            .unit_seats
-            .iter()
-            .find(|seat| seat.label == "stand")
-            .or(graph.unit_seats.first())?;
-        let class = seat
-            .weapon_classes
-            .iter()
-            .find(|class| class.label == "unarmed")
-            .or(seat.weapon_classes.first())?;
-        class
-            .animations
-            .get(IDLE)
-            .copied()
-            .flatten()
-            .filter(|&animation| usize::from(animation) < graph.animations.len())
-    };
+    let seat = graph
+        .unit_seats
+        .iter()
+        .find(|seat| seat.label == "stand")
+        .or(graph.unit_seats.first())?;
+    let class = seat
+        .weapon_classes
+        .iter()
+        .find(|class| class.label == "unarmed")
+        .or(seat.weapon_classes.first())?;
+    class
+        .animations
+        .get(IDLE)
+        .copied()
+        .flatten()
+        .filter(|&animation| usize::from(animation) < graph.animations.len())
+}
+
+/// The animation an object stands still with: for a unit, its idle
+/// ([`unit_idle`]); for anything else, or a unit whose graph has none, the
+/// graph's first.
+pub fn standing_animation(graph: &AnimationGraph, unit: bool) -> u16 {
     if unit {
-        idle().unwrap_or(0)
+        unit_idle(graph).unwrap_or(0)
     } else {
         0
     }
@@ -1398,6 +1440,22 @@ impl AnimationPlayer {
             sound: None,
             foot: None,
             driven: false,
+            automatic: false,
+        }
+    }
+
+    /// The player for an object of `kind`, playing what the original
+    /// starts it on ([`object_animation`]).
+    pub fn for_object(
+        graph: Arc<AnimationGraph>,
+        model: Option<Arc<Model>>,
+        kind: ObjectKind,
+        random: f32,
+    ) -> Self {
+        let (animation, automatic) = object_animation(&graph, kind, random);
+        Self {
+            automatic,
+            ..Self::new(graph, model, animation)
         }
     }
 
@@ -1486,6 +1544,20 @@ impl AnimationPlayer {
             );
         }
         nodes
+    }
+
+    /// Plays an automatic animation at the game's frame `object_frame`
+    /// for its object (its frame's sound and foot are not played).
+    fn play_at(&mut self, object_frame: u32) {
+        self.hold();
+        let frames = self
+            .graph
+            .animations
+            .get(usize::from(self.state.animation))
+            .map_or(0, |animation| animation.frame_count);
+        if frames > 0 {
+            self.state.frame = (object_frame % u32::from(frames)) as u16;
+        }
     }
 
     /// Stays at its frame for a tick between the game's: its frame's sound
@@ -1643,13 +1715,15 @@ pub struct NodeMatrices {
 }
 
 /// What `play_animations` poses of an object: where it is, its player,
-/// its nodes, and a device's or a unit's pose.
+/// its nodes, a device's or a unit's pose, and its functions' values.
 type PlayedObject = (
     &'static Transform,
     &'static mut AnimationPlayer,
     &'static mut NodeMatrices,
     Option<&'static DevicePose>,
     Option<&'static UnitAnimator>,
+    Option<&'static FunctionValues>,
+    Option<&'static Object>,
 );
 
 /// The simulation's ticks to one of the game's: its animations play at its
@@ -1671,6 +1745,7 @@ pub(crate) fn play_animations(
     mut seed: ResMut<RandomSeed>,
     motions: Option<Res<VehicleMotions>>,
     table: Option<Res<ObjectTable>>,
+    functions: Option<Res<FunctionTable>>,
     order: Query<(Entity, &ObjectId), With<AnimationPlayer>>,
     mut players: Query<PlayedObject>,
 ) {
@@ -1687,50 +1762,67 @@ pub(crate) fn play_animations(
         _ => Vec::new(),
     };
     let game_tick = game_tick(tick.as_deref());
-    for (entity, _) in entities {
-        let Ok((transform, mut player, mut matrices, device, unit)) = players.get_mut(entity)
+    let game_time = tick
+        .as_deref()
+        .map_or(0, |tick| tick.0 / TICKS_PER_GAME_TICK);
+    for (entity, id) in entities {
+        let Ok((transform, mut player, mut matrices, device, unit, values, object)) =
+            players.get_mut(entity)
         else {
             continue;
         };
         let player = &mut *player;
-        if game_tick {
+        // (`OBJECT_FRAME_INDEX_GET`: each object at its own place in the
+        // game's frames)
+        let object_frame = (u64::from(id.0).wrapping_add(game_time) & u64::from(u32::MAX)) as u32;
+        if player.automatic {
+            player.play_at(object_frame);
+        } else if game_tick {
             player.step(|| seed.next_real());
         } else {
             player.hold();
         }
-        let current = match motions.iter().find(|(vehicle, _)| *vehicle == entity) {
-            Some((_, motion)) => {
-                let mut nodes = player.blended_pose();
-                let model_nodes = player
-                    .model
-                    .as_ref()
-                    .map_or(nodes.len(), |model| model.nodes.len());
-                apply_vehicle_overlays(&player.graph, model_nodes, motion, &mut nodes);
-                node_matrices(&player.links, &nodes, &root_matrix(transform))
+        let mut nodes = player.blended_pose();
+        let model_nodes = player
+            .model
+            .as_ref()
+            .map_or(nodes.len(), |model| model.nodes.len());
+        // (its graph's overlays, by its functions, over its animation)
+        if !player.graph.object_overlays.is_empty() {
+            let definition = object
+                .zip(functions.as_deref())
+                .and_then(|(object, table)| table.0.get(&object.tag));
+            let outgoing = values.map_or([0.0; 4], |values| values.outgoing);
+            let mut driven = [FunctionValue::default(); OUTGOING_FUNCTIONS];
+            for (at, value) in driven.iter_mut().enumerate() {
+                let additive = definition
+                    .and_then(|definition| definition.functions.get(at))
+                    .is_some_and(|function| function.flags & ObjectFunction::ADDITIVE != 0);
+                *value = FunctionValue {
+                    value: outgoing[at],
+                    additive,
+                };
             }
-            None => match device {
-                // (a device's position and power overlays over its animation)
-                Some(pose) => {
-                    let mut nodes = player.blended_pose();
-                    apply_device_overlays(&player.graph, pose, &mut nodes);
-                    node_matrices(&player.links, &nodes, &root_matrix(transform))
-                }
-                None => match unit {
-                    // (a biped's action, flinch and aiming screens over its base)
-                    Some(unit) => {
-                        let mut nodes = player.blended_pose();
-                        let model_nodes = player
-                            .model
-                            .as_ref()
-                            .map_or(nodes.len(), |model| model.nodes.len());
-                        let layers = unit_layers(unit, transform);
-                        unit_pose(&player.graph, model_nodes, &layers, &mut nodes);
-                        node_matrices(&player.links, &nodes, &root_matrix(transform))
-                    }
-                    None => player.matrices(transform),
-                },
-            },
-        };
+            let count = definition.map_or(0, |definition| definition.functions.len());
+            apply_object_overlays(
+                &player.graph,
+                model_nodes,
+                &driven[..count.min(OUTGOING_FUNCTIONS)],
+                object_frame,
+                &mut nodes,
+            );
+        }
+        if let Some((_, motion)) = motions.iter().find(|(vehicle, _)| *vehicle == entity) {
+            apply_vehicle_overlays(&player.graph, model_nodes, motion, &mut nodes);
+        } else if let Some(pose) = device {
+            // (a device's position and power overlays over its animation)
+            apply_device_overlays(&player.graph, pose, &mut nodes);
+        } else if let Some(unit) = unit {
+            // (a biped's action, flinch and aiming screens over its base)
+            let layers = unit_layers(unit, transform);
+            unit_pose(&player.graph, model_nodes, &layers, &mut nodes);
+        }
+        let current = node_matrices(&player.links, &nodes, &root_matrix(transform));
         matrices.previous = std::mem::replace(&mut matrices.current, current);
     }
 }
@@ -2172,5 +2264,68 @@ pub(crate) mod tests {
             ]
         );
         assert_eq!(run().2, hash);
+    }
+
+    #[test]
+    fn an_object_starts_on_what_its_kind_plays() {
+        let graph_of = |weapon: Vec<Option<u16>>| AnimationGraph {
+            weapon,
+            ..graph(vec![animation(4), animation(4), animation(4)])
+        };
+        // (a unit without seats none, scenery its first at the game's
+        // frame, a weapon its idle if the graph has it)
+        let three = graph_of(Vec::new());
+        assert_eq!(
+            object_animation(&three, ObjectKind::Biped, 0.5),
+            (NO_ANIMATION, false)
+        );
+        assert_eq!(
+            object_animation(&three, ObjectKind::Scenery, 0.5),
+            (0, true)
+        );
+        let armed = graph_of(vec![Some(2)]);
+        assert_eq!(
+            object_animation(&armed, ObjectKind::Weapon, 0.5),
+            (2, false)
+        );
+        // and anything else, or a weapon without one, no animation: it stands
+        // in its model's pose with its overlays alone
+        for (graph, kind) in [
+            (graph_of(vec![Some(9)]), ObjectKind::Weapon),
+            (graph_of(vec![None]), ObjectKind::Weapon),
+            (three.clone(), ObjectKind::Equipment),
+            (three.clone(), ObjectKind::Machine),
+            (graph(Vec::new()), ObjectKind::Scenery),
+        ] {
+            assert_eq!(object_animation(&graph, kind, 0.5), (NO_ANIMATION, false));
+        }
+    }
+
+    #[test]
+    fn scenery_plays_at_its_objects_frame() {
+        let four = Arc::new(graph(vec![animation(4)]));
+        let mut player = AnimationPlayer::for_object(four, None, ObjectKind::Scenery, 0.5);
+        assert!(player.automatic);
+        let mut frames = Vec::new();
+        for object_frame in [0, 1, 6, 7, u32::MAX] {
+            player.play_at(object_frame);
+            frames.push(player.state.frame);
+        }
+        assert_eq!(frames, [0, 1, 2, 3, 3]);
+        // (an object without an animation keeps its frame)
+        let mut none = AnimationPlayer::for_object(
+            Arc::new(graph(Vec::new())),
+            None,
+            ObjectKind::Equipment,
+            0.5,
+        );
+        none.play_at(5);
+        assert_eq!(
+            none.state,
+            AnimationState {
+                animation: NO_ANIMATION,
+                frame: 0
+            }
+        );
     }
 }

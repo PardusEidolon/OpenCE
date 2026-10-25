@@ -73,6 +73,54 @@ pub struct Aim {
     pub looks: bool,
 }
 
+/// `graph`'s object overlays over `nodes`, each driven by its function of
+/// `functions` (its outgoing values): a continuous one at the frame its
+/// value picks, a scaled one at the game's frame for the object
+/// (`object_frame`) and by its value. Each is skipped unless it fits the
+/// model's `model_nodes` nodes and its function is one the object has.
+pub fn apply_object_overlays(
+    graph: &AnimationGraph,
+    model_nodes: usize,
+    functions: &[FunctionValue],
+    object_frame: u32,
+    nodes: &mut [Orientation],
+) {
+    let count = functions.len().min(OUTGOING_FUNCTIONS);
+    for overlay in &graph.object_overlays {
+        let Some(animation) = overlay
+            .animation
+            .and_then(|index| graph.animations.get(usize::from(index)))
+        else {
+            continue;
+        };
+        let Some(function) = usize::try_from(overlay.function)
+            .ok()
+            .filter(|&index| index < count)
+            .and_then(|index| functions.get(index))
+        else {
+            continue;
+        };
+        if usize::from(animation.node_count) > model_nodes {
+            continue;
+        }
+        match overlay.mode {
+            0 => {
+                let frames = if function.additive {
+                    f32::from(animation.frame_count)
+                } else {
+                    f32::from(animation.frame_count) - 1.0
+                };
+                apply_overlay_continuous(animation, frames * function.value, nodes);
+            }
+            1 if animation.frame_count > 0 => {
+                let frame = (object_frame % u32::from(animation.frame_count)) as i16;
+                apply_overlay_scaled(animation, frame, function.value, nodes);
+            }
+            _ => {}
+        }
+    }
+}
+
 /// A unit's layers over its object's pose.
 #[derive(Clone, Copy, Debug, Default)]
 pub struct UnitLayers {
@@ -174,40 +222,13 @@ pub fn object_pose(
     }
 
     let model_nodes = model.map_or(nodes.len(), |model| model.nodes.len());
-    let functions = layers.functions.len().min(OUTGOING_FUNCTIONS);
-    for overlay in &graph.object_overlays {
-        let Some(animation) = overlay
-            .animation
-            .and_then(|index| graph.animations.get(usize::from(index)))
-        else {
-            continue;
-        };
-        let Some(function) = usize::try_from(overlay.function)
-            .ok()
-            .filter(|&index| index < functions)
-            .and_then(|index| layers.functions.get(index))
-        else {
-            continue;
-        };
-        if usize::from(animation.node_count) > model_nodes {
-            continue;
-        }
-        match overlay.mode {
-            0 => {
-                let frames = if function.additive {
-                    f32::from(animation.frame_count)
-                } else {
-                    f32::from(animation.frame_count) - 1.0
-                };
-                apply_overlay_continuous(animation, frames * function.value, nodes);
-            }
-            1 if animation.frame_count > 0 => {
-                let frame = (layers.object_frame % u32::from(animation.frame_count)) as i16;
-                apply_overlay_scaled(animation, frame, function.value, nodes);
-            }
-            _ => {}
-        }
-    }
+    apply_object_overlays(
+        graph,
+        model_nodes,
+        layers.functions,
+        layers.object_frame,
+        nodes,
+    );
 
     if layers.scale > 0.0 {
         if let Some(first) = nodes.first_mut() {

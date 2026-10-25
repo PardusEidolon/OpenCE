@@ -13,6 +13,7 @@ use opence_content::{
     AnimationNode, BspWater, Level, MaterialPhysics, Model, ObjectKind, Physics, TagRef, Vehicle,
     VehicleAnimations, VehicleKind, VehicleSeat, Weapon,
 };
+use std::collections::BTreeMap;
 use std::sync::Arc;
 
 use opence_physics::{Layers, LevelMesh, SurfaceMaterials};
@@ -25,6 +26,7 @@ use crate::armory::Armory;
 use crate::cached::Cached;
 use crate::clock;
 use crate::damage::Vitality;
+use crate::functions::{RideExport, WeaponExport};
 use crate::hash::WorldHasher;
 use crate::input::TickInput;
 use crate::objects::{ObjectHandle, ObjectTable, Placed};
@@ -83,6 +85,8 @@ struct RideKind {
     /// Its gun: the armory's weapon, its definition, and its muzzle from
     /// its origin.
     turret: Option<(usize, Weapon, Vec3)>,
+    /// Its gun's tag.
+    turret_tag: Option<TagRef>,
     /// Its graph's vehicle animations: its overlays and suspensions.
     animations: Option<VehicleAnimations>,
     /// Its hover and jet thrusters, from its origin.
@@ -554,12 +558,17 @@ impl Rides {
                     hover: marker_matrices(render, &matrices, "hover thrusters"),
                     jet: marker_matrices(render, &matrices, "jet thrusters"),
                 });
+                let turret_tag = turret
+                    .as_ref()
+                    .and_then(|(index, _, _)| armory.get(*index))
+                    .map(|weapon| weapon.tag.clone());
                 Some(RideKind {
                     tag: object.tag.clone(),
                     vehicle,
                     physics,
                     seats,
                     turret,
+                    turret_tag,
                     animations,
                     thrusters,
                 })
@@ -577,6 +586,34 @@ impl Rides {
     /// The vehicles in the world, in the order of their handles.
     pub fn rides(&self) -> &[Ride] {
         &self.rides
+    }
+
+    /// What each vehicle in the world exports into its functions that its
+    /// object does not keep: its seats' power and its gun's state.
+    pub fn exports(&self) -> BTreeMap<ObjectHandle, RideExport> {
+        self.rides
+            .iter()
+            .map(|ride| {
+                let kind = self.kinds.get(ride.kind);
+                let turret = kind.and_then(|kind| {
+                    let (_, weapon, _) = kind.turret.as_ref()?;
+                    let state = ride.turret.as_ref()?;
+                    let rounds = weapon
+                        .magazines
+                        .first()
+                        .map_or(0, |magazine| magazine.rounds_loaded_maximum);
+                    Some((
+                        kind.turret_tag.clone()?,
+                        WeaponExport::of(state, Some(weapon), rounds),
+                    ))
+                });
+                let export = RideExport {
+                    seat_power: ride.power,
+                    turret,
+                };
+                (ride.handle, export)
+            })
+            .collect()
     }
 
     /// The vehicle of `handle`, if it is in the world.

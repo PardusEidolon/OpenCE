@@ -7,14 +7,15 @@
 use std::collections::BTreeMap;
 
 use bevy_ecs::prelude::*;
-use opence_content::{FunctionModes, Level, ObjectFunction, ObjectKind, TagRef};
+use opence_content::{FunctionModes, Level, ObjectFunction, ObjectKind, TagRef, Weapon};
 
 use crate::armory::WeaponItem;
 use crate::cached::Cached;
 use crate::damage::{transition, Vitality};
 use crate::device_animation::DevicePose;
-use crate::objects::Object;
+use crate::objects::{Object, ObjectHandle};
 use crate::periodic::evaluate;
+use crate::weapon::WeaponState;
 use crate::{ObjectId, Tick};
 
 /// An object's values: what it exports into its functions and what they
@@ -103,6 +104,8 @@ pub struct Functions {
     /// A weapon's first magazine's most rounds loaded (its ammunition's
     /// value is the rounds loaded over this).
     pub rounds_loaded_maximum: i16,
+    /// A weapon's definition (its heat recovery).
+    pub weapon: Option<Weapon>,
 }
 
 /// The level's objects' functions, by their tags (only those that have
@@ -124,6 +127,7 @@ impl FunctionTable {
                     .as_ref()
                     .and_then(|weapon| weapon.magazines.first())
                     .map_or(0, |magazine| magazine.rounds_loaded_maximum),
+                weapon: object.weapon.clone(),
             };
             if functions.functions.is_empty() && functions.modes == FunctionModes::default() {
                 continue;
@@ -143,9 +147,77 @@ pub struct Exported {
     pub random: f32,
     /// A unit's flashlight's power.
     pub integrated_light: f32,
-    /// A weapon's heat, rounds loaded over its maximum, and whether it is
-    /// cooling from overheating.
-    pub weapon: Option<(f32, f32, bool)>,
+    /// A unit's driver's and gunner's seats' power.
+    pub seat_power: [f32; 2],
+    /// A weapon's state.
+    pub weapon: Option<WeaponExport>,
+}
+
+/// What a weapon's state exports (`weapon_export_function_values`).
+#[derive(Clone, Copy, Debug, Default, PartialEq)]
+pub struct WeaponExport {
+    /// Its heat, 0 to 1.
+    pub heat: f32,
+    /// Its first magazine's rounds loaded over their maximum.
+    pub rounds: f32,
+    /// How far it is from cooling enough to fire again, 0 to 1: its heat
+    /// above its recovery threshold, while it is overheated.
+    pub overheated: f32,
+    /// Each of its first two triggers' rate of fire, 0 to 1 (none for a
+    /// trigger it does not have).
+    pub rate_of_fire: [f32; 2],
+    /// Whether it fired in this game tick or the one before.
+    pub firing: bool,
+}
+
+/// The simulation's ticks within which a weapon that fired is firing: the
+/// original's `game_time - game_time_last_fired` of 1 or less, at its 30
+/// ticks a second.
+const FIRING_TICKS: i16 = 2 * (crate::clock::TICKS_PER_SECOND / 30) as i16;
+
+impl WeaponExport {
+    /// What `state` of `weapon` exports, with `rounds_loaded_maximum` its
+    /// first magazine's most rounds loaded.
+    pub fn of(state: &WeaponState, weapon: Option<&Weapon>, rounds_loaded_maximum: i16) -> Self {
+        let loaded = state.magazines.first().map_or(0, |m| m.loaded);
+        let rounds = if rounds_loaded_maximum > 0 {
+            f32::from(loaded) / f32::from(rounds_loaded_maximum)
+        } else {
+            1.0
+        };
+        let threshold = weapon.map_or(1.0, |weapon| weapon.heat_recovery_threshold);
+        let overheated = if state.overheated && threshold != 1.0 {
+            (state.heat - threshold) / (1.0 - threshold)
+        } else {
+            0.0
+        };
+        let mut rate_of_fire = [0.0; 2];
+        for (rate, trigger) in rate_of_fire.iter_mut().zip(&state.triggers) {
+            *rate = trigger.rate_of_fire;
+        }
+        Self {
+            heat: state.heat,
+            rounds: rounds.clamp(0.0, 1.0),
+            overheated,
+            rate_of_fire,
+            firing: state
+                .triggers
+                .iter()
+                .any(|trigger| trigger.idle_ticks < FIRING_TICKS),
+        }
+    }
+}
+
+/// What a vehicle exports that the world's objects do not keep: its
+/// seats' power, and its gun's state with its gun's definition's tag
+/// (whose modes it exports by into the vehicle's values, the gun being
+/// invisible and the vehicle its parent).
+#[derive(Clone, Debug, Default, PartialEq)]
+pub struct RideExport {
+    /// Its driver's and gunner's seats' power.
+    pub seat_power: [f32; 2],
+    /// Its gun's tag and what its state exports.
+    pub turret: Option<(TagRef, WeaponExport)>,
 }
 
 /// The value an object's part exports by `mode` (none: it leaves the
@@ -161,16 +233,23 @@ fn export(part: usize, mode: i16, exported: &Exported) -> Option<f32> {
         (0, 2) => shield.clamp(0.0, 1.0),
         (0, 5) => exported.random,
         (0, 18) => f32::from(u8::from(!dead)),
+        (1, 1) => exported.seat_power[0],
+        (1, 2) => exported.seat_power[1],
         (1, 5) => exported.integrated_light,
         (1, 6) => f32::from(u8::from(!dead)),
-        (3, 1) => exported.weapon.map_or(0.0, |weapon| weapon.0),
-        (3, 2 | 3) => exported.weapon.map_or(1.0, |weapon| weapon.1),
-        (3, 6) => 1.0,
-        (3, 9) => exported
+        (3, 1) => exported.weapon.map_or(0.0, |weapon| weapon.heat),
+        (3, 2 | 3) => exported.weapon.map_or(1.0, |weapon| weapon.rounds),
+        (3, 4 | 5) => exported
             .weapon
-            .map_or(0.0, |weapon| f32::from(u8::from(weapon.2))),
+            .map_or(0.0, |weapon| weapon.rate_of_fire[usize::from(mode == 5)]),
+        (3, 6) => 1.0,
+        (3, 9) => exported.weapon.map_or(0.0, |weapon| weapon.overheated),
+        (3, 15 | 16) => exported
+            .weapon
+            .filter(|weapon| weapon.firing)
+            .map_or(0.0, |weapon| weapon.rate_of_fire[usize::from(mode == 16)]),
         // (what the port does not keep yet: recent damage, the compass, a
-        // region's damage, seat power, aiming, flying speed, rate of fire)
+        // region's damage, aiming, flying speed, ejection ports, charge)
         _ => 0.0,
     };
     Some(value)
@@ -297,6 +376,7 @@ fn random_constant(id: u32) -> f32 {
 pub type Objects = Cached<(
     Entity,
     &'static ObjectId,
+    &'static ObjectHandle,
     &'static Object,
     Option<&'static Vitality>,
     Option<&'static IntegratedLight>,
@@ -307,34 +387,60 @@ pub type Objects = Cached<(
 
 /// Every object's functions for this tick (an object the table does not
 /// name keeps none).
-pub fn update(world: &mut World, objects: &mut Objects) {
+pub fn update(
+    world: &mut World,
+    objects: &mut Objects,
+    rides: &BTreeMap<ObjectHandle, RideExport>,
+) {
     let Some(table) = world.remove_resource::<FunctionTable>() else {
         return;
     };
     let tick = world.get_resource::<Tick>().map_or(0, |tick| tick.0);
     let mut missing = Vec::new();
     let objects = objects.get(world);
-    for (entity, id, object, vitality, light, item, device, values) in objects.iter_mut(world) {
+    for (entity, id, handle, object, vitality, light, item, device, values) in
+        objects.iter_mut(world)
+    {
         let Some(functions) = table.0.get(&object.tag) else {
             continue;
         };
+        let ride = rides.get(handle);
         let exported = Exported {
             vitality: vitality.map(|v| (v.body, v.shield, v.dead)),
             random: random_constant(id.0),
             integrated_light: light.map_or(0.0, |light| light.power),
+            seat_power: ride.map_or([0.0; 2], |ride| ride.seat_power),
             weapon: (object.kind == ObjectKind::Weapon).then(|| {
-                item.map_or((0.0, 1.0, false), |item| {
-                    let loaded = item.0.magazines.first().map_or(0, |m| m.loaded);
-                    let full = if functions.rounds_loaded_maximum > 0 {
-                        f32::from(loaded) / f32::from(functions.rounds_loaded_maximum)
-                    } else {
-                        1.0
-                    };
-                    (item.0.heat, full.clamp(0.0, 1.0), item.0.overheated)
-                })
+                item.map_or(
+                    WeaponExport {
+                        rounds: 1.0,
+                        ..WeaponExport::default()
+                    },
+                    |item| {
+                        WeaponExport::of(
+                            &item.0,
+                            functions.weapon.as_ref(),
+                            functions.rounds_loaded_maximum,
+                        )
+                    },
+                )
             }),
         };
         let mut incoming = incoming(&functions.modes, &exported);
+        // (a vehicle's gun's values, by the gun's own modes)
+        if let Some((tag, turret)) = ride.and_then(|ride| ride.turret.as_ref()) {
+            if let Some(gun) = table.0.get(tag) {
+                let exported = Exported {
+                    weapon: Some(*turret),
+                    ..Exported::default()
+                };
+                for (value, &mode) in incoming.iter_mut().zip(&gun.modes.weapon) {
+                    if let Some(exported) = export(3, mode, &exported) {
+                        *value = exported;
+                    }
+                }
+            }
+        }
         // (a device's own values, by its definition's modes)
         for (value, exported) in incoming
             .iter_mut()
@@ -366,6 +472,7 @@ pub fn update(world: &mut World, objects: &mut Objects) {
 mod tests {
     use super::*;
     use crate::periodic::function;
+    use crate::weapon::TriggerState;
 
     fn constant() -> ObjectFunction {
         ObjectFunction {
@@ -517,7 +624,7 @@ mod tests {
             vitality: Some((0.5, 1.5, false)),
             random: 0.25,
             integrated_light: 0.75,
-            weapon: None,
+            ..Exported::default()
         };
         assert_eq!(incoming(&modes, &exported), [0.5, 1.0, 0.75, 0.25]);
         let weapon = FunctionModes {
@@ -525,12 +632,65 @@ mod tests {
             ..FunctionModes::default()
         };
         let exported = Exported {
-            weapon: Some((0.4, 0.5, true)),
+            weapon: Some(WeaponExport {
+                heat: 0.4,
+                rounds: 0.5,
+                overheated: 1.0,
+                ..WeaponExport::default()
+            }),
             ..Exported::default()
         };
         assert_eq!(incoming(&weapon, &exported), [0.4, 0.5, 1.0, 1.0]);
         assert_eq!(incoming(&FunctionModes::default(), &exported), [0.0; 4]);
         assert!((0.0..1.0).contains(&random_constant(12345)));
+    }
+
+    #[test]
+    fn seats_rate_of_fire_and_firing_are_exported() {
+        let modes = FunctionModes {
+            unit: [1, 2, 0, 0],
+            weapon: [0, 0, 4, 15],
+            ..FunctionModes::default()
+        };
+        let mut exported = Exported {
+            seat_power: [0.25, 0.5],
+            weapon: Some(WeaponExport {
+                rate_of_fire: [0.75, 0.0],
+                ..WeaponExport::default()
+            }),
+            ..Exported::default()
+        };
+        // (a weapon that has not fired lately is not firing, at any rate)
+        assert_eq!(incoming(&modes, &exported), [0.25, 0.5, 0.75, 0.0]);
+        if let Some(weapon) = exported.weapon.as_mut() {
+            weapon.firing = true;
+        }
+        assert_eq!(incoming(&modes, &exported), [0.25, 0.5, 0.75, 0.75]);
+    }
+
+    #[test]
+    fn a_weapon_fires_for_a_game_tick_and_cools_by_its_threshold() {
+        let weapon = Weapon {
+            heat_recovery_threshold: 0.2,
+            ..Weapon::default()
+        };
+        let mut state = WeaponState {
+            heat: 0.6,
+            overheated: true,
+            triggers: vec![TriggerState {
+                rate_of_fire: 0.5,
+                idle_ticks: 0,
+                ..TriggerState::default()
+            }],
+            ..WeaponState::default()
+        };
+        let export = WeaponExport::of(&state, Some(&weapon), 0);
+        assert!((export.overheated - 0.5).abs() < 1e-6);
+        assert_eq!(export.rate_of_fire, [0.5, 0.0]);
+        assert!(export.firing);
+        // (two game ticks after it fired, it is not firing)
+        state.triggers[0].idle_ticks = FIRING_TICKS;
+        assert!(!WeaponExport::of(&state, Some(&weapon), 0).firing);
     }
 
     #[test]

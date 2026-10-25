@@ -538,7 +538,8 @@ impl Simulation {
         forces::apply(&mut self.world, &mut self.rides, &mut self.players, &pushes);
         self.schedule.run(&mut self.world);
         self.stand_exited_riders();
-        functions::update(&mut self.world, &mut self.queries.functions);
+        let rides = self.rides.exports();
+        functions::update(&mut self.world, &mut self.queries.functions, &rides);
         self.place_ejections(&mut ejections);
         self.update_physics(&ejections);
         self.effects = ejections;

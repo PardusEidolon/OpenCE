@@ -477,6 +477,118 @@ fn a_driven_warthog_rides_its_suspension_and_turns_its_wheels() -> Result {
     Ok(())
 }
 
+/// Where the Warthog's barrels' left axis points in its gun's own frame
+/// (it turns as the barrels spin about the gun, and not as the gun aims).
+fn barrels_on_gun(
+    simulation: &mut Simulation,
+    level: &Level,
+    warthog: ObjectHandle,
+) -> Result<Vec3> {
+    let definition = level
+        .objects
+        .iter()
+        .find(|object| object.tag.path.eq_ignore_ascii_case(WARTHOG))
+        .ok_or("no warthog")?;
+    let model = definition
+        .model
+        .as_ref()
+        .and_then(|model| level.model_index(model))
+        .and_then(|model| level.models.get(model))
+        .ok_or("no model")?;
+    let node = |name: &str| {
+        model
+            .nodes
+            .iter()
+            .position(|node| node.name == name)
+            .ok_or(format!("no node {name}"))
+    };
+    let (gun, barrels) = (node("frame gun")?, node("frame barrels")?);
+    let position = simulation.transform(warthog).ok_or("no warthog")?.position;
+    let mut found = None;
+    simulation.visit_drawn(|drawn| {
+        if drawn.current.position.distance(position) < 1.0e-4 {
+            if let Some(nodes) = drawn.nodes {
+                found = nodes
+                    .current
+                    .get(gun)
+                    .copied()
+                    .zip(nodes.current.get(barrels).copied());
+            }
+        }
+    });
+    let (gun, barrels) = found.ok_or("the Warthog is not drawn with its nodes")?;
+    let left = Vec3::from_array(barrels.left);
+    Ok(Vec3::new(
+        left.dot(Vec3::from_array(gun.forward)),
+        left.dot(Vec3::from_array(gun.left)),
+        left.dot(Vec3::from_array(gun.up)),
+    ))
+}
+
+#[test]
+fn the_warthogs_barrels_spin_only_as_its_gunner_fires() -> Result {
+    let Some(level) = bloodgulch()? else {
+        return Ok(());
+    };
+    let flags = seat_flags(&level)?;
+    let (mut simulation, warthog) = beside_a_warthog(&level)?;
+    // (animated as the app animates it)
+    let definition = level
+        .objects
+        .iter()
+        .find(|object| object.tag.path.eq_ignore_ascii_case(WARTHOG))
+        .ok_or("no warthog")?;
+    let graph = definition.animation_graph.as_ref().ok_or("no graph")?;
+    let graph = Arc::new(level.animation_graph(graph).ok_or("no graph")?.clone());
+    let model = definition
+        .model
+        .as_ref()
+        .and_then(|model| level.model_index(model))
+        .map(|model| Arc::new(level.models[model].clone()));
+    assert!(simulation.animate(
+        warthog,
+        AnimationPlayer::for_object(graph, model, ObjectKind::Vehicle, 0.5)
+    ));
+    let spun = |simulation: &mut Simulation, input: TickInput| -> Result<f32> {
+        let start = barrels_on_gun(simulation, &level, warthog)?;
+        let mut most: f32 = 0.0;
+        for _ in 0..clock::TICKS_PER_SECOND {
+            simulation.step(input);
+            most = most.max(barrels_on_gun(simulation, &level, warthog)?.distance(start));
+        }
+        Ok(most)
+    };
+    // (no gunner: still)
+    simulation.step(TickInput::default());
+    let empty = spun(&mut simulation, TickInput::default())?;
+    assert!(empty < 1.0e-4, "the barrels turned with no gunner: {empty}");
+    // (a gunner who does not fire: still, though the gun aims)
+    let gunner = seat_with(&flags, VehicleSeat::GUNNER, VehicleSeat::DRIVER)?;
+    enter(&mut simulation, warthog, gunner)?;
+    assert_eq!(seated(&simulation), Some(gunner));
+    for _ in 0..clock::TICKS_PER_SECOND {
+        simulation.step(TickInput::default());
+    }
+    let aiming = spun(
+        &mut simulation,
+        TickInput {
+            yaw: Radians(0.01),
+            ..TickInput::default()
+        },
+    )?;
+    assert!(
+        aiming < 1.0e-3,
+        "the barrels turned as the gun aimed: {aiming}"
+    );
+    // (firing: they spin)
+    let firing = spun(&mut simulation, pressed(Buttons::FIRE))?;
+    assert!(
+        firing > 0.1,
+        "the barrels did not spin as the gun fired: {firing}"
+    );
+    Ok(())
+}
+
 #[test]
 fn the_driver_sees_from_behind_the_warthog_along_its_camera_track() -> Result {
     let Some(level) = bloodgulch()? else {
