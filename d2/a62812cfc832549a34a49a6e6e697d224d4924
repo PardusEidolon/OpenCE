@@ -1,0 +1,1 @@
+tracing and benchmarks: log book on tracing (layer + own filter/level), JSON log via OPENCE_LOG_JSON, tracy feature, literal profile_scope! names are spans; divan benches collision 162ns/2.08us, bake 1.71us/19.9us/75.7us, blend 448ns, a10 AI tick 691us. Suite 1106 passed.
