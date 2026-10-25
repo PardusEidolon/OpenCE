@@ -1,0 +1,1 @@
+No blur on impacts: particle sprites write a reactive mask for the temporal scaler; teleported, placed and spawned objects are snapped (previous transform = current). Tests: interpolation.rs, sim lib test, ParticleTests reactive mask. Weapons station golden predates this (particle facing commit 50558697 changed the plasma burst).
