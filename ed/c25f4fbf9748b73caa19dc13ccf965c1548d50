@@ -1,0 +1,1 @@
+Far hills: importer caps DXT chains at a block (IMPORTER_VERSION 37); SPREAD_FLOOR 0.5 (BAKE_VERSION 9). FarHillsTests 3.1% -> 0 near-black. Edge bands: band0 2.51% vs stock 1.64% (expected failure), band1 1.14% vs 3.37%, band2 0 vs 0.66%.
