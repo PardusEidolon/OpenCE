@@ -31,16 +31,7 @@ final class ShadowEdgeTests: XCTestCase {
             let baked = Float(steps.hard) / Float(max(steps.pairs, 1))
             let stock = Float(steps.stockHard) / Float(steps.stockPairs)
             print("band \(band): baked \(baked) mean \(steps.mean); stock \(stock) mean \(steps.stockMean)")
-            let check = { XCTAssertLessThanOrEqual(baked, stock, "band \(band)'s share of neighbours that step hard") }
-            if band == 0 {
-                // (the bases' insides, lit by their lamps, step hard on 5.2% and
-                // 3.4% of their pairs against stock's 2.3% and 2.6%; outside them
-                // this band steps on 0.2% against stock's 0.5%: plan.md's bunker
-                // interiors task)
-                XCTExpectFailure("the bases' insides step harder than stock", strict: false, failingBlock: check)
-            } else {
-                check()
-            }
+            XCTAssertLessThanOrEqual(baked, stock, "band \(band)'s share of neighbours that step hard")
         }
     }
 }

@@ -294,6 +294,22 @@ pub struct BakeEdgeSteps {
     pub stock_mean: f32,
 }
 
+/// The light inside a building: the steps between its texels under the
+/// roof, and the texels there that neither the sky, the sun nor its lamps
+/// light that the bake lights well past the stock texels over them (light
+/// come through a wall).
+#[derive(Clone, Debug, PartialEq, uniffi::Record)]
+pub struct BakeSheltered {
+    /// The steps between neighbouring texels under the roof.
+    pub edges: BakeEdgeSteps,
+    /// How many texels under the roof that see neither the sky nor the sun,
+    /// and are out of the lamps' reach, have a stock texel over them.
+    pub texels: u32,
+    /// How many of them are brighter than it by more than a quarter of the
+    /// range.
+    pub leaks: u32,
+}
+
 /// A BSP's baked light.
 #[derive(uniffi::Object)]
 pub struct BakedLight {
@@ -470,6 +486,33 @@ impl LevelBake {
                 stock_mean: stock.mean,
             })
             .collect()
+    }
+
+    /// The light of `light`'s texels inside the box from `low` to `high`
+    /// (x, y and z; a missing one is 0) that have a roof over them,
+    /// against the stock pages'.
+    pub fn sheltered(
+        &self,
+        light: Arc<BakedLight>,
+        low: Vec<f32>,
+        high: Vec<f32>,
+    ) -> BakeSheltered {
+        let corner = |at: &[f32]| std::array::from_fn(|axis| at.get(axis).copied().unwrap_or(0.0));
+        let inside = self
+            .plan
+            .sheltered(&light.light, corner(&low), corner(&high));
+        BakeSheltered {
+            edges: BakeEdgeSteps {
+                pairs: inside.baked.pairs,
+                hard: inside.baked.hard,
+                mean: inside.baked.mean,
+                stock_pairs: inside.stock.pairs,
+                stock_hard: inside.stock.hard,
+                stock_mean: inside.stock.mean,
+            },
+            texels: inside.leaks.texels,
+            leaks: inside.leaks.brighter,
+        }
     }
 
     /// The BSP, in the level's.

@@ -20,8 +20,9 @@
 use opence_content::level::Level;
 use opence_content::pack::FORMAT_VERSION;
 
+use crate::bvh::{Bvh, Ray};
 use crate::chart::{Atlas, BakePoint, Chart};
-use crate::edge::{size_band, EdgeSteps, SIZE_BANDS};
+use crate::edge::{size_band, Brighter, EdgeSteps, SIZE_BANDS};
 use crate::filter;
 use crate::mood::{self, PageMood, StockPage};
 use crate::probe::{self, ProbeGrid, REFLECTION_SIZE};
@@ -29,7 +30,7 @@ use crate::scene::Scene;
 use crate::seam::{self, Seam, SeamStep};
 
 /// The baker's version: raised with any change to what it makes.
-pub const BAKE_VERSION: u32 = 9;
+pub const BAKE_VERSION: u32 = 10;
 /// The cache file's first eight bytes.
 pub const MAGIC: [u8; 8] = *b"OCEBAKE\0";
 
@@ -49,7 +50,7 @@ pub struct BakeSettings {
 impl Default for BakeSettings {
     fn default() -> Self {
         Self {
-            lightmap_samples: 64,
+            lightmap_samples: 512,
             probe_samples: 256,
             reflection_samples: 16,
             occlusion_distance: 2.0,
@@ -85,6 +86,70 @@ pub struct BakePlan {
     pub stock_edges: EdgeSteps,
     /// The same, band by band of texel size ([`crate::edge::size_band`]).
     pub stock_edge_bands: [EdgeSteps; SIZE_BANDS],
+    /// Each chart's stock page, if it has one the bake can read (for the
+    /// sheltered check).
+    pub stock_pages: Vec<Option<StockPage>>,
+}
+
+/// The light inside a building ([`BakePlan::sheltered`]).
+#[derive(Clone, Copy, Debug, Default, PartialEq)]
+pub struct Sheltered {
+    /// The steps between neighbouring texels under its roof, baked.
+    pub baked: EdgeSteps,
+    /// The same on the stock pages.
+    pub stock: EdgeSteps,
+    /// The texels under its roof that see neither the sky nor the sun and
+    /// are out of its lamps' reach, against the stock texels over them:
+    /// light can come to them only off the building's own surfaces, so
+    /// those lit well past stock have light that came through a wall.
+    pub leaks: Brighter,
+}
+
+/// How far above a point a roof may be and shelter it (world units).
+const ROOF_WITHIN: f32 = 20.0;
+/// How far off its surface a point's rays start (world units).
+const RAY_OFF: f32 = 0.01;
+/// How many directions over a point's hemisphere are tried for the sky.
+const SKY_DIRECTIONS: u32 = 64;
+/// How near a glowing triangle's corners or middle a point is lit by it
+/// strongly enough that the bake's light may well pass stock's (world
+/// units: the bases' lamps light their walls well past stock within a
+/// unit and a half, and nothing beyond two).
+const LAMP_REACH: f32 = 2.0;
+
+/// Whether a ray from `point` along one of [`SKY_DIRECTIONS`] spread
+/// evenly by the cosine over its hemisphere (a golden-angle spiral) leaves
+/// the level by `reaches`.
+fn sees_sky(point: &BakePoint, reaches: impl Fn([f32; 3]) -> bool) -> bool {
+    let normal = point.normal;
+    let helper = if normal[2].abs() < 0.9 {
+        [0.0, 0.0, 1.0]
+    } else {
+        [1.0, 0.0, 0.0]
+    };
+    let cross = |a: [f32; 3], b: [f32; 3]| {
+        [
+            a[1] * b[2] - a[2] * b[1],
+            a[2] * b[0] - a[0] * b[2],
+            a[0] * b[1] - a[1] * b[0],
+        ]
+    };
+    let first = cross(normal, helper);
+    let length = libm::sqrtf(first.iter().map(|value| value * value).sum());
+    if length <= 0.0 {
+        return false;
+    }
+    let first = first.map(|value| value / length);
+    let second = cross(normal, first);
+    (0..SKY_DIRECTIONS).any(|index| {
+        let share = (index as f32 + 0.5) / SKY_DIRECTIONS as f32;
+        let turn = index as f32 * 2.399_963;
+        let (out, up) = (libm::sqrtf(share), libm::sqrtf(1.0 - share));
+        let (cos, sin) = (libm::cosf(turn), libm::sinf(turn));
+        reaches(std::array::from_fn(|axis| {
+            first[axis] * out * cos + second[axis] * out * sin + normal[axis] * up
+        }))
+    })
 }
 
 /// A baked page: its texels' light, row by row from the top.
@@ -175,7 +240,65 @@ impl BakePlan {
             stock_seams,
             stock_edges,
             stock_edge_bands,
+            stock_pages: pages,
         })
+    }
+
+    /// The light of `light`'s texels inside the box from `low` to `high`
+    /// that have a roof over them, against the stock pages'.
+    pub fn sheltered(&self, light: &BakedLighting, low: [f32; 3], high: [f32; 3]) -> Sheltered {
+        let bvh = Bvh::build(&self.scene.triangles);
+        let reaches = |point: &BakePoint, direction: [f32; 3], t_max: f32| {
+            let origin =
+                std::array::from_fn(|axis| point.position[axis] + point.normal[axis] * RAY_OFF);
+            !bvh.occluded(&Ray {
+                origin,
+                direction,
+                t_max,
+            })
+        };
+        let under_roof = |point: &BakePoint| {
+            (0..3)
+                .all(|axis| point.position[axis] >= low[axis] && point.position[axis] <= high[axis])
+                && !reaches(point, [0.0, 0.0, 1.0], ROOF_WITHIN)
+        };
+        let far = crate::trace::RAY_LENGTH;
+        let out_of_lamps_reach = |point: &BakePoint| {
+            self.scene.emitters.iter().all(|lamp| {
+                let middle = std::array::from_fn(|axis| {
+                    lamp.corners.iter().map(|corner| corner[axis]).sum::<f32>() / 3.0
+                });
+                let far_off = |at: &[f32; 3]| {
+                    let apart: f32 = (0..3)
+                        .map(|axis| {
+                            (at[axis] - point.position[axis]) * (at[axis] - point.position[axis])
+                        })
+                        .sum();
+                    apart > LAMP_REACH * LAMP_REACH
+                };
+                lamp.corners.iter().all(far_off) && far_off(&middle)
+            })
+        };
+        let lit_only_from_inside = |point: &BakePoint| {
+            under_roof(point)
+                && self
+                    .scene
+                    .lights
+                    .iter()
+                    .all(|sun| !reaches(point, sun.towards, far))
+                && out_of_lamps_reach(point)
+                && !sees_sky(point, |direction| reaches(point, direction, far))
+        };
+        Sheltered {
+            baked: EdgeSteps::baked_where(&self.atlas, &light.pages, under_roof),
+            stock: EdgeSteps::stock_where(&self.atlas, &self.stock_pages, under_roof),
+            leaks: Brighter::baked_where(
+                &self.atlas,
+                &light.pages,
+                &self.stock_pages,
+                lit_only_from_inside,
+            ),
+        }
     }
 
     /// The steps between neighbouring texels on `light`'s pages and on the
@@ -688,6 +811,141 @@ mod tests {
         let back =
             BakedLighting::decode(&light.encode()).unwrap_or_else(|error| panic!("{error:?}"));
         assert_eq!(back.exposure, light.exposure);
+    }
+
+    #[test]
+    fn only_texels_under_a_roof_inside_the_box_are_sheltered() {
+        use crate::layout;
+        use crate::scene::DirectionalLight;
+        let mut plan = devmap_plan(BakeSettings::default());
+        // (a roof 3 up over x from -1 to 2.5, the sun straight overhead)
+        plan.scene = layout::scene(
+            layout::quad([-1.0, -1.0, 3.0], [3.5, 0.0, 0.0], [0.0, 2.0, 0.0]),
+            vec![layout::material(0.5, 0.0, 1.0)],
+            0.0,
+        );
+        plan.scene.lights = vec![DirectionalLight {
+            towards: [0.0, 0.0, 1.0],
+            irradiance: [1.0; 3],
+            cos_half_angle: 1.0,
+        }];
+        // (four texels on the ground a unit apart, the last in the open)
+        plan.atlas = Atlas {
+            charts: vec![Chart {
+                page: 0,
+                width: 4,
+                height: 1,
+                texels: (0..4).collect(),
+            }],
+            points: (0..4)
+                .map(|x| BakePoint {
+                    position: [x as f32, 0.0, 0.0],
+                    normal: [0.0, 0.0, 1.0],
+                    footprint: 1.0,
+                })
+                .collect(),
+        };
+        plan.stock_pages = vec![Some(StockPage {
+            width: 4,
+            height: 1,
+            texels: vec![[64, 64, 64, 255]; 4],
+        })];
+        let pi = std::f32::consts::PI;
+        let mut light = plan.finish(&[], &[], &[], &[]);
+        light.pages = vec![BakedPage {
+            page: 0,
+            width: 4,
+            height: 1,
+            irradiance: [pi, 0.0, 0.0, pi]
+                .iter()
+                .flat_map(|&value| [half(value), half(value), half(value), 0])
+                .collect(),
+            directions: vec![0; 16],
+        }];
+        let inside = plan.sheltered(&light, [-10.0; 3], [10.0; 3]);
+        // (the pairs from each of the three sheltered texels; the first and
+        // the last step hard)
+        assert_eq!((inside.baked.pairs, inside.baked.hard), (3, 2));
+        assert_eq!((inside.stock.pairs, inside.stock.hard), (3, 0));
+        // (under a roof alone the sky is in view, so light may come in)
+        assert_eq!(inside.leaks, Brighter::default());
+        let first = plan.sheltered(&light, [-10.0; 3], [0.5, 10.0, 10.0]);
+        assert_eq!(first.baked.pairs, 1);
+        assert_eq!(
+            plan.sheltered(&light, [20.0; 3], [30.0; 3]),
+            Sheltered::default()
+        );
+    }
+
+    #[test]
+    fn texels_in_a_closed_room_out_of_its_lamps_reach_are_checked_for_leaks() {
+        use crate::layout;
+        let mut plan = devmap_plan(BakeSettings::default());
+        // (a closed room from -5 to 5, and a lamp hanging a unit over the
+        // floor at its east end)
+        let mut triangles: Vec<_> = layout::cube()
+            .into_iter()
+            .map(|mut triangle| {
+                triangle.positions = triangle
+                    .positions
+                    .map(|corner| corner.map(|value| value * 5.0));
+                triangle
+            })
+            .collect();
+        triangles.extend(
+            layout::quad([4.0, -0.5, -4.0], [0.5, 0.0, 0.0], [0.0, 1.0, 0.0])
+                .into_iter()
+                .map(|triangle| crate::scene::SceneTriangle {
+                    material: 1,
+                    ..triangle
+                }),
+        );
+        plan.scene = layout::scene(
+            triangles,
+            vec![
+                layout::material(0.5, 0.0, 1.0),
+                layout::material(0.5, 10.0, 1.0),
+            ],
+            0.0,
+        );
+        assert!(!plan.scene.emitters.is_empty());
+        // (four texels on the floor, the last under the lamp)
+        let xs = [-4.0, -3.0, -2.0, 4.2];
+        plan.atlas = Atlas {
+            charts: vec![Chart {
+                page: 0,
+                width: 4,
+                height: 1,
+                texels: (0..4).collect(),
+            }],
+            points: xs
+                .iter()
+                .map(|&x| BakePoint {
+                    position: [x, 0.0, -5.0],
+                    normal: [0.0, 0.0, 1.0],
+                    footprint: 1.0,
+                })
+                .collect(),
+        };
+        plan.stock_pages = vec![Some(StockPage {
+            width: 4,
+            height: 1,
+            texels: vec![[64, 64, 64, 255]; 4],
+        })];
+        let pi = std::f32::consts::PI;
+        let mut light = plan.finish(&[], &[], &[], &[]);
+        light.pages = vec![BakedPage {
+            page: 0,
+            width: 4,
+            height: 1,
+            irradiance: [pi, 0.0, pi, pi]
+                .iter()
+                .flat_map(|&value| [half(value), half(value), half(value), 0])
+                .collect(),
+            directions: vec![0; 16],
+        }];
+        let inside = plan.sheltered(&light, [-10.0; 3], [10.0; 3]);
+        assert_eq!((inside.leaks.texels, inside.leaks.brighter), (3, 2));
     }
 
     #[test]

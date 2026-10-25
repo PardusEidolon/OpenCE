@@ -205,6 +205,84 @@ fn neighbours(a: &BakePoint, b: &BakePoint, scale: u32) -> bool {
     facing > 0.9 && reach > 0.0 && apart <= reach
 }
 
+/// The texels of a set of pages that are brighter than the stock texels
+/// over them (the leak check): inside a building, where the sun cannot
+/// reach, a texel the bake lights well past the stock page has light that
+/// came through a wall.
+#[derive(Clone, Copy, Debug, Default, PartialEq)]
+pub struct Brighter {
+    /// How many texels have a stock texel over them.
+    pub texels: u32,
+    /// How many of them are brighter than it by more than [`HARD_STEP`],
+    /// as the level shader shows them.
+    pub brighter: u32,
+}
+
+impl Brighter {
+    /// The share of the texels that are brighter (0 if there are none).
+    pub fn share(&self) -> f32 {
+        if self.texels > 0 {
+            self.brighter as f32 / self.texels as f32
+        } else {
+            0.0
+        }
+    }
+
+    /// The texels of the baked `pages` (one to a chart of `atlas`) whose
+    /// point `keep` keeps, against the `stock` pages over them.
+    pub fn baked_where(
+        atlas: &Atlas,
+        pages: &[BakedPage],
+        stock: &[Option<StockPage>],
+        keep: impl Fn(&BakePoint) -> bool,
+    ) -> Self {
+        let mut tally = Self::default();
+        for ((chart, page), stock) in atlas.charts.iter().zip(pages).zip(stock) {
+            let Some(stock) = stock else { continue };
+            if stock.width == 0 || chart.width % stock.width != 0 {
+                continue;
+            }
+            let scale = chart.width / stock.width;
+            if chart.height != stock.height * scale {
+                continue;
+            }
+            for y in 0..chart.height {
+                for x in 0..chart.width {
+                    let at = y * chart.width + x;
+                    let Some(&index) = chart.texels.get(at as usize) else {
+                        continue;
+                    };
+                    if index == EMPTY {
+                        continue;
+                    }
+                    let Some(point) = atlas.points.get(index as usize) else {
+                        continue;
+                    };
+                    if !keep(point) {
+                        continue;
+                    }
+                    let Some(texel) = page.irradiance.get(at as usize * 4..at as usize * 4 + 3)
+                    else {
+                        continue;
+                    };
+                    let baked = brightness(
+                        [0, 1, 2].map(|channel| shown(from_half(texel[channel])).min(1.0)),
+                    );
+                    let Some(under) = stock.light(x / scale, y / scale).map(brightness) else {
+                        continue;
+                    };
+                    if !baked.is_finite() {
+                        continue;
+                    }
+                    tally.texels += 1;
+                    tally.brighter += u32::from(baked - under > HARD_STEP);
+                }
+            }
+        }
+        tally
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -273,5 +351,30 @@ mod tests {
         let mut dilated = row(2);
         dilated.charts[0].texels = vec![0, 0];
         assert_eq!(EdgeSteps::baked(&dilated, &[page(&[1.0, 0.0])]).pairs, 0);
+    }
+
+    #[test]
+    fn a_texel_lit_well_past_the_stock_texel_over_it_is_brighter() {
+        let atlas = row(4);
+        let pi = core::f32::consts::PI;
+        // (a quarter's light over each)
+        let stock = StockPage {
+            width: 4,
+            height: 1,
+            texels: vec![[64, 64, 64, 255]; 4],
+        };
+        let baked = [page(&[pi, 0.0, pi * 0.07, pi])];
+        let all = Brighter::baked_where(&atlas, &baked, &[Some(stock.clone())], |_| true);
+        assert_eq!((all.texels, all.brighter), (4, 2));
+        assert!((all.share() - 0.5).abs() < 1e-6);
+        let left = Brighter::baked_where(&atlas, &baked, &[Some(stock)], |point| {
+            point.position[0] < 1.5
+        });
+        assert_eq!((left.texels, left.brighter), (2, 1));
+        assert_eq!(
+            Brighter::baked_where(&atlas, &baked, &[None], |_| true),
+            Brighter::default()
+        );
+        assert_eq!(Brighter::default().share(), 0.0);
     }
 }
