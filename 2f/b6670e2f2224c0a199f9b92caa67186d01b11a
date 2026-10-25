@@ -1,0 +1,1 @@
+Property tests: import readers and packs (512/64 cases), console (1024), physics tunnelling and energy (48). All pass; nextest 1042 passed.
