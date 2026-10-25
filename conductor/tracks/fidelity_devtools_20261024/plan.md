@@ -155,9 +155,9 @@ Found in play (2026-10-25): getting in and out is too quick; vehicles collide on
 - [x] Task: Getting in and out c46fd72c
     - [x] Write tests: the enter and exit animations last as many ticks as the original's, against the animation graph at 30 Hz
     - [x] The fixes
-- [ ] Task: Collision with the world
-    - [ ] Write tests: vehicles collide with the structure, scenery, crates, bipeds and devices; none passes through on the vehicles station's paths
-    - [ ] The fixes
+- [x] Task: Collision with the world d82e292b
+    - [x] Write tests: vehicles collide with the structure, scenery, crates, bipeds and devices; none passes through on the vehicles station's paths
+    - [x] The fixes
 - [ ] Task: Animations driven by their functions
     - [ ] Write tests: a turret, barrel or other overlay moves only when its function (aim, firing, speed) changes, as the original's object functions say; the warthog's chaingun barrel stays still with no gunner
     - [ ] The fixes
