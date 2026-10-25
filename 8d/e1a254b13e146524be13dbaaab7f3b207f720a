@@ -1,0 +1,1 @@
+Task: Where the effects start. Effects at the weapon's markers (first-person model posed from the camera, held weapon at the grip in the hand marker); casings from the ejection port; pack format 52. Checked by weapon_markers unit tests, effect_origins data tests, workspace clippy and tests.
