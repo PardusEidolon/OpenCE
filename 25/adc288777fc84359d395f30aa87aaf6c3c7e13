@@ -1,0 +1,1 @@
+Phase 9 task 'The HUD': action-button state messages (enter, flip, swap, switch) drawn as hud_messaging.c; importer 36. Automated checks: workspace tests, clippy, fmt, HudMessageTests, EffectsRowTests. HUD golden frame stale (3.5%), awaiting approval.
