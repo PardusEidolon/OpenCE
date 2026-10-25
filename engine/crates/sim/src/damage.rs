@@ -33,20 +33,9 @@ pub const LETHAL_TO_THE_UNSUSPECTING: i16 = 2;
 /// A damage effect's side effect that empties shields at once.
 pub const EMP: i16 = 3;
 
-/// One of the game's transition functions (`transition_function_evaluate`)
-/// at `v`, clamped to 0 to 1: linear, early, very early, late, very late
-/// and cosine; another is linear.
-pub fn transition(function: i16, v: f32) -> f32 {
-    let v = v.clamp(0.0, 1.0);
-    match function {
-        1 => libm::sqrtf(v),
-        2 => libm::sqrtf(libm::sqrtf(v)),
-        3 => v * v,
-        4 => v * v * v * v,
-        5 => (libm::sinf(v * std::f32::consts::PI - std::f32::consts::FRAC_PI_2) + 1.0) / 2.0,
-        _ => v,
-    }
-}
+/// One of the game's transition functions at `v`, clamped to 0 to 1
+/// (`transition_function_evaluate`, read from the game's tables).
+pub use crate::periodic::transition;
 
 /// An object no damage harms (the shell's `god`).
 #[derive(Component, Clone, Copy, Debug, Default, PartialEq, Eq)]
@@ -1316,13 +1305,17 @@ mod tests {
 
     #[test]
     fn the_transitions_are_the_games() {
+        // (the game's tables are bytes, so the curves are within a 255th;
+        // tools/engine_periodic_reference.py checks them exactly)
+        let near = |a: f32, b: f32| (a - b).abs() <= 1.0 / 255.0 + 1e-6;
         assert_eq!(transition(0, 0.25), 0.25);
-        assert_eq!(transition(1, 0.25), 0.5);
-        assert!((transition(2, 0.0625) - 0.5).abs() < 1e-6);
-        assert_eq!(transition(3, 0.5), 0.25);
-        assert_eq!(transition(4, 0.5), 0.0625);
-        assert!((transition(5, 0.5) - 0.5).abs() < 1e-6);
+        assert!(near(transition(1, 0.25), 0.5));
+        assert!(near(transition(2, 0.0625), 0.5));
+        assert!(near(transition(3, 0.5), 0.25));
+        assert!(near(transition(4, 0.5), 0.0625));
+        assert!(near(transition(5, 0.5), 0.5));
         assert_eq!(transition(9, 2.0), 1.0);
+        assert_eq!(transition(-1, -2.0), 0.0);
     }
 
     #[test]

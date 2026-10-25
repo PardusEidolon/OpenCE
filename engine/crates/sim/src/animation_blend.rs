@@ -128,7 +128,8 @@ pub fn aiming_screen_shown(action: bool, state: i16) -> bool {
 
 /// The yaw and pitch of `vector` relative to forward and up
 /// (`matrix4x3_inverse_transform_normal`, then
-/// `euler_angles2d_from_vector3d`): its left is up × forward.
+/// `euler_angles2d_from_vector3d`, whose arctangents and square root are
+/// in double): its left is up × forward.
 pub fn relative_angles(forward: [f32; 3], up: [f32; 3], vector: [f32; 3]) -> (f32, f32) {
     let left = [
         up[1] * forward[2] - up[2] * forward[1],
@@ -137,8 +138,9 @@ pub fn relative_angles(forward: [f32; 3], up: [f32; 3], vector: [f32; 3]) -> (f3
     ];
     let dot = |axis: [f32; 3]| vector[0] * axis[0] + vector[1] * axis[1] + vector[2] * axis[2];
     let (i, j, k) = (dot(forward), dot(left), dot(up));
-    let yaw = libm::atan2f(j, i);
-    let pitch = libm::atan2f(k, libm::sqrtf(i * i + j * j));
+    let arctangent = |y: f32, x: f32| libm::atan2(f64::from(y), f64::from(x)) as f32;
+    let yaw = arctangent(j, i);
+    let pitch = arctangent(k, libm::sqrt(f64::from(i * i + j * j)) as f32);
     (yaw, pitch)
 }
 

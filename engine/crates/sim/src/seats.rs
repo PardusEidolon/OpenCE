@@ -1215,7 +1215,7 @@ impl Thrusters {
             } else {
                 15.0
             };
-            let direction = spread(forward, outer, seed);
+            let direction = seed.vector_in_cone(forward, 0.0, outer);
             let vector = if plane {
                 let lift = if index < hover {
                     hover_lift
@@ -1247,20 +1247,6 @@ impl Thrusters {
         }
         blasts
     }
-}
-
-/// `axis` turned at random by up to `outer` radians, about a way across
-/// it at random (`seed_random_vector_in_cone3d`, its inner angle 0).
-fn spread(axis: Vec3, outer: f32, seed: &mut RandomSeed) -> Vec3 {
-    let z = 2.0 * seed.next_real() - 1.0;
-    let around = std::f32::consts::TAU * seed.next_real();
-    let flat = libm::sqrtf((1.0_f32 - z * z).max(0.0));
-    let random = Vec3::new(flat * libm::cosf(around), flat * libm::sinf(around), z);
-    let across = axis.cross(random).normalize_or_zero();
-    if across == Vec3::ZERO {
-        return axis;
-    }
-    Quat::from_axis_angle(across, outer * seed.next_real()) * axis
 }
 
 /// The matrix of `model`'s marker `name` (its first instance), from its

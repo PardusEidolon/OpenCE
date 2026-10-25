@@ -3,7 +3,8 @@
 //! table of 1024 bytes built once from the game's seed, read at 25.6
 //! entries a period and mixed between neighbours. The shaders' animations
 //! (self-illumination, scrolling maps) and the objects' functions take
-//! their values from them.
+//! their values from them. The transition functions (early, late, cosine)
+//! are tables too, read across 0 to 1.
 
 use std::sync::OnceLock;
 
@@ -189,6 +190,60 @@ pub fn evaluate(function: i16, time: f32) -> f32 {
         return if result > 1.0 { result - 1.0 } else { result };
     }
     (1.0 - fraction) * first + second * fraction
+}
+
+/// The transition functions, as the tags number them: linear, early, very
+/// early, late, very late and cosine.
+const TRANSITIONS: usize = 6;
+
+/// One transition's table (`transition_function_build_table`): the curve
+/// at each of 1024 values from 0 to 1, as bytes.
+fn build_transition(function: usize) -> [u8; TABLE_SIZE] {
+    std::array::from_fn(|index| {
+        let value = index as f32 * (1.0f32 / 1023.0);
+        let power = |exponent: f64| libm::pow(f64::from(value), exponent) as f32;
+        let result = match function {
+            1 => power(0.5),
+            2 => power(0.25),
+            3 => power(2.0),
+            4 => power(4.0),
+            5 => (sin(value * std::f32::consts::PI - std::f32::consts::FRAC_PI_2) + 1.0) * 0.5,
+            _ => value,
+        };
+        ((result * 255.0) as i32).clamp(0, 255) as u8
+    })
+}
+
+fn transition_tables() -> &'static [[u8; TABLE_SIZE]; TRANSITIONS] {
+    static TABLES: OnceLock<[[u8; TABLE_SIZE]; TRANSITIONS]> = OnceLock::new();
+    TABLES.get_or_init(|| std::array::from_fn(build_transition))
+}
+
+/// A transition function at `value`, clamped to 0 to 1, read from the
+/// game's tables and mixed between neighbours
+/// (`transition_function_evaluate`); linear, or a function out of range,
+/// is the value itself.
+pub fn transition(function: i16, value: f32) -> f32 {
+    let value = value.clamp(0.0, 1.0);
+    let Some(table) = usize::try_from(function)
+        .ok()
+        .filter(|&function| function != 0)
+        .and_then(|function| transition_tables().get(function))
+    else {
+        return value;
+    };
+    let scaled = value * (TABLE_SIZE - 1) as f32;
+    let fraction = fraction(scaled);
+    // (rounded to nearest, ties to even, as the game's FISTP: on an entry,
+    // scaled - 0.5 is a tie, so an even entry reads its neighbour below
+    // with no mix toward it, and an odd one itself)
+    let index = (libm::rint(f64::from(scaled - 0.5)) as i64).clamp(0, TABLE_MASK as i64) as usize;
+    if index == TABLE_MASK {
+        return f32::from(table[TABLE_MASK]) * (1.0 / 255.0);
+    }
+    let first = f32::from(table[index]) * (1.0 / 255.0);
+    let second = f32::from(table[index + 1]) * (1.0 / 255.0);
+    first * (1.0 - fraction) + second * fraction
 }
 
 /// A periodic function at `seconds`, over a `period` and a `phase` in

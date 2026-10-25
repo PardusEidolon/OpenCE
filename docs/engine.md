@@ -890,6 +890,35 @@ when the table is not the one the code writes, or when any trace is stale.
 | `try_to_reset_permutations` | sound | source/sound/sound_definitions.c | audio/src/choice.rs:134 | `tools/engine_sound_choice_reference.py` |
 <!-- end of the reference map -->
 
+### The divergences
+
+Of the 143 functions ported, 56 are traced: animation 15 of 19, gameplay
+40 of 103, sound 5 of 15, and AI (4), particles (1) and scripts (1) none.
+The new traces (`engine_math_reference.py`, `engine_periodic_reference.py`,
+`engine_sound_choice_reference.py`) found four functions that differed;
+each now matches its trace bit for bit. Measured with the engine's old
+code against the traces:
+
+| Function | Used by | Values that differed | Largest difference |
+| --- | --- | --- | --- |
+| `transition_function_evaluate` (functions 1 to 5) | particles, contrails, lights, object functions, damage | 2056 of 2065 each | 0.060 (function 2), 0.002 to 0.008 for the rest |
+| `angle_between_vectors3d` | vehicles, projectiles | 108 of 400 | 2.4e-4 rad |
+| `euler_angles2d_from_vector3d` in a frame | aiming and looking | yaw 50, pitch 77 of 400 | 2.4e-7 rad |
+| `seed_random_vector_in_cone3d` | the Banshee's and Ghost's thrusters | 160 of 240 draws | 3.1 rad (a different algorithm; mean 0.64) |
+
+The transitions were curves where the game reads byte tables built from
+its seed, and the cone spread drew its own way rather than from the
+geosphere's 1026 directions; the angles differed only in rounding, since
+the game works them in double. Sound's pitch ranges, permutations and
+scaled values matched from the start.
+
+Phases 12 to 15 take their order from this: Phase 12 (weapons, particles
+and effects) first, since particles have no trace and the transitions they
+read were the widest divergence; Phase 13 (vehicles) next, home of two of
+the four; then Phase 14 (death and ragdolls, gameplay and animation) and
+Phase 15 (sound), whose untraced functions are the sound manager's and are
+checked by playing every sound Blood Gulch names.
+
 ## The developer tools
 
 The engine's tools reach into a running world: a shell in the game, the

@@ -911,15 +911,16 @@ fn boat(
 }
 
 /// The angle between two vectors (`angle_between_vectors3d`, through the
-/// cosine of twice the angle).
-fn angle_between(a: Vec3, b: Vec3) -> f32 {
-    let squares = a.dot(a) * b.dot(b);
+/// cosine of twice the angle, in the game's order and with its arccosine
+/// in double).
+pub fn angle_between(a: Vec3, b: Vec3) -> f32 {
+    let squares = (a.x * a.x + a.y * a.y + a.z * a.z) * (b.x * b.x + b.y * b.y + b.z * b.z);
     if squares == 0.0 {
         return 0.0;
     }
-    let ab = a.dot(b);
-    let c = (2.0 * ab * ab / squares - 1.0).clamp(-1.0, 1.0);
-    let angle = libm::acosf(c) * 0.5;
+    let ab = a.x * b.x + a.y * b.y + a.z * b.z;
+    let c = (ab / squares * ab + ab / squares * ab - 1.0).clamp(-1.0, 1.0);
+    let angle = libm::acos(f64::from(c)) as f32 * 0.5;
     if ab < 0.0 {
         std::f32::consts::PI - angle
     } else {
