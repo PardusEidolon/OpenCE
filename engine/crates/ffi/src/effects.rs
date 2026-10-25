@@ -3,7 +3,6 @@
 //! scenery's smoke, a vehicle's exhaust), their parts made at the objects'
 //! markers. The parts made each tick are handed to the lights and decals.
 
-use std::cell::RefCell;
 use std::collections::{BTreeMap, VecDeque};
 
 use opence_content::{Level, TagRef};
@@ -127,14 +126,10 @@ impl LevelEffects {
         bsp: usize,
     ) {
         {
-            let decals = RefCell::new(decals);
             let world = &*simulation;
-            self.effects.trigger(
-                level,
-                world,
-                |impact| decals.borrow_mut().material(level, world, bsp, impact),
-                |point| decals.borrow_mut().ground(level, bsp, point),
-            );
+            self.effects.trigger(level, world, |impact| {
+                decals.material(level, world, bsp, impact)
+            });
         }
         let handles: FxHashMap<u32, ObjectHandle> = simulation
             .objects()

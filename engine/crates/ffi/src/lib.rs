@@ -1559,7 +1559,7 @@ pub(crate) fn run_ticks(state: &mut State, ticks: u32) -> Result<(), EngineError
                 .tick(level, &mut running.simulation, &mut running.decals, bsp);
             let fired = running.effects.fired();
             running.lights.tick(level, fired);
-            running.decals.tick(level, &running.simulation, fired);
+            running.decals.tick(level, &running.simulation, bsp, fired);
             let events = running.simulation.animation_events();
             let camera = running.simulation.camera().transform.position;
             let decals = &mut running.decals;

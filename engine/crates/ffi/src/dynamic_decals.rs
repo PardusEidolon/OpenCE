@@ -3,7 +3,7 @@
 //! the object struck, fading at the end of their lives and recycled oldest first
 //! (`decals.c`'s `decal_new_from_collision` and `decals_update`).
 
-use opence_content::{Bitmap, Level, TagRef};
+use opence_content::{Bitmap, Decal, Level, TagRef};
 use opence_sim::effects::FiredPart;
 use opence_sim::objects::ObjectHandle;
 use opence_sim::projectile::Impact;
@@ -19,8 +19,8 @@ use crate::snapshot::{
 const TICKS_PER_SECOND: f32 = 30.0;
 /// How far above a surface struck its material is looked for.
 const MATERIAL_REACH: f32 = 0.25;
-/// How far above a detonation the ground under it is looked for, and how
-/// far below.
+/// How far above a point the ground under it is looked for, and how far
+/// below.
 const GROUND_ABOVE: f32 = 0.5;
 const GROUND_BELOW: f32 = 0.5;
 
@@ -117,11 +117,19 @@ impl DynamicDecals {
 
     /// One tick: the decals age, those past their lives go, and the decal
     /// parts effects made this tick (`fired`) are laid on the surfaces
-    /// their effects were made on, the level's or the objects' struck.
-    pub(crate) fn tick(&mut self, level: &Level, simulation: &Simulation, fired: &[FiredPart]) {
+    /// their effects were made on, the level's or the objects' struck, or,
+    /// made in the air, where their velocity meets BSP `bsp`.
+    pub(crate) fn tick(
+        &mut self,
+        level: &Level,
+        simulation: &Simulation,
+        bsp: usize,
+        fired: &[FiredPart],
+    ) {
         self.age(|handle| simulation.transform(handle).is_some());
-        for part in fired {
-            let Some(surface) = part.surface.filter(|_| part.tag.group.0 == *b"deca") else {
+        for part in fired.iter().filter(|part| part.tag.group.0 == *b"deca") {
+            let Some(surface) = part.surface else {
+                self.lay_in_the_air(level, bsp, part);
                 continue;
             };
             let on = surface
@@ -137,8 +145,43 @@ impl DynamicDecals {
                 surface.normal.to_array(),
                 surface.direction.to_array(),
                 on,
+                part.radius_modifier,
             );
         }
+    }
+
+    /// Lays the decal part `part`, made in the air, where the ray along its
+    /// velocity, as long as it, meets the front of BSP `bsp`; none if it
+    /// meets nothing, or if its decal is one for water (`decal_new`).
+    fn lay_in_the_air(&mut self, level: &Level, bsp: usize, part: &FiredPart) {
+        let length = part.velocity.length();
+        if length <= f32::EPSILON || !length.is_finite() {
+            return;
+        }
+        let direction = (part.velocity / length).to_array();
+        let Some(hit) = first_hit(
+            self.bsp(level, bsp),
+            part.position.to_array(),
+            direction,
+            length,
+        ) else {
+            return;
+        };
+        if level
+            .decal(&part.tag)
+            .is_some_and(|decal| decal.flags & Decal::WATER_EFFECT != 0)
+        {
+            return;
+        }
+        self.lay_decals(
+            level,
+            std::slice::from_ref(&part.tag),
+            hit.point,
+            hit.normal,
+            direction,
+            None,
+            part.radius_modifier,
+        );
     }
 
     /// The material of the surface `impact` struck on BSP `bsp` (-1: one
@@ -179,17 +222,6 @@ impl DynamicDecals {
             MATERIAL_REACH * 2.0,
         )
         .map_or(-1, |hit| hit.material)
-    }
-
-    /// The ground of BSP `bsp` under `point`, and its normal there.
-    pub(crate) fn ground(
-        &mut self,
-        level: &Level,
-        bsp: usize,
-        point: Vec3,
-    ) -> Option<(Vec3, Vec3)> {
-        self.ground_material(level, bsp, point)
-            .map(|(point, normal, _)| (point, normal))
     }
 
     /// The ground of BSP `bsp` under `point`, its normal there, and its
@@ -248,7 +280,9 @@ impl DynamicDecals {
 
     /// Lays the decals `tags` (and those they chain to) at `point` on a
     /// surface facing `normal`, struck going `velocity`; on the object `on`
-    /// (with its transform), if one was struck.
+    /// (with its transform), if one was struck; grown by `radius_modifier`
+    /// (none for 0).
+    #[allow(clippy::too_many_arguments)]
     pub(crate) fn lay_decals(
         &mut self,
         level: &Level,
@@ -257,6 +291,7 @@ impl DynamicDecals {
         normal: [f32; 3],
         velocity: [f32; 3],
         on: Option<(ObjectHandle, Transform)>,
+        radius_modifier: f32,
     ) {
         let pictures = &self.pictures;
         let mut texture =
@@ -270,6 +305,7 @@ impl DynamicDecals {
                 point,
                 normal,
                 velocity,
+                radius_modifier,
                 &mut seed,
                 &mut texture,
             ));
@@ -400,7 +436,7 @@ pub(crate) fn snapshot(decal: &RenderDecal, surface: u32) -> DecalSnapshot {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use opence_content::{Decal, Group};
+    use opence_content::Group;
     use opence_sim::Quat;
 
     fn tag(group: &[u8; 4], path: &str) -> TagRef {
@@ -454,6 +490,7 @@ mod tests {
             [0.0, 0.0, 1.0],
             [0.0, 0.0, -1.0],
             None,
+            0.0,
         );
     }
 
@@ -474,6 +511,7 @@ mod tests {
             velocity: Vec3::ZERO,
             on: None,
             surface,
+            radius_modifier: 0.0,
         }
     }
 
@@ -497,9 +535,11 @@ mod tests {
         decals.tick(
             &level,
             &simulation,
+            0,
             &[
                 fired("hole", Some(surface)),
-                // (made in the air, a light, and on an object gone)
+                // (made in the air with nowhere to go, a light, and on an
+                // object gone)
                 fired("hole", None),
                 light,
                 fired("hole", Some(gone)),
@@ -508,6 +548,75 @@ mod tests {
         let laid = gathered(&decals);
         assert_eq!(laid.len(), 1);
         assert_eq!(laid[0].center[..3], [1.0, 2.0, 0.0]);
+    }
+
+    /// Decals with a floor at height 0, facing up, over x and y from -10
+    /// to 10.
+    fn floored(level: &Level) -> DynamicDecals {
+        let mut decals = DynamicDecals::new(level);
+        let up = [0.0, 0.0, 1.0];
+        decals.triangles = vec![Some(vec![
+            Triangle::new(
+                [[-10.0, -10.0, 0.0], [10.0, -10.0, 0.0], [10.0, 10.0, 0.0]],
+                up,
+                -1,
+            ),
+            Triangle::new(
+                [[-10.0, -10.0, 0.0], [10.0, 10.0, 0.0], [-10.0, 10.0, 0.0]],
+                up,
+                -1,
+            ),
+        ])];
+        decals
+    }
+
+    #[test]
+    fn a_decal_part_made_in_the_air_is_laid_where_its_velocity_meets_the_level() {
+        let level = level();
+        let mut decals = floored(&level);
+        let simulation = Simulation::empty();
+        let falling = |height: f32, velocity: Vec3| FiredPart {
+            position: Vec3::new(1.0, 2.0, height),
+            velocity,
+            ..fired("hole", None)
+        };
+        decals.tick(
+            &level,
+            &simulation,
+            0,
+            &[
+                // (a grenade's char, its ray a world unit down)
+                falling(0.5, Vec3::new(0.0, 0.0, -1.0)),
+                // (too high for its ray to reach, going up, and still)
+                falling(1.5, Vec3::new(0.0, 0.0, -1.0)),
+                falling(0.5, Vec3::new(0.0, 0.0, 1.0)),
+                falling(0.5, Vec3::ZERO),
+            ],
+        );
+        let laid = gathered(&decals);
+        assert_eq!(laid.len(), 1);
+        assert_eq!(laid[0].center[..3], [1.0, 2.0, 0.0]);
+    }
+
+    #[test]
+    fn a_decal_parts_radius_modifier_grows_its_decal() {
+        let level = level();
+        let reach = |modifier: f32| {
+            let mut decals = DynamicDecals::new(&level);
+            decals.lay_decals(
+                &level,
+                &[tag(b"deca", "hole")],
+                [1.0, 2.0, 0.0],
+                [0.0, 0.0, 1.0],
+                [0.0, 0.0, -1.0],
+                None,
+                modifier,
+            );
+            gathered(&decals)[0].reach[0]
+        };
+        // (the same draw, grown; none for 0, as the game takes it)
+        assert!((reach(2.0) - 2.0 * reach(1.0)).abs() < 1e-6);
+        assert_eq!(reach(0.0), reach(1.0));
     }
 
     #[test]
@@ -602,6 +711,7 @@ mod tests {
             [0.0, 1.0, 0.0],
             [0.0, -1.0, 0.0],
             Some((handle, at)),
+            0.0,
         );
         let moved = Transform {
             position: Vec3::new(5.0, 0.0, 0.0),

@@ -26,8 +26,7 @@ const TICKS_PER_SECOND: f32 = 30.0;
 /// The seed effects draw on, apart from the game's.
 const EFFECT_SEED: u32 = 0x00EF_FEC7;
 
-/// The surface an effect was made on: where a shot struck, or the ground
-/// under a detonation.
+/// The surface an effect was made on: where a shot struck.
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct Surface {
     /// The point.
@@ -128,6 +127,9 @@ pub struct FiredPart {
     pub on: Option<ObjectHandle>,
     /// The surface its effect was made on.
     pub surface: Option<Surface>,
+    /// How much a decal it lays is grown, drawn between the part's bounds
+    /// after its velocity, as the game draws it (0 for parts not decals).
+    pub radius_modifier: f32,
 }
 
 /// The effects running.
@@ -269,14 +271,12 @@ impl Effects {
 
     /// Starts the effects this tick of `simulation` made: its weapons'
     /// shots, its projectiles' impacts (each by the `material` of the
-    /// surface struck) and its detonations (on the `ground` under them: a
-    /// point and its normal).
+    /// surface struck) and its detonations.
     pub fn trigger(
         &mut self,
         level: &Level,
         simulation: &Simulation,
         mut material: impl FnMut(&Impact) -> i16,
-        mut ground: impl FnMut(Vec3) -> Option<(Vec3, Vec3)>,
     ) {
         for shot in simulation.effects() {
             let origin = Origin {
@@ -311,14 +311,11 @@ impl Effects {
             let Some(effect) = detonation.effect.as_ref() else {
                 continue;
             };
-            let surface = ground(detonation.point).map(|(point, normal)| Surface {
-                point,
-                normal,
-                direction: Vec3::NEG_Z,
-                object: None,
-            });
+            // (projectile_detonate: made in the air, at the projectile and
+            // at its "gravity", the same point facing down, where the
+            // decals it lays look for the ground)
             let origin = Origin {
-                surface,
+                locations: vec![("gravity".into(), detonation.point, facing(Vec3::NEG_Z))],
                 ..Origin::at(detonation.point, facing(Vec3::Z))
             };
             self.start(level, effect, origin);
@@ -476,6 +473,11 @@ impl Effects {
                 rotation = facing(Vec3::NEG_Z);
             }
             let velocity = self.velocity(part, rotation);
+            let radius_modifier = if part.tag.group.0 == *b"deca" {
+                between(&mut self.seed, part.radius_modifier)
+            } else {
+                0.0
+            };
             self.fired.push(FiredPart {
                 effect: running.number,
                 event: running.event,
@@ -486,6 +488,7 @@ impl Effects {
                 velocity,
                 on: running.origin.on.as_ref().map(|(handle, _)| *handle),
                 surface: running.origin.surface,
+                radius_modifier,
             });
         }
     }
@@ -614,6 +617,49 @@ mod tests {
             .map(|part| (part.tag.path.as_str(), part.position))
             .collect();
         assert_eq!(made, [("up", normal), ("there", at)]);
+    }
+
+    #[test]
+    fn a_decal_part_draws_its_radius_modifier_between_its_bounds() {
+        let mut level = level(-1);
+        let mut decal = part("char", 0);
+        decal.tag.group = opence_content::Group(*b"deca");
+        decal.radius_modifier = [1.0, 1.5];
+        level.effects.push(Effect {
+            locations: vec![String::new()],
+            events: vec![event(0.0, 0.0, vec![decal, part("flash", 0)])],
+            ..Effect::new(tag(b"effe", "blast"))
+        });
+        let mut effects = Effects::default();
+        let mut drawn = Vec::new();
+        for _ in 0..20 {
+            effects.start(
+                &level,
+                &tag(b"effe", "blast"),
+                Origin::at(Vec3::ZERO, Quat::IDENTITY),
+            );
+            effects.tick(&level, |_| true, |_, _| None);
+            drawn.extend(
+                effects
+                    .fired()
+                    .iter()
+                    .map(|part| (part.tag.group.0, part.radius_modifier)),
+            );
+        }
+        assert!(drawn
+            .iter()
+            .filter(|(group, _)| group == b"deca")
+            .all(|(_, modifier)| (1.0..=1.5).contains(modifier)));
+        assert!(drawn
+            .iter()
+            .filter(|(group, _)| group == b"deca")
+            .any(|(_, modifier)| *modifier != 1.0));
+        // (a part not a decal has none)
+        assert!(drawn
+            .iter()
+            .filter(|(group, _)| group == b"ligh")
+            .all(|(_, modifier)| *modifier == 0.0));
+        assert_eq!(drawn.len(), 40);
     }
 
     #[test]

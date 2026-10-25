@@ -175,13 +175,16 @@ struct Geometry {
 
 /// The decal `decal` and those it chains to, laid where a ray along
 /// `velocity` met a surface at `position` with `normal`, each drawing its
-/// numbers from `seed` (`decal_new_from_collision`).
+/// numbers from `seed` and grown by `radius_modifier` (none, as the game
+/// takes it, for 0) (`decal_new_from_collision`).
+#[allow(clippy::too_many_arguments)]
 pub(crate) fn lay(
     level: &Level,
     decal: &Decal,
     position: Vector,
     normal: Vector,
     velocity: Vector,
+    radius_modifier: f32,
     seed: &mut RandomSeed,
     texture: &mut dyn FnMut(&Bitmap, u16) -> Option<u32>,
 ) -> Vec<Laid> {
@@ -205,7 +208,12 @@ pub(crate) fn lay(
                 Geometry {
                     basis,
                     sequence: usize::try_from(sequence).unwrap_or(0),
-                    radius: range(seed, decal.radius),
+                    radius: range(seed, decal.radius)
+                        * if radius_modifier == 0.0 {
+                            1.0
+                        } else {
+                            radius_modifier
+                        },
                 }
             }
         };
@@ -376,6 +384,22 @@ pub(crate) struct Triangle {
     pub(crate) material: i16,
 }
 
+impl Triangle {
+    /// The triangle with `corners`, its front facing `normal`, of the
+    /// material type `material`.
+    pub(crate) fn new(corners: [Vector; 3], normal: Vector, material: i16) -> Self {
+        let least = [0, 1, 2].map(|axis| corners.iter().fold(f32::MAX, |m, c| m.min(c[axis])));
+        let greatest = [0, 1, 2].map(|axis| corners.iter().fold(f32::MIN, |m, c| m.max(c[axis])));
+        Triangle {
+            corners,
+            normal,
+            least,
+            greatest,
+            material,
+        }
+    }
+}
+
 /// Where a ray met the BSP: the point, the surface's normal there, and
 /// its shader's material type (-1: none).
 #[derive(Clone, Copy, Debug, PartialEq)]
@@ -417,16 +441,7 @@ pub(crate) fn triangles(level: &Level, structure: &StructureBsp) -> Vec<Triangle
             if dot(normal, shaded) < 0.0 {
                 normal = scale(normal, -1.0);
             }
-            let least = [0, 1, 2].map(|axis| corners.iter().fold(f32::MAX, |m, c| m.min(c[axis])));
-            let greatest =
-                [0, 1, 2].map(|axis| corners.iter().fold(f32::MIN, |m, c| m.max(c[axis])));
-            triangles.push(Triangle {
-                corners,
-                normal,
-                least,
-                greatest,
-                material: kind,
-            });
+            triangles.push(Triangle::new(corners, normal, kind));
         }
     }
     triangles.sort_by(|a, b| a.least[0].total_cmp(&b.least[0]));
@@ -531,7 +546,7 @@ pub(crate) fn level_decals(
         let mut seed = seed(runtime.position);
         laid.extend(
             lay(
-                level, decal, position, normal, direction, &mut seed, texture,
+                level, decal, position, normal, direction, 0.0, &mut seed, texture,
             )
             .into_iter()
             .map(|laid| laid.decal),
@@ -742,6 +757,7 @@ mod tests {
             [0.0; 3],
             [0.0, 0.0, 1.0],
             velocity,
+            0.0,
             &mut seed,
             &mut |_, _| None,
         );
@@ -756,6 +772,7 @@ mod tests {
             [0.0; 3],
             [0.0, 0.0, 1.0],
             velocity,
+            0.0,
             &mut random,
             &mut |_, _| None,
         );

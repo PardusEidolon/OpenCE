@@ -946,6 +946,7 @@ mod tests {
             velocity: Vec3::ZERO,
             on: None,
             surface: None,
+            radius_modifier: 0.0,
         }
     }
 
