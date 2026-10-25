@@ -145,9 +145,9 @@ Found in play (2026-10-25): each weapon's firing effects are in the wrong place,
 - [x] Task: Impacts by material 563f12b3
     - [x] Write tests: an impact on each material type uses the effect and decal the material table names (no blood on metal)
     - [x] The fixes
-- [ ] Task: No blur on impacts
-    - [ ] Write tests: frame interpolation never blends a spawned, teleported or attached object from a place it wasn't; golden frames of a bullet hitting the ground
-    - [ ] The fixes
+- [x] Task: No blur on impacts 592bb028
+    - [x] Write tests: frame interpolation never blends a spawned, teleported or attached object from a place it wasn't; golden frames of a bullet hitting the ground (stood in for by a structural test: sprites mark the scaler's reactive mask)
+    - [x] The fixes
 - [ ] Task: Conductor - User Manual Verification 'Phase 12: Weapons, particles and effects' (Protocol in workflow.md)
 
 ## Phase 13: Vehicles
