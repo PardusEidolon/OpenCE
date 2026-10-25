@@ -1,0 +1,1 @@
+Task: bunker interiors (Phase 10). 512 paths a texel; leaks predicate lit_only_from_inside; BunkerTests red 0.21%/blue 0.40% hard vs stock 2.19%/2.64%, leaks 0/458 and 2/465. Swift suite green but for HudTests' stale local golden frame.
