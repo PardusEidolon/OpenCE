@@ -18,7 +18,7 @@ use crate::random::RandomSeed;
 use crate::unit_states::{
     biped_desired_state, BipedTick, Mood, SeatChoice, UnitAnimation, UnitEvent, UnitState, UnitTick,
 };
-use crate::{ObjectId, Transform};
+use crate::{ObjectId, Tick, Transform};
 
 /// A biped's animation state machine, as it plays in the world.
 #[derive(Component, Clone, Debug, Default, PartialEq)]
@@ -57,24 +57,38 @@ pub struct UnitDrive {
     pub crouching: bool,
     /// Where it aims, in the world.
     pub aiming_vector: [f32; 3],
+    /// It is leaving its seat.
+    pub exiting: bool,
 }
 
 /// How each driven biped is driven this tick.
 #[derive(Resource, Clone, Debug, Default)]
 pub struct UnitDrives(pub Vec<UnitDrive>);
 
-/// Steps each biped's state machine by a tick, in the order of the
+/// The riders whose animation of leaving their seats ended this tick (or
+/// who have none to play), to stand up out of them
+/// (`unit_exit_seat_end`).
+#[derive(Resource, Clone, Debug, Default)]
+pub struct ExitedSeats(pub Vec<ObjectHandle>);
+
+/// Steps each biped's state machine by one of the game's ticks, in the order of the
 /// objects' ids (so that the seed is drawn from in the same order on every
 /// machine), and has its player play the base animation it chose. A biped
 /// playing an impulse (its player resumes another animation after) is left
 /// to it, and one its graph has no seat or state for plays on as it did.
 pub(crate) fn animate_units(
+    tick: Option<Res<Tick>>,
     mut seed: ResMut<RandomSeed>,
     drives: Option<Res<UnitDrives>>,
+    mut exited: ResMut<ExitedSeats>,
     table: Option<Res<ObjectTable>>,
     order: Query<(Entity, &ObjectId), With<UnitAnimator>>,
     mut units: Query<(&mut UnitAnimator, &mut AnimationPlayer, Option<&Vitality>)>,
 ) {
+    // (a unit's state machine runs at the game's 30 ticks a second)
+    if !crate::animation::game_tick(tick.as_deref()) {
+        return;
+    }
     let mut entities: Vec<(Entity, ObjectId)> =
         order.iter().map(|(entity, id)| (entity, *id)).collect();
     entities.sort_by_key(|(_, id)| *id);
@@ -90,14 +104,14 @@ pub(crate) fn animate_units(
         let Ok((mut animator, mut player, vitality)) = units.get_mut(entity) else {
             continue;
         };
-        if player.resumes() {
-            continue;
-        }
         // (one no player or actor drives stands, unarmed)
         let drive = drives
             .iter()
             .find(|(driven, _)| *driven == entity)
             .map(|(_, drive)| *drive);
+        if player.resumes() {
+            continue;
+        }
         let throttle = drive.map_or([0.0; 3], |drive| drive.throttle);
         let airborne = drive.is_some_and(|drive| drive.airborne);
         let landing = drive.and_then(|drive| drive.landing);
@@ -117,8 +131,21 @@ pub(crate) fn animate_units(
             0
         };
         let mut events = Vec::new();
+        // (leaving its seat: the seat's animation of it, which stands it
+        // up as it ends; one whose seat has none stands up at once, where
+        // the game's could not leave)
+        if let Some(drive) = drive.filter(|drive| drive.exiting && !dead) {
+            if animator.animation.state != Some(UnitState::ExitingSeat)
+                && !animator
+                    .animation
+                    .exit_seat(&graph, &mut || seed.next_real())
+                && !crate::unit_states::busy(animator.animation.state)
+            {
+                exited.0.push(drive.handle);
+            }
+        }
         // (into a vehicle's seat: the seat's own, entering it; out of it:
-        // its base seat at once, as the port's rider is already out)
+        // its base seat at once, as the rider stood up)
         if animator.seat_label.as_deref() != seat_label && !dead {
             match seat_label {
                 Some(label) => {
@@ -188,6 +215,11 @@ pub(crate) fn animate_units(
         if let Some(base) = animator.animation.base {
             player.drive(base, interpolate);
         }
+        if let Some(drive) = drive {
+            if events.contains(&UnitEvent::ExitedSeat) {
+                exited.0.push(drive.handle);
+            }
+        }
     }
 }
 
@@ -234,9 +266,9 @@ mod tests {
 
     /// The animations of [`graph`]: 0 idle, 1 move front, 2 airborne, 3
     /// land soft, 4 land hard, 5 the crouching idle, 6 the rifle's idle,
-    /// 7 entering a driver's seat, 8 sitting in it.
+    /// 7 entering a driver's seat, 8 sitting in it, 9 leaving it.
     fn graph() -> Arc<AnimationGraph> {
-        let animations = (0..9)
+        let animations = (0..10)
             .map(|_| {
                 let mut animation = crate::animation::tests::animation_named("a", 2);
                 animation.frame_count = 5;
@@ -275,6 +307,7 @@ mod tests {
         driving[0] = Some(8);
         let mut entering = vec![None; 30];
         entering[7] = Some(7);
+        entering[8] = Some(9);
         graph.unit_seats = vec![
             seat("stand", stand),
             seat("crouch", crouch),
@@ -321,6 +354,7 @@ mod tests {
             seat_label: None,
             crouching: false,
             aiming_vector: [1.0, 0.0, 0.0],
+            exiting: false,
         }
     }
 
@@ -430,6 +464,43 @@ mod tests {
             playing(&simulation, handle),
             Some((Some(UnitState::Idle), 6))
         );
+        Ok(())
+    }
+
+    #[test]
+    fn a_rider_plays_its_seats_exit_and_stands_up_as_it_ends(
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        let mut simulation = Simulation::empty();
+        let handle = biped(&mut simulation, 0.0).ok_or("no biped")?;
+        let riding = UnitDrive {
+            attached: true,
+            seat_label: Some("driver".into()),
+            ..drive(handle)
+        };
+        let exiting = UnitDrive {
+            exiting: true,
+            ..riding.clone()
+        };
+        run(&mut simulation, 1, &|_| vec![riding.clone()]);
+        // (it cannot leave while it enters)
+        run(&mut simulation, 1, &|_| vec![exiting.clone()]);
+        assert_eq!(
+            playing(&simulation, handle),
+            Some((Some(UnitState::EnteringSeat), 7))
+        );
+        run(&mut simulation, 5, &|_| vec![riding.clone()]);
+        simulation.world.resource_mut::<ExitedSeats>().0.clear();
+        run(&mut simulation, 1, &|_| vec![exiting.clone()]);
+        assert_eq!(
+            playing(&simulation, handle),
+            Some((Some(UnitState::ExitingSeat), 9))
+        );
+        // (the animation's five frames, the second as it starts: it
+        // stands up on its last, not before)
+        run(&mut simulation, 2, &|_| vec![exiting.clone()]);
+        assert!(simulation.world.resource::<ExitedSeats>().0.is_empty());
+        run(&mut simulation, 1, &|_| vec![exiting.clone()]);
+        assert_eq!(simulation.world.resource::<ExitedSeats>().0, vec![handle]);
         Ok(())
     }
 

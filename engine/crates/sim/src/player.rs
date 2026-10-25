@@ -155,6 +155,9 @@ pub struct Player {
     /// The camera behind its vehicle it sees from while it sits, if its
     /// seat has one.
     seat_camera: Option<SeatCamera>,
+    /// It is leaving its seat, its biped playing its seat's animation of
+    /// it.
+    exiting: bool,
     /// It flies where it looks, through the level, as the shell's
     /// `noclip` makes it.
     noclip: bool,
@@ -366,6 +369,7 @@ impl Player {
             seat: None,
             seat_body: None,
             seat_camera: None,
+            exiting: false,
             noclip: false,
         })
     }
@@ -537,11 +541,23 @@ impl Player {
         self.seat_camera = camera;
     }
 
+    /// Whether it is leaving its seat.
+    pub fn exiting(&self) -> bool {
+        self.exiting
+    }
+
+    /// Starts it leaving its seat: its biped plays its seat's animation
+    /// of it, and it stands up as that ends.
+    pub(crate) fn start_exiting(&mut self) {
+        self.exiting = self.seat.is_some();
+    }
+
     /// Stands it up out of its seat at `position`.
     pub(crate) fn stand(&mut self, position: Vec3) {
         self.seat = None;
         self.seat_body = None;
         self.seat_camera = None;
+        self.exiting = false;
         let _ = self.mover.teleport(&mut lock(&self.physics), position);
     }
 
@@ -697,6 +713,7 @@ impl Player {
             // (halfway down: the crouching seat)
             crouching: self.mover.crouch >= 0.5,
             aiming_vector: (look_rotation(self.yaw, self.pitch) * Vec3::X).to_array(),
+            exiting: self.exiting,
         }
     }
 

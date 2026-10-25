@@ -712,23 +712,24 @@ impl Rides {
             .then_some(crate::hud::ActionPrompt::EnterVehicle { vehicle, seat })
     }
 
-    /// With the action button pressed, the player leaves its seat by its
-    /// entrance, or enters the nearest it can; whether it did either.
+    /// With the action button pressed, the player starts leaving its seat
+    /// (unless its biped is `busy`, entering or leaving one), or enters
+    /// the nearest it can; whether it sits or did either.
     pub(crate) fn act(
         &mut self,
         world: &World,
         player: &mut Player,
         taken: &[Seated],
         pressed: bool,
+        busy: bool,
     ) -> bool {
         if !pressed {
             return false;
         }
-        if let Some(seated) = player.seated() {
-            let exit = self
-                .entrance(seated.vehicle, seated.seat)
-                .unwrap_or(player.mover().position);
-            player.stand(exit);
+        if player.seated().is_some() {
+            if !busy && !player.exiting() {
+                player.start_exiting();
+            }
             return true;
         }
         let centre = player.mover().position + player.pose().body.rotation * self.centre;
@@ -780,6 +781,18 @@ impl Rides {
             seat_camera(&ride.pose, place),
         );
         true
+    }
+
+    /// Stands `player` up out of its seat by the seat's entrance, as its
+    /// animation of leaving it ends; where it is, for a seat gone.
+    pub(crate) fn stand(&self, player: &mut Player) {
+        let Some(seated) = player.seated() else {
+            return;
+        };
+        let exit = self
+            .entrance(seated.vehicle, seated.seat)
+            .unwrap_or(player.mover().position);
+        player.stand(exit);
     }
 
     /// Sits `player` in seat `seat` of the vehicle `handle` at once, as

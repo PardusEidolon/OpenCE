@@ -14,6 +14,8 @@ use opence_sim::hud::ActionPrompt;
 use opence_sim::input::{Buttons, TickInput};
 use opence_sim::objects::{ObjectHandle, ObjectSpawn};
 use opence_sim::player::View;
+use opence_sim::unit_animator::UnitAnimator;
+use opence_sim::unit_states::UnitState;
 use opence_sim::units::Radians;
 use opence_sim::{clock, Quat, Simulation, Transform, Vec3};
 
@@ -583,6 +585,153 @@ fn the_hud_prompts_entering_by_a_warthog_and_flipping_one_lying_over() -> Result
         !matches!(prompt(&simulation), Some(ActionPrompt::FlipVehicle { .. })),
         "upending, {:?}",
         prompt(&simulation)
+    );
+    Ok(())
+}
+
+/// The player's biped animated as the app animates it.
+fn animate_player(simulation: &mut Simulation, level: &Level) -> Result {
+    let player = simulation.player().ok_or("no player")?;
+    let (handle, unit) = (player.handle(), player.unit().clone());
+    let definition = level.object(&unit).ok_or("no biped")?;
+    let graph = definition.animation_graph.as_ref().ok_or("no graph")?;
+    let graph = Arc::new(level.animation_graph(graph).ok_or("no graph")?.clone());
+    let standing = animation::standing_animation(&graph, true);
+    if !simulation.animate_unit(handle, AnimationPlayer::new(graph, None, standing)) {
+        return Err("the biped is not animated".into());
+    }
+    Ok(())
+}
+
+/// The frames of the player's graph's animation `index` of the seat
+/// labelled `label` (7 entering it, 8 leaving it), its first permutation.
+fn seat_frames(level: &Level, simulation: &Simulation, label: &str, index: usize) -> Result<u32> {
+    let unit = simulation.player().ok_or("no player")?.unit().clone();
+    let definition = level.object(&unit).ok_or("no biped")?;
+    let graph = definition.animation_graph.as_ref().ok_or("no graph")?;
+    let graph = level.animation_graph(graph).ok_or("no graph")?;
+    let seat = graph
+        .unit_seats
+        .iter()
+        .find(|seat| seat.label.eq_ignore_ascii_case(label))
+        .ok_or("no such seat")?;
+    let animation = seat
+        .animations
+        .get(index)
+        .copied()
+        .flatten()
+        .ok_or("no such animation")?;
+    let animation = graph
+        .animations
+        .get(usize::from(animation))
+        .ok_or("no animation")?;
+    Ok(u32::from(animation.frame_count))
+}
+
+fn entering(simulation: &Simulation) -> bool {
+    simulation
+        .player()
+        .and_then(|player| simulation.component::<UnitAnimator>(player.handle()))
+        .is_some_and(|animator| animator.animation.state == Some(UnitState::EnteringSeat))
+}
+
+#[test]
+fn an_animated_rider_enters_its_seat_over_its_animation_of_it() -> Result {
+    let Some(level) = bloodgulch()? else {
+        return Ok(());
+    };
+    let flags = seat_flags(&level)?;
+    let driver = seat_with(&flags, VehicleSeat::DRIVER, 0)?;
+    let (mut simulation, warthog) = beside_a_warthog(&level)?;
+    animate_player(&mut simulation, &level)?;
+    enter(&mut simulation, warthog, driver)?;
+    let label = simulation
+        .rides()
+        .seat_label(warthog, driver)
+        .ok_or("no seat label")?
+        .to_string();
+    // (the press's tick, or the game's next, starts it)
+    let mut ticks = u32::from(entering(&simulation));
+    if ticks == 0 {
+        simulation.step(TickInput::default());
+        ticks = u32::from(entering(&simulation));
+    }
+    // (the permutation of it the seat chose)
+    let handle = simulation.player().ok_or("no player")?.handle();
+    let frames = simulation
+        .component::<AnimationPlayer>(handle)
+        .and_then(|player| {
+            let animation = player
+                .graph
+                .animations
+                .get(usize::from(player.state.animation))?;
+            Some(u32::from(animation.frame_count))
+        })
+        .ok_or("no animation")?;
+    while entering(&simulation) && ticks < 10 * clock::TICKS_PER_SECOND {
+        simulation.step(TickInput::default());
+        ticks += 1;
+    }
+    let per_frame = clock::TICKS_PER_SECOND / 30;
+    eprintln!("{label}: entered in {ticks} ticks; its entry has {frames} frames");
+    // (a frame a game tick, of 30 a second, as the exit's)
+    let expected = (frames - 1) * per_frame;
+    assert!(
+        ticks.abs_diff(expected) < per_frame,
+        "{label}: {ticks}, not {expected}"
+    );
+    assert_eq!(seated(&simulation), Some(driver));
+    Ok(())
+}
+
+#[test]
+fn an_animated_rider_leaves_its_seat_as_its_animation_of_it_ends() -> Result {
+    let Some(level) = bloodgulch()? else {
+        return Ok(());
+    };
+    let flags = seat_flags(&level)?;
+    let driver = seat_with(&flags, VehicleSeat::DRIVER, 0)?;
+    let (mut simulation, warthog) = beside_a_warthog(&level)?;
+    animate_player(&mut simulation, &level)?;
+    enter(&mut simulation, warthog, driver)?;
+    assert_eq!(seated(&simulation), Some(driver));
+    let label = simulation
+        .rides()
+        .seat_label(warthog, driver)
+        .ok_or("no seat label")?
+        .to_string();
+    for _ in 0..clock::TICKS_PER_SECOND * 2 {
+        simulation.step(TickInput::default());
+    }
+    simulation.step(pressed(Buttons::ACTION));
+    let mut ticks = 1;
+    while seated(&simulation).is_some() && ticks < 10 * clock::TICKS_PER_SECOND {
+        // (pressing again does not cut it short)
+        simulation.step(pressed(if ticks % 2 == 0 {
+            Buttons::ACTION
+        } else {
+            Buttons::default()
+        }));
+        ticks += 1;
+    }
+    let frames = seat_frames(&level, &simulation, &label, 8)?;
+    let per_frame = clock::TICKS_PER_SECOND / 30;
+    eprintln!("{label}: left in {ticks} ticks; its exit has {frames} frames");
+    // (a frame a game tick, of 30 a second: the last as it ends; the
+    // press may fall a tick before the game's next)
+    let expected = (frames - 1) * per_frame;
+    assert!(
+        ticks.abs_diff(expected) < per_frame,
+        "{label}: {ticks}, not {expected}"
+    );
+    let entrance = simulation
+        .rides()
+        .entrance(warthog, driver)
+        .ok_or("no entrance")?;
+    let feet = simulation.player().ok_or("no player")?.mover().position;
+    assert!(
+        feet.distance(entrance) < 0.2,
+        "left at {feet}, not {entrance}"
     );
     Ok(())
 }

@@ -307,6 +307,7 @@ impl Simulation {
         world.insert_resource(ObjectKinds::default());
         world.insert_resource(random::RandomSeed::default());
         world.insert_resource(Snaps::default());
+        world.insert_resource(unit_animator::ExitedSeats::default());
         let mut schedule = Schedule::default();
         // (one thread: systems in parallel would be ordered by chance)
         schedule.set_executor(SingleThreadedExecutor::new());
@@ -418,6 +419,14 @@ impl Simulation {
         }
         // (the action button enters or leaves a seat before it picks up a
         // weapon; one player at a time, so two do not take one seat)
+        let busy: Vec<bool> = self
+            .players
+            .iter()
+            .map(|player| {
+                self.component::<unit_animator::UnitAnimator>(player.handle())
+                    .is_some_and(|animator| unit_states::busy(animator.animation.state))
+            })
+            .collect();
         for index in 0..self.players.len() {
             let taken: Vec<player::Seated> =
                 self.players.iter().filter_map(Player::seated).collect();
@@ -449,7 +458,8 @@ impl Simulation {
                             .map(|weapon| hud::ActionPrompt::RemindToSwitch { weapon })
                     });
             }
-            let seated = self.rides.act(&self.world, player, &taken, action);
+            let busy = busy.get(index).copied().unwrap_or(false);
+            let seated = self.rides.act(&self.world, player, &taken, action, busy);
             actions.push(action && !seated);
         }
         self.rides.step(&mut self.world, &mut self.players, &inputs);
@@ -516,10 +526,31 @@ impl Simulation {
         };
         forces::apply(&mut self.world, &mut self.rides, &mut self.players, &pushes);
         self.schedule.run(&mut self.world);
+        self.stand_exited_riders();
         functions::update(&mut self.world, &mut self.queries.functions);
         self.place_ejections(&mut ejections);
         self.update_physics(&ejections);
         self.effects = ejections;
+    }
+
+    /// Stands up each rider whose animation of leaving its seat ended this
+    /// tick (`unit_exit_seat_end`), and any player leaving its seat whose
+    /// biped has no animator to play it.
+    fn stand_exited_riders(&mut self) {
+        let exited = std::mem::take(&mut self.world.resource_mut::<unit_animator::ExitedSeats>().0);
+        let animated: Vec<bool> = self
+            .players
+            .iter()
+            .map(|player| {
+                self.component::<unit_animator::UnitAnimator>(player.handle())
+                    .is_some()
+            })
+            .collect();
+        for (player, animated) in self.players.iter_mut().zip(animated) {
+            if player.exiting() && (!animated || exited.contains(&player.handle())) {
+                self.rides.stand(player);
+            }
+        }
     }
 
     /// Puts each weapon's effects at its markers, as `weapon_effect_new`

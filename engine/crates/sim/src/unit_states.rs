@@ -238,6 +238,30 @@ pub fn interruptable(current: Option<UnitState>, desired: UnitState) -> bool {
     }
 }
 
+/// Whether a unit in `state` is too busy to start another animation of its
+/// own, as leaving its seat (`unit_animation_busy`).
+pub fn busy(state: Option<UnitState>) -> bool {
+    matches!(
+        state,
+        Some(
+            S::HardPing
+                | S::DyingAirborne
+                | S::Dying
+                | S::EnteringSeat
+                | S::ExitingSeat
+                | S::AiImpulse
+                | S::MeleeAttack
+                | S::MeleeAirborne
+                | S::MeleeContinuous
+                | S::ThrowGrenade
+                | S::ResurrectFront
+                | S::ResurrectBack
+                | S::LeapStart
+                | S::LeapMelee
+        )
+    )
+}
+
 /// Whether a unit's animation in `state` plays on past its end
 /// (`unit_animation_state_loops`); one that doesn't hands the unit to the
 /// state it wants as it ends.
@@ -339,6 +363,9 @@ pub const BASE_SEATS: [&str; 6] = ["asleep", "alert", "stand", "crouch", "flee",
 
 /// A seat's animation of entering it (`_unit_seat_animation_seat_enter`).
 const SEAT_ENTER: usize = 7;
+
+/// A seat's animation of leaving it (`_unit_seat_animation_seat_exit`).
+const SEAT_EXIT: usize = 8;
 
 /// The base seat `asleep`.
 pub const SEAT_ASLEEP: usize = 0;
@@ -570,6 +597,26 @@ impl UnitAnimation {
             });
             self.state = Some(S::EnteringSeat);
         }
+        true
+    }
+
+    /// Starts the unit leaving its vehicle's seat (`unit_try_and_exit_seat`):
+    /// its seat's animation of leaving it, in [`UnitState::ExitingSeat`],
+    /// which ends in [`UnitEvent::ExitedSeat`]. False, changing nothing,
+    /// when it is busy or its seat has no such animation.
+    pub fn exit_seat(&mut self, graph: &AnimationGraph, random: &mut impl FnMut() -> f32) -> bool {
+        if busy(self.state) {
+            return false;
+        }
+        let animation = slot_animation(graph, self.seat.as_ref(), StateAnimation::Seat(SEAT_EXIT));
+        let Some(animation) = choose_permutation(&graph.animations, animation, random()) else {
+            return false;
+        };
+        self.base = Some(AnimationState {
+            animation,
+            frame: 0,
+        });
+        self.state = Some(S::ExitingSeat);
         true
     }
 

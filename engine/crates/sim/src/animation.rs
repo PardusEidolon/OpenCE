@@ -25,7 +25,7 @@ use crate::random::RandomSeed;
 use crate::seats::VehicleMotions;
 use crate::unit_animator::{unit_layers, UnitAnimator};
 use crate::vehicle_animation::{apply_vehicle_overlays, VehicleMotion};
-use crate::{ObjectId, Transform};
+use crate::{clock, ObjectId, Tick, Transform};
 
 /// The most nodes an animation moves, or a model has.
 pub const MAX_NODES: usize = 64;
@@ -1488,6 +1488,13 @@ impl AnimationPlayer {
         nodes
     }
 
+    /// Stays at its frame for a tick between the game's: its frame's sound
+    /// and foot were played on the tick it reached it.
+    fn hold(&mut self) {
+        self.sound = None;
+        self.foot = None;
+    }
+
     /// Moves to the next frame: the blend goes on, and an animation that
     /// ended goes back to the one it interrupted.
     fn step(&mut self, random: impl FnOnce() -> f32) {
@@ -1645,10 +1652,22 @@ type PlayedObject = (
     Option<&'static UnitAnimator>,
 );
 
-/// Plays each object's animation on by a frame and poses its nodes, in the
+/// The simulation's ticks to one of the game's: its animations play at its
+/// 30 ticks a second, a frame a tick.
+const TICKS_PER_GAME_TICK: u64 = (clock::TICKS_PER_SECOND / 30) as u64;
+
+/// Whether `tick` is one of the game's, on which animations play on by a
+/// frame (every tick is, in a world that does not count them).
+pub(crate) fn game_tick(tick: Option<&Tick>) -> bool {
+    tick.is_none_or(|tick| tick.0.is_multiple_of(TICKS_PER_GAME_TICK))
+}
+
+/// Plays each object's animation on by a frame on the game's ticks, and
+/// poses its nodes on every tick (where it is moves between them), in the
 /// order of the objects' ids, so that the seed is drawn from in the same
 /// order on every machine.
 pub(crate) fn play_animations(
+    tick: Option<Res<Tick>>,
     mut seed: ResMut<RandomSeed>,
     motions: Option<Res<VehicleMotions>>,
     table: Option<Res<ObjectTable>>,
@@ -1667,13 +1686,18 @@ pub(crate) fn play_animations(
             .collect(),
         _ => Vec::new(),
     };
+    let game_tick = game_tick(tick.as_deref());
     for (entity, _) in entities {
         let Ok((transform, mut player, mut matrices, device, unit)) = players.get_mut(entity)
         else {
             continue;
         };
         let player = &mut *player;
-        player.step(|| seed.next_real());
+        if game_tick {
+            player.step(|| seed.next_real());
+        } else {
+            player.hold();
+        }
         let current = match motions.iter().find(|(vehicle, _)| *vehicle == entity) {
             Some((_, motion)) => {
                 let mut nodes = player.blended_pose();
@@ -2056,7 +2080,7 @@ pub(crate) mod tests {
         assert!(simulation.animate(walker, AnimationPlayer::new(graph.clone(), None, 0)));
         assert!(simulation.animate(quiet, AnimationPlayer::new(graph, None, 1)));
         let mut heard = Vec::new();
-        for _ in 0..6 {
+        for _ in 0..12 {
             simulation.step(crate::input::TickInput::default());
             heard.push(
                 simulation
@@ -2071,9 +2095,17 @@ pub(crate) mod tests {
             );
         }
         let sound = || Some("step".to_owned());
+        // (a frame a game tick: nothing is heard twice, between them)
+        let (game, between): (Vec<_>, Vec<_>) = heard
+            .into_iter()
+            .enumerate()
+            .partition(|(tick, _)| tick % 2 == 0);
+        assert!(between.iter().all(|(_, events)| events.is_empty()));
         // frames 0, 1, 2, 3, then the loop's 1 and 2
         assert_eq!(
-            heard,
+            game.into_iter()
+                .map(|(_, events)| events)
+                .collect::<Vec<_>>(),
             vec![
                 vec![(None, Some(Foot::Left))],
                 vec![(sound(), None)],
@@ -2105,7 +2137,7 @@ pub(crate) mod tests {
                 assert!(simulation.animate(handle, player));
             }
             let mut states = Vec::new();
-            for _ in 0..4 {
+            for _ in 0..8 {
                 simulation.step(crate::input::TickInput::default());
                 for &handle in &handles {
                     let player = simulation.component::<AnimationPlayer>(handle);
@@ -2124,11 +2156,14 @@ pub(crate) mod tests {
         };
         let (states, drawn, hash) = run();
         let state = |animation, frame| Some(AnimationState { animation, frame });
-        // frames 1, 2, then the end: its one permutation, then on
+        // frames 1, 2, then the end: its one permutation, then on, a frame
+        // a game tick (held on the tick between)
+        let first: Vec<_> = states.iter().step_by(2).copied().collect();
         assert_eq!(
-            states.iter().step_by(2).copied().collect::<Vec<_>>(),
+            first.iter().step_by(2).copied().collect::<Vec<_>>(),
             vec![state(0, 1), state(0, 2), state(1, 0), state(1, 1)]
         );
+        assert!(first.chunks(2).all(|pair| pair[0] == pair[1]));
         assert_eq!(
             drawn,
             vec![
