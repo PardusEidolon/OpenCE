@@ -130,9 +130,9 @@ Lighting, shaders and graphics are rewritten and enhanced. AI, particles, animat
 
 ## Phase 12: Weapons, particles and effects
 Found in play (2026-10-25): each weapon's firing effects are in the wrong place, and in first person they come from the face, not the gun; thrown grenades can't be seen; particles still face the camera; explosions are missing parts; blood decals on metal; impacts blur where bullets hit the ground.
-- [ ] Task: Where the effects start
-    - [ ] Write tests: each weapon's firing effects start at the marker the original uses (in first person, the first-person model's; in third person, the weapon's), within a tolerance; the old engine's (`port/macos`) positions recorded as the reference
-    - [ ] The fixes
+- [x] Task: Where the effects start 8de1a254
+    - [x] Write tests: each weapon's firing effects start at the marker the original uses (in first person, the first-person model's; in third person, the weapon's), within a tolerance; the old engine's (`port/macos`) positions recorded as the reference
+    - [x] The fixes
 - [ ] Task: Thrown grenades
     - [ ] Write tests: a thrown grenade is drawn every frame from the throw to its detonation, in first and third person
     - [ ] The fixes
