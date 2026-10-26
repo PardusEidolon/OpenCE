@@ -36,7 +36,7 @@ manual check is at the end, with the report.
   - [x] Replaced through a caller, from reachability
 - [x] Task: Conductor - User Manual Verification 'Phase 2: The classes and their requirements' (Protocol in workflow.md) (automated) f7f0d4ad
 
-## Phase 3: The walk through the systems
+## Phase 3: The walk through the systems [checkpoint: 944beb44]
 Each task reads the Rust and Swift sides, adds the citations they lack, and
 classes every function of its directories with its evidence. Partial
 entries list what they leave out.
@@ -52,7 +52,7 @@ entries list what they leave out.
 - [x] Task: The interface, HUD, UI and input (interface, dialogs, text, strings, input) c40f7272
 - [x] Task: The world (scenario, structures, bitmaps, cache, tag_files) 70e7b5ac
 - [x] Task: Helpers (math, cseries, memory) as Native, checked against the math reference trace and the fixed-order rule 98092cf2
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: The walk through the systems' (Protocol in workflow.md) (automated; deferred to the end)
+- [x] Task: Conductor - User Manual Verification 'Phase 3: The walk through the systems' (Protocol in workflow.md) (automated) 944beb44
 
 ## Phase 4: Tag fields and load-time fix-ups
 - [x] Task: The layout from source/ 0edcf40e
