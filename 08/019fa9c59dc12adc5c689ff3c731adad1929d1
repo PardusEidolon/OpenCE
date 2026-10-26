@@ -1,0 +1,1 @@
+Phase 2 checked: 1,297 workspace tests pass, census --check passes with the ratchet (130 Ported, 4,690 Missing), nix flake check passes, and the math reference --check passes.
