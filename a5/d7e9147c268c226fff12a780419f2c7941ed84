@@ -1,0 +1,6 @@
+Task: Fields the importer keeps
+Mark each tag field with whether the importer keeps it, from the reads its readers record
+
+The importer's bounds-checked readers now record every read (group, block hops, offset, width) while a recording runs; opence census --record-importer imports the user's maps under one and writes engine/census/importer_reads.tsv. That file holds only the importer's own offsets and widths, nothing from the maps, so it is committed. The census lays each read over the original's tag structures (roots from tag_get casts, macros and #define groups included; elements from TAG_BLOCK_GET_ELEMENT, a block's name, or a unique size) and marks the fields kept in a sixth column of tag_fields.tsv. This departs from the plan's named offsets: recording the readers finds every read without changing each constant.
+
+Of 2879 reads on 24 maps, 687 do not resolve, nearly all in groups whose structures source/ never defines. Reads through a block whose stride is not the original's element size are kept and listed (game globals difficulty: 0x294 against 0x284). 2811 of 6753 fields are kept, 2187 of them read by the original. Checked: the workspace's 1270 tests, clippy on census, import and cli, census --check.
