@@ -27,7 +27,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `main` | | | | | 15 (768 B) | 141 (15072 B) | 0 |
 | `math` | 36 (4096 B) | 5 (240 B) | | | 18 (3072 B) | 157 (15760 B) | 5 |
 | `memory` | | 2 (336 B) | | | 61 (9136 B) | 196 (25824 B) | 2 |
-| `models` | 17 (6080 B) | 5 (3808 B) | | | | 31 (7680 B) | 5 |
+| `models` | 17 (6080 B) | 12 (4880 B) | | 1 (464 B) | 7 (1616 B) | 16 (4528 B) | 13 |
 | `networking` | | | | | 313 (49824 B) | | 0 |
 | `objects` | | 47 (9776 B) | | 12 (96 B) | 49 (12832 B) | 241 (28880 B) | 59 |
 | `physics` | | 14 (1072 B) | | 26 (16832 B) | 27 (7568 B) | 98 (21760 B) | 40 |
@@ -43,7 +43,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `text` | | 1 (912 B) | | | 15 (4240 B) | 96 (11760 B) | 1 |
 | `tool` | | | | | 27 (8752 B) | | 0 |
 | `units` | 8 (1824 B) | 67 (19968 B) | | 14 (1008 B) | | 278 (84720 B) | 81 |
-| **all** | 81 (16832 B) | 465 (128336 B) | | 74 (33504 B) | 2102 (407088 B) | 5779 (1025362 B) | 539 |
+| **all** | 81 (16832 B) | 472 (129408 B) | | 75 (33968 B) | 2109 (408704 B) | 5764 (1022210 B) | 547 |
 
 ## `ai`
 
@@ -1286,9 +1286,15 @@ docs/engine.md's "The coverage census" says what each class needs.
 | Function | File | Class | Engine | Evidence |
 | --- | --- | --- | --- | --- |
 | `animation_get_frame_data` | models/model_animation_definitions.c | Ported |  | `tools/engine_animation_reference.py` |
+| `animation_loop_frame_index` | models/model_animations.c | Matched | sim/src/animation.rs | owed: the engine's own tests (sim/tests/stock_animations.rs); no check against the original yet |
+| `animation_second_key_frame_index` | models/model_animations.c | Matched | sim/src/animation.rs | owed: the engine's own tests (sim/tests/stock_animations.rs); no check against the original yet |
+| `animation_sound_frame_index` | models/model_animations.c | Matched | sim/src/animation.rs | owed: the engine's own tests (sim/tests/stock_animations.rs); no check against the original yet |
 | `build_damage_animation_index` | models/model_animations.c | Matched | content/src/object.rs:519 | owed: the damage animations; reads the object, tag and map world, which the fake worlds do not hold (the animation graph) |
+| `animation_set_frame_size` | models/model_animations.c | Replaced | import/src/object.rs | maps imported to a typed format; the tool's, when it builds an animation: nothing in the game calls it, and the importer reads what it made |
 | `quaternion_decompress_8byte` | models/model_animations.c | Ported | sim/src/animation.rs:260 | `tools/engine_animation_reference.py` |
 | `quaternion_decompress_6byte` | models/model_animations.c | Ported | sim/src/animation.rs:272 | `tools/engine_animation_reference.py` |
+| `quaternion_compress_8byte` | models/model_animations.c | Replaced | import/src/object.rs | maps imported to a typed format; the tool's, when it builds an animation: nothing in the game calls it, and the importer reads what it made |
+| `quaternion_compress_6byte` | models/model_animations.c | Replaced | import/src/object.rs | maps imported to a typed format; the tool's, when it builds an animation: nothing in the game calls it, and the importer reads what it made |
 | `animation_graph_node_matrices_from_orientations` | models/model_animations.c | Ported | sim/src/animation.rs:1146 | `tools/engine_animation_reference.py` |
 | `interpolate_node_orientations` | models/model_animations.c | Ported | sim/src/animation.rs:1122 | `tools/engine_animation_reference.py` |
 | `animation_choose_random_permutation_internal` | models/model_animations.c | Matched | sim/src/animation.rs:1227 | owed: draws from the game's random seed; checked through the animation trace's permutation weights |
@@ -1300,19 +1306,28 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `overlay_animation_apply_continuous` | models/model_animations.c | Ported | sim/src/animation.rs:880 | `tools/engine_animation_reference.py` |
 | `overlay_animation_apply_continuous_scaled` | models/model_animations.c | Matched | sim/src/animation.rs:893 | owed: checked through the animation trace's overlays |
 | `aiming_screen_apply` | models/model_animations.c | Ported | sim/src/animation.rs:762 | `tools/engine_animation_reference.py` |
+| `render_model_parts` | models/models.c | Replaced | app/Sources/OpenCEEngineRender/ModelPass.swift | the enhanced lighting and Metal renderer |
+| `model_interpolate_node_orientations` | models/models.c | Matched | sim/src/animation.rs | owed: the engine's own tests (sim/tests/stock_animations.rs); no check against the original yet |
 | `model_get_node_orientations` | models/models.c | Ported | sim/src/animation.rs:683 | `tools/engine_animation_reference.py` |
+| `model_get_node_matrices` | models/models.c | Matched | sim/src/animation.rs | owed: the engine's own tests (sim/tests/stock_animations.rs); no check against the original yet |
+| `model_node_matrices_from_orientations` | models/models.c | Matched | sim/src/animation.rs | owed: the engine's own tests (sim/tests/stock_animations.rs); no check against the original yet |
+| `model_find_marker` | models/models.c | Matched | sim/src/seats.rs | owed: the engine's own tests (sim/src/seats.rs); no check against the original yet |
+| `model_get_default_inverse_matrix` | models/models.c | Replaced | ffi/src/render_model.rs | the enhanced lighting and Metal renderer |
+| `model_geometry_part_build_tangent_matrices` | models/models.c | Replaced | import/src/object.rs | maps imported to a typed format |
 | `render_model` | models/models.c | Matched | ffi/src/render_model.rs:67 | owed: the engine cites it, with no check against the original yet |
+| `model_get_marker_by_name` | models/models.c | Partial | sim/src/seats.rs | leaves out the marker's region and permutation: every instance of the marker is taken, whichever permutation is drawn; owed: the engine's own tests (sim/src/seats.rs); no check against the original yet |
+| `model_build_tangent_matrices` | models/models.c | Replaced | import/src/object.rs | maps imported to a typed format |
 | `animation_is_compressed` | models/model_animations.c | Ported |  | `tools/engine_animation_reference.py` |
 | `animation_keyframe_search` | models/model_animations.c | Ported | sim/src/animation.rs:522 | `tools/engine_animation_reference.py` |
 | `animation_get_keyframe_rotation` | models/model_animations.c | Ported | sim/src/animation.rs:448 | `tools/engine_animation_reference.py` |
 | `animation_get_keyframe_translation` | models/model_animations.c | Ported |  | `tools/engine_animation_reference.py` |
 | `animation_get_keyframe_scale` | models/model_animations.c | Ported |  | `tools/engine_animation_reference.py` |
 
-31 Missing (13 reached from `main_loop`), by file:
+16 Missing (9 reached from `main_loop`), by file:
 
 - models/model_animation_definitions.c: `animation_get_frame_info`, `animation_list_get_string`
-- models/model_animations.c: `animation_loop_frame_index`, `animation_second_key_frame_index`, `animation_sound_frame_index`, `code_0010fe70`, `animation_get_x_offsets`, `animation_set_frame_size`, `quaternion_decompress_6byte_renormalized`, `quaternion_compress_8byte`, `quaternion_compress_6byte`, `animation_graph_get_animation_by_name`, `code_00110560`, `animation_frame_get_xy_translation`, `inverse_kinematics_adjust_matrices`, `code_00110b80`, `code_00110e90`, `code_00111190`, `animation_get_root_matrix`, `animation_get_root_velocity`
-- models/models.c: `render_model_parts`, `model_interpolate_node_orientations`, `model_get_node_matrices`, `model_node_matrices_from_orientations`, `model_find_marker`, `model_get_default_inverse_matrix`, `model_find_node`, `model_geometry_part_build_tangent_matrices`, `model_get_marker_by_name`, `model_build_tangent_matrices`, `model_geometry_fix_transparent_part_links`
+- models/model_animations.c: `code_0010fe70`, `animation_get_x_offsets`, `quaternion_decompress_6byte_renormalized`, `animation_graph_get_animation_by_name`, `code_00110560`, `animation_frame_get_xy_translation`, `inverse_kinematics_adjust_matrices`, `code_00110b80`, `code_00110e90`, `code_00111190`, `animation_get_root_matrix`, `animation_get_root_velocity`
+- models/models.c: `model_find_node`, `model_geometry_fix_transparent_part_links`
 
 ## `networking`
 

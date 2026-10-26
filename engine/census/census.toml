@@ -357,6 +357,27 @@ owed = "the campaign's rewrite of the AI; no check against the original yet (Pha
 class = "matched"
 owed = "draws from the game's random seed; checked through the animation trace's permutation weights"
 
+[function.animation_loop_frame_index]
+class = "matched"
+engine = "sim/src/animation.rs"
+owed = "the engine's own tests (sim/tests/stock_animations.rs); no check against the original yet"
+
+[function.animation_second_key_frame_index]
+class = "matched"
+engine = "sim/src/animation.rs"
+owed = "the engine's own tests (sim/tests/stock_animations.rs); no check against the original yet"
+
+[function.animation_set_frame_size]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/object.rs"
+note = "the tool's, when it builds an animation: nothing in the game calls it, and the importer reads what it made"
+
+[function.animation_sound_frame_index]
+class = "matched"
+engine = "sim/src/animation.rs"
+owed = "the engine's own tests (sim/tests/stock_animations.rs); no check against the original yet"
+
 [function.animation_update_internal]
 class = "matched"
 owed = "reads the object, tag and map world, which the fake worlds do not hold (the animation tag's frames); checked by the animation trace's frame counts"
@@ -1489,6 +1510,47 @@ owed = "rotations; checked through the item trace's object matrices"
 class = "matched"
 owed = "reads the object, tag and map world, which the fake worlds do not hold (the model's and graph's node names)"
 
+[function.model_build_tangent_matrices]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/object.rs"
+
+[function.model_find_marker]
+class = "matched"
+engine = "sim/src/seats.rs"
+owed = "the engine's own tests (sim/src/seats.rs); no check against the original yet"
+
+[function.model_geometry_part_build_tangent_matrices]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/object.rs"
+
+[function.model_get_default_inverse_matrix]
+class = "replaced"
+because = "renderer"
+stands_in = "ffi/src/render_model.rs"
+
+[function.model_get_marker_by_name]
+class = "partial"
+engine = "sim/src/seats.rs"
+leaves_out = ["the marker's region and permutation: every instance of the marker is taken, whichever permutation is drawn"]
+owed = "the engine's own tests (sim/src/seats.rs); no check against the original yet"
+
+[function.model_get_node_matrices]
+class = "matched"
+engine = "sim/src/animation.rs"
+owed = "the engine's own tests (sim/tests/stock_animations.rs); no check against the original yet"
+
+[function.model_interpolate_node_orientations]
+class = "matched"
+engine = "sim/src/animation.rs"
+owed = "the engine's own tests (sim/tests/stock_animations.rs); no check against the original yet"
+
+[function.model_node_matrices_from_orientations]
+class = "matched"
+engine = "sim/src/animation.rs"
+owed = "the engine's own tests (sim/tests/stock_animations.rs); no check against the original yet"
+
 [function.motion_sensor_update]
 class = "matched"
 owed = "the motion sensor; reads the object, tag and map world, which the fake worlds do not hold; sim/tests/hud.rs"
@@ -2101,6 +2163,18 @@ engine = "sim/src/vehicle_animation.rs"
 owed = "the engine's own tests (sim/tests/vehicle_traces.rs); no check against the original yet"
 note = "only from 0 to 1, where the original's step down to the byte below the value is the floor of value * 255"
 
+[function.quaternion_compress_6byte]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/object.rs"
+note = "the tool's, when it builds an animation: nothing in the game calls it, and the importer reads what it made"
+
+[function.quaternion_compress_8byte]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/object.rs"
+note = "the tool's, when it builds an animation: nothing in the game calls it, and the importer reads what it made"
+
 [function.random_item]
 class = "matched"
 engine = "sim/src/game.rs"
@@ -2264,6 +2338,11 @@ owed = "the engine cites it, with no check against the original yet"
 [function.render_model]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
+
+[function.render_model_parts]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/ModelPass.swift"
 
 [function.render_state_bitmap]
 class = "matched"
