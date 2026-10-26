@@ -397,12 +397,24 @@ pub fn level_placements(level: &Level, structure_bsp: usize) -> Vec<(usize, Obje
 }
 
 /// The orientation of a yaw, pitch and roll, as the game builds it
-/// (`matrix4x3_rotation_from_angles`): forward, left and up are the
-/// matrix's rows.
-pub fn rotation_from_angles([yaw, pitch, roll]: [f32; 3]) -> Quat {
-    let (sine_yaw, cosine_yaw) = (libm::sinf(yaw), libm::cosf(yaw));
-    let (sine_pitch, cosine_pitch) = (libm::sinf(pitch), libm::cosf(pitch));
-    let (sine_roll, cosine_roll) = (libm::sinf(roll), libm::cosf(roll));
+/// (`matrix4x3_rotation_from_angles`), as a rotation.
+pub fn rotation_from_angles(angles: [f32; 3]) -> Quat {
+    Quat::from_mat3(&rotation_matrix_from_angles(angles)).normalize()
+}
+
+/// The game's `matrix4x3_rotation_from_angles`: forward, left and up, the
+/// matrix's rows, are the columns here.
+pub fn rotation_matrix_from_angles([yaw, pitch, roll]: [f32; 3]) -> Mat3 {
+    // (the game's `sine` and `cosine` take the double's and round it)
+    let sine_cosine = |angle: f32| {
+        (
+            libm::sin(f64::from(angle)) as f32,
+            libm::cos(f64::from(angle)) as f32,
+        )
+    };
+    let (sine_yaw, cosine_yaw) = sine_cosine(yaw);
+    let (sine_pitch, cosine_pitch) = sine_cosine(pitch);
+    let (sine_roll, cosine_roll) = sine_cosine(roll);
     let sine_pitch_cosine_roll = sine_pitch * cosine_roll;
     let sine_pitch_sine_roll = sine_pitch * sine_roll;
     let forward = Vec3::new(
@@ -420,7 +432,7 @@ pub fn rotation_from_angles([yaw, pitch, roll]: [f32; 3]) -> Quat {
         -(cosine_pitch * sine_roll),
         cosine_pitch * cosine_roll,
     );
-    Quat::from_mat3(&Mat3::from_cols(forward, left, up)).normalize()
+    Mat3::from_cols(forward, left, up)
 }
 
 /// What a placement makes.

@@ -168,9 +168,31 @@ pub fn vehicle_overlay_frames<'a>(
     frames
 }
 
-/// The game's `quantize_real_to_byte_lower_bound(0, 1, value)`.
+/// The game's `quantize_real_to_byte_lower_bound(0, 1, value)`, with the
+/// value held to the range the game asserts it is in.
 fn quantize(value: f32) -> u8 {
-    (value.clamp(0.0, 1.0) * 255.0) as u8
+    quantize_lower_bound(0.0, 1.0, value.clamp(0.0, 1.0))
+}
+
+/// A real from `minimum` to `maximum` as the byte whose value is the
+/// greatest not above it (`quantize_real_to_byte_lower_bound`): the byte
+/// the scale truncates to, stepped down while its value is still above.
+pub fn quantize_lower_bound(minimum: f32, maximum: f32, value: f32) -> u8 {
+    // (the game's (byte)(long) cast keeps the long's low byte)
+    let mut test = (((value - minimum) / (maximum - minimum)) * 255.0) as i32 as u8;
+    while test > 0 && value < dequantize(minimum, maximum, test) {
+        test -= 1;
+    }
+    test
+}
+
+/// The game's `dequantize_byte_to_real`: the real a byte stands for.
+pub fn dequantize(minimum: f32, maximum: f32, value: u8) -> f32 {
+    if value == u8::MAX {
+        maximum
+    } else {
+        (maximum - minimum) * (f32::from(value) / 255.0) + minimum
+    }
 }
 
 /// Moves each suspension halfway toward where the ground below its mass

@@ -377,10 +377,14 @@ impl SkyLight {
         let [yaw, pitch] = self
             .direction
             .map(|angle| if angle.is_finite() { angle } else { 0.0 });
+        // (the game's `sine` and `cosine` take the double's and round it)
+        let sine = |angle: f32| libm::sin(f64::from(angle)) as f32;
+        let cosine = |angle: f32| libm::cos(f64::from(angle)) as f32;
+        let cosine_pitch = cosine(pitch);
         [
-            libm::cosf(yaw) * libm::cosf(pitch),
-            libm::sinf(yaw) * libm::cosf(pitch),
-            libm::sinf(pitch),
+            cosine(yaw) * cosine_pitch,
+            sine(yaw) * cosine_pitch,
+            sine(pitch),
         ]
     }
 

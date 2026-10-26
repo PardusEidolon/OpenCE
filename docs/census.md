@@ -25,13 +25,13 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `interface` | 6 (1408 B) | 96 (33424 B) | | 19 (6112 B) | 104 (21432 B) | 452 (94304 B) | 115 |
 | `items` | 9 (4080 B) | 24 (19328 B) | | 1 (128 B) | 1 (16 B) | 102 (12496 B) | 24 |
 | `main` | | | | 1 (1648 B) | 34 (5440 B) | 91 (8752 B) | 1 |
-| `math` | 40 (5552 B) | 6 (256 B) | 70 (4720 B) | | 25 (4016 B) | 68 (8624 B) | 4 |
+| `math` | 41 (5552 B) | 6 (256 B) | 70 (4720 B) | | 25 (4016 B) | 67 (8624 B) | 0 |
 | `memory` | | 2 (336 B) | 128 (19856 B) | | 102 (15104 B) | | 0 |
 | `models` | 17 (8928 B) | 12 (4880 B) | | 1 (464 B) | 7 (1616 B) | 11 (1680 B) | 13 |
 | `networking` | | | | | 288 (49824 B) | | 0 |
 | `objects` | 2 (0 B) | 47 (9776 B) | | 12 (96 B) | 59 (13424 B) | 227 (28288 B) | 59 |
 | `physics` | | 14 (2672 B) | | 26 (18384 B) | 60 (19248 B) | 45 (6928 B) | 40 |
-| `rasterizer` | | 3 (2784 B) | | | 777 (182416 B) | | 3 |
+| `rasterizer` | | 3 (2784 B) | | | 777 (182416 B) | | 2 |
 | `render` | 2 (592 B) | 2 (240 B) | | | 115 (37520 B) | | 2 |
 | `saved games` | | | | 2 (96 B) | 31 (3712 B) | 104 (21184 B) | 2 |
 | `scenario` | | 13 (4320 B) | | | 23 (3136 B) | 21 (2128 B) | 13 |
@@ -43,7 +43,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `text` | | 9 (1936 B) | 63 (6864 B) | | 19 (5744 B) | 21 (2368 B) | 9 |
 | `tool` | | | | | 27 (8752 B) | | 0 |
 | `units` | 9 (1856 B) | 67 (27888 B) | | 17 (17808 B) | 9 (1616 B) | 227 (58352 B) | 84 |
-| **all** | 145 (25968 B) | 577 (187824 B) | 332 (38896 B) | 123 (72592 B) | 2770 (569976 B) | 3680 (715866 B) | 670 |
+| **all** | 146 (25968 B) | 577 (187824 B) | 332 (38896 B) | 123 (72592 B) | 2770 (569976 B) | 3679 (715866 B) | 665 |
 
 ## `ai`
 
@@ -81,8 +81,8 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `actor_action_handle_surprise` | ai/actions.c | Matched | sim/src/ai_impulse.rs:6 | owed: AI; reads the object, tag and map world, which the fake worlds do not hold (the actor and its prop); Phase 11's divergences |
 | `actor_action_try_to_dive` | ai/actions.c | Matched | sim/src/ai_impulse.rs:5 | owed: AI; reads the object, tag and map world, which the fake worlds do not hold (the actor and its prop); Phase 11's divergences |
 | `fast_ftol` | ai/actor_combat.c | Ported |  | `tools/engine_periodic_reference.py` |
-| `sine` | ai/actor_combat.c | Ported |  | `tools/engine_math_reference.py` |
-| `cosine` | ai/actor_combat.c | Ported |  | `tools/engine_math_reference.py` |
+| `sine` | ai/actor_combat.c | Ported |  | `tools/engine_math_extra_reference.py` |
+| `cosine` | ai/actor_combat.c | Ported |  | `tools/engine_math_extra_reference.py` |
 | `tangent` | ai/actor_combat.c | Ported |  | `tools/engine_math_reference.py` |
 | `cross_product2d` | ai/actor_combat.c | Ported |  | `tools/engine_math_reference.py` |
 | `add_vectors3d` | ai/actor_combat.c | Ported |  | `tools/engine_item_reference.py` |
@@ -1252,7 +1252,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `build_game_variant_ctf` | game/game_engine.c | Matched | sim/src/game.rs:86 | owed: the engine's own tests (sim/tests/game.rs); no check against the original yet |
 | `game_engine_should_end_game` | game/game_engine.c | Matched | sim/src/game.rs | owed: the engine's own tests (sim/tests/game.rs); no check against the original yet |
 | `random_item` | game/game_engine.c | Matched | sim/src/game.rs | owed: the engine's own tests (sim/tests/game.rs); no check against the original yet |
-| `match_game_type` | game/game_engine.c | Matched | content/src/level.rs:460 | owed: the engine cites it, with no check against the original yet |
+| `match_game_type` | game/game_engine.c | Matched | content/src/level.rs:464 | owed: the engine cites it, with no check against the original yet |
 | `game_engine_update_item_spawn` | game/game_engine.c | Matched | sim/src/game.rs:741 | owed: the engine's own tests (sim/tests/game.rs); no check against the original yet |
 | `default_starting_location_rate_function` | game/game_engine.c | Partial | sim/src/game.rs | leaves out the rating's weights: the engine takes the spawn farthest from its living enemies; owed: the engine's own tests (sim/tests/game.rs); no check against the original yet |
 | `game_engine_get_starting_location_rating` | game/game_engine.c | Partial | sim/src/game.rs:659 | leaves out the rating's weights: the engine takes the spawn farthest from its living enemies; owed: the engine's own tests (sim/tests/game.rs); no check against the original yet |
@@ -1870,7 +1870,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `matrix3x3_multiply` | math/matrix_math.c | Native |  | `glam::Mat3` |
 | `matrix3x3_transform_vector` | math/matrix_math.c | Native |  | `glam::Mat3` |
 | `matrix4x3_rotation_from_vectors` | math/matrix_math.c | Ported |  | `tools/engine_animation_reference.py` |
-| `matrix4x3_rotation_from_angles` | math/matrix_math.c | Matched | sim/src/objects.rs:400 | owed: rotations; checked through the item trace's object matrices |
+| `matrix4x3_rotation_from_angles` | math/matrix_math.c | Matched | sim/src/objects.rs:400 | sim/tests/math_extra_reference.rs (trace) |
 | `matrix4x3_rotation_to_angles` | math/matrix_math.c | Native |  | `glam::Quat` |
 | `matrix4x3_rotation_to_quaternion` | math/matrix_math.c | Native |  | `glam::Quat` |
 | `matrix4x3_from_point_and_vectors` | math/matrix_math.c | Ported | sim/src/animation.rs:93 | `tools/engine_animation_reference.py` |
@@ -1950,7 +1950,8 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `fast_normalize2d` | math/real_math.c | Native |  | `glam::Vec2` |
 | `fast_normalize3d` | math/real_math.c | Native |  | `glam::Vec3` |
 | `cross_product_magnitude3d` | math/real_math.c | Native |  | `glam::Vec3` |
-| `quantize_real_to_byte_lower_bound` | math/real_math.c | Matched | sim/src/vehicle_animation.rs:171 | owed: the engine's own tests (sim/tests/vehicle_traces.rs); no check against the original yet; only from 0 to 1, where the original's step down to the byte below the value is the floor of value * 255 |
+| `dequantize_byte_to_real` | math/real_math.c | Ported | sim/src/vehicle_animation.rs:189 | `tools/engine_math_extra_reference.py` |
+| `quantize_real_to_byte_lower_bound` | math/real_math.c | Matched | sim/src/vehicle_animation.rs:171 | sim/tests/math_extra_reference.rs (trace) |
 | `signed_angle_between_vectors2d` | math/real_math.c | Native |  | `glam::Vec2` |
 | `angle_between_vectors2d` | math/real_math.c | Native |  | `glam::Vec2` |
 | `angle_between_vectors3d` | math/real_math.c | Ported | sim/src/vehicle.rs:917 | `tools/engine_math_reference.py` |
@@ -1965,14 +1966,14 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `orientations_interpolate` | math/real_math.c | Replaced |  | through its caller `first_person_weapon_build_node_matrices` |
 | `euler_angles2d_from_vector3d` | math/real_math.c | Ported | sim/src/animation_blend.rs:179 | `tools/engine_math_reference.py` |
 | `vector3d_from_angle` | math/real_math.c | Native |  | `libm::sinf` |
-| `vector3d_from_euler_angles2d` | math/real_math.c | Matched | content/src/level.rs:375 | owed: the engine cites it, with no check against the original yet |
+| `vector3d_from_euler_angles2d` | math/real_math.c | Matched | content/src/level.rs:375 | sim/tests/math_extra_reference.rs (trace) |
 | `point_to_line_distance_squared3d` | math/real_math.c | Native |  | `glam::Vec3` |
 | `vector_to_line_distance_squared3d` | math/real_math.c | Native |  | `glam::Vec3` |
-| `accelerate_to_position` | math/real_math.c | Matched | sim/src/device_animation.rs:3 | owed: a first-person weapon's sway; checked through first_person_weapon_update's trace |
+| `accelerate_to_position` | math/real_math.c | Matched | sim/src/device_animation.rs:3 | sim/tests/math_extra_reference.rs (trace); sim/src/first_person_states.rs has a copy for the weapons, which never ask for a periodic range; the trace checks both |
 | `valid_real_sine_cosine` | math/real_math.c | Native |  | `libm::sinf` |
 | `set_real_point3d` | math/real_math.h | Native |  | `glam::Vec3` |
 
-68 Missing (22 reached from `main_loop`), by file:
+67 Missing (21 reached from `main_loop`), by file:
 
 - math/geometry.c: `vector_intersect_plane3d`, `build_torus`, `convex_hull2d`, `convex_hull2d_test_circle`, `convex_hull2d_test_point`, `convex_hull2d_area`, `convex_hull2d_perimeter`, `convex_hull2d_test_vector`, `convex_hull3d_begin`, `convex_hull3d_expand`, `convex_hull3d`, `convex_hull3d_test_point`, `convex_hull3d_test_vector`, `points_dimension2d`
 - math/integer_math.c: `integer_square_root`
@@ -1980,7 +1981,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 - math/periodic_functions.c: `@periodic_function_build_variable_period_x_table`
 - math/probability.c: `factorial`, `permutations`, `combinations`, `permute`, `combine`
 - math/random_math.c: `seed_random_orientation`
-- math/real_math.c: `component_vectors_from_direction3d`, `vectors3d_from_euler_angles3d`, `fast_vector_intersects_sphere`, `fast_vector_intersection_with_sphere`, `point_in_rectangle2d`, `point_in_rectangle3d`, `circle_intersects_rectangle2d`, `point_in_cone2d`, `point_in_cone3d`, `point_in_sector2d`, `point_in_sector3d`, `circle_intersects_cone2d`, `circle_intersects_sector2d`, `sphere_intersects_cone3d`, `sphere_intersects_sector3d`, `point_in_triangle2d`, `circle_intersects_triangle2d`, `pill_intersects_triangle2d`, `pill_intersects_rectangle2d`, `sphere_intersects_rectangle3d`, `sphere_intersects_triangle3d`, `pill_intersects_triangle3d`, `vector_intersects_rectangle2d`, `vector_intersects_pill2d`, `vector_intersects_pill3d`, `vector_intersects_triangle2d`, `vector_intersects_triangle3d`, `vector_intersects_rectangle3d`, `pill_intersects_rectangle3d`, `dequantize_byte_to_real`, `quantize_real_to_byte_upper_bound`, `quantize_real_to_byte_rectangle3d`, `yaw_vectors`, `pitch_vectors`, `pin_normal_to_cone3d`, `refract_vector3d`, `point_in_pill2d`, `sphere_test_vector3d`, `pill_test_vector3d`, `point_from_planes3d`, `line_from_planes3d`, `angular_accelerate_to_position`, `accelerate_to_velocity3d`, `accerate_to_position3d`, `accelerate_to_velocity`
+- math/real_math.c: `component_vectors_from_direction3d`, `vectors3d_from_euler_angles3d`, `fast_vector_intersects_sphere`, `fast_vector_intersection_with_sphere`, `point_in_rectangle2d`, `point_in_rectangle3d`, `circle_intersects_rectangle2d`, `point_in_cone2d`, `point_in_cone3d`, `point_in_sector2d`, `point_in_sector3d`, `circle_intersects_cone2d`, `circle_intersects_sector2d`, `sphere_intersects_cone3d`, `sphere_intersects_sector3d`, `point_in_triangle2d`, `circle_intersects_triangle2d`, `pill_intersects_triangle2d`, `pill_intersects_rectangle2d`, `sphere_intersects_rectangle3d`, `sphere_intersects_triangle3d`, `pill_intersects_triangle3d`, `vector_intersects_rectangle2d`, `vector_intersects_pill2d`, `vector_intersects_pill3d`, `vector_intersects_triangle2d`, `vector_intersects_triangle3d`, `vector_intersects_rectangle3d`, `pill_intersects_rectangle3d`, `quantize_real_to_byte_upper_bound`, `quantize_real_to_byte_rectangle3d`, `yaw_vectors`, `pitch_vectors`, `pin_normal_to_cone3d`, `refract_vector3d`, `point_in_pill2d`, `sphere_test_vector3d`, `pill_test_vector3d`, `point_from_planes3d`, `line_from_planes3d`, `angular_accelerate_to_position`, `accelerate_to_velocity3d`, `accerate_to_position3d`, `accelerate_to_velocity`
 
 ## `memory`
 
@@ -2632,7 +2633,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `object_build_shadow_recursive` | objects/object_shadows.c | Replaced | app/Sources/OpenCEEngineRender/ShadowPass.swift | the enhanced lighting and Metal renderer |
 | `object_build_shadow` | objects/object_shadows.c | Replaced | app/Sources/OpenCEEngineRender/ShadowPass.swift | the enhanced lighting and Metal renderer |
 | `object_type_render_debug` | objects/object_types.c | Replaced | dev/src/draw.rs | the editor and tools |
-| `object_types_disconnect_from_structure_bsp` | objects/object_types.c | Matched | sim/src/objects.rs:457 | owed: placement; reads the object, tag and map world, which the fake worlds do not hold |
+| `object_types_disconnect_from_structure_bsp` | objects/object_types.c | Matched | sim/src/objects.rs:469 | owed: placement; reads the object, tag and map world, which the fake worlds do not hold |
 | `object_types_place_objects` | objects/object_types.c | Matched | sim/src/objects.rs:314 | owed: placement; reads the object, tag and map world, which the fake worlds do not hold; tools/engine_placement_traces.py records its results |
 | `object_types_place_all` | objects/object_types.c | Matched | sim/src/objects.rs:381 | owed: placement; reads the object, tag and map world, which the fake worlds do not hold; tools/engine_placement_traces.py records its results |
 | `scenery_place` | objects/scenery.c | Matched | sim/src/scenery.rs | owed: the engine's own tests (sim/src/scenery.rs); no check against the original yet |
@@ -2705,7 +2706,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | Function | File | Class | Engine | Evidence |
 | --- | --- | --- | --- | --- |
 | `bsp2d_test_point` | physics/bsp2d.c | Replaced | physics/src/lib.rs | a library does the job; the same floors, walls and line of sight: Jolt answers the queries (physics/src/lib.rs) on a mesh of the same collision BSP surfaces (physics/src/mesh.rs); the Partial entries of collision_fix_pill and the queries say where an edge can differ |
-| `bsp3d_test_point` | physics/bsp3d.c | Matched | content/src/level.rs:878 | owed: the engine cites it, with no check against the original yet |
+| `bsp3d_test_point` | physics/bsp3d.c | Matched | content/src/level.rs:882 | owed: the engine cites it, with no check against the original yet |
 | `bsp3d_clip_line_to_leaves` | physics/bsp3d.c | Replaced | physics/src/lib.rs | a library does the job; the same floors, walls and line of sight: Jolt answers the queries (physics/src/lib.rs) on a mesh of the same collision BSP surfaces (physics/src/mesh.rs); the Partial entries of collision_fix_pill and the queries say where an edge can differ |
 | `bsp3d_clip_polygon_to_leaves_recursive` | physics/bsp3d.c | Replaced | physics/src/lib.rs | a library does the job; the same floors, walls and line of sight: Jolt answers the queries (physics/src/lib.rs) on a mesh of the same collision BSP surfaces (physics/src/mesh.rs); the Partial entries of collision_fix_pill and the queries say where an edge can differ |
 | `bsp3d_clip_polygon_to_leaves` | physics/bsp3d.c | Replaced | physics/src/lib.rs | a library does the job; the same floors, walls and line of sight: Jolt answers the queries (physics/src/lib.rs) on a mesh of the same collision BSP surfaces (physics/src/mesh.rs); the Partial entries of collision_fix_pill and the queries say where an edge can differ |
@@ -3484,7 +3485,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `rasterizer_frame_statistics_dispose` | rasterizer/rasterizer_frame_statistics.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
 | `uncompress_int8_to_real` | rasterizer/rasterizer_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
 | `uncompress_int16_to_real` | rasterizer/rasterizer_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
-| `uncompress_int32_to_real_vector3d` | rasterizer/rasterizer_geometry.c | Matched | import/src/level.rs:1803 | owed: the engine cites it, with no check against the original yet |
+| `uncompress_int32_to_real_vector3d` | rasterizer/rasterizer_geometry.c | Matched | import/src/level.rs:1803 | sim/tests/math_extra_reference.rs (trace) |
 | `rasterizer_geometry_get_vertex_size` | rasterizer/rasterizer_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
 | `rasterizer_geometry_byte_swap_vertices` | rasterizer/rasterizer_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
 | `rasterizer_geometry_uncompress_vertices` | rasterizer/rasterizer_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
@@ -3796,7 +3797,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `global_structure_bsp_index_get` | scenario/scenario.c | Replaced | import/src/lib.rs | maps imported to a typed format |
 | `scenario_load` | scenario/scenario.c | Replaced | import/src/lib.rs | maps imported to a typed format |
 | `scenario_get_fog_region_index` | scenario/scenario.c | Replaced | ffi/src/camera.rs | the enhanced lighting and Metal renderer |
-| `scenario_location_water_depth` | scenario/scenario.c | Matched | content/src/level.rs:741 | owed: water; reads the object, tag and map world, which the fake worlds do not hold (the structure's fog planes) |
+| `scenario_location_water_depth` | scenario/scenario.c | Matched | content/src/level.rs:745 | owed: water; reads the object, tag and map world, which the fake worlds do not hold (the structure's fog planes) |
 | `scenario_get_sound_environment` | scenario/scenario.c | Matched | ffi/src/sound_world.rs | owed: the engine's own tests (ffi/tests/sounds.rs); no check against the original yet |
 | `interpolate_real_rgb_color` | scenario/scenario.c | Replaced |  | through its caller `object_render_state_refresh` |
 | `scenario_get_atmospheric_fog` | scenario/scenario.c | Replaced |  | through its caller `render_player_frame` |
@@ -4104,7 +4105,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `render_debug_fog_planes` | structures/structures.c | Replaced |  | through its caller `render_debug` |
 | `structure_bsp_get_cluster_pvs` | structures/structure_bsp_definitions.c | Replaced | import/src/lib.rs | maps imported to a typed format |
 | `vertex_type_from_shader_tag` | structures/structure_bsp_definitions.c | Replaced | import/src/lib.rs | maps imported to a typed format |
-| `structure_bsp_get_cluster_encoded_sound_distance` | structures/structure_bsp_definitions.c | Matched | content/src/level.rs:766 | owed: the engine cites it, with no check against the original yet |
+| `structure_bsp_get_cluster_encoded_sound_distance` | structures/structure_bsp_definitions.c | Matched | content/src/level.rs:770 | owed: the engine cites it, with no check against the original yet |
 | `structure_visibility_dequantize_byte_to_real` | structures/structure_visibility.c | Replaced |  | through its caller `dequantize_byte_to_real_rectangle3d` |
 
 26 Missing (23 reached from `main_loop`), by file:
@@ -4350,7 +4351,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `units_debug_get_next_unit` | units/units.c | Replaced | dev/src/control.rs | the editor and tools |
 | `units_debug_get_closest_unit` | units/units.c | Replaced | dev/src/control.rs | the editor and tools |
 | `unit_debug_ninja_rope` | units/units.c | Replaced | dev/src/control.rs | the editor and tools |
-| `unit_detach_from_parent` | units/units.c | Matched | sim/src/vehicle_animation.rs:315 | owed: seats; reads the object, tag and map world, which the fake worlds do not hold; Phase 13's getting in and out |
+| `unit_detach_from_parent` | units/units.c | Matched | sim/src/vehicle_animation.rs:337 | owed: seats; reads the object, tag and map world, which the fake worlds do not hold; Phase 13's getting in and out |
 | `unit_throw_grenade_release` | units/units.c | Matched | sim/src/player.rs:994 | owed: grenades; reads the object, tag and map world, which the fake worlds do not hold; Phase 12's thrown grenades |
 | `unit_seat_update` | units/units.c | Matched | sim/src/vehicle_animation.rs:5 | owed: seats; reads the object, tag and map world, which the fake worlds do not hold; Phase 13 |
 | `unit_animation_update` | units/units.c | Matched | ffi/src/sound_events.rs:71 | owed: the engine cites it, with no check against the original yet |

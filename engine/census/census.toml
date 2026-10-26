@@ -729,7 +729,10 @@ stands_in = "net/src/wire.rs"
 
 [function.accelerate_to_position]
 class = "matched"
-owed = "a first-person weapon's sway; checked through first_person_weapon_update's trace"
+engine = "sim/src/device_animation.rs"
+check = "sim/tests/math_extra_reference.rs"
+against = "trace"
+note = "sim/src/first_person_states.rs has a copy for the weapons, which never ask for a periodic range; the trace checks both"
 
 [function.accelerate_to_velocity]
 class = "missing"
@@ -5166,7 +5169,9 @@ primitive = "glam::Affine3A"
 
 [function.matrix4x3_rotation_from_angles]
 class = "matched"
-owed = "rotations; checked through the item trace's object matrices"
+engine = "sim/src/objects.rs"
+check = "sim/tests/math_extra_reference.rs"
+against = "trace"
 
 [function.matrix4x3_rotation_from_axis_and_angle]
 class = "native"
@@ -6516,8 +6521,8 @@ stands_in = "app/Sources/OpenCEEngineRender/LoadedLevel.swift"
 [function.quantize_real_to_byte_lower_bound]
 class = "matched"
 engine = "sim/src/vehicle_animation.rs"
-owed = "the engine's own tests (sim/tests/vehicle_traces.rs); no check against the original yet"
-note = "only from 0 to 1, where the original's step down to the byte below the value is the floor of value * 255"
+check = "sim/tests/math_extra_reference.rs"
+against = "trace"
 
 [function.quantize_real_to_byte_rectangle3d]
 class = "missing"
@@ -8422,7 +8427,9 @@ owed = "the engine's own tests (ffi/src/sound_world.rs); no check against the or
 
 [function.uncompress_int32_to_real_vector3d]
 class = "matched"
-owed = "the engine cites it, with no check against the original yet"
+engine = "import/src/level.rs"
+check = "sim/tests/math_extra_reference.rs"
+against = "trace"
 
 [function.uniform_cubic_spline]
 class = "matched"
@@ -8998,7 +9005,9 @@ primitive = "libm::sinf"
 
 [function.vector3d_from_euler_angles2d]
 class = "matched"
-owed = "the engine cites it, with no check against the original yet"
+engine = "content/src/level.rs"
+check = "sim/tests/math_extra_reference.rs"
+against = "trace"
 
 [function.vector_from_matrices4x3]
 class = "native"

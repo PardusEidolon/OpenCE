@@ -1802,7 +1802,7 @@ fn compressed_lightmap_vertex(bytes: &[u8]) -> Option<LightmapVertex> {
 /// A unit vector packed in 11, 11 and 10 bits, decoded as the game does
 /// (`uncompress_int32_to_real_vector3d`): each signed field n is
 /// (2n + 1) / (2^bits - 1), in the same float operations.
-pub(crate) fn unit_vector(compressed: u32) -> [f32; 3] {
+pub fn unit_vector(compressed: u32) -> [f32; 3] {
     let i = (compressed << 21) as i32 as f32;
     let j = ((compressed >> 11) << 21) as i32 as f32;
     let k = ((compressed >> 22) << 22) as i32 as f32;
