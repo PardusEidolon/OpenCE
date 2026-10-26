@@ -25,9 +25,9 @@ manual check is at the end, with the report.
 - [x] Task: engine/census.toml and the six classes 71ea835c
   - [x] Tests: one failing case per requirement (Ported without a trace, Matched with only an engine test, Native without a primitive, Partial with nothing left out, Replaced without a listed reason, a function with no class)
   - [x] The schema: rules by directory, file and name, entries for single functions, and the fixed list of Replaced reasons
-- [ ] Task: The reference map moved in
-  - [ ] Its REASONS moved to census.toml, its table rewritten from the census, tools/engine_reference_map.py removed
-  - [ ] `--check` runs the trace scripts' own --check; the cargo test checks that each cited trace exists
+- [x] Task: The reference map moved in ffd8b56d
+  - [x] Its REASONS moved to census.toml, its table rewritten from the census, tools/engine_reference_map.py removed
+  - [x] `--check` runs the trace scripts' own --check; the cargo test checks that each cited trace exists
 - [ ] Task: The docs
   - [ ] docs/census.md (every function, by system) and the summary table in docs/engine.md
   - [ ] Staleness test
