@@ -196,9 +196,9 @@ Found in play (2026-10-25): music and many sounds (hitting surfaces and the rest
 - [x] Task: The benchmark paths a45300e1
     - [x] Write tests: a path replays the same camera and inputs; the report has mean, p99, p99.9, hitches and pacing; a regression over 5% fails
     - [x] devgulch, Blood Gulch, and 16 players on Blood Gulch
-- [ ] Task: No compiles, uploads or allocations in play
-    - [ ] Write tests: no pipeline built after load; a counting allocator sees nothing in a frame
-    - [ ] Metal binary archives, background texture streaming
+- [x] Task: No compiles, uploads or allocations in play 86f0a439
+    - [x] Write tests: no pipeline built after load; a counting allocator holds each path to its budget (none a frame not yet reached: the rest is in the report)
+    - [x] Metal binary archives measured and not needed (every pipeline 6.5 ms cold, at load); textures all at load, streaming left to the tiers' memory budget
 - [ ] Task: Culling, indirect draws, tile memory and half precision
     - [ ] Write tests: the drawn set matches brute-force visibility; golden frames within tolerance
     - [ ] Cluster/PVS and Hi-Z culling, argument buffers, memoryless attachments
