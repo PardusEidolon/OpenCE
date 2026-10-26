@@ -19,7 +19,7 @@ use crate::error::ImportError;
 use crate::level::{tag_index, tag_ref, Reached};
 use crate::tags::{Element, GroupTag};
 
-const UNHI: GroupTag = GroupTag::new(b"unhi");
+pub(crate) const UNHI: GroupTag = GroupTag::new(b"unhi");
 const WPHI: GroupTag = GroupTag::new(b"wphi");
 const GRHI: GroupTag = GroupTag::new(b"grhi");
 const HUD_DIGITS: GroupTag = GroupTag::new(b"hud#");
@@ -93,9 +93,17 @@ pub(crate) fn import_huds(
     }
 
     let mut units = BTreeMap::new();
+    // (each unit's own, and each vehicle seat's its rider shows the
+    // driver)
+    let seats = objects
+        .iter()
+        .filter_map(|object| object.vehicle.as_ref())
+        .flat_map(|vehicle| vehicle.seats.iter().map(|seat| &seat.hud));
     for (tag, index) in objects
         .iter()
-        .filter_map(|object| present(&object.unit_hud))
+        .map(|object| &object.unit_hud)
+        .chain(seats)
+        .filter_map(present)
     {
         if !units.contains_key(&tag) {
             units.insert(tag.clone(), import_unit_hud(cache, index, tag, reached)?);

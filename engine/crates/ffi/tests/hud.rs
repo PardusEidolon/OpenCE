@@ -9,7 +9,7 @@ use std::error::Error;
 use opence_content::Level;
 use opence_ffi::hud::{hud_quads, HudQuad};
 use opence_import::testing::stock_level;
-use opence_sim::hud::HudState;
+use opence_sim::hud::{HudState, UnitPanel};
 use opence_sim::input::{Buttons, TickInput};
 use opence_sim::Simulation;
 
@@ -322,5 +322,86 @@ fn it_follows_the_rounds_the_shield_and_the_grenades() -> Result<(), Box<dyn Err
         digits(&before),
         "the grenades' count held"
     );
+    Ok(())
+}
+
+#[test]
+fn a_drivers_vehicle_panels_are_drawn_under_its_own_from_their_tags() -> Result<(), Box<dyn Error>>
+{
+    let Some(level) = bloodgulch()? else {
+        return Ok(());
+    };
+    let own = spawned(&level)?.hud().ok_or("no HUD")?;
+    let alone = drawn(&level, &own);
+    let seats = level
+        .objects
+        .iter()
+        .find(|object| {
+            object
+                .tag
+                .path
+                .eq_ignore_ascii_case("vehicles\\warthog\\warthog")
+        })
+        .and_then(|object| object.vehicle.as_ref())
+        .map(|vehicle| vehicle.seats.clone())
+        .ok_or("no warthog")?;
+    for tag in seats.iter().filter_map(|seat| seat.hud.clone()) {
+        let hud = level
+            .unit_huds
+            .iter()
+            .find(|hud| hud.tag == tag)
+            .ok_or("not imported")?;
+        let panel = UnitPanel {
+            hud: tag.clone(),
+            shield: 1.0,
+            body: 1.0,
+            shield_depleted: false,
+            dead: false,
+        };
+        let state = HudState {
+            panels: vec![panel.clone()],
+            ..own.clone()
+        };
+        let quads = drawn(&level, &state);
+        // (the panel's quads, then the player's own as they were)
+        let under = quads.len() - alone.len();
+        assert!(under > 0, "{tag:?} drew nothing");
+        assert_eq!(quads[under..], alone[..], "{tag:?}");
+        // (each of its tag's bitmaps: its background, meters and theirs)
+        let named: Vec<_> = [
+            &hud.background.bitmap,
+            &hud.shield_background.bitmap,
+            &hud.shield_meter.bitmap,
+            &hud.health_background.bitmap,
+            &hud.health_meter.bitmap,
+        ]
+        .into_iter()
+        .flatten()
+        .map(|bitmap| bitmap.path.clone())
+        .collect();
+        for quad in &quads[..under] {
+            assert!(
+                named
+                    .iter()
+                    .any(|path| quad.bitmap.ends_with(path.as_str())),
+                "{tag:?}: {} is not its tag's",
+                quad.bitmap
+            );
+        }
+        println!("{}: {under} quads", tag.path);
+        // (its unit dead, it is drawn disabled)
+        let dead = HudState {
+            panels: vec![UnitPanel {
+                dead: true,
+                ..panel
+            }],
+            ..own.clone()
+        };
+        assert_ne!(
+            drawn(&level, &dead)[..under],
+            quads[..under],
+            "{tag:?} dead"
+        );
+    }
     Ok(())
 }

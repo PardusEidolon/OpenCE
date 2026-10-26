@@ -157,6 +157,10 @@ fn import_seat(seat: &Element<'_>) -> Result<VehicleSeat, ImportError> {
         yaw_minimum: seat.f32(0xF0, "yaw minimum")?,
         yaw_maximum: seat.f32(0xF4, "yaw maximum")?,
         built_in_actor: reference(seat, 0xF8, "built-in actor", &[ACTV])?,
+        hud: match seat.block(0xDC, "seat huds", 0x30, 2)?.get(0) {
+            Some(hud) => reference(&hud, 0, "seat hud interface", &[crate::hud::UNHI])?,
+            None => None,
+        },
         icon_text_index: seat.i16(0xEC, "icon text index")?,
     })
 }

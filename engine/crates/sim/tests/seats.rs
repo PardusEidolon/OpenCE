@@ -11,6 +11,7 @@ use std::sync::Arc;
 use opence_content::{Level, MaterialEffects, ObjectKind, VehicleSeat};
 use opence_import::testing::stock_level;
 use opence_sim::animation::{self, AnimationPlayer};
+use opence_sim::damage::Vitality;
 use opence_sim::effects::Effects;
 use opence_sim::hud::ActionPrompt;
 use opence_sim::input::{Buttons, TickInput};
@@ -1013,5 +1014,74 @@ fn a_driven_warthog_slips_its_material_effects_on_the_ground_each_game_tick() ->
     assert!(started > 100, "the slips started only {started} effects");
     // (a vehicle moves only on game ticks, so it slips on every other)
     assert_eq!(ticks.len(), 1, "the Warthog slipped between game ticks");
+    Ok(())
+}
+
+#[test]
+fn the_driver_sees_the_warthogs_hud_and_each_riders_and_the_others_their_own() -> Result {
+    let Some(level) = bloodgulch()? else {
+        return Ok(());
+    };
+    let definition = level
+        .objects
+        .iter()
+        .find(|object| object.tag.path.eq_ignore_ascii_case(WARTHOG))
+        .ok_or("no warthog")?;
+    let seats = &definition.vehicle.as_ref().ok_or("no vehicle")?.seats;
+    let own = definition.unit_hud.clone();
+    // (the stock Warthog's are its seats': it has none of its own)
+    assert!(seats.iter().all(|seat| seat.hud.is_some()));
+    // (each HUD its tags name is imported)
+    for tag in own
+        .iter()
+        .chain(seats.iter().filter_map(|seat| seat.hud.as_ref()))
+    {
+        assert!(
+            level.unit_huds.iter().any(|hud| hud.tag == *tag),
+            "{tag:?} not imported"
+        );
+    }
+    let panels =
+        |simulation: &Simulation| simulation.hud().map(|hud| hud.panels).unwrap_or_default();
+    let (mut simulation, warthog) = beside_a_warthog(&level)?;
+    assert_eq!(panels(&simulation), Vec::new(), "on foot");
+    for (seat, flags) in seats.iter().map(|seat| seat.flags).enumerate() {
+        if flags & VehicleSeat::REQUIRES_DRIVER != 0 {
+            continue; // (the player alone has no driver)
+        }
+        enter(&mut simulation, warthog, seat)?;
+        simulation.step(TickInput::default());
+        assert_eq!(seated(&simulation), Some(seat));
+        let shown = panels(&simulation);
+        if flags & VehicleSeat::DRIVER == 0 {
+            // (a rider who does not drive sees only its own)
+            assert_eq!(shown, Vec::new(), "seat {seat}");
+        } else {
+            // (the driver: the Warthog's, at its health, then each
+            // rider's seat's, at the rider's: here the driver's own)
+            let tags: Vec<_> = shown.iter().map(|panel| panel.hud.clone()).collect();
+            let mut expected: Vec<_> = own.iter().cloned().collect();
+            expected.extend(seats[seat].hud.clone());
+            assert_eq!(tags, expected, "seat {seat}");
+            let health = simulation
+                .component::<Vitality>(warthog)
+                .ok_or("the warthog has no vitality")?;
+            if own.is_some() {
+                assert_eq!(shown[0].body, health.body);
+            }
+            let hud = simulation.hud().ok_or("no hud")?;
+            for rider in &shown[own.iter().count()..] {
+                assert_eq!((rider.shield, rider.body), (hud.shield, hud.body));
+                assert_eq!(rider.dead, hud.dead);
+            }
+        }
+        simulation.step(TickInput::default());
+        simulation.step(pressed(Buttons::ACTION));
+        assert_eq!(seated(&simulation), None, "seat {seat}: never left");
+        assert_eq!(panels(&simulation), Vec::new(), "left seat {seat}");
+        for _ in 0..30 {
+            simulation.step(TickInput::default());
+        }
+    }
     Ok(())
 }

@@ -1317,7 +1317,50 @@ impl Simulation {
                 .map(|settings| self.sensor.blips(yaw.0, &settings))
                 .unwrap_or_default(),
             prompt: self.prompt.clone(),
+            panels: self.vehicle_panels(player),
         })
+    }
+
+    /// The panels a driver sees under its own (`hud_render_unit_interface`):
+    /// its vehicle's HUD, then the HUD of each rider's seat, at that unit's
+    /// shield and health; none in any other seat. (The original takes the
+    /// vehicle's children newest first; here the riders are the players, in
+    /// their order.)
+    fn vehicle_panels(&self, player: &Player) -> Vec<hud::UnitPanel> {
+        let Some(seated) = player.seated() else {
+            return Vec::new();
+        };
+        if seated.flags & opence_content::VehicleSeat::DRIVER == 0 {
+            return Vec::new();
+        }
+        let Some((hud, seats)) = self.rides.huds(seated.vehicle) else {
+            return Vec::new();
+        };
+        let panel = |hud: &TagRef, unit: ObjectHandle| {
+            let vitality = self.component::<damage::Vitality>(unit);
+            hud::UnitPanel {
+                hud: hud.clone(),
+                shield: vitality.as_ref().map_or(1.0, |vitality| vitality.shield),
+                body: vitality.as_ref().map_or(1.0, |vitality| vitality.body),
+                shield_depleted: vitality
+                    .as_ref()
+                    .is_some_and(|vitality| vitality.shield_depleted),
+                dead: vitality.as_ref().is_some_and(|vitality| vitality.dead),
+            }
+        };
+        let mut panels: Vec<_> = hud.iter().map(|hud| panel(hud, seated.vehicle)).collect();
+        for rider in &self.players {
+            let Some(riding) = rider
+                .seated()
+                .filter(|riding| riding.vehicle == seated.vehicle)
+            else {
+                continue;
+            };
+            if let Some(hud) = seats.get(riding.seat).copied().flatten() {
+                panels.push(panel(hud, rider.handle()));
+            }
+        }
+        panels
     }
 
     /// The local player, if there is one.

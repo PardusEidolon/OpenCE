@@ -266,6 +266,23 @@ pub struct WeaponReadout {
     pub overheated: bool,
 }
 
+/// A unit's HUD panel drawn under the player's own: a vehicle's, or the
+/// HUD of one of its riders' seats, as `hud_render_unit_interface` shows
+/// them to the vehicle's driver.
+#[derive(Clone, Debug, PartialEq)]
+pub struct UnitPanel {
+    /// The HUD (`unhi`) it draws.
+    pub hud: TagRef,
+    /// Its unit's shield, 0 to 1 (more when overcharged).
+    pub shield: f32,
+    /// Its unit's health, 0 to 1.
+    pub body: f32,
+    /// Whether its unit's shield is down.
+    pub shield_depleted: bool,
+    /// Whether its unit is dead.
+    pub dead: bool,
+}
+
 /// What the HUD shows this frame.
 #[derive(Clone, Debug, PartialEq)]
 pub struct HudState {
@@ -290,6 +307,11 @@ pub struct HudState {
     /// What the action button would do, as `hud_show_action_response`
     /// tells the player.
     pub prompt: Option<ActionPrompt>,
+    /// The panels beside the player's own, in the original's order: none
+    /// but in a driver's seat, where they are the vehicle's and then its
+    /// riders' seats' (the driver's among them). They are drawn last to
+    /// first, the player's own over them.
+    pub panels: Vec<UnitPanel>,
 }
 
 /// What the action button would do, the state message the HUD shows for

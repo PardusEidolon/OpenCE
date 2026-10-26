@@ -7,8 +7,8 @@
 //! how much of it is filled.
 
 use opence_content::hud::{
-    CrosshairKind, HudAnchor, HudIcon, HudMeter, HudNumber, HudPlacement, HudStatic, WeaponHud,
-    WeaponHudElement, WeaponHudState,
+    CrosshairKind, HudAnchor, HudIcon, HudMeter, HudNumber, HudPlacement, HudStatic, UnitHud,
+    WeaponHud, WeaponHudElement, WeaponHudState,
 };
 use opence_content::{Bitmap, Level, TagRef};
 use opence_sim::hud::{HudState, WeaponReadout};
@@ -124,6 +124,15 @@ pub fn hud_quads(
     }
     painter.grenades(state);
     painter.quads
+}
+
+/// A unit's shield and health, as its HUD panel shows them.
+#[derive(Clone, Copy)]
+struct Vitals {
+    shield: f32,
+    body: f32,
+    shield_depleted: bool,
+    dead: bool,
 }
 
 /// The HUD being drawn: its quads so far, in the window's pixels.
@@ -396,68 +405,41 @@ impl Painter<'_> {
         }
     }
 
-    /// The unit's HUD (`hud_render_unit_interface`): its panel, shield and
-    /// health, and the motion sensor in the bottom left.
+    /// The unit's HUD (`hud_render_unit_interface`): a driver's vehicle's
+    /// and riders' panels first, last to first, then its own panel, shield
+    /// and health, and the motion sensor in the bottom left.
     fn unit(&mut self, state: &HudState) {
         let level = self.level;
+        let find = |tag: &TagRef| level.unit_huds.iter().find(|hud| hud.tag == *tag);
+        for panel in state.panels.iter().rev() {
+            if let Some(hud) = find(&panel.hud) {
+                self.vitals(
+                    hud,
+                    Vitals {
+                        shield: panel.shield,
+                        body: panel.body,
+                        shield_depleted: panel.shield_depleted,
+                        dead: panel.dead,
+                    },
+                );
+            }
+        }
         let Some(hud) = level
             .object(&state.unit)
             .and_then(|unit| unit.unit_hud.as_ref())
-            .and_then(|tag| level.unit_huds.iter().find(|hud| hud.tag == *tag))
+            .and_then(find)
         else {
             return;
         };
-        let anchor = hud.anchor;
-        self.draw_static(anchor, &hud.background, DrawFlags::new(false, state.dead));
-
-        let shield_flags = DrawFlags::new(state.shield < SHIELD_FLASH, state.dead);
-        let value_scale = match hud.shield_meter.value_scale {
-            0 => SHIELD_VALUE_SCALE,
-            scale => scale,
-        };
-        for (overcharge, color) in std::iter::once(None)
-            .chain(OVERCHARGE_COLORS.iter().map(Some))
-            .enumerate()
-        {
-            let shield = (state.shield - overcharge as f32).clamp(0.0, 1.0);
-            if shield <= 0.0 {
-                break;
-            }
-            let mut meter = hud.shield_meter.clone();
-            if let Some(&color) = color {
-                meter.min_color = color;
-                meter.max_color = color;
-            }
-            self.draw_meter(
-                anchor,
-                &meter,
-                meter_value(value_scale, shield),
-                shield_flags,
-            );
-        }
-        self.draw_static(anchor, &hud.shield_background, shield_flags);
-
-        let health_flags = DrawFlags::new(state.shield_depleted, state.dead);
-        let value_scale = match hud.health_meter.value_scale {
-            0 => HEALTH_VALUE_SCALE,
-            scale => scale,
-        };
-        let mut meter = hud.health_meter.clone();
-        if state.body >= hud.health_max_cutoff {
-            meter.min_color = meter.max_color;
-        } else if state.body <= hud.health_min_cutoff {
-            meter.max_color = meter.min_color;
-        } else {
-            meter.min_color = hud.health_mid_color;
-            meter.max_color = hud.health_mid_color;
-        }
-        self.draw_meter(
-            anchor,
-            &meter,
-            meter_value(value_scale, state.body),
-            health_flags,
+        self.vitals(
+            hud,
+            Vitals {
+                shield: state.shield,
+                body: state.body,
+                shield_depleted: state.shield_depleted,
+                dead: state.dead,
+            },
         );
-        self.draw_static(anchor, &hud.health_background, health_flags);
 
         // (the motion sensor keeps to the bottom left, whatever the HUD's)
         let sensor = HudAnchor::BottomLeft;
@@ -489,6 +471,61 @@ impl Painter<'_> {
                 meter: None,
             });
         }
+    }
+
+    /// A unit HUD's background, shield and health, at `vitals`.
+    fn vitals(&mut self, hud: &UnitHud, vitals: Vitals) {
+        let anchor = hud.anchor;
+        self.draw_static(anchor, &hud.background, DrawFlags::new(false, vitals.dead));
+
+        let shield_flags = DrawFlags::new(vitals.shield < SHIELD_FLASH, vitals.dead);
+        let value_scale = match hud.shield_meter.value_scale {
+            0 => SHIELD_VALUE_SCALE,
+            scale => scale,
+        };
+        for (overcharge, color) in std::iter::once(None)
+            .chain(OVERCHARGE_COLORS.iter().map(Some))
+            .enumerate()
+        {
+            let shield = (vitals.shield - overcharge as f32).clamp(0.0, 1.0);
+            if shield <= 0.0 {
+                break;
+            }
+            let mut meter = hud.shield_meter.clone();
+            if let Some(&color) = color {
+                meter.min_color = color;
+                meter.max_color = color;
+            }
+            self.draw_meter(
+                anchor,
+                &meter,
+                meter_value(value_scale, shield),
+                shield_flags,
+            );
+        }
+        self.draw_static(anchor, &hud.shield_background, shield_flags);
+
+        let health_flags = DrawFlags::new(vitals.shield_depleted, vitals.dead);
+        let value_scale = match hud.health_meter.value_scale {
+            0 => HEALTH_VALUE_SCALE,
+            scale => scale,
+        };
+        let mut meter = hud.health_meter.clone();
+        if vitals.body >= hud.health_max_cutoff {
+            meter.min_color = meter.max_color;
+        } else if vitals.body <= hud.health_min_cutoff {
+            meter.max_color = meter.min_color;
+        } else {
+            meter.min_color = hud.health_mid_color;
+            meter.max_color = hud.health_mid_color;
+        }
+        self.draw_meter(
+            anchor,
+            &meter,
+            meter_value(value_scale, vitals.body),
+            health_flags,
+        );
+        self.draw_static(anchor, &hud.health_background, health_flags);
     }
 
     /// The weapon's HUD (`weapon_hud_render`): its parent's first, then

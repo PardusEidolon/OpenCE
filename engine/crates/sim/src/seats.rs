@@ -91,6 +91,8 @@ struct RideKind {
     animations: Option<VehicleAnimations>,
     /// Its hover and jet thrusters, from its origin.
     thrusters: Thrusters,
+    /// Its unit HUD (`unhi`).
+    hud: Option<TagRef>,
 }
 
 /// A vehicle in the world.
@@ -563,6 +565,7 @@ impl Rides {
                     .and_then(|(index, _, _)| armory.get(*index))
                     .map(|weapon| weapon.tag.clone());
                 Some(RideKind {
+                    hud: object.unit_hud.clone(),
                     tag: object.tag.clone(),
                     vehicle,
                     physics,
@@ -641,6 +644,14 @@ impl Rides {
         let ride = self.ride(handle)?;
         let place = self.kinds.get(ride.kind)?.seats.get(seat)?;
         Some(place.label.as_str()).filter(|label| !label.is_empty())
+    }
+
+    /// The unit HUD of `handle` (`unhi`), and the HUD each of its seats'
+    /// riders shows its driver.
+    pub fn huds(&self, handle: ObjectHandle) -> Option<(Option<&TagRef>, Vec<Option<&TagRef>>)> {
+        let kind = self.kinds.get(self.ride(handle)?.kind)?;
+        let seats = kind.vehicle.seats.iter().map(|seat| seat.hud.as_ref());
+        Some((kind.hud.as_ref(), seats.collect()))
     }
 
     /// Where the rider of seat `seat` of `handle` sits, in the world.
