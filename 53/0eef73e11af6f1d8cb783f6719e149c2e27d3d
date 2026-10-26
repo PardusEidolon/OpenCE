@@ -1,0 +1,4 @@
+Task: Add `engine/census/ratchet.tsv` and the `--ratchet` command that writes it from the current census.
+Add a per-system ratchet to the coverage census
+
+The coverage-completion tracks must only bring the Missing, Partial and owed counts down. engine/census/ratchet.tsv records each system's three counts; census --check now fails when a count rises above the record, and when one falls below it until opence census --ratchet records the lower count. A repository with no ratchet records what it has on its first --ratchet; --ratchet refuses to record a rise. Checked: the new tests/ratchet.rs (rise, fall, unnamed system, first record, refusal, malformed file, the real tree has one), the census crate's tests, census --check on the real tree, and nix flake check.
