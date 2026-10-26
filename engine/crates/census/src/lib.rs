@@ -10,6 +10,10 @@
 
 use std::path::{Path, PathBuf};
 
+pub mod c;
+pub mod citations;
+pub mod graph;
+pub mod original;
 pub mod symbols;
 
 /// What the census could not read.
