@@ -1,0 +1,4 @@
+Task: Write a test that no census entry is known only by its address.
+Fold each file's address-only symbols into its definitions without a symbol
+
+The symbol headers know 1,351 functions only by address (code_…). The census also counted most of them a second time, by name, as size-0 inlined definitions. Each file's address-only symbols, in address order, now take the names of its non-inline definitions that have no symbol, in source order, and keep the symbols' addresses and sizes. A symbol the C defines nothing for is known by its place. The HS_EVALUATE_* macros now count as defining their evaluators, so hs.c folds too. Tests: tests/names.rs (pairing, size evidence, place, the table, the macros, the real tree); census tests pass.
