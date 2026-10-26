@@ -73,6 +73,37 @@ fn cluster_at(bsp: &StructureBsp, point: Vec3) -> Option<u16> {
         .and_then(|leaf| *bsp.leaf_clusters.get(leaf as usize)?)
 }
 
+/// The environment and background sound of `structure`'s cluster
+/// `listener` (`scenario_get_sound_environment`): its palette's
+/// environment, unless it has none or is of the lowest priority, which is
+/// never chosen; and the background only with an environment. Without one
+/// the default is heard, and no background.
+fn room_sound(
+    structure: Option<&StructureBsp>,
+    listener: Option<u16>,
+) -> (Environment, Option<TagRef>) {
+    let Some((structure, room)) = structure.zip(listener).and_then(|(structure, cluster)| {
+        Some((
+            structure,
+            structure.cluster_sounds.get(usize::from(cluster))?,
+        ))
+    }) else {
+        return (Environment::DEFAULT, None);
+    };
+    let environment = room
+        .environment
+        .and_then(|index| *structure.sound_environments.get(usize::from(index))?)
+        .filter(|environment| environment.priority > i16::MIN);
+    match environment {
+        Some(environment) => (
+            Environment::from_values(environment.values),
+            room.background
+                .and_then(|index| structure.background_sounds.get(usize::from(index))?.clone()),
+        ),
+        None => (Environment::DEFAULT, None),
+    }
+}
+
 /// How blocked and shut away a source `distance` from the listener is,
 /// `cluster_distance` away by the BSP's sound paths, when the line
 /// between them is `clear` or not: (obstruction, occlusion).
@@ -150,34 +181,14 @@ impl SoundWorld {
             self.camera = Some(camera);
         }
         let listener = structure.and_then(|structure| cluster_at(structure, camera));
-        let room = structure
-            .zip(listener)
-            .and_then(|(structure, cluster)| structure.cluster_sounds.get(usize::from(cluster)));
-        let target = room
-            .and_then(|room| room.environment)
-            .and_then(|index| {
-                structure?
-                    .sound_environments
-                    .get(usize::from(index))
-                    .copied()
-                    .flatten()
-            })
-            .map_or(Environment::DEFAULT, |environment| {
-                Environment::from_values(environment.values)
-            });
+        let (target, background) = room_sound(structure, listener);
         // (every value has arrived after so many updates)
         for _ in 0..ticks.min(16) {
             if self.heard.glide_towards(&target) {
                 break;
             }
         }
-        if let Some(tag) = room.and_then(|room| room.background).and_then(|index| {
-            structure?
-                .background_sounds
-                .get(usize::from(index))
-                .cloned()
-                .flatten()
-        }) {
+        if let Some(tag) = background {
             loops.push(Looping {
                 key: BACKGROUND_KEY,
                 tag,
@@ -220,6 +231,9 @@ impl SoundWorld {
         });
     }
 }
+
+#[cfg(test)]
+mod sound_environment_reference;
 
 #[cfg(test)]
 mod tests {

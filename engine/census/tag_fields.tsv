@@ -5533,7 +5533,7 @@ sound_definition	pitch_ranges.count	152	long	read	kept	used
 sound_definition	pitch_ranges.address	156	void *	read	kept	used
 sound_definition	pitch_ranges.definition	160	struct tag_block_definition *	read	-	-
 sound_environment_definition	unknown	0	long	-	-	-
-sound_environment_definition	priority	4	short	-	kept	unused
+sound_environment_definition	priority	4	short	-	kept	used
 sound_environment_definition	unused0	6	short	-	-	-
 sound_environment_definition	room_intensity	8	real	read	kept	used
 sound_environment_definition	room_intensity_hf	12	real	read	kept	used

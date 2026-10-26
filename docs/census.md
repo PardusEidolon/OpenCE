@@ -34,16 +34,16 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `rasterizer` | | 3 (2784 B) | | | 777 (182416 B) | | 2 |
 | `render` | 2 (592 B) | 2 (240 B) | | | 115 (37520 B) | | 0 |
 | `saved games` | | | | 2 (96 B) | 31 (3712 B) | 104 (21184 B) | 2 |
-| `scenario` | | 13 (4320 B) | | | 23 (3136 B) | 21 (2128 B) | 7 |
+| `scenario` | | 13 (4320 B) | | | 23 (3136 B) | 21 (2128 B) | 6 |
 | `shaders` | | | | | 21 (2624 B) | | 0 |
 | `shell` | | | | | 11 (528 B) | 2 (0 B) | 0 |
 | `sound` | 7 (1072 B) | 63 (15808 B) | | 2 (32 B) | 56 (2832 B) | 44 (7216 B) | 60 |
-| `structures` | | 1 (0 B) | | | 99 (27952 B) | 26 (3760 B) | 1 |
+| `structures` | | 1 (0 B) | | | 99 (27952 B) | 26 (3760 B) | 0 |
 | `tag_files` | | | 43 (4288 B) | | 5 (0 B) | | 0 |
 | `text` | | 9 (1936 B) | 63 (6864 B) | | 19 (5744 B) | 21 (2368 B) | 9 |
 | `tool` | | | | | 27 (8752 B) | | 0 |
 | `units` | 9 (1856 B) | 67 (27888 B) | | 17 (17808 B) | 9 (1616 B) | 227 (58352 B) | 84 |
-| **all** | 147 (26112 B) | 577 (187824 B) | 332 (38896 B) | 123 (72592 B) | 2770 (569976 B) | 3678 (715722 B) | 650 |
+| **all** | 147 (26112 B) | 577 (187824 B) | 332 (38896 B) | 123 (72592 B) | 2770 (569976 B) | 3678 (715722 B) | 648 |
 
 ## `ai`
 
@@ -3799,7 +3799,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `scenario_load` | scenario/scenario.c | Replaced | import/src/lib.rs | maps imported to a typed format |
 | `scenario_get_fog_region_index` | scenario/scenario.c | Replaced | ffi/src/camera.rs | the enhanced lighting and Metal renderer |
 | `scenario_location_water_depth` | scenario/scenario.c | Matched | content/src/level.rs:745 | owed: water; reads the object, tag and map world, which the fake worlds do not hold (the structure's fog planes) |
-| `scenario_get_sound_environment` | scenario/scenario.c | Matched | ffi/src/sound_world.rs | owed: the engine's own tests (ffi/tests/sounds.rs); no check against the original yet |
+| `scenario_get_sound_environment` | scenario/scenario.c | Matched | ffi/src/sound_world/sound_environment_reference.rs:5 | ffi/src/sound_world/sound_environment_reference.rs (trace); one local player; the scenario's fog regions and water boundary are not in the engine, and the game glides once a frame where the engine glides once a tick (the same at 30 frames a second) |
 | `interpolate_real_rgb_color` | scenario/scenario.c | Replaced |  | through its caller `object_render_state_refresh` |
 | `scenario_get_atmospheric_fog` | scenario/scenario.c | Replaced |  | through its caller `render_player_frame` |
 | `wind_dispose_from_old_map` | scenario/wind.c | Matched | ffi/src/particles/wind.rs | owed: the engine's own tests (ffi/src/particles/wind.rs); no check against the original yet |
@@ -4106,7 +4106,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `render_debug_fog_planes` | structures/structures.c | Replaced |  | through its caller `render_debug` |
 | `structure_bsp_get_cluster_pvs` | structures/structure_bsp_definitions.c | Replaced | import/src/lib.rs | maps imported to a typed format |
 | `vertex_type_from_shader_tag` | structures/structure_bsp_definitions.c | Replaced | import/src/lib.rs | maps imported to a typed format |
-| `structure_bsp_get_cluster_encoded_sound_distance` | structures/structure_bsp_definitions.c | Matched | content/src/level.rs:770 | owed: the engine cites it, with no check against the original yet |
+| `structure_bsp_get_cluster_encoded_sound_distance` | structures/structure_bsp_definitions.c | Matched | content/src/level.rs:770 | ffi/src/sound_world/sound_environment_reference.rs (trace) |
 | `structure_visibility_dequantize_byte_to_real` | structures/structure_visibility.c | Replaced |  | through its caller `dequantize_byte_to_real_rectangle3d` |
 
 26 Missing (23 reached from `main_loop`), by file:

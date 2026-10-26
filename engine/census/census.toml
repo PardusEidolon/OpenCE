@@ -6947,7 +6947,9 @@ stands_in = "import/src/lib.rs"
 [function.scenario_get_sound_environment]
 class = "matched"
 engine = "ffi/src/sound_world.rs"
-owed = "the engine's own tests (ffi/tests/sounds.rs); no check against the original yet"
+check = "ffi/src/sound_world/sound_environment_reference.rs"
+against = "trace"
+note = "one local player; the scenario's fog regions and water boundary are not in the engine, and the game glides once a frame where the engine glides once a tick (the same at 30 frames a second)"
 
 [function.scenario_get_structure_reference_index_from_tag_index]
 class = "replaced"
@@ -7639,7 +7641,9 @@ primitive = "String"
 
 [function.structure_bsp_get_cluster_encoded_sound_distance]
 class = "matched"
-owed = "the engine cites it, with no check against the original yet"
+engine = "content/src/level.rs"
+check = "ffi/src/sound_world/sound_environment_reference.rs"
+against = "trace"
 
 [function.structure_bsp_get_cluster_pvs]
 class = "replaced"
