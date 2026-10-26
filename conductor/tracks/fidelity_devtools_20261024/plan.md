@@ -192,7 +192,7 @@ Found in play (2026-10-25): music and many sounds (hitting surfaces and the rest
     - [x] The fixes
 - [x] Task: Conductor - User Manual Verification 'Phase 15: Sound' (Protocol in workflow.md) (superseded: automated verification only, at the user's instruction)
 
-## Phase 16: Performance
+## Phase 16: Performance [checkpoint: aaafa25d]
 - [x] Task: The benchmark paths a45300e1
     - [x] Write tests: a path replays the same camera and inputs; the report has mean, p99, p99.9, hitches and pacing; a regression over 5% fails
     - [x] devgulch, Blood Gulch, and 16 players on Blood Gulch
