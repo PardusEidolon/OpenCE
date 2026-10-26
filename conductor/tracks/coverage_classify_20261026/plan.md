@@ -14,11 +14,11 @@ Every task is test first (`workflow.md`): the trace, measurement or census test 
 - [x] Task: Class the 226 small helpers as Native with their primitives, checked by the math reference trace where they are numeric. cf5646b0
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Citations and Native' (Protocol in workflow.md) (automated)
 
-## Phase 3: Reasons
+## Phase 3: Reasons [checkpoint: 93b45a4c]
 - [x] Task: Add the "library" reason to the census's fixed list, with a test that it needs a stand-in and a player-visible note. 6d6661a1
 - [x] Task: Class the collision BSP functions under it, naming the Jolt code. 9f6f01b7
 - [x] Task: Class the debug and console functions as "the editor and tools". 8e708c7d
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Reasons' (Protocol in workflow.md) (automated)
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Reasons' (Protocol in workflow.md) (automated)
 
 ## Phase 4: Names
 - [ ] Task: Write a test that no census entry is known only by its address.
