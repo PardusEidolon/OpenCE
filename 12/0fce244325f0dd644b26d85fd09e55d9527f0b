@@ -1,0 +1,6 @@
+Task: Load-time fix-ups
+List the original's load-time fix-ups and how the importer compares with each
+
+The census finds the fix-ups in source/ itself: the default element and postprocess entries of tag block definitions, the postprocess of tag groups, and the load path's *_postprocess functions. engine/census/fixups.tsv, written by hand, says for each whether the importer does the same, differs, replaces it or there is nothing to match, and --check fails when a fix-up has no row or a row names none. Four of the five differ (bitmap groups' sprite sequences and linear flag, the scripts' load checks and re-parse, object names' resolution); postprocess_bitmap changes nothing.
+
+Checked: the census tests (71), the workspace's 1275 tests and clippy.
