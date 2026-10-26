@@ -300,6 +300,13 @@ impl SoundPlayer {
     /// limit, a like voice that has played the class's preemption time and
     /// is no nearer than `distance` (by less than one in the squares) is
     /// stopped for the new one; with none, the new one does not play.
+    ///
+    /// The class's limit per object (`maximum_source_instance_count`, the
+    /// summary's like-source channels) is not kept: a `Source` does not say
+    /// which object makes the sound. It is lower than the limit per sound in
+    /// 26 of the 51 classes, 1 for most (weapon fire, footsteps, dialog, the
+    /// devices and ambience), so one object's repeats overlap here where the
+    /// original cuts the older one off.
     fn make_room(&mut self, index: usize, class_index: u16, distance: f32) -> Result<(), Dropped> {
         let limits = class(i32::from(class_index));
         self.census.prune(&self.mixer);
