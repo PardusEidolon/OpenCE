@@ -116,45 +116,69 @@ fn ctf_kills_do_not_score() {
     );
 }
 
+/// One of the game's ticks: the engine's steps to it, the players standing
+/// at `positions` throughout.
+fn game_tick(rules: &mut Rules, positions: &[Option<[f32; 3]>]) -> Vec<GameEvent> {
+    let mut events = Vec::new();
+    for _ in 0..TICKS_PER_SECOND / 30 {
+        events.extend(rules.step(positions));
+    }
+    events
+}
+
 #[test]
 fn a_flag_is_taken_carried_home_and_captured() {
     let mut rules = ctf();
-    let events = rules.step(&[Some([50.5, 0.0, 0.0]), None]);
+    let events = game_tick(&mut rules, &[Some([50.5, 0.0, 0.0]), None]);
     assert!(events.contains(&GameEvent::FlagTaken { flag: 1, by: 0 }));
     assert_eq!(rules.flags()[1].state, FlagState::Carried(0));
-    let events = rules.step(&[Some([0.5, 0.0, 0.0]), None]);
+    // (the game's update sees where the carrier stood the tick before)
+    let home = [Some([0.5, 0.0, 0.0]), None];
+    let events = game_tick(&mut rules, &home);
+    assert!(!events
+        .iter()
+        .any(|e| matches!(e, GameEvent::Captured { .. })));
+    let events = game_tick(&mut rules, &home);
     assert!(events.contains(&GameEvent::Captured { flag: 1, by: 0 }));
     assert_eq!(rules.team_score(0), 1);
     assert_eq!(rules.flags()[1].state, FlagState::Home);
 }
 
 #[test]
+fn a_flag_is_touched_only_nearer_than_a_metre() {
+    let mut rules = ctf();
+    game_tick(&mut rules, &[Some([51.0, 0.0, 0.0]), None]);
+    assert_eq!(rules.flags()[1].state, FlagState::Home);
+    game_tick(&mut rules, &[Some([50.75, 0.0, 0.0]), None]);
+    assert_eq!(rules.flags()[1].state, FlagState::Carried(0));
+}
+
+#[test]
 fn a_dropped_flag_goes_home_when_its_team_touches_it() {
     let mut rules = ctf();
-    rules.step(&[Some(BLUE_STAND), None]);
+    game_tick(&mut rules, &[Some(BLUE_STAND), None]);
     rules.player_killed(0, Some(1), [25.0, 0.0, 0.0]);
     assert!(matches!(rules.flags()[1].state, FlagState::Dropped { .. }));
-    let events = rules.step(&[None, Some([25.0, 0.5, 0.0])]);
+    let events = game_tick(&mut rules, &[None, Some([25.0, 0.5, 0.0])]);
     assert!(events.contains(&GameEvent::FlagReturned(1)));
 }
 
 #[test]
 fn a_dropped_flag_goes_home_after_17_seconds() {
     let mut rules = ctf();
-    rules.step(&[Some(BLUE_STAND), None]);
+    game_tick(&mut rules, &[Some(BLUE_STAND), None]);
+    // (carried through a tick: its time untouched counts from that one)
+    game_tick(&mut rules, &[Some([25.0, 0.0, 0.0]), None]);
     rules.player_killed(0, None, [25.0, 0.0, 0.0]);
     let mut returned = None;
-    for tick in 1..=FLAG_RETURN_TICKS + 1 {
-        if rules
-            .step(&[None, None])
-            .contains(&GameEvent::FlagReturned(1))
-        {
+    for tick in 1..=FLAG_RETURN_TICKS + 2 {
+        if game_tick(&mut rules, &[None, None]).contains(&GameEvent::FlagReturned(1)) {
             returned = Some(tick);
             break;
         }
     }
-    assert_eq!(returned, Some(FLAG_RETURN_TICKS));
-    assert_eq!(FLAG_RETURN_TICKS, 17 * TICKS_PER_SECOND);
+    assert_eq!(returned, Some(FLAG_RETURN_TICKS + 1));
+    assert_eq!(FLAG_RETURN_TICKS, 17 * 30);
 }
 
 #[test]
@@ -167,11 +191,13 @@ fn the_flag_must_be_home_to_score_when_the_variant_says() {
     rules.join(0);
     rules.join(1);
     // (both take the other's flag; red's carrier reaches home first)
-    rules.step(&[Some(BLUE_STAND), Some(RED_STAND)]);
-    let events = rules.step(&[Some(RED_STAND), Some([10.0, 0.0, 0.0])]);
-    assert!(!events
-        .iter()
-        .any(|e| matches!(e, GameEvent::Captured { .. })));
+    game_tick(&mut rules, &[Some(BLUE_STAND), Some(RED_STAND)]);
+    for _ in 0..2 {
+        let events = game_tick(&mut rules, &[Some(RED_STAND), Some([10.0, 0.0, 0.0])]);
+        assert!(!events
+            .iter()
+            .any(|e| matches!(e, GameEvent::Captured { .. })));
+    }
 }
 
 fn bloodgulch() -> Result<Option<Level>> {

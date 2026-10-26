@@ -1590,17 +1590,20 @@ owed = "the damage animations; reads the object, tag and map world, which the fa
 [function.build_game_variant_ctf]
 class = "matched"
 engine = "sim/src/game.rs"
-owed = "the engine's own tests (sim/tests/game.rs); no check against the original yet"
+check = "sim/tests/game_variant_reference.rs"
+against = "trace"
 
 [function.build_game_variant_slayer]
 class = "matched"
 engine = "sim/src/game.rs"
-owed = "the engine's own tests (sim/tests/game.rs); no check against the original yet"
+check = "sim/tests/game_variant_reference.rs"
+against = "trace"
 
 [function.build_game_variant_team_slayer]
 class = "matched"
 engine = "sim/src/game.rs"
-owed = "the engine's own tests (sim/tests/game.rs); no check against the original yet"
+check = "sim/tests/game_variant_reference.rs"
+against = "trace"
 
 [function.build_horiz_mode_tables]
 class = "replaced"
@@ -2548,33 +2551,39 @@ primitive = "String"
 [function.ctf_award_capture]
 class = "matched"
 engine = "sim/src/game.rs"
-owed = "the engine's own tests (sim/tests/game.rs); no check against the original yet"
+check = "sim/tests/ctf_reference.rs"
+against = "trace"
 
 [function.ctf_engine_player_killed_player]
 class = "partial"
 engine = "sim/src/game.rs"
 leaves_out = ["the oddball, king, race and juggernaut variants", "the game's announcer and score messages"]
-owed = "the engine's own tests (sim/tests/game.rs); no check against the original yet"
+check = "sim/tests/ctf_reference.rs"
+against = "trace"
 
 [function.ctf_engine_update]
 class = "matched"
 engine = "sim/src/game.rs"
-owed = "the engine's own tests (sim/tests/game.rs); no check against the original yet"
+check = "sim/tests/ctf_reference.rs"
+against = "trace"
 
 [function.ctf_get_score]
 class = "matched"
 engine = "sim/src/game.rs"
-owed = "the engine's own tests (sim/tests/game.rs); no check against the original yet"
+check = "sim/tests/ctf_reference.rs"
+against = "trace"
 
 [function.ctf_player_drop_flag]
 class = "matched"
 engine = "sim/src/game.rs"
-owed = "the engine's own tests (sim/tests/game.rs); no check against the original yet"
+check = "sim/tests/ctf_reference.rs"
+against = "trace"
 
 [function.ctf_reset_flag]
 class = "matched"
 engine = "sim/src/game.rs"
-owed = "the engine's own tests (sim/tests/game.rs); no check against the original yet"
+check = "sim/tests/ctf_reference.rs"
+against = "trace"
 
 [function.ctf_state_message_update_warning]
 class = "missing"

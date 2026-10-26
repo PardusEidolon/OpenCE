@@ -25,8 +25,13 @@ pub const MINIMUM_RESPAWN_TICKS: u32 = 3 * TICKS_PER_SECOND;
 pub const FLAG_TOUCH_RADIUS: f32 = 1.0;
 
 /// How long a dropped flag lies untouched before it goes home: 17 seconds
-/// (`CTF_FLAG_RETURN_TIME`).
-pub const FLAG_RETURN_TICKS: u32 = 17 * TICKS_PER_SECOND;
+/// of the game's ticks (`CTF_FLAG_RETURN_TIME`); it goes home on the tick
+/// after.
+pub const FLAG_RETURN_TICKS: u32 = 17 * GAME_TICKS_PER_SECOND;
+
+/// The engine's steps to one of the game's ticks, on which the flags' rules
+/// run.
+const STEPS_PER_GAME_TICK: u32 = TICKS_PER_SECOND / GAME_TICKS_PER_SECOND;
 
 /// How long taken equipment waits to come back when neither its placement
 /// nor its item collection says.
@@ -79,10 +84,13 @@ impl Variant {
         }
     }
 
-    /// Team Slayer (`build_game_variant_team_slayer`).
+    /// Team Slayer, as Halo's default (`build_game_variant_team_slayer`):
+    /// to 50, with ten seconds to wait before a respawn.
     pub fn team_slayer() -> Self {
         Self {
             teams: true,
+            score_to_win: 50,
+            respawn_ticks: engine_ticks(300),
             ..Self::slayer()
         }
     }
@@ -139,7 +147,7 @@ pub enum FlagState {
     Dropped {
         /// Where.
         at: [f32; 3],
-        /// How long it has lain there untouched.
+        /// How many of the game's ticks it has lain there untouched.
         untouched_ticks: u32,
     },
 }
@@ -209,12 +217,19 @@ pub struct Rules {
     ticks: u32,
     over: bool,
     events: Vec<GameEvent>,
+    /// Where each player stood at the last of the game's ticks, which its
+    /// update sees before the objects move (`game_tick`).
+    standing: Vec<Option<[f32; 3]>>,
+    /// The last of the game's ticks each flag was held at the objects'
+    /// update, or sent home: its untouched time counts from then
+    /// (`item_update`, `game_engine_flag_reset`).
+    owned: Vec<u32>,
 }
 
-/// Whether `a` is within `radius` of `b`.
+/// Whether `a` is nearer than `radius` to `b` (`ctf_position_near_flag`).
 fn within(a: [f32; 3], b: [f32; 3], radius: f32) -> bool {
     let d = [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
-    d[0] * d[0] + d[1] * d[1] + d[2] * d[2] <= radius * radius
+    d[0] * d[0] + d[1] * d[1] + d[2] * d[2] < radius * radius
 }
 
 impl Rules {
@@ -233,6 +248,7 @@ impl Rules {
         } else {
             Vec::new()
         };
+        let owned = vec![0; flags.len()];
         Self {
             variant,
             contestants: Vec::new(),
@@ -240,6 +256,8 @@ impl Rules {
             ticks: 0,
             over: false,
             events: Vec::new(),
+            standing: Vec::new(),
+            owned,
         }
     }
 
@@ -366,11 +384,12 @@ impl Rules {
         contestant.deaths += 1;
         contestant.respawn_ticks = wait.max(MINIMUM_RESPAWN_TICKS);
         self.events.push(GameEvent::Killed { victim, killer });
+        let now = self.game_ticks();
         for (index, flag) in self.flags.iter_mut().enumerate() {
             if flag.state == FlagState::Carried(victim) {
                 flag.state = FlagState::Dropped {
                     at,
-                    untouched_ticks: 0,
+                    untouched_ticks: now.saturating_sub(self.owned[index]),
                 };
                 self.events.push(GameEvent::FlagDropped(index));
             }
@@ -408,99 +427,123 @@ impl Rules {
         std::mem::take(&mut self.events)
     }
 
+    /// The flags' rules, on the game's ticks: a flag lying untouched too
+    /// long goes home, the carriers standing at their own stands capture
+    /// (where they stood before this tick's moves, as the game's update
+    /// sees them), the game may end, and then the players where they stand
+    /// now take the enemy's flags and return their own, the lowest player
+    /// first and then the lowest flag.
+    /// (`ctf_engine_weapon_update`, `ctf_engine_player_update`,
+    /// `ctf_engine_update`, `ctf_engine_allow_pick_up`, `ctf_weapon_pickup`)
     fn step_flags(&mut self, positions: &[Option<[f32; 3]>]) {
-        let living = |index: usize| -> Option<[f32; 3]> {
-            match (self.contestants.get(index), positions.get(index)) {
-                (Some(contestant), Some(&Some(at))) if contestant.alive => Some(at),
-                _ => None,
+        if !self.ticks.is_multiple_of(STEPS_PER_GAME_TICK) {
+            return;
+        }
+        let now = self.game_ticks();
+        for (index, flag) in self.flags.iter_mut().enumerate() {
+            match &mut flag.state {
+                FlagState::Carried(_) => continue,
+                FlagState::Dropped {
+                    untouched_ticks, ..
+                } => *untouched_ticks = now.saturating_sub(self.owned[index]),
+                FlagState::Home => {}
             }
-        };
-        let mut changes = Vec::new();
-        for (flag_index, flag) in self.flags.iter().enumerate() {
-            match flag.state {
-                FlagState::Carried(carrier) => {
-                    let Some(at) = living(carrier) else {
-                        continue;
-                    };
-                    let team = self.contestants[carrier].team;
-                    let home = self.flags.iter().find(|own| own.team == team);
-                    let Some(home) = home else {
-                        continue;
-                    };
-                    let at_home = home.state == FlagState::Home;
-                    if within(at, home.stand, FLAG_TOUCH_RADIUS)
-                        && (at_home || !self.variant.flag_at_home_to_score)
-                    {
-                        changes.push(GameEvent::Captured {
-                            flag: flag_index,
-                            by: carrier,
-                        });
-                    }
+            // (one at home goes home again, unseen)
+            if now.saturating_sub(self.owned[index]) > FLAG_RETURN_TICKS {
+                if flag.state != FlagState::Home {
+                    flag.state = FlagState::Home;
+                    self.events.push(GameEvent::FlagReturned(index));
                 }
-                FlagState::Home | FlagState::Dropped { .. } => {
-                    let Some(position) = flag.position() else {
-                        continue;
-                    };
-                    let toucher = (0..self.contestants.len()).find_map(|index| {
-                        let at = living(index)?;
-                        within(at, position, FLAG_TOUCH_RADIUS).then_some(index)
+                self.owned[index] = now;
+            }
+        }
+        let standing = std::mem::take(&mut self.standing);
+        for (carrier, at) in standing.iter().enumerate() {
+            let Some(at) = self.living(carrier, at) else {
+                continue;
+            };
+            let Some(carried) = self.carried_by(carrier) else {
+                continue;
+            };
+            let team = self.contestants[carrier].team;
+            let Some(home) = self.flags.iter().find(|own| own.team == team) else {
+                continue;
+            };
+            let at_home = !self.variant.flag_at_home_to_score || home.state == FlagState::Home;
+            if within(at, home.stand, FLAG_TOUCH_RADIUS) && at_home {
+                self.flags[carried].state = FlagState::Home;
+                self.owned[carried] = now;
+                self.contestants[carrier].score += 1;
+                self.events.push(GameEvent::Captured {
+                    flag: carried,
+                    by: carrier,
+                });
+            }
+        }
+        self.check_score();
+        self.standing = positions.to_vec();
+        if self.over {
+            return;
+        }
+        for (index, flag) in self.flags.iter().enumerate() {
+            if matches!(flag.state, FlagState::Carried(_)) {
+                self.owned[index] = now;
+            }
+        }
+        for (player, at) in positions.iter().enumerate() {
+            let Some(at) = self.living(player, at) else {
+                continue;
+            };
+            if self.carried_by(player).is_some() {
+                continue;
+            }
+            let team = self.contestants[player].team;
+            for index in 0..self.flags.len() {
+                let flag = self.flags[index];
+                let Some(position) = flag.position() else {
+                    continue;
+                };
+                if !within(at, position, FLAG_TOUCH_RADIUS) {
+                    continue;
+                }
+                if flag.team != team {
+                    self.flags[index].state = FlagState::Carried(player);
+                    self.events.push(GameEvent::FlagTaken {
+                        flag: index,
+                        by: player,
                     });
-                    match toucher {
-                        Some(index) if self.contestants[index].team != flag.team => {
-                            let carrying = self
-                                .flags
-                                .iter()
-                                .any(|other| other.state == FlagState::Carried(index));
-                            if !carrying {
-                                changes.push(GameEvent::FlagTaken {
-                                    flag: flag_index,
-                                    by: index,
-                                });
-                            }
-                        }
-                        Some(_)
-                            if flag.state != FlagState::Home && !self.variant.flag_must_reset =>
-                        {
-                            changes.push(GameEvent::FlagReturned(flag_index));
-                        }
-                        _ => {
-                            if let FlagState::Dropped {
-                                untouched_ticks, ..
-                            } = flag.state
-                            {
-                                if untouched_ticks + 1 >= FLAG_RETURN_TICKS {
-                                    changes.push(GameEvent::FlagReturned(flag_index));
-                                }
-                            }
-                        }
-                    }
+                    break;
+                }
+                // (a team's own flag at home is not to be picked up; one
+                // lying elsewhere goes home at its touch, unless it must
+                // be carried)
+                if flag.state != FlagState::Home && !self.variant.flag_must_reset {
+                    self.flags[index].state = FlagState::Home;
+                    self.owned[index] = now;
+                    self.events.push(GameEvent::FlagReturned(index));
                 }
             }
         }
-        for flag in &mut self.flags {
-            if let FlagState::Dropped {
-                untouched_ticks, ..
-            } = &mut flag.state
-            {
-                *untouched_ticks += 1;
-            }
-        }
-        for change in changes {
-            match change {
-                GameEvent::FlagTaken { flag, by } => {
-                    self.flags[flag].state = FlagState::Carried(by);
-                }
-                GameEvent::FlagReturned(flag) => {
-                    self.flags[flag].state = FlagState::Home;
-                }
-                GameEvent::Captured { flag, by } => {
-                    self.flags[flag].state = FlagState::Home;
-                    self.contestants[by].score += 1;
-                }
-                _ => continue,
-            }
-            self.events.push(change);
-        }
+    }
+
+    /// How many of the game's ticks the game has lasted.
+    fn game_ticks(&self) -> u32 {
+        self.ticks / STEPS_PER_GAME_TICK
+    }
+
+    /// Where player `index` stands, if it is alive and stands anywhere.
+    fn living(&self, index: usize, at: &Option<[f32; 3]>) -> Option<[f32; 3]> {
+        self.contestants
+            .get(index)
+            .filter(|contestant| contestant.alive)
+            .and(*at)
+    }
+
+    /// The flag player `index` carries.
+    fn carried_by(&self, index: usize) -> Option<usize> {
+        self.flags
+            .iter()
+            .position(|flag| flag.state == FlagState::Carried(index))
     }
 
     fn check_score(&mut self) {
