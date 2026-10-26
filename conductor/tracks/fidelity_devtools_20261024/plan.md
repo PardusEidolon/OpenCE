@@ -150,7 +150,7 @@ Found in play (2026-10-25): each weapon's firing effects are in the wrong place,
     - [x] The fixes
 - [x] Task: Conductor - User Manual Verification 'Phase 12: Weapons, particles and effects' (Protocol in workflow.md) (superseded: automated verification only, at the user's instruction)
 
-## Phase 13: Vehicles
+## Phase 13: Vehicles [checkpoint: 778aa426]
 Found in play (2026-10-25): getting in and out is too quick; vehicles collide only with other vehicles; turret and gun animations play over and over with no one using them (the warthog's chaingun barrel spins on its own); wheels and tracks don't turn properly and blur; driving sprays too many sprites, the same on every surface; the vehicle HUDs have the wrong icons and meters.
 - [x] Task: Getting in and out c46fd72c
     - [x] Write tests: the enter and exit animations last as many ticks as the original's, against the animation graph at 30 Hz
@@ -170,7 +170,7 @@ Found in play (2026-10-25): getting in and out is too quick; vehicles collide on
 - [x] Task: The vehicle HUDs 084afe99
     - [x] Write tests: each vehicle and seat shows the HUD interface, icons and meters its tags name
     - [x] The fixes
-- [ ] Task: Conductor - User Manual Verification 'Phase 13: Vehicles' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 13: Vehicles' (Protocol in workflow.md) (superseded: automated verification only, at the user's instruction)
 
 ## Phase 14: Death and ragdolls
 Found in play (2026-10-25): when a body dies the ragdoll stretches and splits, the model glitches, and the camera doesn't follow the body.
