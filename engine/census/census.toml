@@ -465,6 +465,11 @@ owed = "the engine cites it, with no check against the original yet"
 class = "matched"
 owed = "the motion sensor's blips; checked by sim/tests/hud.rs"
 
+[function.blip_type_get]
+class = "matched"
+engine = "sim/src/hud.rs"
+owed = "the engine's own tests (sim/src/hud.rs); no check against the original yet"
+
 [function.bsp3d_get_plane_from_designator]
 class = "replaced"
 because = "renderer"
@@ -714,6 +719,11 @@ class = "matched"
 engine = "sim/src/vehicle.rs"
 owed = "the engine's own tests (sim/src/vehicle.rs); no check against the original yet"
 
+[function.crosshairs_draw]
+class = "matched"
+engine = "ffi/src/hud.rs"
+owed = "the engine's own tests (ffi/tests/hud.rs); no check against the original yet"
+
 [function.ctf_award_capture]
 class = "matched"
 engine = "sim/src/game.rs"
@@ -919,9 +929,90 @@ class = "matched"
 engine = "campaign/src/cinematic.rs"
 owed = "the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet"
 
+[function.display_scenario_help]
+class = "partial"
+engine = "campaign/src/presented.rs"
+leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
+owed = "the engine's own tests (campaign/src/presented.rs); no check against the original yet"
+
+[function.dispose_widget_stack]
+class = "matched"
+engine = "ui/src/lib.rs"
+owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+
+[function.draw_bitmap_in_rect]
+class = "matched"
+engine = "ui/src/draw.rs"
+owed = "the engine's own tests (ui/tests/draw.rs); no check against the original yet"
+
 [function.draw_string]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
+
+[function.draw_string_compute_bounds]
+class = "matched"
+engine = "ui/src/draw.rs"
+owed = "the engine's own tests (ui/tests/draw.rs); no check against the original yet"
+
+[function.draw_string_get_string]
+class = "matched"
+engine = "ui/src/draw.rs"
+owed = "the engine's own tests (ui/tests/draw.rs); no check against the original yet"
+
+[function.draw_string_set_color]
+class = "matched"
+engine = "ui/src/draw.rs"
+owed = "the engine's own tests (ui/tests/draw.rs); no check against the original yet"
+
+[function.draw_string_set_draw_mode]
+class = "matched"
+engine = "ui/src/draw.rs"
+owed = "the engine's own tests (ui/tests/draw.rs); no check against the original yet"
+
+[function.draw_string_set_font]
+class = "matched"
+engine = "ui/src/draw.rs"
+owed = "the engine's own tests (ui/tests/draw.rs); no check against the original yet"
+
+[function.draw_string_set_format]
+class = "matched"
+engine = "ui/src/draw.rs"
+owed = "the engine's own tests (ui/tests/draw.rs); no check against the original yet"
+
+[function.draw_string_set_highlight]
+class = "matched"
+engine = "ui/src/draw.rs"
+owed = "the engine's own tests (ui/tests/draw.rs); no check against the original yet"
+
+[function.draw_string_set_tab_stops]
+class = "matched"
+engine = "ui/src/draw.rs"
+owed = "the engine's own tests (ui/tests/draw.rs); no check against the original yet"
+
+[function.edit_text_fix_selection]
+class = "replaced"
+because = "tools"
+stands_in = "app/Sources/OpenCEEngineKit/Shell/LineEditor.swift"
+
+[function.edit_text_get_selection_indices]
+class = "replaced"
+because = "tools"
+stands_in = "app/Sources/OpenCEEngineKit/Shell/LineEditor.swift"
+
+[function.edit_text_handle_key]
+class = "replaced"
+because = "tools"
+stands_in = "app/Sources/OpenCEEngineKit/Shell/LineEditor.swift"
+
+[function.edit_text_new]
+class = "replaced"
+because = "tools"
+stands_in = "app/Sources/OpenCEEngineKit/Shell/LineEditor.swift"
+
+[function.edit_text_selection_reset]
+class = "replaced"
+because = "tools"
+stands_in = "app/Sources/OpenCEEngineKit/Shell/LineEditor.swift"
 
 [function.editor_camera_bump_speed]
 class = "replaced"
@@ -1145,6 +1236,16 @@ owed = "items; reads the object, tag and map world, which the fake worlds do not
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
 
+[function.event_controller_index_compatible_with_widget]
+class = "matched"
+engine = "ui/src/lib.rs"
+owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+
+[function.event_handler_dispatch]
+class = "matched"
+engine = "ui/src/lib.rs"
+owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+
 [function.firing_position_store_evaluation_debug]
 class = "replaced"
 because = "tools"
@@ -1307,6 +1408,11 @@ engine = "campaign/src/presented.rs"
 leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
 owed = "the engine's own tests (campaign/src/lib.rs); no check against the original yet"
 
+[function.get_crosshair_state]
+class = "matched"
+engine = "ffi/src/hud.rs"
+owed = "the engine's own tests (ffi/tests/hud.rs); no check against the original yet"
+
 [function.get_flash_color]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
@@ -1318,6 +1424,11 @@ owed = "the ground's material; reads the object, tag and map world, which the fa
 [function.get_sprite_clip_rect]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
+
+[function.get_ui_argb_white]
+class = "matched"
+engine = "ui/src/draw.rs"
+owed = "the engine's own tests (ui/tests/draw.rs); no check against the original yet"
 
 [function.get_ui_rgb_white]
 class = "matched"
@@ -1580,6 +1691,16 @@ owed = "the engine cites it, with no check against the original yet"
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
 
+[function.hud_draw_bitmap]
+class = "matched"
+engine = "ffi/src/hud.rs"
+owed = "the engine's own tests (ffi/tests/hud.rs); no check against the original yet"
+
+[function.hud_draw_bitmap_direct]
+class = "matched"
+engine = "ffi/src/hud.rs"
+owed = "the engine's own tests (ffi/tests/hud.rs); no check against the original yet"
+
 [function.hud_draw_meter]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
@@ -1588,17 +1709,93 @@ owed = "the engine cites it, with no check against the original yet"
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
 
+[function.hud_draw_screen]
+class = "partial"
+engine = "ffi/src/hud.rs"
+leaves_out = ["the damage indicators, nav points, player names, timer, weapon overlays and messages: the engine draws the unit's and weapon's interfaces, the grenades and the motion sensor"]
+owed = "the engine's own tests (ffi/tests/hud.rs); no check against the original yet"
+
 [function.hud_draw_static_element]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
+
+[function.hud_globals_get_scale]
+class = "matched"
+engine = "ffi/src/hud.rs"
+owed = "the engine's own tests (ffi/tests/hud.rs); no check against the original yet"
 
 [function.hud_render_unit_interface]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
 
+[function.hud_render_weapon_interface]
+class = "matched"
+engine = "ffi/src/hud.rs"
+owed = "the engine's own tests (ffi/tests/hud.rs); no check against the original yet"
+
+[function.hud_retrieve_bitmap_and_bounding_rect]
+class = "matched"
+engine = "ffi/src/hud.rs"
+owed = "the engine's own tests (ffi/tests/hud.rs); no check against the original yet"
+
+[function.hud_set_state_message]
+class = "matched"
+engine = "ffi/src/hud_text.rs"
+owed = "the engine's own tests (ffi/tests/hud_text.rs); no check against the original yet"
+
+[function.hud_set_state_message_icon]
+class = "matched"
+engine = "ffi/src/hud_text.rs"
+owed = "the engine's own tests (ffi/tests/hud_text.rs); no check against the original yet"
+
+[function.hud_set_state_message_text]
+class = "matched"
+engine = "ffi/src/hud_text.rs"
+owed = "the engine's own tests (ffi/tests/hud_text.rs); no check against the original yet"
+
 [function.hud_show_action_response]
 class = "matched"
 owed = "the HUD's messages; reads the object, tag and map world, which the fake worlds do not hold"
+
+[function.input_abstraction_dispose]
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "app/Sources/OpenCEEngineKit/PlayControls.swift"
+
+[function.input_abstraction_get_input_state]
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "app/Sources/OpenCEEngineKit/PlayControls.swift"
+
+[function.input_abstraction_initialize]
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "app/Sources/OpenCEEngineKit/PlayControls.swift"
+
+[function.input_abstraction_reset_controller_detection_timer]
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "app/Sources/OpenCEEngineKit/PlayControls.swift"
+
+[function.input_abstraction_update]
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "app/Sources/OpenCEEngineKit/PlayControls.swift"
+
+[function.input_abstraction_update_local_player_preferences]
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "app/Sources/OpenCEEngineKit/PlayControls.swift"
+
+[function.keyboard_controls_update]
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "app/Sources/OpenCEEngineKit/PlayControls.swift"
+
+[function.keyboard_hold_ticks]
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "app/Sources/OpenCEEngineKit/PlayControls.swift"
 
 [function.limit_pitch]
 class = "matched"
@@ -1708,6 +1905,16 @@ owed = "the engine's own tests (sim/tests/stock_animations.rs); no check against
 class = "matched"
 engine = "sim/src/animation.rs"
 owed = "the engine's own tests (sim/tests/stock_animations.rs); no check against the original yet"
+
+[function.motion_sensor_blip_set_type_and_size]
+class = "matched"
+engine = "sim/src/hud.rs"
+owed = "the engine's own tests (sim/src/hud.rs); no check against the original yet"
+
+[function.motion_sensor_tick]
+class = "matched"
+engine = "sim/src/hud.rs"
+owed = "the engine's own tests (sim/src/hud.rs); no check against the original yet"
 
 [function.motion_sensor_update]
 class = "matched"
@@ -2237,6 +2444,24 @@ class = "replaced"
 because = "renderer"
 stands_in = "app/Sources/OpenCEEngineRender/DecalPass.swift"
 
+[function.player0_joystick_set_is_normal]
+class = "partial"
+engine = "campaign/src/game.rs"
+leaves_out = ["the player's profile: it answers a constant, the mouse's own setting standing in"]
+owed = "the engine's own tests (campaign/src/game.rs); no check against the original yet"
+
+[function.player0_look_invert_pitch]
+class = "partial"
+engine = "campaign/src/presented.rs"
+leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
+owed = "the engine's own tests (campaign/src/presented.rs); no check against the original yet"
+
+[function.player0_look_pitch_is_inverted]
+class = "partial"
+engine = "campaign/src/game.rs"
+leaves_out = ["the player's profile: it answers a constant, the mouse's own setting standing in"]
+owed = "the engine's own tests (campaign/src/game.rs); no check against the original yet"
+
 [function.player_control_update]
 class = "matched"
 engine = "sim/src/player.rs"
@@ -2259,9 +2484,19 @@ owed = "the engine's own tests (sim/src/point_physics.rs); no check against the 
 class = "matched"
 owed = "particles; reads the object, tag and map world, which the fake worlds do not hold (the point physics tag); Phase 12's particles"
 
+[function.pop_widget]
+class = "matched"
+engine = "ui/src/lib.rs"
+owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+
 [function.process_looping_sounds]
 class = "matched"
 owed = "sound; reads the object, tag and map world, which the fake worlds do not hold; Phase 15"
+
+[function.process_ui_widgets]
+class = "matched"
+engine = "ui/src/lib.rs"
+owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
 
 [function.project_point2d]
 class = "replaced"
@@ -2314,6 +2549,11 @@ stands_in = "app/Sources/OpenCEEngineRender/DecalPass.swift"
 class = "replaced"
 because = "renderer"
 stands_in = "app/Sources/OpenCEEngineRender/DecalPass.swift"
+
+[function.push_widget]
+class = "matched"
+engine = "ui/src/lib.rs"
+owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
 
 [function.quantize_real_to_byte_lower_bound]
 class = "matched"
@@ -2385,6 +2625,11 @@ owed = "the engine's own tests (audio/src/mixer.rs); no check against the origin
 class = "matched"
 engine = "audio/src/mixer.rs"
 owed = "the engine's own tests (audio/src/mixer.rs); no check against the original yet"
+
+[function.remap_sticks_for_local_player]
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "ui/src/pointer.rs"
 
 [function.render_blip]
 class = "matched"
@@ -2502,9 +2747,29 @@ class = "replaced"
 because = "renderer"
 stands_in = "app/Sources/OpenCEEngineRender/ModelPass.swift"
 
+[function.render_motion_sensor]
+class = "matched"
+engine = "sim/src/hud.rs"
+owed = "the engine's own tests (sim/src/hud.rs); no check against the original yet"
+
 [function.render_state_bitmap]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
+
+[function.render_state_text]
+class = "matched"
+engine = "ffi/src/hud_text.rs"
+owed = "the engine's own tests (ffi/tests/hud_text.rs); no check against the original yet"
+
+[function.render_ui_widgets]
+class = "matched"
+engine = "ui/src/draw.rs"
+owed = "the engine's own tests (ui/tests/draw.rs); no check against the original yet"
+
+[function.render_weapon_hud]
+class = "matched"
+engine = "ffi/src/hud.rs"
+owed = "the engine's own tests (ffi/tests/hud.rs); no check against the original yet"
 
 [function.scenario_location_water_depth]
 class = "matched"
@@ -2582,6 +2847,87 @@ owed = "the engine's own tests (campaign/tests/cutscenes.rs); no check against t
 class = "matched"
 owed = "cutscene cameras; reads the object, tag and map world, which the fake worlds do not hold; campaign/tests/cutscenes.rs"
 
+[function.scripted_hud_blink_health]
+class = "partial"
+engine = "campaign/src/presented.rs"
+leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
+owed = "the engine's own tests (campaign/src/presented.rs); no check against the original yet"
+
+[function.scripted_hud_blink_motion_sensor]
+class = "partial"
+engine = "campaign/src/presented.rs"
+leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
+owed = "the engine's own tests (campaign/src/presented.rs); no check against the original yet"
+
+[function.scripted_hud_blink_shield]
+class = "partial"
+engine = "campaign/src/presented.rs"
+leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
+owed = "the engine's own tests (campaign/src/presented.rs); no check against the original yet"
+
+[function.scripted_hud_get_timer_ticks]
+class = "matched"
+engine = "campaign/src/game.rs"
+owed = "the engine's own tests (campaign/src/game.rs); no check against the original yet"
+
+[function.scripted_hud_pause_timer]
+class = "matched"
+engine = "campaign/src/game.rs"
+owed = "the engine's own tests (campaign/src/game.rs); no check against the original yet"
+
+[function.scripted_hud_set_objective]
+class = "partial"
+engine = "campaign/src/presented.rs"
+leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
+owed = "the engine's own tests (campaign/src/presented.rs); no check against the original yet"
+
+[function.scripted_hud_set_timer_position]
+class = "partial"
+engine = "campaign/src/presented.rs"
+leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
+owed = "the engine's own tests (campaign/src/presented.rs); no check against the original yet"
+
+[function.scripted_hud_set_timer_time]
+class = "matched"
+engine = "campaign/src/game.rs"
+owed = "the engine's own tests (campaign/src/game.rs); no check against the original yet"
+
+[function.scripted_hud_set_timer_warning_cutoff]
+class = "partial"
+engine = "campaign/src/presented.rs"
+leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
+owed = "the engine's own tests (campaign/src/presented.rs); no check against the original yet"
+
+[function.scripted_hud_show_crosshair]
+class = "partial"
+engine = "campaign/src/presented.rs"
+leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
+owed = "the engine's own tests (campaign/src/presented.rs); no check against the original yet"
+
+[function.scripted_hud_show_health]
+class = "partial"
+engine = "campaign/src/presented.rs"
+leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
+owed = "the engine's own tests (campaign/src/presented.rs); no check against the original yet"
+
+[function.scripted_hud_show_motion_sensor]
+class = "partial"
+engine = "campaign/src/presented.rs"
+leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
+owed = "the engine's own tests (campaign/src/presented.rs); no check against the original yet"
+
+[function.scripted_hud_show_shield]
+class = "partial"
+engine = "campaign/src/presented.rs"
+leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
+owed = "the engine's own tests (campaign/src/presented.rs); no check against the original yet"
+
+[function.scripted_hud_show_timer]
+class = "partial"
+engine = "campaign/src/presented.rs"
+leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
+owed = "the engine's own tests (campaign/src/presented.rs); no check against the original yet"
+
 [function.scripted_looping_sound_set_alternate]
 class = "matched"
 engine = "campaign/src/sounds.rs"
@@ -2602,6 +2948,16 @@ class = "matched"
 engine = "campaign/src/sounds.rs"
 owed = "the engine's own tests (campaign/src/sounds.rs); no check against the original yet"
 
+[function.scripted_show_hud]
+class = "matched"
+engine = "campaign/src/game.rs"
+owed = "the engine's own tests (campaign/src/game.rs); no check against the original yet"
+
+[function.scripted_show_hud_help_text]
+class = "matched"
+engine = "campaign/src/game.rs"
+owed = "the engine's own tests (campaign/src/game.rs); no check against the original yet"
+
 [function.scripted_sound_new]
 class = "matched"
 engine = "campaign/src/sounds.rs"
@@ -2616,9 +2972,34 @@ owed = "the engine's own tests (campaign/src/sounds.rs); no check against the or
 class = "matched"
 owed = "sound; reads the object, tag and map world, which the fake worlds do not hold (the sound tag); campaign/tests/sounds.rs"
 
+[function.search_and_replace]
+class = "matched"
+engine = "ui/src/lib.rs"
+owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+
 [function.seed_random_direction3d]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
+
+[function.set_default_game_input_preferences]
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "app/Sources/OpenCEEngineKit/PlayControls.swift"
+
+[function.should_draw_object]
+class = "matched"
+engine = "sim/src/hud.rs"
+owed = "the engine's own tests (sim/src/hud.rs); no check against the original yet"
+
+[function.should_flip_sticks_for_local_player]
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "ui/src/pointer.rs"
+
+[function.should_track_object]
+class = "matched"
+engine = "sim/src/hud.rs"
+owed = "the engine's own tests (sim/src/hud.rs); no check against the original yet"
 
 [function.slayer_engine_player_killed_player]
 class = "partial"
@@ -2774,9 +3155,79 @@ class = "matched"
 engine = "audio/src/player.rs"
 owed = "the engine's own tests (audio/src/player.rs); no check against the original yet"
 
+[function.spinner_list_update]
+class = "matched"
+engine = "ui/src/lib.rs"
+owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+
 [function.structure_bsp_get_cluster_encoded_sound_distance]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
+
+[function.terminal_clear]
+class = "replaced"
+because = "tools"
+stands_in = "app/Sources/OpenCEEngineKit/Shell/ShellOverlay.swift"
+
+[function.terminal_dispose]
+class = "replaced"
+because = "tools"
+stands_in = "app/Sources/OpenCEEngineKit/Shell/ShellOverlay.swift"
+
+[function.terminal_draw]
+class = "replaced"
+because = "tools"
+stands_in = "app/Sources/OpenCEEngineKit/Shell/ShellOverlay.swift"
+
+[function.terminal_gets_active]
+class = "replaced"
+because = "tools"
+stands_in = "app/Sources/OpenCEEngineKit/Shell/ShellOverlay.swift"
+
+[function.terminal_gets_begin]
+class = "replaced"
+because = "tools"
+stands_in = "app/Sources/OpenCEEngineKit/Shell/ShellOverlay.swift"
+
+[function.terminal_gets_end]
+class = "replaced"
+because = "tools"
+stands_in = "app/Sources/OpenCEEngineKit/Shell/ShellOverlay.swift"
+
+[function.terminal_initialize]
+class = "replaced"
+because = "tools"
+stands_in = "app/Sources/OpenCEEngineKit/Shell/ShellOverlay.swift"
+
+[function.terminal_new_line]
+class = "replaced"
+because = "tools"
+stands_in = "app/Sources/OpenCEEngineKit/Shell/ShellOverlay.swift"
+
+[function.terminal_printf]
+class = "replaced"
+because = "tools"
+stands_in = "app/Sources/OpenCEEngineKit/Shell/ShellOverlay.swift"
+
+[function.terminal_remove_line]
+class = "replaced"
+because = "tools"
+stands_in = "app/Sources/OpenCEEngineKit/Shell/ShellOverlay.swift"
+
+[function.terminal_update]
+class = "replaced"
+because = "tools"
+stands_in = "app/Sources/OpenCEEngineKit/Shell/ShellOverlay.swift"
+
+[function.terminal_update_input]
+class = "replaced"
+because = "tools"
+stands_in = "app/Sources/OpenCEEngineKit/Shell/ShellOverlay.swift"
+
+[function.terminal_update_output]
+class = "replaced"
+because = "tools"
+stands_in = "app/Sources/OpenCEEngineKit/Shell/ShellOverlay.swift"
 
 [function.track_loop_impulse_sound]
 class = "matched"
@@ -2802,9 +3253,199 @@ owed = "the engine's own tests (sim/src/projectile.rs); no check against the ori
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
 
+[function.ui_debug_log_click]
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "ui/src/pointer.rs"
+
+[function.ui_debug_log_keyboard_tap]
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "ui/src/pointer.rs"
+
+[function.ui_mouse_child_index]
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "ui/src/pointer.rs"
+
+[function.ui_mouse_fit_button_targets]
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "ui/src/pointer.rs"
+
+[function.ui_mouse_give_focus]
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "ui/src/pointer.rs"
+
+[function.ui_mouse_key_button]
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "ui/src/pointer.rs"
+
+[function.ui_mouse_label_text_right]
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "ui/src/pointer.rs"
+
+[function.ui_mouse_list_directions]
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "ui/src/pointer.rs"
+
+[function.ui_mouse_list_shows_several]
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "ui/src/pointer.rs"
+
+[function.ui_mouse_menu]
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "ui/src/pointer.rs"
+
+[function.ui_mouse_menus_active]
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "ui/src/pointer.rs"
+
+[function.ui_mouse_merge_setting_rows]
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "ui/src/pointer.rs"
+
+[function.ui_mouse_note_list_step]
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "ui/src/pointer.rs"
+
+[function.ui_mouse_note_slot_band]
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "ui/src/pointer.rs"
+
+[function.ui_mouse_note_target]
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "ui/src/pointer.rs"
+
+[function.ui_mouse_press]
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "ui/src/pointer.rs"
+
+[function.ui_mouse_step_list_to_slot]
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "ui/src/pointer.rs"
+
+[function.ui_mouse_target_at]
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "ui/src/pointer.rs"
+
+[function.ui_mouse_wheel_room]
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "ui/src/pointer.rs"
+
+[function.ui_mouse_wheel_skips_child]
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "ui/src/pointer.rs"
+
+[function.ui_mouse_wheel_widget]
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "ui/src/pointer.rs"
+
+[function.ui_mouse_widen_values]
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "ui/src/pointer.rs"
+
+[function.ui_mouse_widget_has_focus]
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "ui/src/pointer.rs"
+
+[function.ui_mouse_widget_is_item]
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "ui/src/pointer.rs"
+
+[function.ui_play_audio_feedback_sound]
+class = "matched"
+engine = "ui/src/lib.rs"
+owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+
 [function.ui_start_main_menu_music]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
+
+[function.ui_widget_add_child]
+class = "matched"
+engine = "ui/src/lib.rs"
+owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+
+[function.ui_widget_delete]
+class = "matched"
+engine = "ui/src/lib.rs"
+owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+
+[function.ui_widget_delete_children_recursive]
+class = "matched"
+engine = "ui/src/lib.rs"
+owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+
+[function.ui_widget_launch_widget]
+class = "matched"
+engine = "ui/src/lib.rs"
+owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+
+[function.ui_widget_load_by_name_or_tag]
+class = "matched"
+engine = "ui/src/lib.rs"
+owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+
+[function.ui_widget_load_children_recursive]
+class = "matched"
+engine = "ui/src/lib.rs"
+owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+
+[function.ui_widgets_active]
+class = "matched"
+engine = "ui/src/lib.rs"
+owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+
+[function.ui_widgets_active_for_local_player]
+class = "matched"
+engine = "ui/src/lib.rs"
+owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+
+[function.ui_widgets_close_all]
+class = "matched"
+engine = "ui/src/lib.rs"
+owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+
+[function.ui_widgets_close_all_for_local_player]
+class = "matched"
+engine = "ui/src/lib.rs"
+owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+
+[function.ui_widgets_delete_history]
+class = "matched"
+engine = "ui/src/lib.rs"
+owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+
+[function.ui_widgets_pop_stack]
+class = "matched"
+engine = "ui/src/lib.rs"
+owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+
+[function.ui_widgets_process_mouse]
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "ui/src/pointer.rs"
 
 [function.unattached_impulse_sound_new]
 class = "matched"
@@ -3104,6 +3745,11 @@ class = "matched"
 engine = "sim/src/vehicle.rs"
 owed = "the engine's own tests (sim/src/vehicle.rs); no check against the original yet"
 
+[function.update_motion_sensor]
+class = "matched"
+engine = "sim/src/hud.rs"
+owed = "the engine's own tests (sim/src/hud.rs); no check against the original yet"
+
 [function.update_potentially_audible_looping_sound]
 class = "matched"
 engine = "ffi/src/sound_world.rs"
@@ -3158,6 +3804,116 @@ owed = "the engine's own tests (campaign/src/units.rs); no check against the ori
 class = "matched"
 engine = "sim/src/vehicle.rs"
 owed = "the engine's own tests (sim/src/vehicle.rs); no check against the original yet"
+
+[function.virtual_keyboard_active]
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "ui/src/pointer.rs"
+
+[function.virtual_keyboard_backspace]
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "ui/src/pointer.rs"
+
+[function.virtual_keyboard_cancel]
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "ui/src/pointer.rs"
+
+[function.virtual_keyboard_click]
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "ui/src/pointer.rs"
+
+[function.virtual_keyboard_close]
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "ui/src/pointer.rs"
+
+[function.virtual_keyboard_dispose]
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "ui/src/pointer.rs"
+
+[function.virtual_keyboard_free_space_in_text_buffer]
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "ui/src/pointer.rs"
+
+[function.virtual_keyboard_get_character]
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "ui/src/pointer.rs"
+
+[function.virtual_keyboard_get_current_character]
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "ui/src/pointer.rs"
+
+[function.virtual_keyboard_initialize]
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "ui/src/pointer.rs"
+
+[function.virtual_keyboard_last_exit_saved_text]
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "ui/src/pointer.rs"
+
+[function.virtual_keyboard_launch]
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "ui/src/pointer.rs"
+
+[function.virtual_keyboard_process]
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "ui/src/pointer.rs"
+
+[function.virtual_keyboard_process_internal]
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "ui/src/pointer.rs"
+
+[function.virtual_keyboard_render]
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "ui/src/pointer.rs"
+
+[function.virtual_keyboard_render_internal]
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "ui/src/pointer.rs"
+
+[function.virtual_keyboard_select]
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "ui/src/pointer.rs"
+
+[function.virtual_keyboard_tab_down]
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "ui/src/pointer.rs"
+
+[function.virtual_keyboard_tab_left]
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "ui/src/pointer.rs"
+
+[function.virtual_keyboard_tab_right]
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "ui/src/pointer.rs"
+
+[function.virtual_keyboard_tab_up]
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "ui/src/pointer.rs"
+
+[function.virtual_keyboard_target_rectangles]
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "ui/src/pointer.rs"
 
 [function.weapon_effect_new]
 class = "matched"
@@ -3287,9 +4043,129 @@ class = "matched"
 engine = "ffi/src/particles/weather.rs"
 owed = "the engine's own tests (ffi/src/particles/weather.rs); no check against the original yet"
 
+[function.widget_event_function_list_widget_goto_next_item]
+class = "matched"
+engine = "ui/src/lib.rs"
+owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+
+[function.widget_event_function_list_widget_goto_previous_item]
+class = "matched"
+engine = "ui/src/lib.rs"
+owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+
+[function.widget_instance_can_handle_events]
+class = "matched"
+engine = "ui/src/lib.rs"
+owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+
+[function.widget_instance_can_receive_events]
+class = "matched"
+engine = "ui/src/lib.rs"
+owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+
+[function.widget_instance_count_children]
+class = "matched"
+engine = "ui/src/lib.rs"
+owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+
+[function.widget_instance_find_by_tag_index]
+class = "matched"
+engine = "ui/src/lib.rs"
+owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+
+[function.widget_instance_find_by_tag_index_recursive]
+class = "matched"
+engine = "ui/src/lib.rs"
+owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+
+[function.widget_instance_get_child_index_from_parent]
+class = "matched"
+engine = "ui/src/lib.rs"
+owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+
+[function.widget_instance_get_cumulative_alpha_modifier]
+class = "matched"
+engine = "ui/src/draw.rs"
+owed = "the engine's own tests (ui/tests/draw.rs); no check against the original yet"
+
+[function.widget_instance_get_nth_child]
+class = "matched"
+engine = "ui/src/lib.rs"
+owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+
+[function.widget_instance_get_tail_child_widget]
+class = "matched"
+engine = "ui/src/lib.rs"
+owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+
+[function.widget_instance_get_topmost_parent]
+class = "matched"
+engine = "ui/src/lib.rs"
+owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+
+[function.widget_instance_give_focus_by_tag]
+class = "matched"
+engine = "ui/src/lib.rs"
+owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+
+[function.widget_instance_give_focus_directly]
+class = "matched"
+engine = "ui/src/lib.rs"
+owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+
+[function.widget_instance_go_back_to_previous]
+class = "matched"
+engine = "ui/src/lib.rs"
+owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+
+[function.widget_instance_initialize]
+class = "matched"
+engine = "ui/src/lib.rs"
+owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+
+[function.widget_instance_process_one_event_recursive]
+class = "matched"
+engine = "ui/src/lib.rs"
+owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+
 [function.widget_instance_render_recursive]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
+
+[function.widget_instance_render_spinner_list]
+class = "matched"
+engine = "ui/src/draw.rs"
+owed = "the engine's own tests (ui/tests/draw.rs); no check against the original yet"
+
+[function.widget_instance_render_text_box]
+class = "matched"
+engine = "ui/src/draw.rs"
+owed = "the engine's own tests (ui/tests/draw.rs); no check against the original yet"
+
+[function.widget_instance_set_focused_child_by_index]
+class = "matched"
+engine = "ui/src/lib.rs"
+owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+
+[function.widget_instance_tab_to_next_valid_widget]
+class = "matched"
+engine = "ui/src/lib.rs"
+owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+
+[function.widget_instance_tab_to_previous_valid_widget]
+class = "matched"
+engine = "ui/src/lib.rs"
+owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+
+[function.widget_takes_any_controller]
+class = "matched"
+engine = "ui/src/lib.rs"
+owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+
+[function.widget_takes_events_of_controller]
+class = "matched"
+engine = "ui/src/lib.rs"
+owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
 
 [function.write_sound_preferences]
 class = "partial"
