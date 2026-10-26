@@ -215,6 +215,27 @@ because = "renderer"
 stands_in = "app/Sources/OpenCEEngineRender/ShadowPass.swift"
 
 [[rule]]
+file = "physics/bsp2d.c"
+class = "replaced"
+because = "library"
+stands_in = "physics/src/lib.rs"
+lives_on = "the same floors, walls and line of sight: Jolt answers the queries (physics/src/lib.rs) on a mesh of the same collision BSP surfaces (physics/src/mesh.rs); the Partial entries of collision_fix_pill and the queries say where an edge can differ"
+
+[[rule]]
+file = "physics/bsp3d.c"
+class = "replaced"
+because = "library"
+stands_in = "physics/src/lib.rs"
+lives_on = "the same floors, walls and line of sight: Jolt answers the queries (physics/src/lib.rs) on a mesh of the same collision BSP surfaces (physics/src/mesh.rs); the Partial entries of collision_fix_pill and the queries say where an edge can differ"
+
+[[rule]]
+file = "physics/collision_bsp.c"
+class = "replaced"
+because = "library"
+stands_in = "physics/src/lib.rs"
+lives_on = "the same floors, walls and line of sight: Jolt answers the queries (physics/src/lib.rs) on a mesh of the same collision BSP surfaces (physics/src/mesh.rs); the Partial entries of collision_fix_pill and the queries say where an edge can differ"
+
+[[rule]]
 file = "physics/collision_usage.c"
 class = "replaced"
 because = "tools"
