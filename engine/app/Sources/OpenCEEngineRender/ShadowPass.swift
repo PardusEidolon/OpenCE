@@ -150,8 +150,8 @@ final class ShadowPass {
     /// uniforms.
     func encode(
         into commands: MTLCommandBuffer, camera: ViewCamera, aspect: Float, towards: SIMD3<Float>?,
-        wrap: MTLSamplerState, level: (MTLRenderCommandEncoder, Casting) -> Void,
-        objects: (MTLRenderCommandEncoder, Casting) -> Void
+        wrap: MTLSamplerState, level: (MTLRenderCommandEncoder, Casting, simd_float4x4) -> Void,
+        objects: (MTLRenderCommandEncoder, Casting, simd_float4x4) -> Void
     ) {
         uniforms = Self.uniforms(camera: camera, aspect: aspect, towards: towards)
         guard uniforms.forward.w > 0 else { return }
@@ -168,7 +168,7 @@ final class ShadowPass {
         let matrices = [uniforms.cascades.0, uniforms.cascades.1, uniforms.cascades.2, uniforms.cascades.3]
         func draw(
             into target: MTLTexture, clear: Bool, label: String, casting: Casting,
-            casters: (MTLRenderCommandEncoder, Casting) -> Void
+            casters: (MTLRenderCommandEncoder, Casting, simd_float4x4) -> Void
         ) {
             for (slice, matrix) in matrices.enumerated() {
                 let pass = MTLRenderPassDescriptor()
@@ -187,7 +187,7 @@ final class ShadowPass {
                 var light = matrix
                 encoder.setVertexBytes(&light, length: MemoryLayout<simd_float4x4>.stride, index: 1)
                 encoder.setFragmentSamplerState(wrap, index: 0)
-                casters(encoder, casting)
+                casters(encoder, casting, matrix)
                 encoder.endEncoding()
             }
         }

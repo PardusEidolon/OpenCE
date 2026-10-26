@@ -275,6 +275,9 @@ impl Builder<'_> {
                     lightmap_page: None,
                     unbaked: false,
                     center: part.centroid.iter().map(|&value| finite(value)).collect(),
+                    // (skinned: the object's bounds stand for its parts')
+                    bounds_min: Vec::new(),
+                    bounds_max: Vec::new(),
                 });
             }
             geometries.push(RenderGeometry { parts });

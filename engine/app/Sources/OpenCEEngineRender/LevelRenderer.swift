@@ -344,6 +344,10 @@ public final class LevelRenderer {
         /// light's directions.
         var textures: [MTLTexture]
         var center: SIMD3<Float>
+        /// The box around its triangles (everywhere, if the level gave
+        /// none), for culling.
+        var low = SIMD3<Float>(repeating: -.infinity)
+        var high = SIMD3<Float>(repeating: .infinity)
         /// Its material, whose animation it takes each frame.
         var material: Int
         /// Its page in the BSP's lightmaps, when it is drawn with one.
@@ -583,10 +587,14 @@ public final class LevelRenderer {
                         uniforms.environment($0, texture: texture, cube: cube, white: white, whiteCube: whiteCube)
                     } ?? [white, white, white, whiteCube]
             }
-            let made = Draw(
+            var made = Draw(
                 firstIndex: Int(draw.firstIndex), indexCount: Int(draw.indexCount),
                 blend: blend, uniforms: uniforms, textures: bound + [white], center: center,
                 material: Int(draw.material), lightmapPage: draw.lightmapPage)
+            if draw.boundsMin.count == 3, draw.boundsMax.count == 3 {
+                made.low = SIMD3(draw.boundsMin[0], draw.boundsMin[1], draw.boundsMin[2])
+                made.high = SIMD3(draw.boundsMax[0], draw.boundsMax[1], draw.boundsMax[2])
+            }
             if made.blend == nil {
                 opaqueDraws.append(made)
             } else {
@@ -914,9 +922,9 @@ public final class LevelRenderer {
             shadows.encode(
                 into: commands, camera: camera, aspect: Float(frame.width) / Float(max(frame.height, 1)),
                 towards: towards, wrap: wrap,
-                level: { encoder, casting in self.encodeShadowCasters(encoder, casting) },
-                objects: { encoder, casting in
-                    self.models.encodeShadowCasters(prepared, casting, into: encoder)
+                level: { encoder, casting, light in self.encodeShadowCasters(encoder, casting, light) },
+                objects: { encoder, casting, light in
+                    self.models.encodeShadowCasters(prepared, casting, light: light, into: encoder)
                 })
         }
         var shadowUniforms = shadows.uniforms
@@ -925,9 +933,9 @@ public final class LevelRenderer {
                 switches.lights ? lights : [], camera: camera,
                 aspect: Float(frame.width) / Float(max(frame.height, 1)))
             let casting = shadows.pipelines
-            lightPass.encodeShadows(lightFrame, into: commands, wrap: wrap) { encoder in
-                self.encodeShadowCasters(encoder, casting.level)
-                self.models.encodeShadowCasters(prepared, casting.model, into: encoder)
+            lightPass.encodeShadows(lightFrame, into: commands, wrap: wrap) { encoder, face in
+                self.encodeShadowCasters(encoder, casting.level, face)
+                self.models.encodeShadowCasters(prepared, casting.model, light: face, into: encoder)
             }
             return lightFrame
         }
@@ -988,7 +996,8 @@ public final class LevelRenderer {
         encoder.setVertexBuffer(vertices, offset: 0, index: 0)
         encoder.setRenderPipelineState(opaque)
         encoder.setDepthStencilState(depthWrite)
-        for draw in opaqueDraws {
+        let view = Frustum(viewProjection)
+        for draw in opaqueDraws where view.contains(low: draw.low, high: draw.high) {
             encode(draw, animation, encoder, stock: stock)
         }
         models.encode(prepared, blendedParts: false, animation: animation, into: encoder)
@@ -1033,7 +1042,7 @@ public final class LevelRenderer {
         bind(blendedEncoder)
         blendedEncoder.setDepthStencilState(depthTest)
         // far to near
-        let far = blendedDraws.sorted {
+        let far = blendedDraws.filter { view.contains(low: $0.low, high: $0.high) }.sorted {
             distance_squared($0.center, camera.position) > distance_squared($1.center, camera.position)
         }
         for draw in far {
@@ -1265,12 +1274,22 @@ public final class LevelRenderer {
             }, objects: { encoder in self.models.encodePick(prepared, into: encoder) })
     }
 
-    /// The level's opaque and alpha-tested surfaces, as the sun's
-    /// shadows' casters.
-    private func encodeShadowCasters(_ encoder: MTLRenderCommandEncoder, _ casting: ShadowPass.Casting) {
+    /// The opaque draws whose boxes may be in the view of `viewProjection`,
+    /// by their indices.
+    func visibleOpaqueDraws(_ viewProjection: simd_float4x4) -> [Int] {
+        let view = Frustum(viewProjection)
+        return opaqueDraws.indices.filter { view.contains(low: opaqueDraws[$0].low, high: opaqueDraws[$0].high) }
+    }
+
+    /// The level's opaque and alpha-tested surfaces in the view of
+    /// `light` (a shadow map's matrix), as the shadows' casters.
+    private func encodeShadowCasters(
+        _ encoder: MTLRenderCommandEncoder, _ casting: ShadowPass.Casting, _ light: simd_float4x4
+    ) {
         encoder.setVertexBuffer(vertices, offset: 0, index: 0)
         var current: MTLRenderPipelineState?
-        for draw in opaqueDraws {
+        let view = Frustum(light)
+        for draw in opaqueDraws where view.contains(low: draw.low, high: draw.high) {
             let cutout = draw.uniforms.alphaTested != 0
             let pipeline = cutout ? casting.cutout : casting.depth
             if current !== pipeline {

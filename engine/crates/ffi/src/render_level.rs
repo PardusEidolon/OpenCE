@@ -257,7 +257,9 @@ fn chicago_function(function: i16) -> u8 {
         .unwrap_or(0)
 }
 
-/// A draw: a material's triangles.
+/// A draw: a material's triangles, or those of one cell of the world
+/// ([`CELL`] on a side) where an opaque material spans more, so that a
+/// view or a shadow draws only the cells it sees.
 #[derive(Clone, Debug, PartialEq, uniffi::Record)]
 pub struct RenderDraw {
     /// Its first index, in the index buffer.
@@ -275,9 +277,19 @@ pub struct RenderDraw {
     /// with no lightmaps (its `no_lightmap` mode); otherwise it would be
     /// drawn fullbright.
     pub unbaked: bool,
-    /// The middle of its vertices, for drawing blended ones far to near.
+    /// The middle of its material's vertices, for drawing blended ones far
+    /// to near.
     pub center: Vec<f32>,
+    /// The least corner of the box around its triangles (none for a
+    /// model's part).
+    pub bounds_min: Vec<f32>,
+    /// The greatest corner.
+    pub bounds_max: Vec<f32>,
 }
+
+/// The side of the cells an opaque material's triangles are drawn in, in
+/// world units.
+pub const CELL: f32 = 16.0;
 
 /// A texture's format, as Metal takes it.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, uniffi::Enum)]
@@ -398,14 +410,13 @@ impl RenderLevel {
         for (number, lightmap) in structure.lightmaps.iter().enumerate() {
             let page = builder.lightmap_texture(structure, lightmap);
             for material in &lightmap.materials {
-                let Some(draw) = builder.draw(structure, material, page, number as u32) else {
-                    continue;
-                };
-                let kind = builder.out.materials[draw.material as usize].kind;
-                if kind == MaterialKind::Blended {
-                    blended.push(draw);
-                } else {
-                    builder.out.draws.push(draw);
+                for draw in builder.draw(structure, material, page, number as u32) {
+                    let kind = builder.out.materials[draw.material as usize].kind;
+                    if kind == MaterialKind::Blended {
+                        blended.push(draw);
+                    } else {
+                        builder.out.draws.push(draw);
+                    }
                 }
             }
         }
@@ -637,35 +648,66 @@ impl Builder<'_> {
     }
 
     /// A material's vertices and triangles added to the buffers, and its
-    /// draw; None if it is not drawn or has no whole triangles.
+    /// draws (one a cell, for an opaque material); none if it is not drawn
+    /// or has no whole triangles.
     fn draw(
         &mut self,
         structure: &StructureBsp,
         material: &Material,
         lightmap: Option<u32>,
         page: u32,
-    ) -> Option<RenderDraw> {
+    ) -> Vec<RenderDraw> {
+        self.draws(structure, material, lightmap, page)
+            .unwrap_or_default()
+    }
+
+    fn draws(
+        &mut self,
+        structure: &StructureBsp,
+        material: &Material,
+        lightmap: Option<u32>,
+        page: u32,
+    ) -> Option<Vec<RenderDraw>> {
         let index = self.material(material.shader.as_ref()?)?;
         let first = usize::try_from(material.first_surface).ok()?;
         let count = usize::try_from(material.surface_count).ok()?;
         let surfaces = structure.surfaces.get(first..first.checked_add(count)?)?;
         let vertex_count = material.vertices.len();
         let base = u32::try_from(self.out.vertices.len() / VERTEX_STRIDE).ok()?;
-        let first_index = self.out.indices.len() as u32;
-        for triangle in surfaces {
-            // (the importer checks them; a triangle past its vertices is
-            // dropped all the same, never drawn from another's)
-            if triangle
+        let kind = self
+            .out
+            .materials
+            .get(index as usize)
+            .map(|material| material.kind);
+        // (the importer checks them; a triangle past its vertices is
+        // dropped all the same, never drawn from another's)
+        let whole = surfaces.iter().filter(|triangle| {
+            triangle
                 .iter()
                 .all(|&vertex| usize::from(vertex) < vertex_count)
-            {
-                self.out
-                    .indices
-                    .extend(triangle.iter().map(|&vertex| base + u32::from(vertex)));
-            }
+        });
+        // each triangle in the cell of its middle, the cells in order (the
+        // blended in one, drawn far to near by the material's middle)
+        let position = |vertex: u16| material.vertices[usize::from(vertex)].position;
+        let mut cells: std::collections::BTreeMap<[i32; 3], Vec<[u16; 3]>> =
+            std::collections::BTreeMap::new();
+        for triangle in whole {
+            let key = if kind == Some(MaterialKind::Blended) {
+                [0; 3]
+            } else {
+                std::array::from_fn(|axis| {
+                    let middle = triangle
+                        .iter()
+                        .map(|&vertex| position(vertex)[axis])
+                        .sum::<f32>()
+                        / 3.0;
+                    // (saturating, for a vertex at infinity)
+                    libm::floorf(middle / CELL) as i32
+                })
+            };
+            cells.entry(key).or_default().push(*triangle);
         }
-        let index_count = self.out.indices.len() as u32 - first_index;
-        if index_count == 0 {
+        if cells.is_empty() {
             return None;
         }
         let lit = material.lightmap_vertices.len() == vertex_count;
@@ -693,21 +735,34 @@ impl Builder<'_> {
                 center[axis] += value / vertex_count as f32;
             }
         }
-        let kind = self
-            .out
-            .materials
-            .get(index as usize)
-            .map(|material| material.kind);
-        Some(RenderDraw {
-            first_index,
-            index_count,
-            material: index,
-            lightmap: if lit { lightmap } else { None },
-            lightmap_page: (lit && lightmap.is_some()).then_some(page),
-            unbaked: structure.lightmap_bitmap.is_none()
-                && matches!(kind, Some(MaterialKind::Opaque | MaterialKind::AlphaTested)),
-            center: center.to_vec(),
-        })
+        let mut draws = Vec::with_capacity(cells.len());
+        for triangles in cells.values() {
+            let first_index = self.out.indices.len() as u32;
+            let mut low = [f32::INFINITY; 3];
+            let mut high = [f32::NEG_INFINITY; 3];
+            for triangle in triangles {
+                for &vertex in triangle {
+                    self.out.indices.push(base + u32::from(vertex));
+                    for (axis, &value) in position(vertex).iter().enumerate() {
+                        low[axis] = low[axis].min(value);
+                        high[axis] = high[axis].max(value);
+                    }
+                }
+            }
+            draws.push(RenderDraw {
+                first_index,
+                index_count: self.out.indices.len() as u32 - first_index,
+                material: index,
+                lightmap: if lit { lightmap } else { None },
+                lightmap_page: (lit && lightmap.is_some()).then_some(page),
+                unbaked: structure.lightmap_bitmap.is_none()
+                    && matches!(kind, Some(MaterialKind::Opaque | MaterialKind::AlphaTested)),
+                center: center.to_vec(),
+                bounds_min: low.to_vec(),
+                bounds_max: high.to_vec(),
+            });
+        }
+        Some(draws)
     }
 }
 
@@ -1063,6 +1118,82 @@ pub(crate) mod tests {
         );
         assert_eq!(built.bounds, [[-1.0, 1.0], [-2.0, 2.0], [0.0, 3.0]]);
         assert!(RenderLevel::build(&level(), 1).is_none());
+    }
+
+    #[test]
+    fn an_opaque_material_wider_than_a_cell_is_drawn_a_cell_at_a_time() {
+        // the ground's triangle copied along x, one a cell, and the glass's
+        // as wide (blended: one draw all the same)
+        let mut level = level();
+        let structure = &mut level.structure_bsps[0];
+        let ground = &mut structure.lightmaps[0].materials[1];
+        ground.vertices = (0..4)
+            .flat_map(|cell| {
+                let x = cell as f32 * CELL + 1.0;
+                [vertex(x, 0.0), vertex(x + 2.0, 0.0), vertex(x, 2.0)]
+            })
+            .collect();
+        ground.lightmap_vertices = Vec::new();
+        ground.first_surface = 3;
+        ground.surface_count = 4;
+        // (backwards, so that the draws' order is the cells', not theirs)
+        structure.surfaces = vec![
+            [0, 1, 2],
+            [2, 1, 9],
+            [0, 2, 1],
+            [9, 10, 11],
+            [6, 7, 8],
+            [3, 4, 5],
+            [0, 1, 2],
+        ];
+        let wide = ground.vertices.clone();
+        let glass = &mut structure.lightmaps[0].materials[0];
+        glass.vertices = wide;
+        glass.lightmap_vertices = Vec::new();
+        glass.first_surface = 3;
+        glass.surface_count = 4;
+        let Some(built) = RenderLevel::build(&level, 0) else {
+            panic!("the level has a BSP 0");
+        };
+        let ground: Vec<_> = built
+            .draws
+            .iter()
+            .filter(|draw| draw.index_count > 0)
+            .collect();
+        let cells: Vec<_> = ground
+            .iter()
+            .filter(|draw| built.materials[draw.material as usize].kind == MaterialKind::Opaque)
+            .filter(|draw| draw.bounds_max[0] > 3.0 || draw.bounds_min[0] >= 1.0)
+            .collect();
+        assert_eq!(cells.len(), 4, "{:?}", built.draws);
+        for (cell, draw) in cells.iter().enumerate() {
+            let x = cell as f32 * CELL + 1.0;
+            assert_eq!(draw.index_count, 3);
+            assert_eq!(draw.bounds_min, [x, 0.0, 1.0]);
+            assert_eq!(draw.bounds_max, [x + 2.0, 2.0, 1.0]);
+            // (its vertices are inside its box)
+            for &index in &built.indices[draw.first_index as usize..][..3] {
+                let at = index as usize * VERTEX_STRIDE;
+                let position: Vec<f32> = (0..3)
+                    .map(|axis| {
+                        let bytes = &built.vertices[at + axis * 4..][..4];
+                        f32::from_le_bytes([bytes[0], bytes[1], bytes[2], bytes[3]])
+                    })
+                    .collect();
+                for (axis, &value) in position.iter().enumerate() {
+                    assert!(draw.bounds_min[axis] <= value);
+                    assert!(value <= draw.bounds_max[axis]);
+                }
+            }
+        }
+        let blended: Vec<_> = built
+            .draws
+            .iter()
+            .filter(|draw| built.materials[draw.material as usize].kind == MaterialKind::Blended)
+            .collect();
+        assert_eq!(blended.len(), 1);
+        assert_eq!(blended[0].index_count, 12);
+        assert_eq!(blended[0].bounds_max[0], 3.0 * CELL + 3.0);
     }
 
     #[test]

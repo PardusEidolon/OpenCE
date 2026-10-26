@@ -314,9 +314,11 @@ final class ModelPass {
     /// What to draw of each object: its model's parts and its nodes' skin
     /// matrices, from `camera` in a view `viewportHeight` pixels high.
     struct Prepared {
-        /// An object's skin matrices' place, its parts and its change
-        /// colours.
-        typealias Object = (uniforms: ModelObjectUniforms, parts: [Draw], colors: [SIMD4<Float>])
+        /// An object's skin matrices' place, its parts, its change
+        /// colours and its bounding sphere (centre and radius).
+        typealias Object = (
+            uniforms: ModelObjectUniforms, parts: [Draw], colors: [SIMD4<Float>], sphere: SIMD4<Float>
+        )
         var skins: MTLBuffer?
         var objects: [Object]
         /// Each of `objects`' ids.
@@ -406,14 +408,15 @@ final class ModelPass {
                 firstNode: UInt32(first), nodeCount: UInt32(nodeCount),
                 reflectionProbe: isSky ? -1 : nearestReflection(object.center))
             let colors = object.changeColorUniforms
+            let sphere = SIMD4(object.center, object.radius)
             if isSky {
-                skyDrawn = (uniforms, parts, colors)
+                skyDrawn = (uniforms, parts, colors, sphere)
             } else if object.firstPerson {
-                firstPerson.append((uniforms, parts, colors))
+                firstPerson.append((uniforms, parts, colors, sphere))
             } else if behind {
-                shadowCasters.append((uniforms, parts, colors))
+                shadowCasters.append((uniforms, parts, colors, sphere))
             } else {
-                drawn.append((uniforms, parts, colors))
+                drawn.append((uniforms, parts, colors, sphere))
                 ids.append(object.id)
             }
         }
@@ -440,7 +443,7 @@ final class ModelPass {
     /// The prepared sky, its opaque parts then its blended ones, behind
     /// everything (the encoder's depth state is left for the caller to set).
     func encodeSky(_ prepared: Prepared, into encoder: MTLRenderCommandEncoder) {
-        guard let skins = prepared.skins, let (uniforms, parts, _) = prepared.sky else { return }
+        guard let skins = prepared.skins, let (uniforms, parts, _, _) = prepared.sky else { return }
         encoder.setDepthStencilState(skyDepth)
         encoder.setVertexBuffer(vertices, offset: 0, index: 0)
         encoder.setVertexBuffer(skins, offset: 0, index: 2)
@@ -466,34 +469,46 @@ final class ModelPass {
     }
 
     /// The prepared objects' opaque and alpha-tested parts (those in view
-    /// and those behind it), as the sun's shadows' casters.
+    /// and those behind it) in the view of `light` (a shadow map's
+    /// matrix), as the shadows' casters.
     func encodeShadowCasters(
-        _ prepared: Prepared, _ casting: ShadowPass.Casting,
+        _ prepared: Prepared, _ casting: ShadowPass.Casting, light: simd_float4x4,
         into encoder: MTLRenderCommandEncoder
     ) {
         guard let skins = prepared.skins else { return }
         encoder.setVertexBuffer(vertices, offset: 0, index: 0)
         encoder.setVertexBuffer(skins, offset: 0, index: 2)
         var current: MTLRenderPipelineState?
-        for (uniforms, parts, _) in prepared.objects + prepared.shadowCasters {
-            var object = uniforms
-            encoder.setVertexBytes(&object, length: MemoryLayout<ModelObjectUniforms>.stride, index: 3)
-            for part in parts where !part.blended && !part.plain {
-                let cutout = part.uniforms.alphaTested != 0
-                let pipeline = cutout ? casting.cutout : casting.depth
-                if current !== pipeline {
-                    encoder.setRenderPipelineState(pipeline)
-                    current = pipeline
-                }
-                if cutout {
-                    var material = part.uniforms
-                    encoder.setFragmentBytes(&material, length: MemoryLayout<MaterialUniforms>.stride, index: 0)
-                    encoder.setFragmentTexture(part.textures.first, index: 0)
-                }
-                encoder.drawIndexedPrimitives(
-                    type: .triangle, indexCount: part.indexCount, indexType: .uint32,
-                    indexBuffer: indices, indexBufferOffset: part.firstIndex * 4)
+        let view = Frustum(light)
+        for objects in [prepared.objects, prepared.shadowCasters] {
+            for (uniforms, parts, _, sphere) in objects
+            where view.contains(center: SIMD3(sphere.x, sphere.y, sphere.z), radius: sphere.w) {
+                encodeShadowCaster(uniforms, parts, casting, into: encoder, current: &current)
             }
+        }
+    }
+
+    private func encodeShadowCaster(
+        _ uniforms: ModelObjectUniforms, _ parts: [Draw], _ casting: ShadowPass.Casting,
+        into encoder: MTLRenderCommandEncoder, current: inout MTLRenderPipelineState?
+    ) {
+        var object = uniforms
+        encoder.setVertexBytes(&object, length: MemoryLayout<ModelObjectUniforms>.stride, index: 3)
+        for part in parts where !part.blended && !part.plain {
+            let cutout = part.uniforms.alphaTested != 0
+            let pipeline = cutout ? casting.cutout : casting.depth
+            if current !== pipeline {
+                encoder.setRenderPipelineState(pipeline)
+                current = pipeline
+            }
+            if cutout {
+                var material = part.uniforms
+                encoder.setFragmentBytes(&material, length: MemoryLayout<MaterialUniforms>.stride, index: 0)
+                encoder.setFragmentTexture(part.textures.first, index: 0)
+            }
+            encoder.drawIndexedPrimitives(
+                type: .triangle, indexCount: part.indexCount, indexType: .uint32,
+                indexBuffer: indices, indexBufferOffset: part.firstIndex * 4)
         }
     }
 
@@ -503,7 +518,7 @@ final class ModelPass {
         guard let skins = prepared.skins else { return }
         encoder.setVertexBuffer(vertices, offset: 0, index: 0)
         encoder.setVertexBuffer(skins, offset: 0, index: 2)
-        for ((uniforms, parts, _), id) in zip(prepared.objects, prepared.ids) {
+        for ((uniforms, parts, _, _), id) in zip(prepared.objects, prepared.ids) {
             var object = uniforms
             var picked = id
             encoder.setVertexBytes(&object, length: MemoryLayout<ModelObjectUniforms>.stride, index: 3)
@@ -529,7 +544,7 @@ final class ModelPass {
         encoder.setRenderPipelineState(opaque)
         encoder.setVertexBuffer(vertices, offset: 0, index: 0)
         encoder.setVertexBuffer(skins, offset: 0, index: 2)
-        for (uniforms, parts, colors) in objects {
+        for (uniforms, parts, colors, _) in objects {
             var object = uniforms
             encoder.setVertexBytes(&object, length: MemoryLayout<ModelObjectUniforms>.stride, index: 3)
             encoder.setFragmentBytes(&object, length: MemoryLayout<ModelObjectUniforms>.stride, index: 3)

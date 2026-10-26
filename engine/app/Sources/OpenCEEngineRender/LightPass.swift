@@ -251,7 +251,7 @@ final class LightPass {
     /// `wrap` at sampler 0) and the sun's shadow pipelines.
     func encodeShadows(
         _ frame: Frame, into commands: MTLCommandBuffer, wrap: MTLSamplerState,
-        casters: (MTLRenderCommandEncoder) -> Void
+        casters: (MTLRenderCommandEncoder, simd_float4x4) -> Void
     ) {
         guard !frame.shadowed.isEmpty else { return }
         if shadows.width != Self.shadowResolution {
@@ -276,7 +276,7 @@ final class LightPass {
                 var matrix = Self.faceMatrix(face: face, centre: centre, far: far)
                 encoder.setVertexBytes(&matrix, length: MemoryLayout<simd_float4x4>.stride, index: 1)
                 encoder.setFragmentSamplerState(wrap, index: 0)
-                casters(encoder)
+                casters(encoder, matrix)
                 encoder.endEncoding()
             }
         }
