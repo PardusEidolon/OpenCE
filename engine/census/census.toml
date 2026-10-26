@@ -3876,9 +3876,12 @@ class = "missing"
 note = "not reached from a root of the game; the game loop track owns it"
 
 [function.game_engine_game_starting]
-class = "matched"
+class = "partial"
 engine = "sim/src/game.rs"
-owed = "the engine's own tests (sim/tests/game.rs); no check against the original yet"
+leaves_out = ["importing the globals' multiplayer sounds (the data track)", "playing the sound (the scripts and sounds track)", "game_engine_build_lighting (replaced by the engine's lighting)"]
+check = "sim/tests/announcer_reference.rs"
+against = "trace"
+note = "the announcer's queue (game_engine_multiplayer_sounds.c) and the game types' starts are traced with it in sim/src/announcer.rs; Race's start is not in the sources"
 
 [function.game_engine_get_starting_location_rating]
 class = "partial"
@@ -3904,6 +3907,14 @@ class = "replaced"
 because = "network"
 stands_in = "net/src/snapshot.rs"
 note = "the original's network state and prediction; the engine sends snapshots"
+
+[function.game_engine_initialize_for_new_map]
+class = "partial"
+engine = "sim/src/game.rs"
+check = "sim/tests/announcer_reference.rs"
+against = "trace"
+leaves_out = ["the custom game engine's own initialisation", "the map's check and the resources' prediction", "the goals, the vehicles' homes and the network state, which the engine's game makes afresh"]
+note = "the announcer's trace compiles it to empty the queue; the next team's reset is traced in sim/tests/game_engine_reference.rs"
 
 [function.game_engine_king_read_network_state]
 class = "replaced"
@@ -3944,9 +3955,11 @@ class = "missing"
 note = "not reached from a root of the game; the game loop track owns it"
 
 [function.game_engine_player_added]
-class = "matched"
+class = "partial"
 engine = "sim/src/game.rs"
-owed = "the engine's own tests (sim/tests/game.rs); no check against the original yet"
+leaves_out = ["a network client's own team choice", "the multiplayer message as a player joins"]
+check = "sim/tests/game_engine_reference.rs"
+against = "trace"
 
 [function.game_engine_player_get_team_index]
 class = "missing"
@@ -4025,6 +4038,13 @@ class = "replaced"
 because = "network"
 stands_in = "net/src/snapshot.rs"
 note = "the original's network state and prediction; the engine sends snapshots"
+
+[function.game_initial_pulse]
+class = "matched"
+engine = "sim/src/game.rs"
+check = "sim/tests/game_engine_reference.rs"
+against = "trace"
+note = "the game engine's trace compiles it to add its players; the start it calls is traced in sim/tests/announcer_reference.rs"
 
 [function.game_is_cooperative]
 class = "matched"
@@ -5142,7 +5162,9 @@ note = "not reached from a root of the game; the game loop track owns it"
 
 [function.match_game_type]
 class = "matched"
-owed = "the engine cites it, with no check against the original yet"
+engine = "content/src/level.rs"
+check = "sim/tests/spawn_reference.rs"
+against = "trace"
 
 [function.match_init]
 class = "replaced"
@@ -6209,7 +6231,7 @@ note = "not reached from a root of the game; the game loop track owns it"
 [function.player_spawn]
 class = "partial"
 engine = "sim/src/lib.rs"
-leaves_out = ["the spawn's choice by the game engine's weights", "the starting equipment's profiles"]
+leaves_out = ["the starting equipment's profiles"]
 owed = "the engine's own version; no check against the original yet"
 
 [function.players_debug_render]
@@ -7401,7 +7423,8 @@ leaves_out = ["the oddball, king, race and juggernaut variants", "the game's ann
 [function.slayer_engine_update]
 class = "matched"
 engine = "sim/src/game.rs"
-owed = "the engine's own tests (sim/tests/game.rs); no check against the original yet"
+check = "sim/tests/game_engine_reference.rs"
+against = "trace"
 
 [function.slayer_get_score]
 class = "matched"

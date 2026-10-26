@@ -11,6 +11,7 @@ pub mod ai_impulse;
 pub mod animation;
 pub mod animation_blend;
 pub mod animation_graph;
+pub mod announcer;
 pub mod armory;
 pub mod cached;
 pub mod clock;

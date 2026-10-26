@@ -5,15 +5,19 @@ respawn waits and scores the native engine's must give.
     python3 tools/engine_game_engine_reference.py          # writes the reference
     python3 tools/engine_game_engine_reference.py --check  # fails if it is stale
 
-The functions are source/game/game_engine.c's `game_engine_player_killed`
-and `game_engine_get_team_score`, and source/game/game_engine_slayer.c's
-scorer (`slayer_engine_player_killed_player`, `slayer_engine_adjust_score`,
-`slayer_get_score`), found by name as tools/harness finds them, and compiled
+The functions are source/game/game_engine.c's `game_engine_player_killed`,
+`game_engine_get_team_score` and `game_engine_player_added` (with
+`initialize_player_multiplayer_data` and `game_engine_has_teams`), and
+source/game/game_engine_slayer.c's `slayer_engine_player_added`,
+`slayer_engine_update` and scorer (`slayer_engine_player_killed_player`,
+`slayer_engine_adjust_score`, `slayer_get_score`), found by name as tools/harness finds them, and compiled
 for this machine against a small fake world: a table of players, the
 variant's options, and stand-ins for the messages and the network. Who is
 friendly fire is decided as source/game/game_statistics.c's
 `game_statistics_record_kill` decides it (no killer, or one not the dead's
-enemy). A dead player's respawn timer counts down a game tick at a time, as
+enemy). The players are added by source/game/game.c's own
+`game_initial_pulse`, from a new map's `next_team_index`, and Slayer's update runs each
+tick. A dead player's respawn timer counts down a game tick at a time, as
 `game_engine_update`'s does, and a player is killed only while alive.
 
 The trace is written to engine/crates/sim/tests/game_engine_reference.txt,
@@ -33,8 +37,20 @@ from harness import function, read, structure  # noqa: E402
 
 OUTPUT = ROOT / "engine" / "crates" / "sim" / "tests" / "game_engine_reference.txt"
 
-ENGINE_FUNCTIONS = ["game_engine_get_team_score", "game_engine_player_killed"]
-SLAYER_FUNCTIONS = ["slayer_engine_adjust_score", "slayer_get_score", "slayer_engine_player_killed_player"]
+ENGINE_FUNCTIONS = [
+    "game_engine_has_teams",
+    "game_engine_get_team_score",
+    "game_engine_player_killed",
+    "initialize_player_multiplayer_data",
+    "game_engine_player_added",
+]
+SLAYER_FUNCTIONS = [
+    "slayer_engine_adjust_score",
+    "slayer_get_score",
+    "slayer_engine_player_killed_player",
+    "slayer_engine_player_added",
+    "slayer_engine_update",
+]
 
 PLAYERS = 8
 
@@ -57,6 +73,7 @@ typedef float real;
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 #define VALID_INDEX(i, n) ((i) >= 0 && (i) < (n))
+#define PIN(x, lo, hi) MIN(MAX((x), (lo)), (hi))
 #define DATUM_INDEX_TO_ABSOLUTE_INDEX(i) (i)
 #define match_assert(file, line, condition) ((void)0)
 #define csmemset memset
@@ -93,7 +110,14 @@ struct player_datum
 	boolean quit_out_of_game;
 	long multiplayer_special;
 	struct { long player_list_index; char team_index; } network_player_data;
-	struct { short multiple_kills; short kills_in_a_row; } statistics;
+	struct { short multiple_kills; short kills_in_a_row; long multiplayer_statistics; } statistics;
+	/* the HUD's, which initialize_player_multiplayer_data sets and the trace
+	does not show */
+	long state_message;
+	long state_message_player_index;
+	real speed_multiplier;
+	long teleporter_index;
+	long player_display_index;
 };
 
 static struct player_datum players[HALO_PORT_MAXIMUM_NETWORK_PLAYERS];
@@ -130,6 +154,7 @@ static long game_time_get(void) { return game_time; }
 /* the network: a host of a game with no clients */
 static void network_distributed_player_killed(long *killer, long *object, long dead, boolean *friendly) {}
 boolean network_game_distributed_client(void) { return FALSE; }
+static void *global_network_game_client_get(void) { return NULL; }
 struct network_game { struct { char team_index; } players[HALO_PORT_MAXIMUM_NETWORK_PLAYERS]; };
 struct network_game_server;
 static struct network_game_server *global_network_game_server_get(void) { return NULL; }
@@ -164,8 +189,16 @@ struct game_engine
 {
 	void (*player_killed_player)(long, long, long, boolean);
 	long (*get_player_score)(long, enum get_score_type);
+	void (*player_added)(long);
+	void (*update)(void);
 };
 static struct game_engine *game_engine;
+
+struct game_engine_globals { long next_team_index; };
+static struct game_engine_globals game_engine_globals;
+
+/* the game type's start, which tools/engine_announcer_reference.py traces */
+void game_engine_game_starting(void) {}
 """
 
 MAIN = r"""
@@ -177,7 +210,12 @@ static long next_random(long n)
 	return (long)((seed >> 8) % (unsigned long)n);
 }
 
-static struct game_engine slayer = { slayer_engine_player_killed_player, slayer_get_score };
+static struct game_engine slayer = {
+	slayer_engine_player_killed_player,
+	slayer_get_score,
+	slayer_engine_player_added,
+	slayer_engine_update,
+};
 
 static void play(long teams, long respawn_time, long growth, long suicide_penalty, long count, long kills)
 {
@@ -193,14 +231,11 @@ static void play(long teams, long respawn_time, long growth, long suicide_penalt
 	global_variant.universal_variant.respawn_time = respawn_time;
 	global_variant.universal_variant.respawn_time_growth = growth;
 	global_variant.universal_variant.suicide_penalty = suicide_penalty;
+	game_engine_globals.next_team_index = 0;
 	printf("game %d %d %d %d %d\n", teams, respawn_time, growth, suicide_penalty, count);
+	game_initial_pulse();
 	for (index = 0; index < count; index++)
-	{
-		/* (the teams alternate, as game_engine_player_added gives them: one
-		team alone would end the game) */
-		players[index].team_index = teams ? index % 2 : index;
 		printf("join %d %d\n", index, players[index].team_index);
-	}
 	for (kill = 0; kill < kills; kill++)
 	{
 		long wait = next_random(4) ? next_random(60) : next_random(600);
@@ -213,6 +248,7 @@ static void play(long teams, long respawn_time, long growth, long suicide_penalt
 		for (tick = 0; tick < wait; tick++)
 		{
 			game_time++;
+			game_engine->update();
 			for (index = 0; index < count; index++)
 			{
 				if (players[index].respawn_timer > 0)
@@ -269,11 +305,13 @@ def source_file():
         structure(slayer_c, "slayer_globals"),
         "static struct slayer_globals slayer_globals;",
         "static short game_engine_betrayal_penalty[HALO_PORT_MAXIMUM_NETWORK_PLAYERS];",
+        "boolean game_engine_has_teams(void);",
     ]
     slayer = [function(slayer_c, name) for name in SLAYER_FUNCTIONS]
     engine = [function(game_engine_c, name) for name in ENGINE_FUNCTIONS]
+    pulse = function(read("source/game/game.c"), "game_initial_pulse")
     return "\n\n".join(
-        [FAKE_WORLD, *variants, VARIANT, *globals_, *slayer, *engine, MAIN.replace("PLAYERS", str(PLAYERS))]
+        [FAKE_WORLD, *variants, VARIANT, *globals_, *slayer, *engine, pulse, MAIN.replace("PLAYERS", str(PLAYERS))]
     )
 
 

@@ -1007,7 +1007,6 @@ impl Engine {
         let level = running.level.clone().ok_or(EngineError::NoWorld)?;
         let starts = level.scenario.player_starts.len().max(1);
         for index in 1..path.players() {
-            let team = u16::try_from(index % 2).unwrap_or(0);
             let (_, handle) = running
                 .simulation
                 .add_player(&level, index % starts, None)
@@ -1018,7 +1017,7 @@ impl Engine {
                 .wardrobe
                 .dress(&mut running.simulation, &level, handle);
             if let Some(game) = running.solo.as_mut() {
-                game.join(team);
+                game.player_added();
             }
         }
         let players = running.simulation.players().len();

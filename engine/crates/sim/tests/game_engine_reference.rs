@@ -2,7 +2,8 @@
 //! tools/engine_game_engine_reference.py (`game_engine_player_killed` with
 //! slayer's scorer, over every mix of respawn time, respawn growth and
 //! suicide penalty, with and without teams) are played again through
-//! `Rules`, and after every kill the dead's wait to respawn, every player's
+//! `Rules`: each player added (`game_engine_player_added`) must play on the
+//! game's team for it, and after every kill the dead's wait to respawn, every player's
 //! score and respawn penalty and every team's score must be the game's.
 //!
 //! The game's timers are in its 30 Hz ticks, the engine's in its own 60 Hz
@@ -59,7 +60,9 @@ fn deaths_cost_the_games_waits_and_scores() -> Result<(), Failure> {
             }
             Some("join") => {
                 let team = u16::try_from(number(&fields, 2)?)?;
-                rules.join(team);
+                let index = rules.player_added();
+                assert_eq!(index, usize::try_from(number(&fields, 1)?)?);
+                assert_eq!(rules.contestants()[index].team, team, "game {games}");
             }
             Some("wait") => {
                 for _ in 0..ticks(&fields, 1)? {

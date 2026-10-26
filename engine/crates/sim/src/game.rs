@@ -9,6 +9,7 @@
 
 use opence_content::{GameType, Level, NetgameFlagKind, ObjectKind, TagRef};
 
+use crate::announcer::{starting_sound, Announcer, MultiplayerSound, MultiplayerSounds};
 use crate::clock::TICKS_PER_SECOND;
 use crate::objects::{ObjectHandle, ObjectSpawn};
 use crate::random::RandomSeed;
@@ -206,6 +207,8 @@ pub enum GameEvent {
     },
     /// The game is over.
     GameOver,
+    /// The announcer's sound to play now.
+    Announce(MultiplayerSound),
 }
 
 /// The rules of a game.
@@ -224,6 +227,9 @@ pub struct Rules {
     /// update, or sent home: its untouched time counts from then
     /// (`item_update`, `game_engine_flag_reset`).
     owned: Vec<u32>,
+    /// The team the next player added plays on, in a game with teams
+    /// (`game_engine_globals.next_team_index`).
+    next_team: u16,
 }
 
 /// Whether `a` is nearer than `radius` to `b` (`ctf_position_near_flag`).
@@ -258,12 +264,35 @@ impl Rules {
             events: Vec::new(),
             standing: Vec::new(),
             owned,
+            next_team: 0,
         }
     }
 
     /// The variant.
     pub fn variant(&self) -> &Variant {
         &self.variant
+    }
+
+    /// The team the next player [`Rules::player_added`] adds plays on:
+    /// in a game with teams they alternate from the first, red, as players
+    /// are added; without teams each player is its own.
+    pub fn next_team(&self) -> u16 {
+        if self.variant.teams {
+            self.next_team
+        } else {
+            u16::try_from(self.contestants.len()).unwrap_or(u16::MAX)
+        }
+    }
+
+    /// Adds a player, alive, on the team [`Rules::next_team`] gives, and
+    /// moves the teams on; its index is returned
+    /// (`game_engine_player_added`, `slayer_engine_player_added`).
+    pub fn player_added(&mut self) -> usize {
+        let team = self.next_team();
+        if self.variant.teams {
+            self.next_team = (self.next_team + 1) % 2;
+        }
+        self.join(team)
     }
 
     /// Adds a player, alive, on `team` (ignored without teams: each
@@ -819,15 +848,30 @@ pub struct Game {
     items: LyingItems<ObjectHandle>,
     steps: u32,
     seed: RandomSeed,
+    announcer: Announcer,
+    sounds: MultiplayerSounds,
 }
 
 impl Game {
     /// Starts a game of `variant` on `level` with the simulation's players
-    /// (alternating between teams 0 and 1 in a game with teams): its
-    /// flags go to their stands; its equipment stands at its placements
-    /// with the first step.
-    /// (`game_engine_game_starting`)
+    /// (each added in turn, alternating between teams 0 and 1 in a game
+    /// with teams): its flags go to their stands; its equipment stands at
+    /// its placements with the first step.
+    /// (`game_initial_pulse`, `game_engine_game_starting`)
     pub fn start(simulation: &mut Simulation, level: &Level, variant: Variant) -> Self {
+        Self::start_with_sounds(simulation, level, variant, MultiplayerSounds::default())
+    }
+
+    /// Starts a game as [`Game::start`] does, with the globals'
+    /// multiplayer information sounds for its announcer, which queues the
+    /// game type's sound to play when the first two seconds are up
+    /// (`game_engine_initialize_for_new_map`, `game_engine_game_starting`).
+    pub fn start_with_sounds(
+        simulation: &mut Simulation,
+        level: &Level,
+        variant: Variant,
+        sounds: MultiplayerSounds,
+    ) -> Self {
         let stands: Vec<(u16, [f32; 3])> = level
             .scenario
             .netgame_flags
@@ -836,8 +880,8 @@ impl Game {
             .map(|flag| (flag.team, flag.position))
             .collect();
         let mut rules = Rules::new(variant, &stands);
-        for index in 0..simulation.players().len() {
-            rules.join(u16::try_from(index % 2).unwrap_or(0));
+        for _ in simulation.players() {
+            rules.player_added();
         }
         let mut game = Self {
             flag_objects: vec![None; rules.flags().len()],
@@ -853,16 +897,23 @@ impl Game {
             items: LyingItems::default(),
             steps: 0,
             seed: RandomSeed::default(),
+            announcer: Announcer::new(),
+            sounds,
         };
+        if let Some(sound) = starting_sound(&variant) {
+            // (the queue's wait holds it, so nothing plays yet)
+            let _ = game.announcer.play(sound, &game.sounds);
+        }
         for flag in 0..game.flag_objects.len() {
             game.place_flag(simulation, level, flag);
         }
         game
     }
 
-    /// Adds a player the simulation added after the game began.
-    pub fn join(&mut self, team: u16) -> usize {
-        self.rules.join(team)
+    /// Adds a player the simulation added after the game began, on the
+    /// team the rules give it (`game_engine_player_added`).
+    pub fn player_added(&mut self) -> usize {
+        self.rules.player_added()
     }
 
     /// The rules and the scores.
@@ -880,6 +931,11 @@ impl Game {
         &self.flag_objects
     }
 
+    /// The announcer's queue.
+    pub fn announcer(&self) -> &Announcer {
+        &self.announcer
+    }
+
     /// The items the placements stood that still lie where they were put.
     pub fn equipment_objects(&self) -> Vec<ObjectHandle> {
         self.items.items().collect()
@@ -887,7 +943,9 @@ impl Game {
 
     /// One tick, after the simulation's: the kills it saw are scored, the
     /// rules step, the players whose wait is over stand at a start, and
-    /// the flags and the taken equipment are put back (`game_engine_update`).
+    /// the flags and the taken equipment are put back; on each of the
+    /// game's ticks the announcer steps first, and a sound whose turn has
+    /// come is announced (`game_engine_update`).
     pub fn step(&mut self, simulation: &mut Simulation, level: &Level) -> Vec<GameEvent> {
         let handles: Vec<ObjectHandle> = simulation.players().iter().map(|p| p.handle()).collect();
         let player_of = |handle: ObjectHandle| handles.iter().position(|&h| h == handle);
@@ -912,7 +970,7 @@ impl Game {
                 alive.then(|| position(simulation, handle)).flatten()
             })
             .collect();
-        let events = self.rules.step(&positions);
+        let mut events = self.rules.step(&positions);
         // (those still to respawn this tick have no unit yet)
         let mut waiting: Vec<usize> = events
             .iter()
@@ -931,10 +989,13 @@ impl Game {
                 | GameEvent::FlagDropped(flag)
                 | GameEvent::FlagReturned(flag)
                 | GameEvent::Captured { flag, .. } => self.place_flag(simulation, level, flag),
-                GameEvent::Killed { .. } | GameEvent::GameOver => {}
+                GameEvent::Killed { .. } | GameEvent::GameOver | GameEvent::Announce(_) => {}
             }
         }
         if self.steps.is_multiple_of(STEPS_PER_GAME_TICK) {
+            if let Some(sound) = self.announcer.update(&self.sounds) {
+                events.push(GameEvent::Announce(sound));
+            }
             self.update_items(simulation, level, self.steps / STEPS_PER_GAME_TICK);
         }
         self.steps += 1;

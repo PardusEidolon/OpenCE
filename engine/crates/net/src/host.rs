@@ -251,14 +251,14 @@ impl Host {
                     return;
                 }
                 let index = simulation.players().len();
-                let team = u16::try_from(index % 2).unwrap_or(0);
+                let team = self.game.rules().next_team();
                 let start = index % level.scenario.player_starts.len().max(1);
                 let teams = self.game.rules().variant().teams;
                 let Ok((player, _)) = simulation.add_player(level, start, teams.then_some(team))
                 else {
                     return;
                 };
-                self.game.join(team);
+                self.game.player_added();
                 self.peers.push(Peer {
                     address: from,
                     player,
