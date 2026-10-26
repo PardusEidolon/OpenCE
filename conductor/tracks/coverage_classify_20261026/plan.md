@@ -17,7 +17,7 @@ Every task is test first (`workflow.md`): the trace, measurement or census test 
 ## Phase 3: Reasons
 - [x] Task: Add the "library" reason to the census's fixed list, with a test that it needs a stand-in and a player-visible note. 6d6661a1
 - [x] Task: Class the collision BSP functions under it, naming the Jolt code. 9f6f01b7
-- [ ] Task: Class the debug and console functions as "the editor and tools".
+- [x] Task: Class the debug and console functions as "the editor and tools". 8e708c7d
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Reasons' (Protocol in workflow.md) (automated)
 
 ## Phase 4: Names
