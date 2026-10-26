@@ -9,13 +9,13 @@ manual check is at the end, with the report.
 - [x] Task: The crate and source/'s symbols 10518229
   - [x] Tests on a fake source/ tree: headers parsed into address, size and name; malformed headers refused, not panicked on
   - [x] engine/crates/census, using bounds-checked readers and passing the workspace lints
-  - [x] On the real tree: 6,962 functions and their bytes
-- [ ] Task: Citations from Rust and Swift
-  - [ ] Tests on fake crates and fake Swift Sources: backtick names in doc comments, excluding tests/
-  - [ ] Collected from all crates and engine/app/Sources; today's 177 reproduced as the floor
+  - [x] On the real tree: 6,747 functions in 1,611,122 bytes (the 6,962 counted the headers' data too)
+- [x] Task: Citations from Rust and Swift be343e52
+  - [x] Tests on fake crates and fake Swift Sources: backtick names in doc comments, excluding tests/
+  - [x] Collected from all crates and engine/app/Sources; the reference map's 159 reproduced as the floor (236 cited)
 - [ ] Task: The call graph and reachability
   - [ ] Tests on a fake tree: calls, calls through function tables, and entry points
-  - [ ] Entry points for a campaign game and a multiplayer game; the reached set recorded
+  - [ ] Entry points for a campaign game and a multiplayer game (both run through `main_loop`); the reached set recorded
 - [ ] Task: `opence census` and the flake check
   - [ ] The cli subcommand (summary, --check, --write)
   - [ ] source/'s headers and the app's Sources visible to the crate's test in nix flake check
