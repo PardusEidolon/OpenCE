@@ -199,9 +199,9 @@ Found in play (2026-10-25): music and many sounds (hitting surfaces and the rest
 - [x] Task: No compiles, uploads or allocations in play 86f0a439
     - [x] Write tests: no pipeline built after load; a counting allocator holds each path to its budget (none a frame not yet reached: the rest is in the report)
     - [x] Metal binary archives measured and not needed (every pipeline 6.5 ms cold, at load); textures all at load, streaming left to the tiers' memory budget
-- [ ] Task: Culling, indirect draws, tile memory and half precision
-    - [ ] Write tests: the drawn set matches brute-force visibility; golden frames within tolerance
-    - [ ] Cluster/PVS and Hi-Z culling, argument buffers, memoryless attachments
+- [x] Task: Culling, indirect draws, tile memory and half precision 5fb78467
+    - [x] Write tests: the drawn set matches brute-force visibility; golden frames within tolerance
+    - [x] Cluster/PVS and Hi-Z culling, argument buffers, memoryless attachments (cell culling built; the rest measured as not needed: the frame is not geometry-bound)
 - [ ] Task: Upscaling and the parallel simulation
     - [ ] Write tests: MetalFX golden frames at 0.67; dynamic resolution holds the target; replay hash unchanged in parallel
     - [ ] MetalFX, dynamic resolution, the ECS in parallel
