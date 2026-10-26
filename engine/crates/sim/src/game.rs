@@ -126,7 +126,8 @@ pub struct Contestant {
     pub deaths: u32,
     /// The times it killed itself.
     pub suicides: u32,
-    /// The times it killed a teammate.
+    /// The times it killed a teammate or itself (the original's
+    /// `friendly_fire_kills`: a suicide counts too).
     pub betrayals: u32,
     /// Whether it is alive.
     pub alive: bool,
@@ -395,7 +396,9 @@ impl Rules {
             let scorer = &mut self.contestants[killer];
             if killer == victim {
                 scorer.suicides += 1;
-            } else if friendly {
+            }
+            // (no one is their own enemy: a suicide is friendly fire too)
+            if friendly {
                 scorer.betrayals += 1;
             } else {
                 scorer.kills += 1;

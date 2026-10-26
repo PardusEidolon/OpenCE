@@ -12,10 +12,12 @@ source/game/game_engine_slayer.c's `slayer_engine_player_added`,
 `slayer_engine_update` and scorer (`slayer_engine_player_killed_player`,
 `slayer_engine_adjust_score`, `slayer_get_score`), found by name as tools/harness finds them, and compiled
 for this machine against a small fake world: a table of players, the
-variant's options, and stand-ins for the messages and the network. Who is
-friendly fire is decided as source/game/game_statistics.c's
-`game_statistics_record_kill` decides it (no killer, or one not the dead's
-enemy). The players are added by source/game/game.c's own
+variant's options, and stand-ins for the messages and the network. Each
+death goes through source/game/game_statistics.c's own
+`game_statistics_record_kill`, which tallies the kill, death, suicide or
+friendly-fire kill and decides who is credited and whether it is friendly
+fire; no unit remembers an attacker (so there are no assists and the
+killer is credited) and each team is an ally of itself only. The players are added by source/game/game.c's own
 `game_initial_pulse`, from a new map's `next_team_index`, and Slayer's update runs each
 tick. A dead player's respawn timer counts down a game tick at a time, as
 `game_engine_update`'s does, and a player is killed only while alive.
@@ -110,7 +112,18 @@ struct player_datum
 	boolean quit_out_of_game;
 	long multiplayer_special;
 	struct { long player_list_index; char team_index; } network_player_data;
-	struct { short multiple_kills; short kills_in_a_row; long multiplayer_statistics; } statistics;
+	struct
+	{
+		short kills_in_a_row;
+		short multiple_kills;
+		short last_kill_time;
+		short kills[4];
+		short assists[4];
+		short friendly_fire_kills;
+		short deaths;
+		short suicides;
+		long multiplayer_statistics;
+	} statistics;
 	/* the HUD's, which initialize_player_multiplayer_data sets and the trace
 	does not show */
 	long state_message;
@@ -147,6 +160,34 @@ struct object_datum { struct { long type; } object; };
 static struct object_datum an_object;
 static struct object_datum *object_get(long index) { return &an_object; }
 static void *unit_try_and_get(long index) { return NULL; }
+
+/* the kill's statistics (game_statistics.c): every player is a unit of the
+same index, no unit remembers an attacker, and the teams are allies of
+themselves only, as a game's are with no allegiances made */
+#define MAXIMUM_ATTACKERS_PER_UNIT 4
+#define NUMBER_OF_GAME_TEAMS 16
+#define REAL_MIN (-3.4028235e38f)
+struct unit_attacker { unsigned long game_time_stamp; real damage_inflicted; long object_index; long player_index; };
+struct unit_datum { struct { struct unit_attacker attackers[MAXIMUM_ATTACKERS_PER_UNIT]; } unit; };
+static struct unit_datum a_unit;
+static struct unit_datum *unit_get(long index)
+{
+	long attacker;
+
+	memset(&a_unit, 0, sizeof(a_unit));
+	for (attacker = 0; attacker < MAXIMUM_ATTACKERS_PER_UNIT; attacker++)
+	{
+		a_unit.unit.attackers[attacker].object_index = NONE;
+		a_unit.unit.attackers[attacker].player_index = NONE;
+	}
+	return &a_unit;
+}
+static long player_index_from_unit_index(long unit) { return unit; }
+static boolean game_team_is_enemy(short ours, short other)
+{
+	return !VALID_INDEX(ours, NUMBER_OF_GAME_TEAMS) || !VALID_INDEX(other, NUMBER_OF_GAME_TEAMS) || ours != other;
+}
+static boolean game_statistics_active = TRUE;
 
 static long game_time;
 static long game_time_get(void) { return game_time; }
@@ -243,7 +284,6 @@ static void play(long teams, long respawn_time, long growth, long suicide_penalt
 		long dead;
 		long killer;
 		long kind;
-		boolean friendly_fire;
 
 		for (tick = 0; tick < wait; tick++)
 		{
@@ -265,14 +305,17 @@ static void play(long teams, long respawn_time, long growth, long suicide_penalt
 		killer = kind == 0 ? NONE : kind == 1 ? dead : next_random(count);
 		if (killer != NONE && killer != dead && players[killer].respawn_timer > 0)
 			killer = NONE;
-		friendly_fire = killer == NONE || players[killer].team_index == players[dead].team_index;
-		game_engine_player_killed(killer, NONE, dead, friendly_fire);
+		game_statistics_record_kill(dead, killer, NONE, killer == NONE ? NONE : players[killer].team_index);
 		printf("kill %d %d %d %d", wait, dead, killer, players[dead].respawn_timer);
 		for (index = 0; index < count; index++)
 			printf(" %d/%d", game_engine->get_player_score(index, _get_score_individual), players[index].respawn_penalty);
 		printf(" teams");
 		for (index = 0; index < (teams ? 2 : count); index++)
 			printf(" %d", game_engine_get_team_score(index));
+		printf(" stats");
+		for (index = 0; index < count; index++)
+			printf(" %d/%d/%d/%d", players[index].statistics.kills[0], players[index].statistics.deaths,
+				players[index].statistics.suicides, players[index].statistics.friendly_fire_kills);
 		printf("\n");
 	}
 }
@@ -310,8 +353,19 @@ def source_file():
     slayer = [function(slayer_c, name) for name in SLAYER_FUNCTIONS]
     engine = [function(game_engine_c, name) for name in ENGINE_FUNCTIONS]
     pulse = function(read("source/game/game.c"), "game_initial_pulse")
+    record_kill = function(read("source/game/game_statistics.c"), "game_statistics_record_kill")
     return "\n\n".join(
-        [FAKE_WORLD, *variants, VARIANT, *globals_, *slayer, *engine, pulse, MAIN.replace("PLAYERS", str(PLAYERS))]
+        [
+            FAKE_WORLD,
+            *variants,
+            VARIANT,
+            *globals_,
+            *slayer,
+            *engine,
+            record_kill,
+            pulse,
+            MAIN.replace("PLAYERS", str(PLAYERS)),
+        ]
     )
 
 
@@ -332,7 +386,7 @@ def reference():
         "# game <teams> <respawn time> <respawn growth> <suicide penalty> <players> (game ticks)\n"
         "# join <player> <team>\n"
         "# wait <ticks>: the ticks went by, and the one chosen to die was not alive\n"
-        "# kill <ticks before> <dead> <killer> <dead's respawn timer> <score/respawn penalty>... teams <team score>...\n"
+        "# kill <ticks before> <dead> <killer> <dead's respawn timer> <score/respawn penalty>... teams <team score>... stats <kills/deaths/suicides/friendly-fire kills>...\n"
         + output
     )
 

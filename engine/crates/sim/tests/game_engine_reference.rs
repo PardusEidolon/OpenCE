@@ -4,7 +4,9 @@
 //! suicide penalty, with and without teams) are played again through
 //! `Rules`: each player added (`game_engine_player_added`) must play on the
 //! game's team for it, and after every kill the dead's wait to respawn, every player's
-//! score and respawn penalty and every team's score must be the game's.
+//! score and respawn penalty, every team's score and every player's kills,
+//! deaths, suicides and friendly-fire kills (`game_statistics_record_kill`)
+//! must be the game's.
 //!
 //! The game's timers are in its 30 Hz ticks, the engine's in its own 60 Hz
 //! ones: each game tick is two of the engine's.
@@ -99,11 +101,30 @@ fn deaths_cost_the_games_waits_and_scores() -> Result<(), Failure> {
                     .iter()
                     .position(|&field| field == "teams")
                     .ok_or("no teams")?;
-                for (team, score) in fields[teams + 1..].iter().enumerate() {
+                let stats = fields
+                    .iter()
+                    .position(|&field| field == "stats")
+                    .ok_or("no stats")?;
+                for (team, score) in fields[teams + 1..stats].iter().enumerate() {
                     assert_eq!(
                         rules.team_score(u16::try_from(team)?),
                         score.parse::<i32>()?,
                         "game {games}: team {team}'s score: {line}"
+                    );
+                }
+                for (index, field) in fields[stats + 1..].iter().enumerate() {
+                    let tally: Vec<u32> =
+                        field.split('/').map(str::parse).collect::<Result<_, _>>()?;
+                    let contestant = contestants.get(index).ok_or("too many stats")?;
+                    assert_eq!(
+                        [
+                            contestant.kills,
+                            contestant.deaths,
+                            contestant.suicides,
+                            contestant.betrayals
+                        ],
+                        tally.as_slice(),
+                        "game {games}: player {index}'s kills/deaths/suicides/friendly fire: {line}"
                     );
                 }
                 kills += 1;

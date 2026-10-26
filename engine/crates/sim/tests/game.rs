@@ -40,6 +40,7 @@ fn slayer_scores_kills_and_takes_one_for_a_suicide() {
     rules.player_killed(a, Some(a), [0.0; 3]);
     assert_eq!(rules.contestants()[a].score, 0);
     assert_eq!(rules.contestants()[a].suicides, 1);
+    assert_eq!(rules.contestants()[a].betrayals, 1);
     assert_eq!(
         rules.contestants()[a].respawn_ticks,
         Variant::slayer().suicide_penalty_ticks

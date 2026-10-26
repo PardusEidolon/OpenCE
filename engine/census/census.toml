@@ -4017,8 +4017,10 @@ note = "not reached from a root of the game; the game loop track owns it"
 [function.game_engine_update]
 class = "partial"
 engine = "sim/src/game.rs"
-leaves_out = ["the oddball, king, race and juggernaut variants", "the game's announcer and score messages"]
-owed = "the engine's own tests (sim/tests/game.rs); no check against the original yet"
+leaves_out = ["the oddball, king, race and juggernaut variants", "the multiplayer sound, no shields, invisibility and teleporters", "the vehicles' respawn", "the postgame's sound and its killing of the players"]
+check = "sim/tests/game_engine_reference.rs"
+against = "trace"
+note = "slayer's update and the kills scored are traced; CTF (ctf_reference), the game's end (game_end_reference) and the items' respawn (item_spawn_reference) are each traced on their own"
 
 [function.game_engine_update_purge]
 class = "partial"
@@ -4108,8 +4110,9 @@ owed = "the engine's own tests (campaign/src/checkpoint.rs); no check against th
 [function.game_statistics_record_kill]
 class = "partial"
 engine = "sim/src/game.rs"
-leaves_out = ["assists", "multiple kills and kills in a row", "the attackers' damage"]
-owed = "the engine's own version; no check against the original yet"
+leaves_out = ["assists", "multiple kills and kills in a row", "the attackers' damage and credit"]
+check = "sim/tests/game_engine_reference.rs"
+against = "trace"
 
 [function.game_statistics_stop]
 class = "missing"
@@ -4267,9 +4270,12 @@ because = "imported"
 stands_in = "import/src/lib.rs"
 
 [function.handle_one_player_input]
-class = "matched"
-engine = "sim/src/player.rs"
-owed = "the engine's own tests (sim/tests/player.rs); no check against the original yet"
+class = "partial"
+engine = "sim/src/facing.rs"
+leaves_out = ["choosing the weapon and grenade", "zoom", "the vehicle's look levelled (autolevel)", "debug rotation and the ninja rope", "the network client's queue", "a seat's and a unit camera's own limits"]
+check = "sim/tests/facing_reference.rs"
+against = "trace"
+note = "the look's turn, through player_control_modify_desired_angles"
 
 [function.hashtable_capacious_put]
 class = "native"
@@ -6194,32 +6200,52 @@ note = "not reached from a root of the game; the game loop track owns it"
 class = "missing"
 note = "not reached from a root of the game; the game loop track owns it"
 
+[function.player_control_modify_desired_angles]
+class = "partial"
+engine = "sim/src/facing.rs"
+leaves_out = ["a seat's yaw limits and a unit camera's pitch limits, eased in", "the vehicle's look levelled (autolevel)"]
+check = "sim/tests/facing_reference.rs"
+against = "trace"
+
 [function.player_control_update]
-class = "matched"
-engine = "sim/src/player.rs"
-owed = "the engine's own tests (sim/tests/player.rs); no check against the original yet"
+class = "partial"
+engine = "sim/src/facing.rs"
+leaves_out = ["choosing the weapon and grenade", "zoom", "the vehicle's look levelled (autolevel)", "debug rotation and the ninja rope", "the network client's queue", "a seat's and a unit camera's own limits"]
+check = "sim/tests/facing_reference.rs"
+against = "trace"
+note = "the look's turn, through player_control_modify_desired_angles"
 
 [function.player_examine_nearby_item]
 class = "partial"
-engine = "sim/src/player.rs"
-leaves_out = ["picking up equipment and powerups", "the grenades' pickup"]
-owed = "the engine's own version; no check against the original yet"
+engine = "sim/src/pickup.rs"
+check = "sim/tests/pickup_reference.rs"
+against = "trace"
+leaves_out = ["picking up equipment and powerups", "the grenades' pickup", "the action's priority among the objects nearby (player_set_action_result)"]
+note = "taken, swapped or left as the game chooses (unit_should_autopick_weapon, unit_approve_weapon_swap), 4000 cases; the engine carries two weapons where the game's places are four"
 
 [function.player_examine_nearby_objects]
-class = "matched"
-owed = "the action button; reads the object, tag and map world, which the fake worlds do not hold"
+class = "partial"
+engine = "sim/src/player.rs"
+check = "sim/tests/pickup_reference.rs"
+against = "trace"
+leaves_out = ["the objects found by objects_in_sphere (the engine looks within the pickup radius)", "the nearby bipeds and devices"]
+note = "the weapons examined as the game examines them (player_examine_nearby_item's trace); the vehicles' seats are offered by sim/src/seats.rs"
 
 [function.player_handle_action]
 class = "partial"
 engine = "sim/src/seats.rs"
-leaves_out = ["the action's other uses (devices, picking up weapons)"]
-owed = "the engine's own version; no check against the original yet"
+check = "sim/tests/handle_action_reference.rs"
+against = "trace"
+leaves_out = ["the action's other uses (devices, powerups)", "the eviction of an AI from a seat", "unit_can_enter_seat's own checks"]
+note = "a vehicle turned back over from the side or end the game chooses (vehicle::Approach::of), 3000 flips"
 
 [function.player_new]
 class = "partial"
 engine = "sim/src/lib.rs"
-leaves_out = ["the network's player slots", "the player's profile and colours"]
-owed = "the engine's own version; no check against the original yet"
+check = "sim/tests/game_engine_reference.rs"
+against = "trace"
+leaves_out = ["the network's player slots", "the player's profile and colours", "its name", "the squad, cluster and aim assist it starts without"]
+note = "a new player has no unit and is added to the game as game_engine_player_added adds it (the game engine trace); the rest of its datum the engine does not hold"
 
 [function.player_new_queue]
 class = "replaced"
@@ -6238,8 +6264,10 @@ note = "not reached from a root of the game; the game loop track owns it"
 [function.player_spawn]
 class = "partial"
 engine = "sim/src/lib.rs"
-leaves_out = ["the starting equipment's profiles"]
-owed = "the engine's own version; no check against the original yet"
+check = "sim/tests/spawn_reference.rs"
+against = "trace"
+leaves_out = ["the starting equipment's profiles", "a campaign respawn's saved unit", "a co-op respawn behind its teammate", "the unit's colours"]
+note = "its start chosen as the game chooses it (find_best_starting_location_index's trace); the unit placed there and armed from the globals"
 
 [function.players_debug_render]
 class = "replaced"
@@ -6247,14 +6275,20 @@ because = "tools"
 stands_in = "dev/src/draw.rs"
 
 [function.players_update_after_game]
-class = "matched"
-owed = "the end of a level; reads the object, tag and map world, which the fake worlds do not hold; campaign/tests/flow.rs"
+class = "partial"
+engine = "sim/src/lib.rs"
+check = "sim/tests/game_tick_reference.rs"
+against = "trace"
+leaves_out = ["the telefrag", "the powerups' timers", "double speed", "co-op's wait for the host"]
+note = "only its place in the tick is traced (game_tick); the BSP switch and the end of a level are checked by campaign/tests/flow.rs; its body is the game loop track's"
 
 [function.players_update_before_game]
 class = "partial"
 engine = "sim/src/lib.rs"
-leaves_out = ["the network's prediction", "the players' respawn timers"]
-owed = "the engine's own version; no check against the original yet"
+check = "sim/tests/game_tick_reference.rs"
+against = "trace"
+leaves_out = ["the network's prediction", "the players' respawn timers", "co-op's stranded players rescued", "the actions' checks (its asserts)"]
+note = "only its place in the tick is traced (game_tick); its body is the game loop track's"
 
 [function.playlist_profile_get_display_name]
 class = "missing"

@@ -21,6 +21,7 @@ mod dead_camera;
 pub mod debris;
 pub mod device_animation;
 pub mod effects;
+pub mod facing;
 pub mod first_person;
 pub mod first_person_states;
 pub mod forces;
@@ -34,6 +35,7 @@ pub mod objects;
 pub mod particle_collision;
 pub mod periodic;
 pub mod physics_variables;
+pub mod pickup;
 pub mod platforms;
 pub mod player;
 pub mod point_physics;
@@ -1501,17 +1503,25 @@ impl Simulation {
     /// it. Its position is the last tick's.
     pub fn camera_turned(&self, yaw: Radians, pitch: Radians) -> Camera {
         let mut camera = self.camera();
-        let (from_yaw, from_pitch) = match self.players.first() {
-            Some(player) => player.look(),
+        let (turned_yaw, turned_pitch) = match self.players.first() {
+            Some(player) => {
+                let (from_yaw, from_pitch) = player.look();
+                facing::turn(from_yaw.0, from_pitch.0, yaw.0, pitch.0)
+            }
             None => {
                 let free = self.world.get_resource::<FreeCamera>().copied();
-                free.map_or((Radians(0.0), Radians(0.0)), |free| (free.yaw, free.pitch))
+                let (from_yaw, from_pitch) =
+                    free.map_or((Radians(0.0), Radians(0.0)), |free| (free.yaw, free.pitch));
+                let max = FreeCamera::MAX_PITCH.0;
+                (
+                    libm::remainderf(from_yaw.0 + yaw.0, std::f32::consts::TAU),
+                    (from_pitch.0 + pitch.0).clamp(-max, max),
+                )
             }
         };
-        let max = FreeCamera::MAX_PITCH.0;
         let turned = FreeCamera {
-            yaw: Radians(libm::remainderf(from_yaw.0 + yaw.0, std::f32::consts::TAU)),
-            pitch: Radians((from_pitch.0 + pitch.0).clamp(-max, max)),
+            yaw: Radians(turned_yaw),
+            pitch: Radians(turned_pitch),
             ..FreeCamera::default()
         };
         if turned.yaw.0.is_finite() && turned.pitch.0.is_finite() {

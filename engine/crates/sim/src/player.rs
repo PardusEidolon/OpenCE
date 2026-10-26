@@ -23,10 +23,12 @@ use crate::cached::Cached;
 use crate::clock;
 use crate::damage;
 use crate::debris::Ejection;
+use crate::facing;
 use crate::hash::WorldHasher;
 use crate::input::{Buttons, TickInput};
 use crate::item_physics;
 use crate::objects::{self, Object, ObjectHandle, ObjectSpawn, Placed};
+use crate::pickup::{self, Choice, Seen};
 use crate::projectile::{self, Contact, Detonation, Flew, Flight, Impact};
 use crate::random::RandomSeed;
 use crate::unit_animator::UnitDrive;
@@ -340,7 +342,7 @@ impl Player {
             },
             place.0,
         )?;
-        let yaw = libm::remainderf(place.1, std::f32::consts::TAU);
+        let yaw = facing::wrap_yaw(place.1);
         let body = body_transform(mover.position, yaw);
         let handle = spawn(unit.clone(), body);
         let Some(handle) = handle else {
@@ -411,7 +413,7 @@ impl Player {
             .ok_or(PlayerError::NoStart(start))?;
         self.mover
             .teleport(&mut lock(&self.physics), Vec3::from_array(place.position))?;
-        self.yaw = libm::remainderf(place.facing, std::f32::consts::TAU);
+        self.yaw = facing::wrap_yaw(place.facing);
         self.pitch = 0.0;
         let body = body_transform(self.mover.position, self.yaw);
         self.handle = spawn(self.unit.clone(), body).ok_or(PlayerError::TableFull)?;
@@ -577,9 +579,7 @@ impl Player {
     /// player only turns; its vehicle moves it).
     /// (`player_control_update`, `handle_one_player_input`)
     pub(crate) fn step(&mut self, input: &TickInput) -> PlayerPose {
-        let max = FreeCamera::MAX_PITCH.0;
-        self.yaw = libm::remainderf(self.yaw + input.yaw.0, std::f32::consts::TAU);
-        self.pitch = (self.pitch + input.pitch.0).clamp(-max, max);
+        (self.yaw, self.pitch) = facing::turn(self.yaw, self.pitch, input.yaw.0, input.pitch.0);
         self.throttle = throttle(input);
         self.jumped = false;
         if self.seat.is_some() {
@@ -684,7 +684,7 @@ impl Player {
         }
         // (a teleport stands it still: it keeps moving as it was)
         self.mover.velocity = velocity;
-        self.yaw = libm::remainderf(yaw, std::f32::consts::TAU);
+        self.yaw = facing::wrap_yaw(yaw);
         true
     }
 
@@ -895,7 +895,8 @@ impl Player {
                 return fired;
             }
             Arms::OnFoot { action } => {
-                self.pick_up(world, action, &mut fired.sounds);
+                let trigger = buttons.contains(Buttons::FIRE);
+                self.pick_up(world, action, trigger, &mut fired.sounds);
                 if buttons.pressed(held, Buttons::MELEE) && self.melee_ticks == 0 {
                     if let Some(impact) = self.melee(world, eyes, aim, &mut fired.sounds) {
                         fired.impacts.push(impact);
@@ -1194,10 +1195,18 @@ impl Player {
     }
 
     /// Takes the grenades it walks over while it has room for them and the
-    /// rounds of weapons it walks over that it carries, and with `action`,
-    /// or with a hand free, picks up the nearest other weapon, dropping the
-    /// one in its hands if its hands are full.
-    fn pick_up(&mut self, world: &mut World, action: bool, sounds: &mut Vec<PlayedSound>) {
+    /// rounds of weapons it walks over that it carries, then takes the
+    /// nearest weapon the game would take without asking or, with `action`,
+    /// the nearest it would swap for the one in its hands
+    /// ([`pickup::choose`]), dropping the one in its hands if its hands
+    /// are full. With `trigger` held, a weapon that must be readied is left.
+    fn pick_up(
+        &mut self,
+        world: &mut World,
+        action: bool,
+        trigger: bool,
+        sounds: &mut Vec<PlayedSound>,
+    ) {
         let feet = self.mover.position;
         let mut grenades: Vec<(f32, ObjectHandle, usize, Option<TagRef>)> = self
             .placed
@@ -1231,8 +1240,6 @@ impl Player {
                 objects::remove(world, handle);
             }
         }
-        // (a hand free takes a weapon walked over, as the action button does)
-        let action = action || self.inventory.weapons.len() < armory::MAXIMUM_WEAPONS;
         let mut near: Vec<(f32, ObjectHandle, usize, Option<WeaponState>)> = self
             .lying
             .get(world)
@@ -1286,24 +1293,19 @@ impl Player {
                 }
             }
         }
-        if !action {
+        let Some((handle, index, state)) = near.into_iter().find_map(|(_, handle, index, item)| {
+            let definition = self.armory.get(index)?;
+            let state = match item {
+                Some(item) => item,
+                None => WeaponState::new(&definition.weapon).ok()?,
+            };
+            match self.pickup_choice(index, &state, trigger) {
+                Choice::Take => Some((handle, index, state)),
+                Choice::Add | Choice::Swap if action => Some((handle, index, state)),
+                _ => None,
+            }
+        }) else {
             return;
-        }
-        let Some((_, handle, index, item)) = near
-            .into_iter()
-            .find(|(_, _, index, _)| !self.inventory.carries(*index))
-        else {
-            return;
-        };
-        let Some(definition) = self.armory.get(index) else {
-            return;
-        };
-        let state = match item {
-            Some(item) => item,
-            None => match WeaponState::new(&definition.weapon) {
-                Ok(state) => state,
-                Err(_) => return,
-            },
         };
         objects::remove(world, handle);
         let dropped = self.inventory.take(
@@ -1318,31 +1320,70 @@ impl Player {
         }
     }
 
+    /// What the game would do with the weapon of armory place `index`,
+    /// in `state`, lying at its feet ([`pickup::choose`]).
+    fn pickup_choice(&self, index: usize, state: &WeaponState, trigger: bool) -> Choice {
+        let flags = |index: usize| {
+            self.armory
+                .get(index)
+                .map_or(0, |definition| definition.weapon.flags)
+        };
+        let carried: Vec<Option<Seen>> = self
+            .inventory
+            .weapons
+            .iter()
+            .map(|carried| {
+                Some(Seen {
+                    kind: carried.armory,
+                    flags: flags(carried.armory),
+                    age: carried.state.age,
+                })
+            })
+            .collect();
+        let current = (self.inventory.current < carried.len()).then_some(self.inventory.current);
+        let lying = Seen {
+            kind: index,
+            flags: flags(index),
+            age: state.age,
+        };
+        // (the CTF flag's forced pickup is the flag's own stand-in)
+        pickup::choose(&carried, current, &lying, trigger, false)
+    }
+
     /// The weapon the action button would swap for the one in its hands,
-    /// as `pick_up` would choose it: the nearest within reach that it
-    /// does not carry, its hands being full (with a hand free, it takes
-    /// one without asking).
+    /// as `pick_up` would choose it: the nearest within reach that the
+    /// game would offer to swap ([`pickup::choose`]), the trigger not held.
     /// (the original's `player_examine_nearby_item`, in part)
     pub(crate) fn swap_offer(&mut self, world: &mut World) -> Option<TagRef> {
-        if self.seat.is_some() || self.inventory.weapons.len() < armory::MAXIMUM_WEAPONS {
+        if self.seat.is_some() {
             return None;
         }
         let feet = self.mover.position;
-        let mut near: Vec<(f32, ObjectHandle, usize)> = self
-            .placed
+        let mut near: Vec<(f32, ObjectHandle, usize, Option<WeaponState>)> = self
+            .lying
             .get(world)
             .iter(world)
-            .filter(|(_, object, _)| object.kind == ObjectKind::Weapon)
-            .filter_map(|(handle, object, transform)| {
+            .filter(|(_, _, object, _)| object.kind == ObjectKind::Weapon)
+            .filter_map(|(handle, transform, object, item)| {
                 let distance = transform.position.distance(feet);
                 let index = self.armory.find(&object.tag)?;
-                (distance <= armory::PICKUP_RADIUS && !self.inventory.carries(index))
-                    .then_some((distance, *handle, index))
+                (distance <= armory::PICKUP_RADIUS)
+                    .then(|| (distance, *handle, index, item.map(|item| item.0.clone())))
             })
             .collect();
         near.sort_by(|a, b| a.0.total_cmp(&b.0).then(a.1.cmp(&b.1)));
-        let (_, _, index) = near.first()?;
-        Some(self.armory.get(*index)?.tag.clone())
+        near.into_iter().find_map(|(_, _, index, item)| {
+            let definition = self.armory.get(index)?;
+            let state = match item {
+                Some(item) => item,
+                None => WeaponState::new(&definition.weapon).ok()?,
+            };
+            matches!(
+                self.pickup_choice(index, &state, false),
+                Choice::Add | Choice::Swap
+            )
+            .then(|| definition.tag.clone())
+        })
     }
 
     /// The weapon the HUD reminds the player to switch to: when the one in
