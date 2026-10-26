@@ -3879,7 +3879,8 @@ owed = "the engine's own tests (sim/tests/game.rs); no check against the origina
 [function.game_engine_get_team_score]
 class = "matched"
 engine = "sim/src/game.rs"
-owed = "the engine's own tests (sim/tests/game.rs); no check against the original yet"
+check = "sim/tests/game_engine_reference.rs"
+against = "trace"
 
 [function.game_engine_handle_client_message]
 class = "replaced"
@@ -3943,8 +3944,9 @@ note = "not reached from a root of the game; the game loop track owns it"
 [function.game_engine_player_killed]
 class = "partial"
 engine = "sim/src/game.rs"
-leaves_out = ["the oddball, king, race and juggernaut variants", "the game's announcer and score messages"]
-owed = "the engine's own tests (sim/tests/game.rs); no check against the original yet"
+check = "sim/tests/game_engine_reference.rs"
+against = "trace"
+leaves_out = ["the oddball, king, race and juggernaut variants", "the game's announcer and score messages", "the PC version's gametype options (auto team balance, the friendly fire penalty), off in stock"]
 
 [function.game_engine_race_read_network_state]
 class = "replaced"
@@ -7345,8 +7347,9 @@ primitive = "glam::Vec2"
 [function.slayer_engine_player_killed_player]
 class = "partial"
 engine = "sim/src/game.rs"
-leaves_out = ["the oddball, king, race and juggernaut variants", "the game's announcer and score messages"]
-owed = "the engine's own tests (sim/tests/game.rs); no check against the original yet"
+check = "sim/tests/game_engine_reference.rs"
+against = "trace"
+leaves_out = ["the oddball, king, race and juggernaut variants", "the game's announcer and score messages", "kill in order's targets and the speed for the score"]
 
 [function.slayer_engine_update]
 class = "matched"
@@ -7356,7 +7359,8 @@ owed = "the engine's own tests (sim/tests/game.rs); no check against the origina
 [function.slayer_get_score]
 class = "matched"
 engine = "sim/src/game.rs"
-owed = "the engine's own tests (sim/tests/game.rs); no check against the original yet"
+check = "sim/tests/game_engine_reference.rs"
+against = "trace"
 
 [function.slowly_stop_vehicle]
 class = "matched"

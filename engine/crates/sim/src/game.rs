@@ -51,6 +51,9 @@ pub struct Variant {
     /// How long a dead player waits to respawn (at least
     /// [`MINIMUM_RESPAWN_TICKS`]).
     pub respawn_ticks: u32,
+    /// How much longer each death makes a player's next wait, up to five
+    /// times as long, and each kill of an enemy makes it shorter again.
+    pub respawn_growth_ticks: u32,
     /// How much longer after a suicide or a betrayal.
     pub suicide_penalty_ticks: u32,
     /// Whether a team's own flag must be carried home rather than touched.
@@ -69,6 +72,7 @@ impl Variant {
             score_to_win: 15,
             time_limit_ticks: None,
             respawn_ticks: 0,
+            respawn_growth_ticks: 0,
             suicide_penalty_ticks: engine_ticks(300),
             flag_must_reset: false,
             flag_at_home_to_score: false,
@@ -91,6 +95,7 @@ impl Variant {
             score_to_win: 3,
             time_limit_ticks: None,
             respawn_ticks: engine_ticks(300),
+            respawn_growth_ticks: 0,
             suicide_penalty_ticks: engine_ticks(150),
             flag_must_reset: false,
             flag_at_home_to_score: false,
@@ -118,6 +123,9 @@ pub struct Contestant {
     pub alive: bool,
     /// How long it still waits to respawn.
     pub respawn_ticks: u32,
+    /// How much longer than the variant's its next wait is, for the
+    /// respawn growth.
+    pub respawn_penalty_ticks: u32,
 }
 
 /// Where a flag is.
@@ -339,12 +347,20 @@ impl Rules {
                 scorer.score += if friendly { -1 } else { 1 };
             }
         }
-        let wait = self.variant.respawn_ticks
-            + if penalty {
-                self.variant.suicide_penalty_ticks
-            } else {
-                0
-            };
+        let mut wait = dead.respawn_penalty_ticks + self.variant.respawn_ticks;
+        let growth = self.variant.respawn_growth_ticks;
+        if growth > 0 {
+            let contestant = &mut self.contestants[victim];
+            contestant.respawn_penalty_ticks =
+                (contestant.respawn_penalty_ticks + growth).min(growth * 5);
+            if let Some(killer) = killer.filter(|_| !penalty) {
+                let scorer = &mut self.contestants[killer];
+                scorer.respawn_penalty_ticks = scorer.respawn_penalty_ticks.saturating_sub(growth);
+            }
+        }
+        if penalty {
+            wait += self.variant.suicide_penalty_ticks;
+        }
         let contestant = &mut self.contestants[victim];
         contestant.alive = false;
         contestant.deaths += 1;
