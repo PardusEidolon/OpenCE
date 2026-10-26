@@ -66,9 +66,9 @@ entries list what they leave out.
   - [x] The readers register named offsets in place of bare constants; the census reads the registration
 - [x] Task: Fields the engine uses b3f1a1b3
   - [x] Typed fields read outside the importer, marked
-- [ ] Task: Load-time fix-ups
-  - [ ] The original's postprocess and defaults listed per tag group
-  - [ ] Each compared with the importer, and the ones that differ recorded
+- [x] Task: Load-time fix-ups 120fce24
+  - [x] The original's postprocess and defaults listed per tag group
+  - [x] Each compared with the importer, and the ones that differ recorded
 - [ ] Task: Conductor - User Manual Verification 'Phase 4: Tag fields and load-time fix-ups' (Protocol in workflow.md) (automated; deferred to the end)
 
 ## Phase 5: Scripts and sounds
