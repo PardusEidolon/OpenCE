@@ -2955,8 +2955,9 @@ stands_in = "import/src/lib.rs"
 [function.default_starting_location_rate_function]
 class = "partial"
 engine = "sim/src/game.rs"
-leaves_out = ["the rating's weights: the engine takes the spawn farthest from its living enemies"]
-owed = "the engine's own tests (sim/tests/game.rs); no check against the original yet"
+leaves_out = ["Capture the Flag's assault rating: the engine has no assault option"]
+check = "sim/tests/spawn_reference.rs"
+against = "trace"
 
 [function.delete_bitmap]
 class = "replaced"
@@ -3882,8 +3883,9 @@ owed = "the engine's own tests (sim/tests/game.rs); no check against the origina
 [function.game_engine_get_starting_location_rating]
 class = "partial"
 engine = "sim/src/game.rs"
-leaves_out = ["the rating's weights: the engine takes the spawn farthest from its living enemies"]
-owed = "the engine's own tests (sim/tests/game.rs); no check against the original yet"
+leaves_out = ["nearby_vehicle's objects_in_sphere: the engine tests every vehicle's bounding sphere, not the sphere's clusters' first sixteen objects"]
+check = "sim/tests/spawn_reference.rs"
+against = "trace"
 
 [function.game_engine_get_team_score]
 class = "matched"

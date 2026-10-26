@@ -283,6 +283,16 @@ impl Rules {
         index
     }
 
+    /// Player `index` found no start to respawn at: it tries again the
+    /// next game tick (`player_spawn` failing leaves its respawn timer at
+    /// one).
+    pub fn spawn_failed(&mut self, index: usize) {
+        if let Some(contestant) = self.contestants.get_mut(index) {
+            contestant.alive = false;
+            contestant.respawn_ticks = engine_ticks(1);
+        }
+    }
+
     /// The players.
     pub fn contestants(&self) -> &[Contestant] {
         &self.contestants
@@ -613,6 +623,147 @@ pub fn random_item(seed: &mut RandomSeed, weights: &[f32]) -> Option<usize> {
     None
 }
 
+/// A player as the rating of a start sees it: its team, and where its unit
+/// stands while it has one.
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct Neighbour {
+    /// Its team (in a game without teams, its own).
+    pub team: u16,
+    /// Where its unit stands, if it has one.
+    pub position: Option<[f32; 3]>,
+}
+
+/// A start as its rating sees it.
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct StartView {
+    /// Where it is.
+    pub position: [f32; 3],
+    /// Its team.
+    pub team: u16,
+    /// Whether it is for the game's type (`match_game_type`).
+    pub for_game_type: bool,
+    /// Whether a vehicle stands on it (`nearby_vehicle`).
+    pub vehicle_near: bool,
+}
+
+/// The distance between two points (`distance3d`).
+fn distance3d(a: [f32; 3], b: [f32; 3]) -> f32 {
+    let d = [b[0] - a[0], b[1] - a[1], b[2] - a[2]];
+    libm::sqrtf(d[0] * d[0] + d[1] * d[1] + d[2] * d[2])
+}
+
+/// How far a start at `at` is from the players' units, for a player of
+/// `team` (`game_engine_get_distance_rating_for_spawn`): none on top of
+/// anyone or within two units of an enemy, a tenth within a unit of
+/// anyone, and less the nearer an enemy is up to five units.
+pub fn distance_rating_for_spawn(
+    teams: bool,
+    team: u16,
+    players: &[Neighbour],
+    at: [f32; 3],
+) -> f32 {
+    let mut rating = 1.0_f32;
+    for player in players {
+        let Some(origin) = player.position else {
+            continue;
+        };
+        let distance = distance3d(origin, at);
+        // (the game's `!(distance > x)`, which a NaN passes)
+        let not_beyond = |x: f32| distance <= x || distance.is_nan();
+        if !teams || player.team != team || not_beyond(0.25) {
+            if distance < 0.25 {
+                rating = 0.0;
+            } else if distance < 1.0 {
+                rating *= 0.1;
+            }
+            if player.team != team {
+                if distance < 2.0 {
+                    rating = 0.0;
+                } else if not_beyond(5.0) {
+                    rating = (distance - 2.0) * rating * 0.333_333_34;
+                }
+            }
+        }
+    }
+    rating
+}
+
+/// How much a start at `at` gains from the units of a player's teammates
+/// between one and six units from it, the nearer the more, up to four times
+/// (`game_engine_get_friendly_bonus`).
+pub fn friendly_bonus(team: u16, players: &[Neighbour], at: [f32; 3]) -> f32 {
+    let mut rating = 0.0_f32;
+    for player in players.iter().filter(|player| player.team == team) {
+        let Some(origin) = player.position else {
+            continue;
+        };
+        let distance = distance3d(origin, at);
+        if (1.0..=6.0).contains(&distance) {
+            let base = 1.0_f32 - (distance - 1.0) * 0.2;
+            rating += libm::pow(f64::from(base), f64::from(0.6_f32)) as f32;
+        }
+    }
+    rating.min(3.0) * 3.0 + 1.0
+}
+
+/// A start's rating for a player of `team` (none if it is not for the
+/// game's type or a vehicle stands on it), as Halo rates it before its
+/// random weighting (`game_engine_get_starting_location_rating`,
+/// `default_starting_location_rate_function`): in Capture the Flag only
+/// the player's own team's starts, then by its distance from the players,
+/// and with teams its nearness to teammates.
+pub fn starting_location_rating(
+    variant: &Variant,
+    team: u16,
+    start: &StartView,
+    players: &[Neighbour],
+) -> f32 {
+    if !start.for_game_type || start.vehicle_near {
+        return 0.0;
+    }
+    let mut rating = 1.0_f32;
+    // (only Capture the Flag's engine has its test flag 0)
+    if variant.game_type == GameType::CaptureTheFlag && team != start.team {
+        rating = 0.0;
+    }
+    if rating > 0.0 {
+        rating *= distance_rating_for_spawn(variant.teams, team, players, start.position);
+    }
+    if rating > 0.0 && variant.teams {
+        rating *= friendly_bonus(team, players, start.position);
+    }
+    rating
+}
+
+/// The start a player respawns at, from each start's rating in order
+/// (`find_best_starting_location_index`): each is weighted by the square
+/// root of a random draw, and the first with the best weighted rating above
+/// zero is chosen; none if every start's is zero.
+pub fn best_starting_location(
+    seed: &mut RandomSeed,
+    ratings: impl IntoIterator<Item = f32>,
+) -> Option<usize> {
+    let (mut best, mut best_rating) = (None, 0.0_f32);
+    for (index, rating) in ratings.into_iter().enumerate() {
+        let random = seed.next_real_range(0.0, 1.0);
+        let rating = rating * libm::pow(f64::from(random), 0.5) as f32;
+        if rating > best_rating {
+            (best, best_rating) = (Some(index), rating);
+        }
+    }
+    best
+}
+
+/// Whether a vehicle stands on a start at `at`: a vehicle's bounding sphere
+/// (its centre and radius) within a tenth of a unit of it (`nearby_vehicle`).
+pub fn vehicle_near(vehicles: &[([f32; 3], f32)], at: [f32; 3]) -> bool {
+    vehicles.iter().any(|&(centre, radius)| {
+        let d = [at[0] - centre[0], at[1] - centre[1], at[2] - centre[2]];
+        let reach = radius + 0.1;
+        d[0] * d[0] + d[1] * d[1] + d[2] * d[2] <= reach * reach
+    })
+}
+
 /// The items the placements stood that still lie where they were put, with
 /// the game tick each was last owned at: one is purged a period after it
 /// was stood, as the next one stands (`game_engine_update_purge`).
@@ -762,9 +913,20 @@ impl Game {
             })
             .collect();
         let events = self.rules.step(&positions);
+        // (those still to respawn this tick have no unit yet)
+        let mut waiting: Vec<usize> = events
+            .iter()
+            .filter_map(|event| match *event {
+                GameEvent::Respawn(index) => Some(index),
+                _ => None,
+            })
+            .collect();
         for event in &events {
             match *event {
-                GameEvent::Respawn(index) => self.respawn(simulation, level, index),
+                GameEvent::Respawn(index) => {
+                    waiting.retain(|&other| other != index);
+                    self.respawn(simulation, level, index, &waiting);
+                }
                 GameEvent::FlagTaken { flag, .. }
                 | GameEvent::FlagDropped(flag)
                 | GameEvent::FlagReturned(flag)
@@ -819,66 +981,72 @@ impl Game {
         }
     }
 
-    /// Stands player `index` at the start for the game type and its team
-    /// farthest from its living enemies.
-    /// (`game_engine_get_starting_location_rating`)
-    fn respawn(&mut self, simulation: &mut Simulation, level: &Level, index: usize) {
+    /// Stands player `index` at the start Halo would choose for it, rated
+    /// by the players' units (but those in `waiting`, still to respawn) and
+    /// the vehicles standing on the starts; with none to choose, it tries
+    /// again the next game tick (`find_best_starting_location_index`).
+    fn respawn(
+        &mut self,
+        simulation: &mut Simulation,
+        level: &Level,
+        index: usize,
+        waiting: &[usize],
+    ) {
         let Some(contestant) = self.rules.contestants().get(index).copied() else {
             return;
         };
         let variant = *self.rules.variant();
-        let enemies: Vec<[f32; 3]> = simulation
+        let players: Vec<Neighbour> = simulation
             .players()
             .iter()
             .enumerate()
-            .filter(|&(other, _)| other != index)
-            .filter(|&(other, _)| {
-                self.rules
-                    .contestants()
-                    .get(other)
-                    .is_some_and(|c| c.alive && c.team != contestant.team)
-            })
-            .filter_map(|(_, player)| position(simulation, player.handle()))
-            .collect();
-        let starts = &level.scenario.player_starts;
-        let fits = |team_matters: bool| {
-            starts
-                .iter()
-                .enumerate()
-                .filter(move |(_, start)| start.game_types.matches(variant.game_type))
-                .filter(move |(_, start)| !team_matters || start.team == contestant.team)
-                .map(|(at, _)| at)
-        };
-        let candidates: Vec<usize> = if variant.teams && fits(true).next().is_some() {
-            fits(true).collect()
-        } else if fits(false).next().is_some() {
-            fits(false).collect()
-        } else {
-            (0..starts.len()).collect()
-        };
-        let nearest_enemy = |start: usize| {
-            let at = starts[start].position;
-            enemies
-                .iter()
-                .map(|enemy| {
-                    let d = [at[0] - enemy[0], at[1] - enemy[1], at[2] - enemy[2]];
-                    d[0] * d[0] + d[1] * d[1] + d[2] * d[2]
+            .filter_map(|(other, player)| {
+                let other_contestant = self.rules.contestants().get(other)?;
+                let has_unit =
+                    other != index && other_contestant.alive && !waiting.contains(&other);
+                Some(Neighbour {
+                    team: other_contestant.team,
+                    position: has_unit
+                        .then(|| position(simulation, player.handle()))
+                        .flatten(),
                 })
-                .fold(f32::INFINITY, f32::min)
-        };
-        let chosen = if enemies.is_empty() {
-            // (no one to avoid: a random one of them)
-            let pick = usize::from(self.seed.next_u16()) % candidates.len().max(1);
-            candidates.get(pick).copied()
-        } else {
-            candidates
-                .iter()
-                .copied()
-                .max_by(|&a, &b| nearest_enemy(a).total_cmp(&nearest_enemy(b)))
-        };
-        if let Some(start) = chosen {
+            })
+            .collect();
+        let vehicles: Vec<([f32; 3], f32)> = simulation
+            .objects()
+            .into_iter()
+            .filter_map(|handle| {
+                let object = simulation.object(handle)?;
+                if object.kind != ObjectKind::Vehicle {
+                    return None;
+                }
+                let definition = level.object(&object.tag)?;
+                let transform = simulation.transform(handle)?;
+                let centre = transform.rotation * Vec3::from_array(definition.bounding_offset)
+                    + transform.position;
+                Some((centre.to_array(), definition.bounding_radius))
+            })
+            .collect();
+        let ratings: Vec<f32> = level
+            .scenario
+            .player_starts
+            .iter()
+            .map(|start| {
+                let view = StartView {
+                    position: start.position,
+                    team: start.team,
+                    for_game_type: start.game_types.matches(variant.game_type),
+                    vehicle_near: vehicle_near(&vehicles, start.position),
+                };
+                starting_location_rating(&variant, contestant.team, &view, &players)
+            })
+            .collect();
+        let spawned = best_starting_location(&mut self.seed, ratings).and_then(|start| {
             let team = variant.teams.then_some(contestant.team);
-            let _ = simulation.respawn_player(index, level, start, team);
+            simulation.respawn_player(index, level, start, team)?.ok()
+        });
+        if spawned.is_none() {
+            self.rules.spawn_failed(index);
         }
     }
 
