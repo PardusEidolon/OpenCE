@@ -1,0 +1,16 @@
+Task: A trace for `game_tick` over a short run of the fake world.
+Trace the game's tick order against the engine's
+
+game.c's game_tick is compiled with a stand-in for each system it
+updates, over four ticks (alone, at double speed, as a distributed
+client and as a co-op client), and sim/tests/game_tick_reference.rs
+checks the engine against it: the order the game ticks in, a game
+tick as two of the engine's 60 Hz ticks (and one at double speed),
+the client's ticks leaving the actors and scripts to the host, and
+the seven pairs of systems the engine runs out of the game's order
+(the scripts first, the actors before the units, the effects after
+the simulation), which the game loop track puts right.
+
+game_tick is now partial against the trace, with what it leaves out
+recorded. census --write, --ratchet and --check pass; the four tests
+pass and clippy is clean.
