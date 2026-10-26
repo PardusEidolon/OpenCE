@@ -51,7 +51,7 @@ entries list what they leave out.
 - [x] Task: Cameras and cutscenes (camera, cutscene) ef6027b4
 - [x] Task: The interface, HUD, UI and input (interface, dialogs, text, strings, input) c40f7272
 - [x] Task: The world (scenario, structures, bitmaps, cache, tag_files) 70e7b5ac
-- [ ] Task: Helpers (math, cseries, memory) as Native, checked against the math reference trace and the fixed-order rule
+- [x] Task: Helpers (math, cseries, memory) as Native, checked against the math reference trace and the fixed-order rule 98092cf2
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: The walk through the systems' (Protocol in workflow.md) (automated; deferred to the end)
 
 ## Phase 4: Tag fields and load-time fix-ups
