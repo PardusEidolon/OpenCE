@@ -1,40 +1,16 @@
-// The benchmark: the level drawn offscreen along a fixed flight path for a
-// set time, as fast as the GPU goes, with up to three frames in flight as
-// the window has. A frame's time is the time between the ends of two
-// frames' GPU work, so it counts whichever of the CPU and the GPU is slower.
+// The benchmark: one of the engine's benchmark paths (devgulch, Blood
+// Gulch, Blood Gulch with sixteen players: crates/ffi/src/benchmark.rs)
+// played and drawn offscreen for a set time, as fast as the GPU goes, with
+// up to three frames in flight as the window has. Each frame asks its
+// caller for the world at that time. A frame's time is the time between
+// the ends of two frames' GPU work, so it counts whichever of the CPU and
+// the GPU is slower.
 
 import Foundation
 import Metal
+import OpenCEEngineCore
 import QuartzCore
 import simd
-
-/// The benchmark's flight: a loop around the start view, rising and
-/// falling, looking ahead along the loop and down and up as it goes, once
-/// around in `period` seconds.
-public struct BenchmarkPath: Sendable {
-    public let centre: SIMD3<Float>
-    public let radius: Float
-    public let height: Float
-    public let period: Double
-
-    public init(centre: SIMD3<Float>, radius: Float = 30, height: Float = 6, period: Double = 60) {
-        self.centre = centre
-        self.radius = radius
-        self.height = height
-        self.period = period
-    }
-
-    /// The camera `seconds` into the flight.
-    public func camera(at seconds: Double, verticalFov: Float = 70 * .pi / 180) -> ViewCamera {
-        let turn = Float((seconds / period).truncatingRemainder(dividingBy: 1)) * 2 * .pi
-        let rise = height * (0.5 + 0.5 * sin(2 * turn))
-        let position = centre + SIMD3(radius * cos(turn), radius * sin(turn), rise)
-        // (the loop's tangent, counter-clockwise)
-        let yaw = turn + .pi / 2
-        let pitch = -0.15 + 0.2 * sin(3 * turn)
-        return ViewCamera(position: position, yaw: yaw, pitch: pitch, verticalFov: verticalFov)
-    }
-}
 
 /// The benchmark's frame times and what they were drawn at.
 public struct BenchmarkResult: Sendable {
@@ -59,11 +35,21 @@ public struct BenchmarkResult: Sendable {
     public var gpuP50: Double { Self.percentile(50, of: gpuTimes) }
     public var gpuP99: Double { Self.percentile(99, of: gpuTimes) }
 
-    /// The result as JSON, for tools/test_engine_benchmark.py.
-    public var json: String {
+    /// The frame times' report (the engine's: crates/ffi/src/benchmark.rs),
+    /// whose hitches are frames over twice `targetMs`.
+    public func report(targetMs: Double) -> BenchmarkReport {
+        benchmarkReport(frameTimes: frameTimes, targetMs: targetMs)
+    }
+
+    /// The result of `path` as JSON, for tools/test_engine_benchmark.py.
+    public func json(path: String, targetMs: Double) -> String {
         func number(_ value: Double) -> String { String(format: "%.3f", value) }
-        return "{\"width\": \(width), \"height\": \(height), \"seconds\": \(number(seconds)), "
-            + "\"frames\": \(frameTimes.count), \"p50_ms\": \(number(p50)), \"p99_ms\": \(number(p99)), "
+        let report = report(targetMs: targetMs)
+        return "{\"path\": \"\(path)\", \"width\": \(width), \"height\": \(height), "
+            + "\"seconds\": \(number(seconds)), \"frames\": \(report.frames), "
+            + "\"mean_ms\": \(number(report.meanMs)), \"p50_ms\": \(number(report.p50Ms)), "
+            + "\"p99_ms\": \(number(report.p99Ms)), \"p999_ms\": \(number(report.p999Ms)), "
+            + "\"hitches\": \(report.hitches), \"pacing_ms\": \(number(report.pacingMs)), "
             + "\"gpu_p50_ms\": \(number(gpuP50)), \"gpu_p99_ms\": \(number(gpuP99))}"
     }
 }
@@ -93,12 +79,14 @@ private final class FrameClock: @unchecked Sendable {
 }
 
 extension LevelRenderer {
-    /// Flies `path` for `seconds`, drawing at `width` by `height`, after
-    /// `warmUp` frames that are not counted (the pipelines' and the
-    /// temporal history's first use).
+    /// Draws for `seconds` at `width` by `height`, after `warmUp` frames
+    /// that are not counted (the pipelines' and the temporal history's
+    /// first use). Before each frame `world` is given the seconds since the
+    /// counting began (none while warming up) and sets the renderer's
+    /// lights, decals and particles, giving back the camera and the objects.
     public func benchmark(
-        width: Int, height: Int, path: BenchmarkPath, seconds: Double, objects: [DrawnObject] = [],
-        warmUp: Int = 60, queue: MTLCommandQueue
+        width: Int, height: Int, seconds: Double, warmUp: Int = 60, queue: MTLCommandQueue,
+        world: (_ elapsed: Double?) throws -> (camera: ViewCamera, objects: [DrawnObject])
     ) throws -> BenchmarkResult {
         let descriptor = MTLTextureDescriptor.texture2DDescriptor(
             pixelFormat: outputFormat, width: width,
@@ -124,6 +112,8 @@ extension LevelRenderer {
             }
             let elapsed = started.map { now - $0 } ?? 0
             if started != nil, elapsed >= seconds { break }
+            // (the world before the slot: a throw leaves the slots whole)
+            let (camera, objects) = try world(started.map { _ in elapsed })
             slots.wait()
             guard let commands = queue.makeCommandBuffer() else {
                 slots.signal()
@@ -136,9 +126,7 @@ extension LevelRenderer {
                 }
                 slots.signal()
             }
-            encode(
-                into: commands, target: targets[frame % inFlight], camera: path.camera(at: elapsed),
-                objects: objects)
+            encode(into: commands, target: targets[frame % inFlight], camera: camera, objects: objects)
             commands.commit()
             last = commands
             frame += 1

@@ -18,9 +18,11 @@
 // on a map without a player start, the free camera flies instead: W, A, S,
 // D, Space and Control (Shift faster). F3 or --frame-times shows the frame
 // times. --capture-ui [FOLDER] draws every menu screen headless into
-// assets/ui_reference (UiCapture.swift). --benchmark SECONDS flies the map
-// offscreen at --size (3840x2160 by default), with no window, and prints the frame times (--off with the
-// render switches it draws without, e.g. render.gtao,render.ssr). --headless runs
+// assets/ui_reference (UiCapture.swift). --benchmark SECONDS plays a
+// benchmark path (--path devgulch, bloodgulch or bloodgulch16) offscreen
+// at --size (3840x2160 by default), with no window, and prints its report
+// (--baseline with a report kept before, to fail on a regression; --off
+// with the render switches it draws without, e.g. render.gtao,render.ssr). --headless runs
 // the world with no window, answering the control socket (Control.swift);
 // --control (or --socket PATH) opens the socket beside the window. ~ (the
 // key left of 1) opens the developer shell over the game.
@@ -1151,16 +1153,27 @@ extension AppDelegate: GameActions {
     }
 }
 
-/// The benchmark (tools/test_engine_benchmark.py): --map drawn offscreen
-/// along the benchmark's path, its frame times printed as JSON.
+/// The benchmark (tools/test_engine_benchmark.py): --path (devgulch,
+/// bloodgulch or bloodgulch16; bloodgulch when none is named) played and
+/// drawn offscreen, its report printed as JSON. --map names the map file
+/// (the path's own in --maps, assets/maps, when none is named); --baseline
+/// names a report kept before, against which each regression is printed
+/// to stderr, and the run fails when there is one.
 func benchmark(seconds: String) -> Never {
     guard let time = Double(seconds), time.isFinite, time > 0 else { fail("--benchmark is seconds, not \(seconds)") }
-    guard let map = argument("--map") else { fail("--benchmark needs --map") }
+    let named = argument("--path") ?? "bloodgulch"
+    guard let path = benchmarkPathNamed(name: named) else {
+        fail("--path is devgulch, bloodgulch or bloodgulch16, not \(named)")
+    }
+    let maps = argument("--maps") ?? "assets/maps"
+    let map = argument("--map") ?? "\(maps)/\(benchmarkPathMap(path: path)).map"
     let size = (argument("--size") ?? "3840x2160").split(separator: "x").compactMap { Int($0) }
     guard size.count == 2, size.allSatisfy({ (1...16384).contains($0) }) else { fail("--size is WIDTHxHEIGHT") }
     guard let device = MTLCreateSystemDefaultDevice(), let queue = device.makeCommandQueue() else {
         fail("no Metal device")
     }
+    // (120 frames a second, the target the hitches are counted against)
+    let targetMs = 1000.0 / 120
     do {
         let level = try LoadedLevel(
             map: map, bsp: argument("--bsp").flatMap { UInt32($0) } ?? 0,
@@ -1172,18 +1185,49 @@ func benchmark(seconds: String) -> Never {
         let engine = Engine()
         let snapshots = SnapshotReader(engine: engine)
         _ = try engine.startLevel(geometry: level.geometry, difficulty: 1)
-        _ = try engine.step()
-        let objects = snapshots.acquire().drawnObjects()
-        let start = level.start
-        let path = BenchmarkPath(centre: SIMD3(start.x, start.y, start.z))
-        let result = try level.renderer.benchmark(
-            width: size[0], height: size[1], path: path, seconds: time,
-            objects: objects, queue: queue)
-        print(result.json)
+        _ = try engine.startBenchmark(path: path)
+        let renderer = level.renderer
+        // (the game runs at the frames' own pace, a tick a frame while
+        // warming up, so that each second counted plays the same second
+        // of the path)
+        var played = 0.0
+        let result = try renderer.benchmark(width: size[0], height: size[1], seconds: time, queue: queue) { elapsed in
+            let now = elapsed ?? 0
+            _ = try engine.advance(frameSeconds: elapsed == nil ? 1.0 / 60 : max(now - played, 0))
+            played = now
+            let frame = snapshots.acquire()
+            renderer.time = Float((Double(frame.tick) + Double(frame.alpha)) / 60)
+            renderer.lights = frame.drawnLights()
+            renderer.laidDecals = Array(frame.decals)
+            renderer.laidParticles = Array(frame.particles)
+            return (ViewCamera(frame.camera, alpha: frame.alpha), frame.drawnObjects())
+        }
+        let name = benchmarkPathName(path: path)
+        print(result.json(path: name, targetMs: targetMs))
+        if let baseline = argument("--baseline") {
+            let lost = try benchmarkRegressions(
+                baseline: benchmarkBaseline(URL(fileURLWithPath: baseline)),
+                current: result.report(targetMs: targetMs))
+            for line in lost {
+                FileHandle.standardError.write(Data("\(name): \(line)\n".utf8))
+            }
+            if !lost.isEmpty { exit(2) }
+        }
         exit(0)
     } catch {
         fail("\(map): \(error)")
     }
+}
+
+/// The report in a benchmark's JSON kept before.
+func benchmarkBaseline(_ url: URL) throws -> BenchmarkReport {
+    let object = try JSONSerialization.jsonObject(with: Data(contentsOf: url))
+    guard let fields = object as? [String: Any] else { fail("\(url.path) is not a benchmark's JSON") }
+    func number(_ key: String) -> Double { (fields[key] as? NSNumber)?.doubleValue ?? 0 }
+    return BenchmarkReport(
+        frames: UInt32(clamping: Int(number("frames"))), meanMs: number("mean_ms"), p50Ms: number("p50_ms"),
+        p99Ms: number("p99_ms"), p999Ms: number("p999_ms"), hitches: UInt32(clamping: Int(number("hitches"))),
+        pacingMs: number("pacing_ms"))
 }
 
 /// The reference captures (UiCapture.swift): every screen of ui.map's

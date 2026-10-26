@@ -10,6 +10,7 @@
 pub mod allocations;
 pub mod audio;
 pub mod bake;
+pub mod benchmark;
 pub mod camera;
 pub mod campaign;
 pub mod control;
@@ -964,6 +965,7 @@ impl Engine {
     /// scenario does not have.
     pub fn spawn_player(&self, start: u32) -> Result<(), EngineError> {
         let mut state = self.lock();
+        state.shell.benchmark = None;
         let running = state.running.as_mut().ok_or(EngineError::NoWorld)?;
         let level = running.level.clone().ok_or(EngineError::NoWorld)?;
         let handle = running
@@ -991,6 +993,46 @@ impl Engine {
         running.previous_camera = transform(&running.simulation.camera().transform);
         publish(&mut state, &self.snapshots, 0.0);
         Ok(())
+    }
+
+    /// Starts benchmark `path` on the level started: the player at the
+    /// first start and the path's others at the starts after it, each
+    /// tick's inputs from then on the path's script (until another player
+    /// is spawned). Returns the players.
+    pub fn start_benchmark(&self, path: benchmark::BenchmarkPath) -> Result<u32, EngineError> {
+        self.spawn_player(0)?;
+        let mut state = self.lock();
+        let running = state.running.as_mut().ok_or(EngineError::NoWorld)?;
+        let level = running.level.clone().ok_or(EngineError::NoWorld)?;
+        let starts = level.scenario.player_starts.len().max(1);
+        for index in 1..path.players() {
+            let team = u16::try_from(index % 2).unwrap_or(0);
+            let (_, handle) = running
+                .simulation
+                .add_player(&level, index % starts, None)
+                .map_err(|error| EngineError::Load {
+                    message: error.to_string(),
+                })?;
+            running
+                .wardrobe
+                .dress(&mut running.simulation, &level, handle);
+            if let Some(game) = running.solo.as_mut() {
+                game.join(team);
+            }
+        }
+        let players = running.simulation.players().len();
+        state.shell.benchmark = Some(benchmark::Run::new());
+        publish(&mut state, &self.snapshots, 0.0);
+        Ok(u32::try_from(players).unwrap_or(u32::MAX))
+    }
+
+    /// A hash of the world's state (the tick, the camera, every object
+    /// and the players' movement), for checking that runs replay alike.
+    pub fn world_hash(&self) -> u64 {
+        self.lock()
+            .running
+            .as_mut()
+            .map_or(0, |running| running.simulation.world_hash())
     }
 
     /// Sees the player from behind (true) or from its eyes; false without
@@ -1563,12 +1605,17 @@ pub(crate) fn run_ticks(state: &mut State, ticks: u32) -> Result<(), EngineError
             }
             (_, _, Some(campaign)) => campaign.step(&mut running.simulation, input.tick_input()),
             _ => {
-                let tick = shell
-                    .station
-                    .as_mut()
-                    .and_then(|run| run.input(&running.simulation))
-                    .unwrap_or_else(|| input.tick_input());
-                running.simulation.step(tick);
+                if let Some(run) = shell.benchmark.as_mut() {
+                    let players = running.simulation.players().len();
+                    running.simulation.step_all(run.inputs(players));
+                } else {
+                    let tick = shell
+                        .station
+                        .as_mut()
+                        .and_then(|run| run.input(&running.simulation))
+                        .unwrap_or_else(|| input.tick_input());
+                    running.simulation.step(tick);
+                }
                 if let (Some(game), Some(level)) = (&mut running.solo, &running.level) {
                     game.step(&mut running.simulation, level);
                 }

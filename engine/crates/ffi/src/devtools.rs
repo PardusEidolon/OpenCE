@@ -136,6 +136,8 @@ pub(crate) struct Shell {
     pub script_status: String,
     /// The test map's station running (`station`).
     pub(crate) station: Option<crate::stations::Run>,
+    /// The benchmark path being played (`Engine::start_benchmark`).
+    pub(crate) benchmark: Option<crate::benchmark::Run>,
     /// The frames `frame` asked for, for the app to draw: path, width, height.
     pub(crate) frames: Vec<(String, u32, u32)>,
     /// The map's lighting controls' file, and what `tune` asked for.
@@ -159,6 +161,7 @@ impl Default for Shell {
             script: None,
             script_status: String::new(),
             station: None,
+            benchmark: None,
             frames: Vec::new(),
             tuning: crate::dev_state::Tuning::default(),
             menu_music: None,
