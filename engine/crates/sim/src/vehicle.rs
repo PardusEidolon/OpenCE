@@ -12,6 +12,7 @@
 //! materials do not scale its friction, and the level is the only thing a
 //! vehicle runs into.
 
+use crate::physics_variables::{position_update_seek, speed_update_seek, SpeedParameters};
 use glam::{Mat3, Quat, Vec2, Vec3};
 use opence_content::{
     BspWater, FrictionType, MassPoint, MaterialPhysics, Physics, PoweredMassPoint, Vehicle,
@@ -723,94 +724,6 @@ fn pin_fraction(v: f32, begin: f32, end: f32) -> f32 {
     } else {
         (begin - v) / (begin - end)
     }
-}
-
-/// A speed's limits and how fast it changes (physics_variables.c's).
-#[derive(Clone, Copy, Debug, PartialEq)]
-struct SpeedParameters {
-    positive: f32,
-    negative: f32,
-    acceleration: f32,
-    deceleration: f32,
-}
-
-fn speed_update(speed: &mut f32, parameters: SpeedParameters, delta: f32) {
-    let magnitude = delta.abs();
-    let acceleration = magnitude * parameters.acceleration;
-    let deceleration = magnitude * parameters.deceleration;
-    if delta > 0.0 {
-        if *speed <= -deceleration {
-            *speed += deceleration;
-        } else if *speed >= 0.0 {
-            *speed += acceleration;
-        } else {
-            *speed = (*speed / deceleration + 1.0) * acceleration;
-        }
-        *speed = speed.min(magnitude * parameters.positive);
-    } else if delta < 0.0 {
-        if *speed >= deceleration {
-            *speed -= deceleration;
-        } else if *speed <= 0.0 {
-            *speed -= acceleration;
-        } else {
-            *speed = (*speed / deceleration - 1.0) * acceleration;
-        }
-        *speed = (-magnitude * parameters.negative).max(*speed);
-    }
-}
-
-/// A speed moved toward `target`, stopping there.
-fn speed_update_seek(speed: &mut f32, parameters: SpeedParameters, target: f32, delta: f32) {
-    if *speed > target {
-        speed_update(speed, parameters, -delta);
-        if *speed <= target {
-            *speed = target;
-        }
-    } else if *speed < target {
-        speed_update(speed, parameters, delta);
-        if *speed >= target {
-            *speed = target;
-        }
-    }
-}
-
-fn position_update(position: &mut f32, limits: [f32; 2], wrap: bool, delta: f32) {
-    *position += delta;
-    if *position < limits[1] {
-        if wrap {
-            *position += limits[0] - limits[1];
-        } else {
-            *position = limits[1];
-        }
-    } else if *position > limits[0] {
-        if wrap {
-            *position -= limits[0] - limits[1];
-        } else {
-            *position = limits[0];
-        }
-    }
-}
-
-fn seek_direction(limits: [f32; 2], position: f32, wrap: bool, target: f32) -> f32 {
-    let difference = target - position;
-    let direction = sign(difference);
-    if wrap && difference.abs() > (limits[0] - limits[1]) * 0.5 {
-        -direction
-    } else {
-        direction
-    }
-}
-
-/// A position moved toward `target` by `delta`, stopping there.
-fn position_update_seek(position: &mut f32, limits: [f32; 2], wrap: bool, target: f32, delta: f32) {
-    let direction = seek_direction(limits, *position, wrap, target);
-    if direction != 0.0 {
-        position_update(position, limits, wrap, direction * delta);
-        if seek_direction(limits, *position, wrap, target) == direction {
-            return;
-        }
-    }
-    *position = target;
 }
 
 /// A value rolled round `circumference`, kept positive.

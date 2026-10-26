@@ -32,6 +32,7 @@ pub mod item_physics;
 pub mod objects;
 pub mod particle_collision;
 pub mod periodic;
+pub mod physics_variables;
 pub mod platforms;
 pub mod player;
 pub mod point_physics;
