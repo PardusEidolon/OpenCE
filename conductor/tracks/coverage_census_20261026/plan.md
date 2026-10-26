@@ -42,7 +42,7 @@ classes every function of its directories with its evidence. Partial
 entries list what they leave out.
 - [x] Task: AI (ai) ac315e46
 - [x] Task: Scripts (hs) 7f89d235
-- [ ] Task: The game loop (game, main, shell, saved games)
+- [x] Task: The game loop (game, main, shell, saved games) 28013b2a
 - [ ] Task: Objects (objects, units, items, devices)
 - [ ] Task: Physics (physics)
 - [ ] Task: Effects (effects)
