@@ -22,6 +22,7 @@ pub mod graph;
 pub mod importer;
 pub mod layout;
 pub mod original;
+pub mod ranking;
 pub mod scripts;
 pub mod symbols;
 pub mod traced;

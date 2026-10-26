@@ -30,6 +30,8 @@ pub enum Mode {
     Check,
     /// Write the files the census owns.
     Write,
+    /// Print the gaps ranked ([`crate::ranking`]).
+    Rank,
 }
 
 /// The census of the repository at a root.
@@ -388,6 +390,9 @@ pub fn census(root: &Path, mode: Mode) -> Result<String, Error> {
             Ok(census.summary())
         }
         Mode::Summary => Ok(census.summary()),
+        Mode::Rank => Ok(crate::ranking::write_ranking(&crate::ranking::rank(
+            &census,
+        ))),
     }
 }
 
