@@ -9,7 +9,7 @@
 //! opence [--socket PATH] watch [--backlog N]    the log, as it is written
 //! opence [--socket PATH] script FILE            a script's lines, stopping at a failure
 //! opence [--socket PATH] shell                  lines typed (completed by the engine), or read
-//! opence census [--check | --write | --rank] [--record-importer] [--root DIR] the coverage census of the repository
+//! opence census [--check | --write | --rank | --ratchet] [--record-importer] [--root DIR] the coverage census of the repository
 //! ```
 //!
 //! `census` needs no engine: it reads the repository (the folder holding
@@ -30,7 +30,7 @@ use rustyline::completion::{Completer, Pair};
 use rustyline::error::ReadlineError;
 use rustyline::{Context, Editor, Helper, Highlighter, Hinter, Validator};
 
-const USAGE: &str = "usage: opence [--socket PATH] (run [--json] LINE... | state | frame PATH [--size WxH] | watch [--backlog N] | script FILE | shell | census [--check | --write | --rank] [--record-importer] [--root DIR])";
+const USAGE: &str = "usage: opence [--socket PATH] (run [--json] LINE... | state | frame PATH [--size WxH] | watch [--backlog N] | script FILE | shell | census [--check | --write | --rank | --ratchet] [--record-importer] [--root DIR])";
 
 fn main() -> ExitCode {
     let arguments: Vec<String> = std::env::args().skip(1).collect();
@@ -153,6 +153,7 @@ fn start(arguments: &[String]) -> Result<(), Error> {
                     "--check" => mode = opence_census::Mode::Check,
                     "--write" => mode = opence_census::Mode::Write,
                     "--rank" => mode = opence_census::Mode::Rank,
+                    "--ratchet" => mode = opence_census::Mode::Ratchet,
                     "--record-importer" => record = true,
                     "--root" => {
                         root =
@@ -181,7 +182,8 @@ fn start(arguments: &[String]) -> Result<(), Error> {
                     },
                     opence_census::Mode::Summary
                     | opence_census::Mode::Write
-                    | opence_census::Mode::Rank => Ok(summary),
+                    | opence_census::Mode::Rank
+                    | opence_census::Mode::Ratchet => Ok(summary),
                 }
             });
             match checked {

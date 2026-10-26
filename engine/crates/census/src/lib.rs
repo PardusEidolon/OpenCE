@@ -23,6 +23,7 @@ pub mod importer;
 pub mod layout;
 pub mod original;
 pub mod ranking;
+pub mod ratchet;
 pub mod scripts;
 pub mod symbols;
 pub mod traced;

@@ -56,7 +56,7 @@ This file tracks all major tracks for the project.
 - [x] **Track: Coverage census: every function of the original, every tag field and its fix-ups, the scripts and the sounds, classed against the engine with the evidence each class asks for, kept current by a Rust census check**
   *Link: [./tracks/coverage_census_20261026/](./tracks/coverage_census_20261026/)*
 
-- [ ] **Track: Coverage: classify and cite: cite the engine's existing equivalents, class the small helpers as Native, add the library reason, name the address-only functions, and a ratchet that stops the counts rising**
+- [~] **Track: Coverage: classify and cite: cite the engine's existing equivalents, class the small helpers as Native, add the library reason, name the address-only functions, and a ratchet that stops the counts rising**
   *Link: [./tracks/coverage_classify_20261026/](./tracks/coverage_classify_20261026/)*
 
 - [ ] **Track: Coverage: evidence for the owed: reference traces for the 675 functions the census says owe evidence, starting with the datum allocators, random ranges, the script evaluator and the game tick, and a fake world that holds objects, tags and a map**

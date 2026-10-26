@@ -9,7 +9,7 @@ use std::path::Path;
 use crate::citations::{self, Citations};
 use crate::classes::{lacking, Class, Engine, From, Manifest, Traced};
 use crate::original::Original;
-use crate::{docs, fields, fixups, layout, read_text, scripts, traced, Error};
+use crate::{docs, fields, fixups, layout, ratchet, read_text, scripts, traced, Error};
 
 /// The classes.
 pub const MANIFEST: &str = "census/census.toml";
@@ -32,6 +32,9 @@ pub enum Mode {
     Write,
     /// Print the gaps ranked ([`crate::ranking`]).
     Rank,
+    /// Record the counts in the ratchet ([`crate::ratchet`]), refusing a
+    /// count that rose.
+    Ratchet,
 }
 
 /// The census of the repository at a root.
@@ -356,6 +359,11 @@ pub fn census(root: &Path, mode: Mode) -> Result<String, Error> {
             problems.extend(fields::stale(root)?);
             problems.extend(fixups::stale(root)?);
             problems.extend(scripts::stale(root)?);
+            if let Some(recorded) = read_recorded(root)? {
+                let (rose, fell) = ratchet::compare(&recorded, &ratchet::counts(&census));
+                problems.extend(rose);
+                problems.extend(fell);
+            }
             if problems.is_empty() {
                 Ok(census.summary())
             } else {
@@ -389,11 +397,34 @@ pub fn census(root: &Path, mode: Mode) -> Result<String, Error> {
             docs::write(root, &census)?;
             Ok(census.summary())
         }
+        Mode::Ratchet => {
+            let current = ratchet::counts(&census);
+            // (a repository without a ratchet records what it has)
+            if let Some(recorded) = read_recorded(root)? {
+                let (rose, _) = ratchet::compare(&recorded, &current);
+                if !rose.is_empty() {
+                    return Err(Error::Problems(rose));
+                }
+            }
+            let path = root.join("engine").join(ratchet::RATCHET);
+            std::fs::write(&path, ratchet::write_ratchet(&current))
+                .map_err(|source| Error::Io { path, source })?;
+            Ok(census.summary())
+        }
         Mode::Summary => Ok(census.summary()),
         Mode::Rank => Ok(crate::ranking::write_ranking(&crate::ranking::rank(
             &census,
         ))),
     }
+}
+
+/// The ratchet the repository at `root` records, if it has one.
+fn read_recorded(root: &Path) -> Result<Option<ratchet::Ratchet>, Error> {
+    let path = root.join("engine").join(ratchet::RATCHET);
+    if !path.is_file() {
+        return Ok(None);
+    }
+    ratchet::read_ratchet(&read_text(&path)?).map(Some)
 }
 
 /// What `opence census --check` finds beyond the crate's own check: a
