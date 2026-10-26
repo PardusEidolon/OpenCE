@@ -63,10 +63,11 @@ pub fn trace_file(script: &Path) -> Option<String> {
 /// definitions refers to, in order.
 pub type Bodies = BTreeMap<String, Vec<Vec<String>>>;
 
-/// The function bodies of the `.c` files under `source`.
+/// The function bodies of the `.c` files under `source`, and of its
+/// headers' inline helpers (`real_math.h`'s, which the traces compile).
 pub fn bodies(source: &Path) -> Result<Bodies, Error> {
     let mut found = Bodies::new();
-    for path in walk(source, &["c"])? {
+    for path in walk(source, &["c", "h"])? {
         for (name, body) in bodies_of(&read_text(&path)?) {
             found.entry(name).or_default().extend(body);
         }

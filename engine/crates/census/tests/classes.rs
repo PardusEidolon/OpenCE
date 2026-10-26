@@ -465,6 +465,25 @@ fn only_the_originals_bodies_are_traced() {
 }
 
 #[test]
+fn a_headers_inline_helpers_are_bodies_a_trace_can_copy() -> Result<(), Failure> {
+    // (real_math.h's inlines are compiled into the math trace)
+    let tree = Tree::new("inline-bodies").with(
+        "source/math/real_math.h",
+        "__inline real dot_product3d(real_vector3d const *a, real_vector3d const *b)\n{\n\treturn a->i * b->i;\n}\n",
+    );
+    let original = opence_census::traced::bodies(&tree.root().join("source"))?;
+    let traced = opence_census::traced::read_sources(
+        "### engine_math_reference\n__inline real dot_product3d(real_vector3d const *a, real_vector3d const *b)\n{\n\treturn a->i * b->i;\n}\n",
+        &original,
+    );
+    assert_eq!(
+        opence_census::traced::write_traced(&traced),
+        "dot_product3d\tengine_math_reference\n"
+    );
+    Ok(())
+}
+
+#[test]
 fn the_summary_counts_each_class() -> Result<(), Failure> {
     let tree = tree("summary-classes", GOOD);
     let summary = Census::read(tree.root())?.summary();

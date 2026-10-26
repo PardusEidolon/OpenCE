@@ -1,5 +1,5 @@
 system	missing	partial	owed
-ai	945	12	31
+ai	930	12	31
 bitmaps	3	0	1
 cache	37	0	0
 camera	107	3	22
@@ -7,7 +7,7 @@ cutscene	71	2	10
 devices	43	0	17
 dialogs	1	0	0
 effects	88	0	89
-game	669	16	39
+game	667	16	39
 hs	691	3	50
 input	5	0	0
 interface	731	19	115
@@ -26,4 +26,4 @@ shell	3	0	0
 sound	93	2	65
 structures	28	0	1
 text	86	0	9
-units	275	17	84
+units	274	17	84
