@@ -1,0 +1,6 @@
+Task: Class the collision BSP functions under it, naming the Jolt code.
+Class the collision BSP walk as done by Jolt
+
+The 44 Missing functions of collision_bsp.c, bsp2d.c and bsp3d.c walk the collision BSP to answer point, vector, sphere and pill queries. The engine asks Jolt the same questions (physics/src/lib.rs) of a mesh cut from the same surfaces (physics/src/mesh.rs), so they are Replaced for the library reason. Their lives_on note says the player sees the same floors, walls and line of sight, and points to the Partial entries (collision_fix_pill and the queries) that say where an edge can differ. bsp3d_test_point keeps its Matched entry.
+
+Checked: the new real-tree test failed first and passes now; census --check passes at 4,646 Missing (44 fewer).
