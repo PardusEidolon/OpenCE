@@ -1,0 +1,6 @@
+Task: The crate and source/'s symbols
+Add the census crate, which reads the original's functions from source/'s symbol headers
+
+The coverage census starts from what the original holds: each file's symbol header gives the addresses, sizes and names of its code and data. The census crate (opence_census) parses them through bounds-checked line readers and refuses malformed headers with an error, never a panic. Code is what lies below the tree's first string literal or float constant (0x242EEC), since the xbe puts its read-only data after its code.
+
+Checked: tests on fake headers (both header formats, files with no symbols, seven malformed cases, stdcall names) and on the real tree, which has 6,747 functions in 1,611,122 bytes. The 6,962 counted before the census also counted the data the headers list. clippy is clean.
