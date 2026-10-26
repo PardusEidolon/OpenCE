@@ -1,0 +1,1 @@
+Ragdoll: dismemberment off by default, blast push spread over every part. Measured: worst joint stretch 0.012 wu landing, <0.005 at rest (was 0.046 single-part push; 4 wu with tearing). Workspace tests + clippy pass.
