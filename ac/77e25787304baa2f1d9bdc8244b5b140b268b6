@@ -1,0 +1,4 @@
+Task: Run `census` and record the counts before and after this track, per system and per class.
+Report the classify track's census counts before and after, and what moved them
+
+The census before the track (530eef73^) and after it, per class and per system: Missing fell from 4,762 to 3,696, and the function count from 8,501 to 7,627 once the address-only double count was folded. The ratchet already holds the new counts. The report also records two numeric findings for later tracks: the single-precision trig calls, and clamp_length's rounding against limit2d.
