@@ -362,49 +362,49 @@ impl<'a> Element<'a> {
         read.map_err(|fault| self.fault(field, fault))
     }
 
-    fn note(&self, at: usize, width: usize) {
-        record::note(self.group, &self.hops, at, width);
+    fn note(&self, at: usize, width: usize, field: &str) {
+        record::note(self.group, &self.hops, at, width, field);
     }
 
     /// A `u8` field.
     pub fn u8(&self, at: usize, field: &str) -> Result<u8, ImportError> {
-        self.note(at, 1);
+        self.note(at, 1, field);
         self.read(field, reader::array::<1>(self.bytes, at).map(|[byte]| byte))
     }
 
     /// A string field of at most `longest` bytes before its terminator.
     pub fn text(&self, at: usize, field: &str, longest: usize) -> Result<&'a str, ImportError> {
-        self.note(at, 1);
+        self.note(at, 1, field);
         self.read(field, reader::text(self.bytes, at, longest))
     }
 
     /// A `u16` field.
     pub fn u16(&self, at: usize, field: &str) -> Result<u16, ImportError> {
-        self.note(at, 2);
+        self.note(at, 2, field);
         self.read(field, reader::u16(self.bytes, at))
     }
 
     /// An `i16` field.
     pub fn i16(&self, at: usize, field: &str) -> Result<i16, ImportError> {
-        self.note(at, 2);
+        self.note(at, 2, field);
         self.read(field, reader::i16(self.bytes, at))
     }
 
     /// A `u32` field.
     pub fn u32(&self, at: usize, field: &str) -> Result<u32, ImportError> {
-        self.note(at, 4);
+        self.note(at, 4, field);
         self.read(field, reader::u32(self.bytes, at))
     }
 
     /// An `i32` field.
     pub fn i32(&self, at: usize, field: &str) -> Result<i32, ImportError> {
-        self.note(at, 4);
+        self.note(at, 4, field);
         self.read(field, reader::i32(self.bytes, at))
     }
 
     /// An `f32` field, which must be finite.
     pub fn f32(&self, at: usize, field: &str) -> Result<f32, ImportError> {
-        self.note(at, 4);
+        self.note(at, 4, field);
         let value = self.read(field, reader::f32(self.bytes, at))?;
         if value.is_finite() {
             Ok(value)
@@ -415,7 +415,7 @@ impl<'a> Element<'a> {
 
     /// `size` bytes of it.
     pub fn slice(&self, at: usize, size: usize, field: &str) -> Result<&'a [u8], ImportError> {
-        self.note(at, size);
+        self.note(at, size, field);
         self.read(field, reader::slice(self.bytes, at, size))
     }
 
@@ -677,16 +677,20 @@ mod tests {
             at: 0,
             element_size: 8,
         };
-        let expected: Vec<crate::record::Read> =
-            [(vec![], 0, 4), (vec![], 4, 4), (vec![hop], 4, 4)]
-                .into_iter()
-                .map(|(hops, at, width)| crate::record::Read {
-                    group: SCNR,
-                    hops,
-                    at,
-                    width,
-                })
-                .collect();
+        let expected: Vec<crate::record::Read> = [
+            (vec![], 0, 4, "elements"),
+            (vec![], 4, 4, "elements"),
+            (vec![hop], 4, 4, "b"),
+        ]
+        .into_iter()
+        .map(|(hops, at, width, label)| crate::record::Read {
+            group: SCNR,
+            hops,
+            at,
+            width,
+            label: label.to_owned(),
+        })
+        .collect();
         assert_eq!(reads.into_iter().collect::<Vec<_>>(), expected);
     }
 

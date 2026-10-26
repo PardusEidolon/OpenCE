@@ -1,7 +1,7 @@
 //! A recording of the tag fields the importer reads, for the coverage
 //! census: each read with the tag group its tag was asked for as, the
-//! blocks it was reached through and its offset and width in the element
-//! it is in. The census lays that over the original's tag structures to
+//! blocks it was reached through, its offset and width in the element
+//! it is in, and the reader's label for it. The census lays that over the original's tag structures to
 //! mark the fields the importer keeps.
 //!
 //! Nothing is recorded outside [`recording`], and a read costs one atomic
@@ -35,6 +35,8 @@ pub struct Read {
     pub at: u32,
     /// How many bytes it read (1 for a string: its start).
     pub width: u32,
+    /// The label the reader was given (`"physics ground depth scale"`).
+    pub label: String,
 }
 
 static RECORDING: AtomicBool = AtomicBool::new(false);
@@ -57,7 +59,7 @@ pub fn recording<T>(run: impl FnOnce() -> T) -> (T, BTreeSet<Read>) {
 }
 
 /// Notes a read, if a recording is running.
-pub(crate) fn note(group: GroupTag, hops: &[Hop], at: usize, width: usize) {
+pub(crate) fn note(group: GroupTag, hops: &[Hop], at: usize, width: usize, label: &str) {
     if !RECORDING.load(Ordering::Relaxed) {
         return;
     }
@@ -70,6 +72,7 @@ pub(crate) fn note(group: GroupTag, hops: &[Hop], at: usize, width: usize) {
             hops: hops.to_vec(),
             at,
             width,
+            label: label.replace(['\t', '\n'], " "),
         });
     }
 }

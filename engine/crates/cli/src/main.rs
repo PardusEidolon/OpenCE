@@ -238,6 +238,7 @@ fn record_importer(root: &std::path::Path) -> Result<usize, Error> {
                     .collect(),
                 at: read.at,
                 width: read.width,
+                label: read.label,
             }
         }));
     }

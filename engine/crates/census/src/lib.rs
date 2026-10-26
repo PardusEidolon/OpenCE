@@ -15,6 +15,7 @@ mod census;
 pub mod citations;
 pub mod classes;
 pub mod docs;
+pub mod engine;
 pub mod fields;
 pub mod graph;
 pub mod importer;

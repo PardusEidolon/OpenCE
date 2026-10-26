@@ -41,6 +41,8 @@ pub struct Read {
     pub at: u32,
     /// How many bytes it read.
     pub width: u32,
+    /// The label the importer gave the read: the field it was reading.
+    pub label: String,
 }
 
 /// The fields the reads keep, how many reads reached no structure's
@@ -54,12 +56,14 @@ pub struct Kept {
     pub unresolved: usize,
     /// Each element structure with the importer's stride and its size.
     pub resized: BTreeSet<(String, u32, u32)>,
+    /// Each kept field with the labels of the reads that kept it.
+    pub labels: BTreeMap<(String, String), BTreeSet<String>>,
 }
 
 /// `importer_reads.tsv`'s text: a line for each read.
 pub fn write_reads(reads: &BTreeSet<Read>) -> String {
     let mut text = String::from(
-        "# group\tblocks (at:element size)\tat\twidth (opence census --record-importer)\n",
+        "# group\tblocks (at:element size)\tat\twidth\tlabel (opence census --record-importer)\n",
     );
     for read in reads {
         let route = if read.hops.is_empty() {
@@ -72,8 +76,8 @@ pub fn write_reads(reads: &BTreeSet<Read>) -> String {
                 .join("/")
         };
         text.push_str(&format!(
-            "{:08x}\t{route}\t{}\t{}\n",
-            read.group, read.at, read.width
+            "{:08x}\t{route}\t{}\t{}\t{}\n",
+            read.group, read.at, read.width, read.label
         ));
     }
     text
@@ -92,8 +96,8 @@ pub fn read_reads(text: &str) -> Result<BTreeSet<Read>, Error> {
             why: why.to_owned(),
         };
         let columns: Vec<&str> = line.split('\t').collect();
-        let [group, route, at, width] = columns[..] else {
-            return Err(malformed("not four columns"));
+        let [group, route, at, width, label] = columns[..] else {
+            return Err(malformed("not five columns"));
         };
         if group.len() != 8 {
             return Err(malformed("a group is eight hex digits"));
@@ -116,6 +120,7 @@ pub fn read_reads(text: &str) -> Result<BTreeSet<Read>, Error> {
             hops,
             at: number(at)?,
             width: number(width)?,
+            label: label.to_owned(),
         });
     }
     Ok(reads)
@@ -505,7 +510,12 @@ pub fn resolve(
                 .min()
                 .unwrap_or(record.size);
             if leaf.offset < end && next > read.at {
-                kept.fields.insert((record.name.clone(), leaf.path.clone()));
+                let field = (record.name.clone(), leaf.path.clone());
+                kept.labels
+                    .entry(field.clone())
+                    .or_default()
+                    .insert(read.label.clone());
+                kept.fields.insert(field);
             }
         }
     }

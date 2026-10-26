@@ -45,6 +45,21 @@ pub struct Mark {
     pub original: bool,
     /// Whether the importer keeps it (reads it from a map).
     pub importer: bool,
+    /// Whether the engine uses what the importer keeps of it.
+    pub engine: Engine,
+}
+
+/// Whether the engine uses a field the importer keeps.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum Engine {
+    /// The importer does not keep it.
+    Unkept,
+    /// The engine reads what the importer fills from it.
+    Used,
+    /// What the importer fills from it is read nowhere in the engine.
+    Unused,
+    /// A read that keeps it could not be traced to what it fills.
+    Untraced,
 }
 
 /// The fields of `record` that hold no smaller ones, once each, in order.
@@ -419,6 +434,7 @@ pub fn marks(records: &[Record], reads: &BTreeSet<(String, String)>) -> Vec<Mark
                 kind: field.kind.clone(),
                 original: false,
                 importer: false,
+                engine: Engine::Unkept,
             })
         })
         .zip(reached)
@@ -432,6 +448,47 @@ pub fn marks(records: &[Record], reads: &BTreeSet<(String, String)>) -> Vec<Mark
 pub fn keep(marks: &mut [Mark], records: &[Record], kept: &BTreeSet<(String, String)>) {
     for (mark, importer) in marks.iter_mut().zip(reached(records, kept)) {
         mark.importer = importer;
+    }
+}
+
+/// `marks` of `records` with what the engine does with each kept field:
+/// the `labels` of the reads that keep it are traced through `assigned`
+/// to what they fill, and that is used if the engine reads it (`used`).
+/// A field kept in an embedded structure is marked wherever that
+/// structure is embedded, as `keep` marks it.
+pub fn engine(
+    marks: &mut [Mark],
+    records: &[Record],
+    labels: &BTreeMap<(String, String), BTreeSet<String>>,
+    assigned: &BTreeMap<String, BTreeSet<String>>,
+    used: &BTreeSet<String>,
+) {
+    let mut using = BTreeSet::new();
+    let mut unused = BTreeSet::new();
+    for (field, labels) in labels {
+        let mut traced = true;
+        let mut fills = BTreeSet::new();
+        for label in labels {
+            match assigned.get(label) {
+                Some(idents) => fills.extend(idents),
+                None => traced = false,
+            }
+        }
+        if fills.iter().any(|ident| used.contains(*ident)) {
+            using.insert(field.clone());
+        } else if traced {
+            unused.insert(field.clone());
+        }
+    }
+    let using = reached(records, &using);
+    let unused = reached(records, &unused);
+    for ((mark, using), unused) in marks.iter_mut().zip(using).zip(unused) {
+        mark.engine = match (mark.importer, using, unused) {
+            (false, _, _) => Engine::Unkept,
+            (true, true, _) => Engine::Used,
+            (true, false, true) => Engine::Unused,
+            (true, false, false) => Engine::Untraced,
+        };
     }
 }
 
@@ -456,28 +513,33 @@ pub fn generate(root: &Path, records: &[Record]) -> Result<Vec<Mark>, Error> {
         found.extend(reads(text, &structures, &members));
     }
     let mut marked = marks(records, &found);
-    keep(
-        &mut marked,
-        records,
-        &crate::importer::kept(root, records)?.fields,
-    );
+    let kept = crate::importer::kept(root, records)?;
+    keep(&mut marked, records, &kept.fields);
+    let (assigned, used) = crate::engine::traced(root)?;
+    engine(&mut marked, records, &kept.labels, &assigned, &used);
     Ok(marked)
 }
 
 /// `tag_fields.tsv`'s text: a line for each field.
 pub fn write_fields(marks: &[Mark]) -> String {
     let mut text = String::from(
-        "# structure\tfield\toffset\ttype\toriginal\timporter (opence census --write)\n",
+        "# structure\tfield\toffset\ttype\toriginal\timporter\tengine (opence census --write)\n",
     );
     for mark in marks {
         text.push_str(&format!(
-            "{}\t{}\t{}\t{}\t{}\t{}\n",
+            "{}\t{}\t{}\t{}\t{}\t{}\t{}\n",
             mark.structure,
             mark.path,
             mark.offset,
             mark.kind,
             if mark.original { "read" } else { "-" },
-            if mark.importer { "kept" } else { "-" }
+            if mark.importer { "kept" } else { "-" },
+            match mark.engine {
+                Engine::Unkept => "-",
+                Engine::Used => "used",
+                Engine::Unused => "unused",
+                Engine::Untraced => "untraced",
+            }
         ));
     }
     text
@@ -496,8 +558,8 @@ pub fn read_fields(text: &str) -> Result<Vec<Mark>, Error> {
             why: why.to_owned(),
         };
         let columns: Vec<&str> = line.split('\t').collect();
-        let [structure, path, offset, kind, original, importer] = columns[..] else {
-            return Err(malformed("not six columns"));
+        let [structure, path, offset, kind, original, importer, engine] = columns[..] else {
+            return Err(malformed("not seven columns"));
         };
         marks.push(Mark {
             structure: structure.to_owned(),
@@ -513,6 +575,13 @@ pub fn read_fields(text: &str) -> Result<Vec<Mark>, Error> {
                 "kept" => true,
                 "-" => false,
                 _ => return Err(malformed("neither kept nor -")),
+            },
+            engine: match engine {
+                "-" => Engine::Unkept,
+                "used" => Engine::Used,
+                "unused" => Engine::Unused,
+                "untraced" => Engine::Untraced,
+                _ => return Err(malformed("not used, unused, untraced or -")),
             },
         });
     }

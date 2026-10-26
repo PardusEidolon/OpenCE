@@ -68,6 +68,7 @@ fn read(group: u32, hops: &[(u32, u32)], at: u32, width: u32) -> Read {
             .collect(),
         at,
         width,
+        label: format!("at {at}"),
     }
 }
 
@@ -76,12 +77,12 @@ fn the_reads_round_trip_through_their_tsv() -> Result<(), Failure> {
     let reads: BTreeSet<Read> =
         [read(THNG, &[], 0, 2), read(THNG, &[(4, 8), (0, 12)], 8, 4)].into();
     let text = write_reads(&reads);
-    assert!(text.contains("74686e67\t4:8/0:12\t8\t4"), "{text}");
+    assert!(text.contains("74686e67\t4:8/0:12\t8\t4\tat 8"), "{text}");
     assert_eq!(read_reads(&text)?, reads);
-    assert!(read_reads("7468\t-\t0\t4\n").is_err());
-    assert!(read_reads("7468ZZ67\t-\t0\t4\n").is_err());
-    assert!(read_reads("74686e67\t4:\t0\t4\n").is_err());
-    assert!(read_reads("74686e67\t-\t0\n").is_err());
+    assert!(read_reads("7468\t-\t0\t4\tx\n").is_err());
+    assert!(read_reads("7468ZZ67\t-\t0\t4\tx\n").is_err());
+    assert!(read_reads("74686e67\t4:\t0\t4\tx\n").is_err());
+    assert!(read_reads("74686e67\t-\t0\t4\n").is_err());
     Ok(())
 }
 
