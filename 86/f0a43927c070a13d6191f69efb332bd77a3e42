@@ -1,0 +1,1 @@
+Task: No compiles, uploads or allocations in play. Load-made particle/decal/light-list buffers; sim scratch reuse. Allocations/frame: devgulch 255.9->136.2, bloodgulch 198.9->136.2, bloodgulch16 704.4->376.9 (budgets 160/420). Binary archives measured unneeded (6.5 ms cold for every pipeline); streaming left to tiers. Swift HitchLog test: no entry in play on any path.
