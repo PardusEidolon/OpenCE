@@ -1,0 +1,1 @@
+Phase 14 checkpoint: ragdoll (4553dc49) and death camera (96a2f9da); automated checks: ragdolls.rs, death_camera.rs, workspace tests, clippy. Manual check superseded at the user's instruction.
