@@ -1,0 +1,22 @@
+Task: engine/census.toml and the six classes
+Class every function of the original in engine/census/census.toml, and check each class's evidence
+
+The census now gives each of source/'s functions a class (Ported, Matched,
+Native, Partial, Replaced or Missing) from rules by directory, file and
+prefix, entries for single functions and the reference traces, and its
+check fails when a class lacks its evidence: a trace or a traced caller,
+a check against the original, a primitive the engine uses, what a
+Partial leaves out, or a listed reason and stand-in for Replaced. An
+owed reason excuses what is still lacking and is reported for the
+completion track.
+
+traced.tsv lists the 86 functions the reference scripts copy from
+source/ (a body with the same names in the same order, so the fake
+worlds' stand-ins are not counted). opence census --write generates it,
+and --check also compares it and runs each script's own --check. The
+census crate no longer counts its own doc comments as citations, and
+the manifest reaches only the tests' source in the flake.
+
+Checked: 17 class tests, the citation and real-tree tests, clippy -D
+warnings on the census and cli crates, opence census --check on the
+tree (81 Ported, 171 Matched owing evidence, 8249 Missing).
