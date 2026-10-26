@@ -147,7 +147,10 @@ final class ScreenPass {
 
     let device: MTLDevice
     private var pipelines: Pipelines
-    private var targets: Targets?
+    /// The targets made, one set for each size drawn (dynamic
+    /// resolution draws at a few).
+    private var targets: [Targets] = []
+    static let targetsKept = 3
     private let always: MTLDepthStencilState
 
     init(device: MTLDevice, source: String) throws {
@@ -201,11 +204,11 @@ final class ScreenPass {
         }
     }
 
-    /// The targets for a frame `width` by `height`, made again when the
-    /// size changes.
+    /// The targets for a frame `width` by `height`, made the first time
+    /// the size is drawn (the last few sizes' are kept).
     func targets(width: Int, height: Int) -> Targets? {
-        if let targets, targets.surface.width == width, targets.surface.height == height {
-            return targets
+        if let kept = targets.first(where: { $0.surface.width == width && $0.surface.height == height }) {
+            return kept
         }
         guard width > 0, height > 0 else { return nil }
         func texture(_ format: MTLPixelFormat, _ usage: MTLTextureUsage, halved: Bool = false) -> MTLTexture? {
@@ -226,10 +229,12 @@ final class ScreenPass {
             let halfOcclusion = texture(.rgba16Float, [.shaderRead, .shaderWrite], halved: true),
             let reflected = texture(.rgba16Float, [.shaderRead, .shaderWrite])
         else { return nil }
-        targets = Targets(
+        let made = Targets(
             surface: surface, reflection: reflection, reflectance: reflectance, occlusion: occlusion,
             halfOcclusion: halfOcclusion, reflected: reflected)
-        return targets
+        if targets.count >= Self.targetsKept { targets.removeFirst() }
+        targets.append(made)
+        return made
     }
 
     /// The occlusion and the traced reflections, from the opaque frame and

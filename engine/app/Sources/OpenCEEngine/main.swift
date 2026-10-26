@@ -8,8 +8,10 @@
 // difficulty with its scripts, and multiplayer's server list and hosting;
 // Escape in a game opens its pause menu, Game > Main Menu, Command-Escape,
 // goes back to the main menu) or the Map menu, smoothed as --anti-aliasing
-// (temporal, the default, or native) and --render-scale (0.5 to 1) say, or
-// as the Video settings do. The player spawns at the scenario's first
+// (temporal, the default, or native) and --render-scale (0.5 to 1) say
+// (--dynamic-resolution steps the scale down to 0.67 and 0.5 when the
+// GPU's frames run longer than the display's), or as the Video settings
+// do. The player spawns at the scenario's first
 // start and moves with W, A, S and D, jumps with Space and crouches with
 // Control (or the keys of --bindings FILE, of bindings.json in the app's
 // support folder, or of the Controls settings); V changes the camera
@@ -128,6 +130,11 @@ func videoSettings(_ options: VideoOptions = stockSettings().video) -> VideoSett
             fail("--render-scale is 0.5 to 1, not \(scale)")
         }
         settings.renderScale = value
+    }
+    if launchArguments.contains("--dynamic-resolution") {
+        settings.dynamicResolution = true
+        let rate = NSScreen.main?.maximumFramesPerSecond ?? 120
+        settings.frameTargetMilliseconds = 1000 / Double(max(rate, 1))
     }
     return settings
 }

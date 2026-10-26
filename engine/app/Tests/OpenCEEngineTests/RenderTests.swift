@@ -159,7 +159,7 @@ struct StockLevel {
 
 /// The golden frames: each stock map's first BSP from its start view, at
 /// three sizes, drawn native and with temporal anti-aliasing (after a
-/// full jitter sequence), written to build/engine/golden and compared with
+/// full jitter sequence, at full scale and upscaled from 0.67), written to build/engine/golden and compared with
 /// the approved frames in assets/golden/engine if they are there (never
 /// committed: they are the game's art).
 final class GoldenFrameTests: XCTestCase {
@@ -169,12 +169,16 @@ final class GoldenFrameTests: XCTestCase {
         let level = try StockLevel(map: map)
         let out = StockLevel.root.appendingPathComponent("build/engine/golden")
         try FileManager.default.createDirectory(at: out, withIntermediateDirectories: true)
-        for antiAliasing in AntiAliasing.allCases {
-            let renderer = try level.renderer(VideoSettings(antiAliasing: antiAliasing, renderScale: 1))
+        // (and MetalFX upscaling from 0.67, dynamic resolution's first step)
+        let settings: [(VideoSettings, String)] =
+            AntiAliasing.allCases.map { (VideoSettings(antiAliasing: $0, renderScale: 1), $0.rawValue) }
+            + [(VideoSettings(antiAliasing: .temporal, renderScale: 0.67), "temporal67")]
+        for (setting, label) in settings {
+            let renderer = try level.renderer(setting)
             XCTAssertGreaterThan(renderer.drawCount, 10)
-            let frames = antiAliasing == .temporal ? Jitter.length : 1
+            let frames = setting.antiAliasing == .temporal ? Jitter.length : 1
             for (width, height) in Self.sizes {
-                let name = "\(map)_\(antiAliasing.rawValue)_\(width)x\(height).png"
+                let name = "\(map)_\(label)_\(width)x\(height).png"
                 let frame = try renderer.capture(
                     width: width, height: height, camera: level.camera, frames: frames,
                     objects: level.objects, queue: level.queue)
@@ -258,7 +262,7 @@ final class TemporalTests: XCTestCase {
 
     func testTheGatheredFrameIsTheNativeOneSmoothed() throws {
         let level = try StockLevel(map: "bloodgulch")
-        for scale: Float in [1, 0.5] {
+        for scale: Float in [1, 0.67, 0.5] {
             let renderer = try level.renderer(VideoSettings(antiAliasing: .temporal, renderScale: scale))
             let frame = try renderer.capture(
                 width: Self.width, height: Self.height, camera: level.camera,

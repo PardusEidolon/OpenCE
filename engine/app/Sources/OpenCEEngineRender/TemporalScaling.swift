@@ -24,10 +24,20 @@ public struct VideoSettings: Equatable, Sendable {
     /// The share of the output's width and height drawn before MetalFX
     /// scales it up (temporal only; 1 smooths without upscaling).
     public var renderScale: Float
+    /// Whether the render scale steps down from `renderScale` when the
+    /// GPU's frames run long (temporal only).
+    public var dynamicResolution: Bool
+    /// The frame time dynamic resolution holds to, in milliseconds.
+    public var frameTargetMilliseconds: Double
 
-    public init(antiAliasing: AntiAliasing = .temporal, renderScale: Float = 1) {
+    public init(
+        antiAliasing: AntiAliasing = .temporal, renderScale: Float = 1, dynamicResolution: Bool = false,
+        frameTargetMilliseconds: Double = 1000.0 / 120
+    ) {
         self.antiAliasing = antiAliasing
         self.renderScale = renderScale
+        self.dynamicResolution = dynamicResolution
+        self.frameTargetMilliseconds = frameTargetMilliseconds
     }
 
     /// The smallest and largest render scales.
@@ -35,6 +45,11 @@ public struct VideoSettings: Equatable, Sendable {
 
     /// The size drawn for an output `width` by `height`.
     public func inputSize(width: Int, height: Int) -> (width: Int, height: Int) {
+        inputSize(width: width, height: height, scale: renderScale)
+    }
+
+    /// The size drawn for an output `width` by `height` at `renderScale`.
+    public func inputSize(width: Int, height: Int, scale renderScale: Float) -> (width: Int, height: Int) {
         guard antiAliasing == .temporal else { return (width, height) }
         let scale = renderScale.isFinite ? min(max(renderScale, Self.renderScales.lowerBound), 1) : 1
         return (max(Int((Float(width) * scale).rounded()), 1), max(Int((Float(height) * scale).rounded()), 1))

@@ -414,13 +414,35 @@ public final class LevelRenderer {
     private let nearest: MTLSamplerState
     private var targets: (frame: MTLTexture, depth: MTLTexture)?
     private(set) var temporal: TemporalScaling?
+    /// The scalers made, one for each input and output size (dynamic
+    /// resolution keeps one for each of its steps).
+    private var temporals: [TemporalScaling] = []
+    static let temporalsKept = 3
 
     /// How the frame is smoothed and the share of it drawn. A change
     /// starts the temporal history again.
     public var settings: VideoSettings {
         didSet {
-            if settings != oldValue { temporal = nil }
+            if settings != oldValue {
+                temporal = nil
+                temporals = []
+                dynamic = Self.dynamic(settings)
+                gpuFrameTimes.reset()
+            }
         }
+    }
+
+    /// The dynamic resolution's controller (nil when it is off).
+    public private(set) var dynamic: DynamicResolution?
+    /// The GPU's frame times, for the controller.
+    let gpuFrameTimes = GpuFrameTimes()
+    /// The scale drawn at in place of the controller's (to make each
+    /// step's scaler and targets at load).
+    var preparingScale: Float?
+
+    static func dynamic(_ settings: VideoSettings) -> DynamicResolution? {
+        guard settings.dynamicResolution, settings.antiAliasing == .temporal else { return nil }
+        return DynamicResolution(targetMilliseconds: settings.frameTargetMilliseconds, maximum: settings.renderScale)
     }
 
     /// Whether this device has MetalFX's temporal scaler (without it,
@@ -506,6 +528,7 @@ public final class LevelRenderer {
         self.device = device
         self.outputFormat = outputFormat
         self.settings = settings
+        dynamic = Self.dynamic(settings)
         let vertexBytes = geometry.vertices()
         let indexBytes = geometry.indices()
         guard let vertices = Self.buffer(device, vertexBytes), let indices = Self.buffer(device, indexBytes) else {
@@ -786,6 +809,18 @@ public final class LevelRenderer {
         let aspect = Float(target.width) / Float(max(target.height, 1))
         let viewProjection = camera.viewProjection(aspect: aspect)
         adaptExposure()
+        if dynamic != nil {
+            var changed = false
+            gpuFrameTimes.drain { time in
+                if !changed, dynamic?.record(milliseconds: time) == true { changed = true }
+            }
+            // (the times still in flight are the old size's)
+            if changed { gpuFrameTimes.reset() }
+            let times = gpuFrameTimes
+            commands.addCompletedHandler { buffer in
+                times.completed(start: buffer.gpuStartTime, end: buffer.gpuEndTime)
+            }
+        }
         let shown: MTLTexture
         if settings.antiAliasing == .temporal,
             let temporal = temporalScaling(
@@ -1094,17 +1129,31 @@ public final class LevelRenderer {
     /// when the size or the render scale changes; nil without MetalFX.
     private func temporalScaling(width: Int, height: Int) -> TemporalScaling? {
         guard width > 0, height > 0 else { return nil }
-        let input = settings.inputSize(width: width, height: height)
-        if let temporal, temporal.outputWidth == width, temporal.outputHeight == height,
-            temporal.inputWidth == input.width, temporal.inputHeight == input.height
-        {
+        let scale = preparingScale ?? dynamic?.scale ?? settings.renderScale
+        let input = settings.inputSize(width: width, height: height, scale: scale)
+        func fits(_ made: TemporalScaling) -> Bool {
+            made.outputWidth == width && made.outputHeight == height && made.inputWidth == input.width
+                && made.inputHeight == input.height
+        }
+        if let temporal, fits(temporal) {
             return temporal
         }
-        guard supportsTemporal else { return nil }
-        temporal = HitchLog.shared.note(.allocation, "temporal scaler \(width)×\(height)") {
-            TemporalScaling(device: device, input: input, output: (width, height))
+        if let kept = temporals.first(where: fits) {
+            // (a step's history is another size's: it starts again)
+            kept.frame = 0
+            kept.previous = nil
+            temporal = kept
+            return kept
         }
-        return temporal
+        guard supportsTemporal,
+            let made = HitchLog.shared.note(
+                .allocation, "temporal scaler \(input.width)×\(input.height) to \(width)×\(height)",
+                { TemporalScaling(device: device, input: input, output: (width, height)) })
+        else { return nil }
+        if temporals.count >= Self.temporalsKept { temporals.removeFirst() }
+        temporals.append(made)
+        temporal = made
+        return made
     }
 
     /// Draws with `light`, the BSP's baked light: each lightmapped draw
@@ -1248,8 +1297,10 @@ public final class LevelRenderer {
     /// Starts the temporal history again (a cut: the camera moved too far
     /// for the last frames to be of use).
     public func resetHistory() {
-        temporal?.frame = 0
-        temporal?.previous = nil
+        for kept in temporals {
+            kept.frame = 0
+            kept.previous = nil
+        }
     }
 
     /// The id of the object drawn at pixel (`x`, `y`) from the top left

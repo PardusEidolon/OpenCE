@@ -118,7 +118,7 @@ public struct LoadedLevel {
 
     /// Draws a frame from the start view at the size the level will be
     /// shown at, offscreen, and waits for it: the size's targets and its
-    /// temporal scaler are made, and the GPU has taken the level's
+    /// temporal scaler (each of dynamic resolution's) are made, and the GPU has taken the level's
     /// buffers and textures, before its first shown frame (a level loaded
     /// behind the loading screen is prepared on the loader's thread, so
     /// that its first frame is no longer than the rest).
@@ -139,7 +139,15 @@ public struct LoadedLevel {
             position: [start.x, start.y, start.z], yaw: start.yaw, pitch: start.pitch,
             verticalFov: 70 * .pi / 180)
         renderer.encode(into: commands, target: target, camera: camera)
+        // (and once at each of dynamic resolution's lower steps)
+        for scale in renderer.dynamic?.steps.dropFirst() ?? [] {
+            renderer.preparingScale = scale
+            renderer.encode(into: commands, target: target, camera: camera)
+        }
+        renderer.preparingScale = nil
         commands.commit()
         commands.waitUntilCompleted()
+        // (the prepared frames are not play's)
+        renderer.gpuFrameTimes.reset()
     }
 }
