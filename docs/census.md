@@ -37,13 +37,13 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `scenario` | | 13 (4320 B) | | | 23 (3136 B) | 21 (2128 B) | 6 |
 | `shaders` | | | | | 21 (2624 B) | | 0 |
 | `shell` | | | | | 11 (528 B) | 2 (0 B) | 0 |
-| `sound` | 7 (1072 B) | 63 (15808 B) | | 2 (32 B) | 56 (2832 B) | 44 (7216 B) | 60 |
-| `structures` | | 1 (0 B) | | | 99 (27952 B) | 26 (3760 B) | 0 |
+| `sound` | 8 (1312 B) | 63 (15808 B) | | 2 (32 B) | 56 (2832 B) | 43 (6976 B) | 59 |
+| `structures` | | 2 (0 B) | | | 98 (27952 B) | 26 (3760 B) | 0 |
 | `tag_files` | | | 43 (4288 B) | | 5 (0 B) | | 0 |
 | `text` | | 9 (1936 B) | 63 (6864 B) | | 19 (5744 B) | 21 (2368 B) | 9 |
 | `tool` | | | | | 27 (8752 B) | | 0 |
 | `units` | 9 (1856 B) | 67 (27888 B) | | 17 (17808 B) | 9 (1616 B) | 227 (58352 B) | 84 |
-| **all** | 147 (26112 B) | 577 (187824 B) | 332 (38896 B) | 123 (72592 B) | 2770 (569976 B) | 3678 (715722 B) | 648 |
+| **all** | 148 (26352 B) | 578 (187824 B) | 332 (38896 B) | 123 (72592 B) | 2769 (569976 B) | 3677 (715482 B) | 647 |
 
 ## `ai`
 
@@ -1738,7 +1738,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 
 | Function | File | Class | Engine | Evidence |
 | --- | --- | --- | --- | --- |
-| `equipment_place` | items/equipment.c | Matched | import/src/level.rs:1040 | owed: the engine cites it, with no check against the original yet |
+| `equipment_place` | items/equipment.c | Matched | import/src/level.rs:1041 | owed: the engine cites it, with no check against the original yet |
 | `equipment_handle_pickup` | items/equipment.c | Matched | sim/src/player.rs:1222 | owed: items; reads the object, tag and map world, which the fake worlds do not hold |
 | `verify_item_location` | items/items.c | Replaced | dev/src/logbook.rs | the editor and tools; a debug check, statistic or editor hook of the original; the dev tools stand in |
 | `item_adjust_for_angular_velocity_change` | items/items.c | Ported | sim/src/item_physics.rs:393 | `tools/engine_item_reference.py` |
@@ -1753,7 +1753,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `projectile_new` | items/projectiles.c | Matched | sim/src/projectile.rs | owed: the engine's own tests (sim/src/projectile.rs); no check against the original yet |
 | `projectile_collision` | items/projectiles.c | Matched | sim/src/effects.rs:177 | owed: the engine cites it, with no check against the original yet |
 | `projectile_update` | items/projectiles.c | Matched | sim/src/projectile.rs:70 | owed: the engine cites it, with no check against the original yet |
-| `weapon_place` | items/weapons.c | Matched | import/src/level.rs:1040 | owed: the engine cites it, with no check against the original yet |
+| `weapon_place` | items/weapons.c | Matched | import/src/level.rs:1041 | owed: the engine cites it, with no check against the original yet |
 | `weapon_magazine_finish_reload` | items/weapons.c | Matched | sim/src/weapon.rs:584 | owed: weapons; reads the object, tag and map world, which the fake worlds do not hold (the weapon tag) |
 | `weapon_trigger_recover` | items/weapons.c | Matched | sim/src/weapon.rs:489 | owed: weapons; reads the object, tag and map world, which the fake worlds do not hold (the weapon tag) |
 | `weapon_magazine_start_reload` | items/weapons.c | Matched | sim/src/weapon.rs:224 | owed: weapons; reads the object, tag and map world, which the fake worlds do not hold (the weapon tag) |
@@ -2707,7 +2707,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | Function | File | Class | Engine | Evidence |
 | --- | --- | --- | --- | --- |
 | `bsp2d_test_point` | physics/bsp2d.c | Replaced | physics/src/lib.rs | a library does the job; the same floors, walls and line of sight: Jolt answers the queries (physics/src/lib.rs) on a mesh of the same collision BSP surfaces (physics/src/mesh.rs); the Partial entries of collision_fix_pill and the queries say where an edge can differ |
-| `bsp3d_test_point` | physics/bsp3d.c | Matched | content/src/level.rs:882 | owed: the engine cites it, with no check against the original yet |
+| `bsp3d_test_point` | physics/bsp3d.c | Matched | content/src/level.rs:908 | owed: the engine cites it, with no check against the original yet |
 | `bsp3d_clip_line_to_leaves` | physics/bsp3d.c | Replaced | physics/src/lib.rs | a library does the job; the same floors, walls and line of sight: Jolt answers the queries (physics/src/lib.rs) on a mesh of the same collision BSP surfaces (physics/src/mesh.rs); the Partial entries of collision_fix_pill and the queries say where an edge can differ |
 | `bsp3d_clip_polygon_to_leaves_recursive` | physics/bsp3d.c | Replaced | physics/src/lib.rs | a library does the job; the same floors, walls and line of sight: Jolt answers the queries (physics/src/lib.rs) on a mesh of the same collision BSP surfaces (physics/src/mesh.rs); the Partial entries of collision_fix_pill and the queries say where an edge can differ |
 | `bsp3d_clip_polygon_to_leaves` | physics/bsp3d.c | Replaced | physics/src/lib.rs | a library does the job; the same floors, walls and line of sight: Jolt answers the queries (physics/src/lib.rs) on a mesh of the same collision BSP surfaces (physics/src/mesh.rs); the Partial entries of collision_fix_pill and the queries say where an edge can differ |
@@ -3486,7 +3486,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `rasterizer_frame_statistics_dispose` | rasterizer/rasterizer_frame_statistics.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
 | `uncompress_int8_to_real` | rasterizer/rasterizer_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
 | `uncompress_int16_to_real` | rasterizer/rasterizer_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
-| `uncompress_int32_to_real_vector3d` | rasterizer/rasterizer_geometry.c | Matched | import/src/level.rs:1803 | sim/tests/math_extra_reference.rs (trace) |
+| `uncompress_int32_to_real_vector3d` | rasterizer/rasterizer_geometry.c | Matched | import/src/level.rs:1818 | sim/tests/math_extra_reference.rs (trace) |
 | `rasterizer_geometry_get_vertex_size` | rasterizer/rasterizer_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
 | `rasterizer_geometry_byte_swap_vertices` | rasterizer/rasterizer_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
 | `rasterizer_geometry_uncompress_vertices` | rasterizer/rasterizer_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
@@ -3513,7 +3513,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `rasterizer_lights_end` | rasterizer/rasterizer_lights.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
 | `lens_flare_evaluate_corona_rotation_function` | rasterizer/rasterizer_lights.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
 | `rasterizer_lens_flare_submit` | rasterizer/rasterizer_lights.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
-| `rasterizer_lens_flare_submit_for_cluster` | rasterizer/rasterizer_lights.c | Matched | import/src/level.rs:1539 | owed: the engine cites it, with no check against the original yet |
+| `rasterizer_lens_flare_submit_for_cluster` | rasterizer/rasterizer_lights.c | Matched | import/src/level.rs:1554 | owed: the engine cites it, with no check against the original yet |
 | `rasterizer_lens_flares_submit_occlusion_tests` | rasterizer/rasterizer_lights.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
 | `rasterizer_lens_flares_draw` | rasterizer/rasterizer_lights.c | Matched | ffi/src/camera.rs:3 | owed: the engine cites it, with no check against the original yet |
 | `lock_rasterizer_text_data` | rasterizer/rasterizer_text.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
@@ -3798,7 +3798,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `global_structure_bsp_index_get` | scenario/scenario.c | Replaced | import/src/lib.rs | maps imported to a typed format |
 | `scenario_load` | scenario/scenario.c | Replaced | import/src/lib.rs | maps imported to a typed format |
 | `scenario_get_fog_region_index` | scenario/scenario.c | Replaced | ffi/src/camera.rs | the enhanced lighting and Metal renderer |
-| `scenario_location_water_depth` | scenario/scenario.c | Matched | content/src/level.rs:745 | owed: water; reads the object, tag and map world, which the fake worlds do not hold (the structure's fog planes) |
+| `scenario_location_water_depth` | scenario/scenario.c | Matched | content/src/level.rs:752 | owed: water; reads the object, tag and map world, which the fake worlds do not hold (the structure's fog planes) |
 | `scenario_get_sound_environment` | scenario/scenario.c | Matched | ffi/src/sound_world/sound_environment_reference.rs:5 | ffi/src/sound_world/sound_environment_reference.rs (trace); one local player; the scenario's fog regions and water boundary are not in the engine, and the game glides once a frame where the engine glides once a tick (the same at 30 frames a second) |
 | `interpolate_real_rgb_color` | scenario/scenario.c | Replaced |  | through its caller `object_render_state_refresh` |
 | `scenario_get_atmospheric_fog` | scenario/scenario.c | Replaced |  | through its caller `render_player_frame` |
@@ -3888,13 +3888,14 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `unattached_looping_sound_stop` | sound/game_sound.c | Matched | ffi/src/sound_world.rs | owed: the engine's own tests (ffi/src/sound_world.rs); no check against the original yet |
 | `scripted_looping_sound_stop_internal` | sound/game_sound.c | Matched | campaign/src/sounds.rs | owed: the engine's own tests (campaign/src/sounds.rs); no check against the original yet |
 | `track_object_impulse_sound` | sound/game_sound.c | Matched | ffi/src/sound_events.rs | owed: the engine's own tests (ffi/src/sound_events.rs); no check against the original yet |
+| `obstruction_cache_slot` | sound/game_sound.c | Ported |  | `tools/engine_sound_obstruction_reference.py` |
 | `location_potentially_audible` | sound/game_sound.c | Matched | ffi/src/sound_world.rs | owed: the engine's own tests (ffi/src/sound_world.rs); no check against the original yet |
 | `update_potentially_audible_looping_sound` | sound/game_sound.c | Matched | ffi/src/sound_world.rs | owed: the engine's own tests (ffi/src/sound_world.rs); no check against the original yet |
 | `object_impulse_sound_new` | sound/game_sound.c | Matched | ffi/src/sound_events.rs | owed: the engine's own tests (ffi/src/sound_events.rs); no check against the original yet |
 | `scripted_sound_new` | sound/game_sound.c | Matched | campaign/src/sounds.rs | owed: the engine's own tests (campaign/src/sounds.rs); no check against the original yet |
 | `scripted_looping_sound_stop` | sound/game_sound.c | Matched | campaign/src/sounds.rs | owed: the engine's own tests (campaign/src/sounds.rs); no check against the original yet |
 | `game_sound_update` | sound/game_sound.c | Matched | ffi/src/sound_world.rs | owed: the engine's own tests (ffi/src/sound_world.rs); no check against the original yet |
-| `compute_sound_obstruction` | sound/game_sound.c | Matched | ffi/src/sound_world.rs | owed: the engine's own tests (ffi/src/sound_world.rs); no check against the original yet |
+| `compute_sound_obstruction` | sound/game_sound.c | Matched | ffi/src/sound_world/sound_obstruction_reference.rs:3 | ffi/src/sound_world/sound_obstruction_reference.rs (trace); the obstruction cache is the old port's and has nothing to match; a source at the listener in its own cluster is shut away where the game's occlusion is not a number |
 | `scripted_looping_sound_start` | sound/game_sound.c | Matched | campaign/src/sounds.rs | owed: the engine's own tests (campaign/src/sounds.rs); no check against the original yet |
 | `compress_ima_adpcm_audio_data` | sound/ima_adpcm.c | Replaced | dev/src/control.rs | the editor and tools |
 | `decompress_ima_adpcm_audio_data` | sound/ima_adpcm.c | Matched | audio/src/decode.rs | owed: the engine's own tests (audio/src/decode.rs); no check against the original yet |
@@ -3996,9 +3997,9 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `virtual_channel_get` | sound/sound_dsound_xbox.c | Replaced | app/Sources/OpenCEEngineKit/SoundOutput.swift | Xbox-only hardware |
 | `channel_get_state` | sound/sound_dsound_xbox.c | Replaced | app/Sources/OpenCEEngineKit/SoundOutput.swift | Xbox-only hardware |
 
-44 Missing (38 reached from `main_loop`), by file:
+43 Missing (37 reached from `main_loop`), by file:
 
-- sound/game_sound.c: `game_sound_initialize`, `game_sound_dispose`, `game_sound_initialize_for_new_map`, `game_sound_clear`, `game_sound_restore`, `scripted_foley_predict`, `scripted_looping_sound_set_scale`, `game_sound_set_mouth_aperture`, `obstruction_cache_slot`, `compute_combined_pas`, `looping_sound_definition_is_music`, `game_sound_dispose_from_old_map`, `scripted_music_stop_all`
+- sound/game_sound.c: `game_sound_initialize`, `game_sound_dispose`, `game_sound_initialize_for_new_map`, `game_sound_clear`, `game_sound_restore`, `scripted_foley_predict`, `scripted_looping_sound_set_scale`, `game_sound_set_mouth_aperture`, `compute_combined_pas`, `looping_sound_definition_is_music`, `game_sound_dispose_from_old_map`, `scripted_music_stop_all`
 - sound/sound_classes.c: `sound_classes_dispose_from_old_map`, `sound_classes_dispose`
 - sound/sound_definitions.c: `sound_permutation_get_mouth_aperture`, `sound_permutation_get_real_mouth_aperture`
 - sound/sound_manager.c: `sound_valid_for_channel`, `current_platform_definition`, `sound_initialize_for_new_map`, `sound_dispose`, `sound_pause`, `sound_render_time`, `sound_reconnect_to_structure_bsp`, `sound_try_and_get`, `sound_enable`, `sound_update_time`, `sound_delete`, `channel_queue_sound`, `sound_set_definition_begin`, `sound_set_definition_end`, `sound_initialize`, `sound_stop_impulse`, `sound_stop_impulse_by_source_and_definition`, `source_audible`, `prioritize_sounds`, `code_001be6a0`, `code_001be890`, `code_001bebf0`, `sound_idle`, `code_001bee50`, `sound_dispose_from_old_map`
@@ -4104,9 +4105,9 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `structure_test_vector` | structures/structures.c | Replaced |  | through its caller `light_particle` |
 | `structure_get_planar_fog` | structures/structures.c | Replaced |  | through its caller `render_player_frame` |
 | `render_debug_fog_planes` | structures/structures.c | Replaced |  | through its caller `render_debug` |
-| `structure_bsp_get_cluster_pvs` | structures/structure_bsp_definitions.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `structure_bsp_get_cluster_pvs` | structures/structure_bsp_definitions.c | Matched | content/src/level.rs:799 | ffi/src/sound_world/sound_obstruction_reference.rs (trace) |
 | `vertex_type_from_shader_tag` | structures/structure_bsp_definitions.c | Replaced | import/src/lib.rs | maps imported to a typed format |
-| `structure_bsp_get_cluster_encoded_sound_distance` | structures/structure_bsp_definitions.c | Matched | content/src/level.rs:770 | ffi/src/sound_world/sound_environment_reference.rs (trace) |
+| `structure_bsp_get_cluster_encoded_sound_distance` | structures/structure_bsp_definitions.c | Matched | content/src/level.rs:777 | ffi/src/sound_world/sound_environment_reference.rs (trace) |
 | `structure_visibility_dequantize_byte_to_real` | structures/structure_visibility.c | Replaced |  | through its caller `dequantize_byte_to_real_rectangle3d` |
 
 26 Missing (23 reached from `main_loop`), by file:

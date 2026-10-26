@@ -46,7 +46,7 @@ pub use level::{
     FallingDamage, GameType, GameTypes, Globals, ItemChoice, Level, Lightmap, LightmapVertex,
     Material, MaterialPhysics, NetgameEquipment, NetgameFlag, NetgameFlagKind, ObjectPlacement,
     PlacementDevice, PlacementPermutation, PlayerPhysics, PlayerStart, Scenario, Sky, SkyAmbient,
-    SkyLight, StructureBsp, MAXIMUM_CLUSTER_SOUND_DISTANCE,
+    SkyLight, StructureBsp, MAXIMUM_CLUSTERS_PER_STRUCTURE, MAXIMUM_CLUSTER_SOUND_DISTANCE,
 };
 pub use light::{FunctionModes, Light, ObjectFunction};
 pub use material::SurfaceMaterial;

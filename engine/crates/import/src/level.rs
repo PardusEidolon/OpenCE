@@ -53,6 +53,7 @@ const BSP_SOUND_ENVIRONMENT_SIZE: usize = 0x50;
 const MAX_BSP_SOUND_ENVIRONMENTS: usize = 64;
 /// `structure_bsp.sound_pas_data`: a byte for each pair of clusters.
 const BSP_SOUND_CLUSTER_DATA_OFFSET: usize = 0x214;
+const BSP_CLUSTER_DATA_OFFSET: usize = 0x140;
 const SNDE: GroupTag = GroupTag::new(b"snde");
 /// A sound environment: its priority (an `i16` at 4) and twelve values
 /// from 8.
@@ -1331,15 +1332,28 @@ fn import_structure_bsp(
         });
     }
     let pairs = clusters_block.len() * clusters_block.len().saturating_sub(1) / 2;
-    let cluster_sound_distances = bsp
-        .data(
-            BSP_SOUND_CLUSTER_DATA_OFFSET,
-            "sound cluster data",
-            MAX_BSP_CLUSTERS * (MAX_BSP_CLUSTERS - 1) / 2,
-        )?
-        .get(..pairs)
+    let cluster_sound_distances = bsp.data(
+        BSP_SOUND_CLUSTER_DATA_OFFSET,
+        "sound cluster data",
+        MAX_BSP_CLUSTERS * (MAX_BSP_CLUSTERS - 1) / 2,
+    )?;
+    // (the game reads what there is of a short table, and past it finds
+    // no distance)
+    let cluster_sound_distances = cluster_sound_distances
+        .get(..pairs.min(cluster_sound_distances.len()))
         .map(<[u8]>::to_vec)
         .unwrap_or_default();
+    let cluster_pvs = bsp
+        .data(
+            BSP_CLUSTER_DATA_OFFSET,
+            "cluster data",
+            MAX_BSP_CLUSTERS * MAX_BSP_CLUSTERS.div_ceil(32) * 4,
+        )?
+        .as_chunks::<4>()
+        .0
+        .iter()
+        .map(|&word| u32::from_le_bytes(word))
+        .collect();
 
     let leaves_block = bsp.block(BSP_LEAVES_OFFSET, "leaves", BSP_LEAF_SIZE, LEAVES.2)?;
     let mut leaf_clusters = Vec::with_capacity(leaves_block.len());
@@ -1367,6 +1381,7 @@ fn import_structure_bsp(
         sound_environments,
         cluster_sounds,
         cluster_sound_distances,
+        cluster_pvs,
         decals,
         lens_flare_markers,
         lens_flares,
@@ -2339,6 +2354,15 @@ pub(crate) mod tests {
         let sound_environments = bsp.add(&environments);
         // (the two clusters' one distance)
         let sound_distances = bsp.add(&[42]);
+        // (the two clusters' visible sets, a word each: the first sees
+        // both, the second only itself; and two bytes short of a word)
+        let mut visible = Vec::new();
+        for word in [0b11u32, 0b10] {
+            visible.extend_from_slice(&word.to_le_bytes());
+        }
+        visible.extend_from_slice(&[0xFF, 0xFF]);
+        let cluster_data = bsp.add(&visible);
+        let visible_size = visible.len();
         // one runtime decal a unit above the floor, looking down
         let mut decal = Vec::new();
         for value in [0.5f32, -0.5, 1.0] {
@@ -2385,6 +2409,16 @@ pub(crate) mod tests {
             structure_bsp,
             BSP_SOUND_CLUSTER_DATA_OFFSET + 12,
             &sound_distances.to_le_bytes(),
+        );
+        put(
+            structure_bsp,
+            BSP_CLUSTER_DATA_OFFSET,
+            &(visible_size as i32).to_le_bytes(),
+        );
+        put(
+            structure_bsp,
+            BSP_CLUSTER_DATA_OFFSET + 12,
+            &cluster_data.to_le_bytes(),
         );
         block(
             structure_bsp,
@@ -2772,6 +2806,9 @@ pub(crate) mod tests {
                 ]
             );
             assert_eq!(bsp.cluster_sound_distances, [42]);
+            assert_eq!(bsp.cluster_pvs, [0b11, 0b10]);
+            assert!(bsp.cluster_in_view(0, 1) && bsp.cluster_in_view(1, 1));
+            assert!(!bsp.cluster_in_view(1, 0));
             assert_eq!(
                 bsp.cluster_water,
                 [

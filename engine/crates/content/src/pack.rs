@@ -27,7 +27,7 @@ use rkyv::util::AlignedVec;
 use crate::Level;
 
 /// The version of this format; a pack of another is not read.
-pub const FORMAT_VERSION: u32 = 53;
+pub const FORMAT_VERSION: u32 = 54;
 
 const MAGIC: [u8; 4] = *b"OCPK";
 /// The header's size; the compressed archive follows it.
@@ -246,6 +246,7 @@ mod tests {
                 sound_environments: Vec::new(),
                 cluster_sounds: Vec::new(),
                 cluster_sound_distances: Vec::new(),
+                cluster_pvs: Vec::new(),
                 cluster_water: Vec::new(),
                 vehicle_floor: 0.0,
                 vehicle_ceiling: 0.0,

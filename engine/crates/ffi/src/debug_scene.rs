@@ -268,6 +268,7 @@ pub(crate) mod tests {
             sound_environments: Vec::new(),
             cluster_sounds: Vec::new(),
             cluster_sound_distances: Vec::new(),
+            cluster_pvs: Vec::new(),
             cluster_water: Vec::new(),
             vehicle_floor: 0.0,
             vehicle_ceiling: 0.0,

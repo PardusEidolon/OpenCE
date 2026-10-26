@@ -104,18 +104,34 @@ fn room_sound(
     }
 }
 
-/// How blocked and shut away a source `distance` from the listener is,
-/// `cluster_distance` away by the BSP's sound paths, when the line
-/// between them is `clear` or not: (obstruction, occlusion).
-pub(crate) fn obstruction(clear: bool, cluster_distance: f32, distance: f32) -> (f32, f32) {
-    if clear {
-        return (0.0, 0.0);
+/// How blocked and shut away a source `distance` from the listener is:
+/// (obstruction, occlusion) (`compute_sound_obstruction`). `paths` is how
+/// far the BSP's sound paths run between their clusters and whether the
+/// source's is in the listener's potentially visible set (none: either is
+/// in no cluster); `clear` tests the line between them, and is asked only
+/// of a source in view and within reach.
+pub(crate) fn obstruction(
+    paths: Option<(f32, bool)>,
+    clear: impl FnOnce() -> bool,
+    distance: f32,
+) -> (f32, f32) {
+    let Some((cluster_distance, in_view)) = paths else {
+        return (OBSTRUCTED, OCCLUDED);
+    };
+    if cluster_distance >= MAXIMUM_CLUSTER_SOUND_DISTANCE {
+        return (OBSTRUCTED, OCCLUDED);
     }
-    let obstruction = if cluster_distance < MAXIMUM_CLUSTER_SOUND_DISTANCE {
+    let obstruction = if in_view {
+        if clear() {
+            return (0.0, 0.0);
+        }
         OBSTRUCTED_NEARBY
     } else {
         OBSTRUCTED
     };
+    // (a source at the listener in its own cluster divides nothing by
+    // nothing: the game's occlusion is then not a number, the engine's
+    // shut away)
     let total = cluster_distance + distance;
     let occlusion = if total > 0.0 {
         ((1.0 - distance / total) * OCCLUSION_SCALE).clamp(0.0, 1.0)
@@ -210,11 +226,14 @@ impl SoundWorld {
             let velocity = (position - object.previous.position) * TICKS_PER_SECOND;
             let (obstruction, occlusion) = match structure {
                 Some(structure) => {
-                    let between = match (listener, cluster_at(structure, position)) {
-                        (Some(from), Some(to)) => structure.cluster_sound_distance(from, to),
-                        _ => MAXIMUM_CLUSTER_SOUND_DISTANCE,
+                    let paths = match (listener, cluster_at(structure, position)) {
+                        (Some(from), Some(to)) => Some((
+                            structure.cluster_sound_distance(from, to),
+                            structure.cluster_in_view(from, to),
+                        )),
+                        _ => None,
                     };
-                    self::obstruction(clear(camera, position), between, position.distance(camera))
+                    self::obstruction(paths, || clear(camera, position), position.distance(camera))
                 }
                 None => (0.0, 0.0),
             };
@@ -234,6 +253,8 @@ impl SoundWorld {
 
 #[cfg(test)]
 mod sound_environment_reference;
+#[cfg(test)]
+mod sound_obstruction_reference;
 
 #[cfg(test)]
 mod tests {
@@ -277,6 +298,8 @@ mod tests {
             background: Some(1),
             environment: Some(0),
         }];
+        // (its one cluster sees itself)
+        bsp.cluster_pvs = vec![1];
         let room = [1.0, -1.0, 10.0, -10.0]
             .into_iter()
             .map(|z| Vec3::new(0.5, 0.5, z))
@@ -289,18 +312,26 @@ mod tests {
 
     #[test]
     fn a_wall_blocks_a_source_and_its_distance_shuts_it_away() {
-        assert_eq!(obstruction(true, 0.0, 10.0), (0.0, 0.0));
-        let (blocked, shut) = obstruction(false, 0.0, 10.0);
+        // in view and clear: heard as it is
+        assert_eq!(obstruction(Some((0.0, true)), || true, 10.0), (0.0, 0.0));
+        // in view behind a wall: blocked a little, shut away by its paths
+        let (blocked, shut) = obstruction(Some((0.0, true)), || false, 10.0);
         assert_eq!((blocked, shut), (OBSTRUCTED_NEARBY, 0.0));
-        let (blocked, shut) = obstruction(false, 30.0, 10.0);
+        let (blocked, shut) = obstruction(Some((10.0, true)), || false, 30.0);
         assert_eq!(blocked, OBSTRUCTED_NEARBY);
-        assert!((shut - 0.75 * OCCLUSION_SCALE).abs() < 1e-6 || shut == 1.0);
-        let (blocked, shut) = obstruction(false, 10.0, 30.0);
         assert!((shut - 0.25 * OCCLUSION_SCALE).abs() < 1e-6);
-        assert_eq!(blocked, OBSTRUCTED_NEARBY);
-        let (blocked, shut) = obstruction(false, MAXIMUM_CLUSTER_SOUND_DISTANCE, 1.0);
-        assert_eq!((blocked, shut), (OBSTRUCTED, 1.0));
-        assert_eq!(obstruction(false, 0.0, 0.0), (OBSTRUCTED_NEARBY, OCCLUDED));
+        // out of view: blocked more, and the line is never tested
+        let (blocked, shut) = obstruction(Some((10.0, false)), || panic!("tested"), 30.0);
+        assert_eq!(blocked, OBSTRUCTED);
+        assert!((shut - 0.25 * OCCLUSION_SCALE).abs() < 1e-6);
+        // out of reach, or in no cluster: blocked and shut away
+        let far = (MAXIMUM_CLUSTER_SOUND_DISTANCE, true);
+        assert_eq!(obstruction(Some(far), || true, 1.0), (OBSTRUCTED, OCCLUDED));
+        assert_eq!(obstruction(None, || true, 1.0), (OBSTRUCTED, OCCLUDED));
+        assert_eq!(
+            obstruction(Some((0.0, true)), || false, 0.0),
+            (OBSTRUCTED_NEARBY, OCCLUDED)
+        );
     }
 
     #[test]

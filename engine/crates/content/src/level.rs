@@ -661,6 +661,10 @@ pub struct StructureBsp {
     /// first: the low seven bits the distance, 127 for 256 world units
     /// (`sound_cluster_data`).
     pub cluster_sound_distances: Vec<u8>,
+    /// Each of its clusters' potentially visible set, a row of bits for
+    /// each cluster, a bit for each cluster it may see, in 32-bit words
+    /// (`cluster_data`).
+    pub cluster_pvs: Vec<u32>,
     /// Each of its clusters' water (none: the cluster is dry).
     pub cluster_water: Vec<Option<ClusterWater>>,
     /// The height flyers are pushed up from below (0: none).
@@ -735,6 +739,9 @@ fn water_depth(
 /// as far as is heard through them.
 pub const MAXIMUM_CLUSTER_SOUND_DISTANCE: f32 = 256.0;
 
+/// The most clusters a BSP's potentially visible sets are read for.
+pub const MAXIMUM_CLUSTERS_PER_STRUCTURE: usize = 512;
+
 impl StructureBsp {
     /// The cluster `point` is in (none: outside the level).
     pub fn cluster_at(&self, point: [f32; 3]) -> Option<u16> {
@@ -784,6 +791,25 @@ impl StructureBsp {
             .copied()
             .unwrap_or(u8::MAX);
         f32::from(encoded & 0x7F) * (MAXIMUM_CLUSTER_SOUND_DISTANCE / 127.0)
+    }
+
+    /// Whether cluster `to` is in cluster `from`'s potentially visible set:
+    /// never when `from` is not one of its clusters, it has more than
+    /// [`MAXIMUM_CLUSTERS_PER_STRUCTURE`], or its sets stop short of
+    /// `from`'s (`structure_bsp_get_cluster_pvs`, which gives an empty set).
+    pub fn cluster_in_view(&self, from: u16, to: u16) -> bool {
+        let count = self.cluster_sounds.len().max(self.cluster_skies.len());
+        let words = count.div_ceil(32);
+        let (from, to) = (usize::from(from), usize::from(to));
+        if from >= count
+            || count > MAXIMUM_CLUSTERS_PER_STRUCTURE
+            || (from + 1) * words > self.cluster_pvs.len()
+        {
+            return false;
+        }
+        self.cluster_pvs
+            .get(from * words + (to >> 5))
+            .is_some_and(|word| word >> (to & 31) & 1 != 0)
     }
 }
 

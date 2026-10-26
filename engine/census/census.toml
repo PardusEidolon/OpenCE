@@ -2322,7 +2322,9 @@ owed = "the engine's own tests (sim/src/vehicle.rs); no check against the origin
 [function.compute_sound_obstruction]
 class = "matched"
 engine = "ffi/src/sound_world.rs"
-owed = "the engine's own tests (ffi/src/sound_world.rs); no check against the original yet"
+check = "ffi/src/sound_world/sound_obstruction_reference.rs"
+against = "trace"
+note = "the obstruction cache is the old port's and has nothing to match; a source at the listener in its own cluster is shut away where the game's occlusion is not a number"
 
 [function.contrail_add_points]
 class = "matched"
@@ -7646,9 +7648,10 @@ check = "ffi/src/sound_world/sound_environment_reference.rs"
 against = "trace"
 
 [function.structure_bsp_get_cluster_pvs]
-class = "replaced"
-because = "imported"
-stands_in = "import/src/lib.rs"
+class = "matched"
+engine = "content/src/level.rs"
+check = "ffi/src/sound_world/sound_obstruction_reference.rs"
+against = "trace"
 
 [function.structure_bsp_header_deregister_vertex_buffers]
 class = "replaced"
