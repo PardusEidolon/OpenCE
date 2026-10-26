@@ -25,7 +25,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `interface` | 6 (0 B) | 24 (11056 B) | | | | 884 (145624 B) | 24 |
 | `items` | 7 (4048 B) | 24 (9024 B) | | | | 151 (22976 B) | 24 |
 | `main` | | | | | 15 (768 B) | 141 (15072 B) | 0 |
-| `math` | 36 (4096 B) | 4 (240 B) | | | 18 (3072 B) | 158 (15760 B) | 4 |
+| `math` | 36 (4096 B) | 5 (240 B) | | | 18 (3072 B) | 157 (15760 B) | 5 |
 | `memory` | | 2 (336 B) | | | 61 (9136 B) | 196 (25824 B) | 2 |
 | `models` | 17 (6080 B) | 5 (3808 B) | | | | 31 (7680 B) | 5 |
 | `networking` | | | | | 313 (49824 B) | | 0 |
@@ -43,7 +43,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `text` | | 1 (912 B) | | | 15 (4240 B) | 96 (11760 B) | 1 |
 | `tool` | | | | | 27 (8752 B) | | 0 |
 | `units` | 8 (1824 B) | 67 (19968 B) | | 14 (1008 B) | | 278 (84720 B) | 81 |
-| **all** | 81 (16832 B) | 464 (128336 B) | | 74 (33504 B) | 2102 (407088 B) | 5780 (1025362 B) | 538 |
+| **all** | 81 (16832 B) | 465 (128336 B) | | 74 (33504 B) | 2102 (407088 B) | 5779 (1025362 B) | 539 |
 
 ## `ai`
 
@@ -1125,7 +1125,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `matrix4x3_from_orientation` | math/matrix_math.c | Ported | sim/src/animation.rs:104 | `tools/engine_animation_reference.py` |
 | `matrix4x3_transform_normal` | math/matrix_math.c | Ported | sim/src/animation.rs:169 | `tools/engine_math_reference.py` |
 | `matrix4x3_inverse_transform_normal` | math/matrix_math.c | Ported | sim/src/animation_blend.rs:178 | `tools/engine_math_reference.py` |
-| `matrix4x3_multiply` | math/matrix_math.c | Ported |  | `tools/engine_animation_reference.py` |
+| `matrix4x3_multiply` | math/matrix_math.c | Ported | sim/src/animation.rs:131 | `tools/engine_animation_reference.py` |
 | `matrix4x3_rotation_from_vectors` | math/matrix_math.c | Ported |  | `tools/engine_animation_reference.py` |
 | `matrix4x3_rotation_from_angles` | math/matrix_math.c | Matched | sim/src/objects.rs:399 | owed: rotations; checked through the item trace's object matrices |
 | `matrix4x3_from_point_and_vectors` | math/matrix_math.c | Ported | sim/src/animation.rs:93 | `tools/engine_animation_reference.py` |
@@ -1166,6 +1166,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `quaternions_interpolate` | math/real_math.c | Ported | sim/src/animation.rs:208 | `tools/engine_animation_reference.py` |
 | `quaternion_transform_point` | math/real_math.c | Ported |  | `tools/engine_item_reference.py` |
 | `point_in_triangle3d` | math/real_math.c | Replaced |  | through its caller `structure_render_surface_from_point_and_leaf` |
+| `quantize_real_to_byte_lower_bound` | math/real_math.c | Matched | sim/src/vehicle_animation.rs:171 | owed: the engine's own tests (sim/tests/vehicle_traces.rs); no check against the original yet; only from 0 to 1, where the original's step down to the byte below the value is the floor of value * 255 |
 | `angle_between_vectors3d` | math/real_math.c | Ported | sim/src/vehicle.rs:917 | `tools/engine_math_reference.py` |
 | `quaternion_normalize` | math/real_math.c | Ported | sim/src/animation.rs:190 | `tools/engine_animation_reference.py` |
 | `quaternions_interpolate_and_normalize` | math/real_math.c | Ported | sim/src/animation.rs:202 | `tools/engine_animation_reference.py` |
@@ -1174,7 +1175,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `vector3d_from_euler_angles2d` | math/real_math.c | Matched | content/src/level.rs:375 | owed: the engine cites it, with no check against the original yet |
 | `accelerate_to_position` | math/real_math.c | Matched | sim/src/device_animation.rs:3 | owed: a first-person weapon's sway; checked through first_person_weapon_update's trace |
 
-158 Missing (66 reached from `main_loop`), by file:
+157 Missing (65 reached from `main_loop`), by file:
 
 - math/geometry.c: `convex_hull3d_verify`, `plane2d_distance_to_point`, `vector_intersect_plane3d`, `code_000f5050`, `build_torus`, `code_000f54a0`, `convex_hull2d`, `convex_hull2d_verify`, `convex_hull2d_test_circle`, `convex_hull2d_test_point`, `convex_hull2d_test_point_indexed`, `convex_hull2d_area`, `convex_hull2d_perimeter`, `convex_hull2d_test_vector`, `convex_polygon2d_verify`, `convex_polygon3d_verify`, `convex_hull3d_begin`, `convex_hull3d_expand`, `convex_hull3d`, `convex_hull3d_test_point`, `convex_hull3d_test_vector`, `code_000f76e0`, `code_000f7a90`, `code_000f7c20`, `points_dimension2d`
 - math/integer_math.c: `set_point2d`, `offset_point2d`, `rectangle2d_height`, `inset_rectangle2d`, `adjust_rectangle2d`, `intersect_rectangles2d`, `rectangle2d_hull_from_rectangles2d`, `point2d_in_rectangle2d`, `interior_rectangle2d`, `equal_rectangle2d`, `equal_point2d`, `floor_log2`, `ceiling_log2`, `floor_power2`, `ceiling_power2`, `integer_square_root`, `bit_vector_and`, `bit_vector_or`, `scale_rectangle2d`
@@ -1182,7 +1183,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 - math/periodic_functions.c: `@periodic_function_build_variable_period_x_table`
 - math/probability.c: `factorial`, `permutations`, `combinations`, `permute`, `combine`
 - math/random_math.c: `lock_global_random_seed`, `unlock_global_random_seed`, `get_global_random_seed_address`, `get_random_seed`, `get_global_local_random_seed_address`, `random_seed_debug_log`, `seed_random_orientation`
-- math/real_math.c: `magnitude_squared3d_right_associated`, `real_math_reset_precision`, `perpendicular2d`, `perpendicular3d`, `perpendicular4d`, `component_vectors_from_direction3d`, `vectors3d_from_euler_angles3d`, `fast_vector_intersects_sphere`, `fast_vector_intersection_with_sphere`, `point_in_rectangle2d`, `point_in_rectangle3d`, `circle_intersects_rectangle2d`, `point_in_cone2d`, `point_in_cone3d`, `point_in_sector2d`, `point_in_sector3d`, `circle_intersects_cone2d`, `circle_intersects_sector2d`, `sphere_intersects_cone3d`, `sphere_intersects_sector3d`, `point_in_triangle2d`, `circle_intersects_triangle2d`, `pill_intersects_triangle2d`, `pill_intersects_rectangle2d`, `sphere_intersects_rectangle3d`, `sphere_intersects_triangle3d`, `pill_intersects_triangle3d`, `vector_intersects_rectangle2d`, `vector_intersects_pill2d`, `vector_intersects_pill3d`, `vector_intersects_triangle2d`, `vector_intersects_triangle3d`, `vector_intersects_rectangle3d`, `pill_intersects_rectangle3d`, `fast_normalize2d`, `fast_normalize3d`, `cross_product_magnitude3d`, `dequantize_byte_to_real`, `quantize_real_to_byte_lower_bound`, `quantize_real_to_byte_upper_bound`, `quantize_real_to_byte_rectangle3d`, `signed_angle_between_vectors2d`, `angle_between_vectors2d`, `angle_between_normals3d`, `yaw_vectors`, `pitch_vectors`, `fast_normals_interpolate`, `normals_interpolate`, `pin_normal_to_cone3d`, `reflect_vector3d`, `refract_vector3d`, `quaternion_from_angle_and_vector`, `quaternion_to_angle_and_vector`, `vector3d_from_angle`, `point_in_pill2d`, `point_to_line_distance_squared3d`, `vector_to_line_distance_squared3d`, `sphere_test_vector3d`, `pill_test_vector3d`, `point_from_planes3d`, `line_from_planes3d`, `angular_accelerate_to_position`, `accelerate_to_velocity3d`, `accerate_to_position3d`, `accelerate_to_velocity`, `valid_real_sine_cosine`
+- math/real_math.c: `magnitude_squared3d_right_associated`, `real_math_reset_precision`, `perpendicular2d`, `perpendicular3d`, `perpendicular4d`, `component_vectors_from_direction3d`, `vectors3d_from_euler_angles3d`, `fast_vector_intersects_sphere`, `fast_vector_intersection_with_sphere`, `point_in_rectangle2d`, `point_in_rectangle3d`, `circle_intersects_rectangle2d`, `point_in_cone2d`, `point_in_cone3d`, `point_in_sector2d`, `point_in_sector3d`, `circle_intersects_cone2d`, `circle_intersects_sector2d`, `sphere_intersects_cone3d`, `sphere_intersects_sector3d`, `point_in_triangle2d`, `circle_intersects_triangle2d`, `pill_intersects_triangle2d`, `pill_intersects_rectangle2d`, `sphere_intersects_rectangle3d`, `sphere_intersects_triangle3d`, `pill_intersects_triangle3d`, `vector_intersects_rectangle2d`, `vector_intersects_pill2d`, `vector_intersects_pill3d`, `vector_intersects_triangle2d`, `vector_intersects_triangle3d`, `vector_intersects_rectangle3d`, `pill_intersects_rectangle3d`, `fast_normalize2d`, `fast_normalize3d`, `cross_product_magnitude3d`, `dequantize_byte_to_real`, `quantize_real_to_byte_upper_bound`, `quantize_real_to_byte_rectangle3d`, `signed_angle_between_vectors2d`, `angle_between_vectors2d`, `angle_between_normals3d`, `yaw_vectors`, `pitch_vectors`, `fast_normals_interpolate`, `normals_interpolate`, `pin_normal_to_cone3d`, `reflect_vector3d`, `refract_vector3d`, `quaternion_from_angle_and_vector`, `quaternion_to_angle_and_vector`, `vector3d_from_angle`, `point_in_pill2d`, `point_to_line_distance_squared3d`, `vector_to_line_distance_squared3d`, `sphere_test_vector3d`, `pill_test_vector3d`, `point_from_planes3d`, `line_from_planes3d`, `angular_accelerate_to_position`, `accelerate_to_velocity3d`, `accerate_to_position3d`, `accelerate_to_velocity`, `valid_real_sine_cosine`
 - math/real_math.h: `set_real_point3d`
 - math/vector_tree.c: `vector_tree_new`, `vector_tree_delete`, `code_00100040`, `code_00100080`, `vector_tree_find`, `vectors_equal`, `vector_tree_add_node`
 
@@ -1719,7 +1720,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `object_beautify` | objects/objects.c | Partial | campaign/src/presented.rs | leaves out what it does: the engine keeps it only as an event, which nothing acts on yet; owed: the engine's own tests (campaign/src/lib.rs); no check against the original yet |
 | `object_scripting_set_collideable` | objects/objects.c | Partial | campaign/src/presented.rs | leaves out what it does: the engine keeps it only as an event, which nothing acts on yet; owed: the engine's own tests (campaign/src/lib.rs); no check against the original yet |
 | `objects_place` | objects/objects.c | Matched | sim/src/objects.rs | owed: the engine's own tests (sim/src/objects.rs); no check against the original yet |
-| `object_start_interpolation` | objects/objects.c | Matched | sim/src/animation.rs:1348 | owed: interpolation; reads the object, tag and map world, which the fake worlds do not hold; Phase 12's impacts |
+| `object_start_interpolation` | objects/objects.c | Matched | campaign/src/units.rs:55 | owed: interpolation; reads the object, tag and map world, which the fake worlds do not hold; Phase 12's impacts |
 | `object_get_function_value` | objects/objects.c | Matched | ffi/src/particles/contrails.rs:56 | owed: the engine cites it, with no check against the original yet |
 | `object_index_from_name_index` | objects/objects.c | Matched | campaign/src/objects.rs | owed: the engine's own tests (campaign/src/objects.rs); no check against the original yet |
 | `objects_disconnect_from_structure_bsp` | objects/objects.c | Matched | sim/src/objects.rs | owed: the engine's own tests (sim/src/objects.rs); no check against the original yet |

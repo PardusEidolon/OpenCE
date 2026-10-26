@@ -81,13 +81,20 @@ fn cite(text: &str, place: &str, comment: &str, known: &BTreeSet<String>, found:
 
 /// The names in backticks in `text` that could be a function of the
 /// original: lower case, digits and underscores, with at least one
-/// underscore.
+/// underscore. A call quoted with its arguments (`f(a, b)`) cites `f`.
 pub fn quoted(text: &str) -> impl Iterator<Item = &str> {
-    text.split('`').skip(1).step_by(2).filter(|name| {
-        name.contains('_')
-            && name.bytes().next().is_some_and(|b| b.is_ascii_lowercase())
-            && name
-                .bytes()
-                .all(|b| b.is_ascii_lowercase() || b.is_ascii_digit() || b == b'_')
-    })
+    text.split('`')
+        .skip(1)
+        .step_by(2)
+        .map(|quote| match quote.split_once('(') {
+            Some((name, _)) if quote.ends_with(')') => name,
+            _ => quote,
+        })
+        .filter(|name| {
+            name.contains('_')
+                && name.bytes().next().is_some_and(|b| b.is_ascii_lowercase())
+                && name
+                    .bytes()
+                    .all(|b| b.is_ascii_lowercase() || b.is_ascii_digit() || b == b'_')
+        })
 }

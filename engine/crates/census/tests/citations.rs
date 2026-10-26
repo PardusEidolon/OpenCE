@@ -83,3 +83,10 @@ fn the_engine_cites_at_least_the_reference_maps_functions() -> Result<(), Failur
     }
     Ok(())
 }
+
+#[test]
+fn a_call_with_its_arguments_cites_the_name() {
+    let found: Vec<_> =
+        quoted("// as `matrix4x3_multiply(a, b, out)` does, then `unit_kill()`; `f(x)`").collect();
+    assert_eq!(found, ["matrix4x3_multiply", "unit_kill"]);
+}

@@ -2095,6 +2095,12 @@ class = "replaced"
 because = "renderer"
 stands_in = "app/Sources/OpenCEEngineRender/DecalPass.swift"
 
+[function.quantize_real_to_byte_lower_bound]
+class = "matched"
+engine = "sim/src/vehicle_animation.rs"
+owed = "the engine's own tests (sim/tests/vehicle_traces.rs); no check against the original yet"
+note = "only from 0 to 1, where the original's step down to the byte below the value is the floor of value * 255"
+
 [function.random_item]
 class = "matched"
 engine = "sim/src/game.rs"
