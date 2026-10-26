@@ -41,7 +41,7 @@ Each task reads the Rust and Swift sides, adds the citations they lack, and
 classes every function of its directories with its evidence. Partial
 entries list what they leave out.
 - [x] Task: AI (ai) ac315e46
-- [ ] Task: Scripts (hs)
+- [x] Task: Scripts (hs) 7f89d235
 - [ ] Task: The game loop (game, main, shell, saved games)
 - [ ] Task: Objects (objects, units, items, devices)
 - [ ] Task: Physics (physics)
