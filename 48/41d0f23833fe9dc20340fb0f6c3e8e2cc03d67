@@ -1,0 +1,1 @@
+Phase 2 verified: traces for the data table, the random helpers, the script evaluation and casts, the sound classes and the game tick; the workspace's 1326 tests pass, census --check and the ratchet pass, and nix flake check is green.
