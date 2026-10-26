@@ -37,7 +37,7 @@ const SCRIPTED_LOOP: u64 = 1 << 62;
 
 /// The key a looping sound the scripts play is refreshed under: its path's
 /// FNV-1a hash, marked as scripted.
-fn loop_key(path: &str) -> u64 {
+pub(crate) fn loop_key(path: &str) -> u64 {
     let hash = path.bytes().fold(0xcbf2_9ce4_8422_2325_u64, |hash, byte| {
         (hash ^ u64::from(byte)).wrapping_mul(0x0000_0100_0000_01b3)
     });

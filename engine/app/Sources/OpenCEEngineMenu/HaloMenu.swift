@@ -21,6 +21,11 @@ public protocol GameActions: AnyObject {
     /// Leaves the mission or the network game for the main menu.
     func returnToMainMenu()
     func quit()
+    /// Plays the level's sound at the tag path `path` once (a widget's).
+    func playSound(_ path: String)
+    /// Plays the level's looping sound at `path` until it is given
+    /// another or none (the main menu's music).
+    func playMusic(_ path: String?)
 }
 
 @MainActor
@@ -114,6 +119,7 @@ public final class HaloMenu {
     /// Puts the menu away.
     public func close() {
         menu = nil
+        actions?.playMusic(nil)
         settings.save()
     }
 
@@ -130,8 +136,10 @@ public final class HaloMenu {
             }
         }
         menu.update(nowMs: UInt64(max(now, 0) * 1000))
-        // (UI sounds are not played yet)
-        _ = menu.takeSounds()
+        for sound in menu.takeSounds() {
+            actions?.playSound(sound)
+        }
+        actions?.playMusic(menu.music())
         for action in menu.takeActions() {
             perform(action)
         }

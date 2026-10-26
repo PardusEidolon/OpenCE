@@ -32,6 +32,9 @@ final class FakeActions: GameActions {
     func restartLevel() throws { done.append("restart") }
     func returnToMainMenu() { done.append("main menu") }
     func quit() { done.append("quit") }
+    func playSound(_ path: String) { done.append("sound \(path)") }
+    func playMusic(_ path: String?) { music = path }
+    var music: String?
 }
 
 /// A menu that records what it is given and asks what a test says.
@@ -67,7 +70,13 @@ final class FakeMenu: MenuProtocol, @unchecked Sendable {
         defer { asks = [] }
         return asks
     }
-    func takeSounds() -> [String] { [] }
+    var sounds: [String] = []
+    var playing: String?
+    func takeSounds() -> [String] {
+        defer { sounds = [] }
+        return sounds
+    }
+    func music() -> String? { playing }
     func targets(width: UInt32, height: UInt32) -> [MenuPoint] { [] }
     func update(nowMs: UInt64) { now = nowMs }
     func wheel(steps: Int32) {}
@@ -112,6 +121,19 @@ final class MenuTests: XCTestCase {
         XCTAssertTrue(halo.isOpen)
         XCTAssertFalse(halo.show(FakeMenu(), widget: "nowhere"))
         XCTAssertNil(halo.menu, "a widget not there opens nothing")
+    }
+
+    func testTheMenusSoundsAndMusicPlayThroughTheApp() {
+        let (halo, fake, actions, _) = menu()
+        fake.sounds = ["sound\\sfx\\ui\\cursor", "sound\\sfx\\ui\\forward"]
+        fake.playing = "sound\\music\\title1\\title1"
+        halo.update(now: 0)
+        XCTAssertEqual(actions.done, ["sound sound\\sfx\\ui\\cursor", "sound sound\\sfx\\ui\\forward"])
+        XCTAssertEqual(actions.music, "sound\\music\\title1\\title1")
+        halo.update(now: 1)
+        XCTAssertEqual(actions.done.count, 2, "each sound once")
+        halo.close()
+        XCTAssertNil(actions.music, "a menu put away stops its music")
     }
 
     func testTheKeysAreTheMenusOnly() {

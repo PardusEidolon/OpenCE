@@ -1119,6 +1119,14 @@ extension AppDelegate: GameActions {
         NSApp.terminate(nil)
     }
 
+    func playSound(_ path: String) {
+        _ = engine.playSound(path: path, gain: 1)
+    }
+
+    func playMusic(_ path: String?) {
+        engine.setMenuMusic(path: path)
+    }
+
     /// The network's state in the title; a refusal brings the menus back
     /// with its reason.
     func showStatus() {

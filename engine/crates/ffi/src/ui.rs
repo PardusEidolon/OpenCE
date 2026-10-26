@@ -422,6 +422,12 @@ impl Menu {
         std::mem::take(&mut self.lock().host.sounds)
     }
 
+    /// The tag path of the looping sound the menus play (the main menu's
+    /// music), if they play one.
+    pub fn music(&self) -> Option<String> {
+        self.lock().host.music().map(Into::into)
+    }
+
     /// What the menus asked of the engine since the last call, in order.
     pub fn take_actions(&self) -> Vec<MenuAction> {
         std::mem::take(&mut self.lock().host.actions)

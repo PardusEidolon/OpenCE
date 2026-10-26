@@ -1164,6 +1164,12 @@ impl Engine {
                 if let Some(campaign) = running.campaign.as_mut() {
                     campaign.play_sounds(player, &running.simulation);
                 }
+                if let Some(path) = &shell.menu_music {
+                    if let Some(index) = player.looping_index(path) {
+                        let source = opence_audio::Source::default();
+                        player.refresh_looping(campaign::loop_key(path), index, &source, false);
+                    }
+                }
                 player.update_loops();
                 if let Some(run) = station.as_mut() {
                     run.after_sounds(player);
@@ -1175,6 +1181,13 @@ impl Engine {
         let frame = frame.ok_or(EngineError::NoWorld)?;
         publish(&mut state, &self.snapshots, frame.alpha);
         Ok(frame.ticks)
+    }
+
+    /// Plays the level's looping sound of the tag at `path`, heard
+    /// everywhere alike, for as long as it is set; none stops it (the
+    /// menus' music).
+    pub fn set_menu_music(&self, path: Option<String>) {
+        self.lock().shell.menu_music = path;
     }
 
     /// Where the app's audio comes from: the level's sounds, mixed.

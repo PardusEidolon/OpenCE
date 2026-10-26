@@ -140,6 +140,8 @@ pub(crate) struct Shell {
     pub(crate) frames: Vec<(String, u32, u32)>,
     /// The map's lighting controls' file, and what `tune` asked for.
     pub(crate) tuning: crate::dev_state::Tuning,
+    /// The looping sound the app's menus play, by its tag path.
+    pub(crate) menu_music: Option<String>,
 }
 
 impl Default for Shell {
@@ -159,6 +161,7 @@ impl Default for Shell {
             station: None,
             frames: Vec::new(),
             tuning: crate::dev_state::Tuning::default(),
+            menu_music: None,
         }
     }
 }

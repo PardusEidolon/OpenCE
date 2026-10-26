@@ -59,6 +59,9 @@ pub const GAME_TYPES: [&str; 5] = [
     "Race",
 ];
 
+/// The looping sound the main menu plays (`ui_start_main_menu_music`).
+pub(crate) const TITLE_MUSIC: &str = "sound\\music\\title1\\title1";
+
 /// Screen items one player at a keyboard can't use: split screen, two
 /// players' co-op and the Xbox's demos.
 const UNUSABLE_ITEMS: [&str; 3] = [
@@ -92,6 +95,8 @@ pub(crate) struct MenuHost {
     map: usize,
     /// Whether the multiplayer screens are setting up a game to host.
     hosting: bool,
+    /// Whether the main menu's music is playing (`main_menu_music_active`).
+    music: bool,
 }
 
 impl Default for MenuHost {
@@ -108,6 +113,7 @@ impl Default for MenuHost {
             difficulty: 1,
             map: 0,
             hosting: false,
+            music: false,
         }
     }
 }
@@ -226,6 +232,11 @@ fn fill_list(shell: &mut Shell, ui: &Ui, list: Id, names: &[String]) {
 }
 
 impl MenuHost {
+    /// The looping sound the menus play, if they play one.
+    pub(crate) fn music(&self) -> Option<&'static str> {
+        self.music.then_some(TITLE_MUSIC)
+    }
+
     fn names(entries: &[MenuEntry]) -> Vec<String> {
         entries.iter().map(|entry| entry.name.clone()).collect()
     }
@@ -344,9 +355,14 @@ impl Host for MenuHost {
                 fill_list(shell, ui, widget, std::slice::from_ref(&self.profile));
                 Outcome::Done
             }
-            // the screens' first frames
+            // the screens' first frames; the main menu's starts its music
             23 | 24 => {
+                self.music |= function == 23;
                 Self::disable_unusable(shell, ui, widget);
+                Outcome::Done
+            }
+            100 => {
+                self.music = false;
                 Outcome::Done
             }
             // split screen, co-op and the demos need more players or an Xbox
@@ -624,5 +640,23 @@ mod tests {
         host.feedback(Feedback::Cursor);
         host.sound(&tag("sound\\click"));
         assert_eq!(host.sounds, ["sound\\sfx\\ui\\cursor", "sound\\click"]);
+    }
+
+    #[test]
+    fn the_main_menu_starts_the_title_music_and_a_fade_stops_it() {
+        let mut opened = opened();
+        let screen = opened.screen;
+        let (ui, shell, host) = (&opened.ui, &mut opened.shell, &mut opened.host);
+        assert_eq!(host.music(), None);
+        // (`main_menu_initialize`, then `begin_music_fade_out`)
+        assert_eq!(host.run(23, shell, ui, screen), Outcome::Done);
+        assert_eq!(host.music(), Some(TITLE_MUSIC));
+        assert_eq!(TITLE_MUSIC, "sound\\music\\title1\\title1");
+        assert_eq!(host.run(24, shell, ui, screen), Outcome::Done);
+        assert_eq!(host.music(), Some(TITLE_MUSIC), "other screens keep it");
+        assert_eq!(host.run(100, shell, ui, screen), Outcome::Done);
+        assert_eq!(host.music(), None);
+        assert_eq!(opence_ui::function_name(23), Some("main menu intialize"));
+        assert_eq!(opence_ui::function_name(100), Some("begin music fade out"));
     }
 }
