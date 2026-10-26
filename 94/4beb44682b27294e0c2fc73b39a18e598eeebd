@@ -1,0 +1,1 @@
+Phase 3 checkpoint. Automated verification at the end of the track (deferred): nextest --workspace 1279 passed (opence_net a_client_plays_slayer_over_udp flaky: passes alone and on retry); cargo test --tests --workspace threaded passes; clippy clean; opence census --check passes; nix flake check passes after 333db3ef.
