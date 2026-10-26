@@ -9,7 +9,7 @@ use std::path::Path;
 use crate::citations::{self, Citations};
 use crate::classes::{lacking, Class, Engine, From, Manifest, Traced};
 use crate::original::Original;
-use crate::{docs, layout, read_text, traced, Error};
+use crate::{docs, fields, layout, read_text, traced, Error};
 
 /// The classes.
 pub const MANIFEST: &str = "census/census.toml";
@@ -351,6 +351,7 @@ pub fn census(root: &Path, mode: Mode) -> Result<String, Error> {
         Mode::Check => {
             let mut problems = census.problems();
             problems.extend(docs::stale(root, &census));
+            problems.extend(fields::stale(root)?);
             if problems.is_empty() {
                 Ok(census.summary())
             } else {
@@ -368,8 +369,15 @@ pub fn census(root: &Path, mode: Mode) -> Result<String, Error> {
             std::fs::write(&path, traced::write_traced(&traced::generate(root)?))
                 .map_err(|source| Error::Io { path, source })?;
             let path = root.join("engine").join(layout::LAYOUT);
-            std::fs::write(&path, layout::write_layout(&layout::generate(root)?))
+            let records = layout::generate(root)?;
+            std::fs::write(&path, layout::write_layout(&records))
                 .map_err(|source| Error::Io { path, source })?;
+            let path = root.join("engine").join(fields::FIELDS);
+            std::fs::write(
+                &path,
+                fields::write_fields(&fields::generate(root, &records)?),
+            )
+            .map_err(|source| Error::Io { path, source })?;
             let census = Census::read(root)?;
             docs::write(root, &census)?;
             Ok(census.summary())
