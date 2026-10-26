@@ -37,13 +37,13 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `scenario` | | 2 (608 B) | | | 5 (1456 B) | 50 (7520 B) | 2 |
 | `shaders` | | | | | 21 (2624 B) | | 0 |
 | `shell` | | | | | 10 (528 B) | 3 (0 B) | 0 |
-| `sound` | 5 (672 B) | 12 (2560 B) | | | 39 (0 B) | 162 (23728 B) | 12 |
+| `sound` | 5 (672 B) | 63 (6864 B) | | 2 (32 B) | 45 (656 B) | 103 (18736 B) | 65 |
 | `structures` | | 1 (0 B) | | | 55 (15968 B) | 71 (15744 B) | 1 |
 | `tag_files` | | | | | | 49 (4288 B) | 0 |
 | `text` | | 1 (912 B) | | | 15 (4240 B) | 96 (11760 B) | 1 |
 | `tool` | | | | | 27 (8752 B) | | 0 |
 | `units` | 8 (1824 B) | 67 (19968 B) | | 14 (1008 B) | | 278 (84720 B) | 81 |
-| **all** | 81 (16832 B) | 413 (124032 B) | | 72 (33472 B) | 2086 (404464 B) | 5849 (1032322 B) | 485 |
+| **all** | 81 (16832 B) | 464 (128336 B) | | 74 (33504 B) | 2092 (405120 B) | 5790 (1027330 B) | 538 |
 
 ## `ai`
 
@@ -2899,15 +2899,49 @@ docs/engine.md's "The coverage census" says what each class needs.
 
 | Function | File | Class | Engine | Evidence |
 | --- | --- | --- | --- | --- |
+| `game_looping_sound_new` | sound/game_sound.c | Matched | ffi/src/sound_world.rs | owed: the engine's own tests (ffi/src/sound_world.rs); no check against the original yet |
+| `game_looping_sound_delete` | sound/game_sound.c | Matched | ffi/src/sound_world.rs | owed: the engine's own tests (ffi/src/sound_world.rs); no check against the original yet |
+| `unattached_impulse_sound_new` | sound/game_sound.c | Matched | ffi/src/sound_events.rs | owed: the engine's own tests (ffi/src/sound_events.rs); no check against the original yet |
 | `unspatialized_impulse_sound_new` | sound/game_sound.c | Matched | sim/src/player.rs:1275 | owed: the engine cites it, with no check against the original yet |
 | `scripted_sound_time` | sound/game_sound.c | Matched | campaign/src/sounds.rs:181 | owed: sound; reads the object, tag and map world, which the fake worlds do not hold (the sound tag); campaign/tests/sounds.rs |
+| `scripted_sound_stop` | sound/game_sound.c | Matched | campaign/src/sounds.rs | owed: the engine's own tests (campaign/src/sounds.rs); no check against the original yet |
+| `scripted_looping_sound_set_alternate` | sound/game_sound.c | Matched | campaign/src/sounds.rs | owed: the engine's own tests (campaign/src/sounds.rs); no check against the original yet |
+| `unattached_looping_sound_start` | sound/game_sound.c | Matched | ffi/src/sound_world.rs | owed: the engine's own tests (ffi/src/sound_world.rs); no check against the original yet |
+| `unattached_looping_sound_stop` | sound/game_sound.c | Matched | ffi/src/sound_world.rs | owed: the engine's own tests (ffi/src/sound_world.rs); no check against the original yet |
+| `track_object_impulse_sound` | sound/game_sound.c | Matched | ffi/src/sound_events.rs | owed: the engine's own tests (ffi/src/sound_events.rs); no check against the original yet |
+| `object_impulse_sound_new` | sound/game_sound.c | Matched | ffi/src/sound_events.rs | owed: the engine's own tests (ffi/src/sound_events.rs); no check against the original yet |
+| `scripted_sound_new` | sound/game_sound.c | Matched | campaign/src/sounds.rs | owed: the engine's own tests (campaign/src/sounds.rs); no check against the original yet |
+| `scripted_looping_sound_stop` | sound/game_sound.c | Matched | campaign/src/sounds.rs | owed: the engine's own tests (campaign/src/sounds.rs); no check against the original yet |
+| `game_sound_update` | sound/game_sound.c | Matched | ffi/src/sound_world.rs | owed: the engine's own tests (ffi/src/sound_world.rs); no check against the original yet |
+| `compute_sound_obstruction` | sound/game_sound.c | Matched | ffi/src/sound_world.rs | owed: the engine's own tests (ffi/src/sound_world.rs); no check against the original yet |
+| `scripted_looping_sound_start` | sound/game_sound.c | Matched | campaign/src/sounds.rs | owed: the engine's own tests (campaign/src/sounds.rs); no check against the original yet |
+| `compress_ima_adpcm_audio_data` | sound/ima_adpcm.c | Replaced | dev/src/control.rs | the editor and tools |
+| `decompress_ima_adpcm_audio_data` | sound/ima_adpcm.c | Matched | audio/src/decode.rs | owed: the engine's own tests (audio/src/decode.rs); no check against the original yet |
+| `sound_class_get` | sound/sound_classes.c | Matched | audio/src/classes.rs | owed: the engine's own tests (audio/src/classes.rs); no check against the original yet |
+| `sound_class_datum_get` | sound/sound_classes.c | Matched | audio/src/classes.rs | owed: the engine's own tests (audio/src/classes.rs); no check against the original yet |
+| `debug_sound_classes_enable` | sound/sound_classes.c | Replaced | dev/src/control.rs | the editor and tools |
+| `debug_sound_classes_set_distances` | sound/sound_classes.c | Replaced | dev/src/control.rs | the editor and tools |
+| `debug_sound_classes_set_wet` | sound/sound_classes.c | Replaced | dev/src/control.rs | the editor and tools |
 | `sound_classes_update` | sound/sound_classes.c | Matched | audio/src/classes.rs:579 | owed: the sound classes; reads the object, tag and map world, which the fake worlds do not hold (the sound manager); Phase 15 |
+| `sound_class_get_gain` | sound/sound_classes.c | Matched | audio/src/classes.rs | owed: the engine's own tests (audio/src/classes.rs); no check against the original yet |
 | `sound_class_set_gain` | sound/sound_classes.c | Matched | audio/src/classes.rs:4 | owed: the sound classes; reads the object, tag and map world, which the fake worlds do not hold (the sound manager); Phase 15 |
+| `sound_definition_get_maximum_distance` | sound/sound_definitions.c | Matched | audio/src/player.rs | owed: the engine's own tests (audio/src/player.rs); no check against the original yet |
+| `sound_definition_get_minimum_distance` | sound/sound_definitions.c | Matched | audio/src/player.rs | owed: the engine's own tests (audio/src/player.rs); no check against the original yet |
 | `sound_definition_find_pitch_range_by_pitch` | sound/sound_definitions.c | Ported | audio/src/choice.rs:80 | `tools/engine_sound_choice_reference.py` |
 | `try_to_reset_permutations` | sound/sound_definitions.c | Ported | audio/src/choice.rs:134 | `tools/engine_sound_choice_reference.py` |
 | `sound_definition_next_permutation` | sound/sound_definitions.c | Ported | audio/src/choice.rs:163 | `tools/engine_sound_choice_reference.py` |
+| `sound_is_active` | sound/sound_manager.c | Matched | audio/src/mixer.rs | owed: the engine's own tests (audio/src/mixer.rs); no check against the original yet |
+| `sound_scripted_dialog_is_playing` | sound/sound_manager.c | Matched | audio/src/player.rs | owed: the engine's own tests (audio/src/player.rs); no check against the original yet |
+| `sound_manager_set_sound_environment` | sound/sound_manager.c | Matched | audio/src/mixer.rs | owed: the engine's own tests (audio/src/mixer.rs); no check against the original yet |
+| `sound_stop_all` | sound/sound_manager.c | Matched | audio/src/mixer.rs | owed: the engine's own tests (audio/src/mixer.rs); no check against the original yet |
 | `sound_new_impulse` | sound/sound_manager.c | Matched | audio/src/player.rs:1 | owed: sound; reads the object, tag and map world, which the fake worlds do not hold; Phase 15 |
 | `sound_refresh_looping` | sound/sound_manager.c | Matched | audio/src/player/looping.rs:1 | owed: sound; reads the object, tag and map world, which the fake worlds do not hold; Phase 15 |
+| `sound_render` | sound/sound_manager.c | Matched | audio/src/mixer.rs | owed: the engine's own tests (audio/src/mixer.rs); no check against the original yet |
+| `read_sound_preferences` | sound/sound_preferences.c | Partial | ffi/src/settings.rs | leaves out the original's preferences file: the volumes are kept with the app's settings; owed: the engine's own tests (ffi/src/settings.rs); no check against the original yet |
+| `write_sound_preferences` | sound/sound_preferences.c | Partial | ffi/src/settings.rs | leaves out the original's preferences file: the volumes are kept with the app's settings; owed: the engine's own tests (ffi/src/settings.rs); no check against the original yet |
+| `scripted_looping_sound_stop_internal` | sound/game_sound.c | Matched | campaign/src/sounds.rs | owed: the engine's own tests (campaign/src/sounds.rs); no check against the original yet |
+| `location_potentially_audible` | sound/game_sound.c | Matched | ffi/src/sound_world.rs | owed: the engine's own tests (ffi/src/sound_world.rs); no check against the original yet |
+| `update_potentially_audible_looping_sound` | sound/game_sound.c | Matched | ffi/src/sound_world.rs | owed: the engine's own tests (ffi/src/sound_world.rs); no check against the original yet |
 | `sound_samples_per_second` | sound/sound_dsound_xbox.c | Replaced | app/Sources/OpenCEEngineKit/SoundOutput.swift | Xbox-only hardware |
 | `dsound_volume_from_gain` | sound/sound_dsound_xbox.c | Replaced | app/Sources/OpenCEEngineKit/SoundOutput.swift | Xbox-only hardware |
 | `dsound_frequency_from_pitch` | sound/sound_dsound_xbox.c | Replaced | app/Sources/OpenCEEngineKit/SoundOutput.swift | Xbox-only hardware |
@@ -2948,25 +2982,49 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `virtual_channel_get` | sound/sound_dsound_xbox.c | Replaced | app/Sources/OpenCEEngineKit/SoundOutput.swift | Xbox-only hardware |
 | `channel_get_state` | sound/sound_dsound_xbox.c | Replaced | app/Sources/OpenCEEngineKit/SoundOutput.swift | Xbox-only hardware |
 | `sound_scale_value` | sound/sound_manager.c | Ported | audio/src/choice.rs:50 | `tools/engine_sound_choice_reference.py` |
+| `sound_definition_is_playable` | sound/sound_manager.c | Matched | audio/src/player.rs | owed: the engine's own tests (audio/src/player.rs); no check against the original yet |
+| `listener_get` | sound/sound_manager.c | Matched | audio/src/player.rs | owed: the engine's own tests (audio/src/player.rs); no check against the original yet |
+| `sound_definition_promote` | sound/sound_manager.c | Matched | audio/src/choice.rs | owed: the engine's own tests (audio/src/choice.rs); no check against the original yet |
 | `sound_manager_master_gain` | sound/sound_manager.c | Matched | audio/src/player.rs:236 | owed: the sound manager's gain; reads the object, tag and map world, which the fake worlds do not hold; Phase 15 |
+| `sound_travel_milliseconds` | sound/sound_manager.c | Matched | audio/src/mixer.rs | owed: the engine's own tests (audio/src/mixer.rs); no check against the original yet |
+| `refresh_sound` | sound/sound_manager.c | Matched | audio/src/mixer.rs | owed: the engine's own tests (audio/src/mixer.rs); no check against the original yet |
 | `sound_channel_summary_build` | sound/sound_manager.c | Matched | audio/src/player.rs:299 | owed: the mixer's channels; reads the object, tag and map world, which the fake worlds do not hold (the sound manager); Phase 15 |
+| `channel_set_properties_hardware` | sound/sound_manager.c | Matched | audio/src/mixer.rs | owed: the engine's own tests (audio/src/mixer.rs); no check against the original yet |
+| `track_loop_track_sound` | sound/sound_manager.c | Matched | audio/src/player/looping.rs | owed: the engine's own tests (audio/src/player/looping.rs); no check against the original yet |
+| `track_loop_impulse_sound` | sound/sound_manager.c | Matched | audio/src/player/looping.rs | owed: the engine's own tests (audio/src/player/looping.rs); no check against the original yet |
+| `looping_sound_find` | sound/sound_manager.c | Matched | audio/src/player/looping.rs | owed: the engine's own tests (audio/src/player/looping.rs); no check against the original yet |
+| `looping_sound_new` | sound/sound_manager.c | Matched | audio/src/player/looping.rs | owed: the engine's own tests (audio/src/player/looping.rs); no check against the original yet |
 | `limit_pitch` | sound/sound_manager.c | Matched | audio/src/choice.rs:68 | owed: the engine cites it, with no check against the original yet |
+| `render_debug_sound` | sound/sound_manager.c | Replaced | dev/src/draw.rs | the editor and tools |
+| `render_debug_looping_sound` | sound/sound_manager.c | Replaced | dev/src/draw.rs | the editor and tools |
 | `sound_scale_random_value` | sound/sound_manager.c | Ported | audio/src/choice.rs:56 | `tools/engine_sound_choice_reference.py` |
+| `sound_calculate_fade` | sound/sound_manager.c | Matched | audio/src/player/looping.rs | owed: the engine's own tests (audio/src/player/looping.rs); no check against the original yet |
+| `sound_start_fade` | sound/sound_manager.c | Matched | audio/src/player/looping.rs | owed: the engine's own tests (audio/src/player/looping.rs); no check against the original yet |
+| `sound_stop` | sound/sound_manager.c | Matched | audio/src/mixer.rs | owed: the engine's own tests (audio/src/mixer.rs); no check against the original yet |
+| `source_distance` | sound/sound_manager.c | Matched | audio/src/player.rs | owed: the engine's own tests (audio/src/player.rs); no check against the original yet |
+| `source_distance_squared` | sound/sound_manager.c | Matched | audio/src/player.rs | owed: the engine's own tests (audio/src/player.rs); no check against the original yet |
+| `sound_preempts_sound` | sound/sound_manager.c | Matched | audio/src/player.rs | owed: the engine's own tests (audio/src/player.rs); no check against the original yet |
+| `sound_find_best_channel` | sound/sound_manager.c | Matched | audio/src/player.rs | owed: the engine's own tests (audio/src/player.rs); no check against the original yet |
+| `sound_find_channel` | sound/sound_manager.c | Matched | audio/src/player.rs | owed: the engine's own tests (audio/src/player.rs); no check against the original yet |
 | `sound_find_like_channel` | sound/sound_manager.c | Matched | audio/src/player.rs:299 | owed: the mixer's channels; reads the object, tag and map world, which the fake worlds do not hold (the sound manager); Phase 15 |
+| `update_channel_for_impulse_sound` | sound/sound_manager.c | Matched | audio/src/mixer.rs | owed: the engine's own tests (audio/src/mixer.rs); no check against the original yet |
+| `update_channel_for_looping_sound` | sound/sound_manager.c | Matched | audio/src/mixer.rs | owed: the engine's own tests (audio/src/mixer.rs); no check against the original yet |
 | `process_looping_sounds` | sound/sound_manager.c | Matched | audio/src/player/looping.rs:1 | owed: sound; reads the object, tag and map world, which the fake worlds do not hold; Phase 15 |
+| `refresh_sounds` | sound/sound_manager.c | Matched | audio/src/mixer.rs | owed: the engine's own tests (audio/src/mixer.rs); no check against the original yet |
+| `update_channels` | sound/sound_manager.c | Matched | audio/src/mixer.rs | owed: the engine's own tests (audio/src/mixer.rs); no check against the original yet |
+| `refresh_listener` | sound/sound_manager.c | Matched | audio/src/player.rs | owed: the engine's own tests (audio/src/player.rs); no check against the original yet |
 | `detail_sound_random_offset` | sound/sound_manager.c | Matched | audio/src/player/looping.rs:686 | owed: a looping sound's details; draws from the game's random seed; Phase 15 |
 
-162 Missing (90 reached from `main_loop`), by file:
+103 Missing (37 reached from `main_loop`), by file:
 
-- sound/game_sound.c: `game_sound_initialize`, `game_sound_dispose`, `game_sound_initialize_for_new_map`, `game_sound_clear`, `game_sound_restore`, `game_looping_sound_new`, `game_looping_sound_delete`, `unattached_impulse_sound_new`, `scripted_sound_stop`, `scripted_foley_predict`, `scripted_looping_sound_set_scale`, `scripted_looping_sound_set_alternate`, `unattached_looping_sound_start`, `unattached_looping_sound_stop`, `code_001b7290`, `track_object_impulse_sound`, `game_sound_set_mouth_aperture`, `code_001b7630`, `code_001b7720`, `code_001b7790`, `code_001b7800`, `code_001b7860`, `game_sound_dispose_from_old_map`, `object_impulse_sound_new`, `scripted_sound_new`, `scripted_looping_sound_stop`, `game_sound_update`, `compute_sound_obstruction`, `scripted_looping_sound_start`, `scripted_looping_sound_stop_internal`, `obstruction_cache_slot`, `compute_combined_pas`, `location_potentially_audible`, `looping_sound_definition_is_music`, `update_potentially_audible_looping_sound`, `scripted_music_stop_all`
-- sound/ima_adpcm.c: `compress_ima_adpcm_audio_data`, `decompress_ima_adpcm_audio_data`, `byte_swap_bungie_ima_adpcm_header`
-- sound/sound_classes.c: `sound_class_get`, `sound_classes_initialize`, `sound_classes_dispose_from_old_map`, `sound_classes_dispose`, `sound_class_datum_get`, `debug_sound_classes_enable`, `debug_sound_classes_set_distances`, `debug_sound_classes_set_wet`, `sound_classes_initialize_for_new_map`, `sound_class_get_gain`
-- sound/sound_definitions.c: `sound_definition_get_maximum_distance`, `sound_definition_get_minimum_distance`, `sound_permutation_get_mouth_aperture`, `sound_permutation_get_real_mouth_aperture`
+- sound/game_sound.c: `game_sound_initialize`, `game_sound_dispose`, `game_sound_initialize_for_new_map`, `game_sound_clear`, `game_sound_restore`, `scripted_foley_predict`, `scripted_looping_sound_set_scale`, `code_001b7290`, `game_sound_set_mouth_aperture`, `code_001b7630`, `code_001b7720`, `code_001b7790`, `code_001b7800`, `code_001b7860`, `game_sound_dispose_from_old_map`, `obstruction_cache_slot`, `compute_combined_pas`, `looping_sound_definition_is_music`, `scripted_music_stop_all`
+- sound/ima_adpcm.c: `byte_swap_bungie_ima_adpcm_header`
+- sound/sound_classes.c: `sound_classes_initialize`, `sound_classes_dispose_from_old_map`, `sound_classes_dispose`, `sound_classes_initialize_for_new_map`
+- sound/sound_definitions.c: `sound_permutation_get_mouth_aperture`, `sound_permutation_get_real_mouth_aperture`
 - sound/sound_import/sound_aiff.c: `sound_file_is_aiff`, `sound_file_aiff_info_get`, `sound_file_aiff_raw_data_get`, `sound_file_aiff_format`
 - sound/sound_import/sound_import.c: `sound_file_info_get`, `sound_raw_sample_data_get`
 - sound/sound_import/sound_wave.c: `sound_file_is_wave`, `sound_file_wave_info_get`, `sound_file_wave_raw_data_get`, `sound_file_wave_format`
-- sound/sound_manager.c: `sound_valid_for_channel`, `current_platform_definition`, `sound_initialize_for_new_map`, `sound_dispose`, `sound_is_active`, `sound_pause`, `sound_render_time`, `sound_reconnect_to_structure_bsp`, `sound_try_and_get`, `sound_enable`, `sound_scripted_dialog_is_playing`, `sound_manager_set_sound_environment`, `code_001bb4c0`, `code_001bb4f0`, `code_001bb510`, `code_001bb570`, `code_001bb5b0`, `code_001bb5f0`, `code_001bb690`, `code_001bb6c0`, `code_001bb710`, `code_001bb730`, `code_001bb820`, `code_001bba20`, `code_001bbaa0`, `code_001bbb40`, `code_001bbc30`, `code_001bbcb0`, `code_001bbcf0`, `code_001bbde0`, `code_001bbe00`, `code_001bbf30`, `code_001bbf80`, `code_001bbfe0`, `code_001bc0a0`, `sound_initialize`, `code_001bc3b0`, `code_001bc3e0`, `code_001bc550`, `code_001bc6d0`, `code_001bc790`, `code_001bc860`, `code_001bc970`, `code_001bca70`, `code_001bcc80`, `code_001bcdb0`, `code_001bce80`, `sound_stop_impulse`, `sound_stop_impulse_by_source_and_definition`, `sound_stop_all`, `code_001bd090`, `code_001bd180`, `code_001bd3a0`, `code_001bd540`, `code_001bd720`, `code_001be4b0`, `code_001be6a0`, `code_001be890`, `code_001bebf0`, `sound_idle`, `code_001bee50`, `sound_dispose_from_old_map`, `sound_render`, `sound_update_time`, `sound_definition_is_playable`, `listener_get`, `sound_definition_promote`, `sound_delete`, `sound_travel_milliseconds`, `refresh_sound`, `channel_queue_sound`, `channel_set_properties_hardware`, `track_loop_track_sound`, `track_loop_impulse_sound`, `sound_set_definition_begin`, `looping_sound_find`, `looping_sound_new`, `sound_set_definition_end`, `render_debug_sound`, `render_debug_looping_sound`, `sound_calculate_fade`, `sound_start_fade`, `sound_stop`, `source_distance`, `source_distance_squared`, `sound_preempts_sound`, `sound_find_best_channel`, `sound_find_channel`, `update_channel_for_impulse_sound`, `update_channel_for_looping_sound`, `source_audible`, `refresh_sounds`, `update_channels`, `prioritize_sounds`, `refresh_listener`
-- sound/sound_preferences.c: `read_sound_preferences`, `write_sound_preferences`
+- sound/sound_manager.c: `sound_valid_for_channel`, `current_platform_definition`, `sound_initialize_for_new_map`, `sound_dispose`, `sound_pause`, `sound_render_time`, `sound_reconnect_to_structure_bsp`, `sound_try_and_get`, `sound_enable`, `code_001bb4c0`, `code_001bb4f0`, `code_001bb510`, `code_001bb570`, `code_001bb5b0`, `code_001bb5f0`, `code_001bb690`, `code_001bb6c0`, `code_001bb710`, `code_001bb730`, `code_001bb820`, `code_001bba20`, `code_001bbaa0`, `code_001bbb40`, `code_001bbc30`, `code_001bbcb0`, `code_001bbcf0`, `code_001bbde0`, `code_001bbe00`, `code_001bbf30`, `code_001bbf80`, `code_001bbfe0`, `code_001bc0a0`, `sound_initialize`, `code_001bc3b0`, `code_001bc3e0`, `code_001bc550`, `code_001bc6d0`, `code_001bc790`, `code_001bc860`, `code_001bc970`, `code_001bca70`, `code_001bcc80`, `code_001bcdb0`, `code_001bce80`, `sound_stop_impulse`, `sound_stop_impulse_by_source_and_definition`, `code_001bd090`, `code_001bd180`, `code_001bd3a0`, `code_001bd540`, `code_001bd720`, `code_001be4b0`, `code_001be6a0`, `code_001be890`, `code_001bebf0`, `sound_idle`, `code_001bee50`, `sound_dispose_from_old_map`, `sound_update_time`, `sound_delete`, `channel_queue_sound`, `sound_set_definition_begin`, `sound_set_definition_end`, `source_audible`, `prioritize_sounds`
 - sound/sound_scenery.c: `sound_scenery_new`, `sound_scenery_delete`
 
 ## `structures`

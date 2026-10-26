@@ -220,6 +220,12 @@ class = "replaced"
 because = "tools"
 stands_in = "dev/src/profile.rs"
 
+[[rule]]
+directory = "sound/sound_import"
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
 [function.accelerate_to_position]
 class = "matched"
 owed = "a first-person weapon's sway; checked through first_person_weapon_update's trace"
@@ -470,6 +476,11 @@ owed = "the engine's own tests (sim/tests/game.rs); no check against the origina
 class = "matched"
 owed = "cutscene cameras; reads the object, tag and map world, which the fake worlds do not hold (the camera track tag); campaign/tests/cutscenes.rs"
 
+[function.channel_set_properties_hardware]
+class = "matched"
+engine = "audio/src/mixer.rs"
+owed = "the engine's own tests (audio/src/mixer.rs); no check against the original yet"
+
 [function.collision_debug_render]
 class = "replaced"
 because = "tools"
@@ -559,10 +570,20 @@ engine = "physics/src/lib.rs"
 leaves_out = ["the original's collision BSP walk: Jolt answers the query on a mesh made from the collision BSP, so what is hit at an edge, and in what order, can differ"]
 owed = "the engine's own tests (physics/tests/world.rs); no check against the original yet"
 
+[function.compress_ima_adpcm_audio_data]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/control.rs"
+
 [function.compute_airborne_ticks]
 class = "matched"
 engine = "sim/src/vehicle.rs"
 owed = "the engine's own tests (sim/src/vehicle.rs); no check against the original yet"
+
+[function.compute_sound_obstruction]
+class = "matched"
+engine = "ffi/src/sound_world.rs"
+owed = "the engine's own tests (ffi/src/sound_world.rs); no check against the original yet"
 
 [function.contrail_add_points]
 class = "matched"
@@ -678,6 +699,21 @@ owed = "the engine cites it, with no check against the original yet"
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
 
+[function.debug_sound_classes_enable]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/control.rs"
+
+[function.debug_sound_classes_set_distances]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/control.rs"
+
+[function.debug_sound_classes_set_wet]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/control.rs"
+
 [function.decal_clip_to_surface]
 class = "replaced"
 because = "renderer"
@@ -719,6 +755,11 @@ owed = "the engine's own tests (ffi/src/dynamic_decals.rs); no check against the
 [function.decals_update]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
+
+[function.decompress_ima_adpcm_audio_data]
+class = "matched"
+engine = "audio/src/decode.rs"
+owed = "the engine's own tests (audio/src/decode.rs); no check against the original yet"
 
 [function.default_starting_location_rate_function]
 class = "partial"
@@ -1031,6 +1072,16 @@ class = "matched"
 engine = "campaign/src/game.rs"
 owed = "the engine's own tests (campaign/src/game.rs); no check against the original yet"
 
+[function.game_looping_sound_delete]
+class = "matched"
+engine = "ffi/src/sound_world.rs"
+owed = "the engine's own tests (ffi/src/sound_world.rs); no check against the original yet"
+
+[function.game_looping_sound_new]
+class = "matched"
+engine = "ffi/src/sound_world.rs"
+owed = "the engine's own tests (ffi/src/sound_world.rs); no check against the original yet"
+
 [function.game_safe_to_save]
 class = "partial"
 engine = "campaign/src/game.rs"
@@ -1042,6 +1093,11 @@ class = "partial"
 engine = "campaign/src/game.rs"
 leaves_out = ["the game's own test: the engine's always passes"]
 owed = "the engine's own tests (campaign/src/game.rs); no check against the original yet"
+
+[function.game_sound_update]
+class = "matched"
+engine = "ffi/src/sound_world.rs"
+owed = "the engine's own tests (ffi/src/sound_world.rs); no check against the original yet"
 
 [function.game_state_revert]
 class = "partial"
@@ -1369,6 +1425,11 @@ owed = "the HUD's messages; reads the object, tag and map world, which the fake 
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
 
+[function.listener_get]
+class = "matched"
+engine = "audio/src/player.rs"
+owed = "the engine's own tests (audio/src/player.rs); no check against the original yet"
+
 [function.local_random_direction3d]
 class = "matched"
 engine = "sim/src/effects.rs"
@@ -1383,6 +1444,21 @@ owed = "the engine's own tests (ffi/src/particles/contrails.rs); no check agains
 class = "matched"
 engine = "ffi/src/particles/contrails.rs"
 owed = "the engine's own tests (ffi/src/particles/contrails.rs); no check against the original yet"
+
+[function.location_potentially_audible]
+class = "matched"
+engine = "ffi/src/sound_world.rs"
+owed = "the engine's own tests (ffi/src/sound_world.rs); no check against the original yet"
+
+[function.looping_sound_find]
+class = "matched"
+engine = "audio/src/player/looping.rs"
+owed = "the engine's own tests (audio/src/player/looping.rs); no check against the original yet"
+
+[function.looping_sound_new]
+class = "matched"
+engine = "audio/src/player/looping.rs"
+owed = "the engine's own tests (audio/src/player/looping.rs); no check against the original yet"
 
 [function.machine_update]
 class = "matched"
@@ -1547,6 +1623,11 @@ owed = "the engine's own tests (sim/src/damage.rs); no check against the origina
 class = "matched"
 engine = "sim/src/damage.rs"
 owed = "the engine's own tests (sim/src/damage.rs); no check against the original yet"
+
+[function.object_impulse_sound_new]
+class = "matched"
+engine = "ffi/src/sound_events.rs"
+owed = "the engine's own tests (ffi/src/sound_events.rs); no check against the original yet"
 
 [function.object_index_from_name_index]
 class = "matched"
@@ -2037,6 +2118,12 @@ owed = "the engine cites it, with no check against the original yet"
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
 
+[function.read_sound_preferences]
+class = "partial"
+engine = "ffi/src/settings.rs"
+leaves_out = ["the original's preferences file: the volumes are kept with the app's settings"]
+owed = "the engine's own tests (ffi/src/settings.rs); no check against the original yet"
+
 [function.real_local_random]
 class = "matched"
 engine = "sim/src/effects.rs"
@@ -2045,6 +2132,21 @@ owed = "the engine's own tests (sim/src/effects.rs); no check against the origin
 [function.real_random_range]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
+
+[function.refresh_listener]
+class = "matched"
+engine = "audio/src/player.rs"
+owed = "the engine's own tests (audio/src/player.rs); no check against the original yet"
+
+[function.refresh_sound]
+class = "matched"
+engine = "audio/src/mixer.rs"
+owed = "the engine's own tests (audio/src/mixer.rs); no check against the original yet"
+
+[function.refresh_sounds]
+class = "matched"
+engine = "audio/src/mixer.rs"
+owed = "the engine's own tests (audio/src/mixer.rs); no check against the original yet"
 
 [function.render_blip]
 class = "matched"
@@ -2100,6 +2202,11 @@ class = "replaced"
 because = "tools"
 stands_in = "dev/src/draw.rs"
 
+[function.render_debug_looping_sound]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/draw.rs"
+
 [function.render_debug_obstacle_path]
 class = "replaced"
 because = "tools"
@@ -2126,6 +2233,11 @@ because = "tools"
 stands_in = "dev/src/draw.rs"
 
 [function.render_debug_scripting]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/draw.rs"
+
+[function.render_debug_sound]
 class = "replaced"
 because = "tools"
 stands_in = "dev/src/draw.rs"
@@ -2192,6 +2304,36 @@ owed = "the engine's own tests (sim/src/scenery.rs); no check against the origin
 class = "matched"
 owed = "cutscene cameras; reads the object, tag and map world, which the fake worlds do not hold; campaign/tests/cutscenes.rs"
 
+[function.scripted_looping_sound_set_alternate]
+class = "matched"
+engine = "campaign/src/sounds.rs"
+owed = "the engine's own tests (campaign/src/sounds.rs); no check against the original yet"
+
+[function.scripted_looping_sound_start]
+class = "matched"
+engine = "campaign/src/sounds.rs"
+owed = "the engine's own tests (campaign/src/sounds.rs); no check against the original yet"
+
+[function.scripted_looping_sound_stop]
+class = "matched"
+engine = "campaign/src/sounds.rs"
+owed = "the engine's own tests (campaign/src/sounds.rs); no check against the original yet"
+
+[function.scripted_looping_sound_stop_internal]
+class = "matched"
+engine = "campaign/src/sounds.rs"
+owed = "the engine's own tests (campaign/src/sounds.rs); no check against the original yet"
+
+[function.scripted_sound_new]
+class = "matched"
+engine = "campaign/src/sounds.rs"
+owed = "the engine's own tests (campaign/src/sounds.rs); no check against the original yet"
+
+[function.scripted_sound_stop]
+class = "matched"
+engine = "campaign/src/sounds.rs"
+owed = "the engine's own tests (campaign/src/sounds.rs); no check against the original yet"
+
 [function.scripted_sound_time]
 class = "matched"
 owed = "sound; reads the object, tag and map world, which the fake worlds do not hold (the sound tag); campaign/tests/sounds.rs"
@@ -2221,9 +2363,29 @@ class = "matched"
 engine = "sim/src/vehicle.rs"
 owed = "the engine's own tests (sim/src/vehicle.rs); no check against the original yet"
 
+[function.sound_calculate_fade]
+class = "matched"
+engine = "audio/src/player/looping.rs"
+owed = "the engine's own tests (audio/src/player/looping.rs); no check against the original yet"
+
 [function.sound_channel_summary_build]
 class = "matched"
 owed = "the mixer's channels; reads the object, tag and map world, which the fake worlds do not hold (the sound manager); Phase 15"
+
+[function.sound_class_datum_get]
+class = "matched"
+engine = "audio/src/classes.rs"
+owed = "the engine's own tests (audio/src/classes.rs); no check against the original yet"
+
+[function.sound_class_get]
+class = "matched"
+engine = "audio/src/classes.rs"
+owed = "the engine's own tests (audio/src/classes.rs); no check against the original yet"
+
+[function.sound_class_get_gain]
+class = "matched"
+engine = "audio/src/classes.rs"
+owed = "the engine's own tests (audio/src/classes.rs); no check against the original yet"
 
 [function.sound_class_set_gain]
 class = "matched"
@@ -2233,25 +2395,125 @@ owed = "the sound classes; reads the object, tag and map world, which the fake w
 class = "matched"
 owed = "the sound classes; reads the object, tag and map world, which the fake worlds do not hold (the sound manager); Phase 15"
 
+[function.sound_definition_get_maximum_distance]
+class = "matched"
+engine = "audio/src/player.rs"
+owed = "the engine's own tests (audio/src/player.rs); no check against the original yet"
+
+[function.sound_definition_get_minimum_distance]
+class = "matched"
+engine = "audio/src/player.rs"
+owed = "the engine's own tests (audio/src/player.rs); no check against the original yet"
+
+[function.sound_definition_is_playable]
+class = "matched"
+engine = "audio/src/player.rs"
+owed = "the engine's own tests (audio/src/player.rs); no check against the original yet"
+
+[function.sound_definition_promote]
+class = "matched"
+engine = "audio/src/choice.rs"
+owed = "the engine's own tests (audio/src/choice.rs); no check against the original yet"
+
+[function.sound_find_best_channel]
+class = "matched"
+engine = "audio/src/player.rs"
+owed = "the engine's own tests (audio/src/player.rs); no check against the original yet"
+
+[function.sound_find_channel]
+class = "matched"
+engine = "audio/src/player.rs"
+owed = "the engine's own tests (audio/src/player.rs); no check against the original yet"
+
 [function.sound_find_like_channel]
 class = "matched"
 owed = "the mixer's channels; reads the object, tag and map world, which the fake worlds do not hold (the sound manager); Phase 15"
+
+[function.sound_is_active]
+class = "matched"
+engine = "audio/src/mixer.rs"
+owed = "the engine's own tests (audio/src/mixer.rs); no check against the original yet"
 
 [function.sound_manager_master_gain]
 class = "matched"
 owed = "the sound manager's gain; reads the object, tag and map world, which the fake worlds do not hold; Phase 15"
 
+[function.sound_manager_set_sound_environment]
+class = "matched"
+engine = "audio/src/mixer.rs"
+owed = "the engine's own tests (audio/src/mixer.rs); no check against the original yet"
+
 [function.sound_new_impulse]
 class = "matched"
 owed = "sound; reads the object, tag and map world, which the fake worlds do not hold; Phase 15"
+
+[function.sound_preempts_sound]
+class = "matched"
+engine = "audio/src/player.rs"
+owed = "the engine's own tests (audio/src/player.rs); no check against the original yet"
 
 [function.sound_refresh_looping]
 class = "matched"
 owed = "sound; reads the object, tag and map world, which the fake worlds do not hold; Phase 15"
 
+[function.sound_render]
+class = "matched"
+engine = "audio/src/mixer.rs"
+owed = "the engine's own tests (audio/src/mixer.rs); no check against the original yet"
+
+[function.sound_scripted_dialog_is_playing]
+class = "matched"
+engine = "audio/src/player.rs"
+owed = "the engine's own tests (audio/src/player.rs); no check against the original yet"
+
+[function.sound_start_fade]
+class = "matched"
+engine = "audio/src/player/looping.rs"
+owed = "the engine's own tests (audio/src/player/looping.rs); no check against the original yet"
+
+[function.sound_stop]
+class = "matched"
+engine = "audio/src/mixer.rs"
+owed = "the engine's own tests (audio/src/mixer.rs); no check against the original yet"
+
+[function.sound_stop_all]
+class = "matched"
+engine = "audio/src/mixer.rs"
+owed = "the engine's own tests (audio/src/mixer.rs); no check against the original yet"
+
+[function.sound_travel_milliseconds]
+class = "matched"
+engine = "audio/src/mixer.rs"
+owed = "the engine's own tests (audio/src/mixer.rs); no check against the original yet"
+
+[function.source_distance]
+class = "matched"
+engine = "audio/src/player.rs"
+owed = "the engine's own tests (audio/src/player.rs); no check against the original yet"
+
+[function.source_distance_squared]
+class = "matched"
+engine = "audio/src/player.rs"
+owed = "the engine's own tests (audio/src/player.rs); no check against the original yet"
+
 [function.structure_bsp_get_cluster_encoded_sound_distance]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
+
+[function.track_loop_impulse_sound]
+class = "matched"
+engine = "audio/src/player/looping.rs"
+owed = "the engine's own tests (audio/src/player/looping.rs); no check against the original yet"
+
+[function.track_loop_track_sound]
+class = "matched"
+engine = "audio/src/player/looping.rs"
+owed = "the engine's own tests (audio/src/player/looping.rs); no check against the original yet"
+
+[function.track_object_impulse_sound]
+class = "matched"
+engine = "ffi/src/sound_events.rs"
+owed = "the engine's own tests (ffi/src/sound_events.rs); no check against the original yet"
 
 [function.trigger_create_projectiles]
 class = "matched"
@@ -2265,6 +2527,21 @@ owed = "the engine cites it, with no check against the original yet"
 [function.ui_start_main_menu_music]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
+
+[function.unattached_impulse_sound_new]
+class = "matched"
+engine = "ffi/src/sound_events.rs"
+owed = "the engine's own tests (ffi/src/sound_events.rs); no check against the original yet"
+
+[function.unattached_looping_sound_start]
+class = "matched"
+engine = "ffi/src/sound_world.rs"
+owed = "the engine's own tests (ffi/src/sound_world.rs); no check against the original yet"
+
+[function.unattached_looping_sound_stop]
+class = "matched"
+engine = "ffi/src/sound_world.rs"
+owed = "the engine's own tests (ffi/src/sound_world.rs); no check against the original yet"
 
 [function.uncompress_int32_to_real_vector3d]
 class = "matched"
@@ -2519,6 +2796,21 @@ class = "matched"
 engine = "sim/src/vehicle.rs"
 owed = "the engine's own tests (sim/src/vehicle.rs); no check against the original yet"
 
+[function.update_channel_for_impulse_sound]
+class = "matched"
+engine = "audio/src/mixer.rs"
+owed = "the engine's own tests (audio/src/mixer.rs); no check against the original yet"
+
+[function.update_channel_for_looping_sound]
+class = "matched"
+engine = "audio/src/mixer.rs"
+owed = "the engine's own tests (audio/src/mixer.rs); no check against the original yet"
+
+[function.update_channels]
+class = "matched"
+engine = "audio/src/mixer.rs"
+owed = "the engine's own tests (audio/src/mixer.rs); no check against the original yet"
+
 [function.update_human_boat_physics]
 class = "matched"
 engine = "sim/src/vehicle.rs"
@@ -2533,6 +2825,11 @@ owed = "the engine's own tests (sim/src/vehicle.rs); no check against the origin
 class = "matched"
 engine = "sim/src/vehicle.rs"
 owed = "the engine's own tests (sim/src/vehicle.rs); no check against the original yet"
+
+[function.update_potentially_audible_looping_sound]
+class = "matched"
+engine = "ffi/src/sound_world.rs"
+owed = "the engine's own tests (ffi/src/sound_world.rs); no check against the original yet"
 
 [function.update_suspension]
 class = "matched"
@@ -2715,3 +3012,9 @@ owed = "the engine's own tests (ffi/src/particles/weather.rs); no check against 
 [function.widget_instance_render_recursive]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
+
+[function.write_sound_preferences]
+class = "partial"
+engine = "ffi/src/settings.rs"
+leaves_out = ["the original's preferences file: the volumes are kept with the app's settings"]
+owed = "the engine's own tests (ffi/src/settings.rs); no check against the original yet"
