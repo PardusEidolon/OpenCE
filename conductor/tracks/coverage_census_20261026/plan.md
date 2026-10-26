@@ -49,7 +49,7 @@ entries list what they leave out.
 - [x] Task: Sound (sound) 1396d63e
 - [x] Task: Animation (models, first_person) 48220967
 - [x] Task: Cameras and cutscenes (camera, cutscene) ef6027b4
-- [ ] Task: The interface, HUD, UI and input (interface, dialogs, text, strings, input)
+- [x] Task: The interface, HUD, UI and input (interface, dialogs, text, strings, input) c40f7272
 - [ ] Task: The world (scenario, structures, bitmaps, cache, tag_files)
 - [ ] Task: Helpers (math, cseries, memory) as Native, checked against the math reference trace and the fixed-order rule
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: The walk through the systems' (Protocol in workflow.md) (automated; deferred to the end)
