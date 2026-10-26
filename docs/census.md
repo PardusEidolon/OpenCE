@@ -18,7 +18,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `devices` | | 17 (3728 B) | | | 1 (432 B) | 42 (3024 B) | 17 |
 | `dialogs` | | | | | 5 (1328 B) | | 0 |
 | `editor` | | | | | 9 (0 B) | | 0 |
-| `effects` | 1 (48 B) | 89 (35312 B) | | | 13 (7344 B) | 87 (13904 B) | 85 |
+| `effects` | 1 (48 B) | 88 (35024 B) | | 1 (288 B) | 13 (7344 B) | 87 (13904 B) | 79 |
 | `game` | 9 (416 B) | 22 (5008 B) | | 17 (8496 B) | 61 (4384 B) | 607 (85776 B) | 34 |
 | `hs` | 2 (384 B) | 42 (7984 B) | | 8 (1776 B) | 11 (2880 B) | 576 (53968 B) | 37 |
 | `input` | | | | | 46 (7216 B) | 1 (0 B) | 0 |
@@ -43,7 +43,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `text` | | 9 (1936 B) | 63 (6864 B) | | 19 (5744 B) | 21 (2368 B) | 9 |
 | `tool` | | | | | 27 (8752 B) | | 0 |
 | `units` | 9 (1856 B) | 67 (27888 B) | | 17 (17808 B) | 9 (1616 B) | 227 (58352 B) | 84 |
-| **all** | 151 (26432 B) | 578 (187824 B) | 332 (38896 B) | 119 (66800 B) | 2773 (575768 B) | 3674 (715402 B) | 626 |
+| **all** | 151 (26432 B) | 577 (187536 B) | 332 (38896 B) | 120 (67088 B) | 2773 (575768 B) | 3674 (715402 B) | 620 |
 
 ## `ai`
 
@@ -811,7 +811,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 
 | Function | File | Class | Engine | Evidence |
 | --- | --- | --- | --- | --- |
-| `real_local_random_range` | camera/bored_camera.c | Ported |  | `tools/engine_random_reference.py` |
+| `real_local_random_range` | camera/bored_camera.c | Ported |  | `tools/engine_particle_reference.py` |
 | `scripted_camera_enable` | camera/camera_scripting.c | Matched | campaign/src/cinematic.rs | owed: the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet |
 | `scripted_camera_set_animation` | camera/camera_scripting.c | Matched | campaign/src/cinematic.rs | owed: the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet |
 | `scripted_camera_set_first_person` | camera/camera_scripting.c | Matched | campaign/src/cinematic.rs | owed: the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet |
@@ -1180,15 +1180,15 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `particle_system_new_attached` | effects/particle_systems.c | Matched | ffi/src/particles/systems.rs | owed: the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet |
 | `particle_delete` | effects/particles.c | Matched | ffi/src/particles.rs | owed: the engine's own tests (ffi/src/particles.rs); no check against the original yet |
 | `new_particle_is_visible` | effects/particles.c | Matched | ffi/src/particles.rs | owed: the engine's own tests (ffi/src/particles.rs); no check against the original yet |
-| `particle_get_radius` | effects/particles.c | Matched | content/src/particle.rs:155 | owed: the engine cites it, with no check against the original yet |
+| `particle_get_radius` | effects/particles.c | Matched | content/src/particle.rs:155 | ffi/tests/particle_reference.rs (trace); its radius through a particle's life, unclamped as the game's; the engine falls back to the definition's first radius where the game's would not be a number |
 | `particle_effect_new` | effects/particles.c | Matched | ffi/src/particles.rs | owed: the engine's own tests (ffi/src/particles.rs); no check against the original yet |
 | `particle_die` | effects/particles.c | Matched | ffi/src/particles.rs | owed: the engine's own tests (ffi/src/particles.rs); no check against the original yet |
-| `particle_next_sequence` | effects/particles.c | Matched | ffi/src/particles.rs | owed: the engine's own tests (ffi/src/particles.rs); no check against the original yet |
-| `particle_next_frame` | effects/particles.c | Matched | ffi/src/particles.rs | owed: the engine's own tests (ffi/src/particles.rs); no check against the original yet |
-| `particle_update_frame_time` | effects/particles.c | Matched | ffi/src/particles.rs | owed: the engine's own tests (ffi/src/particles.rs); no check against the original yet |
-| `particle_update_physics` | effects/particles.c | Matched | ffi/src/particles.rs:514 | owed: the engine cites it, with no check against the original yet |
-| `particle_new` | effects/particles.c | Matched | ffi/src/particles.rs | owed: the engine's own tests (ffi/src/particles.rs); no check against the original yet |
-| `particles_update` | effects/particles.c | Matched | ffi/src/particles.rs | owed: the engine's own tests (ffi/src/particles.rs); no check against the original yet |
+| `particle_next_sequence` | effects/particles.c | Matched | ffi/src/particle_life.rs:5 | ffi/tests/particle_reference.rs (trace) |
+| `particle_next_frame` | effects/particles.c | Matched | ffi/src/particle_life.rs:6 | ffi/tests/particle_reference.rs (trace); a bitmap sequence with images but no sprites counts its images (the game's sprite count would be none, and its particles would die at once) |
+| `particle_update_frame_time` | effects/particles.c | Matched | ffi/src/particle_life.rs:6 | ffi/tests/particle_reference.rs (trace); steps at most 4096 frames an update, where the game's loop has no bound and would hold forever on a frame shown no time |
+| `particle_update_physics` | effects/particles.c | Matched | ffi/src/particles.rs:502 | owed: the engine cites it, with no check against the original yet |
+| `particle_new` | effects/particles.c | Matched | ffi/src/particle_life.rs:2 | ffi/tests/particle_reference.rs (trace) |
+| `particles_update` | effects/particles.c | Partial | ffi/src/particle_life.rs:7 | ffi/tests/particle_reference.rs (trace); leaves out the deletion of particles left undrawn for a few frames (the engine draws every live particle), the physics, which particle_update_physics owes; a particle's age, death past its life and its frames, as particle_life::Life::update; the engine ticks particles at 30 Hz |
 | `weather_particle_system_get` | effects/weather_particle_systems.c | Matched | ffi/src/particles/weather.rs | owed: the engine's own tests (ffi/src/particles/weather.rs); no check against the original yet |
 | `weather_particle_system_get_type` | effects/weather_particle_systems.c | Matched | ffi/src/particles/weather.rs | owed: the engine's own tests (ffi/src/particles/weather.rs); no check against the original yet |
 | `weather_particle_system_type_delete_particle` | effects/weather_particle_systems.c | Matched | ffi/src/particles/weather.rs | owed: the engine's own tests (ffi/src/particles/weather.rs); no check against the original yet |
@@ -1811,7 +1811,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `main_movie_start` | main/main.c | Replaced | ui/src/loading.rs | Bink; no Bink movies; the loading screen stands in |
 | `main_framerate_render` | main/main.c | Replaced |  | through its caller `interface_draw_fullscreen_overlays` |
 | `halt_and_catch_fire` | main/main.c | Replaced |  | through its caller `main` |
-| `main_loop` | main/main.c | Partial | ffi/src/lib.rs:1133 | leaves out the menu and the shell, switching maps, the network connection, the console's frame; owed: the engine's own version; no check against the original yet |
+| `main_loop` | main/main.c | Partial | ffi/src/lib.rs:1134 | leaves out the menu and the shell, switching maps, the network connection, the console's frame; owed: the engine's own version; no check against the original yet |
 | `debug_keys_initialize` | main/debug_keys.c | Replaced | dev/src/control.rs | the editor and tools |
 | `debug_keys_dispose` | main/debug_keys.c | Replaced | dev/src/control.rs | the editor and tools |
 | `debug_keys_update` | main/debug_keys.c | Replaced | dev/src/control.rs | the editor and tools |
@@ -2675,7 +2675,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `objects_paparazzi` | objects/objects.c | Replaced | dev/src/logbook.rs | the editor and tools; a debug check, statistic or editor hook of the original; the dev tools stand in |
 | `object_export_function_values` | objects/objects.c | Matched | sim/src/functions.rs:228 | owed: object functions; reads the object, tag and map world, which the fake worlds do not hold; Phase 13's animations driven by their functions |
 | `object_compute_node_matrices` | objects/objects.c | Matched | sim/src/player.rs:789 | owed: the engine cites it, with no check against the original yet |
-| `object_choose_random_change_colors` | objects/objects.c | Matched | ffi/src/lib.rs:510 | owed: the engine cites it, with no check against the original yet |
+| `object_choose_random_change_colors` | objects/objects.c | Matched | ffi/src/lib.rs:511 | owed: the engine cites it, with no check against the original yet |
 | `objects_scripting_detach` | objects/objects.c | Matched | campaign/src/objects.rs | owed: the engine's own tests (campaign/src/objects.rs); no check against the original yet |
 | `object_render_debug` | objects/objects.c | Replaced | dev/src/draw.rs | the editor and tools |
 | `object_set_position` | objects/objects.c | Matched | campaign/src/objects.rs | owed: the engine's own tests (campaign/src/objects.rs); no check against the original yet |

@@ -9,6 +9,7 @@ use opence_content::{EffectParticles, Level, Particle, StructureBsp, TagRef};
 use opence_sim::effects::{FiredPart, Running};
 use opence_sim::particle_collision::PointHit;
 use opence_sim::point_physics;
+use opence_sim::random::RandomSeed;
 use opence_sim::{Simulation, Vec3};
 use rustc_hash::{FxHashMap, FxHashSet};
 
@@ -17,6 +18,7 @@ mod slots;
 mod systems;
 mod weather;
 mod wind;
+use crate::particle_life::{Clock, Life};
 use crate::snapshot::{
     LightSnapshot, ParticleSnapshot, LIGHT_SPOT, MAX_PARTICLES, PARTICLE_FACING_AXIS,
     PARTICLE_FACING_SCREEN, PARTICLE_LIT, PARTICLE_NO_PICTURE,
@@ -397,36 +399,26 @@ struct Live {
     particle: usize,
     position: Vec3,
     velocity: Vec3,
-    age: f32,
-    life: f32,
+    /// Its age and animation, as the game's particles live them.
+    life: Life,
     /// The radius it was emitted at.
     radius: f32,
     rotation: f32,
     spin: f32,
     color: [f32; 4],
-    sequence: i32,
-    /// Seconds a frame of its animation shows (worn longer each time it
-    /// meets the world), or none if it does not animate.
-    frame_span: Option<f32>,
-    /// The frames it has shown.
-    frame: f32,
     /// It settled and stopped: it moves no more.
     at_rest: bool,
     /// The way it lies along or across: the way it was emitted, then the
     /// way it moves while it moves fast enough (`particle->direction`).
     direction: Vec3,
-    /// Its picture is mirrored across and up and down, as its random
-    /// mirroring drew it.
-    mirrors: [bool; 2],
     /// The effect it stays with, and where that was at the last tick.
     anchor: Option<(u32, Vec3)>,
 }
 
 impl Live {
     fn emit(
-        random: &mut Random,
+        (random, life): (&mut Random, Life),
         index: usize,
-        particle: &Particle,
         emitter: &EffectParticles,
         effect: &Running,
     ) -> Self {
@@ -482,33 +474,29 @@ impl Live {
             particle: index,
             position,
             velocity,
-            age: 0.0,
-            life: random.between(particle.lifespan).max(TICK),
+            life,
             radius: radius.max(0.0),
             rotation,
             spin,
             color,
-            sequence: i32::from(particle.first_sequence)
-                + random.below(i32::from(particle.initial_sequences)),
-            frame_span: (particle.fps[1] > 0.0)
-                .then(|| random.between(particle.fps))
-                .filter(|&fps| fps > 0.0)
-                .map(|fps| 1.0 / fps),
-            frame: 0.0,
             at_rest: false,
             direction,
-            mirrors: [
-                Particle::RANDOM_HORIZONTAL_MIRRORING,
-                Particle::RANDOM_VERTICAL_MIRRORING,
-            ]
-            .map(|flag| particle.flags & flag != 0 && random.next() < 0.5),
             anchor: attached.then_some((effect.number, origin.position)),
         }
     }
 
-    /// Its radius now, by its particle's radius over its life.
+    /// Its radius now, by its particle's radius over its life, which goes
+    /// on past its lifespan as it plays its final sequences. (A particle
+    /// that lives no time is at no point through its life, where the
+    /// game's radius is not a number: it keeps its radius at birth.)
     fn radius_now(&self, particle: &Particle) -> f32 {
-        self.radius * particle.radius_at(self.age / self.life)
+        let along = self.life.radius(particle);
+        self.radius
+            * if along.is_finite() {
+                along
+            } else {
+                particle.radius[0]
+            }
     }
 
     /// One tick of its physics (`particle_update_physics`), in `wind`,
@@ -581,9 +569,7 @@ impl Live {
                 }
                 if let Some(hit) = moved.collision {
                     settled = hit.normal.z > SETTLES_ON;
-                    if let Some(span) = &mut self.frame_span {
-                        *span += particle.contact_deterioration;
-                    }
+                    self.life.frame_span += particle.contact_deterioration;
                 }
             }
             (None, _) => self.position += self.velocity * TICK,
@@ -603,16 +589,6 @@ impl Live {
         true
     }
 
-    /// One tick of its animation, unless it stopped at rest.
-    fn animate(&mut self, particle: &Particle) {
-        if self.at_rest && particle.flags & Particle::ANIMATION_STOPS_AT_REST != 0 {
-            return;
-        }
-        if let Some(span) = self.frame_span.filter(|&span| span > 0.0) {
-            self.frame += TICK / span;
-        }
-    }
-
     /// As drawn this frame, lit by `lights` unless it lights itself.
     fn snapshot(
         &self,
@@ -622,28 +598,29 @@ impl Live {
     ) -> Option<ParticleSnapshot> {
         let particle = level.particles.get(self.particle)?;
         let radius = self.radius_now(particle);
+        let Life { age, lifespan, .. } = self.life;
         let fade_in = if particle.fade_in > 0.0 {
-            (self.age / particle.fade_in).min(1.0)
+            (age / particle.fade_in).min(1.0)
         } else {
             1.0
         };
         let fade_out = if particle.fade_out > 0.0 {
-            ((self.life - self.age) / particle.fade_out).clamp(0.0, 1.0)
+            ((lifespan - age) / particle.fade_out).clamp(0.0, 1.0)
         } else {
             1.0
         };
         let frame = pictures.frame(
             level,
             particle.bitmap.as_ref(),
-            self.sequence,
-            self.frame as usize,
+            self.life.sequence,
+            usize::try_from(self.life.frame).unwrap_or(0),
         );
         let along = self.direction;
         let facing = sprite::facing(
             Orientation::from_tag(particle.orientation),
             along,
             particle.shader.fade_mode,
-            self.mirrors,
+            self.life.mirrors,
         );
         let [r, g, b, a] = self.color;
         let lighting = if particle.flags & Particle::SELF_ILLUMINATED == 0 {
@@ -718,6 +695,32 @@ pub(crate) struct Census {
     pub(crate) missing: BTreeSet<String>,
     /// The particle systems the effects' parts began.
     pub(crate) systems: u32,
+    /// The particles emitted that died before they could be drawn: dead
+    /// as they were made, or as their first update ran out their frames
+    /// (a sprite shown for a frame at 30 fps, as the game's are).
+    pub(crate) unseen: u32,
+}
+
+/// The local players the particles' lives are split among.
+const LOCAL_PLAYERS: u16 = 1;
+
+/// The sprites in each sequence of `bitmap`, as the particles' lives count
+/// them: a sequence's sprites, or, for a bitmap that has none, its images
+/// (which the game's particles would not show).
+fn sprite_counts(level: &Level, bitmap: Option<&TagRef>) -> Vec<i32> {
+    bitmap
+        .and_then(|tag| level.bitmap(tag))
+        .map(|bitmap| {
+            bitmap
+                .sequences
+                .iter()
+                .map(|sequence| match sequence.sprites.len() {
+                    0 => i32::from(sequence.image_count),
+                    count => i32::try_from(count).unwrap_or(i32::MAX),
+                })
+                .collect()
+        })
+        .unwrap_or_default()
 }
 
 /// The particles, contrails and weather while the game runs.
@@ -740,6 +743,14 @@ pub(crate) struct LevelParticles {
     /// The particle systems running.
     systems: systems::Systems,
     random: Random,
+    /// The sprites in each sequence of each of the level's particles'
+    /// bitmaps, by the particle's index.
+    sprites: Vec<Vec<i32>>,
+    /// The random sequence the particles' lives draw from, as the game's
+    /// draw from its local seed.
+    life_random: RandomSeed,
+    /// The ticks the particles that step once a frame step.
+    clock: Clock,
     /// The camera at the last frame, which the weather is about.
     pub(crate) camera: Vec3,
     /// The seconds run.
@@ -761,6 +772,11 @@ impl LevelParticles {
                 .collect(),
             contrails: Contrails::new(level),
             systems: systems::Systems::new(level),
+            sprites: level
+                .particles
+                .iter()
+                .map(|particle| sprite_counts(level, particle.bitmap.as_ref()))
+                .collect(),
             ..Self::default()
         }
     }
@@ -780,6 +796,7 @@ impl LevelParticles {
         bsp: usize,
     ) {
         self.seconds += TICK;
+        self.events.clear();
         self.emit(level, emitting);
         let origins: FxHashMap<u32, Vec3> = running
             .iter()
@@ -791,8 +808,10 @@ impl LevelParticles {
         }
         let air = wind::Air::new(&self.winds, structure);
         let events = &mut self.events;
-        events.clear();
         let world: &Simulation = simulation;
+        let ticks = self.clock.ticks(TICK);
+        let (sprites, life_random) = (&self.sprites, &mut self.life_random);
+        let census = &mut self.census;
         self.live.retain_mut(|live| {
             let Some(particle) = level.particles.get(live.particle) else {
                 return false;
@@ -803,7 +822,20 @@ impl LevelParticles {
                     *at = now;
                 }
             }
-            live.age += TICK;
+            // as particles_update: it ages, and dies past its life or as its
+            // frames run out, before it moves
+            let counts = sprites.get(live.particle).map_or(&[][..], Vec::as_slice);
+            let first = live.life.age == 0.0;
+            if !live
+                .life
+                .update(particle, counts, (TICK, ticks), live.at_rest, life_random)
+            {
+                if first {
+                    census.unseen += 1;
+                }
+                events.died(particle, live.position, live.velocity);
+                return false;
+            }
             let wind = particle
                 .physics
                 .as_ref()
@@ -814,11 +846,6 @@ impl LevelParticles {
                 |from, motion| world.collide_point(from, motion),
                 events,
             ) {
-                return false;
-            }
-            live.animate(particle);
-            if live.age >= live.life {
-                events.died(particle, live.position, live.velocity);
                 return false;
             }
             true
@@ -918,13 +945,17 @@ impl LevelParticles {
                         let over = self.live.len() + 1 - limit;
                         self.live.drain(..over);
                     }
-                    self.live.push(Live::emit(
-                        random,
-                        particle,
-                        &level.particles[particle],
-                        emitter,
-                        effect,
-                    ));
+                    let definition = &level.particles[particle];
+                    let counts = self.sprites.get(particle).map_or(&[][..], Vec::as_slice);
+                    let life = Life::new(definition, counts, LOCAL_PLAYERS, &mut self.life_random);
+                    let live = Live::emit((random, life), particle, emitter, effect);
+                    if live.life.alive() {
+                        self.live.push(live);
+                    } else {
+                        census.unseen += 1;
+                        // with no sequence to show it dies as it is made
+                        self.events.died(definition, live.position, live.velocity);
+                    }
                 }
             }
         }
@@ -1115,18 +1146,23 @@ mod tests {
             particle: 0,
             position: Vec3::new(0.0, 0.0, height),
             velocity,
-            age: 0.0,
-            life: 10.0,
+            life: Life {
+                age: 0.0,
+                lifespan: 10.0,
+                stage: crate::particle_life::Stage::StillLooping,
+                sequence: 0,
+                frame: 0,
+                frame_time: 0.0,
+                frame_span: 0.1,
+                backwards: false,
+                mirrors: [false; 2],
+            },
             radius: 0.01,
             rotation: 0.0,
             spin: 1.0,
             color: [1.0; 4],
-            sequence: 0,
-            frame_span: Some(0.1),
-            frame: 0.0,
             at_rest: false,
             direction: Vec3::Z,
-            mirrors: [false; 2],
             anchor: None,
         }
     }
@@ -1151,24 +1187,43 @@ mod tests {
         let mut events = ParticleEvents::default();
         assert!(one.step(&stops, Vec3::ZERO, floor, &mut events));
         // (its frames wear longer for meeting the ground; it slid to a stop)
-        assert_eq!(one.frame_span, Some(0.6));
+        assert_eq!(one.life.frame_span, 0.6);
         assert!(one.at_rest, "{:?}", one.velocity);
         assert!(one.position.z >= 0.0, "{}", one.position);
         assert!(events.made.is_empty() && events.impacts.is_empty());
         // at rest it moves, turns and animates no more
+        let (mut random, sprites) = (RandomSeed::default(), [4]);
         let still = one.clone();
-        one.animate(&stops);
+        let tick = (TICK, 1);
+        assert!(one
+            .life
+            .update(&stops, &sprites, tick, one.at_rest, &mut random));
         assert!(one.step(&stops, Vec3::ONE, floor, &mut events));
-        assert_eq!(one, still);
+        assert_eq!(
+            (
+                one.position,
+                one.rotation,
+                one.life.frame,
+                one.life.frame_time
+            ),
+            (
+                still.position,
+                still.rotation,
+                still.life.frame,
+                still.life.frame_time
+            )
+        );
         // unless its animation goes on at rest
-        one.animate(&pebble(0));
-        assert!(one.frame > 0.0);
+        assert!(one
+            .life
+            .update(&pebble(0), &sprites, tick, one.at_rest, &mut random));
+        assert!(one.life.frame_time > 0.0);
         // in the air, far from the ground, it falls and turns
         let mut falling = live(10.0, Vec3::ZERO);
         assert!(falling.step(&stops, Vec3::ZERO, floor, &mut events));
         assert!(falling.velocity.z < 0.0 && !falling.at_rest);
         assert_eq!(falling.rotation, TICK);
-        assert_eq!(falling.frame_span, Some(0.1));
+        assert_eq!(falling.life.frame_span, 0.1);
     }
 
     #[test]
@@ -1446,7 +1501,7 @@ mod tests {
             particles
                 .live
                 .iter()
-                .map(|live| live.mirrors)
+                .map(|live| live.life.mirrors)
                 .collect::<Vec<_>>()
         };
         assert!(mirrors(0).iter().all(|&drawn| drawn == [false; 2]));

@@ -222,11 +222,12 @@ fn each_effect_of_the_row_spawns_its_full_particle_set() -> Result {
     let results = station(&engine, "station effects", 900)?;
     for one in &results {
         println!(
-            "{} peak {} planned {} made {} emitters {} systems {}/{} missing {}",
+            "{} peak {} planned {} made {} unseen {} emitters {} systems {}/{} missing {}",
             one["effect"],
             one["particles"],
             one["planned"],
             one["made"],
+            one["unseen"],
             one["emitters expected"],
             one["systems"],
             one["systems expected"],
@@ -256,7 +257,11 @@ fn each_effect_of_the_row_spawns_its_full_particle_set() -> Result {
         if number(one, "emitters expected") > 0 {
             assert!(number(one, "planned") > 0, "{effect} planned no particles");
         }
-        if number(one, "planned") > 0 || number(one, "systems expected") > 0 {
+        // (a particle whose frames run out on its first update, as the
+        // needle reflect's one-frame bolts at 30 fps do in the game, is
+        // never alive to be counted)
+        let seen = number(one, "made") > number(one, "unseen");
+        if seen || number(one, "systems expected") > 0 {
             assert!(number(one, "particles") > 0, "{effect} had none alive");
         }
     }

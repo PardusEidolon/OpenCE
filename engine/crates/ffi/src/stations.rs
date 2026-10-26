@@ -1431,6 +1431,7 @@ impl Particles {
             "particles": self.peak,
             "planned": census.planned,
             "made": census.made,
+            "unseen": census.unseen,
             "missing": census.missing,
             "systems": census.systems,
             "systems expected": systems,

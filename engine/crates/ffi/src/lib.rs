@@ -25,6 +25,7 @@ pub mod hud_text;
 pub mod lights;
 pub mod loading;
 pub mod network;
+pub mod particle_life;
 mod particles;
 pub mod render_level;
 pub mod render_model;

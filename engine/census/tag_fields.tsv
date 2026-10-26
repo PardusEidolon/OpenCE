@@ -4405,8 +4405,8 @@ particle_definition	collision_material_effects.name	40	char *	-	-	-
 particle_definition	collision_material_effects.name_length	44	long	-	-	-
 particle_definition	collision_material_effects.index	48	long	read	kept	unused
 particle_definition	reserved34	52	long	-	-	-
-particle_definition	life_span_lower_bound	56	real	read	kept	unused
-particle_definition	life_span_upper_bound	60	real	read	kept	unused
+particle_definition	life_span_lower_bound	56	real	read	kept	used
+particle_definition	life_span_upper_bound	60	real	read	kept	used
 particle_definition	fade_in_time	64	real	read	kept	used
 particle_definition	fade_out_time	68	real	read	kept	used
 particle_definition	collision_effect.group_tag	72	unsigned long	read	kept	used
@@ -4428,10 +4428,10 @@ particle_definition	frames_per_second_contact_deterioration	136	real	read	kept	u
 particle_definition	lod_falloff	140	real	-	kept	unused
 particle_definition	lod_cutoff	144	real	read	kept	unused
 particle_definition	reserved94	148	long	-	-	-
-particle_definition	first_sequence_index	152	short	read	kept	unused
-particle_definition	initial_sequence_count	154	short	read	kept	unused
-particle_definition	looping_sequence_count	156	short	read	kept	unused
-particle_definition	final_sequence_count	158	short	read	kept	unused
+particle_definition	first_sequence_index	152	short	read	kept	used
+particle_definition	initial_sequence_count	154	short	read	kept	used
+particle_definition	looping_sequence_count	156	short	read	kept	used
+particle_definition	final_sequence_count	158	short	read	kept	used
 particle_definition	reservedA0	160	long[2]	-	-	-
 particle_definition	runtime_oo_width	168	real	read	-	-
 particle_definition	sprite_orientation	172	short	read	kept	used

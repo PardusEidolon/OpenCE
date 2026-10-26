@@ -5820,22 +5820,29 @@ owed = "the engine's own tests (ffi/src/particles.rs); no check against the orig
 
 [function.particle_get_radius]
 class = "matched"
-owed = "the engine cites it, with no check against the original yet"
+engine = "ffi/src/particle_life.rs"
+check = "ffi/tests/particle_reference.rs"
+against = "trace"
+note = "its radius through a particle's life, unclamped as the game's; the engine falls back to the definition's first radius where the game's would not be a number"
 
 [function.particle_new]
 class = "matched"
-engine = "ffi/src/particles.rs"
-owed = "the engine's own tests (ffi/src/particles.rs); no check against the original yet"
+engine = "ffi/src/particle_life.rs"
+check = "ffi/tests/particle_reference.rs"
+against = "trace"
 
 [function.particle_next_frame]
 class = "matched"
-engine = "ffi/src/particles.rs"
-owed = "the engine's own tests (ffi/src/particles.rs); no check against the original yet"
+engine = "ffi/src/particle_life.rs"
+check = "ffi/tests/particle_reference.rs"
+against = "trace"
+note = "a bitmap sequence with images but no sprites counts its images (the game's sprite count would be none, and its particles would die at once)"
 
 [function.particle_next_sequence]
 class = "matched"
-engine = "ffi/src/particles.rs"
-owed = "the engine's own tests (ffi/src/particles.rs); no check against the original yet"
+engine = "ffi/src/particle_life.rs"
+check = "ffi/tests/particle_reference.rs"
+against = "trace"
 
 [function.particle_system_delete]
 class = "matched"
@@ -5929,17 +5936,22 @@ owed = "the engine's own tests (ffi/src/particles/systems.rs); no check against 
 
 [function.particle_update_frame_time]
 class = "matched"
-engine = "ffi/src/particles.rs"
-owed = "the engine's own tests (ffi/src/particles.rs); no check against the original yet"
+engine = "ffi/src/particle_life.rs"
+check = "ffi/tests/particle_reference.rs"
+against = "trace"
+note = "steps at most 4096 frames an update, where the game's loop has no bound and would hold forever on a frame shown no time"
 
 [function.particle_update_physics]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
 
 [function.particles_update]
-class = "matched"
+class = "partial"
 engine = "ffi/src/particles.rs"
-owed = "the engine's own tests (ffi/src/particles.rs); no check against the original yet"
+check = "ffi/tests/particle_reference.rs"
+against = "trace"
+leaves_out = ["the deletion of particles left undrawn for a few frames (the engine draws every live particle)", "the physics, which particle_update_physics owes"]
+note = "a particle's age, death past its life and its frames, as particle_life::Life::update; the engine ticks particles at 30 Hz"
 
 [function.permute]
 class = "missing"
