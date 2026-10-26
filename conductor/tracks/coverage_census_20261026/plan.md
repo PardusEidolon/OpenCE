@@ -80,9 +80,9 @@ entries list what they leave out.
 - [ ] Task: Conductor - User Manual Verification 'Phase 5: Scripts and sounds' (Protocol in workflow.md) (automated; deferred to the end)
 
 ## Phase 6: The report
-- [ ] Task: The numbers
-  - [ ] Per system and class, in counts and bytes; tag-field gaps; fix-ups that differ; scripts and sounds
-  - [ ] The Missing, Partial and evidence-less items, ranked by reach and by how much of play depends on them
+- [x] Task: The numbers 41d6f7c7
+  - [x] Per system and class, in counts and bytes; tag-field gaps; fix-ups that differ; scripts and sounds
+  - [x] The Missing, Partial and evidence-less items, ranked by reach and by how much of play depends on them
 - [ ] Task: The report Artifact and the proposed completion track
   - [ ] The phases of the coverage-completion track proposed from the ranking, to become a new track after your review
 - [ ] Task: Conductor - User Manual Verification 'Phase 6: The report' (Protocol in workflow.md) (the one manual check: you review the report)
