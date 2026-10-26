@@ -193,9 +193,9 @@ Found in play (2026-10-25): music and many sounds (hitting surfaces and the rest
 - [x] Task: Conductor - User Manual Verification 'Phase 15: Sound' (Protocol in workflow.md) (superseded: automated verification only, at the user's instruction)
 
 ## Phase 16: Performance
-- [ ] Task: The benchmark paths
-    - [ ] Write tests: a path replays the same camera and inputs; the report has mean, p99, p99.9, hitches and pacing; a regression over 5% fails
-    - [ ] devgulch, Blood Gulch, and 16 players on Blood Gulch
+- [x] Task: The benchmark paths a45300e1
+    - [x] Write tests: a path replays the same camera and inputs; the report has mean, p99, p99.9, hitches and pacing; a regression over 5% fails
+    - [x] devgulch, Blood Gulch, and 16 players on Blood Gulch
 - [ ] Task: No compiles, uploads or allocations in play
     - [ ] Write tests: no pipeline built after load; a counting allocator sees nothing in a frame
     - [ ] Metal binary archives, background texture streaming
