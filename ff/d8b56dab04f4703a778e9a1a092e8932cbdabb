@@ -1,0 +1,4 @@
+Task: The reference map moved in
+Write docs/census.md and the engine doc's census table from the census, and remove the reference map script
+
+The census now writes the table the reference map script wrote, and much more: docs/census.md lists every function of the original by system with its class and evidence, and docs/engine.md's summary table counts each system's classes in functions and bytes. The check fails when either doc is stale, and runs each reference script's own --check, so tools/engine_reference_map.py and its test are gone. Checked: the census crate's 18 class tests, opence census --check on the real tree.
