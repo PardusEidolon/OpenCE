@@ -202,7 +202,7 @@ impl Painter<'_> {
         }
     }
 
-    /// Draws frame `frame` of `sequence` of `tag` at `point` (in the HUD's
+    /// Draws `frame` of `tag` at `point` (in the HUD's
     /// pixels), kept to `anchor`'s side of it (`hud_calculate_bitmap_bounds`).
     #[allow(clippy::too_many_arguments)]
     fn bitmap(
@@ -210,8 +210,7 @@ impl Painter<'_> {
         tag: &TagRef,
         anchor: HudAnchor,
         point: [f32; 2],
-        sequence: i16,
-        frame: usize,
+        frame: Frame,
         scale: [f32; 2],
         color: u32,
         meter: Option<HudMeterFill>,
@@ -219,7 +218,7 @@ impl Painter<'_> {
         let Some(bitmap) = self.level.bitmap(tag) else {
             return;
         };
-        let Some(Sprite { image, clip }) = sprite(bitmap, sequence, frame) else {
+        let Some(Sprite { image, clip }) = sprite(bitmap, frame) else {
             return;
         };
         let Some(size) = bitmap.images.get(usize::from(image)) else {
@@ -283,8 +282,7 @@ impl Painter<'_> {
             icons,
             HudAnchor::BottomLeft,
             point,
-            icon.sequence,
-            frame,
+            Frame::Sprite(icon.sequence, frame),
             [1.0, 1.0],
             color,
             None,
@@ -308,8 +306,7 @@ impl Painter<'_> {
             tag,
             anchor,
             point,
-            element.sequence,
-            0,
+            Frame::Element(element.sequence),
             element.placement.scale,
             color,
             None,
@@ -345,8 +342,7 @@ impl Painter<'_> {
             tag,
             anchor,
             point,
-            meter.sequence,
-            0,
+            Frame::Element(meter.sequence),
             meter.placement.scale,
             (tint << 24) | 0x00FF_FFFF,
             Some(HudMeterFill {
@@ -394,8 +390,7 @@ impl Painter<'_> {
                 &tag,
                 anchor,
                 [cursor, origin[1]],
-                0,
-                digit,
+                Frame::Sprite(0, digit),
                 [digit_scale; 2],
                 color,
                 None,
@@ -611,8 +606,7 @@ impl Painter<'_> {
                     tag,
                     HudAnchor::Center,
                     point,
-                    item.sequence,
-                    0,
+                    Frame::Sprite(item.sequence, 0),
                     item.placement.scale,
                     item.color,
                     None,
@@ -649,36 +643,96 @@ const SWITCH_COLOR_ON_STATE_CHANGE: u8 = 1 << 3;
 
 /// A frame of a sequence: its image and its part of it (`[left, right,
 /// top, bottom]`, 0 to 1).
+#[derive(Clone, Copy, Debug, PartialEq)]
 struct Sprite {
     image: u16,
     clip: [f32; 4],
 }
 
-/// Frame `frame` of `sequence` (`bitmap_group_get_bitmap_from_sequence`
-/// and `get_sprite_clip_rect`): a sprite's part of its image, or a whole
-/// image of the sequence; the first image for no sequence.
-fn sprite(bitmap: &Bitmap, sequence: i16, frame: usize) -> Option<Sprite> {
-    let whole = [0.0, 1.0, 0.0, 1.0];
-    let Some(sequence) = usize::try_from(sequence)
+/// Which frame of which sequence is drawn, and how the game looks it up.
+#[derive(Clone, Copy, Debug)]
+enum Frame {
+    /// A static element's or meter's: its sequence's first frame, from
+    /// `bitmap_group_get_bitmap_from_sequence`.
+    Element(i16),
+    /// A number's, crosshair's or message icon's: frame `.1` of sequence
+    /// `.0`, from `hud_retrieve_bitmap_and_bounding_rect`.
+    Sprite(i16, usize),
+}
+
+/// The part of the image a whole image is drawn from.
+const WHOLE: [f32; 4] = [0.0, 1.0, 0.0, 1.0];
+
+/// The image `bitmap_group_get_bitmap_from_sequence` gives for frame
+/// `frame` of `sequence`: a negative sequence, or a bitmap without
+/// sequences, gives the frame's image; any other sequence wraps to one the
+/// bitmap has, whose run of images the frame wraps through, or whose
+/// sprite's image it is.
+fn sequence_image(bitmap: &Bitmap, sequence: i16, frame: usize) -> Option<u16> {
+    let wrapped = usize::try_from(sequence)
         .ok()
-        .and_then(|index| bitmap.sequences.get(index))
-    else {
-        return (!bitmap.images.is_empty()).then_some(Sprite {
-            image: 0,
-            clip: whole,
-        });
-    };
-    if !sequence.sprites.is_empty() {
-        let sprite = sequence.sprites.get(frame % sequence.sprites.len())?;
-        return Some(Sprite {
-            image: sprite.image,
-            clip: sprite.bounds,
-        });
+        .filter(|_| !bitmap.sequences.is_empty())
+        .and_then(|index| bitmap.sequences.get(index % bitmap.sequences.len()));
+    let image = match wrapped {
+        Some(sequence) if sequence.image_count > 0 => sequence
+            .first_image
+            .map(|first| usize::from(first) + frame % usize::from(sequence.image_count)),
+        Some(sequence) => sequence
+            .sprites
+            .get(frame)
+            .map(|sprite| usize::from(sprite.image)),
+        None => None,
     }
-    let first = sequence.first_image?;
-    let count = usize::from(sequence.image_count.max(1));
-    let image = u16::try_from(usize::from(first) + frame % count).ok()?;
-    Some(Sprite { image, clip: whole })
+    .unwrap_or(frame);
+    (image < bitmap.images.len())
+        .then(|| u16::try_from(image).ok())
+        .flatten()
+}
+
+/// The part of its image frame `frame` of `sequence` is drawn from
+/// (`get_sprite_clip_rect`): its sprite's, for a sequence of sprites the
+/// bitmap has (not wrapped), the frame wrapping through them.
+fn sprite_clip(bitmap: &Bitmap, sequence: i16, frame: usize) -> Option<[f32; 4]> {
+    let sprites = &bitmap
+        .sequences
+        .get(usize::try_from(sequence).ok()?)?
+        .sprites;
+    sprites
+        .get(frame.checked_rem(sprites.len())?)
+        .map(|sprite| sprite.bounds)
+}
+
+/// What `frame` is drawn from: its image, and its sprite's part of it or
+/// the whole.
+fn sprite(bitmap: &Bitmap, frame: Frame) -> Option<Sprite> {
+    match frame {
+        Frame::Element(sequence) => Some(Sprite {
+            image: sequence_image(bitmap, sequence, 0)?,
+            clip: sprite_clip(bitmap, sequence, 0).unwrap_or(WHOLE),
+        }),
+        Frame::Sprite(sequence, frame) => {
+            // a sequence the bitmap has, and the game's frame is a short
+            // kept positive
+            let sprites = &bitmap
+                .sequences
+                .get(usize::try_from(sequence).ok()?)?
+                .sprites;
+            let frame = frame & 0x7FFF;
+            let Some(sprite) = frame
+                .checked_rem(sprites.len())
+                .and_then(|index| sprites.get(index))
+            else {
+                return Some(Sprite {
+                    image: sequence_image(bitmap, sequence, frame)?,
+                    clip: WHOLE,
+                });
+            };
+            (usize::from(sprite.image) < bitmap.images.len()).then_some(Sprite {
+                image: sprite.image,
+                clip: sprite.bounds,
+            })
+        }
+    }
 }
 
 /// What a meter showing `vitality` in `value_scale` units is given.
@@ -744,6 +798,9 @@ fn lerp_color(from: u32, to: u32, fraction: f32) -> u32 {
     };
     channel(24) | channel(16) | channel(8) | channel(0)
 }
+
+#[cfg(test)]
+mod sprite_reference;
 
 #[cfg(test)]
 mod tests {

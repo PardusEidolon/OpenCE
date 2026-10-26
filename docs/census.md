@@ -9,7 +9,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | `ai` | 41 (1664 B) | 19 (3408 B) | | 12 (16320 B) | 91 (5616 B) | 796 (269258 B) | 30 |
 | `bink` | | | | | 24 (3968 B) | | 0 |
-| `bitmaps` | | 1 (224 B) | | | 209 (63904 B) | | 1 |
+| `bitmaps` | | 1 (224 B) | | | 209 (63904 B) | | 0 |
 | `bungie_net` | | | | | 105 (18992 B) | | 0 |
 | `cache` | | | | | 187 (24784 B) | | 0 |
 | `camera` | 3 (192 B) | 19 (8208 B) | | 3 (560 B) | 17 (2448 B) | 79 (25136 B) | 22 |
@@ -22,7 +22,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `game` | 7 (336 B) | 22 (5008 B) | | 17 (8496 B) | 61 (4384 B) | 609 (85856 B) | 38 |
 | `hs` | 2 (384 B) | 42 (7984 B) | | 8 (1776 B) | 11 (2880 B) | 576 (53968 B) | 37 |
 | `input` | | | | | 46 (7216 B) | 1 (0 B) | 0 |
-| `interface` | 6 (1408 B) | 96 (33424 B) | | 19 (6112 B) | 104 (21432 B) | 452 (94304 B) | 115 |
+| `interface` | 6 (1408 B) | 96 (33424 B) | | 19 (6112 B) | 104 (21432 B) | 452 (94304 B) | 113 |
 | `items` | 9 (4080 B) | 24 (19328 B) | | 1 (128 B) | 1 (16 B) | 102 (12496 B) | 24 |
 | `main` | | | | 1 (1648 B) | 34 (5440 B) | 91 (8752 B) | 1 |
 | `math` | 41 (5552 B) | 6 (256 B) | 70 (4720 B) | | 25 (4016 B) | 67 (8624 B) | 0 |
@@ -43,7 +43,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `text` | | 9 (1936 B) | 63 (6864 B) | | 19 (5744 B) | 21 (2368 B) | 9 |
 | `tool` | | | | | 27 (8752 B) | | 0 |
 | `units` | 9 (1856 B) | 67 (27888 B) | | 17 (17808 B) | 9 (1616 B) | 227 (58352 B) | 84 |
-| **all** | 147 (26112 B) | 577 (187824 B) | 332 (38896 B) | 123 (72592 B) | 2770 (569976 B) | 3678 (715722 B) | 659 |
+| **all** | 147 (26112 B) | 577 (187824 B) | 332 (38896 B) | 123 (72592 B) | 2770 (569976 B) | 3678 (715722 B) | 656 |
 
 ## `ai`
 
@@ -344,7 +344,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `delete_bitmap` | bitmaps/bitmap_group.c | Replaced | import/src/lib.rs | maps imported to a typed format |
 | `postprocess_bitmap_group` | bitmaps/bitmap_group.c | Replaced | import/src/lib.rs | maps imported to a typed format |
 | `bitmap_group_try_and_get_bitmap` | bitmaps/bitmap_group.c | Replaced | import/src/lib.rs | maps imported to a typed format |
-| `bitmap_group_get_bitmap_from_sequence` | bitmaps/bitmap_group.c | Matched | ffi/src/hud.rs:657 | owed: the engine cites it, with no check against the original yet |
+| `bitmap_group_get_bitmap_from_sequence` | bitmaps/bitmap_group.c | Matched | ffi/src/hud/sprite_reference.rs:3 | ffi/src/hud/sprite_reference.rs (trace); the HUD's static elements and meters; the UI's widgets draw from their own (ui/src/draw.rs), still owed |
 | `bitmap_group_add_bitmap` | bitmaps/bitmap_group.c | Replaced | import/src/lib.rs | maps imported to a typed format |
 | `bitmap_fill` | bitmaps/bitmap_utilities.c | Replaced | import/src/lib.rs | the editor and tools |
 | `bitmap_alpha_to_rgb` | bitmaps/bitmap_utilities.c | Replaced | import/src/lib.rs | the editor and tools |
@@ -1489,17 +1489,17 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `hud_show_action_response` | interface/hud.c | Matched | ffi/src/hud_text.rs:52 | owed: the HUD's messages; reads the object, tag and map world, which the fake worlds do not hold |
 | `hud_draw_screen` | interface/hud.c | Partial | ffi/src/hud.rs | leaves out the damage indicators, nav points, player names, timer, weapon overlays and messages: the engine draws the unit's and weapon's interfaces, the grenades and the motion sensor; owed: the engine's own tests (ffi/tests/hud.rs); no check against the original yet |
 | `hud_globals_get_scale` | interface/hud_draw.c | Matched | ffi/src/hud.rs | owed: the engine's own tests (ffi/tests/hud.rs); no check against the original yet |
-| `hud_retrieve_bitmap_and_bounding_rect` | interface/hud_draw.c | Matched | ffi/src/hud.rs | owed: the engine's own tests (ffi/tests/hud.rs); no check against the original yet |
+| `hud_retrieve_bitmap_and_bounding_rect` | interface/hud_draw.c | Matched | ffi/src/hud/sprite_reference.rs:4 | ffi/src/hud/sprite_reference.rs (trace) |
 | `fast_ftol_C` | interface/hud_draw.c | Replaced | app/Sources/OpenCEEngineRender/UiPass.swift | the enhanced lighting and Metal renderer; drawn by the Metal renderer |
 | `hud_calculate_point` | interface/hud_draw.c | Matched | ffi/src/hud.rs:168 | owed: the engine cites it, with no check against the original yet |
 | `get_flash_color` | interface/hud_draw.c | Matched | ffi/src/hud.rs:180 | owed: the engine cites it, with no check against the original yet |
 | `hud_draw_bitmap_direct` | interface/hud_draw.c | Matched | ffi/src/hud.rs | owed: the engine's own tests (ffi/tests/hud.rs); no check against the original yet |
-| `hud_draw_meter` | interface/hud_draw.c | Matched | ffi/src/hud.rs:319 | owed: the engine cites it, with no check against the original yet |
-| `hud_draw_numbers` | interface/hud_draw.c | Matched | ffi/src/hud.rs:361 | owed: the engine cites it, with no check against the original yet |
+| `hud_draw_meter` | interface/hud_draw.c | Matched | ffi/src/hud.rs:316 | owed: the engine cites it, with no check against the original yet |
+| `hud_draw_numbers` | interface/hud_draw.c | Matched | ffi/src/hud.rs:357 | owed: the engine cites it, with no check against the original yet |
 | `hud_draw_bitmap` | interface/hud_draw.c | Matched | ffi/src/hud.rs | owed: the engine's own tests (ffi/tests/hud.rs); no check against the original yet |
-| `hud_draw_static_element` | interface/hud_draw.c | Matched | ffi/src/hud.rs:300 | owed: the engine cites it, with no check against the original yet |
+| `hud_draw_static_element` | interface/hud_draw.c | Matched | ffi/src/hud.rs:298 | owed: the engine cites it, with no check against the original yet |
 | `render_state_text` | interface/hud_messaging.c | Matched | ffi/src/hud_text.rs | owed: the engine's own tests (ffi/tests/hud_text.rs); no check against the original yet |
-| `render_state_bitmap` | interface/hud_messaging.c | Matched | ffi/src/hud.rs:258 | owed: the engine cites it, with no check against the original yet |
+| `render_state_bitmap` | interface/hud_messaging.c | Matched | ffi/src/hud.rs:257 | owed: the engine cites it, with no check against the original yet |
 | `scripted_hud_set_objective` | interface/hud_messaging.c | Partial | campaign/src/presented.rs | leaves out what it does: the engine keeps it only as an event, which nothing acts on yet; owed: the engine's own tests (campaign/src/presented.rs); no check against the original yet |
 | `scripted_hud_set_timer_time` | interface/hud_messaging.c | Matched | campaign/src/game.rs | owed: the engine's own tests (campaign/src/game.rs); no check against the original yet |
 | `scripted_hud_set_timer_warning_cutoff` | interface/hud_messaging.c | Partial | campaign/src/presented.rs | leaves out what it does: the engine keeps it only as an event, which nothing acts on yet; owed: the engine's own tests (campaign/src/presented.rs); no check against the original yet |
@@ -1520,7 +1520,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `hud_render_unit_interface` | interface/hud_unit.c | Matched | ffi/src/hud.rs:82 | owed: the engine cites it, with no check against the original yet |
 | `scripted_hud_show_crosshair` | interface/hud_weapon.c | Partial | campaign/src/presented.rs | leaves out what it does: the engine keeps it only as an event, which nothing acts on yet; owed: the engine's own tests (campaign/src/presented.rs); no check against the original yet |
 | `get_crosshair_state` | interface/hud_weapon.c | Matched | ffi/src/hud.rs | owed: the engine's own tests (ffi/tests/hud.rs); no check against the original yet |
-| `render_grenade_hud` | interface/hud_weapon.c | Matched | ffi/src/hud.rs:624 | owed: the engine cites it, with no check against the original yet |
+| `render_grenade_hud` | interface/hud_weapon.c | Matched | ffi/src/hud.rs:618 | owed: the engine cites it, with no check against the original yet |
 | `crosshairs_draw` | interface/hud_weapon.c | Matched | ffi/src/hud.rs | owed: the engine's own tests (ffi/tests/hud.rs); no check against the original yet |
 | `render_weapon_hud` | interface/hud_weapon.c | Matched | ffi/src/hud.rs | owed: the engine's own tests (ffi/tests/hud.rs); no check against the original yet |
 | `hud_render_weapon_interface` | interface/hud_weapon.c | Matched | ffi/src/hud.rs | owed: the engine's own tests (ffi/tests/hud.rs); no check against the original yet |
@@ -1679,7 +1679,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `virtual_keyboard_select` | interface/virtual_keyboard.c | Replaced | ui/src/pointer.rs | keyboard and mouse only |
 | `virtual_keyboard_process_internal` | interface/virtual_keyboard.c | Replaced | ui/src/pointer.rs | keyboard and mouse only |
 | `virtual_keyboard_process` | interface/virtual_keyboard.c | Replaced | ui/src/pointer.rs | keyboard and mouse only |
-| `get_sprite_clip_rect` | interface/hud_draw.c | Matched | ffi/src/hud.rs:658 | owed: the engine cites it, with no check against the original yet |
+| `get_sprite_clip_rect` | interface/hud_draw.c | Matched | ffi/src/hud/sprite_reference.rs:4 | ffi/src/hud/sprite_reference.rs (trace) |
 | `hud_calculate_bitmap_bounds` | interface/hud_draw.c | Matched | ffi/src/hud.rs:206 | owed: the engine cites it, with no check against the original yet |
 | `widget_instance_can_handle_events` | interface/ui_widget.c | Matched | ui/src/lib.rs | owed: the engine's own tests (ui/tests/tree.rs); no check against the original yet |
 | `widget_instance_get_tail_child_widget` | interface/ui_widget.c | Matched | ui/src/lib.rs | owed: the engine's own tests (ui/tests/tree.rs); no check against the original yet |

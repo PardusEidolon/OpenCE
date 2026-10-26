@@ -1432,7 +1432,10 @@ stands_in = "import/src/lib.rs"
 
 [function.bitmap_group_get_bitmap_from_sequence]
 class = "matched"
-owed = "the engine cites it, with no check against the original yet"
+engine = "ffi/src/hud.rs"
+check = "ffi/src/hud/sprite_reference.rs"
+against = "trace"
+note = "the HUD's static elements and meters; the UI's widgets draw from their own (ui/src/draw.rs), still owed"
 
 [function.bitmap_group_try_and_get_bitmap]
 class = "replaced"
@@ -4143,7 +4146,9 @@ against = "trace"
 
 [function.get_sprite_clip_rect]
 class = "matched"
-owed = "the engine cites it, with no check against the original yet"
+engine = "ffi/src/hud.rs"
+check = "ffi/src/hud/sprite_reference.rs"
+against = "trace"
 
 [function.get_ui_argb_white]
 class = "matched"
@@ -4650,7 +4655,8 @@ owed = "the engine's own tests (ffi/tests/hud.rs); no check against the original
 [function.hud_retrieve_bitmap_and_bounding_rect]
 class = "matched"
 engine = "ffi/src/hud.rs"
-owed = "the engine's own tests (ffi/tests/hud.rs); no check against the original yet"
+check = "ffi/src/hud/sprite_reference.rs"
+against = "trace"
 
 [function.hud_set_state_message]
 class = "matched"
