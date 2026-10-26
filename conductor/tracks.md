@@ -53,6 +53,6 @@ This file tracks all major tracks for the project.
 - [~] **Track: The menus, launcher and loading screen redesigned in the original's design language, designed first in a Claude design artifact**
   *Link: [./tracks/menu_redesign_20261024/](./tracks/menu_redesign_20261024/)*
 
-- [~] **Track: Coverage census: every function of the original, every tag field and its fix-ups, the scripts and the sounds, classed against the engine with the evidence each class asks for, kept current by a Rust census check**
+- [x] **Track: Coverage census: every function of the original, every tag field and its fix-ups, the scripts and the sounds, classed against the engine with the evidence each class asks for, kept current by a Rust census check**
   *Link: [./tracks/coverage_census_20261026/](./tracks/coverage_census_20261026/)*
 
