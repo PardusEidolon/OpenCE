@@ -4131,8 +4131,10 @@ class = "matched"
 owed = "the ground's material; reads the object, tag and map world, which the fake worlds do not hold (the structure's collision)"
 
 [function.get_random_seed]
-class = "missing"
-note = "not reached from a root of the game; the animation and world track owns it"
+class = "matched"
+engine = "sim/src/random.rs"
+check = "sim/tests/random_reference.rs"
+against = "trace"
 
 [function.get_sprite_clip_rect]
 class = "matched"
@@ -4837,24 +4839,30 @@ engine = "audio/src/player.rs"
 owed = "the engine's own tests (audio/src/player.rs); no check against the original yet"
 
 [function.local_random]
-class = "replaced"
-because = "tools"
-stands_in = "ffi/src/allocations.rs"
+class = "matched"
+engine = "sim/src/random.rs"
+check = "sim/tests/random_reference.rs"
+against = "trace"
 
 [function.local_random_direction3d]
 class = "matched"
-engine = "sim/src/effects.rs"
-owed = "the engine's own tests (sim/src/effects.rs); no check against the original yet"
+engine = "sim/src/random.rs"
+check = "sim/tests/random_reference.rs"
+against = "trace"
 
 [function.local_random_range]
 class = "matched"
-engine = "ffi/src/particles/contrails.rs"
-owed = "the engine's own tests (ffi/src/particles/contrails.rs); no check against the original yet"
+engine = "sim/src/random.rs"
+check = "sim/tests/random_reference.rs"
+against = "trace"
+note = "the particles draw on a xorshift of their own (ffi/src/particles.rs), not the game's local seed; the animation and world track owns that"
 
 [function.local_random_vector_in_cone3d]
 class = "matched"
-engine = "ffi/src/particles/contrails.rs"
-owed = "the engine's own tests (ffi/src/particles/contrails.rs); no check against the original yet"
+engine = "sim/src/random.rs"
+check = "sim/tests/random_reference.rs"
+against = "trace"
+note = "the particles draw on a xorshift of their own (ffi/src/particles.rs), not the game's local seed; the animation and world track owns that"
 
 [function.local_time_get_elapsed]
 class = "missing"
@@ -6534,8 +6542,9 @@ stands_in = "dev/src/logbook.rs"
 
 [function.random_vector_in_cone3d]
 class = "matched"
-engine = "sim/src/projectile.rs"
-owed = "the engine's own tests (sim/src/projectile.rs); no check against the original yet"
+engine = "sim/src/random.rs"
+check = "sim/tests/random_reference.rs"
+against = "trace"
 
 [function.randomize_particle_variables]
 class = "matched"
@@ -6568,8 +6577,9 @@ stands_in = "import/src/lib.rs"
 
 [function.real_local_random]
 class = "matched"
-engine = "sim/src/effects.rs"
-owed = "the engine's own tests (sim/src/effects.rs); no check against the original yet"
+engine = "sim/src/random.rs"
+check = "sim/tests/random_reference.rs"
+against = "trace"
 
 [function.real_math_reset_precision]
 class = "native"
@@ -6577,7 +6587,9 @@ primitive = "libm::sqrtf"
 
 [function.real_random_range]
 class = "matched"
-owed = "the engine cites it, with no check against the original yet"
+engine = "sim/src/random.rs"
+check = "sim/tests/random_reference.rs"
+against = "trace"
 
 [function.real_rgb_color_brightness]
 class = "replaced"
@@ -7183,7 +7195,9 @@ owed = "the engine's own tests (ui/tests/tree.rs); no check against the original
 
 [function.seed_random_direction3d]
 class = "matched"
-owed = "the engine cites it, with no check against the original yet"
+engine = "sim/src/random.rs"
+check = "sim/tests/random_reference.rs"
+against = "trace"
 
 [function.seed_random_orientation]
 class = "missing"

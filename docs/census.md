@@ -7,25 +7,25 @@ docs/engine.md's "The coverage census" says what each class needs.
 
 | System | Ported | Matched | Native | Partial | Replaced | Missing | Owed |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| `ai` | 39 (1600 B) | 19 (3408 B) | | 12 (16320 B) | 91 (5616 B) | 798 (269322 B) | 31 |
+| `ai` | 41 (1664 B) | 19 (3408 B) | | 12 (16320 B) | 91 (5616 B) | 796 (269258 B) | 30 |
 | `bink` | | | | | 24 (3968 B) | | 0 |
 | `bitmaps` | | 1 (224 B) | | | 209 (63904 B) | | 1 |
 | `bungie_net` | | | | | 105 (18992 B) | | 0 |
 | `cache` | | | | | 187 (24784 B) | | 0 |
-| `camera` | 1 (16 B) | 19 (8208 B) | | 3 (560 B) | 17 (2448 B) | 81 (25312 B) | 22 |
-| `cseries` | | | 28 (3168 B) | | 112 (18672 B) | | 0 |
+| `camera` | 2 (48 B) | 19 (8208 B) | | 3 (560 B) | 17 (2448 B) | 80 (25280 B) | 22 |
+| `cseries` | | 1 (16 B) | 28 (3168 B) | | 111 (18656 B) | | 0 |
 | `cutscene` | | 8 (288 B) | | 2 (672 B) | 7 (1072 B) | 48 (8496 B) | 10 |
 | `devices` | | 17 (3728 B) | | | 1 (432 B) | 42 (3024 B) | 17 |
 | `dialogs` | | | | | 5 (1328 B) | | 0 |
 | `editor` | | | | | 9 (0 B) | | 0 |
-| `effects` | 1 (48 B) | 89 (35312 B) | | | 13 (7344 B) | 87 (13904 B) | 89 |
-| `game` | 6 (304 B) | 23 (5280 B) | | 16 (8224 B) | 61 (4384 B) | 610 (85888 B) | 39 |
+| `effects` | 1 (48 B) | 89 (35312 B) | | | 13 (7344 B) | 87 (13904 B) | 85 |
+| `game` | 7 (336 B) | 23 (5280 B) | | 16 (8224 B) | 61 (4384 B) | 609 (85856 B) | 39 |
 | `hs` | | 47 (8304 B) | | 3 (1456 B) | 11 (2880 B) | 578 (54352 B) | 50 |
 | `input` | | | | | 46 (7216 B) | 1 (0 B) | 0 |
 | `interface` | 6 (1408 B) | 96 (33424 B) | | 19 (6112 B) | 104 (21432 B) | 452 (94304 B) | 115 |
-| `items` | 8 (4064 B) | 24 (19328 B) | | 1 (128 B) | 1 (16 B) | 103 (12512 B) | 25 |
+| `items` | 9 (4080 B) | 24 (19328 B) | | 1 (128 B) | 1 (16 B) | 102 (12496 B) | 24 |
 | `main` | | | | 1 (1648 B) | 34 (5440 B) | 91 (8752 B) | 1 |
-| `math` | 36 (5408 B) | 5 (240 B) | 70 (4720 B) | | 25 (4016 B) | 73 (8784 B) | 5 |
+| `math` | 40 (5552 B) | 6 (256 B) | 70 (4720 B) | | 25 (4016 B) | 68 (8624 B) | 4 |
 | `memory` | | 2 (336 B) | 128 (19856 B) | | 102 (15104 B) | | 0 |
 | `models` | 17 (8928 B) | 12 (4880 B) | | 1 (464 B) | 7 (1616 B) | 11 (1680 B) | 13 |
 | `networking` | | | | | 288 (49824 B) | | 0 |
@@ -43,7 +43,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `text` | | 9 (1936 B) | 63 (6864 B) | | 19 (5744 B) | 21 (2368 B) | 9 |
 | `tool` | | | | | 27 (8752 B) | | 0 |
 | `units` | 9 (1856 B) | 67 (27888 B) | | 17 (17808 B) | 9 (1616 B) | 227 (58352 B) | 84 |
-| **all** | 132 (25120 B) | 581 (188384 B) | 332 (38896 B) | 117 (72000 B) | 2771 (569992 B) | 3694 (716730 B) | 696 |
+| **all** | 141 (25408 B) | 583 (188416 B) | 332 (38896 B) | 117 (72000 B) | 2770 (569976 B) | 3684 (716426 B) | 689 |
 
 ## `ai`
 
@@ -52,7 +52,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `vector_from_points3d` | ai/action_alert.c | Ported |  | `tools/engine_math_reference.py` |
 | `magnitude_squared3d` | ai/action_alert.c | Ported |  | `tools/engine_math_reference.py` |
 | `distance_squared3d` | ai/action_alert.c | Ported |  | `tools/engine_math_reference.py` |
-| `real_random_range` | ai/action_alert.c | Matched | audio/src/choice.rs:43 | owed: the engine cites it, with no check against the original yet |
+| `real_random_range` | ai/action_alert.c | Matched | audio/src/choice.rs:43 | sim/tests/random_reference.rs (trace) |
 | `square_root` | ai/action_charge.c | Ported |  | `tools/engine_animation_reference.py` |
 | `scale_vector2d` | ai/action_charge.c | Ported |  | `tools/engine_math_reference.py` |
 | `magnitude_squared2d` | ai/action_charge.c | Ported |  | `tools/engine_math_reference.py` |
@@ -68,6 +68,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `vector_from_points2d` | ai/action_obey.c | Ported |  | `tools/engine_math_reference.py` |
 | `cross_product3d` | ai/action_obey.c | Ported |  | `tools/engine_animation_reference.py` |
 | `negate_vector3d` | ai/action_obey.c | Ported |  | `tools/engine_math_reference.py` |
+| `random_range` | ai/action_obey.c | Ported |  | `tools/engine_random_reference.py` |
 | `point_from_line2d` | ai/action_vehicle.c | Ported |  | `tools/engine_math_reference.py` |
 | `distance_squared2d` | ai/action_vehicle.c | Ported |  | `tools/engine_math_reference.py` |
 | `distance2d` | ai/action_vehicle.c | Ported |  | `tools/engine_math_reference.py` |
@@ -85,6 +86,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `tangent` | ai/actor_combat.c | Ported |  | `tools/engine_math_reference.py` |
 | `cross_product2d` | ai/actor_combat.c | Ported |  | `tools/engine_math_reference.py` |
 | `add_vectors3d` | ai/actor_combat.c | Ported |  | `tools/engine_item_reference.py` |
+| `random_boolean` | ai/actor_combat.c | Ported |  | `tools/engine_random_reference.py` |
 | `valid_real` | ai/actor_combat.c | Ported |  | `tools/engine_math_reference.py` |
 | `firing_position_store_evaluation_debug` | ai/actor_firing_position.c | Replaced | dev/src/draw.rs | the editor and tools |
 | `actor_select_firing_position` | ai/actor_firing_position.c | Partial | campaign/src/actors.rs:544 | leaves out the pre- and post-evaluators, discarded positions, line of sight from each position, the firing position groups; owed: the campaign's rewrite of the AI; no check against the original yet (Phase 11's divergences) |
@@ -211,7 +213,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `ai_debug_render_path_line` | ai/ai_debug.c | Replaced | dev/src/draw.rs | the editor and tools |
 | `ai_debug_get_this_actor` | ai/ai_debug.c | Replaced | dev/src/draw.rs | the editor and tools |
 
-798 Missing (784 reached from `main_loop`), by file:
+796 Missing (782 reached from `main_loop`), by file:
 
 - ai/action_alert.c: `action_alert_setup`, `action_alert_begin`, `action_alert_control`, `action_alert_flush_position_indices`, `action_alert_flush_structure_indices`, `action_alert_update`, `action_alert_next_position`, `action_alert_perform`
 - ai/action_avoid.c: `action_avoid_setup`, `action_avoid_begin`, `action_avoid_end`, `action_avoid_perform`, `action_avoid_update`, `action_avoid_control`
@@ -220,14 +222,14 @@ docs/engine.md's "The coverage census" says what each class needs.
 - ai/action_fight.c: `action_fight_setup`, `action_fight_begin`, `action_fight_end`, `action_fight_update`, `action_fight_control`, `action_fight_perform`
 - ai/action_flee.c: `action_flee_end`, `action_flee_flush_position_indices`, `action_flee_modify_color`, `action_flee_find_flee_position`, `action_flee_current_position_exposed`, `action_flee_replace_prop`, `action_flee_blind_panic`, `action_flee_setup`, `action_flee_begin`, `action_flee_update`, `action_flee_control`, `action_flee_at_flee_position`, `action_flee_perform`
 - ai/action_guard.c: `action_guard_setup_current_position`, `action_guard_setup_find_position`, `action_guard_setup_postcombat`, `action_guard_begin`, `action_guard_end`, `action_guard_speak_post_combat`, `action_guard_update`, `action_guard_flush_position_indices`, `action_guard_flush_structure_indices`, `action_guard_modify_color`, `action_guard_replace_prop`, `action_guard_setup_from_combat_transition`, `action_guard_setup_from_fleeing`, `action_guard_perform`, `action_guard_control`
-- ai/action_obey.c: `vehicle_possibility_qsort`, `action_obey_command_end`, `action_obey_individual_setup`, `action_obey_individual_flush_command_indices`, `action_obey_individual_begin`, `action_obey_individual_advance`, `action_obey_individual_end`, `action_obey_individuals_iterate`, `action_obey_command_list_setup`, `action_obey_flush_command_indices`, `action_obey_flush_structure_indices`, `action_obey_advance_command_list`, `action_obey_begin`, `action_obey_end`, `action_obey_describe_command`, `random_range`, `action_obey_directmovement_update_facing`, `action_obey_command_begin`, `action_obey_command_perform`, `action_obey_individual_perform`, `action_obey_individual_update`, `action_obey_update`, `action_obey_perform`, `action_obey_control`
+- ai/action_obey.c: `vehicle_possibility_qsort`, `action_obey_command_end`, `action_obey_individual_setup`, `action_obey_individual_flush_command_indices`, `action_obey_individual_begin`, `action_obey_individual_advance`, `action_obey_individual_end`, `action_obey_individuals_iterate`, `action_obey_command_list_setup`, `action_obey_flush_command_indices`, `action_obey_flush_structure_indices`, `action_obey_advance_command_list`, `action_obey_begin`, `action_obey_end`, `action_obey_describe_command`, `action_obey_directmovement_update_facing`, `action_obey_command_begin`, `action_obey_command_perform`, `action_obey_individual_perform`, `action_obey_individual_update`, `action_obey_update`, `action_obey_perform`, `action_obey_control`
 - ai/action_search.c: `action_search_setup_target`, `action_search_setup_pursuit`, `action_search_setup_undirected`, `action_search_update`, `action_search_flush_position_indices`, `action_search_flush_structure_indices`, `action_search_control`, `action_search_begin`, `action_search_perform`
 - ai/action_sleep.c: `action_sleep_control`
 - ai/action_uncover.c: `action_uncover_setup_target`, `action_uncover_setup_pursuit`, `action_uncover_perform`, `action_uncover_control`, `action_uncover_flush_position_indices`, `action_uncover_flush_structure_indices`, `action_uncover_modify_color`, `action_uncover_begin`, `action_uncover_update`
 - ai/action_vehicle.c: `object_get_bounding_sphere`, `action_vehicle_begin`, `action_vehicle_update`, `action_vehicle_flush_structure_indices`, `action_vehicle_control`, `action_vehicle_desirable`, `action_vehicle_evaluate_seat`, `action_vehicle_find_destination`, `action_vehicle_setup_specific`, `action_vehicle_perform`, `action_vehicle_find_impromptu_seat`, `action_vehicle_setup_impromptu`
 - ai/action_wait.c: `action_wait_begin`, `action_wait_perform`, `action_wait_control`, `action_wait_setup`, `action_wait_update`
 - ai/actions.c: `encounter_get_squad`, `actor_action_perform`, `actor_action_update`, `actor_action_control`, `actor_action_replace_prop`, `actor_action_flush_position_indices`, `actor_action_flush_structure_indices`, `actor_action_handle_panic_from_surprise`, `actor_action_handle_panic_from_damage`, `actor_action_handle_panic_from_burning_to_death`, `actor_action_handle_panic_from_attached_projectiles`, `actor_action_handle_panic_from_attached_melee_attackers`, `actor_action_handle_berserking_from_attacking_mode`, `actor_action_handle_berserking_from_proximity`, `actor_action_handle_berserking_from_damage`, `actor_action_deny_transition`, `actor_action_allowed_to_enter_vehicle`, `actor_action_handle_vehicle_exit`, `actor_action_allow_cover_seeking`, `actor_action_determine_pursuit_options`, `actor_action_can_stop_guarding`, `actor_action_can_stop_conversing`, `actor_action_change`, `actor_action_test_grenade`, `actor_action_try_to_seek_cover`, `actor_action_try_to_panic`, `actor_action_try_to_enter_vehicle`, `actor_get_pursuit_location`, `actor_pursuit_consider_nearby_actor`, `actor_action_name`, `actor_action_class`, `actor_action_get_default_state`, `point_to_line_distance3d`, `actor_action_set_default_state`, `actor_action_handle_initial_action`, `actor_action_handle_pending_command_list`, `actor_action_handle_panic_transition`, `actor_action_handle_berserking_from_attached_projectiles`, `actor_action_handle_vehicle_entry`, `actor_action_find_escape_from_danger`, `actor_action_handle_active_cover_seeking`, `actor_action_handle_combat_selection`, `actor_action_handle_lost_contact`, `actor_action_handle_done_fleeing`, `actor_action_handle_combat_status`, `actor_action_handle_combat_failure`, `actor_action_handle_exit_pursuit`, `actor_action_try_to_throw_grenade`, `actor_action_consider_grenade`, `actor_action_try_to_evade`, `actors_searching_same_position`, `actor_pursuit_find_nearby_actors`, `actor_action_handle_berserk_transition`, `actor_action_handle_combat_transition`, `actor_action_handle_grenade_throwing`, `actor_action_handle_evasion`, `actor_action_handle_danger_avoidance`
-- ai/actor_combat.c: `actor_combat_enable_special_fire_situation`, `actor_combat_fire_wildly`, `actor_combat_disable_bursts`, `actor_firing_blindly`, `actor_combat_currently_firing_burst`, `actor_get_weapon_definition`, `actor_get_weapon_vector`, `actor_combat_get_firing_variant_definition`, `actor_combat_get_firing_parameters`, `actor_get_grenade_definition`, `random_boolean`, `actor_combat_find_nearby_target`, `actor_start_pause`, `actor_start_first_burst_delay`, `actor_combat_reaim_grenade`, `actor_combat_build_grenade_trajectory`, `actor_combat_find_grenade_target`, `actor_combat_check_collateral_damage`, `actor_combat_plan_grenade_trajectory`, `valid_realcmp`, `valid_real_normal3d`, `actor_combat_allow_special_fire_situation`, `actor_aim_projectile`, `actor_start_burst`, `actor_combat_retarget_grenade`, `actor_aim_grenade`, `actor_combat_update`
+- ai/actor_combat.c: `actor_combat_enable_special_fire_situation`, `actor_combat_fire_wildly`, `actor_combat_disable_bursts`, `actor_firing_blindly`, `actor_combat_currently_firing_burst`, `actor_get_weapon_definition`, `actor_get_weapon_vector`, `actor_combat_get_firing_variant_definition`, `actor_combat_get_firing_parameters`, `actor_get_grenade_definition`, `actor_combat_find_nearby_target`, `actor_start_pause`, `actor_start_first_burst_delay`, `actor_combat_reaim_grenade`, `actor_combat_build_grenade_trajectory`, `actor_combat_find_grenade_target`, `actor_combat_check_collateral_damage`, `actor_combat_plan_grenade_trajectory`, `valid_realcmp`, `valid_real_normal3d`, `actor_combat_allow_special_fire_situation`, `actor_aim_projectile`, `actor_start_burst`, `actor_combat_retarget_grenade`, `actor_aim_grenade`, `actor_combat_update`
 - ai/actor_firing_position.c: `firing_position_reject`, `pre_evaluator_guard`, `pre_evaluator_combatmove`, `post_evaluator_global`, `post_evaluator_pursuit`, `post_evaluator_hide`, `post_evaluator_uncover`, `post_evaluator_attack`, `firing_position_pre_evaluate`, `firing_position_post_evaluate`, `firing_positions_get_post_evaluation_bound`, `firing_position_compare`, `actor_get_firing_position_group`, `actor_clear_discarded_firing_positions`, `actor_discard_firing_position`, `actor_firing_position_discarded`, `pre_evaluator_global`, `pre_evaluator_pursuit`, `pre_evaluator_panic`, `firing_position_compute_line_of_sight`, `firing_position_forced_evaluation`, `actor_nearby_firing_positions`, `actor_active_select_firing_position`, `actor_change_firing_position`, `pre_evaluator_attack`
 - ai/actor_looking.c: `actor_look_secondary_stop`, `actor_look_compute_prop_interest`, `actor_look_get_looking_definition`, `actor_look_secondary`, `actor_look_valid_aim_vector`, `actor_look_valid_look_vector`, `actor_looking_test_validity`, `actor_look_idle_find_prop`, `actor_look_idle_timer`, `actor_look_find_random_vector`, `valid_real_normal2d`, `actor_look_decode_direction`, `actor_look_idle_new_major_direction`, `actor_look_idle_new_minor_direction`, `actor_look_update`, `actor_look_affect_movement`
 - ai/actor_moving.c: `actor_move_keep_moving_past_destination`, `actor_move_animation_busy`, `actor_path_clear`, `actor_path_has_path`, `actor_path_at_destination`, `actor_path_get_destination_firing_position_index`, `actor_path_input_new`, `actor_test_destination`, `actor_get_stopping_distances`, `actor_move_animation_impulse`, `actor_move_force_stop`, `actor_move_try_evasion_vector`, `actor_move_try_evasion_direction`, `actor_aim_jump`, `actor_move_avoidance_setup`, `actor_move_test_avoidance_vector`, `actor_move_vector_avoidance_find_direction`, `actor_move_transform_avoidance_vector`, `actor_move_get_avoidance_direction`, `actor_move_initialize`, `actor_path_3d_available`, `actor_move_vector_avoidance`, `actor_move_calculate_movement`, `actor_move_calculate_controlled_by_aiming`, `actor_path_refresh`, `actor_destination_update`, `actor_move_to_point`, `actor_move_to_move_position`, `actor_move_to_firing_position`, `actor_move_to_prop`, `actor_move_calculate_free`, `actor_move_update`, `actor_move_halt`, `actor_move_halt_at_firing_position`
@@ -809,6 +811,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 
 | Function | File | Class | Engine | Evidence |
 | --- | --- | --- | --- | --- |
+| `real_local_random_range` | camera/bored_camera.c | Ported |  | `tools/engine_random_reference.py` |
 | `scripted_camera_enable` | camera/camera_scripting.c | Matched | campaign/src/cinematic.rs | owed: the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet |
 | `scripted_camera_set_animation` | camera/camera_scripting.c | Matched | campaign/src/cinematic.rs | owed: the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet |
 | `scripted_camera_set_first_person` | camera/camera_scripting.c | Matched | campaign/src/cinematic.rs | owed: the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet |
@@ -850,9 +853,9 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `observer_update_polynomial` | camera/observer.c | Matched | sim/src/dead_camera.rs:9 | owed: the engine cites it, with no check against the original yet |
 | `observer_update` | camera/observer.c | Partial | sim/src/player.rs:737 | leaves out the observer's dynamics and its springs, the cutscenes' cameras; owed: the engine's own version; no check against the original yet |
 
-81 Missing (68 reached from `main_loop`), by file:
+80 Missing (67 reached from `main_loop`), by file:
 
-- camera/bored_camera.c: `bored_camera_new`, `bored_camera_shot_threshold_milliseconds`, `bored_camera_shot_duration_milliseconds`, `is_bored`, `is_still_bored`, `real_local_random_range`, `valid_real_vector3d`, `valid_real_vector3d_axes2`, `bored_camera_update`
+- camera/bored_camera.c: `bored_camera_new`, `bored_camera_shot_threshold_milliseconds`, `bored_camera_shot_duration_milliseconds`, `is_bored`, `is_still_bored`, `valid_real_vector3d`, `valid_real_vector3d_axes2`, `bored_camera_update`
 - camera/camera_scripting.c: `scripted_camera_object_is_first_person_camera`, `scripted_camera_set_absolute`, `scripted_camera_set_camera_point_absolute`, `scripted_camera_next_camera_point`, `scripted_camera_object_relative_to`
 - camera/dead_camera.c: `player_has_allies`, `player_get_next_player_with_a_unit`
 - camera/director.c: `director_get`, `director_initialize`, `director_dispose`, `director_inhibit_facing`, `director_inhibit_input`, `director_inhibited_facing`, `director_inhibited_input`, `director_set_mode`, `director_save_camera`, `director_get_perspective`, `director_set_camera`, `director_initialize_variables`, `director_process_variables`, `director_dispose_from_old_map`, `director_load_camera`, `director_rotate_cameras`, `director_camera_deterministic`, `director_choose_game_perspective`, `director_choose_camera_game`, `director_choose_camera_editor`, `director_choose_camera_script_camera_record`, `director_update_controls`, `director_choose_camera`, `director_initialize_for_new_map`, `director_update`, `director_initialize_for_saved_game`
@@ -918,7 +921,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `compare_file_pointer_totals` | cseries/debug_memory.c | Replaced | ffi/src/allocations.rs | the editor and tools |
 | `debug_check_pointer_header` | cseries/debug_memory.c | Replaced | ffi/src/allocations.rs | the editor and tools |
 | `check_memory_status` | cseries/debug_memory.c | Replaced |  | through its caller `scenario_load` |
-| `local_random` | cseries/debug_memory.c | Replaced | ffi/src/allocations.rs | the editor and tools |
+| `local_random` | cseries/debug_memory.c | Matched | sim/src/random.rs | sim/tests/random_reference.rs (trace) |
 | `debug_check_pointer_overrun` | cseries/debug_memory.c | Replaced | ffi/src/allocations.rs | the editor and tools |
 | `debug_memory_fill_with_random` | cseries/debug_memory.c | Replaced | ffi/src/allocations.rs | the editor and tools |
 | `debug_memory_add_pointer` | cseries/debug_memory.c | Replaced | ffi/src/allocations.rs | the editor and tools |
@@ -1101,8 +1104,8 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `contrail_scale_value` | effects/contrails.c | Matched | ffi/src/particles/contrails.rs:32 | owed: the engine cites it, with no check against the original yet |
 | `contrail_delete` | effects/contrails.c | Matched | ffi/src/particles/contrails.rs | owed: the engine's own tests (ffi/src/particles/contrails.rs); no check against the original yet |
 | `contrail_compute_new_point_count` | effects/contrails.c | Matched | ffi/src/particles/contrails.rs | owed: the engine's own tests (ffi/src/particles/contrails.rs); no check against the original yet |
-| `local_random_range` | effects/contrails.c | Matched | ffi/src/particles/contrails.rs | owed: the engine's own tests (ffi/src/particles/contrails.rs); no check against the original yet |
-| `local_random_vector_in_cone3d` | effects/contrails.c | Matched | ffi/src/particles/contrails.rs | owed: the engine's own tests (ffi/src/particles/contrails.rs); no check against the original yet |
+| `local_random_range` | effects/contrails.c | Matched | sim/src/random.rs | sim/tests/random_reference.rs (trace); the particles draw on a xorshift of their own (ffi/src/particles.rs), not the game's local seed; the animation and world track owns that |
+| `local_random_vector_in_cone3d` | effects/contrails.c | Matched | sim/src/random.rs | sim/tests/random_reference.rs (trace); the particles draw on a xorshift of their own (ffi/src/particles.rs), not the game's local seed; the animation and world track owns that |
 | `contrail_scale_random_value` | effects/contrails.c | Matched | ffi/src/particles/contrails.rs:42 | owed: the engine cites it, with no check against the original yet |
 | `contrail_next_frame` | effects/contrails.c | Matched | ffi/src/particles/contrails.rs:252 | owed: the engine cites it, with no check against the original yet |
 | `contrail_add_points` | effects/contrails.c | Matched | ffi/src/particles/contrails.rs:298 | owed: the engine cites it, with no check against the original yet |
@@ -1136,8 +1139,8 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `effect_set_event` | effects/effects.c | Matched | sim/src/effects.rs | owed: the engine's own tests (sim/src/effects.rs); no check against the original yet |
 | `effect_build_location` | effects/effects.c | Matched | sim/src/effects.rs | owed: the engine's own tests (sim/src/effects.rs); no check against the original yet |
 | `effect_location_get_next_instance` | effects/effects.c | Matched | sim/src/effects.rs | owed: the engine's own tests (sim/src/effects.rs); no check against the original yet |
-| `real_local_random` | effects/effects.c | Matched | sim/src/effects.rs | owed: the engine's own tests (sim/src/effects.rs); no check against the original yet |
-| `local_random_direction3d` | effects/effects.c | Matched | sim/src/effects.rs | owed: the engine's own tests (sim/src/effects.rs); no check against the original yet |
+| `real_local_random` | effects/effects.c | Matched | sim/src/random.rs | sim/tests/random_reference.rs (trace) |
+| `local_random_direction3d` | effects/effects.c | Matched | sim/src/random.rs | sim/tests/random_reference.rs (trace) |
 | `effect_stop` | effects/effects.c | Matched | sim/src/effects.rs | owed: the engine's own tests (sim/src/effects.rs); no check against the original yet |
 | `effect_random_translational_velocity` | effects/effects.c | Matched | sim/src/effects.rs | owed: the engine's own tests (sim/src/effects.rs); no check against the original yet |
 | `effect_allocate` | effects/effects.c | Matched | sim/src/effects.rs | owed: the engine's own tests (sim/src/effects.rs); no check against the original yet |
@@ -1289,6 +1292,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `rumble_dispose_from_old_map` | game/player_rumble.c | Replaced | app/Sources/OpenCEEngineKit/PlayControls.swift | keyboard and mouse only |
 | `rumble_calculate` | game/player_rumble.c | Replaced | app/Sources/OpenCEEngineKit/PlayControls.swift | keyboard and mouse only |
 | `rumble_update` | game/player_rumble.c | Replaced | app/Sources/OpenCEEngineKit/PlayControls.swift | keyboard and mouse only |
+| `random_direction3d` | game/players.c | Ported |  | `tools/engine_random_reference.py` |
 | `player_new` | game/players.c | Partial | sim/src/lib.rs:754 | leaves out the network's player slots, the player's profile and colours; owed: the engine's own version; no check against the original yet |
 | `player_spawn` | game/players.c | Partial | sim/src/lib.rs:830 | leaves out the spawn's choice by the game engine's weights, the starting equipment's profiles; owed: the engine's own version; no check against the original yet |
 | `player_handle_action` | game/players.c | Partial | sim/src/seats.rs:791 | leaves out the action's other uses (devices, picking up weapons); owed: the engine's own version; no check against the original yet |
@@ -1324,7 +1328,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `network_player_show_pickup` | game/players.c | Replaced | net/src/snapshot.rs | networking and Xbox Live; the original's network state and prediction; the engine sends snapshots |
 | `network_player_detach_unit` | game/players.c | Replaced | net/src/snapshot.rs | networking and Xbox Live; the original's network state and prediction; the engine sends snapshots |
 
-610 Missing (594 reached from `main_loop`), by file:
+609 Missing (593 reached from `main_loop`), by file:
 
 - game/aim_assist.c: `compute_attenuation`, `compute_composite_attenuation`, `unit_get_aim_assist_parameters`, `compare_targets`, `aim_assist_clear_line_of_sight`, `object_compute_autoaim_target`, `aim_assist_compute_target`, `autoaim_compute_target`, `find_aim_assist_targets_recursive`, `find_aim_assist_targets`, `aim_assist`, `player_aim_projectile`, `local_player_aim_assist`
 - game/game.c: `game_initialize`, `game_dispose`, `game_precache_new_map`, `game_map_loading_in_progress`, `game_unload`, `game_dispose_from_old_map`, `game_frame`, `remove_quitting_players_from_game`, `game_options_new`, `game_options_verify`, `game_initial_pulse`, `game_set_players_are_double_speed`, `game_players_are_double_speed`, `game_difficulty_level_set`, `game_difficulty_level_get`, `game_difficulty_level_get_ignore_easy`, `game_set_game_variant`, `game_set_game_engine_index`, `game_load`, `game_initialize_for_new_map`, `game_set_game_variant_from_name`, `game_set_game_variant_options`, `game_variant_options_get`
@@ -1342,7 +1346,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 - game/game_time.c: `game_time_initialized`, `game_time_initialize`, `game_time_initialize_for_new_map`, `game_time_dispose_from_old_map`, `game_time_dispose`, `game_time_end`, `game_time_get`, `game_time_get_elapsed`, `local_time_get`, `local_time_get_elapsed`, `game_in_progress`, `game_time_get_paused`, `game_time_set_paused`, `game_time_get_speed`, `game_time_set_speed`, `game_time_start`, `game_time_set_distributed`, `game_time_get_tick_fraction`, `game_time_held`
 - game/player_control.c: `player_control_get`, `player_control_initialize`, `player_control_dispose`, `player_control_dispose_from_old_map`, `player_control_camera_control_is_active`, `scripted_player_control_set_camera_control`, `player_control_inhibit_buttons`, `evaluate_piecewise_linear_function`, `player_action_clear`, `player_control_get_aiming_unit_index`, `player_control_get_target_object_index`, `player_control_get_field_of_view`, `player_control_get_unit_camera_info`, `player_control_get_unit_index`, `player_control_get_desired_weapon`, `player_control_get_autoaim_level`, `unit_get_local_player_index`, `players_unzoom_all`, `player_control_unzoom`, `player_control_get_zoom_level`, `player_control_action_test_reset`, `player_control_action_test_accept`, `player_control_action_test_back`, `player_control_action_test_action`, `player_control_action_test_jump`, `player_control_action_test_primary_trigger`, `player_control_action_test_grenade_trigger`, `player_control_action_test_zoom`, `player_control_action_test_move_relative_all_directions`, `player_control_action_test_look_relative_all_directions`, `player_control_action_test_look_relative_left`, `player_control_action_test_look_relative_right`, `player_control_action_test_look_relative_up`, `player_control_action_test_look_relative_down`, `player_control_action_test_check_reset_input_blob`, `signed_angular_difference`, `player_control_set_facing`, `player_control_new_unit`, `get_local_player_input_blob`, `player_control_get_facing_angles`, `player_control_get_facing_direction`, `player_control_set_desired_weapon`, `player_control_modify_desired_angles`, `player_control_initialize_for_new_map`, `player_control_permanent_impulse`, `player_control_action_test_note`
 - game/player_queues_new.c: `update_server_add_player`, `update_client_new`, `update_client_start`, `update_client_add_player`, `update_client_queue`, `update_client_queue_push`, `update_client_build_client_update`, `update_server_get_update`, `update_client_get_update`, `update_server_new`, `update_server_delete`, `update_server_start`, `update_server_build_server_update`, `update_client_dequeue`, `update_client_get_maximum_possible_server_time`, `update_server_handle_client_update`, `update_client_handle_server_update`, `update_queues_reset_and_fill_with_lies`, `update_server_next_update`, `update_client_local_ticks`, `update_client_local_player_index`, `update_client_dequeue_distributed`, `update_queues_distributed_reset`, `update_server_take_local_actions`
-- game/players.c: `players_initialize`, `players_initialize_for_new_map`, `players_dispose_from_old_map`, `players_dispose`, `machine_get_player_list`, `machine_add_player`, `local_player_exists`, `find_unused_local_player_index`, `player_delete`, `players_get_respawn_failure`, `local_player_get_player_index`, `local_player_set_player_index`, `local_player_count`, `local_player_get_next`, `player_index_from_unit_index`, `player_died`, `players_are_all_dead`, `players_set_local_player_unit`, `players_get_combined_pvs_local`, `players_get_combined_pvs`, `player_input_enable`, `player_input_enabled`, `any_player_is_in_the_air`, `any_player_is_dead`, `is_player_in_trigger`, `player_pseudo_kill`, `player_control_fix_for_loaded_game_state`, `player_get_starting_location_count`, `player_get_starting_location`, `placement_data_set_change_color`, `create_weapon`, `players_compute_combined_pvs`, `players_compute_local_player_count`, `player_examine_nearby_unit`, `unit_should_autopick_weapon`, `player_reset_action_result`, `player_handle_weapon_swap`, `player_over_shield_screen_effect`, `player_active_camo_screen_effect`, `player_health_pack_screen_effect`, `player_powerup_on`, `player_powerup_additional`, `player_powerup_off`, `players_handle_deleted_object`, `random_direction3d`, `valid_real_vector2d`, `player_add_equipment`, `player_aiming_vector_from_facing`, `player_teleport_internal`, `player_teleport`, `find_best_starting_location_index`, `player_set_action_result`, `player_handle_powerup`, `player_handle_powerup_minor`, `player_update_powerups`, `players_respawn_coop`, `player_teleport_on_bsp_switch`, `players_reconnect_to_structure_bsp`, `player_examine_nearby_vehicle`, `player_examine_nearby_device`, `player_handle_powerup_equipment`, `network_player_log_idle_action`, `players_coop_extras_held`, `players_coop_may_spawn`, `players_coop_waiting_to_start`, `players_coop_danger_near`, `players_coop_unit_in_structure`, `players_coop_unit_grounded`, `players_coop_unit_safe`, `players_coop_unit_where`, `players_coop_session_count`, `players_coop_use_majority`, `players_coop_unit_spawnable`, `players_coop_near_count`, `players_coop_respawn_unit`, `players_coop_spawn_location`, `players_respawn_network_coop`, `player_spawnable_beside`, `players_checkpoint_position`, `players_coop_unit_grounded_anywhere`, `players_coop_unit_stranded`, `players_coop_rescue_stranded`, `players_coop_note_on_foot`, `players_coop_room_to_spawn`, `player_place_beside_teammate`, `players_coop_respawn_beside`, `players_note_checkpoint`, `players_respawn_at_checkpoint`, `player_position_switches_bsp`, `players_coop_bsp_switch_ready`, `players_coop_bsp_switch_allowed`, `player_name_clean`
+- game/players.c: `players_initialize`, `players_initialize_for_new_map`, `players_dispose_from_old_map`, `players_dispose`, `machine_get_player_list`, `machine_add_player`, `local_player_exists`, `find_unused_local_player_index`, `player_delete`, `players_get_respawn_failure`, `local_player_get_player_index`, `local_player_set_player_index`, `local_player_count`, `local_player_get_next`, `player_index_from_unit_index`, `player_died`, `players_are_all_dead`, `players_set_local_player_unit`, `players_get_combined_pvs_local`, `players_get_combined_pvs`, `player_input_enable`, `player_input_enabled`, `any_player_is_in_the_air`, `any_player_is_dead`, `is_player_in_trigger`, `player_pseudo_kill`, `player_control_fix_for_loaded_game_state`, `player_get_starting_location_count`, `player_get_starting_location`, `placement_data_set_change_color`, `create_weapon`, `players_compute_combined_pvs`, `players_compute_local_player_count`, `player_examine_nearby_unit`, `unit_should_autopick_weapon`, `player_reset_action_result`, `player_handle_weapon_swap`, `player_over_shield_screen_effect`, `player_active_camo_screen_effect`, `player_health_pack_screen_effect`, `player_powerup_on`, `player_powerup_additional`, `player_powerup_off`, `players_handle_deleted_object`, `valid_real_vector2d`, `player_add_equipment`, `player_aiming_vector_from_facing`, `player_teleport_internal`, `player_teleport`, `find_best_starting_location_index`, `player_set_action_result`, `player_handle_powerup`, `player_handle_powerup_minor`, `player_update_powerups`, `players_respawn_coop`, `player_teleport_on_bsp_switch`, `players_reconnect_to_structure_bsp`, `player_examine_nearby_vehicle`, `player_examine_nearby_device`, `player_handle_powerup_equipment`, `network_player_log_idle_action`, `players_coop_extras_held`, `players_coop_may_spawn`, `players_coop_waiting_to_start`, `players_coop_danger_near`, `players_coop_unit_in_structure`, `players_coop_unit_grounded`, `players_coop_unit_safe`, `players_coop_unit_where`, `players_coop_session_count`, `players_coop_use_majority`, `players_coop_unit_spawnable`, `players_coop_near_count`, `players_coop_respawn_unit`, `players_coop_spawn_location`, `players_respawn_network_coop`, `player_spawnable_beside`, `players_checkpoint_position`, `players_coop_unit_grounded_anywhere`, `players_coop_unit_stranded`, `players_coop_rescue_stranded`, `players_coop_note_on_foot`, `players_coop_room_to_spawn`, `player_place_beside_teammate`, `players_coop_respawn_beside`, `players_note_checkpoint`, `players_respawn_at_checkpoint`, `player_position_switches_bsp`, `players_coop_bsp_switch_ready`, `players_coop_bsp_switch_allowed`, `player_name_clean`
 
 ## `hs`
 
@@ -1740,7 +1744,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `item_update` | items/items.c | Ported | sim/src/item_physics.rs:1 | `tools/engine_item_reference.py` |
 | `projectile_calculate_deceleration_from_distances` | items/projectiles.c | Matched | sim/src/projectile.rs | owed: the engine's own tests (sim/src/projectile.rs); no check against the original yet |
 | `projectile_calculate_deceleration` | items/projectiles.c | Matched | sim/src/projectile.rs | owed: the engine's own tests (sim/src/projectile.rs); no check against the original yet |
-| `random_vector_in_cone3d` | items/projectiles.c | Matched | sim/src/projectile.rs | owed: the engine's own tests (sim/src/projectile.rs); no check against the original yet |
+| `random_vector_in_cone3d` | items/projectiles.c | Matched | sim/src/random.rs | sim/tests/random_reference.rs (trace) |
 | `projectile_collision_test_line` | items/projectiles.c | Matched | sim/src/projectile.rs | owed: the engine's own tests (sim/src/projectile.rs); no check against the original yet |
 | `projectile_detonate` | items/projectiles.c | Matched | sim/src/effects.rs:178 | owed: the engine cites it, with no check against the original yet |
 | `projectile_new` | items/projectiles.c | Matched | sim/src/projectile.rs | owed: the engine's own tests (sim/src/projectile.rs); no check against the original yet |
@@ -1751,6 +1755,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `weapon_trigger_recover` | items/weapons.c | Matched | sim/src/weapon.rs:489 | owed: weapons; reads the object, tag and map world, which the fake worlds do not hold (the weapon tag) |
 | `weapon_magazine_start_reload` | items/weapons.c | Matched | sim/src/weapon.rs:224 | owed: weapons; reads the object, tag and map world, which the fake worlds do not hold (the weapon tag) |
 | `power` | items/weapons.c | Ported |  | `tools/engine_math_reference.py` |
+| `random` | items/weapons.c | Ported |  | `tools/engine_random_reference.py` |
 | `weapon_new` | items/weapons.c | Matched | sim/src/weapon.rs:170 | owed: the engine cites it, with no check against the original yet |
 | `weapon_export_function_values` | items/weapons.c | Matched | sim/src/functions.rs:156 | owed: the engine cites it, with no check against the original yet |
 | `weapon_trigger_can_fire_again` | items/weapons.c | Matched | sim/src/weapon.rs:424 | owed: weapons; reads the object, tag and map world, which the fake worlds do not hold (the weapon tag) |
@@ -1766,14 +1771,14 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `item_rested_surface` | items/items.c | Ported |  | `tools/engine_item_reference.py` |
 | `item_set_rested_surface` | items/items.c | Ported |  | `tools/engine_item_reference.py` |
 
-103 Missing (96 reached from `main_loop`), by file:
+102 Missing (95 reached from `main_loop`), by file:
 
 - items/equipment.c: `equipment_definition_handle_pickup`
 - items/garbage.c: `garbage_update`, `garbage_new`
 - items/items.c: `object_get_type`, `items_initialize`, `items_initialize_for_new_map`, `items_dispose_from_old_map`, `items_dispose`, `item_new`, `item_delete`, `dangerous_items_near_player`, `item_in_unit_inventory`, `item_get_position_even_if_in_inventory`, `item_detonate`, `valid_real_vector3d_axes3`, `valid_real_matrix4x3`
 - items/projectiles.c: `projectiles_initialize`, `projectiles_initialize_for_new_map`, `projectiles_dispose_from_old_map`, `projectiles_dispose`, `projectile_kill_tracer`, `projectiles_delete_all`, `projectile_delete`, `projectile_set_target_object_index`, `projectile_make_tracer`, `projectile_get_ballistic_acceleration`, `projectile_estimate_time_to_target`, `dangerous_projectiles_near_player`, `projectile_handle_deleted_object`, `projectile_adjust_for_angular_velocity_change`, `projectile_export_function_values`, `projectile_handle_parent_destroyed`, `projectile_aim_ballistic`, `projectile_aim_linear`, `projectile_aim`, `projectile_set_action`, `projectile_effect_new`, `projectile_accelerate`
 - items/weapon_definitions.c: `weapon_definition_get_damage_potential`
-- items/weapons.c: `animation_convert_frame_to_pal`, `animation_key_frame_index`, `animation_update`, `animation_choose_random_permutation`, `weapons_initialize`, `weapons_initialize_for_new_map`, `weapons_dispose_from_old_map`, `weapons_dispose`, `weapon_preprocess_node_orientations`, `weapon_get_label`, `weapon_set_integrated_light_power`, `weapon_estimate_time_to_target`, `weapon_can_be_fired`, `weapon_useful`, `weapon_compute_movement_penalty`, `weapon_melee_attack`, `weapon_must_be_readied`, `weapon_is_flag`, `weapon_prevents_grenade_throwing`, `weapon_get_first_person_animation_time`, `weapon_overcharged`, `weapon_precache_projectile_trails`, `weapon_magazine_start_chamber`, `weapon_magazine_finish_chamber`, `weapon_trigger_fully_charged`, `weapon_trigger_idle`, `weapon_trigger_locked`, `weapon_trigger_finish_tracking`, `weapon_state_next`, `weapon_trigger_get`, `weapon_magazine_get`, `weapon_trigger_count`, `weapon_trigger_get_charged_fraction`, `weapon_busy`, `weapon_magazine_state_change_ok`, `weapon_get_effect_object_index`, `weapon_get_owner_object_index`, `weapon_set_total_rounds`, `random`, `weapon_delete`, `weapon_handle_potential_inventory_item`, `weapon_owner_update`, `weapon_build_weapon_interface_state`, `weapon_reloading`, `weapon_rotate_zoom_level`, `weapon_get_zoom_magnification`, `weapon_get_field_of_view`, `weapon_prevents_melee_attack`, `weapon_get_projectile_owner_object_index`, `weapon_magazine_idle`, `weapon_effect_looping_new`, `weapon_detonate`, `weapon_trigger_change_state`, `weapon_state_key_frame`, `weapon_magazine_state_interruptable`, `weapon_reset`, `weapon_state_interruptable`, `weapon_set_current_amount`, `weapon_put_away`, `weapon_aim`, `weapon_stop_reload`, `weapon_set_state`, `weapon_trigger_overload`, `weapon_trigger_overcharged`
+- items/weapons.c: `animation_convert_frame_to_pal`, `animation_key_frame_index`, `animation_update`, `animation_choose_random_permutation`, `weapons_initialize`, `weapons_initialize_for_new_map`, `weapons_dispose_from_old_map`, `weapons_dispose`, `weapon_preprocess_node_orientations`, `weapon_get_label`, `weapon_set_integrated_light_power`, `weapon_estimate_time_to_target`, `weapon_can_be_fired`, `weapon_useful`, `weapon_compute_movement_penalty`, `weapon_melee_attack`, `weapon_must_be_readied`, `weapon_is_flag`, `weapon_prevents_grenade_throwing`, `weapon_get_first_person_animation_time`, `weapon_overcharged`, `weapon_precache_projectile_trails`, `weapon_magazine_start_chamber`, `weapon_magazine_finish_chamber`, `weapon_trigger_fully_charged`, `weapon_trigger_idle`, `weapon_trigger_locked`, `weapon_trigger_finish_tracking`, `weapon_state_next`, `weapon_trigger_get`, `weapon_magazine_get`, `weapon_trigger_count`, `weapon_trigger_get_charged_fraction`, `weapon_busy`, `weapon_magazine_state_change_ok`, `weapon_get_effect_object_index`, `weapon_get_owner_object_index`, `weapon_set_total_rounds`, `weapon_delete`, `weapon_handle_potential_inventory_item`, `weapon_owner_update`, `weapon_build_weapon_interface_state`, `weapon_reloading`, `weapon_rotate_zoom_level`, `weapon_get_zoom_magnification`, `weapon_get_field_of_view`, `weapon_prevents_melee_attack`, `weapon_get_projectile_owner_object_index`, `weapon_magazine_idle`, `weapon_effect_looping_new`, `weapon_detonate`, `weapon_trigger_change_state`, `weapon_state_key_frame`, `weapon_magazine_state_interruptable`, `weapon_reset`, `weapon_state_interruptable`, `weapon_set_current_amount`, `weapon_put_away`, `weapon_aim`, `weapon_stop_reload`, `weapon_set_state`, `weapon_trigger_overload`, `weapon_trigger_overcharged`
 
 ## `main`
 
@@ -1879,6 +1884,11 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `transition_function_build_table` | math/periodic_functions.c | Ported | sim/src/periodic.rs:199 | `tools/engine_periodic_reference.py` |
 | `periodic_function_build_table` | math/periodic_functions.c | Ported | sim/src/periodic.rs:93 | `tools/engine_periodic_reference.py` |
 | `periodic_functions_initialize` | math/periodic_functions.c | Ported | sim/src/periodic.rs:45 | `tools/engine_periodic_reference.py` |
+| `lock_global_random_seed` | math/random_math.c | Ported |  | `tools/engine_random_reference.py` |
+| `unlock_global_random_seed` | math/random_math.c | Ported |  | `tools/engine_random_reference.py` |
+| `get_global_random_seed_address` | math/random_math.c | Ported |  | `tools/engine_random_reference.py` |
+| `get_random_seed` | math/random_math.c | Matched | sim/src/random.rs | sim/tests/random_reference.rs (trace) |
+| `get_global_local_random_seed_address` | math/random_math.c | Ported |  | `tools/engine_random_reference.py` |
 | `random_seed_debug_log` | math/random_math.c | Replaced | dev/src/logbook.rs | the editor and tools |
 | `get_number_suitable_for_initializing_random_seed` | math/random_math.c | Replaced |  | through its caller `random_math_initialize` |
 | `random_math_initialize` | math/random_math.c | Replaced |  | through its caller `real_math_initialize` |
@@ -1888,7 +1898,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `seed_random` | math/random_math.c | Ported | audio/src/choice.rs:24 | `tools/engine_math_reference.py` |
 | `seed_random_range` | math/random_math.c | Ported | audio/src/choice.rs:36 | `tools/engine_math_reference.py` |
 | `direction3d_from_table` | math/random_math.c | Ported |  | `tools/engine_math_reference.py` |
-| `seed_random_direction3d` | math/random_math.c | Matched | sim/src/random.rs:55 | owed: the engine cites it, with no check against the original yet |
+| `seed_random_direction3d` | math/random_math.c | Matched | sim/src/random.rs:55 | sim/tests/random_reference.rs (trace) |
 | `seed_random_vector_in_cone3d` | math/random_math.c | Ported | sim/src/random.rs:66 | `tools/engine_math_reference.py` |
 | `vector_tree_new` | math/vector_tree.c | Native |  | `std::collections::BTreeMap` |
 | `vector_tree_delete` | math/vector_tree.c | Native |  | `std::collections::BTreeMap` |
@@ -1960,14 +1970,14 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `valid_real_sine_cosine` | math/real_math.c | Native |  | `libm::sinf` |
 | `set_real_point3d` | math/real_math.h | Native |  | `glam::Vec3` |
 
-73 Missing (26 reached from `main_loop`), by file:
+68 Missing (22 reached from `main_loop`), by file:
 
 - math/geometry.c: `vector_intersect_plane3d`, `build_torus`, `convex_hull2d`, `convex_hull2d_test_circle`, `convex_hull2d_test_point`, `convex_hull2d_area`, `convex_hull2d_perimeter`, `convex_hull2d_test_vector`, `convex_hull3d_begin`, `convex_hull3d_expand`, `convex_hull3d`, `convex_hull3d_test_point`, `convex_hull3d_test_vector`, `points_dimension2d`
 - math/integer_math.c: `integer_square_root`
 - math/matrix_math.c: `valid_real_plane3d`
 - math/periodic_functions.c: `@periodic_function_build_variable_period_x_table`
 - math/probability.c: `factorial`, `permutations`, `combinations`, `permute`, `combine`
-- math/random_math.c: `lock_global_random_seed`, `unlock_global_random_seed`, `get_global_random_seed_address`, `get_random_seed`, `get_global_local_random_seed_address`, `seed_random_orientation`
+- math/random_math.c: `seed_random_orientation`
 - math/real_math.c: `component_vectors_from_direction3d`, `vectors3d_from_euler_angles3d`, `fast_vector_intersects_sphere`, `fast_vector_intersection_with_sphere`, `point_in_rectangle2d`, `point_in_rectangle3d`, `circle_intersects_rectangle2d`, `point_in_cone2d`, `point_in_cone3d`, `point_in_sector2d`, `point_in_sector3d`, `circle_intersects_cone2d`, `circle_intersects_sector2d`, `sphere_intersects_cone3d`, `sphere_intersects_sector3d`, `point_in_triangle2d`, `circle_intersects_triangle2d`, `pill_intersects_triangle2d`, `pill_intersects_rectangle2d`, `sphere_intersects_rectangle3d`, `sphere_intersects_triangle3d`, `pill_intersects_triangle3d`, `vector_intersects_rectangle2d`, `vector_intersects_pill2d`, `vector_intersects_pill3d`, `vector_intersects_triangle2d`, `vector_intersects_triangle3d`, `vector_intersects_rectangle3d`, `pill_intersects_rectangle3d`, `dequantize_byte_to_real`, `quantize_real_to_byte_upper_bound`, `quantize_real_to_byte_rectangle3d`, `yaw_vectors`, `pitch_vectors`, `pin_normal_to_cone3d`, `refract_vector3d`, `point_in_pill2d`, `sphere_test_vector3d`, `pill_test_vector3d`, `point_from_planes3d`, `line_from_planes3d`, `angular_accelerate_to_position`, `accelerate_to_velocity3d`, `accerate_to_position3d`, `accelerate_to_velocity`
 
 ## `memory`
