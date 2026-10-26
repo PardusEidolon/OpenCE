@@ -181,8 +181,18 @@ impl Census {
         }
         let mut replaced = Vec::new();
         for (index, function) in self.functions.iter().enumerate() {
+            let kept = match function.from {
+                From::Rule(index) => {
+                    self.manifest
+                        .rule
+                        .get(index)
+                        .and_then(|rule| rule.through_callers)
+                        == Some(false)
+                }
+                _ => true,
+            };
             if function.class == Some(Class::Missing)
-                && matches!(function.from, From::Rule(_))
+                && !kept
                 && function.reached
                 && !live.contains(&function.name)
             {

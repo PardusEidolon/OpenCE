@@ -163,6 +163,11 @@ pub struct Entry {
     pub owed: Option<String>,
     /// A note for the docs.
     pub note: Option<String>,
+    /// Missing rules: `false` keeps the rule's functions Missing even when
+    /// only Replaced code reaches them, for systems whose behaviour play
+    /// still needs (the original's renderer drives its weather, decals and
+    /// score screens).
+    pub through_callers: Option<bool>,
 }
 
 impl Entry {

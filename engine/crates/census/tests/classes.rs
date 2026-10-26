@@ -366,6 +366,23 @@ fn what_only_replaced_code_reaches_is_replaced_through_its_caller() -> Result<()
 }
 
 #[test]
+fn a_rule_can_keep_its_functions_from_their_replaced_callers() -> Result<(), Failure> {
+    let tree = tree(
+        "kept",
+        &(GOOD.replace(
+            "directory = \"rasterizer\"",
+            "file = \"rasterizer/rasterizer.c\"\nprefix = \"rasterizer_frame\"",
+        ) + "\n[[rule]]\nfile = \"rasterizer/rasterizer.c\"\nprefix = \"rasterizer_helper\"\n\
+             class = \"missing\"\nthrough_callers = false\n"),
+    );
+    let census = Census::read(tree.root())?;
+    let helper = census.function("rasterizer_helper");
+    assert_eq!(helper.and_then(|f| f.class), Some(Class::Missing));
+    assert_eq!(helper.and_then(|f| f.through_caller.as_deref()), None);
+    Ok(())
+}
+
+#[test]
 fn rules_are_chosen_by_how_specific_they_are() -> Result<(), Failure> {
     let manifest = Manifest::parse(
         "census.toml",

@@ -10,6 +10,174 @@
 [[rule]]
 class = "missing"
 
+# The systems ported from the original and matched to it: their functions
+# stay Missing until classed, even where the original's renderer is their
+# only caller (it drives the weather, decals, HUD and score screens).
+
+[[rule]]
+directory = "ai"
+class = "missing"
+through_callers = false
+
+[[rule]]
+directory = "camera"
+class = "missing"
+through_callers = false
+
+[[rule]]
+directory = "cutscene"
+class = "missing"
+through_callers = false
+
+[[rule]]
+directory = "devices"
+class = "missing"
+through_callers = false
+
+[[rule]]
+directory = "effects"
+class = "missing"
+through_callers = false
+
+[[rule]]
+directory = "game"
+class = "missing"
+through_callers = false
+
+[[rule]]
+directory = "hs"
+class = "missing"
+through_callers = false
+
+[[rule]]
+directory = "interface"
+class = "missing"
+through_callers = false
+
+[[rule]]
+directory = "items"
+class = "missing"
+through_callers = false
+
+[[rule]]
+directory = "models"
+class = "missing"
+through_callers = false
+
+[[rule]]
+directory = "objects"
+class = "missing"
+through_callers = false
+
+[[rule]]
+directory = "physics"
+class = "missing"
+through_callers = false
+
+[[rule]]
+directory = "sound"
+class = "missing"
+through_callers = false
+
+[[rule]]
+directory = "units"
+class = "missing"
+through_callers = false
+
+# Replaced on purpose: code whose job the engine does another way, with no
+# behaviour to match. A function they alone reach is Replaced through its
+# caller.
+
+[[rule]]
+directory = "rasterizer"
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/LevelRenderer.swift"
+
+[[rule]]
+directory = "render"
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/LevelRenderer.swift"
+
+[[rule]]
+directory = "shaders"
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/ShaderSources.swift"
+
+[[rule]]
+directory = "bink"
+class = "replaced"
+because = "bink"
+stands_in = "app/Sources/OpenCEEngineMenu/Launcher.swift"
+
+[[rule]]
+directory = "bungie_net"
+class = "replaced"
+because = "network"
+stands_in = "net/src/transport.rs"
+
+[[rule]]
+directory = "networking"
+class = "replaced"
+because = "network"
+stands_in = "net/src/lib.rs"
+
+[[rule]]
+directory = "editor"
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/lib.rs"
+
+[[rule]]
+directory = "tool"
+class = "replaced"
+because = "tools"
+stands_in = "bake/src/lib.rs"
+
+[[rule]]
+file = "cache/xbox_texture_cache.c"
+class = "replaced"
+because = "xbox"
+stands_in = "app/Sources/OpenCEEngineRender/LoadedLevel.swift"
+
+[[rule]]
+file = "cache/xbox_sound_cache.c"
+class = "replaced"
+because = "xbox"
+stands_in = "audio/src/player.rs"
+
+[[rule]]
+file = "sound/sound_dsound_xbox.c"
+class = "replaced"
+because = "xbox"
+stands_in = "app/Sources/OpenCEEngineKit/SoundOutput.swift"
+
+[[rule]]
+file = "input/input_xbox.c"
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "app/Sources/OpenCEEngineKit/PlayControls.swift"
+
+[[rule]]
+file = "shell/shell_xbox.c"
+class = "replaced"
+because = "xbox"
+stands_in = "app/Sources/OpenCEEngine/main.swift"
+
+[[rule]]
+file = "tag_files/tag_files_xbox.c"
+class = "replaced"
+because = "imported"
+stands_in = "import/src/level_cache.rs"
+
+[[rule]]
+file = "saved games/game_state_xbox.c"
+class = "replaced"
+because = "xbox"
+stands_in = "sim/src/lib.rs"
+
 [function.accelerate_to_position]
 class = "matched"
 owed = "a first-person weapon's sway; checked through first_person_weapon_update's trace"

@@ -816,7 +816,10 @@ needs:
 - **Replaced**: on purpose, for a listed reason (the renderer, Xbox-only
   hardware, keyboard and mouse, the importer, the tools, the network or
   Bink), with the engine's code that stands in for it named; a function
-  reached only through Replaced ones is Replaced through its caller.
+  reached only through Replaced ones is Replaced through its caller,
+  except in the systems that are ported and matched (their rules set
+  `through_callers = false`, since the original's renderer drives its
+  weather, decals, HUD and score screens).
 - **Missing**: not started. A function the engine cites cannot be Missing.
 
 `engine/census/census.toml` holds the rules and entries; an `owed` reason
@@ -830,42 +833,42 @@ when any trace is stale (each script's own `--check`).
 | System | Ported | Matched | Native | Partial | Replaced | Missing | Owed |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | `ai` | | 8 (2048 B) | | | | 1071 (294218 B) | 8 |
-| `bink` | | | | | | 33 (3968 B) | 0 |
-| `bitmaps` | | 1 (224 B) | | | | 212 (63904 B) | 1 |
-| `bungie_net` | | | | | | 109 (18992 B) | 0 |
-| `cache` | | | | | | 224 (24784 B) | 0 |
+| `bink` | | | | | 33 (3968 B) | | 0 |
+| `bitmaps` | | 1 (224 B) | | | 5 (976 B) | 207 (62928 B) | 1 |
+| `bungie_net` | | | | | 109 (18992 B) | | 0 |
+| `cache` | | | | | 102 (9680 B) | 122 (15104 B) | 0 |
 | `camera` | | 9 (5392 B) | | | | 137 (31152 B) | 9 |
-| `cseries` | | | | | | 151 (21840 B) | 0 |
+| `cseries` | | | | | 31 (7200 B) | 120 (14640 B) | 0 |
 | `cutscene` | | | | | | 81 (10528 B) | 0 |
 | `devices` | | 4 (2624 B) | | | | 56 (4560 B) | 4 |
 | `dialogs` | | | | | | 6 (1328 B) | 0 |
-| `editor` | | | | | | 9 (0 B) | 0 |
+| `editor` | | | | | 9 (0 B) | | 0 |
 | `effects` | | 14 (10832 B) | | | | 176 (45776 B) | 14 |
 | `game` | | 3 (1216 B) | | | | 717 (102864 B) | 3 |
 | `hs` | | 3 (1232 B) | | | | 740 (65760 B) | 3 |
-| `input` | | | | | | 56 (7216 B) | 0 |
+| `input` | | | | | 42 (4064 B) | 14 (3152 B) | 0 |
 | `interface` | 6 (0 B) | 24 (11056 B) | | | | 884 (145624 B) | 24 |
 | `items` | 7 (4048 B) | 17 (8544 B) | | | | 158 (23456 B) | 17 |
-| `main` | | | | | | 156 (15840 B) | 0 |
-| `math` | 36 (4096 B) | 4 (240 B) | | | | 176 (18832 B) | 4 |
-| `memory` | | 2 (336 B) | | | | 257 (34960 B) | 2 |
+| `main` | | | | | 3 (768 B) | 153 (15072 B) | 0 |
+| `math` | 36 (4096 B) | 4 (240 B) | | | 14 (2016 B) | 162 (16816 B) | 4 |
+| `memory` | | 2 (336 B) | | | 60 (8992 B) | 197 (25968 B) | 2 |
 | `models` | 17 (6080 B) | 5 (3808 B) | | | | 31 (7680 B) | 5 |
-| `networking` | | | | | | 313 (49824 B) | 0 |
+| `networking` | | | | | 313 (49824 B) | | 0 |
 | `objects` | | 15 (4864 B) | | | | 334 (46720 B) | 15 |
 | `physics` | | 4 (128 B) | | | | 161 (47104 B) | 4 |
-| `rasterizer` | | 3 (2784 B) | | | | 793 (182416 B) | 3 |
-| `render` | 2 (112 B) | 2 (240 B) | | | | 134 (38000 B) | 2 |
-| `saved games` | | | | | | 149 (24992 B) | 0 |
-| `scenario` | | 2 (608 B) | | | | 55 (8976 B) | 2 |
-| `shaders` | | | | | | 21 (2624 B) | 0 |
-| `shell` | | | | | | 13 (528 B) | 0 |
-| `sound` | 5 (672 B) | 12 (2560 B) | | | | 201 (23728 B) | 12 |
-| `structures` | | 1 (0 B) | | | | 126 (31712 B) | 1 |
+| `rasterizer` | | 3 (2784 B) | | | 793 (182416 B) | | 3 |
+| `render` | 2 (112 B) | 2 (240 B) | | | 134 (38000 B) | | 2 |
+| `saved games` | | | | | 30 (3616 B) | 119 (21376 B) | 0 |
+| `scenario` | | 2 (608 B) | | | 5 (1456 B) | 50 (7520 B) | 2 |
+| `shaders` | | | | | 21 (2624 B) | | 0 |
+| `shell` | | | | | 10 (528 B) | 3 (0 B) | 0 |
+| `sound` | 5 (672 B) | 12 (2560 B) | | | 39 (0 B) | 162 (23728 B) | 12 |
+| `structures` | | 1 (0 B) | | | 53 (14928 B) | 73 (16784 B) | 1 |
 | `tag_files` | | | | | | 49 (4288 B) | 0 |
-| `text` | | 1 (912 B) | | | | 111 (16000 B) | 1 |
-| `tool` | | | | | | 27 (8752 B) | 0 |
+| `text` | | 1 (912 B) | | | 15 (4240 B) | 96 (11760 B) | 1 |
+| `tool` | | | | | 27 (8752 B) | | 0 |
 | `units` | 8 (1824 B) | 37 (15360 B) | | | | 322 (90336 B) | 37 |
-| **all** | 81 (16832 B) | 171 (75008 B) | | | | 8249 (1519282 B) | 171 |
+| **all** | 81 (16832 B) | 171 (75008 B) | | | 1848 (363040 B) | 6401 (1156242 B) | 171 |
 <!-- end of the coverage census -->
 
 ### The divergences

@@ -8,42 +8,42 @@ docs/engine.md's "The coverage census" says what each class needs.
 | System | Ported | Matched | Native | Partial | Replaced | Missing | Owed |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | `ai` | | 8 (2048 B) | | | | 1071 (294218 B) | 8 |
-| `bink` | | | | | | 33 (3968 B) | 0 |
-| `bitmaps` | | 1 (224 B) | | | | 212 (63904 B) | 1 |
-| `bungie_net` | | | | | | 109 (18992 B) | 0 |
-| `cache` | | | | | | 224 (24784 B) | 0 |
+| `bink` | | | | | 33 (3968 B) | | 0 |
+| `bitmaps` | | 1 (224 B) | | | 5 (976 B) | 207 (62928 B) | 1 |
+| `bungie_net` | | | | | 109 (18992 B) | | 0 |
+| `cache` | | | | | 102 (9680 B) | 122 (15104 B) | 0 |
 | `camera` | | 9 (5392 B) | | | | 137 (31152 B) | 9 |
-| `cseries` | | | | | | 151 (21840 B) | 0 |
+| `cseries` | | | | | 31 (7200 B) | 120 (14640 B) | 0 |
 | `cutscene` | | | | | | 81 (10528 B) | 0 |
 | `devices` | | 4 (2624 B) | | | | 56 (4560 B) | 4 |
 | `dialogs` | | | | | | 6 (1328 B) | 0 |
-| `editor` | | | | | | 9 (0 B) | 0 |
+| `editor` | | | | | 9 (0 B) | | 0 |
 | `effects` | | 14 (10832 B) | | | | 176 (45776 B) | 14 |
 | `game` | | 3 (1216 B) | | | | 717 (102864 B) | 3 |
 | `hs` | | 3 (1232 B) | | | | 740 (65760 B) | 3 |
-| `input` | | | | | | 56 (7216 B) | 0 |
+| `input` | | | | | 42 (4064 B) | 14 (3152 B) | 0 |
 | `interface` | 6 (0 B) | 24 (11056 B) | | | | 884 (145624 B) | 24 |
 | `items` | 7 (4048 B) | 17 (8544 B) | | | | 158 (23456 B) | 17 |
-| `main` | | | | | | 156 (15840 B) | 0 |
-| `math` | 36 (4096 B) | 4 (240 B) | | | | 176 (18832 B) | 4 |
-| `memory` | | 2 (336 B) | | | | 257 (34960 B) | 2 |
+| `main` | | | | | 3 (768 B) | 153 (15072 B) | 0 |
+| `math` | 36 (4096 B) | 4 (240 B) | | | 14 (2016 B) | 162 (16816 B) | 4 |
+| `memory` | | 2 (336 B) | | | 60 (8992 B) | 197 (25968 B) | 2 |
 | `models` | 17 (6080 B) | 5 (3808 B) | | | | 31 (7680 B) | 5 |
-| `networking` | | | | | | 313 (49824 B) | 0 |
+| `networking` | | | | | 313 (49824 B) | | 0 |
 | `objects` | | 15 (4864 B) | | | | 334 (46720 B) | 15 |
 | `physics` | | 4 (128 B) | | | | 161 (47104 B) | 4 |
-| `rasterizer` | | 3 (2784 B) | | | | 793 (182416 B) | 3 |
-| `render` | 2 (112 B) | 2 (240 B) | | | | 134 (38000 B) | 2 |
-| `saved games` | | | | | | 149 (24992 B) | 0 |
-| `scenario` | | 2 (608 B) | | | | 55 (8976 B) | 2 |
-| `shaders` | | | | | | 21 (2624 B) | 0 |
-| `shell` | | | | | | 13 (528 B) | 0 |
-| `sound` | 5 (672 B) | 12 (2560 B) | | | | 201 (23728 B) | 12 |
-| `structures` | | 1 (0 B) | | | | 126 (31712 B) | 1 |
+| `rasterizer` | | 3 (2784 B) | | | 793 (182416 B) | | 3 |
+| `render` | 2 (112 B) | 2 (240 B) | | | 134 (38000 B) | | 2 |
+| `saved games` | | | | | 30 (3616 B) | 119 (21376 B) | 0 |
+| `scenario` | | 2 (608 B) | | | 5 (1456 B) | 50 (7520 B) | 2 |
+| `shaders` | | | | | 21 (2624 B) | | 0 |
+| `shell` | | | | | 10 (528 B) | 3 (0 B) | 0 |
+| `sound` | 5 (672 B) | 12 (2560 B) | | | 39 (0 B) | 162 (23728 B) | 12 |
+| `structures` | | 1 (0 B) | | | 53 (14928 B) | 73 (16784 B) | 1 |
 | `tag_files` | | | | | | 49 (4288 B) | 0 |
-| `text` | | 1 (912 B) | | | | 111 (16000 B) | 1 |
-| `tool` | | | | | | 27 (8752 B) | 0 |
+| `text` | | 1 (912 B) | | | 15 (4240 B) | 96 (11760 B) | 1 |
+| `tool` | | | | | 27 (8752 B) | | 0 |
 | `units` | 8 (1824 B) | 37 (15360 B) | | | | 322 (90336 B) | 37 |
-| **all** | 81 (16832 B) | 171 (75008 B) | | | | 8249 (1519282 B) | 171 |
+| **all** | 81 (16832 B) | 171 (75008 B) | | | 1848 (363040 B) | 6401 (1156242 B) | 171 |
 
 ## `ai`
 
@@ -110,24 +110,60 @@ docs/engine.md's "The coverage census" says what each class needs.
 
 ## `bink`
 
-
-33 Missing (19 reached from `main_loop`), by file:
-
-- bink/bink_playback.c: `code_001b53f0`, `bink_playback_active`, `bink_playback_ui_rendering_inhibited`, `bink_playback_in_progress`, `code_001b5480`, `code_001b5570`, `code_001b55a0`, `code_001b5790`, `bink_decompress_audio_frame`, `code_001b5860`, `code_001b5bf0`, `code_001b5c00`, `code_001b5c50`, `code_001b5c60`, `code_001b5c80`, `bink_playback_initialize`, `code_001b5cc0`, `code_001b5d20`, `bink_playback_stop`, `bink_playback_dispose`, `bink_playback_update__internal`, `bink_playback_render`, `bink_playback_start`, `bink_playback_update`, `bink_draw_frame`, `bink_free_texture_cache`, `bink_get_memory_available`, `bink_alloc_permanent`, `bink_alloc`, `bink_free`, `is_all_bink_memory_free`, `bink_decompress_video_frame`, `bink_query_analog_controller_buttons`
+| Function | File | Class | Engine | Evidence |
+| --- | --- | --- | --- | --- |
+| `code_001b53f0` | bink/bink_playback.c | Replaced | app/Sources/OpenCEEngineMenu/Launcher.swift | Bink |
+| `bink_playback_active` | bink/bink_playback.c | Replaced | app/Sources/OpenCEEngineMenu/Launcher.swift | Bink |
+| `bink_playback_ui_rendering_inhibited` | bink/bink_playback.c | Replaced | app/Sources/OpenCEEngineMenu/Launcher.swift | Bink |
+| `bink_playback_in_progress` | bink/bink_playback.c | Replaced | app/Sources/OpenCEEngineMenu/Launcher.swift | Bink |
+| `code_001b5480` | bink/bink_playback.c | Replaced | app/Sources/OpenCEEngineMenu/Launcher.swift | Bink |
+| `code_001b5570` | bink/bink_playback.c | Replaced | app/Sources/OpenCEEngineMenu/Launcher.swift | Bink |
+| `code_001b55a0` | bink/bink_playback.c | Replaced | app/Sources/OpenCEEngineMenu/Launcher.swift | Bink |
+| `code_001b5790` | bink/bink_playback.c | Replaced | app/Sources/OpenCEEngineMenu/Launcher.swift | Bink |
+| `bink_decompress_audio_frame` | bink/bink_playback.c | Replaced | app/Sources/OpenCEEngineMenu/Launcher.swift | Bink |
+| `code_001b5860` | bink/bink_playback.c | Replaced | app/Sources/OpenCEEngineMenu/Launcher.swift | Bink |
+| `code_001b5bf0` | bink/bink_playback.c | Replaced | app/Sources/OpenCEEngineMenu/Launcher.swift | Bink |
+| `code_001b5c00` | bink/bink_playback.c | Replaced | app/Sources/OpenCEEngineMenu/Launcher.swift | Bink |
+| `code_001b5c50` | bink/bink_playback.c | Replaced | app/Sources/OpenCEEngineMenu/Launcher.swift | Bink |
+| `code_001b5c60` | bink/bink_playback.c | Replaced | app/Sources/OpenCEEngineMenu/Launcher.swift | Bink |
+| `code_001b5c80` | bink/bink_playback.c | Replaced | app/Sources/OpenCEEngineMenu/Launcher.swift | Bink |
+| `bink_playback_initialize` | bink/bink_playback.c | Replaced | app/Sources/OpenCEEngineMenu/Launcher.swift | Bink |
+| `code_001b5cc0` | bink/bink_playback.c | Replaced | app/Sources/OpenCEEngineMenu/Launcher.swift | Bink |
+| `code_001b5d20` | bink/bink_playback.c | Replaced | app/Sources/OpenCEEngineMenu/Launcher.swift | Bink |
+| `bink_playback_stop` | bink/bink_playback.c | Replaced | app/Sources/OpenCEEngineMenu/Launcher.swift | Bink |
+| `bink_playback_dispose` | bink/bink_playback.c | Replaced | app/Sources/OpenCEEngineMenu/Launcher.swift | Bink |
+| `bink_playback_update__internal` | bink/bink_playback.c | Replaced | app/Sources/OpenCEEngineMenu/Launcher.swift | Bink |
+| `bink_playback_render` | bink/bink_playback.c | Replaced | app/Sources/OpenCEEngineMenu/Launcher.swift | Bink |
+| `bink_playback_start` | bink/bink_playback.c | Replaced | app/Sources/OpenCEEngineMenu/Launcher.swift | Bink |
+| `bink_playback_update` | bink/bink_playback.c | Replaced | app/Sources/OpenCEEngineMenu/Launcher.swift | Bink |
+| `bink_draw_frame` | bink/bink_playback.c | Replaced | app/Sources/OpenCEEngineMenu/Launcher.swift | Bink |
+| `bink_free_texture_cache` | bink/bink_playback.c | Replaced | app/Sources/OpenCEEngineMenu/Launcher.swift | Bink |
+| `bink_get_memory_available` | bink/bink_playback.c | Replaced | app/Sources/OpenCEEngineMenu/Launcher.swift | Bink |
+| `bink_alloc_permanent` | bink/bink_playback.c | Replaced | app/Sources/OpenCEEngineMenu/Launcher.swift | Bink |
+| `bink_alloc` | bink/bink_playback.c | Replaced | app/Sources/OpenCEEngineMenu/Launcher.swift | Bink |
+| `bink_free` | bink/bink_playback.c | Replaced | app/Sources/OpenCEEngineMenu/Launcher.swift | Bink |
+| `is_all_bink_memory_free` | bink/bink_playback.c | Replaced | app/Sources/OpenCEEngineMenu/Launcher.swift | Bink |
+| `bink_decompress_video_frame` | bink/bink_playback.c | Replaced | app/Sources/OpenCEEngineMenu/Launcher.swift | Bink |
+| `bink_query_analog_controller_buttons` | bink/bink_playback.c | Replaced | app/Sources/OpenCEEngineMenu/Launcher.swift | Bink |
 
 ## `bitmaps`
 
 | Function | File | Class | Engine | Evidence |
 | --- | --- | --- | --- | --- |
 | `bitmap_group_get_bitmap_from_sequence` | bitmaps/bitmap_group.c | Matched | ffi/src/hud.rs:657 | owed: the engine cites it, with no check against the original yet |
+| `pixel32_to_real_argb_color` | bitmaps/bitmap_utilities.c | Replaced |  | through its caller `cinematic_render` |
+| `rgb_colors_interpolate_and_scale` | bitmaps/bitmap_utilities.c | Replaced |  | through its caller `lights_preprocess_scene` |
+| `bitmap_type_get_string` | bitmaps/bitmaps.c | Replaced |  | through its caller `rasterizer_set_texture` |
+| `bitmap_mipmap_get_pixel_data_size` | bitmaps/bitmaps.c | Replaced |  | through its caller `rasterizer_bitmap_2d_changed` |
+| `bitmap_mipmap_get_row_pitch` | bitmaps/bitmaps.c | Replaced |  | through its caller `rasterizer_xbox_bitmap_get_pixel_data_size` |
 
-212 Missing (44 reached from `main_loop`), by file:
+207 Missing (39 reached from `main_loop`), by file:
 
 - bitmaps/bitmap_drawing.c: `bitmap_initialize_line`, `bitmap_step_line`, `bitmap_fill_rectangle`, `bitmap_copy`, `bitmap_tile_and_bevel_rectangle`, `bitmap_draw_line`, `bitmap_frame_rectangle`
 - bitmaps/bitmap_extract.c: `extract_initialize`, `extract_find_sequence_bounds`, `extract_warn_about_horizontal_border`, `extract_plateless_cube_map`, `extract_find_bitmap_bounds`, `extract_get_bitmap_format`, `extract_pixels_to_mipmap`, `extract_pixels_from_mipmap`, `extract_build_texture_pages_by_sequence`, `extract_build_debug_plate`, `extract_mipmaps_to_bitmap`, `extract_add_bitmap`, `extract_3d_textures`, `extract_cube_maps`, `extract_sprites`, `extract_bitmap`, `extract_without_sequences`, `extract_sequence`, `extract_sequences`, `bitmaps_extract`, `bitmaps_extract_from_plate`
 - bitmaps/bitmap_group.c: `code_00065210`, `code_00065220`, `code_00065240`, `bitmap_group_try_and_get_bitmap`, `bitmap_group_add_bitmap`, `postprocess_bitmap`, `delete_bitmap`, `postprocess_bitmap_group`
-- bitmaps/bitmap_utilities.c: `bitmap_fill`, `bitmap_alpha_to_rgb`, `bitmap_clone`, `bitmap_2d_shrink`, `bitmap_3d_shrink`, `bitmap_cm_shrink`, `bitmap_fade`, `bitmap_2d_smooth`, `bitmap_3d_smooth`, `bitmap_cm_smooth`, `bitmap_2d_sharpen`, `bitmap_3d_sharpen`, `bitmap_cm_sharpen`, `bitmap_2d_alpha_bleed`, `bitmap_3d_alpha_bleed`, `bitmap_cm_alpha_bleed`, `bitmap_cm_height_map`, `bitmap_2d_compress_to_mipmap`, `bitmap_3d_compress_to_mipmap`, `bitmap_cm_compress_to_mipmap`, `bitmap_2d_uncompress_from_mipmap`, `bitmap_3d_uncompress_from_mipmap`, `bitmap_cm_uncompress_from_mipmap`, `real_rgb_color_brightness`, `rgb_color_to_hsv_color`, `hsv_color_to_rgb_color`, `real_rgb_color_to_real_hsv_color`, `real_hsv_color_to_real_rgb_color`, `argb_color_to_real_argb_color`, `rgb_color_to_real_rgb_color`, `pixel32_to_real_argb_color`, `pixel32_to_real_rgb_color`, `valid_real_rgb_color`, `bitmap_shrink`, `bitmap_smooth`, `bitmap_sharpen`, `bitmap_alpha_bleed`, `bitmap_2d_height_map`, `bitmap_3d_height_map`, `bitmap_2d_vector_map`, `bitmap_3d_vector_map`, `bitmap_cm_vector_map`, `bitmap_compress_to_mipmap`, `bitmap_uncompress_from_mipmap`, `rgb_colors_interpolate`, `rgb_colors_interpolate_and_scale`, `bitmap_height_map`, `bitmap_vector_map`
-- bitmaps/bitmaps.c: `bitmap_type_get_string`, `bitmap_format_get_string`, `bitmap_format_get_bits_per_pixel`, `bitmap_changed`, `bitmap_delete`, `bitmap_2d_address`, `bitmap_3d_address`, `bitmap_cube_map_address`, `bitmap_mipmap_address`, `bitmap_format_to_a8r8g8b8`, `bitmap_byte_swap_pixels`, `palette_find_closest_match`, `bitmap_format_type_valid_width`, `bitmap_format_type_valid_height`, `bitmap_format_type_valid_depth`, `bitmap_verify`, `bitmap_rebuild`, `bitmap_get_max_mipmap_count`, `bitmap_mipmap_get_width`, `bitmap_mipmap_get_height`, `bitmap_mipmap_get_depth`, `bitmap_mipmap_get_pixel_count`, `bitmap_mipmap_get_pixel_data_size`, `bitmap_mipmap_get_row_pitch`, `bitmap_2d_get_pixel`, `bitmap_get_pixel_count`, `bitmap_get_pixel_data_size`, `bitmap_2d_new`, `bitmap_3d_new`, `bitmap_cube_map_new`, `bitmap_3d_slice_extract`, `bitmap_3d_slice_insert`, `bitmap_cube_map_face_extract`, `bitmap_cube_map_face_insert`
+- bitmaps/bitmap_utilities.c: `bitmap_fill`, `bitmap_alpha_to_rgb`, `bitmap_clone`, `bitmap_2d_shrink`, `bitmap_3d_shrink`, `bitmap_cm_shrink`, `bitmap_fade`, `bitmap_2d_smooth`, `bitmap_3d_smooth`, `bitmap_cm_smooth`, `bitmap_2d_sharpen`, `bitmap_3d_sharpen`, `bitmap_cm_sharpen`, `bitmap_2d_alpha_bleed`, `bitmap_3d_alpha_bleed`, `bitmap_cm_alpha_bleed`, `bitmap_cm_height_map`, `bitmap_2d_compress_to_mipmap`, `bitmap_3d_compress_to_mipmap`, `bitmap_cm_compress_to_mipmap`, `bitmap_2d_uncompress_from_mipmap`, `bitmap_3d_uncompress_from_mipmap`, `bitmap_cm_uncompress_from_mipmap`, `real_rgb_color_brightness`, `rgb_color_to_hsv_color`, `hsv_color_to_rgb_color`, `real_rgb_color_to_real_hsv_color`, `real_hsv_color_to_real_rgb_color`, `argb_color_to_real_argb_color`, `rgb_color_to_real_rgb_color`, `pixel32_to_real_rgb_color`, `valid_real_rgb_color`, `bitmap_shrink`, `bitmap_smooth`, `bitmap_sharpen`, `bitmap_alpha_bleed`, `bitmap_2d_height_map`, `bitmap_3d_height_map`, `bitmap_2d_vector_map`, `bitmap_3d_vector_map`, `bitmap_cm_vector_map`, `bitmap_compress_to_mipmap`, `bitmap_uncompress_from_mipmap`, `rgb_colors_interpolate`, `bitmap_height_map`, `bitmap_vector_map`
+- bitmaps/bitmaps.c: `bitmap_format_get_string`, `bitmap_format_get_bits_per_pixel`, `bitmap_changed`, `bitmap_delete`, `bitmap_2d_address`, `bitmap_3d_address`, `bitmap_cube_map_address`, `bitmap_mipmap_address`, `bitmap_format_to_a8r8g8b8`, `bitmap_byte_swap_pixels`, `palette_find_closest_match`, `bitmap_format_type_valid_width`, `bitmap_format_type_valid_height`, `bitmap_format_type_valid_depth`, `bitmap_verify`, `bitmap_rebuild`, `bitmap_get_max_mipmap_count`, `bitmap_mipmap_get_width`, `bitmap_mipmap_get_height`, `bitmap_mipmap_get_depth`, `bitmap_mipmap_get_pixel_count`, `bitmap_2d_get_pixel`, `bitmap_get_pixel_count`, `bitmap_get_pixel_data_size`, `bitmap_2d_new`, `bitmap_3d_new`, `bitmap_cube_map_new`, `bitmap_3d_slice_extract`, `bitmap_3d_slice_insert`, `bitmap_cube_map_face_extract`, `bitmap_cube_map_face_insert`
 - bitmaps/bitmaps_quantitize.c: `bitmap_quantitize_read_row`, `row_dither`, `bitmap_quantitize`
 - bitmaps/libtiff/mkg3states.c: `DECLARE1`, `DECLARE3`, `DECLARE2`, `build_null_mode_tables`, `build_horiz_mode_tables`, `build_uncomp_mode_tables`
 - bitmaps/libtiff/tif_compress.c: `findScheme`, `TIFFNoEncode`, `TIFFNoRowEncode`, `TIFFNoStripEncode`, `TIFFNoTileEncode`, `TIFFNoDecode`, `TIFFNoRowDecode`, `TIFFNoStripDecode`, `TIFFNoTileDecode`, `TIFFSetCompressionScheme`
@@ -143,33 +179,232 @@ docs/engine.md's "The coverage census" says what each class needs.
 
 ## `bungie_net`
 
-
-109 Missing (64 reached from `main_loop`), by file:
-
-- bungie_net/common/64bit_math.c: `add64`, `code_0006e650`, `subtract64`, `multiply64`, `divide64`, `negate64`
-- bungie_net/common/key_agreement.c: `key_agreement_get_packet_type`, `key_agreement_decode_packet`, `key_agreement_encode_packet`, `key_agreement_build_message`, `build_initiate_key_agreement_message`, `build_finalize_key_agreement_message`, `is_message_encryption_key_message`, `initiate_key_exchange`, `complete_key_exchange`, `initialize_key_agreement_packets`
-- bungie_net/common/message_encryption.c: `reversible_crypt`, `tea_encipher`, `tea_decipher`, `message_encrypt`, `message_decrypt`
-- bungie_net/common/message_header.c: `build_message_header`, `byte_swap_message_header`, `create_message`
-- bungie_net/common/prime_numbers.c: `compare_ulongs_descending`, `primegen`, `randomprime`, `probable_prime64`
-- bungie_net/common/public_key_crypt.c: `code_0006f630`, `code_0006f700`, `code_0006f780`, `generate_key_parameters`, `generate_public_key`, `generate_private_key`, `x_exp_y_mod_n`, `generate_diffie_hellman_public_key`, `generate_diffie_hellman_private_key`
-- bungie_net/common/random_numbers.c: `randomrange`, `randomrange64`
-- bungie_net/common/thread_win32.c: `get_thread_from_pool`, `get_mutex_from_pool`, `create_thread`, `thread_has_exited`, `dispose_thread`, `create_mutex`, `take_mutex`, `release_mutex`, `dispose_mutex`
-- bungie_net/network/transport_address.c: `create_transport_address`, `delete_transport_address`, `transport_address_equivalent`, `transport_address_to_string`, `transport_error_to_string`
-- bungie_net/network/transport_endpoint_set_winsock.c: `net_startup_debug`, `get_next_available_set_array_index`, `transport_push_key`, `transport_pop_key`, `transport_get_nonce`, `transport_nonce_is_equal`, `transport_is_nonce`, `transport_client_stop`, `transport_get_xnaddr`, `transport_get_key_id`, `transport_get_key`, `transport_initialize`, `transport_dispose`, `transport_network_available`, `create_endpoint_set`, `delete_endpoint_set`, `poll_ep_array_compare_proc`, `poll_endpoint_set`, `add_endpoint_to_set`, `remove_endpoint_from_set`, `rewind_endpoint_set`, `get_next_endpoint_from_set`, `count_endpoints_in_set`, `transport_server_initialize`, `transport_server_terminate`, `transport_client_start`
-- bungie_net/network/transport_endpoint_winsock.c: `add_connect_thread`, `mark_connection_thread_as_terminated`, `connection_thread_list_maintenance`, `create_transport_endpoint`, `get_endpoint_type`, `read_endpoint`, `write_endpoint`, `endpoint_readable`, `endpoint_writeable`, `endpoint_connected`, `endpoint_listening`, `endpoint_blocking`, `get_endpoint_error`, `endpoint_equivalent`, `winsock_error_to_string`, `create_socket`, `get_endpoint_address`, `set_endpoint_blocking`, `bind_endpoint`, `connect_endpoint`, `disconnect_endpoint`, `connect_async_thread_proc`, `connect_endpoint_async`, `cancel_connect_process`, `listen_endpoint`, `accept_endpoint`, `read_from_endpoint`, `write_to_endpoint`, `delete_transport_endpoint`, `reject_endpoint`
+| Function | File | Class | Engine | Evidence |
+| --- | --- | --- | --- | --- |
+| `add64` | bungie_net/common/64bit_math.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `code_0006e650` | bungie_net/common/64bit_math.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `subtract64` | bungie_net/common/64bit_math.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `multiply64` | bungie_net/common/64bit_math.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `divide64` | bungie_net/common/64bit_math.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `key_agreement_get_packet_type` | bungie_net/common/key_agreement.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `key_agreement_decode_packet` | bungie_net/common/key_agreement.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `key_agreement_encode_packet` | bungie_net/common/key_agreement.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `key_agreement_build_message` | bungie_net/common/key_agreement.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `build_initiate_key_agreement_message` | bungie_net/common/key_agreement.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `build_finalize_key_agreement_message` | bungie_net/common/key_agreement.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `is_message_encryption_key_message` | bungie_net/common/key_agreement.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `initiate_key_exchange` | bungie_net/common/key_agreement.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `complete_key_exchange` | bungie_net/common/key_agreement.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `initialize_key_agreement_packets` | bungie_net/common/key_agreement.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `reversible_crypt` | bungie_net/common/message_encryption.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `tea_encipher` | bungie_net/common/message_encryption.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `tea_decipher` | bungie_net/common/message_encryption.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `message_encrypt` | bungie_net/common/message_encryption.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `message_decrypt` | bungie_net/common/message_encryption.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `build_message_header` | bungie_net/common/message_header.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `byte_swap_message_header` | bungie_net/common/message_header.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `create_message` | bungie_net/common/message_header.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `compare_ulongs_descending` | bungie_net/common/prime_numbers.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `primegen` | bungie_net/common/prime_numbers.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `randomprime` | bungie_net/common/prime_numbers.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `probable_prime64` | bungie_net/common/prime_numbers.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `code_0006f630` | bungie_net/common/public_key_crypt.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `code_0006f700` | bungie_net/common/public_key_crypt.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `code_0006f780` | bungie_net/common/public_key_crypt.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `generate_key_parameters` | bungie_net/common/public_key_crypt.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `generate_public_key` | bungie_net/common/public_key_crypt.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `generate_private_key` | bungie_net/common/public_key_crypt.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `randomrange` | bungie_net/common/random_numbers.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `randomrange64` | bungie_net/common/random_numbers.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `get_thread_from_pool` | bungie_net/common/thread_win32.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `get_mutex_from_pool` | bungie_net/common/thread_win32.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `create_thread` | bungie_net/common/thread_win32.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `thread_has_exited` | bungie_net/common/thread_win32.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `dispose_thread` | bungie_net/common/thread_win32.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `create_mutex` | bungie_net/common/thread_win32.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `take_mutex` | bungie_net/common/thread_win32.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `release_mutex` | bungie_net/common/thread_win32.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `dispose_mutex` | bungie_net/common/thread_win32.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `create_transport_address` | bungie_net/network/transport_address.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `delete_transport_address` | bungie_net/network/transport_address.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `transport_address_equivalent` | bungie_net/network/transport_address.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `transport_address_to_string` | bungie_net/network/transport_address.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `transport_error_to_string` | bungie_net/network/transport_address.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `net_startup_debug` | bungie_net/network/transport_endpoint_set_winsock.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `get_next_available_set_array_index` | bungie_net/network/transport_endpoint_set_winsock.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `transport_push_key` | bungie_net/network/transport_endpoint_set_winsock.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `transport_pop_key` | bungie_net/network/transport_endpoint_set_winsock.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `transport_get_nonce` | bungie_net/network/transport_endpoint_set_winsock.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `transport_nonce_is_equal` | bungie_net/network/transport_endpoint_set_winsock.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `transport_is_nonce` | bungie_net/network/transport_endpoint_set_winsock.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `transport_client_stop` | bungie_net/network/transport_endpoint_set_winsock.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `transport_get_xnaddr` | bungie_net/network/transport_endpoint_set_winsock.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `transport_get_key_id` | bungie_net/network/transport_endpoint_set_winsock.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `transport_get_key` | bungie_net/network/transport_endpoint_set_winsock.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `transport_initialize` | bungie_net/network/transport_endpoint_set_winsock.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `transport_dispose` | bungie_net/network/transport_endpoint_set_winsock.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `transport_network_available` | bungie_net/network/transport_endpoint_set_winsock.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `create_endpoint_set` | bungie_net/network/transport_endpoint_set_winsock.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `delete_endpoint_set` | bungie_net/network/transport_endpoint_set_winsock.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `poll_ep_array_compare_proc` | bungie_net/network/transport_endpoint_set_winsock.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `poll_endpoint_set` | bungie_net/network/transport_endpoint_set_winsock.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `add_endpoint_to_set` | bungie_net/network/transport_endpoint_set_winsock.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `remove_endpoint_from_set` | bungie_net/network/transport_endpoint_set_winsock.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `rewind_endpoint_set` | bungie_net/network/transport_endpoint_set_winsock.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `get_next_endpoint_from_set` | bungie_net/network/transport_endpoint_set_winsock.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `count_endpoints_in_set` | bungie_net/network/transport_endpoint_set_winsock.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `transport_server_initialize` | bungie_net/network/transport_endpoint_set_winsock.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `transport_server_terminate` | bungie_net/network/transport_endpoint_set_winsock.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `transport_client_start` | bungie_net/network/transport_endpoint_set_winsock.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `add_connect_thread` | bungie_net/network/transport_endpoint_winsock.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `mark_connection_thread_as_terminated` | bungie_net/network/transport_endpoint_winsock.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `connection_thread_list_maintenance` | bungie_net/network/transport_endpoint_winsock.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `create_transport_endpoint` | bungie_net/network/transport_endpoint_winsock.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `get_endpoint_type` | bungie_net/network/transport_endpoint_winsock.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `read_endpoint` | bungie_net/network/transport_endpoint_winsock.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `write_endpoint` | bungie_net/network/transport_endpoint_winsock.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `endpoint_readable` | bungie_net/network/transport_endpoint_winsock.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `endpoint_writeable` | bungie_net/network/transport_endpoint_winsock.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `endpoint_connected` | bungie_net/network/transport_endpoint_winsock.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `endpoint_listening` | bungie_net/network/transport_endpoint_winsock.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `endpoint_blocking` | bungie_net/network/transport_endpoint_winsock.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `get_endpoint_error` | bungie_net/network/transport_endpoint_winsock.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `endpoint_equivalent` | bungie_net/network/transport_endpoint_winsock.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `winsock_error_to_string` | bungie_net/network/transport_endpoint_winsock.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `create_socket` | bungie_net/network/transport_endpoint_winsock.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `get_endpoint_address` | bungie_net/network/transport_endpoint_winsock.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `set_endpoint_blocking` | bungie_net/network/transport_endpoint_winsock.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `bind_endpoint` | bungie_net/network/transport_endpoint_winsock.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `connect_endpoint` | bungie_net/network/transport_endpoint_winsock.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `disconnect_endpoint` | bungie_net/network/transport_endpoint_winsock.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `connect_async_thread_proc` | bungie_net/network/transport_endpoint_winsock.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `connect_endpoint_async` | bungie_net/network/transport_endpoint_winsock.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `cancel_connect_process` | bungie_net/network/transport_endpoint_winsock.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `listen_endpoint` | bungie_net/network/transport_endpoint_winsock.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `accept_endpoint` | bungie_net/network/transport_endpoint_winsock.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `read_from_endpoint` | bungie_net/network/transport_endpoint_winsock.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `write_to_endpoint` | bungie_net/network/transport_endpoint_winsock.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `delete_transport_endpoint` | bungie_net/network/transport_endpoint_winsock.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `reject_endpoint` | bungie_net/network/transport_endpoint_winsock.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `negate64` | bungie_net/common/64bit_math.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `x_exp_y_mod_n` | bungie_net/common/public_key_crypt.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `generate_diffie_hellman_public_key` | bungie_net/common/public_key_crypt.c | Replaced | net/src/transport.rs | networking and Xbox Live |
+| `generate_diffie_hellman_private_key` | bungie_net/common/public_key_crypt.c | Replaced | net/src/transport.rs | networking and Xbox Live |
 
 ## `cache`
 
+| Function | File | Class | Engine | Evidence |
+| --- | --- | --- | --- | --- |
+| `tag_files_open` | cache/cache_files.c | Replaced |  | through its caller `shell_initialize` |
+| `tag_files_close` | cache/cache_files.c | Replaced |  | through its caller `shell_dispose` |
+| `tag_groups_checksum` | cache/cache_files.c | Replaced |  | through its caller `network_game_generate_join_game_token` |
+| `acquire_read_request` | cache/cache_files_decompress_windows.c | Replaced |  | through its caller `cache_copy_run_decompression` |
+| `cache_copy_FileIOCompletionRoutine` | cache/cache_files_decompress_windows.c | Replaced |  | through its caller `cache_copy_issue_read` |
+| `cache_copy_initialize` | cache/cache_files_decompress_windows.c | Replaced |  | through its caller `cache_files_initialize` |
+| `cache_files_dispose` | cache/cache_files_windows.c | Replaced |  | through its caller `tag_files_close` |
+| `cache_file_read_io_completion_routine` | cache/cache_files_windows.c | Replaced |  | through its caller `cache_file_windows_thread_proc` |
+| `cache_file_promote_read` | cache/cache_files_windows.c | Replaced |  | through its caller `_texture_cache_bitmap_get_hardware_format` |
+| `cached_map_issue_async_write` | cache/cache_files_windows.c | Replaced |  | through its caller `cache_files_open_cache_files` |
+| `cached_map_files_delete` | cache/cache_files_windows.c | Replaced |  | through its caller `cache_files_open_cache_files` |
+| `cache_files_verify_language` | cache/cache_files_windows.c | Replaced |  | through its caller `cache_files_initialize` |
+| `cache_file_windows_thread_proc` | cache/cache_files_windows.c | Replaced |  | through its caller `cache_file_windows_thread_create` |
+| `cache_files_open_cache_files` | cache/cache_files_windows.c | Replaced |  | through its caller `cache_files_initialize` |
+| `cache_file_windows_thread_create` | cache/cache_files_windows.c | Replaced |  | through its caller `cache_files_initialize` |
+| `cache_files_initialize` | cache/cache_files_windows.c | Replaced |  | through its caller `tag_files_open` |
+| `physical_memory_allocate` | cache/physical_memory_map.c | Replaced |  | through its caller `main` |
+| `physical_memory_verify` | cache/physical_memory_map.c | Replaced |  | through its caller `shell_platform_verify` |
+| `physical_memory_get_game_state_base_address` | cache/physical_memory_map.c | Replaced |  | through its caller `game_state_allocate_buffer` |
+| `physical_memory_get_texture_cache_base_address` | cache/physical_memory_map.c | Replaced |  | through its caller `texture_cache_new` |
+| `physical_memory_get_sound_cache_base_address` | cache/physical_memory_map.c | Replaced |  | through its caller `dsound_channel_queue_packet` |
+| `sound_cache_delete` | cache/xbox_sound_cache.c | Replaced | audio/src/player.rs | Xbox-only hardware |
+| `sound_cache_open` | cache/xbox_sound_cache.c | Replaced | audio/src/player.rs | Xbox-only hardware |
+| `sound_cache_idle` | cache/xbox_sound_cache.c | Replaced | audio/src/player.rs | Xbox-only hardware |
+| `sound_cache_sound_new` | cache/xbox_sound_cache.c | Replaced | audio/src/player.rs | Xbox-only hardware |
+| `sound_cache_sound_delete` | cache/xbox_sound_cache.c | Replaced | audio/src/player.rs | Xbox-only hardware |
+| `sound_cache_sound_finished` | cache/xbox_sound_cache.c | Replaced | audio/src/player.rs | Xbox-only hardware |
+| `sound_cache_sound_hardware_lock` | cache/xbox_sound_cache.c | Replaced | audio/src/player.rs | Xbox-only hardware |
+| `sound_cache_sound_hardware_unlock` | cache/xbox_sound_cache.c | Replaced | audio/src/player.rs | Xbox-only hardware |
+| `sound_cache_locked_block_proc` | cache/xbox_sound_cache.c | Replaced | audio/src/player.rs | Xbox-only hardware |
+| `sound_cache_delete_block_proc` | cache/xbox_sound_cache.c | Replaced | audio/src/player.rs | Xbox-only hardware |
+| `cache_block_get_sound_permutation_name` | cache/xbox_sound_cache.c | Replaced | audio/src/player.rs | Xbox-only hardware |
+| `sound_cache_start_loading_sound` | cache/xbox_sound_cache.c | Replaced | audio/src/player.rs | Xbox-only hardware |
+| `sound_cache_new` | cache/xbox_sound_cache.c | Replaced | audio/src/player.rs | Xbox-only hardware |
+| `sound_cache_flush` | cache/xbox_sound_cache.c | Replaced | audio/src/player.rs | Xbox-only hardware |
+| `sound_cache_close` | cache/xbox_sound_cache.c | Replaced | audio/src/player.rs | Xbox-only hardware |
+| `_sound_cache_sound_request` | cache/xbox_sound_cache.c | Replaced | audio/src/player.rs | Xbox-only hardware |
+| `render_inverse_transform_screen_point` | cache/xbox_sound_cache.c | Replaced | audio/src/player.rs | Xbox-only hardware |
+| `sound_cache_debug_render` | cache/xbox_sound_cache.c | Replaced | audio/src/player.rs | Xbox-only hardware |
+| `texture_cache_delete` | cache/xbox_texture_cache.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | Xbox-only hardware |
+| `texture_cache_open` | cache/xbox_texture_cache.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | Xbox-only hardware |
+| `texture_cache_idle` | cache/xbox_texture_cache.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | Xbox-only hardware |
+| `texture_cache_bitmap_new` | cache/xbox_texture_cache.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | Xbox-only hardware |
+| `texture_cache_bitmap_delete` | cache/xbox_texture_cache.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | Xbox-only hardware |
+| `texture_cache_steal_memory` | cache/xbox_texture_cache.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | Xbox-only hardware |
+| `texture_cache_return_memory` | cache/xbox_texture_cache.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | Xbox-only hardware |
+| `texture_cache_name_block_proc` | cache/xbox_texture_cache.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | Xbox-only hardware |
+| `bitmap_format_to_d3d_format` | cache/xbox_texture_cache.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | Xbox-only hardware |
+| `bitmap_format_to_d3d_linear_format` | cache/xbox_texture_cache.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | Xbox-only hardware |
+| `compare` | cache/xbox_texture_cache.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | Xbox-only hardware |
+| `IDirect3DDevice8_IsBusy` | cache/xbox_texture_cache.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | Xbox-only hardware |
+| `IDirect3DDevice8_KickPushBuffer` | cache/xbox_texture_cache.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | Xbox-only hardware |
+| `IDirect3DBaseTexture8_IsBusy` | cache/xbox_texture_cache.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | Xbox-only hardware |
+| `IDirect3DBaseTexture8_Register` | cache/xbox_texture_cache.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | Xbox-only hardware |
+| `texture_cache_flush` | cache/xbox_texture_cache.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | Xbox-only hardware |
+| `texture_cache_locked_block_proc` | cache/xbox_texture_cache.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | Xbox-only hardware |
+| `texture_cache_delete_block_proc` | cache/xbox_texture_cache.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | Xbox-only hardware |
+| `texture_cache_initialize_hardware_format` | cache/xbox_texture_cache.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | Xbox-only hardware |
+| `render_inverse_transform_screen_point` | cache/xbox_texture_cache.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | Xbox-only hardware |
+| `texture_cache_new` | cache/xbox_texture_cache.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | Xbox-only hardware |
+| `texture_cache_close` | cache/xbox_texture_cache.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | Xbox-only hardware |
+| `texture_cache_start_loading_bitmap` | cache/xbox_texture_cache.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | Xbox-only hardware |
+| `texture_cache_debug_render` | cache/xbox_texture_cache.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | Xbox-only hardware |
+| `_texture_cache_bitmap_get_hardware_format` | cache/xbox_texture_cache.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | Xbox-only hardware |
+| `cache_files_map_version` | cache/cache_files.c | Replaced |  | through its caller `network_game_server_change_map_name` |
+| `cache_files_map_present` | cache/cache_files.c | Replaced |  | through its caller `network_game_client_game_settings_updated` |
+| `cache_copy_stop_requested` | cache/cache_files_decompress_windows.c | Replaced |  | through its caller `cache_copy_run_decompression` |
+| `cache_copy_initialize_zlib` | cache/cache_files_decompress_windows.c | Replaced |  | through its caller `simple_cache_copy_thread` |
+| `cache_copy_dispose_zlib` | cache/cache_files_decompress_windows.c | Replaced |  | through its caller `simple_cache_copy_thread` |
+| `cache_copy_compressed_alloc` | cache/cache_files_decompress_windows.c | Replaced |  | through its caller `cache_copy_initialize` |
+| `cache_copy_compressed_free` | cache/cache_files_decompress_windows.c | Replaced |  | through its caller `cache_copy_initialize` |
+| `cache_copy_initialize_read_buffers` | cache/cache_files_decompress_windows.c | Replaced |  | through its caller `simple_cache_copy_thread` |
+| `cache_copy_initialize_file_data` | cache/cache_files_decompress_windows.c | Replaced |  | through its caller `simple_cache_copy_thread` |
+| `cache_copy_block_on_raw_read` | cache/cache_files_decompress_windows.c | Replaced |  | through its caller `cache_copy_initialize_read_data` |
+| `cache_copy_block_on_raw_write` | cache/cache_files_decompress_windows.c | Replaced |  | through its caller `cache_copy_initialize_read_data` |
+| `cache_copy_read_buffer_size` | cache/cache_files_decompress_windows.c | Replaced |  | through its caller `cache_copy_initialize_read_buffers` |
+| `cache_copy_get_read_buffer` | cache/cache_files_decompress_windows.c | Replaced |  | through its caller `cache_copy_issue_read_internal` |
+| `cache_copy_get_write_buffer` | cache/cache_files_decompress_windows.c | Replaced |  | through its caller `cache_copy_issue_write_internal` |
+| `cache_copy_write_buffer_size` | cache/cache_files_decompress_windows.c | Replaced |  | through its caller `cache_copy_issue_write_internal` |
+| `any_bit_vector_flag_set` | cache/cache_files_decompress_windows.c | Replaced |  | through its caller `cache_copy_wait_for_async_io` |
+| `cache_copy_wait_for_async_io` | cache/cache_files_decompress_windows.c | Replaced |  | through its caller `simple_cache_copy_thread` |
+| `cache_copy_set_flag` | cache/cache_files_decompress_windows.c | Replaced |  | through its caller `cache_copy_FileIOCompletionRoutine` |
+| `decompressor_reset_timing` | cache/cache_files_decompress_windows.c | Replaced |  | through its caller `simple_cache_copy_thread` |
+| `decompressor_timer_start` | cache/cache_files_decompress_windows.c | Replaced |  | through its caller `cache_copy_issue_read` |
+| `decompressor_timer_stop` | cache/cache_files_decompress_windows.c | Replaced |  | through its caller `cache_copy_issue_read` |
+| `cache_copy_yield` | cache/cache_files_decompress_windows.c | Replaced |  | through its caller `cache_copy_run_decompression` |
+| `cache_copy_issue_read` | cache/cache_files_decompress_windows.c | Replaced |  | through its caller `cache_copy_issue_read_internal` |
+| `cache_copy_issue_write` | cache/cache_files_decompress_windows.c | Replaced |  | through its caller `cache_copy_issue_write_internal` |
+| `cache_copy_issue_read_raw` | cache/cache_files_decompress_windows.c | Replaced |  | through its caller `cache_copy_initialize_read_data` |
+| `cache_copy_issue_write_raw` | cache/cache_files_decompress_windows.c | Replaced |  | through its caller `cache_copy_initialize_read_data` |
+| `cache_copy_issue_read_internal` | cache/cache_files_decompress_windows.c | Replaced |  | through its caller `cache_copy_issue_read_by_index` |
+| `cache_copy_issue_read_request` | cache/cache_files_decompress_windows.c | Replaced |  | through its caller `cache_copy_release_read_request` |
+| `cache_copy_issue_read_by_index` | cache/cache_files_decompress_windows.c | Replaced |  | through its caller `cache_copy_issue_initial_reads` |
+| `cache_copy_release_read_request` | cache/cache_files_decompress_windows.c | Replaced |  | through its caller `cache_copy_run_decompression` |
+| `cache_copy_issue_write_internal` | cache/cache_files_decompress_windows.c | Replaced |  | through its caller `cache_copy_update_write_buffers` |
+| `cache_copy_initialize_read_data` | cache/cache_files_decompress_windows.c | Replaced |  | through its caller `simple_cache_copy_thread` |
+| `cache_copy_issue_initial_reads` | cache/cache_files_decompress_windows.c | Replaced |  | through its caller `simple_cache_copy_thread` |
+| `cache_copy_update_write_buffers` | cache/cache_files_decompress_windows.c | Replaced |  | through its caller `cache_copy_run_decompression` |
+| `cache_copy_run_decompression` | cache/cache_files_decompress_windows.c | Replaced |  | through its caller `simple_cache_copy_thread` |
+| `simple_cache_copy_thread` | cache/cache_files_decompress_windows.c | Replaced |  | through its caller `cache_copy_initialize` |
+| `sound_cache_sound_get_cache_sound` | cache/xbox_sound_cache.c | Replaced | audio/src/player.rs | Xbox-only hardware |
+| `texture_cache_bitmap_valid` | cache/xbox_texture_cache.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | Xbox-only hardware |
 
-224 Missing (165 reached from `main_loop`), by file:
+122 Missing (69 reached from `main_loop`), by file:
 
-- cache/cache_files.c: `cache_files_map_directory`, `scenario_tags_unload`, `tag_files_open`, `tag_files_close`, `tag_groups_checksum`, `cache_files_get_checksum`, `tag_loaded`, `cache_files_enable_writes`, `cache_files_disable_writes`, `tag_block_resize`, `tag_data_resize`, `tag_block_add_element`, `tag_block_delete_element`, `tag_load`, `tag_unload`, `tag_file_get_path`, `tag_reference_set`, `tag_iterator_new`, `tag_iterator_next`, `cache_get_tag_instance`, `cache_file_header_verify`, `cache_files_give_time_to_precache`, `scenario_tags_load`, `scenario_structure_bsp_load`, `scenario_structure_bsp_unload`, `tag_get`, `tag_get_name`, `tag_get_group_tag`, `cache_empty_tag_instance`, `cache_files_set_tag_instances`, `cache_files_build_region`, `cache_files_multiplayer_region`, `cache_files_map_plays_multiplayer`, `cache_files_show_multiplayer_unavailable`, `cache_files_map_version`, `cache_files_map_present`, `tag_index_is_group`
-- cache/cache_files_decompress_windows.c: `code_001a9c10`, `cache_copy_buffer_size`, `cache_copy_set_priority`, `cache_copy_compressed_file_complete`, `cache_copy_begin`, `cache_copy_queue_end`, `code_001a9fe0`, `code_001aa010`, `code_001aa040`, `code_001aa0a0`, `code_001aa0f0`, `code_001aa1a0`, `code_001aa290`, `code_001aa310`, `acquire_read_request`, `code_001aa420`, `code_001aa430`, `code_001aa480`, `code_001aa4d0`, `code_001aa510`, `code_001aa540`, `code_001aa5e0`, `code_001aa610`, `code_001aa620`, `code_001aa640`, `code_001aa650`, `code_001aa680`, `code_001aa780`, `cache_copy_get_status`, `cache_copy_end`, `cache_copy_FileIOCompletionRoutine`, `code_001aab70`, `code_001aacb0`, `code_001aadf0`, `code_001aae00`, `code_001aae10`, `code_001aaf10`, `code_001aaf30`, `code_001aaf80`, `code_001ab020`, `code_001ab1b0`, `code_001ab280`, `code_001ab350`, `code_001ab540`, `code_001ab880`, `cache_copy_initialize`, `cache_copy_stop_requested`, `cache_copy_initialize_zlib`, `cache_copy_dispose_zlib`, `cache_copy_compressed_alloc`, `cache_copy_compressed_free`, `cache_copy_initialize_read_buffers`, `cache_copy_initialize_file_data`, `cache_copy_block_on_raw_read`, `cache_copy_block_on_raw_write`, `cache_copy_read_buffer_size`, `cache_copy_get_read_buffer`, `cache_copy_get_write_buffer`, `cache_copy_write_buffer_size`, `any_bit_vector_flag_set`, `cache_copy_wait_for_async_io`, `cache_copy_set_flag`, `cache_copy_get_flags`, `decompressor_reset_timing`, `decompressor_timer_start`, `decompressor_timer_stop`, `cache_copy_print_timing`, `cache_copy_yield`, `cache_copy_issue_read`, `cache_copy_issue_write`, `cache_copy_issue_read_raw`, `cache_copy_issue_write_raw`, `cache_copy_issue_read_internal`, `cache_copy_issue_read_request`, `cache_copy_issue_read_by_index`, `cache_copy_release_read_request`, `cache_copy_issue_write_internal`, `cache_copy_initialize_read_data`, `cache_copy_issue_initial_reads`, `cache_copy_update_write_buffers`, `cache_copy_run_decompression`, `simple_cache_copy_thread`
-- cache/cache_files_windows.c: `cache_files_dispose`, `cached_map_issue_async_request`, `cached_map_block_on_async_request`, `cache_request_get`, `cache_request_next_free_index`, `cache_requests_flush`, `cache_files_precache_set_priority`, `cache_files_precache_in_progress`, `cache_files_precache_is_copying_map`, `cache_files_precache_map_queue_end`, `cached_map_file_get`, `cached_map_file_invalidate`, `cached_map_file_get_handle`, `cached_map_file_get_size`, `cached_map_file_get_path`, `cache_file_windows_thread_wake`, `cache_file_read_io_completion_routine`, `cache_file_blocking_io_completion_routine`, `cache_file_get_map_path`, `IDirect3DVertexBuffer8_IsBusy`, `IDirect3DVertexBuffer8_BlockUntilNotBusy`, `IDirect3DVertexBuffer8_Register`, `IDirect3DIndexBuffer8_IsBusy`, `IDirect3DIndexBuffer8_BlockUntilNotBusy`, `cache_file_close`, `cache_file_read`, `cache_file_promote_read`, `cache_file_read_header_from_dvd`, `cached_map_issue_async_read`, `cached_map_issue_async_write`, `cache_file_block_until_not_busy`, `tags_header_register_vertex_and_index_buffers`, `tags_header_deregister_vertex_and_index_buffers`, `structure_bsp_header_register_vertex_buffers`, `structure_bsp_header_deregister_vertex_buffers`, `cached_map_files_delete`, `cache_files_verify_language`, `cache_files_precache_map_status`, `cached_map_file_set_modification_date`, `cached_map_file_read_header`, `cached_map_files_find_map`, `cached_map_files_find_free_map`, `cache_file_windows_thread_proc`, `cache_file_open`, `cache_files_open_cache_files`, `cache_files_precache_map_loaded`, `cache_files_precache_map_begin`, `cache_files_precache_map_end`, `cache_file_windows_thread_create`, `cache_files_initialize`
-- cache/physical_memory_map.c: `physical_memory_allocate`, `physical_memory_verify`, `physical_memory_free`, `physical_memory_get_game_state_base_address`, `physical_memory_get_tag_cache_base_address`, `physical_memory_get_texture_cache_base_address`, `physical_memory_get_sound_cache_base_address`
+- cache/cache_files.c: `cache_files_map_directory`, `scenario_tags_unload`, `cache_files_get_checksum`, `tag_loaded`, `cache_files_enable_writes`, `cache_files_disable_writes`, `tag_block_resize`, `tag_data_resize`, `tag_block_add_element`, `tag_block_delete_element`, `tag_load`, `tag_unload`, `tag_file_get_path`, `tag_reference_set`, `tag_iterator_new`, `tag_iterator_next`, `cache_get_tag_instance`, `cache_file_header_verify`, `cache_files_give_time_to_precache`, `scenario_tags_load`, `scenario_structure_bsp_load`, `scenario_structure_bsp_unload`, `tag_get`, `tag_get_name`, `tag_get_group_tag`, `cache_empty_tag_instance`, `cache_files_set_tag_instances`, `cache_files_build_region`, `cache_files_multiplayer_region`, `cache_files_map_plays_multiplayer`, `cache_files_show_multiplayer_unavailable`, `tag_index_is_group`
+- cache/cache_files_decompress_windows.c: `code_001a9c10`, `cache_copy_buffer_size`, `cache_copy_set_priority`, `cache_copy_compressed_file_complete`, `cache_copy_begin`, `cache_copy_queue_end`, `code_001a9fe0`, `code_001aa010`, `code_001aa040`, `code_001aa0a0`, `code_001aa0f0`, `code_001aa1a0`, `code_001aa290`, `code_001aa310`, `code_001aa420`, `code_001aa430`, `code_001aa480`, `code_001aa4d0`, `code_001aa510`, `code_001aa540`, `code_001aa5e0`, `code_001aa610`, `code_001aa620`, `code_001aa640`, `code_001aa650`, `code_001aa680`, `code_001aa780`, `cache_copy_get_status`, `cache_copy_end`, `code_001aab70`, `code_001aacb0`, `code_001aadf0`, `code_001aae00`, `code_001aae10`, `code_001aaf10`, `code_001aaf30`, `code_001aaf80`, `code_001ab020`, `code_001ab1b0`, `code_001ab280`, `code_001ab350`, `code_001ab540`, `code_001ab880`, `cache_copy_get_flags`, `cache_copy_print_timing`
+- cache/cache_files_windows.c: `cached_map_issue_async_request`, `cached_map_block_on_async_request`, `cache_request_get`, `cache_request_next_free_index`, `cache_requests_flush`, `cache_files_precache_set_priority`, `cache_files_precache_in_progress`, `cache_files_precache_is_copying_map`, `cache_files_precache_map_queue_end`, `cached_map_file_get`, `cached_map_file_invalidate`, `cached_map_file_get_handle`, `cached_map_file_get_size`, `cached_map_file_get_path`, `cache_file_windows_thread_wake`, `cache_file_blocking_io_completion_routine`, `cache_file_get_map_path`, `IDirect3DVertexBuffer8_IsBusy`, `IDirect3DVertexBuffer8_BlockUntilNotBusy`, `IDirect3DVertexBuffer8_Register`, `IDirect3DIndexBuffer8_IsBusy`, `IDirect3DIndexBuffer8_BlockUntilNotBusy`, `cache_file_close`, `cache_file_read`, `cache_file_read_header_from_dvd`, `cached_map_issue_async_read`, `cache_file_block_until_not_busy`, `tags_header_register_vertex_and_index_buffers`, `tags_header_deregister_vertex_and_index_buffers`, `structure_bsp_header_register_vertex_buffers`, `structure_bsp_header_deregister_vertex_buffers`, `cache_files_precache_map_status`, `cached_map_file_set_modification_date`, `cached_map_file_read_header`, `cached_map_files_find_map`, `cached_map_files_find_free_map`, `cache_file_open`, `cache_files_precache_map_loaded`, `cache_files_precache_map_begin`, `cache_files_precache_map_end`
+- cache/physical_memory_map.c: `physical_memory_free`, `physical_memory_get_tag_cache_base_address`
 - cache/predicted_resources.c: `code_001ad870`, `predicted_resources_precache`, `predicted_resources_sound_precache`
-- cache/xbox_sound_cache.c: `sound_cache_delete`, `sound_cache_open`, `sound_cache_idle`, `sound_cache_sound_new`, `sound_cache_sound_delete`, `sound_cache_sound_finished`, `sound_cache_sound_hardware_lock`, `sound_cache_sound_hardware_unlock`, `sound_cache_locked_block_proc`, `sound_cache_delete_block_proc`, `cache_block_get_sound_permutation_name`, `sound_cache_start_loading_sound`, `sound_cache_new`, `sound_cache_flush`, `sound_cache_close`, `_sound_cache_sound_request`, `render_inverse_transform_screen_point`, `sound_cache_debug_render`, `sound_cache_sound_get_cache_sound`
-- cache/xbox_texture_cache.c: `texture_cache_delete`, `texture_cache_open`, `texture_cache_idle`, `texture_cache_bitmap_new`, `texture_cache_bitmap_delete`, `texture_cache_steal_memory`, `texture_cache_return_memory`, `texture_cache_name_block_proc`, `bitmap_format_to_d3d_format`, `bitmap_format_to_d3d_linear_format`, `compare`, `IDirect3DDevice8_IsBusy`, `IDirect3DDevice8_KickPushBuffer`, `IDirect3DBaseTexture8_IsBusy`, `IDirect3DBaseTexture8_Register`, `texture_cache_flush`, `texture_cache_locked_block_proc`, `texture_cache_delete_block_proc`, `texture_cache_initialize_hardware_format`, `render_inverse_transform_screen_point`, `texture_cache_new`, `texture_cache_close`, `texture_cache_start_loading_bitmap`, `texture_cache_debug_render`, `_texture_cache_bitmap_get_hardware_format`, `texture_cache_bitmap_valid`
 
 ## `camera`
 
@@ -201,17 +436,50 @@ docs/engine.md's "The coverage census" says what each class needs.
 
 ## `cseries`
 
+| Function | File | Class | Engine | Evidence |
+| --- | --- | --- | --- | --- |
+| `cseries_initialize` | cseries/cseries.c | Replaced |  | through its caller `shell_initialize` |
+| `cseries_dispose` | cseries/cseries.c | Replaced |  | through its caller `shell_dispose` |
+| `strnlen` | cseries/cseries.c | Replaced |  | through its caller `data_encode_string` |
+| `system_seconds` | cseries/cseries_windows.c | Replaced |  | through its caller `get_number_suitable_for_initializing_random_seed` |
+| `system_memory_information_get` | cseries/cseries_windows.c | Replaced |  | through its caller `render_debug_profile` |
+| `exception_code_get_string` | cseries/cseries_windows.c | Replaced |  | through its caller `generic_exception_filter` |
+| `generic_exception_filter` | cseries/cseries_windows.c | Replaced |  | through its caller `main` |
+| `debug_memory_manager_initialize` | cseries/debug_memory.c | Replaced |  | through its caller `cseries_initialize` |
+| `debug_check_memory` | cseries/debug_memory.c | Replaced |  | through its caller `debug_dump_memory_for_file` |
+| `debug_dump_memory_for_file` | cseries/debug_memory.c | Replaced |  | through its caller `debug_dump_memory` |
+| `debug_dump_memory` | cseries/debug_memory.c | Replaced |  | through its caller `cseries_dispose` |
+| `errors_dispose` | cseries/errors.c | Replaced |  | through its caller `shell_dispose` |
+| `errors_initialize` | cseries/errors.c | Replaced |  | through its caller `shell_initialize` |
+| `profile_rasterizer_stats` | cseries/profile.c | Replaced |  | through its caller `rasterizer_profile_frame_end` |
+| `compare_profile_sections` | cseries/profile.c | Replaced |  | through its caller `profile_dump` |
+| `profile_dump` | cseries/profile.c | Replaced |  | through its caller `render_debug_profile` |
+| `profile_find_frame_value` | cseries/profile.c | Replaced |  | through its caller `render_debug_profile` |
+| `profile_frame_get_value` | cseries/profile.c | Replaced |  | through its caller `render_debug_profile` |
+| `profile_frame_iterator_new` | cseries/profile.c | Replaced |  | through its caller `render_debug_profile` |
+| `profile_frame_iterator_next` | cseries/profile.c | Replaced |  | through its caller `render_debug_profile` |
+| `profile_frame_get_messages` | cseries/profile.c | Replaced |  | through its caller `render_debug_profile` |
+| `profile_frame_get_stalls` | cseries/profile.c | Replaced |  | through its caller `render_debug_profile` |
+| `profile_render_window_start` | cseries/profile.c | Replaced |  | through its caller `render_frame_pregame` |
+| `profile_render_window_end` | cseries/profile.c | Replaced |  | through its caller `render_frame_pregame` |
+| `qsort_2byte` | cseries/sort.c | Replaced |  | through its caller `rasterizer_frame_statistics_count_dynamic_vertices` |
+| `symbol_sort_proc` | cseries/stack_walk_windows.c | Replaced |  | through its caller `load_symbol_table` |
+| `free_symbol_table` | cseries/stack_walk_windows.c | Replaced |  | through its caller `load_symbol_table` |
+| `stack_walk_dispose` | cseries/stack_walk_windows.c | Replaced |  | through its caller `errors_dispose` |
+| `load_symbol_table` | cseries/stack_walk_windows.c | Replaced |  | through its caller `stack_walk_initialize` |
+| `stack_walk_initialize` | cseries/stack_walk_windows.c | Replaced |  | through its caller `errors_initialize` |
+| `shortsort_2byte` | cseries/sort.c | Replaced |  | through its caller `qsort_2byte` |
 
-151 Missing (107 reached from `main_loop`), by file:
+120 Missing (76 reached from `main_loop`), by file:
 
-- cseries/cseries.c: `cseries_initialize`, `cseries_dispose`, `string_to_tag`, `tag_to_string`, `strnlen`, `strnupr`, `strnlwr`, `strupr`, `strlwr`, `csprintf`, `display_assert`, `csmemcmp`, `csmemmove`, `csmemset`, `csstrcat`, `csstrcmp`, `csstrncat`, `csstrncmp`, `csstrncpy`, `csstrtok`, `csstrlen`, `csstrcpy`, `csmemcpy`, `csstrcasecmp`, `stristr`, `string_hash`
-- cseries/cseries_windows.c: `display_debug_string`, `system_exit`, `system_unique_identifier_get`, `system_unique_identifiers_equal`, `system_milliseconds`, `system_seconds`, `system_get_user_name`, `system_calloc`, `system_malloc`, `system_free`, `system_realloc`, `system_get_used_memory_size`, `system_memory_information_get`, `system_show_wait_cursor`, `system_alert`, `system_kill_screen_saver`, `exception_code_get_string`, `generic_exception_filter`
-- cseries/debug_memory.c: `debug_memory_manager_initialize`, `code_0007ccf0`, `code_0007cd40`, `code_0007cd90`, `code_0007cdc0`, `check_memory_status`, `local_random`, `code_0007ce40`, `code_0007cf50`, `code_0007cfc0`, `code_0007d060`, `debug_check_memory`, `debug_dump_memory_for_file`, `debug_dump_memory_by_file`, `debug_malloc`, `debug_free`, `debug_realloc`, `debug_dump_memory`, `debug_check_memory_globals`, `debug_memory_header_checksum`, `compare_file_pointer_totals`, `debug_check_pointer_header`, `debug_check_pointer_overrun`, `debug_memory_fill_with_random`, `debug_memory_add_pointer`, `debug_memory_remove_pointer`
-- cseries/errors.c: `errors_dispose`, `errors_output_to_debug_file`, `errors_overflow_suppression_enable`, `error_get`, `write_to_error_file`, `code_0007d9d0`, `errors_initialize`, `error`, `errors_handle`, `errors_clear`, `write_to_debug_file`, `reset_error_state`
-- cseries/profile.c: `profile_initialize`, `profile_internal_step`, `profile_rasterizer_stats`, `profile_timesection_inherit`, `profile_seconds_elapsed`, `profile_lapsed_frames`, `profile_lapsed_msec`, `find_profile_section`, `profile_enter_private`, `profile_exit_private`, `profile_describe_frame`, `profile_timesection_begin`, `profile_timesection_end`, `compare_profile_sections`, `profile_dump`, `profile_dump_to_file`, `profile_dump_frame`, `profile_dump_frame_stop`, `string_has_prefix`, `profile_sections_activation`, `profile_sections_activate`, `profile_sections_deactivate`, `profile_find_frame_value`, `profile_find_game_value`, `profile_frame_get_value`, `profile_frame_iterator_new`, `profile_frame_iterator_next`, `profile_frame_get_messages`, `profile_frame_get_stalls`, `profile_rasterizer_stalls`, `profile_timesection_begin_now`, `profile_timesection_end_now`, `profile_tick_start`, `profile_tick_end`, `profile_render_start`, `profile_render_end`, `profile_render_window_start`, `profile_render_window_end`, `profile_texture_start`, `profile_texture_end`, `profile_frame_start`, `profile_frame_end`, `profile_idle_start`, `profile_idle_end`, `profile_append`
+- cseries/cseries.c: `string_to_tag`, `tag_to_string`, `strnupr`, `strnlwr`, `strupr`, `strlwr`, `csprintf`, `display_assert`, `csmemcmp`, `csmemmove`, `csmemset`, `csstrcat`, `csstrcmp`, `csstrncat`, `csstrncmp`, `csstrncpy`, `csstrtok`, `csstrlen`, `csstrcpy`, `csmemcpy`, `csstrcasecmp`, `stristr`, `string_hash`
+- cseries/cseries_windows.c: `display_debug_string`, `system_exit`, `system_unique_identifier_get`, `system_unique_identifiers_equal`, `system_milliseconds`, `system_get_user_name`, `system_calloc`, `system_malloc`, `system_free`, `system_realloc`, `system_get_used_memory_size`, `system_show_wait_cursor`, `system_alert`, `system_kill_screen_saver`
+- cseries/debug_memory.c: `code_0007ccf0`, `code_0007cd40`, `code_0007cd90`, `code_0007cdc0`, `check_memory_status`, `local_random`, `code_0007ce40`, `code_0007cf50`, `code_0007cfc0`, `code_0007d060`, `debug_dump_memory_by_file`, `debug_malloc`, `debug_free`, `debug_realloc`, `debug_check_memory_globals`, `debug_memory_header_checksum`, `compare_file_pointer_totals`, `debug_check_pointer_header`, `debug_check_pointer_overrun`, `debug_memory_fill_with_random`, `debug_memory_add_pointer`, `debug_memory_remove_pointer`
+- cseries/errors.c: `errors_output_to_debug_file`, `errors_overflow_suppression_enable`, `error_get`, `write_to_error_file`, `code_0007d9d0`, `error`, `errors_handle`, `errors_clear`, `write_to_debug_file`, `reset_error_state`
+- cseries/profile.c: `profile_initialize`, `profile_internal_step`, `profile_timesection_inherit`, `profile_seconds_elapsed`, `profile_lapsed_frames`, `profile_lapsed_msec`, `find_profile_section`, `profile_enter_private`, `profile_exit_private`, `profile_describe_frame`, `profile_timesection_begin`, `profile_timesection_end`, `profile_dump_to_file`, `profile_dump_frame`, `profile_dump_frame_stop`, `string_has_prefix`, `profile_sections_activation`, `profile_sections_activate`, `profile_sections_deactivate`, `profile_find_game_value`, `profile_rasterizer_stalls`, `profile_timesection_begin_now`, `profile_timesection_end_now`, `profile_tick_start`, `profile_tick_end`, `profile_render_start`, `profile_render_end`, `profile_texture_start`, `profile_texture_end`, `profile_frame_start`, `profile_frame_end`, `profile_idle_start`, `profile_idle_end`, `profile_append`
 - cseries/progress.c: `progress_new`, `progress_update`
-- cseries/sort.c: `code_00080360`, `code_000803c0`, `qsort_2byte`, `qsort_4byte`, `shortsort_2byte`, `shortsort_4byte`
-- cseries/stack_walk_windows.c: `stack_walk_global_function_offset`, `stack_walk_disregard_symbol_names`, `symbol_sort_proc`, `free_symbol_table`, `symbol_name_from_address`, `base_address_from_symbol_name`, `is_valid_ebp`, `walk_up`, `initialize_stack_walk`, `walk_stack_context`, `walk_stack`, `stack_walk_dispose`, `stack_walk_with_context`, `load_symbol_table`, `stack_walk_initialize`, `stack_walk`
+- cseries/sort.c: `code_00080360`, `code_000803c0`, `qsort_4byte`, `shortsort_4byte`
+- cseries/stack_walk_windows.c: `stack_walk_global_function_offset`, `stack_walk_disregard_symbol_names`, `symbol_name_from_address`, `base_address_from_symbol_name`, `is_valid_ebp`, `walk_up`, `initialize_stack_walk`, `walk_stack_context`, `walk_stack`, `stack_walk_with_context`, `stack_walk`
 
 ## `cutscene`
 
@@ -250,10 +518,17 @@ docs/engine.md's "The coverage census" says what each class needs.
 
 ## `editor`
 
-
-9 Missing (9 reached from `main_loop`), by file:
-
-- editor/editor_stubs.c: `editor_render`, `game_in_editor`, `editor_preprocess_rendered_object`, `editor_should_exit`, `editor_initialize`, `editor_dispose`, `editor_update`, `editor_initialize_for_new_map`, `editor_dispose_from_old_map`
+| Function | File | Class | Engine | Evidence |
+| --- | --- | --- | --- | --- |
+| `editor_render` | editor/editor_stubs.c | Replaced | dev/src/lib.rs | the editor and tools |
+| `game_in_editor` | editor/editor_stubs.c | Replaced | dev/src/lib.rs | the editor and tools |
+| `editor_preprocess_rendered_object` | editor/editor_stubs.c | Replaced | dev/src/lib.rs | the editor and tools |
+| `editor_should_exit` | editor/editor_stubs.c | Replaced | dev/src/lib.rs | the editor and tools |
+| `editor_initialize` | editor/editor_stubs.c | Replaced | dev/src/lib.rs | the editor and tools |
+| `editor_dispose` | editor/editor_stubs.c | Replaced | dev/src/lib.rs | the editor and tools |
+| `editor_update` | editor/editor_stubs.c | Replaced | dev/src/lib.rs | the editor and tools |
+| `editor_initialize_for_new_map` | editor/editor_stubs.c | Replaced | dev/src/lib.rs | the editor and tools |
+| `editor_dispose_from_old_map` | editor/editor_stubs.c | Replaced | dev/src/lib.rs | the editor and tools |
 
 ## `effects`
 
@@ -334,12 +609,55 @@ docs/engine.md's "The coverage census" says what each class needs.
 
 ## `input`
 
+| Function | File | Class | Engine | Evidence |
+| --- | --- | --- | --- | --- |
+| `input_abstraction_get_local_player_preferences` | input/input_abstraction.c | Replaced |  | through its caller `draw_string_and_hack_in_icons` |
+| `input_abstraction_update_device_changes` | input/input_abstraction.c | Replaced |  | through its caller `input_get_device_states` |
+| `fix_dead_zone` | input/input_xbox.c | Replaced | app/Sources/OpenCEEngineKit/PlayControls.swift | keyboard and mouse only |
+| `update_ticks` | input/input_xbox.c | Replaced | app/Sources/OpenCEEngineKit/PlayControls.swift | keyboard and mouse only |
+| `code_000be800` | input/input_xbox.c | Replaced | app/Sources/OpenCEEngineKit/PlayControls.swift | keyboard and mouse only |
+| `input_dispose` | input/input_xbox.c | Replaced | app/Sources/OpenCEEngineKit/PlayControls.swift | keyboard and mouse only |
+| `input_activate` | input/input_xbox.c | Replaced | app/Sources/OpenCEEngineKit/PlayControls.swift | keyboard and mouse only |
+| `input_deactivate` | input/input_xbox.c | Replaced | app/Sources/OpenCEEngineKit/PlayControls.swift | keyboard and mouse only |
+| `input_flush` | input/input_xbox.c | Replaced | app/Sources/OpenCEEngineKit/PlayControls.swift | keyboard and mouse only |
+| `input_key_is_down` | input/input_xbox.c | Replaced | app/Sources/OpenCEEngineKit/PlayControls.swift | keyboard and mouse only |
+| `input_get_key` | input/input_xbox.c | Replaced | app/Sources/OpenCEEngineKit/PlayControls.swift | keyboard and mouse only |
+| `input_get_mouse_state` | input/input_xbox.c | Replaced | app/Sources/OpenCEEngineKit/PlayControls.swift | keyboard and mouse only |
+| `input_suppress` | input/input_xbox.c | Replaced | app/Sources/OpenCEEngineKit/PlayControls.swift | keyboard and mouse only |
+| `input_mouse_button_is_down` | input/input_xbox.c | Replaced | app/Sources/OpenCEEngineKit/PlayControls.swift | keyboard and mouse only |
+| `input_has_gamepad` | input/input_xbox.c | Replaced | app/Sources/OpenCEEngineKit/PlayControls.swift | keyboard and mouse only |
+| `input_get_gamepad_state` | input/input_xbox.c | Replaced | app/Sources/OpenCEEngineKit/PlayControls.swift | keyboard and mouse only |
+| `input_set_gamepad_rumbler_state` | input/input_xbox.c | Replaced | app/Sources/OpenCEEngineKit/PlayControls.swift | keyboard and mouse only |
+| `input_vertical_blank_interrupt` | input/input_xbox.c | Replaced | app/Sources/OpenCEEngineKit/PlayControls.swift | keyboard and mouse only |
+| `code_000bebb0` | input/input_xbox.c | Replaced | app/Sources/OpenCEEngineKit/PlayControls.swift | keyboard and mouse only |
+| `code_000bebc0` | input/input_xbox.c | Replaced | app/Sources/OpenCEEngineKit/PlayControls.swift | keyboard and mouse only |
+| `code_000bebd0` | input/input_xbox.c | Replaced | app/Sources/OpenCEEngineKit/PlayControls.swift | keyboard and mouse only |
+| `code_000bf0a0` | input/input_xbox.c | Replaced | app/Sources/OpenCEEngineKit/PlayControls.swift | keyboard and mouse only |
+| `code_000bf150` | input/input_xbox.c | Replaced | app/Sources/OpenCEEngineKit/PlayControls.swift | keyboard and mouse only |
+| `input_get_raw_data_string` | input/input_xbox.c | Replaced | app/Sources/OpenCEEngineKit/PlayControls.swift | keyboard and mouse only |
+| `input_update` | input/input_xbox.c | Replaced | app/Sources/OpenCEEngineKit/PlayControls.swift | keyboard and mouse only |
+| `input_frame_begin` | input/input_xbox.c | Replaced | app/Sources/OpenCEEngineKit/PlayControls.swift | keyboard and mouse only |
+| `input_frame_end` | input/input_xbox.c | Replaced | app/Sources/OpenCEEngineKit/PlayControls.swift | keyboard and mouse only |
+| `code_000bf540` | input/input_xbox.c | Replaced | app/Sources/OpenCEEngineKit/PlayControls.swift | keyboard and mouse only |
+| `input_initialize` | input/input_xbox.c | Replaced | app/Sources/OpenCEEngineKit/PlayControls.swift | keyboard and mouse only |
+| `HATCleanup` | input/HaloAutoTest.c | Replaced |  | through its caller `input_dispose` |
+| `HATReadMain` | input/HaloAutoTest.c | Replaced |  | through its caller `HATInit` |
+| `HATRawLoopRead` | input/HaloAutoTest.c | Replaced |  | through its caller `HATRun` |
+| `HATInit` | input/HaloAutoTest.c | Replaced |  | through its caller `input_initialize` |
+| `HATRun` | input/HaloAutoTest.c | Replaced |  | through its caller `input_update` |
+| `update_hold_ticks` | input/input_xbox.c | Replaced | app/Sources/OpenCEEngineKit/PlayControls.swift | keyboard and mouse only |
+| `acquire_input_mutex` | input/input_xbox.c | Replaced | app/Sources/OpenCEEngineKit/PlayControls.swift | keyboard and mouse only |
+| `release_input_mutex` | input/input_xbox.c | Replaced | app/Sources/OpenCEEngineKit/PlayControls.swift | keyboard and mouse only |
+| `input_update_analog_button_state` | input/input_xbox.c | Replaced | app/Sources/OpenCEEngineKit/PlayControls.swift | keyboard and mouse only |
+| `input_get_device_states` | input/input_xbox.c | Replaced | app/Sources/OpenCEEngineKit/PlayControls.swift | keyboard and mouse only |
+| `input_update_keyboard_devices` | input/input_xbox.c | Replaced | app/Sources/OpenCEEngineKit/PlayControls.swift | keyboard and mouse only |
+| `input_flush_rumble` | input/input_xbox.c | Replaced | app/Sources/OpenCEEngineKit/PlayControls.swift | keyboard and mouse only |
+| `input_keyboard_thread` | input/input_xbox.c | Replaced | app/Sources/OpenCEEngineKit/PlayControls.swift | keyboard and mouse only |
 
-56 Missing (40 reached from `main_loop`), by file:
+14 Missing (10 reached from `main_loop`), by file:
 
-- input/HaloAutoTest.c: `HATCleanup`, `HATReadMain`, `HATRawRead`, `HATRawLoopRead`, `HATRawWrite`, `HATInit`, `HATRun`
-- input/input_abstraction.c: `input_abstraction_dispose`, `input_abstraction_reset_controller_detection_timer`, `input_abstraction_get_local_player_preferences`, `input_abstraction_update_local_player_preferences`, `input_abstraction_get_input_state`, `input_abstraction_update_device_changes`, `code_000bdc60`, `code_000bdd40`, `input_abstraction_initialize`, `input_abstraction_update`, `keyboard_hold_ticks`, `keyboard_controls_update`, `local_player_is_piloting_aircraft`, `set_default_game_input_preferences`
-- input/input_xbox.c: `fix_dead_zone`, `update_ticks`, `code_000be800`, `input_dispose`, `input_activate`, `input_deactivate`, `input_flush`, `input_key_is_down`, `input_get_key`, `input_get_mouse_state`, `input_suppress`, `input_mouse_button_is_down`, `input_has_gamepad`, `input_get_gamepad_state`, `input_set_gamepad_rumbler_state`, `input_vertical_blank_interrupt`, `code_000bebb0`, `code_000bebc0`, `code_000bebd0`, `code_000bf0a0`, `code_000bf150`, `input_get_raw_data_string`, `input_update`, `input_frame_begin`, `input_frame_end`, `code_000bf540`, `input_initialize`, `update_hold_ticks`, `acquire_input_mutex`, `release_input_mutex`, `input_update_analog_button_state`, `input_get_device_states`, `input_update_keyboard_devices`, `input_flush_rumble`, `input_keyboard_thread`
+- input/HaloAutoTest.c: `HATRawRead`, `HATRawWrite`
+- input/input_abstraction.c: `input_abstraction_dispose`, `input_abstraction_reset_controller_detection_timer`, `input_abstraction_update_local_player_preferences`, `input_abstraction_get_input_state`, `code_000bdc60`, `code_000bdd40`, `input_abstraction_initialize`, `input_abstraction_update`, `keyboard_hold_ticks`, `keyboard_controls_update`, `local_player_is_piloting_aircraft`, `set_default_game_input_preferences`
 
 ## `interface`
 
@@ -442,18 +760,25 @@ docs/engine.md's "The coverage census" says what each class needs.
 
 ## `main`
 
+| Function | File | Class | Engine | Evidence |
+| --- | --- | --- | --- | --- |
+| `main_menu_unload` | main/main.c | Replaced |  | through its caller `network_game_create_game_objects` |
+| `main_get_window_count` | main/main.c | Replaced |  | through its caller `_rasterizer_detail_objects_begin` |
+| `main_framerate_render` | main/main.c | Replaced |  | through its caller `interface_draw_fullscreen_overlays` |
 
-156 Missing (106 reached from `main_loop`), by file:
+153 Missing (103 reached from `main_loop`), by file:
 
 - main/console.c: `console_initialize`, `console_initialize_for_new_map`, `console_open`, `console_close`, `console_is_active`, `console_printf`, `console_warning`, `code_000eede0`, `code_000eee50`, `code_000eee90`, `console_startup`, `console_dispose`, `console_update`, `console_process_command`, `console_get_text_to_autocomplete`, `console_complete`
 - main/debug_keys.c: `debug_keys_initialize`, `debug_keys_dispose`, `debug_keys_update`, `debug_key_select_actor`, `debug_key_select_next_encounter`, `debug_key_select_prev_encounter`, `debug_key_select_next_actor`, `debug_key_select_prev_actor`, `debug_key_show_actor_spray`, `debug_key_profile_reset`, `debug_key_erase_all_actors`, `debug_key_play_animation`
-- main/main.c: `main_get_seconds_elapsed`, `gamepad_button_is_down`, `game_connection_set`, `game_connection`, `main_disallow_persistent_storage`, `main_set_map_name`, `main_defer_map_map_change`, `main_set_multiplayer_map_name`, `main_get_map_name`, `main_get_multiplayer_map_name`, `main_set_difficulty`, `main_get_difficulty`, `sort_desired_local_player_controllers`, `code_000ef8e0`, `main_reset_map`, `main_revert_map`, `main_skip_cinematic`, `main_save_map_nonsafe`, `main_saving_map`, `main_save_cancel`, `main_save_map_safe`, `main_won_map`, `main_lost_map`, `main_respawn`, `main_save_core`, `main_save_core_name`, `main_load_core`, `main_load_core_at_startup`, `main_load_core_name`, `main_load_core_name_at_startup`, `main_switch_structure_bsp`, `main_skip`, `main_queue_map_name`, `code_000efde0`, `main_goto_main_menu`, `main_menu_precache_resources`, `main_menu_unload`, `main_menu_ensure_player_queues_exist`, `main_menu_fade_active`, `main_menu_switch_to_single_player`, `main_set_game_connection_to_film_playback`, `main_get_solo_level_from_name`, `main_get_current_solo_level`, `main_get_solo_level_name`, `main_run_demos`, `code_000f00b0`, `compute_window_bounds`, `main_get_window_count`, `code_000f0350`, `code_000f0420`, `code_000f05a0`, `code_000f05c0`, `code_000f05f0`, `code_000f06a0`, `code_000f06c0`, `code_000f07a0`, `code_000f07d0`, `code_000f0810`, `code_000f0850`, `code_000f08b0`, `code_000f08d0`, `code_000f08f0`, `code_000f0930`, `code_000f0940`, `code_000f0b60`, `code_000f0bb0`, `main_framerate_throttle_enabled`, `code_000f0bf0`, `main_rasterizer_throttle`, `code_000f13a0`, `main_taking_screenshot`, `main_movie_start`, `main_movie_stop`, `main_stop_time`, `main_start_time`, `main_crash`, `main_print_version`, `main_vertical_blank_interrupt_handler`, `main_save_current_solo_map`, `main_load_last_solo_map`, `main_save_map_no_timeout`, `main_load_ui_scenario`, `main_menu_load`, `main_roll_credits`, `main_pregame_render`, `set_window_camera_values`, `main_present_frame`, `code_000f1c20`, `code_000f1ce0`, `code_000f1d30`, `main_framerate_render`, `halt_and_catch_fire`, `main_loop_of_death`, `code_000f24a0`, `main_loop`, `create_local_players`, `main_queue_map_private`, `screenshot_record`, `compute_subframe_counts`, `main_new_map`, `main_change_map_name`, `main_native_build_label`, `main_native_error_tail`, `main_coop_host`, `main_revert_map_private`, `main_skip_cinematic_private`, `main_skip_private`, `main_saving_map_private`, `main_save_map_private`, `main_switch_to_structure_bsp_private`, `main_death_timer_expired`, `main_lost_map_private`, `main_respawn_private`, `main_load_core_private`, `main_save_core_private`, `main_run_demos_private`, `main_frame_rate_debug`, `main_won_map_private`, `main_exit`, `main_reset_time`, `main_update_time_unthrottled`, `main_update_time`, `main_setup_connection`, `main_initialize_time`, `main_reset_map_private`, `screenshot_render`, `main_game_render`, `main_loop_iteration`
+- main/main.c: `main_get_seconds_elapsed`, `gamepad_button_is_down`, `game_connection_set`, `game_connection`, `main_disallow_persistent_storage`, `main_set_map_name`, `main_defer_map_map_change`, `main_set_multiplayer_map_name`, `main_get_map_name`, `main_get_multiplayer_map_name`, `main_set_difficulty`, `main_get_difficulty`, `sort_desired_local_player_controllers`, `code_000ef8e0`, `main_reset_map`, `main_revert_map`, `main_skip_cinematic`, `main_save_map_nonsafe`, `main_saving_map`, `main_save_cancel`, `main_save_map_safe`, `main_won_map`, `main_lost_map`, `main_respawn`, `main_save_core`, `main_save_core_name`, `main_load_core`, `main_load_core_at_startup`, `main_load_core_name`, `main_load_core_name_at_startup`, `main_switch_structure_bsp`, `main_skip`, `main_queue_map_name`, `code_000efde0`, `main_goto_main_menu`, `main_menu_precache_resources`, `main_menu_ensure_player_queues_exist`, `main_menu_fade_active`, `main_menu_switch_to_single_player`, `main_set_game_connection_to_film_playback`, `main_get_solo_level_from_name`, `main_get_current_solo_level`, `main_get_solo_level_name`, `main_run_demos`, `code_000f00b0`, `compute_window_bounds`, `code_000f0350`, `code_000f0420`, `code_000f05a0`, `code_000f05c0`, `code_000f05f0`, `code_000f06a0`, `code_000f06c0`, `code_000f07a0`, `code_000f07d0`, `code_000f0810`, `code_000f0850`, `code_000f08b0`, `code_000f08d0`, `code_000f08f0`, `code_000f0930`, `code_000f0940`, `code_000f0b60`, `code_000f0bb0`, `main_framerate_throttle_enabled`, `code_000f0bf0`, `main_rasterizer_throttle`, `code_000f13a0`, `main_taking_screenshot`, `main_movie_start`, `main_movie_stop`, `main_stop_time`, `main_start_time`, `main_crash`, `main_print_version`, `main_vertical_blank_interrupt_handler`, `main_save_current_solo_map`, `main_load_last_solo_map`, `main_save_map_no_timeout`, `main_load_ui_scenario`, `main_menu_load`, `main_roll_credits`, `main_pregame_render`, `set_window_camera_values`, `main_present_frame`, `code_000f1c20`, `code_000f1ce0`, `code_000f1d30`, `halt_and_catch_fire`, `main_loop_of_death`, `code_000f24a0`, `main_loop`, `create_local_players`, `main_queue_map_private`, `screenshot_record`, `compute_subframe_counts`, `main_new_map`, `main_change_map_name`, `main_native_build_label`, `main_native_error_tail`, `main_coop_host`, `main_revert_map_private`, `main_skip_cinematic_private`, `main_skip_private`, `main_saving_map_private`, `main_save_map_private`, `main_switch_to_structure_bsp_private`, `main_death_timer_expired`, `main_lost_map_private`, `main_respawn_private`, `main_load_core_private`, `main_save_core_private`, `main_run_demos_private`, `main_frame_rate_debug`, `main_won_map_private`, `main_exit`, `main_reset_time`, `main_update_time_unthrottled`, `main_update_time`, `main_setup_connection`, `main_initialize_time`, `main_reset_map_private`, `screenshot_render`, `main_game_render`, `main_loop_iteration`
 
 ## `math`
 
 | Function | File | Class | Engine | Evidence |
 | --- | --- | --- | --- | --- |
 | `geosphere_dispose` | math/geometry.c | Ported |  | `tools/engine_math_reference.py` |
+| `convex_polygon3d_clip_to_plane` | math/geometry.c | Replaced |  | through its caller `portal_hull_from_points` |
+| `convex_hull2d_intersect` | math/geometry.c | Replaced |  | through its caller `structure_visibility_find_mirror` |
 | `geosphere_new` | math/geometry.c | Ported | sim/src/random.rs:5 | `tools/engine_math_reference.py` |
 | `matrix4x3_rotation_from_quaternion` | math/matrix_math.c | Ported |  | `tools/engine_animation_reference.py` |
 | `matrix4x3_from_orientation` | math/matrix_math.c | Ported | sim/src/animation.rs:104 | `tools/engine_animation_reference.py` |
@@ -463,11 +788,15 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `matrix4x3_rotation_from_vectors` | math/matrix_math.c | Ported |  | `tools/engine_animation_reference.py` |
 | `matrix4x3_rotation_from_angles` | math/matrix_math.c | Matched | sim/src/objects.rs:399 | owed: rotations; checked through the item trace's object matrices |
 | `matrix4x3_from_point_and_vectors` | math/matrix_math.c | Ported | sim/src/animation.rs:93 | `tools/engine_animation_reference.py` |
+| `periodic_functions_dispose` | math/periodic_functions.c | Replaced |  | through its caller `real_math_dispose` |
 | `periodic_function_evaluate` | math/periodic_functions.c | Ported | sim/src/periodic.rs:165 | `tools/engine_periodic_reference.py` |
 | `transition_function_evaluate` | math/periodic_functions.c | Ported | sim/src/damage.rs:37 | `tools/engine_periodic_reference.py` |
 | `transition_function_build_table` | math/periodic_functions.c | Ported | sim/src/periodic.rs:199 | `tools/engine_periodic_reference.py` |
 | `periodic_function_build_table` | math/periodic_functions.c | Ported | sim/src/periodic.rs:93 | `tools/engine_periodic_reference.py` |
 | `periodic_functions_initialize` | math/periodic_functions.c | Ported | sim/src/periodic.rs:45 | `tools/engine_periodic_reference.py` |
+| `get_number_suitable_for_initializing_random_seed` | math/random_math.c | Replaced |  | through its caller `random_math_initialize` |
+| `random_math_initialize` | math/random_math.c | Replaced |  | through its caller `real_math_initialize` |
+| `random_math_dispose` | math/random_math.c | Replaced |  | through its caller `real_math_dispose` |
 | `real_seed_random` | math/random_math.c | Ported | audio/src/choice.rs:30 | `tools/engine_item_reference.py` |
 | `real_seed_random_range` | math/random_math.c | Ported | ffi/src/decals.rs:126 | `tools/engine_math_reference.py` |
 | `seed_random` | math/random_math.c | Ported | audio/src/choice.rs:24 | `tools/engine_math_reference.py` |
@@ -479,10 +808,17 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `get_face_vertex` | math/geometry.c | Ported | sim/src/random.rs:193 | `tools/engine_math_reference.py` |
 | `get_edge_vertex` | math/geometry.c | Ported | sim/src/random.rs:224 | `tools/engine_math_reference.py` |
 | `calculate_vertex` | math/geometry.c | Ported | sim/src/random.rs:255 | `tools/engine_math_reference.py` |
+| `set_rectangle2d` | math/integer_math.c | Replaced |  | through its caller `rasterizer_draw_string` |
+| `rectangle2d_width` | math/integer_math.c | Replaced |  | through its caller `draw_string` |
+| `offset_rectangle2d` | math/integer_math.c | Replaced |  | through its caller `bink_draw_frame` |
 | `periodic_function_build_variable_period_x_table` | math/periodic_functions.c | Ported | sim/src/periodic.rs:73 | `tools/engine_periodic_reference.py` |
+| `real_math_initialize` | math/real_math.c | Replaced |  | through its caller `shell_initialize` |
+| `real_math_dispose` | math/real_math.c | Replaced |  | through its caller `shell_dispose` |
 | `rotate_vector_about_axis` | math/real_math.c | Ported | ffi/src/sprite.rs:102 | `tools/engine_item_reference.py` |
+| `vectors_interpolate` | math/real_math.c | Replaced |  | through its caller `get_flash_color` |
 | `points_interpolate` | math/real_math.c | Ported |  | `tools/engine_animation_reference.py` |
 | `scalars_interpolate` | math/real_math.c | Ported |  | `tools/engine_animation_reference.py` |
+| `scalars_interpolate_and_clamp_0_to_1` | math/real_math.c | Replaced |  | through its caller `rasterizer_screen_effect_get_cinematic_parameters` |
 | `component_vectors_from_normal3d` | math/real_math.c | Ported |  | `tools/engine_vehicle_function_reference.py` |
 | `quaternions_multiply` | math/real_math.c | Ported | sim/src/animation.rs:221 | `tools/engine_animation_reference.py` |
 | `quaternions_interpolate` | math/real_math.c | Ported | sim/src/animation.rs:208 | `tools/engine_animation_reference.py` |
@@ -490,19 +826,20 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `angle_between_vectors3d` | math/real_math.c | Ported | sim/src/vehicle.rs:917 | `tools/engine_math_reference.py` |
 | `quaternion_normalize` | math/real_math.c | Ported | sim/src/animation.rs:190 | `tools/engine_animation_reference.py` |
 | `quaternions_interpolate_and_normalize` | math/real_math.c | Ported | sim/src/animation.rs:202 | `tools/engine_animation_reference.py` |
+| `orientations_interpolate` | math/real_math.c | Replaced |  | through its caller `first_person_weapon_build_node_matrices` |
 | `euler_angles2d_from_vector3d` | math/real_math.c | Ported | sim/src/animation_blend.rs:179 | `tools/engine_math_reference.py` |
 | `vector3d_from_euler_angles2d` | math/real_math.c | Matched | content/src/level.rs:375 | owed: the engine cites it, with no check against the original yet |
 | `accelerate_to_position` | math/real_math.c | Matched | sim/src/device_animation.rs:3 | owed: a first-person weapon's sway; checked through first_person_weapon_update's trace |
 
-176 Missing (84 reached from `main_loop`), by file:
+162 Missing (70 reached from `main_loop`), by file:
 
-- math/geometry.c: `convex_hull3d_verify`, `plane2d_distance_to_point`, `vector_intersect_plane2d`, `vector_intersect_plane3d`, `code_000f5050`, `build_torus`, `code_000f54a0`, `convex_hull2d`, `convex_hull2d_verify`, `convex_hull2d_test_circle`, `convex_hull2d_test_point`, `convex_hull2d_test_point_indexed`, `convex_hull2d_area`, `convex_hull2d_perimeter`, `convex_hull2d_test_vector`, `convex_polygon2d_clip_to_plane`, `convex_polygon2d_verify`, `convex_polygon3d_clip_to_plane`, `convex_polygon3d_verify`, `convex_hull3d_begin`, `convex_hull3d_expand`, `convex_hull3d`, `convex_hull3d_test_point`, `convex_hull3d_test_vector`, `code_000f76e0`, `convex_hull2d_intersect`, `code_000f7a90`, `code_000f7c20`, `points_dimension2d`
-- math/integer_math.c: `set_rectangle2d`, `set_point2d`, `offset_point2d`, `rectangle2d_width`, `rectangle2d_height`, `inset_rectangle2d`, `offset_rectangle2d`, `adjust_rectangle2d`, `intersect_rectangles2d`, `rectangle2d_hull_from_rectangles2d`, `point2d_in_rectangle2d`, `interior_rectangle2d`, `equal_rectangle2d`, `equal_point2d`, `floor_log2`, `ceiling_log2`, `floor_power2`, `ceiling_power2`, `integer_square_root`, `bit_vector_and`, `bit_vector_or`, `bit_vector_not`, `scale_rectangle2d`
+- math/geometry.c: `convex_hull3d_verify`, `plane2d_distance_to_point`, `vector_intersect_plane2d`, `vector_intersect_plane3d`, `code_000f5050`, `build_torus`, `code_000f54a0`, `convex_hull2d`, `convex_hull2d_verify`, `convex_hull2d_test_circle`, `convex_hull2d_test_point`, `convex_hull2d_test_point_indexed`, `convex_hull2d_area`, `convex_hull2d_perimeter`, `convex_hull2d_test_vector`, `convex_polygon2d_clip_to_plane`, `convex_polygon2d_verify`, `convex_polygon3d_verify`, `convex_hull3d_begin`, `convex_hull3d_expand`, `convex_hull3d`, `convex_hull3d_test_point`, `convex_hull3d_test_vector`, `code_000f76e0`, `code_000f7a90`, `code_000f7c20`, `points_dimension2d`
+- math/integer_math.c: `set_point2d`, `offset_point2d`, `rectangle2d_height`, `inset_rectangle2d`, `adjust_rectangle2d`, `intersect_rectangles2d`, `rectangle2d_hull_from_rectangles2d`, `point2d_in_rectangle2d`, `interior_rectangle2d`, `equal_rectangle2d`, `equal_point2d`, `floor_log2`, `ceiling_log2`, `floor_power2`, `ceiling_power2`, `integer_square_root`, `bit_vector_and`, `bit_vector_or`, `bit_vector_not`, `scale_rectangle2d`
 - math/matrix_math.c: `matrix4x3_identity`, `matrix4x3_transpose`, `matrix4x3_inverse`, `matrix4x3_scale`, `matrix4x3_translation`, `matrix4x3_rotation_from_axis_and_angle`, `matrix4x3_from_point_and_quaternion`, `matrix4x3_to_point_and_vectors`, `matrix4x3_transform_point`, `matrix4x3_transform_vector`, `matrix4x3_inverse_transform_point`, `matrix4x3_inverse_transform_vector`, `matrix3x3_determinant`, `matrix3x3_transpose`, `matrix3x3_inverse`, `matrix3x3_from_axis_and_angle`, `matrix3x3_multiply`, `matrix3x3_transform_vector`, `matrix4x3_rotation_to_angles`, `matrix4x3_rotation_to_quaternion`, `vector_from_matrices4x3`, `matrix4x3_transform_plane`, `matrix4x3_inverse_transform_plane`, `matrix3x3_from_forward_and_up`, `matrix3x3_rotation_to_quaternion`, `valid_real_plane3d`, `matrix4x3_from_plane`
-- math/periodic_functions.c: `periodic_functions_dispose`, `@periodic_function_build_variable_period_x_table`
+- math/periodic_functions.c: `@periodic_function_build_variable_period_x_table`
 - math/probability.c: `factorial`, `permutations`, `combinations`, `permute`, `combine`
-- math/random_math.c: `lock_global_random_seed`, `unlock_global_random_seed`, `get_global_random_seed_address`, `get_random_seed`, `get_global_local_random_seed_address`, `random_seed_debug_log`, `get_number_suitable_for_initializing_random_seed`, `random_math_initialize`, `random_math_dispose`, `seed_random_orientation`
-- math/real_math.c: `magnitude_squared3d_right_associated`, `real_math_initialize`, `real_math_dispose`, `real_math_reset_precision`, `perpendicular2d`, `perpendicular3d`, `perpendicular4d`, `vectors_interpolate`, `scalars_interpolate_and_clamp_0_to_1`, `component_vectors_from_direction3d`, `vectors3d_from_euler_angles3d`, `fast_vector_intersects_sphere`, `fast_vector_intersection_with_sphere`, `point_in_rectangle2d`, `point_in_rectangle3d`, `circle_intersects_rectangle2d`, `point_in_cone2d`, `point_in_cone3d`, `point_in_sector2d`, `point_in_sector3d`, `circle_intersects_cone2d`, `circle_intersects_sector2d`, `sphere_intersects_cone3d`, `sphere_intersects_sector3d`, `point_in_triangle2d`, `point_in_triangle3d`, `circle_intersects_triangle2d`, `pill_intersects_triangle2d`, `pill_intersects_rectangle2d`, `sphere_intersects_rectangle3d`, `sphere_intersects_triangle3d`, `pill_intersects_triangle3d`, `vector_intersects_rectangle2d`, `vector_intersects_pill2d`, `vector_intersects_pill3d`, `vector_intersects_triangle2d`, `vector_intersects_triangle3d`, `vector_intersects_rectangle3d`, `pill_intersects_rectangle3d`, `fast_normalize2d`, `fast_normalize3d`, `cross_product_magnitude3d`, `dequantize_byte_to_real`, `quantize_real_to_byte_lower_bound`, `quantize_real_to_byte_upper_bound`, `quantize_real_to_byte_rectangle3d`, `signed_angle_between_vectors2d`, `angle_between_vectors2d`, `angle_between_normals3d`, `yaw_vectors`, `pitch_vectors`, `fast_normals_interpolate`, `normals_interpolate`, `pin_normal_to_cone3d`, `reflect_vector3d`, `refract_vector3d`, `quaternion_from_angle_and_vector`, `quaternion_to_angle_and_vector`, `orientations_interpolate`, `vector3d_from_angle`, `point_in_pill2d`, `point_to_line_distance_squared3d`, `vector_to_line_distance_squared3d`, `sphere_test_vector3d`, `pill_test_vector3d`, `point_from_planes3d`, `line_from_planes3d`, `angular_accelerate_to_position`, `accelerate_to_velocity3d`, `accerate_to_position3d`, `accelerate_to_velocity`, `valid_real_sine_cosine`
+- math/random_math.c: `lock_global_random_seed`, `unlock_global_random_seed`, `get_global_random_seed_address`, `get_random_seed`, `get_global_local_random_seed_address`, `random_seed_debug_log`, `seed_random_orientation`
+- math/real_math.c: `magnitude_squared3d_right_associated`, `real_math_reset_precision`, `perpendicular2d`, `perpendicular3d`, `perpendicular4d`, `component_vectors_from_direction3d`, `vectors3d_from_euler_angles3d`, `fast_vector_intersects_sphere`, `fast_vector_intersection_with_sphere`, `point_in_rectangle2d`, `point_in_rectangle3d`, `circle_intersects_rectangle2d`, `point_in_cone2d`, `point_in_cone3d`, `point_in_sector2d`, `point_in_sector3d`, `circle_intersects_cone2d`, `circle_intersects_sector2d`, `sphere_intersects_cone3d`, `sphere_intersects_sector3d`, `point_in_triangle2d`, `point_in_triangle3d`, `circle_intersects_triangle2d`, `pill_intersects_triangle2d`, `pill_intersects_rectangle2d`, `sphere_intersects_rectangle3d`, `sphere_intersects_triangle3d`, `pill_intersects_triangle3d`, `vector_intersects_rectangle2d`, `vector_intersects_pill2d`, `vector_intersects_pill3d`, `vector_intersects_triangle2d`, `vector_intersects_triangle3d`, `vector_intersects_rectangle3d`, `pill_intersects_rectangle3d`, `fast_normalize2d`, `fast_normalize3d`, `cross_product_magnitude3d`, `dequantize_byte_to_real`, `quantize_real_to_byte_lower_bound`, `quantize_real_to_byte_upper_bound`, `quantize_real_to_byte_rectangle3d`, `signed_angle_between_vectors2d`, `angle_between_vectors2d`, `angle_between_normals3d`, `yaw_vectors`, `pitch_vectors`, `fast_normals_interpolate`, `normals_interpolate`, `pin_normal_to_cone3d`, `reflect_vector3d`, `refract_vector3d`, `quaternion_from_angle_and_vector`, `quaternion_to_angle_and_vector`, `vector3d_from_angle`, `point_in_pill2d`, `point_to_line_distance_squared3d`, `vector_to_line_distance_squared3d`, `sphere_test_vector3d`, `pill_test_vector3d`, `point_from_planes3d`, `line_from_planes3d`, `angular_accelerate_to_position`, `accelerate_to_velocity3d`, `accerate_to_position3d`, `accelerate_to_velocity`, `valid_real_sine_cosine`
 - math/real_math.h: `set_real_point3d`
 - math/vector_tree.c: `vector_tree_new`, `vector_tree_delete`, `code_00100040`, `code_00100080`, `vector_tree_find`, `vectors_equal`, `vector_tree_add_node`
 
@@ -510,25 +847,83 @@ docs/engine.md's "The coverage census" says what each class needs.
 
 | Function | File | Class | Engine | Evidence |
 | --- | --- | --- | --- | --- |
+| `byte_swap_memory` | memory/byte_swapping.c | Replaced |  | through its caller `data_decode_memory` |
+| `byte_swap_data` | memory/byte_swapping.c | Replaced |  | through its caller `data_packet_group_append_packet_header` |
+| `circular_queue_reset` | memory/circular_queue.c | Replaced |  | through its caller `network_client_unreliable_connection_read` |
+| `circular_queue_verify` | memory/circular_queue.c | Replaced |  | through its caller `circular_queue_delete` |
+| `circular_queue_new` | memory/circular_queue.c | Replaced |  | through its caller `network_connection_create_client_from_endpoint` |
+| `circular_queue_delete` | memory/circular_queue.c | Replaced |  | through its caller `network_connection_delete` |
+| `circular_queue_size` | memory/circular_queue.c | Replaced |  | through its caller `circular_queue_dequeue_data` |
+| `circular_queue_free_space` | memory/circular_queue.c | Replaced |  | through its caller `network_connection_idle` |
+| `circular_queue_queue_data` | memory/circular_queue.c | Replaced |  | through its caller `network_connection_idle` |
+| `circular_queue_dequeue_data` | memory/circular_queue.c | Replaced |  | through its caller `network_client_reliable_connection_read` |
 | `datum_new` | memory/data.c | Matched | ffi/src/particles/slots.rs:3 | owed: the engine cites it, with no check against the original yet |
 | `data_next_index` | memory/data.c | Matched | ffi/src/particles/slots.rs:4 | owed: the engine cites it, with no check against the original yet |
+| `data_encode_new` | memory/data_encoding.c | Replaced |  | through its caller `data_packet_encode` |
+| `data_encode_memory` | memory/data_encoding.c | Replaced |  | through its caller `_data_packet_encode` |
+| `data_encode_integer` | memory/data_encoding.c | Replaced |  | through its caller `_data_packet_encode` |
+| `data_encode_string` | memory/data_encoding.c | Replaced |  | through its caller `_data_packet_encode` |
+| `data_decode_new` | memory/data_encoding.c | Replaced |  | through its caller `data_packet_decode` |
+| `data_decode_memory` | memory/data_encoding.c | Replaced |  | through its caller `_data_packet_decode` |
+| `data_decode_byte` | memory/data_encoding.c | Replaced |  | through its caller `data_decode_integer` |
+| `data_decode_short` | memory/data_encoding.c | Replaced |  | through its caller `data_decode_integer` |
+| `data_decode_long` | memory/data_encoding.c | Replaced |  | through its caller `data_decode_integer` |
+| `data_decode_integer` | memory/data_encoding.c | Replaced |  | through its caller `_data_packet_decode` |
+| `data_decode_string` | memory/data_encoding.c | Replaced |  | through its caller `_data_packet_decode` |
+| `data_packet_group_initialize` | memory/data_packet_groups.c | Replaced |  | through its caller `initialize_network_game_packets` |
+| `data_packet_group_decode_packet` | memory/data_packet_groups.c | Replaced |  | through its caller `decode_network_game_message` |
+| `data_packet_group_append_packet_header` | memory/data_packet_groups.c | Replaced |  | through its caller `data_packet_group_encode_packet` |
+| `data_packet_group_encode_packet` | memory/data_packet_groups.c | Replaced |  | through its caller `encode_network_game_message` |
+| `data_packet_verify` | memory/data_packets.c | Replaced |  | through its caller `data_packet_decode` |
+| `data_packet_encode` | memory/data_packets.c | Replaced |  | through its caller `data_packet_group_encode_packet` |
+| `data_packet_decode` | memory/data_packets.c | Replaced |  | through its caller `data_packet_group_decode_packet` |
+| `lruv_allocation_size` | memory/lruv_cache.c | Replaced |  | through its caller `game_state_lruv_cache_new` |
+| `lruv_update_function_pointers` | memory/lruv_cache.c | Replaced |  | through its caller `_rasterizer_decals_update_function_pointers` |
+| `lruv_has_locked_proc` | memory/lruv_cache.c | Replaced |  | through its caller `rasterizer_decal_vertices_purge_proc` |
+| `lruv_cache_bytes_to_pages` | memory/lruv_cache.c | Replaced |  | through its caller `lruv_block_new` |
+| `lruv_cache_verify` | memory/lruv_cache.c | Replaced |  | through its caller `lruv_block_delete` |
+| `lruv_initialize` | memory/lruv_cache.c | Replaced |  | through its caller `game_state_lruv_cache_new` |
+| `lruv_delete` | memory/lruv_cache.c | Replaced |  | through its caller `_rasterizer_decals_dispose` |
+| `lruv_idle` | memory/lruv_cache.c | Replaced |  | through its caller `rasterizer_decal_vertices_begin_update` |
+| `lruv_block_delete` | memory/lruv_cache.c | Replaced |  | through its caller `_rasterizer_decal_vertices_delete` |
+| `lruv_block_touch` | memory/lruv_cache.c | Replaced |  | through its caller `_sound_cache_sound_request` |
+| `lruv_block_get_address` | memory/lruv_cache.c | Replaced |  | through its caller `_rasterizer_decal_vertices_lock` |
+| `lruv_block_touched` | memory/lruv_cache.c | Replaced |  | through its caller `texture_cache_debug_render` |
+| `lruv_cache_get_page_usage` | memory/lruv_cache.c | Replaced |  | through its caller `sound_cache_debug_render` |
+| `lruv_resize` | memory/lruv_cache.c | Replaced |  | through its caller `texture_cache_return_memory` |
+| `lruv_debug_to_file` | memory/lruv_cache.c | Replaced |  | through its caller `_texture_cache_bitmap_get_hardware_format` |
+| `lruv_new` | memory/lruv_cache.c | Replaced |  | through its caller `sound_cache_new` |
+| `lruv_flush` | memory/lruv_cache.c | Replaced |  | through its caller `_rasterizer_decals_dispose_from_old_map` |
+| `lruv_block_new` | memory/lruv_cache.c | Replaced |  | through its caller `_rasterizer_decal_vertices_new` |
+| `_byte_swap_data` | memory/byte_swapping.c | Replaced |  | through its caller `byte_swap_data` |
+| `_data_packet_verify` | memory/data_packets.c | Replaced |  | through its caller `_data_packet_decode` |
+| `_data_packet_encode` | memory/data_packets.c | Replaced |  | through its caller `data_packet_encode` |
+| `_data_packet_decode` | memory/data_packets.c | Replaced |  | through its caller `data_packet_decode` |
+| `getoct` | memory/zlib/contrib/untgz/untgz.c | Replaced |  | through its caller `tar` |
+| `strtime` | memory/zlib/contrib/untgz/untgz.c | Replaced |  | through its caller `tar` |
+| `ExprMatch` | memory/zlib/contrib/untgz/untgz.c | Replaced |  | through its caller `matchname` |
+| `makedir` | memory/zlib/contrib/untgz/untgz.c | Replaced |  | through its caller `tar` |
+| `matchname` | memory/zlib/contrib/untgz/untgz.c | Replaced |  | through its caller `tar` |
+| `tar` | memory/zlib/contrib/untgz/untgz.c | Replaced |  | through its caller `main` |
+| `help` | memory/zlib/contrib/untgz/untgz.c | Replaced |  | through its caller `main` |
+| `maketree` | memory/zlib/maketree.c | Replaced |  | through its caller `main` |
+| `zcalloc` | memory/zlib/zutil.c | Replaced |  | through its caller `main` |
+| `zcfree` | memory/zlib/zutil.c | Replaced |  | through its caller `main` |
 
-257 Missing (122 reached from `main_loop`), by file:
+197 Missing (62 reached from `main_loop`), by file:
 
 - memory/array.c: `dynamic_array_new`, `dynamic_array_resize`, `dynamic_array_delete`, `dynamic_array_add_element`, `dynamic_array_get_element`, `dynamic_array_delete_element`, `static_array_new`, `static_array_resize`, `static_array_add_element`, `static_array_get_element`, `static_array_delete_element`
-- memory/byte_swapping.c: `byte_swap_memory`, `code_00108010`, `byte_swap_codes_size`, `byte_swap_data`, `byte_swap_data_explicit`, `_byte_swap_data`
-- memory/circular_queue.c: `circular_queue_reset`, `circular_queue_verify`, `circular_queue_new`, `circular_queue_delete`, `circular_queue_size`, `circular_queue_free_space`, `circular_queue_queue_data`, `circular_queue_dequeue_data`
+- memory/byte_swapping.c: `code_00108010`, `byte_swap_codes_size`, `byte_swap_data_explicit`
 - memory/crc.c: `crc_new`, `build_crc_table`, `crc_checksum_buffer`
 - memory/data.c: `data_allocation_size`, `data_initialize`, `datum_try_and_get`, `datum_get`, `data_verify`, `datum_initialize`, `data_new`, `data_dispose`, `data_make_invalid`, `datum_new_at_index`, `datum_delete`, `data_delete_all`, `data_iterator_new`, `data_iterator_next`, `data_prev_index`, `data_compact`, `data_make_valid`, `data_usable`
 - memory/data_compress.c: `data_compress`, `data_decompressed_size`, `data_decompress`
-- memory/data_encoding.c: `data_encode_new`, `data_encode_memory`, `data_encode_integer`, `data_encode_structures`, `data_encode_array`, `data_encode_string`, `data_decode_new`, `data_decode_structures`, `data_decode_memory`, `data_decode_byte`, `data_decode_short`, `data_decode_long`, `data_decode_int64`, `data_decode_integer`, `data_decode_array`, `data_decode_string`
-- memory/data_packet_groups.c: `data_packet_group_initialize`, `data_packet_groups_get_error`, `data_packet_group_decode_packet`, `data_packet_group_append_packet_header`, `data_packet_group_encode_packet`
-- memory/data_packets.c: `code_0010a5f0`, `code_0010a7c0`, `code_0010aac0`, `data_packet_verify`, `data_packet_encode`, `data_packet_decode`, `_data_packet_verify`, `_data_packet_encode`, `_data_packet_decode`
+- memory/data_encoding.c: `data_encode_structures`, `data_encode_array`, `data_decode_structures`, `data_decode_int64`, `data_decode_array`
+- memory/data_packet_groups.c: `data_packet_groups_get_error`
+- memory/data_packets.c: `code_0010a5f0`, `code_0010a7c0`, `code_0010aac0`
 - memory/hashtable.c: `hashtable_new`, `hashtable_set_user_data`, `hashtable_delete`, `default_hash_function`, `code_0010b270`, `hashtable_get`, `hashtable_remove`, `code_0010b630`, `hashtable_grow`, `hashtable_put`, `hashtable_search`, `hashtable_capacious_put`
 - memory/lra_cache.c: `lra_full`, `lra_default_update_proc`, `lra_default_delete_proc`, `lra_block_delete`, `verify_lra_cache_block`, `verify_lra_cache`, `lra_new`, `lra_dispose`, `lra_flush`, `lra_free`, `lra_lock`, `lra_unlock`, `lra_block_offset`, `lra_allocate`
 - memory/lrar_cache.c: `lrar_default_lock_proc`, `lrar_default_unlock_proc`, `lrar_unlock_block`, `verify_lrar_cache_block`, `verify_lrar_cache`, `lrar_new`, `lrar_dispose`, `get_lrar_cache_block`, `lrar_flush`, `lrar_allocate`, `lrar_block_address`, `lrar_deallocate`
 - memory/lru_cache.c: `lru_default_new_block_proc`, `lru_default_purge_block_proc`, `get_lru_cache_block_offset`, `verify_lru_cache_block`, `verify_lru_cache`, `lru_new`, `lru_dispose`, `lru_flush`, `lru_free_blocks`, `lru_allocate`, `lru_lock`, `lru_unlock`, `lru_touch`
-- memory/lruv_cache.c: `lruv_allocation_size`, `lruv_update_function_pointers`, `lruv_has_locked_proc`, `lruv_cache_bytes_to_pages`, `lruv_cache_verify`, `lruv_initialize`, `lruv_delete`, `lruv_idle`, `lruv_block_delete`, `lruv_block_touch`, `lruv_block_get_address`, `lruv_block_touched`, `lruv_cache_get_page_usage`, `lruv_resize`, `lruv_debug_to_file`, `lruv_new`, `lruv_flush`, `lruv_block_new`
 - memory/memory_pool.c: `memory_pool_allocation_size`, `memory_pool_initialize`, `memory_pool_get_free_size`, `memory_pool_get_used_size`, `memory_pool_get_contiguous_free_size`, `memory_pool_block_compute_actual_size`, `memory_pool_block_new`, `memory_pool_verify`, `memory_pool_block_get`, `memory_pool_new`, `memory_pool_delete`, `memory_pool_block_allocate`, `memory_pool_block_free`, `memory_pool_compact`, `memory_pool_block_reallocate`
 - memory/stack_memory_pool.c: `stack_memory_pool_reset`, `code_0010e270`, `code_0010e2b0`, `code_0010e2e0`, `code_0010e330`, `code_0010e360`, `code_0010e3e0`, `code_0010e430`, `stack_memory_pool_find_space_between_blocks`, `code_0010e510`, `code_0010e5b0`, `code_0010e5f0`, `code_0010e630`, `code_0010e670`, `code_0010e6a0`, `code_0010e770`, `code_0010e7f0`, `code_0010e890`, `code_0010e960`, `code_0010ea00`, `dispose_handle`, `lock_handle`, `unlock_handle`, `dispose_pointer`, `code_0010eef0`, `code_0010ef10`, `code_0010ef70`, `pool_new_handle`, `pool_new_handle_clear`, `pool_resize_handle`, `pool_new_pointer`, `pool_new_pointer_clear`, `pool_resize_pointer`, `memory_block_set_size_and_index`, `memory_block_get_real_size`, `memory_block_get_user_size`, `memory_block_get_pool_index`, `stack_memory_pool_free_space_at_end_of_pool`, `stack_memory_pool_find_first_unused_memory_block`, `stack_memory_pool_set_next_block_index`, `memory_block_valid`, `memory_block_lock`, `memory_block_unlock`, `memory_block_is_locked`, `memory_block_get_user_address`, `stack_memory_pool_compact`, `stack_memory_pool_valid_block`, `stack_memory_pool_dispose_block`, `stack_memory_pool_lock_block`, `stack_memory_pool_unlock_block`, `stack_memory_pool_allocate`, `stack_memory_pool_new_block`, `stack_memory_pool_new_block_clear`, `stack_memory_pool_resize_block`
 - memory/texture_page.c: `texture_page_fraction_used`, `texture_page_verify`, `texture_page_new`, `texture_page_delete`, `texture_page_textures_begin`, `texture_page_texture_get`, `qsort_texture_indexes`, `texture_page_resort`, `texture_page_texture_new`, `texture_page_textures_cancel`, `texture_page_textures_end`, `texture_page_texture_delete`, `texture_page_resize`, `texture_page_verify_and_return`
@@ -536,11 +931,10 @@ docs/engine.md's "The coverage census" says what each class needs.
 - memory/zlib/contrib/iostream/zfstream.h: `setcompressionlevel`, `setcompressionstrategy`
 - memory/zlib/contrib/iostream2/zstream.h: `read`, `zstringlen`, `write`
 - memory/zlib/contrib/minizip/zip.c: `allocate_new_datablock`
-- memory/zlib/contrib/untgz/untgz.c: `OF`, `getoct`, `strtime`, `ExprMatch`, `makedir`, `matchname`, `tar`, `help`
+- memory/zlib/contrib/untgz/untgz.c: `OF`
 - memory/zlib/crc32.c: `make_crc_table`, `get_crc_table`, `crc32`
-- memory/zlib/maketree.c: `maketree`
 - memory/zlib/trees.c: `send_bits`, `tr_static_init`, `gen_trees_header`
-- memory/zlib/zutil.c: `zlibVersion`, `zcalloc`, `zcfree`
+- memory/zlib/zutil.c: `zlibVersion`
 
 ## `models`
 
@@ -577,19 +971,321 @@ docs/engine.md's "The coverage census" says what each class needs.
 
 ## `networking`
 
-
-313 Missing (256 reached from `main_loop`), by file:
-
-- networking/network_client_manager.c: `check_networking_and_generate_error`, `network_game_client_dispose`, `network_game_client_keep_alive`, `network_game_client_get_state`, `network_game_client_initiate_join_game`, `network_game_client_set_machine`, `network_game_client_get_machine`, `network_game_client_get_machine_index`, `network_game_client_get_available_games`, `network_game_client_get_error`, `network_game_client_get_seconds_to_game_start`, `network_game_client_write`, `network_game_client_address_matches_server`, `network_game_client_game_out_of_sync`, `network_game_client_ponged`, `network_game_client_accepted_into_game`, `network_game_client_game_settings_updated`, `unstrip_player_index`, `network_game_client_game_has_started`, `network_game_client_handle_game_update`, `network_game_client_add_player_to_game`, `network_game_client_switch_to_postgame`, `network_game_client_switch_to_pregame`, `network_game_client_get_connection`, `network_game_client_get_remote_server_address`, `network_game_client_get_game`, `network_game_client_server_has_started_game`, `network_game_client_get_next_update_number`, `network_client_get_oos`, `network_game_client_add_player`, `network_game_client_update_local_player_data`, `network_game_client_request_start_time_change`, `network_game_client_countdown_timer_update`, `network_game_client_advertised_game_is_valid`, `add_advertised_game`, `network_game_client_set_error`, `network_game_client_update_precache_status`, `network_game_client_process_incoming_messages`, `network_game_client_leave_game`, `network_game_client_request_remove_player`, `network_game_client_remove_player`, `network_game_client_new_advertised_game`, `network_game_client_game_shutdown`, `network_game_client_reset`, `network_game_client_idle_searching`, `network_game_client_idle_joining`, `network_game_client_idle_pregame`, `network_game_client_idle_ingame`, `network_game_client_idle_postgame`, `network_game_client_create`, `network_game_client_idle`, `network_game_client_rejected_by_game`, `network_game_client_network_available`, `network_game_client_network_lost`, `network_game_client_map_name_is_valid`, `network_game_client_process_messages`, `network_game_client_process_last_messages`, `network_game_client_advertised_game_compatible`, `network_game_client_join_first_available_game`, `network_game_client_set_team`
-- networking/network_client_message_handler.c: `network_game_client_handle_message_server_game_advertise`, `network_game_client_handle_message_server_pong`, `network_game_client_handle_message_server_machine_accepted`, `network_game_client_handle_message_server_machine_rejected`, `network_game_client_handle_message_server_game_settings_update`, `network_game_client_handle_message_server_pregame_countdown`, `network_game_client_handle_message_server_pregame_keep_alive`, `network_game_client_handle_message_server_postgame_keep_alive`, `network_game_client_handle_message_server_begin_game`, `network_game_client_handle_message_server_graceful_game_exit_pregame`, `network_game_client_handle_message_server_game_update`, `network_game_client_handle_message_server_add_player_ingame`, `network_game_client_handle_message_server_remove_player_ingame`, `network_game_client_handle_message_server_game_over`, `network_game_client_handle_message_server_switch_to_pregame`, `network_game_client_handle_message_server_graceful_game_exit_postgame`, `network_game_client_handle_message`, `network_game_client_receive_game_settings_piece`
-- networking/network_connection.c: `network_connection_initialize`, `network_server_allow_client_connections`, `network_connection_connected`, `network_connection_get_address`, `network_connection_connect`, `network_connection_set_connection_rejection_procedure`, `network_connection_server_accept_client_connection`, `network_connection_active`, `network_connection_going_stale`, `network_client_unreliable_connection_read`, `network_connection_log_traffic_event`, `network_connection_keep_alive`, `network_connection_delete`, `network_connection_write`, `network_server_close_client_connection`, `network_connection_create_client_from_endpoint`, `network_client_reliable_connection_read`, `network_connection_idle_client_reliable_endpoint`, `network_connection_new`, `network_connection_read`, `network_connection_disconnect`, `network_connection_idle_server_reliable_endpoint`, `network_connection_idle`, `network_connection_write_reliable`, `network_connection_flush_reliable`, `network_connection_datagram_size`
-- networking/network_game_globals.c: `network_game_is_active`, `network_game_set_number_of_games_played`, `network_game_set_random_seed`, `network_game_get_game`, `network_game_player_is_local`, `network_game_accept_remote_connections`, `network_game_should_accept_remote_connections`, `network_game_is_splitscreen_local`, `network_game_set_quickstart_local`, `network_game_is_quickstart_local`, `global_network_game_server_get`, `dispose_global_network_game_server`, `network_game_server_start_frame`, `global_network_game_client_get`, `create_global_network_game_client`, `dispose_global_network_game_client`, `network_game_client_start_frame`, `network_game_client_end_frame`, `network_game_client_get_local_machine_index`, `network_game_client_local_player_quit`, `network_game_abort`, `network_game_client_all_local_players_have_quit`, `network_game_client_request_immediate_start`, `network_game_get_number_of_games_played`, `network_game_get_random_seed`, `create_global_network_game_server`, `network_distributed_client_send`, `network_distributed_client_send_reliably`, `network_game_distributed_client`
-- networking/network_game_manager.c: `network_game_invalidate_player`, `network_game_add_machine`, `network_game_update_machine`, `xbox_set_machine_name`, `network_game_generate_local_machine_name`, `network_game_end_and_load_ui`, `network_game_reset_for_next_round`, `network_game_assign_players_to_team`, `network_player_is_valid`, `network_game_invalidate_machine`, `network_game_add_player`, `compare_network_players`, `network_game_spawn_player`, `network_game_player_is_valid`, `network_game_invalidate`, `network_game_update_player`, `network_game_remove_player`, `network_game_create_game_objects`, `network_game_remove_machine`, `network_game_player_slot_reusable`, `network_game_player_slot_held`
-- networking/network_game_ui.c: `network_game_get_random_player_name`
-- networking/network_messages.c: `initialize_network_game_packets`, `network_event`, `code_0011af00`, `create_network_game_message`, `decode_network_game_message`, `encode_network_game_message`
-- networking/network_server_manager.c: `countdown_timer_update`, `countdown_timer_get_time_remaining`, `countdown_timer_increment`, `countdown_timer_decrement`, `countdown_timer_set_time_remaining`, `network_game_server_set_game_name`, `network_game_server_get_game_name`, `network_game_server_get_state`, `network_game_server_open_game`, `network_game_server_game_is_open`, `network_game_server_game_is_valid`, `network_game_server_send_player_quit_messages_ingame`, `network_game_server_start_network_game`, `network_game_server_switch_to_postgame`, `network_game_server_graceful_shutdown`, `network_game_server_client_machine_is_joined_to_game`, `network_game_server_accept_client_machine_into_game`, `player_name_is_unique`, `get_unique_random_name`, `get_unique_random_color`, `network_game_server_add_player_to_game`, `network_game_server_remove_player_from_game`, `network_game_server_adjust_machine_settings`, `network_game_server_all_machines_have_loaded`, `network_game_server_client_machine_game_loading_complete`, `network_game_server_client_machine_is_precached`, `network_game_server_handle_client_update_packet`, `network_game_server_switch_machine_from_postgame_to_pregame`, `network_game_server_update_ticks`, `network_game_server_queue_player_for_addition`, `network_game_server_begin_game_start_countdown`, `server_needs_more_teams`, `server_has_a_player_on_each_machine`, `server_has_enough_machines`, `server_ok_to_countdown`, `network_game_server_invalidate_network_machine`, `network_game_generate_join_game_token`, `network_game_server_get_client_machine`, `network_game_server_get_connection`, `network_game_server_get_client_connection`, `network_game_server_get_machine_connection`, `network_game_server_get_client_machine_at_index`, `network_game_server_get_client_machine_at_address`, `network_game_server_get_game`, `network_game_server_game_can_start`, `network_game_server_pause_countdown`, `network_game_server_change_map_name`, `network_game_server_change_game_variant`, `code_0011d0d0`, `code_0011d240`, `network_game_server_send_rejection_message`, `network_game_server_reject_connection_game_is_full`, `code_0011d3b0`, `code_0011d400`, `code_0011d470`, `network_game_server_get_client_machine_count`, `dump_network_game_data`, `network_game_server_dump`, `network_game_server_remove_client_machine_from_game`, `network_game_server_remove_machine_from_game`, `network_game_server_update_countdown`, `code_0011ddd0`, `code_0011dfa0`, `network_game_server_dispose`, `network_game_server_idle`, `network_game_server_reset_to_pregame`, `network_game_server_create`, `network_game_server_ingame_addition_count`, `network_game_server_kick_machine`, `network_game_server_machine_may_add_player_ingame`, `network_game_server_last_refusal_code`, `network_game_server_accepts_late_joins`, `network_game_server_client_machine_is_loaded`, `network_game_server_machine_has_waiting_players`, `network_game_server_machine_has_players`, `network_game_server_refuse_late_joiner`, `network_game_server_same_player`, `network_game_server_player_among`, `network_game_server_start_late_joiner`, `network_game_server_restore_held_players`, `network_game_server_discard_held_players`, `network_game_server_queue_held_players`, `network_game_server_keep_late_joiners_alive`, `network_game_server_late_joiner_loaded`, `network_game_server_drop_client_machine`, `network_game_server_client_machine_heard`, `network_game_server_client_machine_is_local`, `network_game_server_countdown_started`, `network_game_server_setup_game_from_playlist`, `network_game_server_add_new_client`, `network_game_server_handle_public_endpoint`, `network_game_server_handle_client_machines`, `network_game_server_idle_postgame_tasks`, `network_game_server_have_all_machines_have_precached`, `network_game_server_idle_pregame_tasks`
-- networking/network_server_message_handler.c: `code_0011e890`, `code_0011e920`, `code_0011e9c0`, `code_0011ea50`, `code_0011eae0`, `code_0011eb80`, `code_0011ec20`, `network_game_server_send_message_to_machine`, `network_game_server_send_message_to_all_machines`, `network_game_server_send_player_joined_info_ingame`, `network_game_server_send_game_data_pregame`, `code_0011eee0`, `code_0011f120`, `code_0011f1e0`, `code_0011f5d0`, `code_0011f690`, `code_0011f750`, `code_0011f830`, `code_0011f900`, `code_0011f9d0`, `network_game_server_handle_datagram`, `network_game_server_handle_client_message`, `network_game_server_write`, `network_game_server_machine_is_loading_late`, `network_game_server_send_message_to_client_machine`, `network_game_server_send_game_settings_to_client_machine`, `network_distributed_server_machines`, `network_game_server_client_machine_in_game`, `network_distributed_server_send_to_machine`, `network_distributed_server_send_to_machine_reliably`, `network_distributed_server_send_to_all_reliably`, `network_game_server_send_game_settings_to_all_machines`, `network_game_server_flush_game_data_pregame`, `network_game_server_queue_client_player`, `network_game_server_handle_message_client_broadcast_game_search`, `network_game_server_handle_message_client_ping`, `network_game_server_handle_message_client_join_game_request`, `network_game_server_handle_message_client_add_player_request_pregame`, `network_game_server_handle_message_client_remove_player_request_pregame`, `network_game_server_handle_message_client_settings_request`, `network_game_server_handle_message_client_player_settings_request`, `network_game_server_handle_message_client_game_start_request`, `network_game_server_handle_message_client_graceful_game_exit_pregame`, `network_game_server_handle_message_client_map_is_precached_pregame`, `network_game_server_handle_message_client_loaded`, `network_game_server_handle_message_client_add_player_request_ingame`, `network_game_server_handle_message_client_remove_player_request_ingame`, `network_game_server_handle_message_client_remove_player_request_postgame`, `network_game_server_handle_message_client_switch_to_pregame`
-- networking/telnet_console.c: `telnet_console_initialize`, `telnet_console_dispose`, `telnet_console_print`, `code_001203c0`, `telnet_console_process`, `telnet_client_write`, `telnet_client_disconnect`, `process_telnet_client_buffer`
+| Function | File | Class | Engine | Evidence |
+| --- | --- | --- | --- | --- |
+| `check_networking_and_generate_error` | networking/network_client_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_dispose` | networking/network_client_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_keep_alive` | networking/network_client_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_get_state` | networking/network_client_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_initiate_join_game` | networking/network_client_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_set_machine` | networking/network_client_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_get_machine` | networking/network_client_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_get_machine_index` | networking/network_client_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_get_available_games` | networking/network_client_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_get_error` | networking/network_client_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_get_seconds_to_game_start` | networking/network_client_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_write` | networking/network_client_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_address_matches_server` | networking/network_client_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_game_out_of_sync` | networking/network_client_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_ponged` | networking/network_client_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_accepted_into_game` | networking/network_client_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_game_settings_updated` | networking/network_client_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `unstrip_player_index` | networking/network_client_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_game_has_started` | networking/network_client_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_handle_game_update` | networking/network_client_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_add_player_to_game` | networking/network_client_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_switch_to_postgame` | networking/network_client_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_switch_to_pregame` | networking/network_client_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_get_connection` | networking/network_client_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_get_remote_server_address` | networking/network_client_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_get_game` | networking/network_client_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_server_has_started_game` | networking/network_client_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_get_next_update_number` | networking/network_client_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_client_get_oos` | networking/network_client_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_add_player` | networking/network_client_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_update_local_player_data` | networking/network_client_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_request_start_time_change` | networking/network_client_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_countdown_timer_update` | networking/network_client_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_advertised_game_is_valid` | networking/network_client_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `add_advertised_game` | networking/network_client_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_set_error` | networking/network_client_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_update_precache_status` | networking/network_client_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_process_incoming_messages` | networking/network_client_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_leave_game` | networking/network_client_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_request_remove_player` | networking/network_client_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_remove_player` | networking/network_client_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_new_advertised_game` | networking/network_client_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_game_shutdown` | networking/network_client_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_reset` | networking/network_client_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_idle_searching` | networking/network_client_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_idle_joining` | networking/network_client_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_idle_pregame` | networking/network_client_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_idle_ingame` | networking/network_client_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_idle_postgame` | networking/network_client_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_create` | networking/network_client_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_idle` | networking/network_client_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_rejected_by_game` | networking/network_client_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_handle_message_server_game_advertise` | networking/network_client_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_handle_message_server_pong` | networking/network_client_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_handle_message_server_machine_accepted` | networking/network_client_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_handle_message_server_machine_rejected` | networking/network_client_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_handle_message_server_game_settings_update` | networking/network_client_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_handle_message_server_pregame_countdown` | networking/network_client_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_handle_message_server_pregame_keep_alive` | networking/network_client_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_handle_message_server_postgame_keep_alive` | networking/network_client_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_handle_message_server_begin_game` | networking/network_client_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_handle_message_server_graceful_game_exit_pregame` | networking/network_client_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_handle_message_server_game_update` | networking/network_client_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_handle_message_server_add_player_ingame` | networking/network_client_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_handle_message_server_remove_player_ingame` | networking/network_client_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_handle_message_server_game_over` | networking/network_client_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_handle_message_server_switch_to_pregame` | networking/network_client_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_handle_message_server_graceful_game_exit_postgame` | networking/network_client_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_handle_message` | networking/network_client_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_connection_initialize` | networking/network_connection.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_server_allow_client_connections` | networking/network_connection.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_connection_connected` | networking/network_connection.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_connection_get_address` | networking/network_connection.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_connection_connect` | networking/network_connection.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_connection_set_connection_rejection_procedure` | networking/network_connection.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_connection_server_accept_client_connection` | networking/network_connection.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_connection_active` | networking/network_connection.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_connection_going_stale` | networking/network_connection.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_client_unreliable_connection_read` | networking/network_connection.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_connection_log_traffic_event` | networking/network_connection.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_connection_keep_alive` | networking/network_connection.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_connection_delete` | networking/network_connection.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_connection_write` | networking/network_connection.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_server_close_client_connection` | networking/network_connection.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_connection_create_client_from_endpoint` | networking/network_connection.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_client_reliable_connection_read` | networking/network_connection.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_connection_idle_client_reliable_endpoint` | networking/network_connection.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_connection_new` | networking/network_connection.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_connection_read` | networking/network_connection.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_connection_disconnect` | networking/network_connection.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_connection_idle_server_reliable_endpoint` | networking/network_connection.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_connection_idle` | networking/network_connection.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_is_active` | networking/network_game_globals.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_set_number_of_games_played` | networking/network_game_globals.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_set_random_seed` | networking/network_game_globals.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_get_game` | networking/network_game_globals.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_player_is_local` | networking/network_game_globals.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_accept_remote_connections` | networking/network_game_globals.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_should_accept_remote_connections` | networking/network_game_globals.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_is_splitscreen_local` | networking/network_game_globals.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_set_quickstart_local` | networking/network_game_globals.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_is_quickstart_local` | networking/network_game_globals.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `global_network_game_server_get` | networking/network_game_globals.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `dispose_global_network_game_server` | networking/network_game_globals.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_start_frame` | networking/network_game_globals.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `global_network_game_client_get` | networking/network_game_globals.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `create_global_network_game_client` | networking/network_game_globals.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `dispose_global_network_game_client` | networking/network_game_globals.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_start_frame` | networking/network_game_globals.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_end_frame` | networking/network_game_globals.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_get_local_machine_index` | networking/network_game_globals.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_local_player_quit` | networking/network_game_globals.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_abort` | networking/network_game_globals.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_all_local_players_have_quit` | networking/network_game_globals.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_request_immediate_start` | networking/network_game_globals.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_get_number_of_games_played` | networking/network_game_globals.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_get_random_seed` | networking/network_game_globals.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `create_global_network_game_server` | networking/network_game_globals.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_invalidate_player` | networking/network_game_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_add_machine` | networking/network_game_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_update_machine` | networking/network_game_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `xbox_set_machine_name` | networking/network_game_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_generate_local_machine_name` | networking/network_game_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_end_and_load_ui` | networking/network_game_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_reset_for_next_round` | networking/network_game_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_assign_players_to_team` | networking/network_game_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_player_is_valid` | networking/network_game_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_invalidate_machine` | networking/network_game_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_add_player` | networking/network_game_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `compare_network_players` | networking/network_game_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_spawn_player` | networking/network_game_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_player_is_valid` | networking/network_game_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_invalidate` | networking/network_game_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_update_player` | networking/network_game_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_remove_player` | networking/network_game_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_create_game_objects` | networking/network_game_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_remove_machine` | networking/network_game_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_get_random_player_name` | networking/network_game_ui.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `initialize_network_game_packets` | networking/network_messages.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_event` | networking/network_messages.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `code_0011af00` | networking/network_messages.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `create_network_game_message` | networking/network_messages.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `decode_network_game_message` | networking/network_messages.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `countdown_timer_update` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `countdown_timer_get_time_remaining` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `countdown_timer_increment` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `countdown_timer_decrement` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `countdown_timer_set_time_remaining` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_set_game_name` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_get_game_name` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_get_state` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_open_game` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_game_is_open` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_game_is_valid` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_send_player_quit_messages_ingame` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_start_network_game` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_switch_to_postgame` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_graceful_shutdown` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_client_machine_is_joined_to_game` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_accept_client_machine_into_game` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `player_name_is_unique` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `get_unique_random_name` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `get_unique_random_color` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_add_player_to_game` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_remove_player_from_game` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_adjust_machine_settings` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_all_machines_have_loaded` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_client_machine_game_loading_complete` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_client_machine_is_precached` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_handle_client_update_packet` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_switch_machine_from_postgame_to_pregame` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_update_ticks` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_queue_player_for_addition` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_begin_game_start_countdown` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `server_needs_more_teams` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `server_has_a_player_on_each_machine` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `server_has_enough_machines` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `server_ok_to_countdown` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_invalidate_network_machine` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_generate_join_game_token` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_get_client_machine` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_get_connection` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_get_client_connection` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_get_machine_connection` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_get_client_machine_at_index` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_get_client_machine_at_address` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_get_game` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_game_can_start` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_pause_countdown` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_change_map_name` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_change_game_variant` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `code_0011d0d0` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `code_0011d240` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_send_rejection_message` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_reject_connection_game_is_full` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `code_0011d3b0` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `code_0011d400` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `code_0011d470` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_get_client_machine_count` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `dump_network_game_data` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_dump` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_remove_client_machine_from_game` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_remove_machine_from_game` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_update_countdown` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `code_0011ddd0` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `code_0011dfa0` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_dispose` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_idle` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_reset_to_pregame` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_create` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `code_0011e890` | networking/network_server_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `code_0011e920` | networking/network_server_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `code_0011e9c0` | networking/network_server_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `code_0011ea50` | networking/network_server_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `code_0011eae0` | networking/network_server_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `code_0011eb80` | networking/network_server_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `code_0011ec20` | networking/network_server_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_send_message_to_machine` | networking/network_server_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_send_message_to_all_machines` | networking/network_server_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_send_player_joined_info_ingame` | networking/network_server_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_send_game_data_pregame` | networking/network_server_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `code_0011eee0` | networking/network_server_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `code_0011f120` | networking/network_server_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `code_0011f1e0` | networking/network_server_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `code_0011f5d0` | networking/network_server_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `code_0011f690` | networking/network_server_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `code_0011f750` | networking/network_server_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `code_0011f830` | networking/network_server_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `code_0011f900` | networking/network_server_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `code_0011f9d0` | networking/network_server_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_handle_datagram` | networking/network_server_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_handle_client_message` | networking/network_server_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `telnet_console_initialize` | networking/telnet_console.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `telnet_console_dispose` | networking/telnet_console.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `telnet_console_print` | networking/telnet_console.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `code_001203c0` | networking/telnet_console.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `telnet_console_process` | networking/telnet_console.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_network_available` | networking/network_client_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_network_lost` | networking/network_client_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_map_name_is_valid` | networking/network_client_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_process_messages` | networking/network_client_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_process_last_messages` | networking/network_client_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_advertised_game_compatible` | networking/network_client_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_join_first_available_game` | networking/network_client_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_set_team` | networking/network_client_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_client_receive_game_settings_piece` | networking/network_client_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_connection_write_reliable` | networking/network_connection.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_connection_flush_reliable` | networking/network_connection.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_connection_datagram_size` | networking/network_connection.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_distributed_client_send` | networking/network_game_globals.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_distributed_client_send_reliably` | networking/network_game_globals.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_distributed_client` | networking/network_game_globals.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_player_slot_reusable` | networking/network_game_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_player_slot_held` | networking/network_game_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `encode_network_game_message` | networking/network_messages.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_ingame_addition_count` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_kick_machine` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_machine_may_add_player_ingame` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_last_refusal_code` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_accepts_late_joins` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_client_machine_is_loaded` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_machine_has_waiting_players` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_machine_has_players` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_refuse_late_joiner` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_same_player` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_player_among` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_start_late_joiner` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_restore_held_players` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_discard_held_players` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_queue_held_players` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_keep_late_joiners_alive` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_late_joiner_loaded` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_drop_client_machine` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_client_machine_heard` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_client_machine_is_local` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_countdown_started` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_setup_game_from_playlist` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_add_new_client` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_handle_public_endpoint` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_handle_client_machines` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_idle_postgame_tasks` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_have_all_machines_have_precached` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_idle_pregame_tasks` | networking/network_server_manager.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_write` | networking/network_server_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_machine_is_loading_late` | networking/network_server_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_send_message_to_client_machine` | networking/network_server_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_send_game_settings_to_client_machine` | networking/network_server_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_distributed_server_machines` | networking/network_server_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_client_machine_in_game` | networking/network_server_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_distributed_server_send_to_machine` | networking/network_server_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_distributed_server_send_to_machine_reliably` | networking/network_server_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_distributed_server_send_to_all_reliably` | networking/network_server_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_send_game_settings_to_all_machines` | networking/network_server_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_flush_game_data_pregame` | networking/network_server_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_queue_client_player` | networking/network_server_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_handle_message_client_broadcast_game_search` | networking/network_server_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_handle_message_client_ping` | networking/network_server_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_handle_message_client_join_game_request` | networking/network_server_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_handle_message_client_add_player_request_pregame` | networking/network_server_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_handle_message_client_remove_player_request_pregame` | networking/network_server_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_handle_message_client_settings_request` | networking/network_server_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_handle_message_client_player_settings_request` | networking/network_server_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_handle_message_client_game_start_request` | networking/network_server_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_handle_message_client_graceful_game_exit_pregame` | networking/network_server_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_handle_message_client_map_is_precached_pregame` | networking/network_server_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_handle_message_client_loaded` | networking/network_server_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_handle_message_client_add_player_request_ingame` | networking/network_server_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_handle_message_client_remove_player_request_ingame` | networking/network_server_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_handle_message_client_remove_player_request_postgame` | networking/network_server_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `network_game_server_handle_message_client_switch_to_pregame` | networking/network_server_message_handler.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `telnet_client_write` | networking/telnet_console.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `telnet_client_disconnect` | networking/telnet_console.c | Replaced | net/src/lib.rs | networking and Xbox Live |
+| `process_telnet_client_buffer` | networking/telnet_console.c | Replaced | net/src/lib.rs | networking and Xbox Live |
 
 ## `objects`
 
@@ -656,83 +1352,985 @@ docs/engine.md's "The coverage census" says what each class needs.
 
 | Function | File | Class | Engine | Evidence |
 | --- | --- | --- | --- | --- |
+| `Direct3D_Release` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3D8_Release` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3D8_CreateDevice` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `D3DDevice_BeginScene` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `D3DDevice_EndScene` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `D3DDevice_GetRenderState` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `D3DDevice_GetTextureStageState` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `D3DDevice_SetRenderState` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `D3DDevice_SetTextureStageState` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_Release` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_GetDeviceCaps` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_Present` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_GetBackBuffer` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_CreateTexture` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_CreateVolumeTexture` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_CreateCubeTexture` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_CreatePalette` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_SetRenderTarget` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_preinitialize__fill_you_up_with_the_devils_cock` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_GetDepthStencilSurface` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_BeginScene` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_EndScene` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_Clear` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_SetViewport` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_get_bitmap_default_hardware_format` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_SetRenderState` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_GetRenderState` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_SetTexture` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_SetPalette` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_GetTextureStageState` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_SetTextureStageState` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_SetVertexShader` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_SetVertexShaderConstant` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_SetShaderConstantMode` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_SetStreamSource` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_SetIndices` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_SetPixelShaderProgram` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_SetVerticalBlankCallback` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_SetVertexData2s` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_Begin` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_End` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_reset_state` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_spin_begin` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_spin_end` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_windows_begin` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_window_get_fog` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `D3DTexture_UnlockRect` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_windows_end` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_frame_end` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DTexture8_GetSurfaceLevel` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DTexture8_LockRect` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DTexture8_UnlockRect` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `D3DVolumeTexture_UnlockBox` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_dispose` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_set_vblank_callback` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DVolumeTexture8_LockBox` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DVolumeTexture8_UnlockBox` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_set_texture_bitmap_data` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_set_texture_direct` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `D3DCubeTexture_UnlockRect` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_set_texture_direct_non_blocking` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_set_texture` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DCubeTexture8_LockRect` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DCubeTexture8_UnlockRect` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_set_texture_non_blocking` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_get_target` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `D3DPalette_Unlock` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DPalette8_Lock` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DPalette8_Unlock` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_set_vertex_shader` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_set_pixel_shader` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_set_model_skinning` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `D3DSurface_UnlockRect` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DSurface8_Release` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_set_model_lighting_point_light` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DSurface8_GetDesc` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DSurface8_LockRect` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DSurface8_UnlockRect` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_set_model_lighting_distant_light` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_set_model_lighting` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_set_frustum_z` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_get_stencil_mode` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `SetupSmartStates` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_filthy_bitmap_defaults_initialize` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_initialize` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_frame_begin` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_window_set_fog` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_present` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_set_framebuffer_blend_function` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_set_target` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_set_target_as_texture` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_secondary_render_target_debug` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_set_stencil_mode` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_window_begin` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_window_end` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `real_alpha_to_pixel32` | rasterizer/xbox/rasterizer_xbox_active_camouflage.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `D3DDevice_SetRenderState` | rasterizer/xbox/rasterizer_xbox_active_camouflage.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `D3DDevice_SetTextureStageState` | rasterizer/xbox/rasterizer_xbox_active_camouflage.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_active_camouflage_set_visibility` | rasterizer/xbox/rasterizer_xbox_active_camouflage.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_SetRenderState` | rasterizer/xbox/rasterizer_xbox_active_camouflage.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_SetTextureStageState` | rasterizer/xbox/rasterizer_xbox_active_camouflage.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_SetVertexShaderConstant` | rasterizer/xbox/rasterizer_xbox_active_camouflage.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_SetVertexData2s` | rasterizer/xbox/rasterizer_xbox_active_camouflage.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_Begin` | rasterizer/xbox/rasterizer_xbox_active_camouflage.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_End` | rasterizer/xbox/rasterizer_xbox_active_camouflage.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_active_camouflage_cache_primary_render_target` | rasterizer/xbox/rasterizer_xbox_active_camouflage.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_active_camouflage_draw` | rasterizer/xbox/rasterizer_xbox_active_camouflage.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `D3DDevice_SetRenderState` | rasterizer/xbox/rasterizer_xbox_decals.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `D3DDevice_SetTextureStageState` | rasterizer/xbox/rasterizer_xbox_decals.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_decal_vertices_purge_proc` | rasterizer/xbox/rasterizer_xbox_decals.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_decal_vertices_locked_proc` | rasterizer/xbox/rasterizer_xbox_decals.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_decals_update_function_pointers` | rasterizer/xbox/rasterizer_xbox_decals.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_SetRenderState` | rasterizer/xbox/rasterizer_xbox_decals.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_decals_initialize_for_new_map` | rasterizer/xbox/rasterizer_xbox_decals.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_decals_dispose_from_old_map` | rasterizer/xbox/rasterizer_xbox_decals.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_decals_flush` | rasterizer/xbox/rasterizer_xbox_decals.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_decal_vertices_begin_update` | rasterizer/xbox/rasterizer_xbox_decals.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_decal_vertices_end_update` | rasterizer/xbox/rasterizer_xbox_decals.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_decal_vertices_new` | rasterizer/xbox/rasterizer_xbox_decals.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_SetTextureStageState` | rasterizer/xbox/rasterizer_xbox_decals.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_DrawPrimitive` | rasterizer/xbox/rasterizer_xbox_decals.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_decal_vertices_delete` | rasterizer/xbox/rasterizer_xbox_decals.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_SetStreamSource` | rasterizer/xbox/rasterizer_xbox_decals.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_decals_end` | rasterizer/xbox/rasterizer_xbox_decals.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_SetVertexData4ub` | rasterizer/xbox/rasterizer_xbox_decals.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `D3DVertexBuffer_Unlock` | rasterizer/xbox/rasterizer_xbox_decals.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DVertexBuffer8_Release` | rasterizer/xbox/rasterizer_xbox_decals.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DVertexBuffer8_Register` | rasterizer/xbox/rasterizer_xbox_decals.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DVertexBuffer8_Lock` | rasterizer/xbox/rasterizer_xbox_decals.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DVertexBuffer8_Unlock` | rasterizer/xbox/rasterizer_xbox_decals.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_decals_initialize` | rasterizer/xbox/rasterizer_xbox_decals.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_decals_dispose` | rasterizer/xbox/rasterizer_xbox_decals.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_decal_vertices_lock` | rasterizer/xbox/rasterizer_xbox_decals.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_decal_vertices_unlock` | rasterizer/xbox/rasterizer_xbox_decals.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_decals_begin` | rasterizer/xbox/rasterizer_xbox_decals.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_decals_draw` | rasterizer/xbox/rasterizer_xbox_decals.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0014b7e0` | rasterizer/xbox/rasterizer_xbox_detail_objects.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0014b990` | rasterizer/xbox/rasterizer_xbox_detail_objects.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0014b9e0` | rasterizer/xbox/rasterizer_xbox_detail_objects.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0014ba00` | rasterizer/xbox/rasterizer_xbox_detail_objects.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_detail_objects_initialize` | rasterizer/xbox/rasterizer_xbox_detail_objects.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0014bb90` | rasterizer/xbox/rasterizer_xbox_detail_objects.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0014bdb0` | rasterizer/xbox/rasterizer_xbox_detail_objects.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0014be10` | rasterizer/xbox/rasterizer_xbox_detail_objects.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0014be20` | rasterizer/xbox/rasterizer_xbox_detail_objects.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0014be30` | rasterizer/xbox/rasterizer_xbox_detail_objects.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_detail_objects_end` | rasterizer/xbox/rasterizer_xbox_detail_objects.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0014be50` | rasterizer/xbox/rasterizer_xbox_detail_objects.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0014be80` | rasterizer/xbox/rasterizer_xbox_detail_objects.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0014be90` | rasterizer/xbox/rasterizer_xbox_detail_objects.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0014bea0` | rasterizer/xbox/rasterizer_xbox_detail_objects.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0014bec0` | rasterizer/xbox/rasterizer_xbox_detail_objects.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_detail_objects_dispose` | rasterizer/xbox/rasterizer_xbox_detail_objects.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_detail_objects_begin` | rasterizer/xbox/rasterizer_xbox_detail_objects.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_detail_objects_rebuild_vertices` | rasterizer/xbox/rasterizer_xbox_detail_objects.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_detail_objects_draw` | rasterizer/xbox/rasterizer_xbox_detail_objects.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0014c870` | rasterizer/xbox/rasterizer_xbox_draw_primitives.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0014c890` | rasterizer/xbox/rasterizer_xbox_draw_primitives.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_dynamic_geometry_initialize` | rasterizer/xbox/rasterizer_xbox_draw_primitives.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_dynamic_geometry_begin` | rasterizer/xbox/rasterizer_xbox_draw_primitives.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_dynamic_geometry_end` | rasterizer/xbox/rasterizer_xbox_draw_primitives.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_dynamic_triangles_new` | rasterizer/xbox/rasterizer_xbox_draw_primitives.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0014ccd0` | rasterizer/xbox/rasterizer_xbox_draw_primitives.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0014cd00` | rasterizer/xbox/rasterizer_xbox_draw_primitives.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_dynamic_triangles_delete` | rasterizer/xbox/rasterizer_xbox_draw_primitives.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_dynamic_vertices_new` | rasterizer/xbox/rasterizer_xbox_draw_primitives.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0014ceb0` | rasterizer/xbox/rasterizer_xbox_draw_primitives.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0014cec0` | rasterizer/xbox/rasterizer_xbox_draw_primitives.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_dynamic_vertices_get_type` | rasterizer/xbox/rasterizer_xbox_draw_primitives.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0014cf80` | rasterizer/xbox/rasterizer_xbox_draw_primitives.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_dynamic_vertices_delete` | rasterizer/xbox/rasterizer_xbox_draw_primitives.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_draw_dynamic_vertices` | rasterizer/xbox/rasterizer_xbox_draw_primitives.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_draw_dynamic_triangles_dynamic_vertices` | rasterizer/xbox/rasterizer_xbox_draw_primitives.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_draw_dynamic_triangles_static_vertices` | rasterizer/xbox/rasterizer_xbox_draw_primitives.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_draw_dynamic_triangles_static_vertices2` | rasterizer/xbox/rasterizer_xbox_draw_primitives.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_draw_static_triangles_dynamic_vertices` | rasterizer/xbox/rasterizer_xbox_draw_primitives.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_draw_static_triangles_static_vertices` | rasterizer/xbox/rasterizer_xbox_draw_primitives.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_draw` | rasterizer/xbox/rasterizer_xbox_draw_primitives.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0014e180` | rasterizer/xbox/rasterizer_xbox_draw_primitives.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0014e190` | rasterizer/xbox/rasterizer_xbox_draw_primitives.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0014e1a0` | rasterizer/xbox/rasterizer_xbox_draw_primitives.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0014e1c0` | rasterizer/xbox/rasterizer_xbox_draw_primitives.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0014e1d0` | rasterizer/xbox/rasterizer_xbox_draw_primitives.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0014e1e0` | rasterizer/xbox/rasterizer_xbox_draw_primitives.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0014e1f0` | rasterizer/xbox/rasterizer_xbox_draw_primitives.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0014e200` | rasterizer/xbox/rasterizer_xbox_draw_primitives.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0014e220` | rasterizer/xbox/rasterizer_xbox_draw_primitives.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_dynamic_geometry_dispose` | rasterizer/xbox/rasterizer_xbox_draw_primitives.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_dynamic_triangles_lock` | rasterizer/xbox/rasterizer_xbox_draw_primitives.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_dynamic_triangles_unlock` | rasterizer/xbox/rasterizer_xbox_draw_primitives.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_dynamic_vertices_lock` | rasterizer/xbox/rasterizer_xbox_draw_primitives.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_dynamic_vertices_unlock` | rasterizer/xbox/rasterizer_xbox_draw_primitives.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `D3DDevice_SetRenderState` | rasterizer/xbox/rasterizer_xbox_dynavobgeom.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `D3DDevice_SetTextureStageState` | rasterizer/xbox/rasterizer_xbox_dynavobgeom.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_hud_begin` | rasterizer/xbox/rasterizer_xbox_dynavobgeom.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_hud_end` | rasterizer/xbox/rasterizer_xbox_dynavobgeom.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_dynamic_lit_geometry_draw` | rasterizer/xbox/rasterizer_xbox_dynavobgeom.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_dynamic_screen_geometry_add_multitexture_params_to_base` | rasterizer/xbox/rasterizer_xbox_dynavobgeom.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_SetRenderState` | rasterizer/xbox/rasterizer_xbox_dynavobgeom.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_dynamic_screen_geometry_draw` | rasterizer/xbox/rasterizer_xbox_dynavobgeom.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_SetTextureStageState` | rasterizer/xbox/rasterizer_xbox_dynavobgeom.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_SetVertexShaderConstant` | rasterizer/xbox/rasterizer_xbox_dynavobgeom.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_SetVertexData2f` | rasterizer/xbox/rasterizer_xbox_dynavobgeom.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_SetVertexDataColor` | rasterizer/xbox/rasterizer_xbox_dynavobgeom.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_Begin` | rasterizer/xbox/rasterizer_xbox_dynavobgeom.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_End` | rasterizer/xbox/rasterizer_xbox_dynavobgeom.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_dynamic_unlit_geometry_draw` | rasterizer/xbox/rasterizer_xbox_dynavobgeom.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `submit_screen_vertex` | rasterizer/xbox/rasterizer_xbox_dynavobgeom.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_psuedo_dynamic_screen_quad_draw` | rasterizer/xbox/rasterizer_xbox_dynavobgeom.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `D3DDevice_SetRenderState` | rasterizer/xbox/rasterizer_xbox_environment.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `D3DDevice_SetTextureStageState` | rasterizer/xbox/rasterizer_xbox_environment.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_SetRenderState` | rasterizer/xbox/rasterizer_xbox_environment.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_SetTexture` | rasterizer/xbox/rasterizer_xbox_environment.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_SetTextureStageState` | rasterizer/xbox/rasterizer_xbox_environment.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_SetVertexShaderConstant` | rasterizer/xbox/rasterizer_xbox_environment.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_environment_lightmap_end` | rasterizer/xbox/rasterizer_xbox_environment.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_environment_lightmaps_end` | rasterizer/xbox/rasterizer_xbox_environment.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_environment_diffuse_light_end` | rasterizer/xbox/rasterizer_xbox_environment.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_environment_diffuse_lights_end` | rasterizer/xbox/rasterizer_xbox_environment.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_environment_diffuse_textures_end` | rasterizer/xbox/rasterizer_xbox_environment.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_environment_specular_light_end` | rasterizer/xbox/rasterizer_xbox_environment.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_environment_specular_lights_end` | rasterizer/xbox/rasterizer_xbox_environment.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_environment_specular_lightmap_end` | rasterizer/xbox/rasterizer_xbox_environment.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_environment_specular_lightmaps_end` | rasterizer/xbox/rasterizer_xbox_environment.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_environment_reflection_lightmap_mask_draw` | rasterizer/xbox/rasterizer_xbox_environment.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_environment_reflection_lightmap_mask_end` | rasterizer/xbox/rasterizer_xbox_environment.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_environment_reflection_lightmap_masks_end` | rasterizer/xbox/rasterizer_xbox_environment.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_environment_reflection_mirrors_begin` | rasterizer/xbox/rasterizer_xbox_environment.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_environment_reflection_mirrors_end` | rasterizer/xbox/rasterizer_xbox_environment.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_environment_reflections_begin` | rasterizer/xbox/rasterizer_xbox_environment.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_environment_reflections_end` | rasterizer/xbox/rasterizer_xbox_environment.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_environment_transparent_geometry_begin` | rasterizer/xbox/rasterizer_xbox_environment.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_environment_transparent_geometry_end` | rasterizer/xbox/rasterizer_xbox_environment.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_environment_lightmaps_begin` | rasterizer/xbox/rasterizer_xbox_environment.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_environment_lightmap_begin` | rasterizer/xbox/rasterizer_xbox_environment.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_environment_lightmap_draw` | rasterizer/xbox/rasterizer_xbox_environment.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_environment_diffuse_lights_begin` | rasterizer/xbox/rasterizer_xbox_environment.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_environment_diffuse_light_begin` | rasterizer/xbox/rasterizer_xbox_environment.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_environment_diffuse_light_draw` | rasterizer/xbox/rasterizer_xbox_environment.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_environment_diffuse_textures_begin` | rasterizer/xbox/rasterizer_xbox_environment.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_environment_diffuse_texture_draw` | rasterizer/xbox/rasterizer_xbox_environment.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_environment_specular_lights_begin` | rasterizer/xbox/rasterizer_xbox_environment.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_specular_spot_light_begin` | rasterizer/xbox/rasterizer_xbox_environment.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_environment_specular_light_begin` | rasterizer/xbox/rasterizer_xbox_environment.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_environment_specular_light_draw` | rasterizer/xbox/rasterizer_xbox_environment.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_environment_specular_lightmaps_begin` | rasterizer/xbox/rasterizer_xbox_environment.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_environment_specular_lightmap_begin` | rasterizer/xbox/rasterizer_xbox_environment.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_environment_specular_lightmap_draw` | rasterizer/xbox/rasterizer_xbox_environment.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_environment_reflection_lightmap_masks_begin` | rasterizer/xbox/rasterizer_xbox_environment.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_environment_reflection_lightmap_mask_begin` | rasterizer/xbox/rasterizer_xbox_environment.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_environment_reflection_mirror_draw` | rasterizer/xbox/rasterizer_xbox_environment.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_environment_reflection_draw` | rasterizer/xbox/rasterizer_xbox_environment.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_environment_transparent_geometry_submit` | rasterizer/xbox/rasterizer_xbox_environment.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_00154fd0` | rasterizer/xbox/rasterizer_xbox_environment_fog.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_00155180` | rasterizer/xbox/rasterizer_xbox_environment_fog.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_001551d0` | rasterizer/xbox/rasterizer_xbox_environment_fog.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_001551f0` | rasterizer/xbox/rasterizer_xbox_environment_fog.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_fog_screen_initialize` | rasterizer/xbox/rasterizer_xbox_environment_fog.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_fog_screen_window_begin` | rasterizer/xbox/rasterizer_xbox_environment_fog.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_fog_screen_window_end` | rasterizer/xbox/rasterizer_xbox_environment_fog.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_fog_screen_dispose` | rasterizer/xbox/rasterizer_xbox_environment_fog.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_001554a0` | rasterizer/xbox/rasterizer_xbox_environment_fog.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_00155500` | rasterizer/xbox/rasterizer_xbox_environment_fog.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_environment_fog_draw` | rasterizer/xbox/rasterizer_xbox_environment_fog.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_environment_fog_end` | rasterizer/xbox/rasterizer_xbox_environment_fog.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_environment_fog_screen_wind_get_vector` | rasterizer/xbox/rasterizer_xbox_environment_fog.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_001556c0` | rasterizer/xbox/rasterizer_xbox_environment_fog.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_001556d0` | rasterizer/xbox/rasterizer_xbox_environment_fog.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_001556e0` | rasterizer/xbox/rasterizer_xbox_environment_fog.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_fog_screen_model_submit` | rasterizer/xbox/rasterizer_xbox_environment_fog.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_fog_screen_model_end` | rasterizer/xbox/rasterizer_xbox_environment_fog.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `set_real_vector4d` | rasterizer/xbox/rasterizer_xbox_environment_fog.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `local_random_boolean` | rasterizer/xbox/rasterizer_xbox_environment_fog.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_fog_screen_is_active` | rasterizer/xbox/rasterizer_xbox_environment_fog.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_fog_screen_wind_update` | rasterizer/xbox/rasterizer_xbox_environment_fog.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_environment_fog_begin` | rasterizer/xbox/rasterizer_xbox_environment_fog.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_environment_fog_screen_begin` | rasterizer/xbox/rasterizer_xbox_environment_fog.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_environment_fog_screen_draw` | rasterizer/xbox/rasterizer_xbox_environment_fog.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_environment_fog_screen_end` | rasterizer/xbox/rasterizer_xbox_environment_fog.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_fog_screen_model_begin` | rasterizer/xbox/rasterizer_xbox_environment_fog.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_error` | rasterizer/xbox/rasterizer_xbox_errors.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_CreateTexture` | rasterizer/xbox/rasterizer_xbox_hardware_bitmaps.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_CreateVolumeTexture` | rasterizer/xbox/rasterizer_xbox_hardware_bitmaps.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_CreateCubeTexture` | rasterizer/xbox/rasterizer_xbox_hardware_bitmaps.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_bitmap_new` | rasterizer/xbox/rasterizer_xbox_hardware_bitmaps.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DBaseTexture8_Release` | rasterizer/xbox/rasterizer_xbox_hardware_bitmaps.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `D3DTexture_UnlockRect` | rasterizer/xbox/rasterizer_xbox_hardware_bitmaps.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DTexture8_LockRect` | rasterizer/xbox/rasterizer_xbox_hardware_bitmaps.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DTexture8_UnlockRect` | rasterizer/xbox/rasterizer_xbox_hardware_bitmaps.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `D3DVolumeTexture_UnlockBox` | rasterizer/xbox/rasterizer_xbox_hardware_bitmaps.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DVolumeTexture8_LockBox` | rasterizer/xbox/rasterizer_xbox_hardware_bitmaps.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DVolumeTexture8_UnlockBox` | rasterizer/xbox/rasterizer_xbox_hardware_bitmaps.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `D3DCubeTexture_UnlockRect` | rasterizer/xbox/rasterizer_xbox_hardware_bitmaps.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DCubeTexture8_LockRect` | rasterizer/xbox/rasterizer_xbox_hardware_bitmaps.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DCubeTexture8_UnlockRect` | rasterizer/xbox/rasterizer_xbox_hardware_bitmaps.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_bitmap_2d_changed` | rasterizer/xbox/rasterizer_xbox_hardware_bitmaps.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_bitmap_3d_changed` | rasterizer/xbox/rasterizer_xbox_hardware_bitmaps.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_bitmap_cm_changed` | rasterizer/xbox/rasterizer_xbox_hardware_bitmaps.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_bitmap_delete` | rasterizer/xbox/rasterizer_xbox_hardware_bitmaps.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_bitmap_changed` | rasterizer/xbox/rasterizer_xbox_hardware_bitmaps.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_CreateVertexBuffer` | rasterizer/xbox/rasterizer_xbox_hardware_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_CreateIndexBuffer` | rasterizer/xbox/rasterizer_xbox_hardware_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_00158450` | rasterizer/xbox/rasterizer_xbox_hardware_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_00158460` | rasterizer/xbox/rasterizer_xbox_hardware_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `D3DVertexBuffer_Unlock` | rasterizer/xbox/rasterizer_xbox_hardware_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DVertexBuffer8_Release` | rasterizer/xbox/rasterizer_xbox_hardware_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DVertexBuffer8_Lock` | rasterizer/xbox/rasterizer_xbox_hardware_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DVertexBuffer8_Unlock` | rasterizer/xbox/rasterizer_xbox_hardware_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `D3DIndexBuffer_Lock` | rasterizer/xbox/rasterizer_xbox_hardware_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `D3DIndexBuffer_Unlock` | rasterizer/xbox/rasterizer_xbox_hardware_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DIndexBuffer8_Release` | rasterizer/xbox/rasterizer_xbox_hardware_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DIndexBuffer8_Lock` | rasterizer/xbox/rasterizer_xbox_hardware_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DIndexBuffer8_Unlock` | rasterizer/xbox/rasterizer_xbox_hardware_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_vertex_buffer_new` | rasterizer/xbox/rasterizer_xbox_hardware_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_vertex_buffer_delete` | rasterizer/xbox/rasterizer_xbox_hardware_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_triangle_buffer_new` | rasterizer/xbox/rasterizer_xbox_hardware_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_triangle_buffer_delete` | rasterizer/xbox/rasterizer_xbox_hardware_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `D3DDevice_SetRenderState` | rasterizer/xbox/rasterizer_xbox_lights.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `D3DDevice_SetTextureStageState` | rasterizer/xbox/rasterizer_xbox_lights.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_project_billboard` | rasterizer/xbox/rasterizer_xbox_lights.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_SetRenderState` | rasterizer/xbox/rasterizer_xbox_lights.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_SetTextureStageState` | rasterizer/xbox/rasterizer_xbox_lights.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_SetVertexShaderConstant` | rasterizer/xbox/rasterizer_xbox_lights.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_SetVertexData2f` | rasterizer/xbox/rasterizer_xbox_lights.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_SetVertexData4f` | rasterizer/xbox/rasterizer_xbox_lights.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_SetVertexData2s` | rasterizer/xbox/rasterizer_xbox_lights.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_Begin` | rasterizer/xbox/rasterizer_xbox_lights.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_End` | rasterizer/xbox/rasterizer_xbox_lights.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_sun_glow_copy_source` | rasterizer/xbox/rasterizer_xbox_lights.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_sun_glow_convolve` | rasterizer/xbox/rasterizer_xbox_lights.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_sun_glow_draw` | rasterizer/xbox/rasterizer_xbox_lights.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `D3DDevice_SetRenderState` | rasterizer/xbox/rasterizer_xbox_models.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `D3DDevice_SetTextureStageState` | rasterizer/xbox/rasterizer_xbox_models.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `set_environment_shader_pixel_shader` | rasterizer/xbox/rasterizer_xbox_models.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_SetRenderState` | rasterizer/xbox/rasterizer_xbox_models.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_SetTextureStageState` | rasterizer/xbox/rasterizer_xbox_models.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_SetVertexShaderConstant` | rasterizer/xbox/rasterizer_xbox_models.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_models_begin` | rasterizer/xbox/rasterizer_xbox_models.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_model_end` | rasterizer/xbox/rasterizer_xbox_models.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_models_end` | rasterizer/xbox/rasterizer_xbox_models.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_model_ambient_reflection_tint` | rasterizer/xbox/rasterizer_xbox_models.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_model_draw_environment_shader` | rasterizer/xbox/rasterizer_xbox_models.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_model_begin` | rasterizer/xbox/rasterizer_xbox_models.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_model_transparent_geometry_submit` | rasterizer/xbox/rasterizer_xbox_models.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_model_draw` | rasterizer/xbox/rasterizer_xbox_models.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0015d220` | rasterizer/xbox/rasterizer_xbox_motion_sensor.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0015d3d0` | rasterizer/xbox/rasterizer_xbox_motion_sensor.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0015d420` | rasterizer/xbox/rasterizer_xbox_motion_sensor.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0015d640` | rasterizer/xbox/rasterizer_xbox_motion_sensor.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0015d6a0` | rasterizer/xbox/rasterizer_xbox_motion_sensor.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0015d6b0` | rasterizer/xbox/rasterizer_xbox_motion_sensor.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0015d6d0` | rasterizer/xbox/rasterizer_xbox_motion_sensor.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0015d700` | rasterizer/xbox/rasterizer_xbox_motion_sensor.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0015d710` | rasterizer/xbox/rasterizer_xbox_motion_sensor.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0015d720` | rasterizer/xbox/rasterizer_xbox_motion_sensor.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_hud_motion_sensor_blip_begin` | rasterizer/xbox/rasterizer_xbox_motion_sensor.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_hud_motion_sensor_blip_draw` | rasterizer/xbox/rasterizer_xbox_motion_sensor.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_hud_motion_sensor_blip_end` | rasterizer/xbox/rasterizer_xbox_motion_sensor.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0015e2b0` | rasterizer/xbox/rasterizer_xbox_plasma_energy.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0015e460` | rasterizer/xbox/rasterizer_xbox_plasma_energy.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0015e4b0` | rasterizer/xbox/rasterizer_xbox_plasma_energy.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0015e6d0` | rasterizer/xbox/rasterizer_xbox_plasma_energy.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0015e730` | rasterizer/xbox/rasterizer_xbox_plasma_energy.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_plasma_energy_draw` | rasterizer/xbox/rasterizer_xbox_plasma_energy.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `profile_assert` | rasterizer/xbox/rasterizer_xbox_profile.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `callback_function` | rasterizer/xbox/rasterizer_xbox_profile.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `frame_callback_function` | rasterizer/xbox/rasterizer_xbox_profile.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_profile_enabled` | rasterizer/xbox/rasterizer_xbox_profile.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_profile_initialize` | rasterizer/xbox/rasterizer_xbox_profile.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_profile_frame_begin` | rasterizer/xbox/rasterizer_xbox_profile.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_profile_window_begin` | rasterizer/xbox/rasterizer_xbox_profile.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_profile_enable` | rasterizer/xbox/rasterizer_xbox_profile.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_profile_begin` | rasterizer/xbox/rasterizer_xbox_profile.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_profile_end` | rasterizer/xbox/rasterizer_xbox_profile.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_profile_get_string` | rasterizer/xbox/rasterizer_xbox_profile.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_profile_query` | rasterizer/xbox/rasterizer_xbox_profile.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_profile_query_pushbuffer` | rasterizer/xbox/rasterizer_xbox_profile.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_profile_frame_end` | rasterizer/xbox/rasterizer_xbox_profile.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_profile_window_end` | rasterizer/xbox/rasterizer_xbox_profile.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_profile_dispose` | rasterizer/xbox/rasterizer_xbox_profile.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0015f720` | rasterizer/xbox/rasterizer_xbox_screen_effect.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0015f8d0` | rasterizer/xbox/rasterizer_xbox_screen_effect.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0015f920` | rasterizer/xbox/rasterizer_xbox_screen_effect.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0015f9b0` | rasterizer/xbox/rasterizer_xbox_screen_effect.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0015fbd0` | rasterizer/xbox/rasterizer_xbox_screen_effect.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0015fc30` | rasterizer/xbox/rasterizer_xbox_screen_effect.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0015fc40` | rasterizer/xbox/rasterizer_xbox_screen_effect.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0015fc60` | rasterizer/xbox/rasterizer_xbox_screen_effect.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0015fc70` | rasterizer/xbox/rasterizer_xbox_screen_effect.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0015fc80` | rasterizer/xbox/rasterizer_xbox_screen_effect.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_screen_effect_set_texture_transforms` | rasterizer/xbox/rasterizer_xbox_screen_effect.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_screen_effect` | rasterizer/xbox/rasterizer_xbox_screen_effect.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_screen_flash` | rasterizer/xbox/rasterizer_xbox_screen_effect.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `D3DDevice_SetRenderState` | rasterizer/xbox/rasterizer_xbox_shadows.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `D3DDevice_SetTextureStageState` | rasterizer/xbox/rasterizer_xbox_shadows.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_SetRenderState` | rasterizer/xbox/rasterizer_xbox_shadows.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_environment_shadows_begin` | rasterizer/xbox/rasterizer_xbox_shadows.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_SetTextureStageState` | rasterizer/xbox/rasterizer_xbox_shadows.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_SetVertexShaderConstant` | rasterizer/xbox/rasterizer_xbox_shadows.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_environment_shadow_model_begin` | rasterizer/xbox/rasterizer_xbox_shadows.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_environment_shadow_model_end` | rasterizer/xbox/rasterizer_xbox_shadows.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_SetVertexData2f` | rasterizer/xbox/rasterizer_xbox_shadows.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_SetVertexData2s` | rasterizer/xbox/rasterizer_xbox_shadows.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_Begin` | rasterizer/xbox/rasterizer_xbox_shadows.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_End` | rasterizer/xbox/rasterizer_xbox_shadows.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_environment_shadow_end` | rasterizer/xbox/rasterizer_xbox_shadows.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_environment_shadows_end` | rasterizer/xbox/rasterizer_xbox_shadows.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_shadow_convolve` | rasterizer/xbox/rasterizer_xbox_shadows.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_environment_shadow_begin` | rasterizer/xbox/rasterizer_xbox_shadows.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_environment_shadow_model_draw` | rasterizer/xbox/rasterizer_xbox_shadows.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_environment_shadow_draw` | rasterizer/xbox/rasterizer_xbox_shadows.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_00162ea0` | rasterizer/xbox/rasterizer_xbox_text.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_00163050` | rasterizer/xbox/rasterizer_xbox_text.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_001630a0` | rasterizer/xbox/rasterizer_xbox_text.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_001632c0` | rasterizer/xbox/rasterizer_xbox_text.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_00163320` | rasterizer/xbox/rasterizer_xbox_text.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_text_end` | rasterizer/xbox/rasterizer_xbox_text.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_00163340` | rasterizer/xbox/rasterizer_xbox_text.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_00163360` | rasterizer/xbox/rasterizer_xbox_text.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_00163370` | rasterizer/xbox/rasterizer_xbox_text.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_00163380` | rasterizer/xbox/rasterizer_xbox_text.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_text_begin` | rasterizer/xbox/rasterizer_xbox_text.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_text_draw_character` | rasterizer/xbox/rasterizer_xbox_text.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_00163b40` | rasterizer/xbox/rasterizer_xbox_transparent_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_00163cf0` | rasterizer/xbox/rasterizer_xbox_transparent_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_CreateVertexBuffer` | rasterizer/xbox/rasterizer_xbox_transparent_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_transparent_geometry_group_draw__internal` | rasterizer/xbox/rasterizer_xbox_transparent_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_00163ee0` | rasterizer/xbox/rasterizer_xbox_transparent_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_00164100` | rasterizer/xbox/rasterizer_xbox_transparent_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_00164160` | rasterizer/xbox/rasterizer_xbox_transparent_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_00164170` | rasterizer/xbox/rasterizer_xbox_transparent_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_BeginVisibilityTest` | rasterizer/xbox/rasterizer_xbox_transparent_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_EndVisibilityTest` | rasterizer/xbox/rasterizer_xbox_transparent_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_GetVisibilityTestResult` | rasterizer/xbox/rasterizer_xbox_transparent_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `D3DVertexBuffer_Unlock` | rasterizer/xbox/rasterizer_xbox_transparent_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DVertexBuffer8_Release` | rasterizer/xbox/rasterizer_xbox_transparent_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DVertexBuffer8_Lock` | rasterizer/xbox/rasterizer_xbox_transparent_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DVertexBuffer8_Unlock` | rasterizer/xbox/rasterizer_xbox_transparent_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_transparent_geometry_groups_end` | rasterizer/xbox/rasterizer_xbox_transparent_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `subtract_vectors4d` | rasterizer/xbox/rasterizer_xbox_transparent_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `offset_vector4d` | rasterizer/xbox/rasterizer_xbox_transparent_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_transparent_geometry_initialize_aux_buffer` | rasterizer/xbox/rasterizer_xbox_transparent_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_transparent_geometry_dispose_aux_buffer` | rasterizer/xbox/rasterizer_xbox_transparent_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_transparent_geometry_groups_begin` | rasterizer/xbox/rasterizer_xbox_transparent_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_transparent_geometry_group_draw` | rasterizer/xbox/rasterizer_xbox_transparent_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_00168070` | rasterizer/xbox/rasterizer_xbox_vertex_shaders_initialize.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_00168090` | rasterizer/xbox/rasterizer_xbox_vertex_shaders_initialize.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_vertex_shaders_initialize` | rasterizer/xbox/rasterizer_xbox_vertex_shaders_initialize.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_vertex_shaders_dispose` | rasterizer/xbox/rasterizer_xbox_vertex_shaders_initialize.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_00168350` | rasterizer/xbox/rasterizer_xbox_vertex_shaders_runtime.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_00168360` | rasterizer/xbox/rasterizer_xbox_vertex_shaders_runtime.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_00168370` | rasterizer/xbox/rasterizer_xbox_vertex_shaders_runtime.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_00168380` | rasterizer/xbox/rasterizer_xbox_vertex_shaders_runtime.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_set_vertex_shader_permutation` | rasterizer/xbox/rasterizer_xbox_vertex_shaders_runtime.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `D3DDevice_SetRenderState` | rasterizer/xbox/rasterizer_xbox_water.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `D3DDevice_SetTextureStageState` | rasterizer/xbox/rasterizer_xbox_water.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_water_set_visibility_for_frame` | rasterizer/xbox/rasterizer_xbox_water.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_water_set_visibility_for_window` | rasterizer/xbox/rasterizer_xbox_water.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_water_get_visibility_for_window` | rasterizer/xbox/rasterizer_xbox_water.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_SetRenderState` | rasterizer/xbox/rasterizer_xbox_water.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_SetTextureStageState` | rasterizer/xbox/rasterizer_xbox_water.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_SetVertexShaderConstant` | rasterizer/xbox/rasterizer_xbox_water.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_SetVertexData2f` | rasterizer/xbox/rasterizer_xbox_water.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_SetVertexData2s` | rasterizer/xbox/rasterizer_xbox_water.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_Begin` | rasterizer/xbox/rasterizer_xbox_water.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_End` | rasterizer/xbox/rasterizer_xbox_water.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_water_build_bumpmap` | rasterizer/xbox/rasterizer_xbox_water.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_water_draw` | rasterizer/xbox/rasterizer_xbox_water.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `D3DDevice_SetRenderState` | rasterizer/xbox/rasterizer_xbox_widgets.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `D3DDevice_SetTextureStageState` | rasterizer/xbox/rasterizer_xbox_widgets.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_widget_project_billboard` | rasterizer/xbox/rasterizer_xbox_widgets.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_SetRenderState` | rasterizer/xbox/rasterizer_xbox_widgets.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_SetTextureStageState` | rasterizer/xbox/rasterizer_xbox_widgets.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_SetVertexShaderConstant` | rasterizer/xbox/rasterizer_xbox_widgets.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_BeginVisibilityTest` | rasterizer/xbox/rasterizer_xbox_widgets.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_EndVisibilityTest` | rasterizer/xbox/rasterizer_xbox_widgets.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_GetVisibilityTestResult` | rasterizer/xbox/rasterizer_xbox_widgets.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_SetVertexData2f` | rasterizer/xbox/rasterizer_xbox_widgets.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_SetVertexData4f` | rasterizer/xbox/rasterizer_xbox_widgets.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_SetVertexData2s` | rasterizer/xbox/rasterizer_xbox_widgets.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_SetVertexDataColor` | rasterizer/xbox/rasterizer_xbox_widgets.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_Begin` | rasterizer/xbox/rasterizer_xbox_widgets.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DDevice8_End` | rasterizer/xbox/rasterizer_xbox_widgets.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_widget_end` | rasterizer/xbox/rasterizer_xbox_widgets.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_widget_get_occlusion_test_result` | rasterizer/xbox/rasterizer_xbox_widgets.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_widget_submit` | rasterizer/xbox/rasterizer_xbox_widgets.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_widget_begin` | rasterizer/xbox/rasterizer_xbox_widgets.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_widget_set_texture` | rasterizer/xbox/rasterizer_xbox_widgets.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_widget_set_tint_factor` | rasterizer/xbox/rasterizer_xbox_widgets.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_widget_set_zbuffer_enable` | rasterizer/xbox/rasterizer_xbox_widgets.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_widget_draw_sprite2d` | rasterizer/xbox/rasterizer_xbox_widgets.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_widget_draw_sprite3d` | rasterizer/xbox/rasterizer_xbox_widgets.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_widget_submit_occlusion_test` | rasterizer/xbox/rasterizer_xbox_widgets.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `shader_map_verify` | rasterizer/xbox/shader_transparent_chicago_preprocessor.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `shader_transparent_chicago_create` | rasterizer/xbox/shader_transparent_chicago_preprocessor.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_initialize` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_reset_state` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_frame_begin` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_windows_begin` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_window_begin` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_window_get_fog` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_window_set_fog` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_window_end` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_windows_end` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_frame_end` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_present` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_dispose` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_set_vblank_callback` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_profile_enable` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_dynamic_triangles_new` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_dynamic_triangles_lock` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_dynamic_triangles_unlock` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_dynamic_triangles_delete` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_dynamic_vertices_new` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_dynamic_vertices_get_type` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_dynamic_vertices_lock` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_dynamic_vertices_unlock` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_dynamic_vertices_delete` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_debug_immediate_begin` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_debug_immediate_line` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_debug_immediate_triangle` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_debug_immediate_end` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_debug_immediate_begin_screenspace` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_debug_immediate_line_screenspace` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_debug_immediate_linestrip_screenspace` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_debug_immediate_end_screenspace` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_decals_initialize` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_decals_update_function_pointers` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_decals_initialize_for_new_map` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_decals_dispose_from_old_map` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_decals_flush` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_decals_dispose` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_decal_vertices_new` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_decal_vertices_lock` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_decal_vertices_unlock` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_decal_vertices_delete` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_decals_begin` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_decals_draw` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_decals_end` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_detail_objects_begin` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_detail_objects_rebuild_vertices` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_detail_objects_draw` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_detail_objects_end` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_screen_effect` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_screen_flash` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_model_begin` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_model_draw` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_model_transparent_geometry_submit` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_model_end` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_models_end` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_lightmaps_begin` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_lightmap_begin` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_lightmap_draw` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_lightmap_end` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_lightmaps_end` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_diffuse_lights_begin` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_diffuse_light_begin` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_diffuse_light_draw` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_diffuse_light_end` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_diffuse_lights_end` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_shadows_begin` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_shadow_begin` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_shadow_model_begin` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_shadow_model_draw` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_shadow_model_end` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_shadow_draw` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_shadow_end` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_shadows_end` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_diffuse_textures_begin` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_diffuse_texture_draw` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_diffuse_textures_end` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_specular_lights_begin` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_specular_light_begin` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_specular_light_draw` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_specular_light_end` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_specular_lights_end` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_specular_lightmaps_begin` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_specular_lightmap_begin` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_specular_lightmap_draw` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_specular_lightmap_end` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_specular_lightmaps_end` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_reflection_lightmap_masks_begin` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_reflection_lightmap_mask_begin` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_reflection_lightmap_mask_draw` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_reflection_lightmap_mask_end` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_reflection_lightmap_masks_end` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_reflection_mirrors_begin` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_reflection_mirror_draw` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_reflection_mirrors_end` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_reflections_begin` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_reflection_draw` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_reflections_end` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_transparent_geometry_begin` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_transparent_geometry_submit` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_transparent_geometry_end` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_fog_begin` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_fog_draw` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_fog_end` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_fog_screen_wind_get_vector` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_fog_screen_begin` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_fog_screen_draw` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_environment_fog_screen_end` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_hud_begin` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_hud_end` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_dynamic_unlit_geometry_draw` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_dynamic_lit_geometry_draw` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_dynamic_screen_geometry_draw` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_dynamic_screen_geometry_add_multitexture_params_to_base` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_psuedo_dynamic_screen_quad_draw` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_widget_submit` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_widget_begin` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_widget_set_texture` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_widget_set_tint_factor` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_widget_set_zbuffer_enable` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_widget_draw_sprite2d` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_widget_draw_sprite3d` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_widget_end` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_widget_submit_occlusion_test` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_widget_get_occlusion_test_result` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_hud_motion_sensor_blip_begin` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_hud_motion_sensor_blip_draw` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_hud_motion_sensor_blip_end` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_debug_immediate_point` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_debug_immediate_vector` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_models_begin` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_debug_model_vertices` | rasterizer/rasterizer.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_screen_effects_time` | rasterizer/rasterizer_cinematics.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_screen_effects_initialize` | rasterizer/rasterizer_cinematics.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_screen_effects_initialize_for_new_map` | rasterizer/rasterizer_cinematics.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_screen_effects_dispose_from_old_map` | rasterizer/rasterizer_cinematics.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_screen_effects_dispose` | rasterizer/rasterizer_cinematics.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_script_screen_effect_set_value` | rasterizer/rasterizer_cinematics.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_script_screen_effect_get_value` | rasterizer/rasterizer_cinematics.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_screen_effect_start` | rasterizer/rasterizer_cinematics.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_screen_effect_set_convolution` | rasterizer/rasterizer_cinematics.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_screen_effect_set_filter` | rasterizer/rasterizer_cinematics.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_screen_effect_set_filter_desaturation_tint` | rasterizer/rasterizer_cinematics.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_screen_effect_set_video` | rasterizer/rasterizer_cinematics.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_screen_effect_stop` | rasterizer/rasterizer_cinematics.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_screen_effect_get_cinematic_parameters` | rasterizer/rasterizer_cinematics.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_set_near_clip_distance` | rasterizer/rasterizer_cinematics.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_get_near_clip_distance` | rasterizer/rasterizer_cinematics.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_debug_new_primitive` | rasterizer/rasterizer_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_debug_initialize` | rasterizer/rasterizer_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_debug_begin` | rasterizer/rasterizer_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_debug_end` | rasterizer/rasterizer_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_debug_dispose` | rasterizer/rasterizer_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_debug_test` | rasterizer/rasterizer_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0016d980` | rasterizer/rasterizer_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_debug_draw` | rasterizer/rasterizer_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_debug_line_shaded` | rasterizer/rasterizer_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_debug_triangle_shaded` | rasterizer/rasterizer_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_debug_line` | rasterizer/rasterizer_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_debug_triangle` | rasterizer/rasterizer_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_frame_statistics_initialize` | rasterizer/rasterizer_frame_statistics.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_frame_statistics_begin` | rasterizer/rasterizer_frame_statistics.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_frame_statistics_get_fps` | rasterizer/rasterizer_frame_statistics.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_fps_accumulate` | rasterizer/rasterizer_frame_statistics.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `eat_my_shorts` | rasterizer/rasterizer_frame_statistics.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_frame_statistics_count_static_vertices` | rasterizer/rasterizer_frame_statistics.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_frame_statistics_count_dynamic_vertices` | rasterizer/rasterizer_frame_statistics.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_frame_statistics_draw` | rasterizer/rasterizer_frame_statistics.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_frame_statistics_end` | rasterizer/rasterizer_frame_statistics.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_frame_statistics_dispose` | rasterizer/rasterizer_frame_statistics.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `uncompress_int8_to_real` | rasterizer/rasterizer_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `uncompress_int16_to_real` | rasterizer/rasterizer_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
 | `uncompress_int32_to_real_vector3d` | rasterizer/rasterizer_geometry.c | Matched | import/src/level.rs:1803 | owed: the engine cites it, with no check against the original yet |
+| `rasterizer_geometry_get_vertex_size` | rasterizer/rasterizer_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_geometry_byte_swap_vertices` | rasterizer/rasterizer_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_geometry_uncompress_vertices` | rasterizer/rasterizer_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_geometry_stripify` | rasterizer/rasterizer_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `environment_vertex_compressed_get_point` | rasterizer/rasterizer_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `environment_vertex_compressed_get_normal` | rasterizer/rasterizer_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `environment_vertex_compressed_get_texcoord` | rasterizer/rasterizer_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `environment_lightmap_vertex_compressed_get_incident_radiosity` | rasterizer/rasterizer_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `environment_lightmap_vertex_compressed_get_texcoord` | rasterizer/rasterizer_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `compress_real_to_int8` | rasterizer/rasterizer_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `compress_real_to_int8_clamp` | rasterizer/rasterizer_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `compress_real_to_int16` | rasterizer/rasterizer_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `compress_real_to_int16_clamp` | rasterizer/rasterizer_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `compress_real_vector3d_to_int32` | rasterizer/rasterizer_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `compress_real_vector3d_to_int32_clamp` | rasterizer/rasterizer_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_geometry_compress_vertices` | rasterizer/rasterizer_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `screenshot_in_progress` | rasterizer/rasterizer_lights.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `lens_flare_parameters_get` | rasterizer/rasterizer_lights.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `lens_flare_occlusion_test_results_get` | rasterizer/rasterizer_lights.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_lights_reset_for_new_map` | rasterizer/rasterizer_lights.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_lights_begin_for_new_frame` | rasterizer/rasterizer_lights.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_lights_begin` | rasterizer/rasterizer_lights.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_light_submit` | rasterizer/rasterizer_lights.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_lights_end` | rasterizer/rasterizer_lights.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `lens_flare_evaluate_corona_rotation_function` | rasterizer/rasterizer_lights.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_lens_flare_submit` | rasterizer/rasterizer_lights.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
 | `rasterizer_lens_flare_submit_for_cluster` | rasterizer/rasterizer_lights.c | Matched | import/src/level.rs:1539 | owed: the engine cites it, with no check against the original yet |
+| `rasterizer_lens_flares_submit_occlusion_tests` | rasterizer/rasterizer_lights.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
 | `rasterizer_lens_flares_draw` | rasterizer/rasterizer_lights.c | Matched | ffi/src/camera.rs:3 | owed: the engine cites it, with no check against the original yet |
-
-793 Missing (479 reached from `main_loop`), by file:
-
-- rasterizer/common/rasterizer_common.c: `rasterizer_initialize_for_new_map`, `rasterizer_dispose_from_old_map`, `rasterizer_frame_update`
-- rasterizer/rasterizer.c: `rasterizer_initialize`, `rasterizer_reset_state`, `rasterizer_frame_begin`, `rasterizer_windows_begin`, `rasterizer_window_begin`, `rasterizer_window_get_fog`, `rasterizer_window_set_fog`, `rasterizer_window_end`, `rasterizer_windows_end`, `rasterizer_frame_end`, `rasterizer_present`, `rasterizer_dispose`, `rasterizer_set_vblank_callback`, `rasterizer_profile_enable`, `rasterizer_dynamic_triangles_new`, `rasterizer_dynamic_triangles_lock`, `rasterizer_dynamic_triangles_unlock`, `rasterizer_dynamic_triangles_delete`, `rasterizer_dynamic_vertices_new`, `rasterizer_dynamic_vertices_get_type`, `rasterizer_dynamic_vertices_lock`, `rasterizer_dynamic_vertices_unlock`, `rasterizer_dynamic_vertices_delete`, `rasterizer_debug_immediate_begin`, `rasterizer_debug_immediate_line`, `rasterizer_debug_immediate_triangle`, `rasterizer_debug_immediate_end`, `rasterizer_debug_immediate_begin_screenspace`, `rasterizer_debug_immediate_line_screenspace`, `rasterizer_debug_immediate_linestrip_screenspace`, `rasterizer_debug_immediate_end_screenspace`, `rasterizer_decals_initialize`, `rasterizer_decals_update_function_pointers`, `rasterizer_decals_initialize_for_new_map`, `rasterizer_decals_dispose_from_old_map`, `rasterizer_decals_flush`, `rasterizer_decals_dispose`, `rasterizer_decal_vertices_new`, `rasterizer_decal_vertices_lock`, `rasterizer_decal_vertices_unlock`, `rasterizer_decal_vertices_delete`, `rasterizer_decals_begin`, `rasterizer_decals_draw`, `rasterizer_decals_end`, `rasterizer_detail_objects_begin`, `rasterizer_detail_objects_rebuild_vertices`, `rasterizer_detail_objects_draw`, `rasterizer_detail_objects_end`, `rasterizer_screen_effect`, `rasterizer_screen_flash`, `rasterizer_model_begin`, `rasterizer_model_draw`, `rasterizer_model_transparent_geometry_submit`, `rasterizer_model_end`, `rasterizer_models_end`, `rasterizer_environment_lightmaps_begin`, `rasterizer_environment_lightmap_begin`, `rasterizer_environment_lightmap_draw`, `rasterizer_environment_lightmap_end`, `rasterizer_environment_lightmaps_end`, `rasterizer_environment_diffuse_lights_begin`, `rasterizer_environment_diffuse_light_begin`, `rasterizer_environment_diffuse_light_draw`, `rasterizer_environment_diffuse_light_end`, `rasterizer_environment_diffuse_lights_end`, `rasterizer_environment_shadows_begin`, `rasterizer_environment_shadow_begin`, `rasterizer_environment_shadow_model_begin`, `rasterizer_environment_shadow_model_draw`, `rasterizer_environment_shadow_model_end`, `rasterizer_environment_shadow_draw`, `rasterizer_environment_shadow_end`, `rasterizer_environment_shadows_end`, `rasterizer_environment_diffuse_textures_begin`, `rasterizer_environment_diffuse_texture_draw`, `rasterizer_environment_diffuse_textures_end`, `rasterizer_environment_specular_lights_begin`, `rasterizer_environment_specular_light_begin`, `rasterizer_environment_specular_light_draw`, `rasterizer_environment_specular_light_end`, `rasterizer_environment_specular_lights_end`, `rasterizer_environment_specular_lightmaps_begin`, `rasterizer_environment_specular_lightmap_begin`, `rasterizer_environment_specular_lightmap_draw`, `rasterizer_environment_specular_lightmap_end`, `rasterizer_environment_specular_lightmaps_end`, `rasterizer_environment_reflection_lightmap_masks_begin`, `rasterizer_environment_reflection_lightmap_mask_begin`, `rasterizer_environment_reflection_lightmap_mask_draw`, `rasterizer_environment_reflection_lightmap_mask_end`, `rasterizer_environment_reflection_lightmap_masks_end`, `rasterizer_environment_reflection_mirrors_begin`, `rasterizer_environment_reflection_mirror_draw`, `rasterizer_environment_reflection_mirrors_end`, `rasterizer_environment_reflections_begin`, `rasterizer_environment_reflection_draw`, `rasterizer_environment_reflections_end`, `rasterizer_environment_transparent_geometry_begin`, `rasterizer_environment_transparent_geometry_submit`, `rasterizer_environment_transparent_geometry_end`, `rasterizer_environment_fog_begin`, `rasterizer_environment_fog_draw`, `rasterizer_environment_fog_end`, `rasterizer_environment_fog_screen_wind_get_vector`, `rasterizer_environment_fog_screen_begin`, `rasterizer_environment_fog_screen_draw`, `rasterizer_environment_fog_screen_end`, `rasterizer_hud_begin`, `rasterizer_hud_end`, `rasterizer_dynamic_unlit_geometry_draw`, `rasterizer_dynamic_lit_geometry_draw`, `rasterizer_dynamic_screen_geometry_draw`, `rasterizer_dynamic_screen_geometry_add_multitexture_params_to_base`, `rasterizer_psuedo_dynamic_screen_quad_draw`, `rasterizer_widget_submit`, `rasterizer_widget_begin`, `rasterizer_widget_set_texture`, `rasterizer_widget_set_tint_factor`, `rasterizer_widget_set_zbuffer_enable`, `rasterizer_widget_draw_sprite2d`, `rasterizer_widget_draw_sprite3d`, `rasterizer_widget_end`, `rasterizer_widget_submit_occlusion_test`, `rasterizer_widget_get_occlusion_test_result`, `rasterizer_hud_motion_sensor_blip_begin`, `rasterizer_hud_motion_sensor_blip_draw`, `rasterizer_hud_motion_sensor_blip_end`, `rasterizer_debug_immediate_point`, `rasterizer_debug_immediate_vector`, `rasterizer_models_begin`, `rasterizer_debug_model_vertices`
-- rasterizer/rasterizer_cinematics.c: `rasterizer_screen_effects_time`, `rasterizer_screen_effects_initialize`, `rasterizer_screen_effects_initialize_for_new_map`, `rasterizer_screen_effects_dispose_from_old_map`, `rasterizer_screen_effects_dispose`, `rasterizer_script_screen_effect_set_value`, `rasterizer_script_screen_effect_get_value`, `rasterizer_screen_effect_start`, `rasterizer_screen_effect_set_convolution`, `rasterizer_screen_effect_set_filter`, `rasterizer_screen_effect_set_filter_desaturation_tint`, `rasterizer_screen_effect_set_video`, `rasterizer_screen_effect_stop`, `rasterizer_screen_effect_get_cinematic_parameters`, `rasterizer_set_near_clip_distance`, `rasterizer_get_near_clip_distance`
-- rasterizer/rasterizer_debug.c: `rasterizer_debug_new_primitive`, `rasterizer_debug_initialize`, `rasterizer_debug_begin`, `rasterizer_debug_end`, `rasterizer_debug_dispose`, `rasterizer_debug_test`, `code_0016d980`, `rasterizer_debug_draw`, `rasterizer_debug_line_shaded`, `rasterizer_debug_triangle_shaded`, `rasterizer_debug_line`, `rasterizer_debug_triangle`, `rasterizer_debug_compare_primitives`
-- rasterizer/rasterizer_frame_statistics.c: `rasterizer_frame_statistics_initialize`, `rasterizer_frame_statistics_begin`, `rasterizer_frame_statistics_get_fps`, `rasterizer_fps_accumulate`, `eat_my_shorts`, `rasterizer_frame_statistics_count_static_vertices`, `rasterizer_frame_statistics_count_dynamic_vertices`, `rasterizer_frame_statistics_draw`, `rasterizer_frame_statistics_end`, `rasterizer_frame_statistics_dispose`
-- rasterizer/rasterizer_geometry.c: `uncompress_int8_to_real`, `uncompress_int16_to_real`, `rasterizer_geometry_get_vertex_size`, `rasterizer_geometry_byte_swap_vertices`, `rasterizer_geometry_uncompress_vertices`, `rasterizer_geometry_stripify`, `environment_vertex_compressed_get_point`, `environment_vertex_compressed_get_normal`, `environment_vertex_compressed_get_texcoord`, `environment_lightmap_vertex_compressed_get_incident_radiosity`, `environment_lightmap_vertex_compressed_get_texcoord`, `compress_real_to_int8`, `compress_real_to_int8_clamp`, `compress_real_to_int16`, `compress_real_to_int16_clamp`, `compress_real_vector3d_to_int32`, `compress_real_vector3d_to_int32_clamp`, `rasterizer_geometry_compress_vertices`
-- rasterizer/rasterizer_lights.c: `screenshot_in_progress`, `lens_flare_parameters_get`, `lens_flare_occlusion_test_results_get`, `rasterizer_lights_reset_for_new_map`, `rasterizer_lights_begin_for_new_frame`, `rasterizer_lights_begin`, `rasterizer_light_submit`, `rasterizer_lights_end`, `lens_flare_evaluate_corona_rotation_function`, `rasterizer_lens_flare_submit`, `rasterizer_lens_flares_submit_occlusion_tests`
-- rasterizer/rasterizer_memory_pool.c: `rasterizer_memory_pool_initialize`, `rasterizer_memory_pool_begin`, `rasterizer_memory_alloc`, `rasterizer_memory_alloc_const`, `rasterizer_memory_pool_end`, `rasterizer_memory_pool_dispose`
-- rasterizer/rasterizer_swizzle.c: `rasterizer_xbox_bitmap_get_max_mipmap_count`, `rasterizer_xbox_bitmap_get_pixel_data_size`, `bitmap_swizzle_vector2d`, `rasterizer_xbox_bitmap_swizzle2d_byte`, `rasterizer_xbox_bitmap_swizzle2d_word`, `rasterizer_xbox_bitmap_swizzle2d_long`, `rasterizer_xbox_bitmap_swizzle3d_byte`, `rasterizer_xbox_bitmap_swizzle3d_word`, `rasterizer_xbox_bitmap_swizzle3d_long`, `rasterizer_xbox_bitmap_swizzle`, `rasterizer_xbox_bitmap_rebuild_hardware_format`, `bitmap_swizzle_vector3d`, `compute_swizzle_masks`
-- rasterizer/rasterizer_text.c: `code_00172e80`, `code_00172e90`, `rasterizer_text_cache_initialize`, `rasterizer_text_set_shadow_color`, `rasterizer_text_cache_flush`, `rasterizer_text_cache_dispose`, `code_00172fa0`, `code_00172fc0`, `code_00173070`, `code_001730d0`, `code_00173450`, `code_00173540`, `rasterizer_draw_string`, `rasterizer_draw_unicode_string`, `lock_rasterizer_text_data`, `unlock_rasterizer_text_data`, `rasterizer_draw_character`, `rasterizer_draw_character_with_dropshadow`, `rasterizer_draw_hires_glyph`, `rasterizer_draw_hires_character`, `rasterizer_draw_hires_character_with_dropshadow`, `hardware_character_cache_get_bitmap`, `hardware_character_cache_get_origin`, `hardware_character_padding`, `flush_hardware_character`, `cache_hardware_format_character`
-- rasterizer/rasterizer_transparent_enclosure.h: `rasterizer_transparent_encloses`
-- rasterizer/rasterizer_transparent_geometry.c: `rasterizer_transparent_geometry_initialize`, `rasterizer_transparent_geometry_begin`, `rasterizer_transparent_geometry_new_group`, `rasterizer_transparent_geometry_new_group2`, `rasterizer_transparent_geometry_get_groups2`, `rasterizer_transparent_geometry_next_group`, `rasterizer_transparent_geometry_get_groups`, `rasterizer_transparent_geometry_get_group_from_presorted_index`, `rasterizer_transparent_geometry_get_group_presorted_index`, `rasterizer_transparent_geometry_get_group_pending_status`, `rasterizer_transparent_geometry_set_group_pending_status`, `rasterizer_transparent_geometry_get_primary_vertex_type`, `rasterizer_transparent_geometry_end`, `rasterizer_transparent_geometry_dispose`, `rasterizer_transparent_geometry_stop`, `rasterizer_sort_internal`, `group_sorted_indices_cmpfn`, `rasterizer_sort_external`, `rasterizer_transparent_geometry_draw`
-- rasterizer/xbox/rasterizer_xbox.c: `Direct3D_Release`, `IDirect3D8_Release`, `IDirect3D8_CreateDevice`, `D3DDevice_BeginScene`, `D3DDevice_EndScene`, `D3DDevice_GetRenderState`, `D3DDevice_GetTextureStageState`, `D3DDevice_SetRenderState`, `D3DDevice_SetTextureStageState`, `IDirect3DDevice8_Release`, `IDirect3DDevice8_GetDeviceCaps`, `IDirect3DDevice8_Present`, `IDirect3DDevice8_GetBackBuffer`, `IDirect3DDevice8_CreateTexture`, `IDirect3DDevice8_CreateVolumeTexture`, `IDirect3DDevice8_CreateCubeTexture`, `IDirect3DDevice8_CreatePalette`, `IDirect3DDevice8_SetRenderTarget`, `rasterizer_preinitialize__fill_you_up_with_the_devils_cock`, `IDirect3DDevice8_GetDepthStencilSurface`, `IDirect3DDevice8_BeginScene`, `IDirect3DDevice8_EndScene`, `IDirect3DDevice8_Clear`, `IDirect3DDevice8_SetViewport`, `rasterizer_get_bitmap_default_hardware_format`, `IDirect3DDevice8_SetRenderState`, `IDirect3DDevice8_GetRenderState`, `IDirect3DDevice8_SetTexture`, `IDirect3DDevice8_SetPalette`, `IDirect3DDevice8_GetTextureStageState`, `IDirect3DDevice8_SetTextureStageState`, `IDirect3DDevice8_SetVertexShader`, `IDirect3DDevice8_SetVertexShaderConstant`, `IDirect3DDevice8_SetShaderConstantMode`, `IDirect3DDevice8_SetStreamSource`, `IDirect3DDevice8_SetIndices`, `IDirect3DDevice8_SetPixelShaderProgram`, `IDirect3DDevice8_SetVerticalBlankCallback`, `IDirect3DDevice8_SetVertexData2s`, `IDirect3DDevice8_Begin`, `IDirect3DDevice8_End`, `_rasterizer_reset_state`, `rasterizer_spin_begin`, `rasterizer_spin_end`, `_rasterizer_windows_begin`, `_rasterizer_window_get_fog`, `D3DTexture_UnlockRect`, `_rasterizer_windows_end`, `_rasterizer_frame_end`, `IDirect3DTexture8_GetSurfaceLevel`, `IDirect3DTexture8_LockRect`, `IDirect3DTexture8_UnlockRect`, `D3DVolumeTexture_UnlockBox`, `_rasterizer_dispose`, `_rasterizer_set_vblank_callback`, `IDirect3DVolumeTexture8_LockBox`, `IDirect3DVolumeTexture8_UnlockBox`, `rasterizer_set_texture_bitmap_data`, `rasterizer_set_texture_direct`, `D3DCubeTexture_UnlockRect`, `rasterizer_set_texture_direct_non_blocking`, `rasterizer_set_texture`, `IDirect3DCubeTexture8_LockRect`, `IDirect3DCubeTexture8_UnlockRect`, `rasterizer_set_texture_non_blocking`, `rasterizer_get_target`, `D3DPalette_Unlock`, `IDirect3DPalette8_Lock`, `IDirect3DPalette8_Unlock`, `rasterizer_set_vertex_shader`, `rasterizer_set_pixel_shader`, `rasterizer_set_model_skinning`, `D3DSurface_UnlockRect`, `IDirect3DSurface8_Release`, `rasterizer_set_model_lighting_point_light`, `IDirect3DSurface8_GetDesc`, `IDirect3DSurface8_LockRect`, `IDirect3DSurface8_UnlockRect`, `rasterizer_set_model_lighting_distant_light`, `rasterizer_set_model_lighting`, `rasterizer_set_frustum_z`, `rasterizer_get_stencil_mode`, `SetupSmartStates`, `rasterizer_filthy_bitmap_defaults_initialize`, `_rasterizer_initialize`, `_rasterizer_frame_begin`, `_rasterizer_window_set_fog`, `_rasterizer_present`, `rasterizer_set_framebuffer_blend_function`, `rasterizer_set_target`, `rasterizer_set_target_as_texture`, `rasterizer_secondary_render_target_debug`, `rasterizer_set_stencil_mode`, `_rasterizer_window_begin`, `_rasterizer_window_end`, `rasterizer_screen_width_update`
-- rasterizer/xbox/rasterizer_xbox_active_camouflage.c: `real_alpha_to_pixel32`, `D3DDevice_SetRenderState`, `D3DDevice_SetTextureStageState`, `rasterizer_active_camouflage_set_visibility`, `IDirect3DDevice8_SetRenderState`, `IDirect3DDevice8_SetTextureStageState`, `IDirect3DDevice8_SetVertexShaderConstant`, `IDirect3DDevice8_SetVertexData2s`, `IDirect3DDevice8_Begin`, `IDirect3DDevice8_End`, `rasterizer_active_camouflage_cache_primary_render_target`, `rasterizer_active_camouflage_draw`
-- rasterizer/xbox/rasterizer_xbox_debug.c: `rasterizer_debug_drawing_begin`, `rasterizer_debug_drawing_end`, `_rasterizer_debug_immediate_begin`, `_rasterizer_debug_immediate_end`, `_rasterizer_debug_immediate_line`, `_rasterizer_debug_immediate_triangle`, `_rasterizer_debug_immediate_begin_screenspace`, `_rasterizer_debug_immediate_end_screenspace`, `_rasterizer_debug_immediate_line_screenspace`, `_rasterizer_debug_immediate_linestrip_screenspace`
-- rasterizer/xbox/rasterizer_xbox_decals.c: `D3DDevice_SetRenderState`, `D3DDevice_SetTextureStageState`, `rasterizer_decal_vertices_purge_proc`, `rasterizer_decal_vertices_locked_proc`, `_rasterizer_decals_update_function_pointers`, `IDirect3DDevice8_SetRenderState`, `_rasterizer_decals_initialize_for_new_map`, `_rasterizer_decals_dispose_from_old_map`, `_rasterizer_decals_flush`, `rasterizer_decal_vertices_begin_update`, `rasterizer_decal_vertices_end_update`, `_rasterizer_decal_vertices_new`, `IDirect3DDevice8_SetTextureStageState`, `IDirect3DDevice8_DrawPrimitive`, `_rasterizer_decal_vertices_delete`, `IDirect3DDevice8_SetStreamSource`, `_rasterizer_decals_end`, `IDirect3DDevice8_SetVertexData4ub`, `D3DVertexBuffer_Unlock`, `IDirect3DVertexBuffer8_Release`, `IDirect3DVertexBuffer8_Register`, `IDirect3DVertexBuffer8_Lock`, `IDirect3DVertexBuffer8_Unlock`, `_rasterizer_decals_initialize`, `_rasterizer_decals_dispose`, `_rasterizer_decal_vertices_lock`, `_rasterizer_decal_vertices_unlock`, `_rasterizer_decals_begin`, `_rasterizer_decals_draw`, `rasterizer_decal_blend_function_commutes`, `rasterizer_decals_sort_run`, `rasterizer_decals_draw_order`
-- rasterizer/xbox/rasterizer_xbox_detail_objects.c: `code_0014b7e0`, `code_0014b990`, `code_0014b9e0`, `code_0014ba00`, `rasterizer_detail_objects_initialize`, `code_0014bb90`, `code_0014bdb0`, `code_0014be10`, `code_0014be20`, `code_0014be30`, `_rasterizer_detail_objects_end`, `code_0014be50`, `code_0014be80`, `code_0014be90`, `code_0014bea0`, `code_0014bec0`, `rasterizer_detail_objects_dispose`, `_rasterizer_detail_objects_begin`, `_rasterizer_detail_objects_rebuild_vertices`, `_rasterizer_detail_objects_draw`, `detail_object_build_vertices`
-- rasterizer/xbox/rasterizer_xbox_draw_primitives.c: `code_0014c870`, `code_0014c890`, `rasterizer_dynamic_geometry_initialize`, `rasterizer_dynamic_geometry_begin`, `rasterizer_dynamic_geometry_end`, `_rasterizer_dynamic_triangles_new`, `code_0014ccd0`, `code_0014cd00`, `_rasterizer_dynamic_triangles_delete`, `_rasterizer_dynamic_vertices_new`, `code_0014ceb0`, `code_0014cec0`, `_rasterizer_dynamic_vertices_get_type`, `code_0014cf80`, `_rasterizer_dynamic_vertices_delete`, `rasterizer_draw_dynamic_vertices`, `rasterizer_draw_dynamic_triangles_dynamic_vertices`, `rasterizer_draw_dynamic_triangles_static_vertices`, `rasterizer_draw_dynamic_triangles_static_vertices2`, `rasterizer_draw_static_triangles_dynamic_vertices`, `rasterizer_draw_static_triangles_static_vertices`, `rasterizer_draw`, `code_0014e180`, `code_0014e190`, `code_0014e1a0`, `code_0014e1c0`, `code_0014e1d0`, `code_0014e1e0`, `code_0014e1f0`, `code_0014e200`, `code_0014e220`, `rasterizer_dynamic_geometry_dispose`, `_rasterizer_dynamic_triangles_lock`, `_rasterizer_dynamic_triangles_unlock`, `_rasterizer_dynamic_vertices_lock`, `_rasterizer_dynamic_vertices_unlock`, `draw_primitives_vertex_buffer_valid`, `draw_primitives_triangle_buffer_valid`, `draw_primitives_dynamic_triangle_count_valid`, `dynamic_vertex_group_get_d3d_vertex_buffer`
-- rasterizer/xbox/rasterizer_xbox_dynavobgeom.c: `D3DDevice_SetRenderState`, `D3DDevice_SetTextureStageState`, `_rasterizer_hud_begin`, `_rasterizer_hud_end`, `_rasterizer_dynamic_lit_geometry_draw`, `_rasterizer_dynamic_screen_geometry_add_multitexture_params_to_base`, `IDirect3DDevice8_SetRenderState`, `_rasterizer_dynamic_screen_geometry_draw`, `IDirect3DDevice8_SetTextureStageState`, `IDirect3DDevice8_SetVertexShaderConstant`, `IDirect3DDevice8_SetVertexData2f`, `IDirect3DDevice8_SetVertexDataColor`, `IDirect3DDevice8_Begin`, `IDirect3DDevice8_End`, `_rasterizer_dynamic_unlit_geometry_draw`, `submit_screen_vertex`, `_rasterizer_psuedo_dynamic_screen_quad_draw`
-- rasterizer/xbox/rasterizer_xbox_environment.c: `D3DDevice_SetRenderState`, `D3DDevice_SetTextureStageState`, `IDirect3DDevice8_SetRenderState`, `IDirect3DDevice8_SetTexture`, `IDirect3DDevice8_SetTextureStageState`, `IDirect3DDevice8_SetVertexShaderConstant`, `_rasterizer_environment_lightmap_end`, `_rasterizer_environment_lightmaps_end`, `_rasterizer_environment_diffuse_light_end`, `_rasterizer_environment_diffuse_lights_end`, `_rasterizer_environment_diffuse_textures_end`, `_rasterizer_environment_specular_light_end`, `_rasterizer_environment_specular_lights_end`, `_rasterizer_environment_specular_lightmap_end`, `_rasterizer_environment_specular_lightmaps_end`, `_rasterizer_environment_reflection_lightmap_mask_draw`, `_rasterizer_environment_reflection_lightmap_mask_end`, `_rasterizer_environment_reflection_lightmap_masks_end`, `_rasterizer_environment_reflection_mirrors_begin`, `_rasterizer_environment_reflection_mirrors_end`, `_rasterizer_environment_reflections_begin`, `_rasterizer_environment_reflections_end`, `_rasterizer_environment_transparent_geometry_begin`, `_rasterizer_environment_transparent_geometry_end`, `_rasterizer_environment_lightmaps_begin`, `_rasterizer_environment_lightmap_begin`, `_rasterizer_environment_lightmap_draw`, `_rasterizer_environment_diffuse_lights_begin`, `_rasterizer_environment_diffuse_light_begin`, `_rasterizer_environment_diffuse_light_draw`, `_rasterizer_environment_diffuse_textures_begin`, `_rasterizer_environment_diffuse_texture_draw`, `_rasterizer_environment_specular_lights_begin`, `rasterizer_environment_specular_spot_light_begin`, `_rasterizer_environment_specular_light_begin`, `_rasterizer_environment_specular_light_draw`, `_rasterizer_environment_specular_lightmaps_begin`, `_rasterizer_environment_specular_lightmap_begin`, `_rasterizer_environment_specular_lightmap_draw`, `_rasterizer_environment_reflection_lightmap_masks_begin`, `_rasterizer_environment_reflection_lightmap_mask_begin`, `_rasterizer_environment_reflection_mirror_draw`, `_rasterizer_environment_reflection_draw`, `_rasterizer_environment_transparent_geometry_submit`
-- rasterizer/xbox/rasterizer_xbox_environment_fog.c: `code_00154fd0`, `code_00155180`, `code_001551d0`, `code_001551f0`, `rasterizer_environment_fog_screen_initialize`, `rasterizer_environment_fog_screen_window_begin`, `rasterizer_environment_fog_screen_window_end`, `rasterizer_environment_fog_screen_dispose`, `code_001554a0`, `code_00155500`, `_rasterizer_environment_fog_draw`, `_rasterizer_environment_fog_end`, `_rasterizer_environment_fog_screen_wind_get_vector`, `code_001556c0`, `code_001556d0`, `code_001556e0`, `rasterizer_environment_fog_screen_model_submit`, `rasterizer_environment_fog_screen_model_end`, `set_real_vector4d`, `local_random_boolean`, `rasterizer_environment_fog_screen_is_active`, `rasterizer_environment_fog_screen_wind_update`, `_rasterizer_environment_fog_begin`, `_rasterizer_environment_fog_screen_begin`, `_rasterizer_environment_fog_screen_draw`, `_rasterizer_environment_fog_screen_end`, `rasterizer_environment_fog_screen_model_begin`, `previous_camera_matrix_for_window`
-- rasterizer/xbox/rasterizer_xbox_errors.c: `rasterizer_error`
-- rasterizer/xbox/rasterizer_xbox_hardware_bitmaps.c: `IDirect3DDevice8_CreateTexture`, `IDirect3DDevice8_CreateVolumeTexture`, `IDirect3DDevice8_CreateCubeTexture`, `rasterizer_bitmap_new`, `IDirect3DBaseTexture8_Release`, `D3DTexture_UnlockRect`, `IDirect3DTexture8_LockRect`, `IDirect3DTexture8_UnlockRect`, `D3DVolumeTexture_UnlockBox`, `IDirect3DVolumeTexture8_LockBox`, `IDirect3DVolumeTexture8_UnlockBox`, `D3DCubeTexture_UnlockRect`, `IDirect3DCubeTexture8_LockRect`, `IDirect3DCubeTexture8_UnlockRect`, `rasterizer_bitmap_2d_changed`, `rasterizer_bitmap_3d_changed`, `rasterizer_bitmap_cm_changed`, `rasterizer_bitmap_delete`, `rasterizer_bitmap_changed`
-- rasterizer/xbox/rasterizer_xbox_hardware_geometry.c: `IDirect3DDevice8_CreateVertexBuffer`, `IDirect3DDevice8_CreateIndexBuffer`, `code_00158450`, `code_00158460`, `D3DVertexBuffer_Unlock`, `IDirect3DVertexBuffer8_Release`, `IDirect3DVertexBuffer8_Lock`, `IDirect3DVertexBuffer8_Unlock`, `D3DIndexBuffer_Lock`, `D3DIndexBuffer_Unlock`, `IDirect3DIndexBuffer8_Release`, `IDirect3DIndexBuffer8_Lock`, `IDirect3DIndexBuffer8_Unlock`, `rasterizer_vertex_buffer_new`, `rasterizer_vertex_buffer_delete`, `rasterizer_triangle_buffer_new`, `rasterizer_triangle_buffer_delete`
-- rasterizer/xbox/rasterizer_xbox_lights.c: `D3DDevice_SetRenderState`, `D3DDevice_SetTextureStageState`, `rasterizer_project_billboard`, `IDirect3DDevice8_SetRenderState`, `IDirect3DDevice8_SetTextureStageState`, `IDirect3DDevice8_SetVertexShaderConstant`, `IDirect3DDevice8_SetVertexData2f`, `IDirect3DDevice8_SetVertexData4f`, `IDirect3DDevice8_SetVertexData2s`, `IDirect3DDevice8_Begin`, `IDirect3DDevice8_End`, `rasterizer_sun_glow_copy_source`, `rasterizer_sun_glow_convolve`, `rasterizer_sun_glow_draw`
-- rasterizer/xbox/rasterizer_xbox_models.c: `D3DDevice_SetRenderState`, `D3DDevice_SetTextureStageState`, `set_environment_shader_pixel_shader`, `IDirect3DDevice8_SetRenderState`, `IDirect3DDevice8_SetTextureStageState`, `IDirect3DDevice8_SetVertexShaderConstant`, `_rasterizer_models_begin`, `_rasterizer_model_end`, `_rasterizer_models_end`, `rasterizer_model_ambient_reflection_tint`, `rasterizer_model_draw_environment_shader`, `_rasterizer_model_begin`, `_rasterizer_model_transparent_geometry_submit`, `_rasterizer_model_draw`
-- rasterizer/xbox/rasterizer_xbox_motion_sensor.c: `code_0015d220`, `code_0015d3d0`, `code_0015d420`, `code_0015d640`, `code_0015d6a0`, `code_0015d6b0`, `code_0015d6d0`, `code_0015d700`, `code_0015d710`, `code_0015d720`, `_rasterizer_hud_motion_sensor_blip_begin`, `_rasterizer_hud_motion_sensor_blip_draw`, `_rasterizer_hud_motion_sensor_blip_end`
-- rasterizer/xbox/rasterizer_xbox_plasma_energy.c: `code_0015e2b0`, `code_0015e460`, `code_0015e4b0`, `code_0015e6d0`, `code_0015e730`, `rasterizer_plasma_energy_draw`
-- rasterizer/xbox/rasterizer_xbox_profile.c: `profile_assert`, `callback_function`, `frame_callback_function`, `rasterizer_profile_enabled`, `rasterizer_profile_initialize`, `rasterizer_profile_frame_begin`, `rasterizer_profile_window_begin`, `_rasterizer_profile_enable`, `rasterizer_profile_begin`, `rasterizer_profile_end`, `rasterizer_profile_get_string`, `rasterizer_profile_query`, `rasterizer_profile_query_pushbuffer`, `rasterizer_profile_frame_end`, `rasterizer_profile_window_end`, `rasterizer_profile_dispose`
-- rasterizer/xbox/rasterizer_xbox_screen_effect.c: `code_0015f720`, `code_0015f8d0`, `code_0015f920`, `code_0015f9b0`, `code_0015fbd0`, `code_0015fc30`, `code_0015fc40`, `code_0015fc60`, `code_0015fc70`, `code_0015fc80`, `rasterizer_screen_effect_set_texture_transforms`, `_rasterizer_screen_effect`, `_rasterizer_screen_flash`, `vector2d_reciprocal`
-- rasterizer/xbox/rasterizer_xbox_shadows.c: `D3DDevice_SetRenderState`, `D3DDevice_SetTextureStageState`, `IDirect3DDevice8_SetRenderState`, `_rasterizer_environment_shadows_begin`, `IDirect3DDevice8_SetTextureStageState`, `IDirect3DDevice8_SetVertexShaderConstant`, `_rasterizer_environment_shadow_model_begin`, `_rasterizer_environment_shadow_model_end`, `IDirect3DDevice8_SetVertexData2f`, `IDirect3DDevice8_SetVertexData2s`, `IDirect3DDevice8_Begin`, `IDirect3DDevice8_End`, `_rasterizer_environment_shadow_end`, `_rasterizer_environment_shadows_end`, `rasterizer_shadow_convolve`, `_rasterizer_environment_shadow_begin`, `_rasterizer_environment_shadow_model_draw`, `_rasterizer_environment_shadow_draw`, `rasterizer_shadow_convolve_pass`
-- rasterizer/xbox/rasterizer_xbox_text.c: `code_00162ea0`, `code_00163050`, `code_001630a0`, `code_001632c0`, `code_00163320`, `rasterizer_text_end`, `code_00163340`, `code_00163360`, `code_00163370`, `code_00163380`, `rasterizer_text_begin`, `rasterizer_text_draw_character`
-- rasterizer/xbox/rasterizer_xbox_transparent_geometry.c: `code_00163b40`, `code_00163cf0`, `IDirect3DDevice8_CreateVertexBuffer`, `rasterizer_transparent_geometry_group_draw__internal`, `code_00163ee0`, `code_00164100`, `code_00164160`, `code_00164170`, `IDirect3DDevice8_BeginVisibilityTest`, `IDirect3DDevice8_EndVisibilityTest`, `IDirect3DDevice8_GetVisibilityTestResult`, `D3DVertexBuffer_Unlock`, `IDirect3DVertexBuffer8_Release`, `IDirect3DVertexBuffer8_Lock`, `IDirect3DVertexBuffer8_Unlock`, `rasterizer_transparent_geometry_groups_end`, `subtract_vectors4d`, `offset_vector4d`, `rasterizer_transparent_geometry_initialize_aux_buffer`, `rasterizer_transparent_geometry_dispose_aux_buffer`, `rasterizer_transparent_geometry_groups_begin`, `rasterizer_transparent_geometry_group_draw`
-- rasterizer/xbox/rasterizer_xbox_vertex_shaders_initialize.c: `code_00168070`, `code_00168090`, `rasterizer_vertex_shaders_initialize`, `rasterizer_vertex_shaders_dispose`
-- rasterizer/xbox/rasterizer_xbox_vertex_shaders_runtime.c: `code_00168350`, `code_00168360`, `code_00168370`, `code_00168380`, `rasterizer_set_vertex_shader_permutation`
-- rasterizer/xbox/rasterizer_xbox_water.c: `D3DDevice_SetRenderState`, `D3DDevice_SetTextureStageState`, `rasterizer_water_set_visibility_for_frame`, `rasterizer_water_set_visibility_for_window`, `rasterizer_water_get_visibility_for_window`, `IDirect3DDevice8_SetRenderState`, `IDirect3DDevice8_SetTextureStageState`, `IDirect3DDevice8_SetVertexShaderConstant`, `IDirect3DDevice8_SetVertexData2f`, `IDirect3DDevice8_SetVertexData2s`, `IDirect3DDevice8_Begin`, `IDirect3DDevice8_End`, `rasterizer_water_build_bumpmap`, `rasterizer_water_draw`
-- rasterizer/xbox/rasterizer_xbox_widgets.c: `D3DDevice_SetRenderState`, `D3DDevice_SetTextureStageState`, `rasterizer_widget_project_billboard`, `IDirect3DDevice8_SetRenderState`, `IDirect3DDevice8_SetTextureStageState`, `IDirect3DDevice8_SetVertexShaderConstant`, `IDirect3DDevice8_BeginVisibilityTest`, `IDirect3DDevice8_EndVisibilityTest`, `IDirect3DDevice8_GetVisibilityTestResult`, `IDirect3DDevice8_SetVertexData2f`, `IDirect3DDevice8_SetVertexData4f`, `IDirect3DDevice8_SetVertexData2s`, `IDirect3DDevice8_SetVertexDataColor`, `IDirect3DDevice8_Begin`, `IDirect3DDevice8_End`, `_rasterizer_widget_end`, `_rasterizer_widget_get_occlusion_test_result`, `_rasterizer_widget_submit`, `_rasterizer_widget_begin`, `_rasterizer_widget_set_texture`, `_rasterizer_widget_set_tint_factor`, `_rasterizer_widget_set_zbuffer_enable`, `_rasterizer_widget_draw_sprite2d`, `_rasterizer_widget_draw_sprite3d`, `_rasterizer_widget_submit_occlusion_test`, `rasterizer_widget_batch_sprites`
-- rasterizer/xbox/shader_transparent_chicago_preprocessor.c: `shader_map_verify`, `shader_transparent_chicago_create`
-- rasterizer/xbox/shader_transparent_generic_preprocessor.c: `shader_stage_color_input`, `shader_stage_color_output`, `shader_stage_color_output_flags`, `shader_stage_alpha_input`, `shader_stage_alpha_output`, `shader_stage_alpha_output_flags`, `shader_stage_verify`, `shader_transparent_generic_create`
+| `code_00172e80` | rasterizer/rasterizer_text.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_00172e90` | rasterizer/rasterizer_text.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_text_cache_initialize` | rasterizer/rasterizer_text.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_text_set_shadow_color` | rasterizer/rasterizer_text.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_text_cache_flush` | rasterizer/rasterizer_text.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_text_cache_dispose` | rasterizer/rasterizer_text.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_00172fa0` | rasterizer/rasterizer_text.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_00172fc0` | rasterizer/rasterizer_text.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_00173070` | rasterizer/rasterizer_text.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_001730d0` | rasterizer/rasterizer_text.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_00173450` | rasterizer/rasterizer_text.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_00173540` | rasterizer/rasterizer_text.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_draw_string` | rasterizer/rasterizer_text.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_draw_unicode_string` | rasterizer/rasterizer_text.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_transparent_geometry_initialize` | rasterizer/rasterizer_transparent_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_transparent_geometry_begin` | rasterizer/rasterizer_transparent_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_transparent_geometry_new_group` | rasterizer/rasterizer_transparent_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_transparent_geometry_new_group2` | rasterizer/rasterizer_transparent_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_transparent_geometry_get_groups2` | rasterizer/rasterizer_transparent_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_transparent_geometry_next_group` | rasterizer/rasterizer_transparent_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_transparent_geometry_get_groups` | rasterizer/rasterizer_transparent_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_transparent_geometry_get_group_from_presorted_index` | rasterizer/rasterizer_transparent_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_transparent_geometry_get_group_presorted_index` | rasterizer/rasterizer_transparent_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_transparent_geometry_get_group_pending_status` | rasterizer/rasterizer_transparent_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_transparent_geometry_set_group_pending_status` | rasterizer/rasterizer_transparent_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_transparent_geometry_get_primary_vertex_type` | rasterizer/rasterizer_transparent_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_transparent_geometry_end` | rasterizer/rasterizer_transparent_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_transparent_geometry_dispose` | rasterizer/rasterizer_transparent_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_transparent_geometry_stop` | rasterizer/rasterizer_transparent_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_sort_internal` | rasterizer/rasterizer_transparent_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `group_sorted_indices_cmpfn` | rasterizer/rasterizer_transparent_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_sort_external` | rasterizer/rasterizer_transparent_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_transparent_geometry_draw` | rasterizer/rasterizer_transparent_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_initialize_for_new_map` | rasterizer/common/rasterizer_common.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_dispose_from_old_map` | rasterizer/common/rasterizer_common.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_frame_update` | rasterizer/common/rasterizer_common.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_debug_compare_primitives` | rasterizer/rasterizer_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_memory_pool_initialize` | rasterizer/rasterizer_memory_pool.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_memory_pool_begin` | rasterizer/rasterizer_memory_pool.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_memory_alloc` | rasterizer/rasterizer_memory_pool.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_memory_alloc_const` | rasterizer/rasterizer_memory_pool.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_memory_pool_end` | rasterizer/rasterizer_memory_pool.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_memory_pool_dispose` | rasterizer/rasterizer_memory_pool.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_xbox_bitmap_get_max_mipmap_count` | rasterizer/rasterizer_swizzle.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_xbox_bitmap_get_pixel_data_size` | rasterizer/rasterizer_swizzle.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `bitmap_swizzle_vector2d` | rasterizer/rasterizer_swizzle.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_xbox_bitmap_swizzle2d_byte` | rasterizer/rasterizer_swizzle.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_xbox_bitmap_swizzle2d_word` | rasterizer/rasterizer_swizzle.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_xbox_bitmap_swizzle2d_long` | rasterizer/rasterizer_swizzle.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_xbox_bitmap_swizzle3d_byte` | rasterizer/rasterizer_swizzle.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_xbox_bitmap_swizzle3d_word` | rasterizer/rasterizer_swizzle.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_xbox_bitmap_swizzle3d_long` | rasterizer/rasterizer_swizzle.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_xbox_bitmap_swizzle` | rasterizer/rasterizer_swizzle.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_xbox_bitmap_rebuild_hardware_format` | rasterizer/rasterizer_swizzle.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `bitmap_swizzle_vector3d` | rasterizer/rasterizer_swizzle.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `compute_swizzle_masks` | rasterizer/rasterizer_swizzle.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `lock_rasterizer_text_data` | rasterizer/rasterizer_text.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `unlock_rasterizer_text_data` | rasterizer/rasterizer_text.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_draw_character` | rasterizer/rasterizer_text.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_draw_character_with_dropshadow` | rasterizer/rasterizer_text.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_draw_hires_glyph` | rasterizer/rasterizer_text.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_draw_hires_character` | rasterizer/rasterizer_text.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_draw_hires_character_with_dropshadow` | rasterizer/rasterizer_text.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `hardware_character_cache_get_bitmap` | rasterizer/rasterizer_text.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `hardware_character_cache_get_origin` | rasterizer/rasterizer_text.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `hardware_character_padding` | rasterizer/rasterizer_text.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `flush_hardware_character` | rasterizer/rasterizer_text.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `cache_hardware_format_character` | rasterizer/rasterizer_text.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_transparent_encloses` | rasterizer/rasterizer_transparent_enclosure.h | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_screen_width_update` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_debug_drawing_begin` | rasterizer/xbox/rasterizer_xbox_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_debug_drawing_end` | rasterizer/xbox/rasterizer_xbox_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_debug_immediate_begin` | rasterizer/xbox/rasterizer_xbox_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_debug_immediate_end` | rasterizer/xbox/rasterizer_xbox_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_debug_immediate_line` | rasterizer/xbox/rasterizer_xbox_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_debug_immediate_triangle` | rasterizer/xbox/rasterizer_xbox_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_debug_immediate_begin_screenspace` | rasterizer/xbox/rasterizer_xbox_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_debug_immediate_end_screenspace` | rasterizer/xbox/rasterizer_xbox_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_debug_immediate_line_screenspace` | rasterizer/xbox/rasterizer_xbox_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `_rasterizer_debug_immediate_linestrip_screenspace` | rasterizer/xbox/rasterizer_xbox_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_decal_blend_function_commutes` | rasterizer/xbox/rasterizer_xbox_decals.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_decals_sort_run` | rasterizer/xbox/rasterizer_xbox_decals.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_decals_draw_order` | rasterizer/xbox/rasterizer_xbox_decals.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `detail_object_build_vertices` | rasterizer/xbox/rasterizer_xbox_detail_objects.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `draw_primitives_vertex_buffer_valid` | rasterizer/xbox/rasterizer_xbox_draw_primitives.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `draw_primitives_triangle_buffer_valid` | rasterizer/xbox/rasterizer_xbox_draw_primitives.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `draw_primitives_dynamic_triangle_count_valid` | rasterizer/xbox/rasterizer_xbox_draw_primitives.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `dynamic_vertex_group_get_d3d_vertex_buffer` | rasterizer/xbox/rasterizer_xbox_draw_primitives.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `previous_camera_matrix_for_window` | rasterizer/xbox/rasterizer_xbox_environment_fog.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `vector2d_reciprocal` | rasterizer/xbox/rasterizer_xbox_screen_effect.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_shadow_convolve_pass` | rasterizer/xbox/rasterizer_xbox_shadows.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rasterizer_widget_batch_sprites` | rasterizer/xbox/rasterizer_xbox_widgets.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `shader_stage_color_input` | rasterizer/xbox/shader_transparent_generic_preprocessor.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `shader_stage_color_output` | rasterizer/xbox/shader_transparent_generic_preprocessor.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `shader_stage_color_output_flags` | rasterizer/xbox/shader_transparent_generic_preprocessor.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `shader_stage_alpha_input` | rasterizer/xbox/shader_transparent_generic_preprocessor.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `shader_stage_alpha_output` | rasterizer/xbox/shader_transparent_generic_preprocessor.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `shader_stage_alpha_output_flags` | rasterizer/xbox/shader_transparent_generic_preprocessor.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `shader_stage_verify` | rasterizer/xbox/shader_transparent_generic_preprocessor.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `shader_transparent_generic_create` | rasterizer/xbox/shader_transparent_generic_preprocessor.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
 
 ## `render`
 
 | Function | File | Class | Engine | Evidence |
 | --- | --- | --- | --- | --- |
+| `render_effects` | render/render.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_initialize` | render/render.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_initialize_for_new_map` | render/render.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_dispose_from_old_map` | render/render.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_dispose` | render/render.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_nonplayer_frame` | render/render.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_frame_pregame` | render/render.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_frame_present` | render/render.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_location_visible` | render/render.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `rendered_cluster_get` | render/render.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_window` | render/render.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_player_frame` | render/render.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_frame` | render/render.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_camera_warn_once` | render/render_cameras.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_camera_new` | render/render_cameras.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_camera_hack_frustum_z` | render/render_cameras.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_camera_build_frustum_bounds` | render/render_cameras.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
 | `render_frustum_sphere_diameter_in_pixels` | render/render_cameras.c | Matched | ffi/src/render_model.rs:84 | owed: the engine cites it, with no check against the original yet |
+| `render_frustum_cube_view_fraction` | render/render_cameras.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_frustum_get_projection_bounds` | render/render_cameras.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_camera_view_to_screen` | render/render_cameras.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_camera_screen_to_view` | render/render_cameras.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_camera_screen_to_world` | render/render_cameras.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_camera_get_adjusted_field_of_view_tangent` | render/render_cameras.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_camera_build_clipped_frustum_bounds` | render/render_cameras.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_camera_triangle_frontfacing` | render/render_cameras.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_frustum_build_point_flags` | render/render_cameras.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_frustum_triangle_visible` | render/render_cameras.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_frustum_cube_visible` | render/render_cameras.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_frustum_sphere_visible` | render/render_cameras.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_camera_world_to_screen` | render/render_cameras.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_camera_debug_frustum` | render/render_cameras.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_camera_mirror` | render/render_cameras.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_camera_build_frustum` | render/render_cameras.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
 | `contrail_fade` | render/render_contrails.c | Matched | ffi/src/particles/contrails.rs:481 | owed: the engine cites it, with no check against the original yet |
+| `code_00177860` | render/render_contrails.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_00178000` | render/render_contrails.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_contrails_ground_mapped` | render/render_contrails.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_contrails_media_mapped` | render/render_contrails.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_contrails_normal` | render/render_contrails.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_debug_triangle` | render/render_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_debug_quadrilateral` | render/render_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_debug_polygon` | render/render_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_debug_add_cache_string` | render/render_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `build_circle_points` | render/render_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `build_height_matrix` | render/render_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `build_pill_points` | render/render_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_debug_add_cache_entry` | render/render_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_debug_point` | render/render_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_debug_line` | render/render_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_debug_vector` | render/render_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_debug_tick` | render/render_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_debug_line_offset` | render/render_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_debug_matrix` | render/render_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_debug_sphere` | render/render_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_debug_cylinder` | render/render_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_debug_pill` | render/render_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_debug_box` | render/render_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_debug_polygon_edges` | render/render_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_debug_string` | render/render_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_debug_string_at_point` | render/render_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_debug_camera` | render/render_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_debug_player` | render/render_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_debug_structure` | render/render_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_debug_bsp` | render/render_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_debug_input` | render/render_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_debug_structure_decals` | render/render_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_debug_point2d` | render/render_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_debug_line2d` | render/render_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_debug_vector2d` | render/render_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_debug_circle` | render/render_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_debug_vectors` | render/render_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_debug_quaternion` | render/render_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_debug_box2d_outline` | render/render_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_debug_box_outline` | render/render_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_debug` | render/render_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_media_initialize_for_new_map` | render/render_media.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_media_dispose_from_old_map` | render/render_media.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_media_build_render_target` | render/render_media.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_media` | render/render_media.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `object_get_render_bounding_sphere` | render/render_objects.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_objects_initialize` | render/render_objects.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_objects_initialize_for_new_map` | render/render_objects.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_objects_dispose_from_old_map` | render/render_objects.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_objects_dispose` | render/render_objects.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0017a860` | render/render_objects.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0017a8d0` | render/render_objects.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0017a980` | render/render_objects.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0017a9e0` | render/render_objects.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0017ae60` | render/render_objects.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0017af00` | render/render_objects.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0017afd0` | render/render_objects.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0017b080` | render/render_objects.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0017b180` | render/render_objects.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0017b1e0` | render/render_objects.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0017b4b0` | render/render_objects.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0017b7d0` | render/render_objects.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `object_get_cached_render_lighting` | render/render_objects.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0017b950` | render/render_objects.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0017bbc0` | render/render_objects.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_objects` | render/render_objects.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_object_shadows` | render/render_objects.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `local_player_is_first_person` | render/render_particles.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `compare_rendered_particles` | render/render_particles.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_particles` | render/render_particles.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_sky` | render/render_sky.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0017c760` | render/render_sprite.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0017c890` | render/render_sprite.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `build_sprite_prepare_for_window` | render/render_sprite.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0017c990` | render/render_sprite.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `build_sprites_begin` | render/render_sprite.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `build_sprites_end` | render/render_sprite.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `code_0017cce0` | render/render_sprite.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
 | `build_sprite_compute_vertex_fade` | render/render_sprite.c | Ported | ffi/src/sprite.rs:2 | `tools/engine_sprite_reference.py` |
+| `build_sprite` | render/render_sprite.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `build_sprite_rotational` | render/render_sprite.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `triangle_strip_iterator_new` | render/triangle_strips.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `triangle_strip_iterator_get_triangle` | render/triangle_strips.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_contrail` | render/render_contrails.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_contrails` | render/render_contrails.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_detail_objects` | render/render_detail_objects.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `object_is_first_person_camera` | render/render_objects.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `find_rendered_objects` | render/render_objects.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `object_get_level_of_detail_pixels` | render/render_objects.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_object_list` | render/render_objects.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `interpolate_real_argb_color` | render/render_objects.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `interpolate_normal` | render/render_objects.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_object_shadow_begin` | render/render_objects.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `shadow_volume_plane_pair` | render/render_objects.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_object_shadow_end` | render/render_objects.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `object_render_state_refresh` | render/render_objects.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `object_get_cached_render_state` | render/render_objects.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `render_object` | render/render_objects.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `process_rendered_objects` | render/render_objects.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `build_sprite_transform_origin_and_direction` | render/render_sprite.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `build_sprite_compute_scale` | render/render_sprite.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `build_sprite_get_group` | render/render_sprite.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
 | `build_sprite_compute_basis` | render/render_sprite.c | Ported | ffi/src/sprite.rs:1 | `tools/engine_sprite_reference.py` |
-
-134 Missing (97 reached from `main_loop`), by file:
-
-- render/render.c: `render_effects`, `render_initialize`, `render_initialize_for_new_map`, `render_dispose_from_old_map`, `render_dispose`, `render_nonplayer_frame`, `render_frame_pregame`, `render_frame_present`, `render_location_visible`, `rendered_cluster_get`, `render_window`, `render_player_frame`, `render_frame`
-- render/render_cameras.c: `render_camera_warn_once`, `render_camera_new`, `render_camera_hack_frustum_z`, `render_camera_build_frustum_bounds`, `render_frustum_cube_view_fraction`, `render_frustum_get_projection_bounds`, `render_camera_view_to_screen`, `render_camera_screen_to_view`, `render_camera_screen_to_world`, `render_camera_get_adjusted_field_of_view_tangent`, `render_camera_build_clipped_frustum_bounds`, `render_camera_triangle_frontfacing`, `render_frustum_build_point_flags`, `render_frustum_triangle_visible`, `render_frustum_cube_visible`, `render_frustum_sphere_visible`, `render_camera_world_to_screen`, `render_camera_debug_frustum`, `render_camera_mirror`, `render_camera_build_frustum`
-- render/render_contrails.c: `code_00177860`, `code_00178000`, `render_contrails_ground_mapped`, `render_contrails_media_mapped`, `render_contrails_normal`, `render_contrail`, `render_contrails`
-- render/render_debug.c: `render_debug_triangle`, `render_debug_quadrilateral`, `render_debug_polygon`, `render_debug_add_cache_string`, `build_circle_points`, `build_height_matrix`, `build_pill_points`, `render_debug_add_cache_entry`, `render_debug_point`, `render_debug_line`, `render_debug_vector`, `render_debug_tick`, `render_debug_line_offset`, `render_debug_matrix`, `render_debug_sphere`, `render_debug_cylinder`, `render_debug_pill`, `render_debug_box`, `render_debug_polygon_edges`, `render_debug_string`, `render_debug_string_at_point`, `render_debug_camera`, `render_debug_player`, `render_debug_structure`, `render_debug_bsp`, `render_debug_input`, `render_debug_structure_decals`, `render_debug_point2d`, `render_debug_line2d`, `render_debug_vector2d`, `render_debug_circle`, `render_debug_vectors`, `render_debug_quaternion`, `render_debug_box2d_outline`, `render_debug_box_outline`, `render_debug`
-- render/render_detail_objects.c: `render_detail_objects`
-- render/render_media.c: `render_media_initialize_for_new_map`, `render_media_dispose_from_old_map`, `render_media_build_render_target`, `render_media`
-- render/render_objects.c: `object_get_render_bounding_sphere`, `render_objects_initialize`, `render_objects_initialize_for_new_map`, `render_objects_dispose_from_old_map`, `render_objects_dispose`, `code_0017a860`, `code_0017a8d0`, `code_0017a980`, `code_0017a9e0`, `code_0017ae60`, `code_0017af00`, `code_0017afd0`, `code_0017b080`, `code_0017b180`, `code_0017b1e0`, `code_0017b4b0`, `code_0017b7d0`, `object_get_cached_render_lighting`, `code_0017b950`, `code_0017bbc0`, `render_objects`, `render_object_shadows`, `object_is_first_person_camera`, `find_rendered_objects`, `object_get_level_of_detail_pixels`, `render_object_list`, `interpolate_real_argb_color`, `interpolate_normal`, `render_object_shadow_begin`, `shadow_volume_plane_pair`, `render_object_shadow_end`, `object_render_state_refresh`, `object_get_cached_render_state`, `render_object`, `process_rendered_objects`
-- render/render_particles.c: `local_player_is_first_person`, `compare_rendered_particles`, `render_particles`
-- render/render_sky.c: `render_sky`
-- render/render_sprite.c: `code_0017c760`, `code_0017c890`, `build_sprite_prepare_for_window`, `code_0017c990`, `build_sprites_begin`, `build_sprites_end`, `code_0017cce0`, `build_sprite`, `build_sprite_rotational`, `build_sprite_transform_origin_and_direction`, `build_sprite_compute_scale`, `build_sprite_get_group`
-- render/triangle_strips.c: `triangle_strip_iterator_new`, `triangle_strip_iterator_get_triangle`
 
 ## `saved games`
 
+| Function | File | Class | Engine | Evidence |
+| --- | --- | --- | --- | --- |
+| `game_state_gpu_malloc` | saved games/game_state.c | Replaced |  | through its caller `_rasterizer_decals_initialize` |
+| `game_state_lruv_cache_new` | saved games/game_state.c | Replaced |  | through its caller `_rasterizer_decals_initialize` |
+| `game_state_initialize` | saved games/game_state.c | Replaced |  | through its caller `shell_initialize` |
+| `game_state_allocate_buffer` | saved games/game_state_xbox.c | Replaced | sim/src/lib.rs | Xbox-only hardware |
+| `game_state_free_buffer` | saved games/game_state_xbox.c | Replaced | sim/src/lib.rs | Xbox-only hardware |
+| `game_state_create_or_open_file` | saved games/game_state_xbox.c | Replaced | sim/src/lib.rs | Xbox-only hardware |
+| `game_state_close_file` | saved games/game_state_xbox.c | Replaced | sim/src/lib.rs | Xbox-only hardware |
+| `game_state_write_to_file` | saved games/game_state_xbox.c | Replaced | sim/src/lib.rs | Xbox-only hardware |
+| `game_state_read_from_file` | saved games/game_state_xbox.c | Replaced | sim/src/lib.rs | Xbox-only hardware |
+| `game_state_write_core` | saved games/game_state_xbox.c | Replaced | sim/src/lib.rs | Xbox-only hardware |
+| `game_state_read_core_header` | saved games/game_state_xbox.c | Replaced | sim/src/lib.rs | Xbox-only hardware |
+| `game_state_read_core` | saved games/game_state_xbox.c | Replaced | sim/src/lib.rs | Xbox-only hardware |
+| `game_state_get_persistent_storage_filename` | saved games/game_state_xbox.c | Replaced | sim/src/lib.rs | Xbox-only hardware |
+| `game_state_get_persistent_storage_path` | saved games/game_state_xbox.c | Replaced | sim/src/lib.rs | Xbox-only hardware |
+| `delete_persistent_storage` | saved games/game_state_xbox.c | Replaced | sim/src/lib.rs | Xbox-only hardware |
+| `game_state_open_persistent_storage` | saved games/game_state_xbox.c | Replaced | sim/src/lib.rs | Xbox-only hardware |
+| `game_state_read_header_from_persistent_storage` | saved games/game_state_xbox.c | Replaced | sim/src/lib.rs | Xbox-only hardware |
+| `game_state_write_to_persistent_storage` | saved games/game_state_xbox.c | Replaced | sim/src/lib.rs | Xbox-only hardware |
+| `game_state_read_from_persistent_storage` | saved games/game_state_xbox.c | Replaced | sim/src/lib.rs | Xbox-only hardware |
+| `game_state_create_persistent_storage` | saved games/game_state_xbox.c | Replaced | sim/src/lib.rs | Xbox-only hardware |
+| `player_profile_get_random_good_color` | saved games/player_profile.c | Replaced |  | through its caller `get_unique_random_color` |
+| `player_profile_get_random_color` | saved games/player_profile.c | Replaced |  | through its caller `get_unique_random_color` |
+| `game_state_image_contains` | saved games/game_state.c | Replaced |  | through its caller `game_state_image_reference_valid` |
+| `game_state_image_pointer` | saved games/game_state.c | Replaced |  | through its caller `game_state_image_data_valid` |
+| `game_state_image_refuse` | saved games/game_state.c | Replaced |  | through its caller `game_state_image_accept` |
+| `game_state_image_data_valid` | saved games/game_state.c | Replaced |  | through its caller `game_state_image_accept` |
+| `game_state_image_reference_valid` | saved games/game_state.c | Replaced |  | through its caller `game_state_image_memory_pool_valid` |
+| `game_state_image_memory_pool_valid` | saved games/game_state.c | Replaced |  | through its caller `game_state_image_accept` |
+| `game_state_image_lruv_cache_valid` | saved games/game_state.c | Replaced |  | through its caller `game_state_image_accept` |
+| `game_state_image_accept` | saved games/game_state.c | Replaced |  | through its caller `game_state_read_core` |
 
-149 Missing (129 reached from `main_loop`), by file:
+119 Missing (99 reached from `main_loop`), by file:
 
-- saved games/game_state.c: `dummy`, `code_001af260`, `code_001af270`, `code_001af280`, `game_state_dispose`, `game_state_initialize_for_new_map`, `game_state_dispose_from_old_map`, `game_state_save`, `game_state_revert`, `game_state_save_to_persistent_storage`, `game_state_test_persistent_storage`, `game_state_save_core`, `game_state_reverted`, `game_state_header_valid`, `game_state_allocation_record`, `code_001af6c0`, `game_state_malloc`, `game_state_gpu_malloc`, `game_state_data_new`, `game_state_memory_pool_new`, `game_state_lruv_cache_new`, `game_state_try_and_load_from_persistent_storage`, `game_state_load_core`, `game_state_initialize`, `game_state_call_before_save_procs`, `game_state_call_before_load_procs`, `game_state_call_after_load_procs`, `game_state_note_event`, `game_state_set_revert_time`, `game_state_allocation_new`, `game_state_image_contains`, `game_state_image_pointer`, `game_state_image_refuse`, `game_state_image_data_valid`, `game_state_image_reference_valid`, `game_state_image_memory_pool_valid`, `game_state_image_lruv_cache_valid`, `game_state_image_accept`, `game_state_data_arrays_new_map`, `game_state_check_data_arrays`
-- saved games/game_state_xbox.c: `game_state_allocate_buffer`, `game_state_free_buffer`, `game_state_create_or_open_file`, `game_state_close_file`, `game_state_write_to_file`, `game_state_read_from_file`, `game_state_write_core`, `game_state_read_core_header`, `game_state_read_core`, `game_state_get_persistent_storage_filename`, `game_state_get_persistent_storage_path`, `delete_persistent_storage`, `game_state_open_persistent_storage`, `game_state_read_header_from_persistent_storage`, `game_state_write_to_persistent_storage`, `game_state_read_from_persistent_storage`, `game_state_create_persistent_storage`
-- saved games/player_profile.c: `player_profiles_dispose`, `player_profiles_enumerate_available_to_local_player_index`, `player_profile_delete`, `player_profile_get_from_path`, `player_profile_number_of_available_primary_colors`, `player_profile_get_rgb_color`, `player_profile_get_highest_completed_solo_level`, `player_profile_get_enclosing_directory_path`, `build_default_profile`, `player_profile_read`, `player_profile_write_thread_proc`, `player_profile_new`, `player_profile_get`, `player_profile_get_argb_color`, `player_profile_get_random_good_color`, `player_profile_get_random_color`, `player_profile_create_default_profiles_on_disk`, `player_profile_write`, `player_profiles_initialize`, `player_profile_save`, `player_profile_save_last_level_played`, `player_profile_save_level_completed`
+- saved games/game_state.c: `dummy`, `code_001af260`, `code_001af270`, `code_001af280`, `game_state_dispose`, `game_state_initialize_for_new_map`, `game_state_dispose_from_old_map`, `game_state_save`, `game_state_revert`, `game_state_save_to_persistent_storage`, `game_state_test_persistent_storage`, `game_state_save_core`, `game_state_reverted`, `game_state_header_valid`, `game_state_allocation_record`, `code_001af6c0`, `game_state_malloc`, `game_state_data_new`, `game_state_memory_pool_new`, `game_state_try_and_load_from_persistent_storage`, `game_state_load_core`, `game_state_call_before_save_procs`, `game_state_call_before_load_procs`, `game_state_call_after_load_procs`, `game_state_note_event`, `game_state_set_revert_time`, `game_state_allocation_new`, `game_state_data_arrays_new_map`, `game_state_check_data_arrays`
+- saved games/player_profile.c: `player_profiles_dispose`, `player_profiles_enumerate_available_to_local_player_index`, `player_profile_delete`, `player_profile_get_from_path`, `player_profile_number_of_available_primary_colors`, `player_profile_get_rgb_color`, `player_profile_get_highest_completed_solo_level`, `player_profile_get_enclosing_directory_path`, `build_default_profile`, `player_profile_read`, `player_profile_write_thread_proc`, `player_profile_new`, `player_profile_get`, `player_profile_get_argb_color`, `player_profile_create_default_profiles_on_disk`, `player_profile_write`, `player_profiles_initialize`, `player_profile_save`, `player_profile_save_last_level_played`, `player_profile_save_level_completed`
 - saved games/playlist_profile.c: `playlist_profiles_initialize`, `playlist_profiles_dispose`, `playlist_profile_new`, `playlist_profile_delete`, `playlist_profile_get_from_path`, `playlist_profile_get_display_name`, `playlist_profile_number_of_default_profiles_on_disk`, `playlist_profile_create_default_profiles_on_disk`, `playlist_profile_read`, `playlist_profile_write_thread_proc`, `playlist_profiles_enumerate_available_to_local_player_index`, `playlist_profile_get`, `playlist_profile_write`, `playlist_profile_save`, `playlist_profile_options_from_block`, `playlist_profile_options_to_block`
 - saved games/saved_game_files.c: `saved_game_files_dispose`, `saved_game_file_close`, `saved_game_file_get_type`, `saved_game_files_notify_memory_units_changed`, `saved_game_file_get_useable_untitled_profile_name`, `saved_game_files_take_mutex`, `saved_game_files_release_mutex`, `saved_game_perform_file_system_checks`, `saved_game_file_name_unique`, `saved_game_file_remember_player1_last_used_profile_directory`, `saved_game_file_retrieve_player1_last_used_profile_directory`, `saved_game_file_remember_last_used_multiplayer_variant_directory`, `saved_game_file_retrieve_last_used_multiplayer_variant_directory`, `saved_game_file_remember_last_used_multiplayer_map`, `saved_game_file_retrieve_last_used_multiplayer_map`, `saved_game_file_generate_checksum`, `find_and_create_directory_if_necessary`, `enumerate_saved_game_files_start`, `enumerate_saved_game_files_end`, `enumerate_saved_game_file`, `enumerate_mapfile_start`, `enumerate_mapfile_end`, `enumerate_saved_game_file_from_mapfile`, `code_001b3100`, `code_001b31d0`, `code_001b31f0`, `code_001b3200`, `saved_game_files_initialize`, `saved_game_file_find_profile_index_for_directory_path`, `enumerate_default_playlist_profiles`, `enumerate_default_player_profiles`, `code_001b3930`, `code_001b3b20`, `append_entry_to_mapfile`, `code_001b3ee0`, `saved_game_file_get_display_name`, `delete_enumerated_saved_game_file`, `saved_game_file_open`, `synchronize_metadata_display_name_with_profile_name`, `saved_game_file_get_path_to_enclosing_directory`, `enumerate_default_profiles`, `saved_game_files_delete_all_custom_profiles`, `code_001b4b00`, `saved_game_files_enumerate_available_to_local_player_index`, `create_enumerated_saved_game_file`, `enumerate_memory_units_test`, `saved_game_files_take_mapfile_mutex`, `saved_game_files_release_mapfile_mutex`, `set_nth_entry_in_mapfile`, `enumerate_memory_units`, `count_enumerated_profiles_in_mapfile`, `build_saved_game_file_index`, `remove_nth_entry_in_mapfile`, `get_nth_entry_in_mapfile`
 
@@ -740,30 +2338,64 @@ docs/engine.md's "The coverage census" says what each class needs.
 
 | Function | File | Class | Engine | Evidence |
 | --- | --- | --- | --- | --- |
+| `scenario_get_sky_definition_index` | scenario/scenario.c | Replaced |  | through its caller `scenario_get_sky` |
+| `scenario_get_sky` | scenario/scenario.c | Replaced |  | through its caller `render_sky` |
 | `scenario_trigger_volume_test_point` | scenario/scenario.c | Matched | content/src/campaign.rs:138 | owed: the engine cites it, with no check against the original yet |
+| `scenario_debug_to_file` | scenario/scenario.c | Replaced |  | through its caller `_texture_cache_bitmap_get_hardware_format` |
 | `scenario_location_water_depth` | scenario/scenario.c | Matched | content/src/level.rs:741 | owed: water; reads the object, tag and map world, which the fake worlds do not hold (the structure's fog planes) |
+| `interpolate_real_rgb_color` | scenario/scenario.c | Replaced |  | through its caller `object_render_state_refresh` |
+| `scenario_get_atmospheric_fog` | scenario/scenario.c | Replaced |  | through its caller `render_player_frame` |
 
-55 Missing (47 reached from `main_loop`), by file:
+50 Missing (42 reached from `main_loop`), by file:
 
 - scenario/multiplayer_scenario_description.c: `multiplayer_scenario_description_get_list`, `map_name_from_multiplayer_scenario_description_item`
-- scenario/scenario.c: `scenario_call_disconnect_from_structure_bsp_procs`, `scenario_call_reconnect_to_structure_bsp_procs`, `scenario_initialize`, `scenario_initialize_for_new_map`, `scenario_dispose_from_old_map`, `scenario_frame_update`, `scenario_unload`, `global_scenario_get`, `global_scenario_try_and_get`, `global_structure_bsp_get`, `global_collision_bsp_get`, `global_bsp3d_get`, `scenario_get_game_globals`, `global_structure_bsp_tag_index_get`, `scenario_location_award_bonus`, `default_material_definition_get`, `scenario_material_definition_get`, `scenario_location_deafening`, `scenario_fog_at_point`, `scenario_illumination_at_point`, `scenario_leaf_index_from_point`, `scenario_get_sky_definition_index`, `scenario_get_sky`, `scenario_test_pvs`, `scenario_test_pas`, `scenario_location_potentially_visible_local`, `scenario_location_potentially_visible`, `scenario_object_name_index_from_string`, `scenario_fog_region_get_fog_index`, `scenario_switch_structure_bsp`, `scenario_reload_structure_bsp_if_necessary`, `scenario_get_structure_reference_index_from_tag_index`, `scenario_trigger_volume_test_object`, `scenario_debug_to_file`, `global_structure_bsp_index_get`, `scenario_load`, `scenario_location_from_point`, `scenario_location_from_line`, `scenario_ensure_point_within_world`, `scenario_get_fog_region_index`, `scenario_location_underwater`, `scenario_get_sound_environment`, `interpolate_real_rgb_color`, `scenario_get_atmospheric_fog`
+- scenario/scenario.c: `scenario_call_disconnect_from_structure_bsp_procs`, `scenario_call_reconnect_to_structure_bsp_procs`, `scenario_initialize`, `scenario_initialize_for_new_map`, `scenario_dispose_from_old_map`, `scenario_frame_update`, `scenario_unload`, `global_scenario_get`, `global_scenario_try_and_get`, `global_structure_bsp_get`, `global_collision_bsp_get`, `global_bsp3d_get`, `scenario_get_game_globals`, `global_structure_bsp_tag_index_get`, `scenario_location_award_bonus`, `default_material_definition_get`, `scenario_material_definition_get`, `scenario_location_deafening`, `scenario_fog_at_point`, `scenario_illumination_at_point`, `scenario_leaf_index_from_point`, `scenario_test_pvs`, `scenario_test_pas`, `scenario_location_potentially_visible_local`, `scenario_location_potentially_visible`, `scenario_object_name_index_from_string`, `scenario_fog_region_get_fog_index`, `scenario_switch_structure_bsp`, `scenario_reload_structure_bsp_if_necessary`, `scenario_get_structure_reference_index_from_tag_index`, `scenario_trigger_volume_test_object`, `global_structure_bsp_index_get`, `scenario_load`, `scenario_location_from_point`, `scenario_location_from_line`, `scenario_ensure_point_within_world`, `scenario_get_fog_region_index`, `scenario_location_underwater`, `scenario_get_sound_environment`
 - scenario/wind.c: `wind_dispose_from_old_map`, `wind_variance_get`, `wind_update`, `scenario_get_current_from_weather_palette`, `wind_variance_initialize`, `wind_initialize_for_new_map`, `scenario_get_current`, `scenario_get_wind`, `scenario_get_water_current`
 
 ## `shaders`
 
-
-21 Missing (13 reached from `main_loop`), by file:
-
-- shaders/shader_definitions.c: `shader_get_and_verify_type`
-- shaders/shaders.c: `shader_get_vertex_shader_permutation`, `shader_is_mirror`, `shader_is_destructable`, `shader_is_double_sided`, `shader_is_decal`, `shader_is_water_decal`, `shader_ignores_effect`, `shader_type_is_transparent`, `shader_type_is_lightmapped`, `shader_type_is_vertex_lit`, `shader_type_is_valid_for_environment`, `shader_type_is_valid_for_model`, `shader_type_is_valid_for_modifier`, `shader_environment_texture_animation_evaluate`, `numeric_countdown_timer_set`, `numeric_countdown_timer_get`, `numeric_countdown_timer_stop`, `numeric_countdown_timer_restart`, `numeric_countdown_timer_update`, `shader_texture_animation_evaluate`
+| Function | File | Class | Engine | Evidence |
+| --- | --- | --- | --- | --- |
+| `shader_get_and_verify_type` | shaders/shader_definitions.c | Replaced | app/Sources/OpenCEEngineRender/ShaderSources.swift | the enhanced lighting and Metal renderer |
+| `shader_get_vertex_shader_permutation` | shaders/shaders.c | Replaced | app/Sources/OpenCEEngineRender/ShaderSources.swift | the enhanced lighting and Metal renderer |
+| `shader_is_mirror` | shaders/shaders.c | Replaced | app/Sources/OpenCEEngineRender/ShaderSources.swift | the enhanced lighting and Metal renderer |
+| `shader_is_destructable` | shaders/shaders.c | Replaced | app/Sources/OpenCEEngineRender/ShaderSources.swift | the enhanced lighting and Metal renderer |
+| `shader_is_double_sided` | shaders/shaders.c | Replaced | app/Sources/OpenCEEngineRender/ShaderSources.swift | the enhanced lighting and Metal renderer |
+| `shader_is_decal` | shaders/shaders.c | Replaced | app/Sources/OpenCEEngineRender/ShaderSources.swift | the enhanced lighting and Metal renderer |
+| `shader_is_water_decal` | shaders/shaders.c | Replaced | app/Sources/OpenCEEngineRender/ShaderSources.swift | the enhanced lighting and Metal renderer |
+| `shader_ignores_effect` | shaders/shaders.c | Replaced | app/Sources/OpenCEEngineRender/ShaderSources.swift | the enhanced lighting and Metal renderer |
+| `shader_type_is_transparent` | shaders/shaders.c | Replaced | app/Sources/OpenCEEngineRender/ShaderSources.swift | the enhanced lighting and Metal renderer |
+| `shader_type_is_lightmapped` | shaders/shaders.c | Replaced | app/Sources/OpenCEEngineRender/ShaderSources.swift | the enhanced lighting and Metal renderer |
+| `shader_type_is_vertex_lit` | shaders/shaders.c | Replaced | app/Sources/OpenCEEngineRender/ShaderSources.swift | the enhanced lighting and Metal renderer |
+| `shader_type_is_valid_for_environment` | shaders/shaders.c | Replaced | app/Sources/OpenCEEngineRender/ShaderSources.swift | the enhanced lighting and Metal renderer |
+| `shader_type_is_valid_for_model` | shaders/shaders.c | Replaced | app/Sources/OpenCEEngineRender/ShaderSources.swift | the enhanced lighting and Metal renderer |
+| `shader_type_is_valid_for_modifier` | shaders/shaders.c | Replaced | app/Sources/OpenCEEngineRender/ShaderSources.swift | the enhanced lighting and Metal renderer |
+| `shader_environment_texture_animation_evaluate` | shaders/shaders.c | Replaced | app/Sources/OpenCEEngineRender/ShaderSources.swift | the enhanced lighting and Metal renderer |
+| `numeric_countdown_timer_set` | shaders/shaders.c | Replaced | app/Sources/OpenCEEngineRender/ShaderSources.swift | the enhanced lighting and Metal renderer |
+| `numeric_countdown_timer_get` | shaders/shaders.c | Replaced | app/Sources/OpenCEEngineRender/ShaderSources.swift | the enhanced lighting and Metal renderer |
+| `numeric_countdown_timer_stop` | shaders/shaders.c | Replaced | app/Sources/OpenCEEngineRender/ShaderSources.swift | the enhanced lighting and Metal renderer |
+| `numeric_countdown_timer_restart` | shaders/shaders.c | Replaced | app/Sources/OpenCEEngineRender/ShaderSources.swift | the enhanced lighting and Metal renderer |
+| `numeric_countdown_timer_update` | shaders/shaders.c | Replaced | app/Sources/OpenCEEngineRender/ShaderSources.swift | the enhanced lighting and Metal renderer |
+| `shader_texture_animation_evaluate` | shaders/shaders.c | Replaced | app/Sources/OpenCEEngineRender/ShaderSources.swift | the enhanced lighting and Metal renderer |
 
 ## `shell`
 
+| Function | File | Class | Engine | Evidence |
+| --- | --- | --- | --- | --- |
+| `shell_platform_initialize` | shell/shell_xbox.c | Replaced | app/Sources/OpenCEEngine/main.swift | Xbox-only hardware |
+| `shell_platform_verify` | shell/shell_xbox.c | Replaced | app/Sources/OpenCEEngine/main.swift | Xbox-only hardware |
+| `shell_platform_dispose` | shell/shell_xbox.c | Replaced | app/Sources/OpenCEEngine/main.swift | Xbox-only hardware |
+| `shell_screen_pause` | shell/shell_xbox.c | Replaced | app/Sources/OpenCEEngine/main.swift | Xbox-only hardware |
+| `shell_get_command_line` | shell/shell_xbox.c | Replaced | app/Sources/OpenCEEngine/main.swift | Xbox-only hardware |
+| `shell_idle` | shell/shell_xbox.c | Replaced | app/Sources/OpenCEEngine/main.swift | Xbox-only hardware |
+| `fuck_code_in_the_eye` | shell/shell_xbox.c | Replaced | app/Sources/OpenCEEngine/main.swift | Xbox-only hardware |
+| `main` | shell/shell_xbox.c | Replaced | app/Sources/OpenCEEngine/main.swift | Xbox-only hardware |
+| `shell_initialize` | shell/shell.c | Replaced |  | through its caller `main` |
+| `shell_dispose` | shell/shell.c | Replaced |  | through its caller `main` |
 
-13 Missing (10 reached from `main_loop`), by file:
+3 Missing (1 reached from `main_loop`), by file:
 
-- shell/shell.c: `shell_initialize`, `shell_dispose`, `shell_application_is_paused`, `shell_application_pause`, `shell_running_import_tool`
-- shell/shell_xbox.c: `shell_platform_initialize`, `shell_platform_verify`, `shell_platform_dispose`, `shell_screen_pause`, `shell_get_command_line`, `shell_idle`, `fuck_code_in_the_eye`, `main`
+- shell/shell.c: `shell_application_is_paused`, `shell_application_pause`, `shell_running_import_tool`
 
 ## `sound`
 
@@ -778,6 +2410,45 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `sound_definition_next_permutation` | sound/sound_definitions.c | Ported | audio/src/choice.rs:163 | `tools/engine_sound_choice_reference.py` |
 | `sound_new_impulse` | sound/sound_manager.c | Matched | audio/src/player.rs:1 | owed: sound; reads the object, tag and map world, which the fake worlds do not hold; Phase 15 |
 | `sound_refresh_looping` | sound/sound_manager.c | Matched | audio/src/player/looping.rs:1 | owed: sound; reads the object, tag and map world, which the fake worlds do not hold; Phase 15 |
+| `sound_samples_per_second` | sound/sound_dsound_xbox.c | Replaced | app/Sources/OpenCEEngineKit/SoundOutput.swift | Xbox-only hardware |
+| `dsound_volume_from_gain` | sound/sound_dsound_xbox.c | Replaced | app/Sources/OpenCEEngineKit/SoundOutput.swift | Xbox-only hardware |
+| `dsound_frequency_from_pitch` | sound/sound_dsound_xbox.c | Replaced | app/Sources/OpenCEEngineKit/SoundOutput.swift | Xbox-only hardware |
+| `dsound_angle_from_angle` | sound/sound_dsound_xbox.c | Replaced | app/Sources/OpenCEEngineKit/SoundOutput.swift | Xbox-only hardware |
+| `dsound_occlusion_from_occlusion` | sound/sound_dsound_xbox.c | Replaced | app/Sources/OpenCEEngineKit/SoundOutput.swift | Xbox-only hardware |
+| `dsound_obstruction_from_obstruction` | sound/sound_dsound_xbox.c | Replaced | app/Sources/OpenCEEngineKit/SoundOutput.swift | Xbox-only hardware |
+| `dsound_get` | sound/sound_dsound_xbox.c | Replaced | app/Sources/OpenCEEngineKit/SoundOutput.swift | Xbox-only hardware |
+| `dsound_virtual_get_state` | sound/sound_dsound_xbox.c | Replaced | app/Sources/OpenCEEngineKit/SoundOutput.swift | Xbox-only hardware |
+| `dsound_virtual_stop` | sound/sound_dsound_xbox.c | Replaced | app/Sources/OpenCEEngineKit/SoundOutput.swift | Xbox-only hardware |
+| `dsound_channel_update` | sound/sound_dsound_xbox.c | Replaced | app/Sources/OpenCEEngineKit/SoundOutput.swift | Xbox-only hardware |
+| `dsound_begin_scene` | sound/sound_dsound_xbox.c | Replaced | app/Sources/OpenCEEngineKit/SoundOutput.swift | Xbox-only hardware |
+| `dsound_dispose` | sound/sound_dsound_xbox.c | Replaced | app/Sources/OpenCEEngineKit/SoundOutput.swift | Xbox-only hardware |
+| `dsound_end_scene` | sound/sound_dsound_xbox.c | Replaced | app/Sources/OpenCEEngineKit/SoundOutput.swift | Xbox-only hardware |
+| `dsound_set_paused` | sound/sound_dsound_xbox.c | Replaced | app/Sources/OpenCEEngineKit/SoundOutput.swift | Xbox-only hardware |
+| `dsound_flush` | sound/sound_dsound_xbox.c | Replaced | app/Sources/OpenCEEngineKit/SoundOutput.swift | Xbox-only hardware |
+| `dsound_set_listener_properties` | sound/sound_dsound_xbox.c | Replaced | app/Sources/OpenCEEngineKit/SoundOutput.swift | Xbox-only hardware |
+| `dsound_initialize` | sound/sound_dsound_xbox.c | Replaced | app/Sources/OpenCEEngineKit/SoundOutput.swift | Xbox-only hardware |
+| `dsound_virtual_set_location` | sound/sound_dsound_xbox.c | Replaced | app/Sources/OpenCEEngineKit/SoundOutput.swift | Xbox-only hardware |
+| `dsound_virtual_set_properties` | sound/sound_dsound_xbox.c | Replaced | app/Sources/OpenCEEngineKit/SoundOutput.swift | Xbox-only hardware |
+| `dsound_virtual_queue_sound` | sound/sound_dsound_xbox.c | Replaced | app/Sources/OpenCEEngineKit/SoundOutput.swift | Xbox-only hardware |
+| `dsound_channel_set_I3DL2_properties` | sound/sound_dsound_xbox.c | Replaced | app/Sources/OpenCEEngineKit/SoundOutput.swift | Xbox-only hardware |
+| `virtual_channel_new` | sound/sound_dsound_xbox.c | Replaced | app/Sources/OpenCEEngineKit/SoundOutput.swift | Xbox-only hardware |
+| `dsound_fix_rear_speakers` | sound/sound_dsound_xbox.c | Replaced | app/Sources/OpenCEEngineKit/SoundOutput.swift | Xbox-only hardware |
+| `dsound_initialize_channel` | sound/sound_dsound_xbox.c | Replaced | app/Sources/OpenCEEngineKit/SoundOutput.swift | Xbox-only hardware |
+| `dsound_channel_callback` | sound/sound_dsound_xbox.c | Replaced | app/Sources/OpenCEEngineKit/SoundOutput.swift | Xbox-only hardware |
+| `dsound_channel_set_location` | sound/sound_dsound_xbox.c | Replaced | app/Sources/OpenCEEngineKit/SoundOutput.swift | Xbox-only hardware |
+| `dsound_channel_set_properties` | sound/sound_dsound_xbox.c | Replaced | app/Sources/OpenCEEngineKit/SoundOutput.swift | Xbox-only hardware |
+| `dsound_channel_queue_packet` | sound/sound_dsound_xbox.c | Replaced | app/Sources/OpenCEEngineKit/SoundOutput.swift | Xbox-only hardware |
+| `dsound_channel_fill` | sound/sound_dsound_xbox.c | Replaced | app/Sources/OpenCEEngineKit/SoundOutput.swift | Xbox-only hardware |
+| `dsound_channel_queue_sound` | sound/sound_dsound_xbox.c | Replaced | app/Sources/OpenCEEngineKit/SoundOutput.swift | Xbox-only hardware |
+| `interrupt_time_error` | sound/sound_dsound_xbox.c | Replaced | app/Sources/OpenCEEngineKit/SoundOutput.swift | Xbox-only hardware |
+| `dsound_virtual_remap` | sound/sound_dsound_xbox.c | Replaced | app/Sources/OpenCEEngineKit/SoundOutput.swift | Xbox-only hardware |
+| `dsound_virtual_touch` | sound/sound_dsound_xbox.c | Replaced | app/Sources/OpenCEEngineKit/SoundOutput.swift | Xbox-only hardware |
+| `dsound_channel_stopped` | sound/sound_dsound_xbox.c | Replaced | app/Sources/OpenCEEngineKit/SoundOutput.swift | Xbox-only hardware |
+| `dsound_error` | sound/sound_dsound_xbox.c | Replaced | app/Sources/OpenCEEngineKit/SoundOutput.swift | Xbox-only hardware |
+| `channel_stop` | sound/sound_dsound_xbox.c | Replaced | app/Sources/OpenCEEngineKit/SoundOutput.swift | Xbox-only hardware |
+| `channel_get` | sound/sound_dsound_xbox.c | Replaced | app/Sources/OpenCEEngineKit/SoundOutput.swift | Xbox-only hardware |
+| `virtual_channel_get` | sound/sound_dsound_xbox.c | Replaced | app/Sources/OpenCEEngineKit/SoundOutput.swift | Xbox-only hardware |
+| `channel_get_state` | sound/sound_dsound_xbox.c | Replaced | app/Sources/OpenCEEngineKit/SoundOutput.swift | Xbox-only hardware |
 | `sound_scale_value` | sound/sound_manager.c | Ported | audio/src/choice.rs:50 | `tools/engine_sound_choice_reference.py` |
 | `sound_manager_master_gain` | sound/sound_manager.c | Matched | audio/src/player.rs:236 | owed: the sound manager's gain; reads the object, tag and map world, which the fake worlds do not hold; Phase 15 |
 | `sound_channel_summary_build` | sound/sound_manager.c | Matched | audio/src/player.rs:299 | owed: the mixer's channels; reads the object, tag and map world, which the fake worlds do not hold (the sound manager); Phase 15 |
@@ -787,13 +2458,12 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `process_looping_sounds` | sound/sound_manager.c | Matched | audio/src/player/looping.rs:1 | owed: sound; reads the object, tag and map world, which the fake worlds do not hold; Phase 15 |
 | `detail_sound_random_offset` | sound/sound_manager.c | Matched | audio/src/player/looping.rs:686 | owed: a looping sound's details; draws from the game's random seed; Phase 15 |
 
-201 Missing (129 reached from `main_loop`), by file:
+162 Missing (90 reached from `main_loop`), by file:
 
 - sound/game_sound.c: `game_sound_initialize`, `game_sound_dispose`, `game_sound_initialize_for_new_map`, `game_sound_clear`, `game_sound_restore`, `game_looping_sound_new`, `game_looping_sound_delete`, `unattached_impulse_sound_new`, `scripted_sound_stop`, `scripted_foley_predict`, `scripted_looping_sound_set_scale`, `scripted_looping_sound_set_alternate`, `unattached_looping_sound_start`, `unattached_looping_sound_stop`, `code_001b7290`, `track_object_impulse_sound`, `game_sound_set_mouth_aperture`, `code_001b7630`, `code_001b7720`, `code_001b7790`, `code_001b7800`, `code_001b7860`, `game_sound_dispose_from_old_map`, `object_impulse_sound_new`, `scripted_sound_new`, `scripted_looping_sound_stop`, `game_sound_update`, `compute_sound_obstruction`, `scripted_looping_sound_start`, `scripted_looping_sound_stop_internal`, `obstruction_cache_slot`, `compute_combined_pas`, `location_potentially_audible`, `looping_sound_definition_is_music`, `update_potentially_audible_looping_sound`, `scripted_music_stop_all`
 - sound/ima_adpcm.c: `compress_ima_adpcm_audio_data`, `decompress_ima_adpcm_audio_data`, `byte_swap_bungie_ima_adpcm_header`
 - sound/sound_classes.c: `sound_class_get`, `sound_classes_initialize`, `sound_classes_dispose_from_old_map`, `sound_classes_dispose`, `sound_class_datum_get`, `debug_sound_classes_enable`, `debug_sound_classes_set_distances`, `debug_sound_classes_set_wet`, `sound_classes_initialize_for_new_map`, `sound_class_get_gain`
 - sound/sound_definitions.c: `sound_definition_get_maximum_distance`, `sound_definition_get_minimum_distance`, `sound_permutation_get_mouth_aperture`, `sound_permutation_get_real_mouth_aperture`
-- sound/sound_dsound_xbox.c: `sound_samples_per_second`, `dsound_volume_from_gain`, `dsound_frequency_from_pitch`, `dsound_angle_from_angle`, `dsound_occlusion_from_occlusion`, `dsound_obstruction_from_obstruction`, `dsound_get`, `dsound_virtual_get_state`, `dsound_virtual_stop`, `dsound_channel_update`, `dsound_begin_scene`, `dsound_dispose`, `dsound_end_scene`, `dsound_set_paused`, `dsound_flush`, `dsound_set_listener_properties`, `dsound_initialize`, `dsound_virtual_set_location`, `dsound_virtual_set_properties`, `dsound_virtual_queue_sound`, `dsound_channel_set_I3DL2_properties`, `virtual_channel_new`, `dsound_fix_rear_speakers`, `dsound_initialize_channel`, `dsound_channel_callback`, `dsound_channel_set_location`, `dsound_channel_set_properties`, `dsound_channel_queue_packet`, `dsound_channel_fill`, `dsound_channel_queue_sound`, `interrupt_time_error`, `dsound_virtual_remap`, `dsound_virtual_touch`, `dsound_channel_stopped`, `dsound_error`, `channel_stop`, `channel_get`, `virtual_channel_get`, `channel_get_state`
 - sound/sound_import/sound_aiff.c: `sound_file_is_aiff`, `sound_file_aiff_info_get`, `sound_file_aiff_raw_data_get`, `sound_file_aiff_format`
 - sound/sound_import/sound_import.c: `sound_file_info_get`, `sound_raw_sample_data_get`
 - sound/sound_import/sound_wave.c: `sound_file_is_wave`, `sound_file_wave_info_get`, `sound_file_wave_raw_data_get`, `sound_file_wave_format`
@@ -805,19 +2475,71 @@ docs/engine.md's "The coverage census" says what each class needs.
 
 | Function | File | Class | Engine | Evidence |
 | --- | --- | --- | --- | --- |
+| `render_debug_leaf_portal` | structures/leaf_map.c | Replaced |  | through its caller `render_debug_leaf_portals` |
+| `render_debug_leaf_portals` | structures/leaf_map.c | Replaced |  | through its caller `structure_render_preprocess` |
+| `calculate_world_from_cell_index_and_offset` | structures/structure_detail_objects.c | Replaced |  | through its caller `render_debug_detail_objects` |
+| `get_local_player_datum` | structures/structure_detail_objects.c | Replaced |  | through its caller `render_debug_detail_objects` |
+| `key_compare_cells_lower_bound` | structures/structure_detail_objects.c | Replaced |  | through its caller `get_lower_bound_cell` |
+| `key_compare_cells_upper_bound` | structures/structure_detail_objects.c | Replaced |  | through its caller `get_upper_bound_cell` |
+| `get_lower_bound_cell` | structures/structure_detail_objects.c | Replaced |  | through its caller `structure_render_detail_objects` |
+| `get_upper_bound_cell` | structures/structure_detail_objects.c | Replaced |  | through its caller `structure_render_detail_objects` |
+| `structure_render_detail_objects` | structures/structure_detail_objects.c | Replaced |  | through its caller `render_window` |
+| `render_debug_detail_objects` | structures/structure_detail_objects.c | Replaced |  | through its caller `render_debug` |
+| `structure_render_set_fog_offset` | structures/structure_render.c | Replaced |  | through its caller `structure_get_planar_fog` |
+| `compare_surface_indices` | structures/structure_render.c | Replaced |  | through its caller `structure_render_sort_surface_indices` |
+| `structure_render_dynamic_triangles_from_bitvector` | structures/structure_render.c | Replaced |  | through its caller `structure_render_build_dynamic_triangles` |
+| `structure_render_dynamic_triangles_from_indices` | structures/structure_render.c | Replaced |  | through its caller `structure_render_build_dynamic_triangles` |
+| `structure_render_build_dynamic_triangles` | structures/structure_render.c | Replaced |  | through its caller `structure_render_diffuse_light` |
+| `structure_render_pass` | structures/structure_render.c | Replaced |  | through its caller `structure_render_diffuse_light` |
+| `structure_render_preprocess` | structures/structure_render.c | Replaced |  | through its caller `render_window` |
+| `structure_render_lightmaps` | structures/structure_render.c | Replaced |  | through its caller `render_window` |
+| `structure_render_diffuse_texture` | structures/structure_render.c | Replaced |  | through its caller `render_window` |
+| `structure_render_specular_lightmaps` | structures/structure_render.c | Replaced |  | through its caller `render_window` |
+| `structure_render_reflection_lightmap_masks` | structures/structure_render.c | Replaced |  | through its caller `render_window` |
+| `structure_render_reflection_mirrors` | structures/structure_render.c | Replaced |  | through its caller `render_window` |
+| `structure_render_reflections` | structures/structure_render.c | Replaced |  | through its caller `render_window` |
+| `structure_render_transparent_geometry` | structures/structure_render.c | Replaced |  | through its caller `render_window` |
+| `structure_render_fog` | structures/structure_render.c | Replaced |  | through its caller `render_window` |
+| `structure_render_fog_screen` | structures/structure_render.c | Replaced |  | through its caller `render_window` |
+| `structure_render_specular_light` | structures/structure_render.c | Replaced |  | through its caller `lights_render_specular` |
+| `structure_render_diffuse_light` | structures/structure_render.c | Replaced |  | through its caller `lights_render_diffuse` |
+| `structure_render_shadow` | structures/structure_render.c | Replaced |  | through its caller `render_object_shadow_end` |
+| `structure_visibility_find_camera` | structures/structure_visibility.c | Replaced |  | through its caller `render_player_frame` |
+| `structure_visibility_traverse_subclusters` | structures/structure_visibility.c | Replaced |  | through its caller `structure_visibility_compute` |
+| `structure_visibility_traverse_surface_lists` | structures/structure_visibility.c | Replaced |  | through its caller `structure_visibility_compute` |
+| `bounding_rectangles_intersect` | structures/structure_visibility.c | Replaced |  | through its caller `structure_visibility_build_surfaces_traverse_clusters` |
+| `planes_intersect_rectangle` | structures/structure_visibility.c | Replaced |  | through its caller `structure_visibility_build_surfaces_traverse_clusters` |
+| `structure_visibility_find_objects` | structures/structure_visibility.c | Replaced |  | through its caller `find_rendered_objects` |
+| `grow_clipping_rectangle_by_portal_hull` | structures/structure_visibility.c | Replaced |  | through its caller `structure_visibility_traverse_cluster` |
+| `structure_visibility_render_debug_portal_hull` | structures/structure_visibility.c | Replaced |  | through its caller `structure_visibility_traverse_cluster` |
+| `dequantize_byte_to_real_rectangle3d` | structures/structure_visibility.c | Replaced |  | through its caller `structure_visibility_build_surfaces_traverse_leaf` |
+| `structure_visibility_build_surfaces_traverse_clusters` | structures/structure_visibility.c | Replaced |  | through its caller `structure_visibility_build_surfaces` |
+| `structure_visibility_build_surfaces_traverse_leaf` | structures/structure_visibility.c | Replaced |  | through its caller `structure_visibility_build_surfaces_traverse_node` |
+| `portal_hull_from_points` | structures/structure_visibility.c | Replaced |  | through its caller `portal_hull_from_portal` |
+| `portal_hull_from_portal` | structures/structure_visibility.c | Replaced |  | through its caller `structure_visibility_traverse_cluster` |
+| `points_within_distance` | structures/structure_visibility.c | Replaced |  | through its caller `structure_visibility_traverse_cluster` |
+| `structure_visibility_find_mirror` | structures/structure_visibility.c | Replaced |  | through its caller `render_player_frame` |
+| `structure_visibility_build_surfaces_traverse_node` | structures/structure_visibility.c | Replaced |  | through its caller `structure_visibility_build_surfaces` |
+| `structure_visibility_traverse_cluster` | structures/structure_visibility.c | Replaced |  | through its caller `structure_visibility_find_clusters` |
+| `structure_visibility_build_surfaces` | structures/structure_visibility.c | Replaced |  | through its caller `structure_render_diffuse_light` |
+| `structure_visibility_find_clusters` | structures/structure_visibility.c | Replaced |  | through its caller `structure_visibility_compute` |
+| `structure_visibility_compute` | structures/structure_visibility.c | Replaced |  | through its caller `render_window` |
+| `structure_get_planar_fog_definition_index` | structures/structures.c | Replaced |  | through its caller `structure_get_planar_fog` |
+| `structure_get_planar_fog` | structures/structures.c | Replaced |  | through its caller `render_player_frame` |
+| `render_debug_fog_planes` | structures/structures.c | Replaced |  | through its caller `render_debug` |
 | `structure_bsp_get_cluster_encoded_sound_distance` | structures/structure_bsp_definitions.c | Matched | content/src/level.rs:766 | owed: the engine cites it, with no check against the original yet |
+| `structure_visibility_dequantize_byte_to_real` | structures/structure_visibility.c | Replaced |  | through its caller `dequantize_byte_to_real_rectangle3d` |
 
-126 Missing (91 reached from `main_loop`), by file:
+73 Missing (38 reached from `main_loop`), by file:
 
 - structures/cluster_partitions.c: `reference_list_remove`, `reference_list_copy`, `cluster_partition_new`, `cluster_partition_make_valid`, `cluster_partition_make_invalid`, `cluster_partition_delete`, `cluster_partition_get_next_datum`, `cluster_partition_get_first_cluster`, `cluster_partition_get_next_cluster`, `cluster_partition_copy`, `cluster_partition_get_first_reference`, `cluster_partition_reconnect`, `cluster_partition_disconnect`, `cluster_partition_get_first_datum`
-- structures/leaf_map.c: `node_stack_push`, `node_stack_pop`, `node_stack_read`, `leaf_map_delete`, `find_like_crossing`, `map_leaf_find_face_on_node`, `leaf_map_close_portal`, `leaf_map_leaf_is_closed`, `leaf_map_family_mark`, `render_debug_leaf_portal`, `render_debug_leaf_portals`, `leaf_map_build_portal_from_leaves`, `leaf_map_get_leaf_bounds`, `leaf_map_closure`, `leaf_map_leaf_spans_polygon`, `leaf_face_get_vertex3d`, `render_debug_leaf_faces`, `normalize_three_dee`, `intersect_planes3d`, `leaf_map_build_portals_from_leaf`, `leaf_map_build_leaf_face_for_leaf_on_node`, `leaf_map_build_portals`, `leaf_map_build_leaf_faces_for_leaf`, `leaf_map_build_leaf_faces`, `leaf_map_initialize_from_bsp`
+- structures/leaf_map.c: `node_stack_push`, `node_stack_pop`, `node_stack_read`, `leaf_map_delete`, `find_like_crossing`, `map_leaf_find_face_on_node`, `leaf_map_close_portal`, `leaf_map_leaf_is_closed`, `leaf_map_family_mark`, `leaf_map_build_portal_from_leaves`, `leaf_map_get_leaf_bounds`, `leaf_map_closure`, `leaf_map_leaf_spans_polygon`, `leaf_face_get_vertex3d`, `render_debug_leaf_faces`, `normalize_three_dee`, `intersect_planes3d`, `leaf_map_build_portals_from_leaf`, `leaf_map_build_leaf_face_for_leaf_on_node`, `leaf_map_build_portals`, `leaf_map_build_leaf_faces_for_leaf`, `leaf_map_build_leaf_faces`, `leaf_map_initialize_from_bsp`
 - structures/structure_bsp_definitions.c: `structure_bsp_get_cluster_pvs`, `vertex_type_from_shader_tag`
-- structures/structure_detail_objects.c: `calculate_world_from_cell_index_and_offset`, `get_local_player_datum`, `structure_detail_objects_initialize`, `structure_detail_objects_dispose_from_old_map`, `structure_detail_objects_dispose`, `structure_detail_objects_flush`, `detail_object_offset`, `key_compare_cells_lower_bound`, `key_compare_cells_upper_bound`, `get_lower_bound_cell`, `get_upper_bound_cell`, `dot_product4d`, `structure_detail_objects_initialize_for_new_map`, `structure_render_detail_objects`, `render_debug_detail_objects`
+- structures/structure_detail_objects.c: `structure_detail_objects_initialize`, `structure_detail_objects_dispose_from_old_map`, `structure_detail_objects_dispose`, `structure_detail_objects_flush`, `detail_object_offset`, `dot_product4d`, `structure_detail_objects_initialize_for_new_map`
 - structures/structure_lens_flares.c: `compare_temp_markers`, `cluster_index_from_point`, `build_structure_lens_flares`, `structure_lens_flares_place`
-- structures/structure_render.c: `structure_render_set_fog_offset`, `compare_surface_indices`, `structure_render_dynamic_triangles_from_bitvector`, `structure_render_dynamic_triangles_from_indices`, `structure_render_build_dynamic_triangles`, `structure_render_pass`, `structure_render_preprocess`, `structure_render_lightmaps`, `structure_render_diffuse_texture`, `structure_render_specular_lightmaps`, `structure_render_reflection_lightmap_masks`, `structure_render_reflection_mirrors`, `structure_render_reflections`, `structure_render_transparent_geometry`, `structure_render_fog`, `structure_render_fog_screen`, `structure_render_specular_light`, `structure_render_diffuse_light`, `structure_render_shadow`
 - structures/structure_runtime_decals.c: `structure_decals_initialize`, `structure_decals_initialize_for_new_map`, `structure_decals_reconnect_to_structure_bsp`, `structure_decals_disconnect_from_structure_bsp`, `structure_decals_dispose_from_old_map`, `structure_decals_dispose`, `structure_decals_update`
-- structures/structure_visibility.c: `debug_pvs`, `structure_visibility_find_camera`, `structure_visibility_traverse_subclusters`, `structure_visibility_traverse_surface_lists`, `bounding_rectangles_intersect`, `planes_intersect_rectangle`, `structure_visibility_find_objects`, `grow_clipping_rectangle_by_portal_hull`, `structure_visibility_render_debug_portal_hull`, `dequantize_byte_to_real_rectangle3d`, `structure_visibility_build_surfaces_traverse_clusters`, `structure_visibility_build_surfaces_traverse_leaf`, `portal_hull_from_points`, `portal_hull_from_portal`, `points_within_distance`, `structure_visibility_find_mirror`, `structure_visibility_build_surfaces_traverse_node`, `structure_visibility_traverse_cluster`, `structure_visibility_build_surfaces`, `structure_visibility_find_clusters`, `structure_visibility_compute`, `structure_visibility_dequantize_byte_to_real`
-- structures/structures.c: `structures_initialize`, `structures_initialize_for_new_map`, `structures_dispose_from_old_map`, `structures_dispose`, `structure_cluster_marker_begin`, `structure_cluster_unmarked`, `structure_cluster_mark`, `structure_cluster_marker_end`, `structure_render_surface_from_point_and_leaf`, `structure_get_planar_fog_definition_index`, `sphere_intersects_cluster_portal`, `code_00188200`, `structure_clusters_in_cone`, `structure_test_vector`, `structure_get_planar_fog`, `render_debug_fog_planes`, `structure_clusters_in_sphere`, `structure_clusters_in_sphere_recursive`
+- structures/structure_visibility.c: `debug_pvs`
+- structures/structures.c: `structures_initialize`, `structures_initialize_for_new_map`, `structures_dispose_from_old_map`, `structures_dispose`, `structure_cluster_marker_begin`, `structure_cluster_unmarked`, `structure_cluster_mark`, `structure_cluster_marker_end`, `structure_render_surface_from_point_and_leaf`, `sphere_intersects_cluster_portal`, `code_00188200`, `structure_clusters_in_cone`, `structure_test_vector`, `structure_clusters_in_sphere`, `structure_clusters_in_sphere_recursive`
 
 ## `tag_files`
 
@@ -834,23 +2556,61 @@ docs/engine.md's "The coverage census" says what each class needs.
 
 | Function | File | Class | Engine | Evidence |
 | --- | --- | --- | --- | --- |
+| `text_bounds_draw_character` | text/draw_string.c | Replaced |  | through its caller `draw_unicode_string_compute_bounds` |
+| `draw_string_set_indents` | text/draw_string.c | Replaced |  | through its caller `draw_string_and_hack_in_icons` |
+| `draw_string_get_color` | text/draw_string.c | Replaced |  | through its caller `draw_string_and_hack_in_icons` |
+| `styled_font_get` | text/draw_string.c | Replaced |  | through its caller `draw_unicode_string_compute_bounds` |
+| `parse_string_new` | text/draw_string.c | Replaced |  | through its caller `draw_string` |
+| `parse_string` | text/draw_string.c | Replaced |  | through its caller `draw_string` |
+| `parse_unicode_string` | text/draw_string.c | Replaced |  | through its caller `draw_unicode_string` |
+| `draw_string_partial` | text/draw_string.c | Replaced |  | through its caller `draw_string` |
+| `draw_unicode_string_partial` | text/draw_string.c | Replaced |  | through its caller `draw_unicode_string` |
 | `draw_string` | text/draw_string.c | Matched | ui/src/draw.rs:208 | owed: the engine cites it, with no check against the original yet |
+| `draw_unicode_string` | text/draw_string.c | Replaced |  | through its caller `draw_unicode_string_compute_bounds` |
+| `draw_unicode_string_compute_bounds` | text/draw_string.c | Replaced |  | through its caller `draw_unicode_string_capital_middle` |
+| `font_get_character_by_ascii_code` | text/font_group.c | Replaced |  | through its caller `draw_string` |
+| `character_in_pattern` | text/international_strings.c | Replaced |  | through its caller `parse_string` |
+| `ustrstr` | text/unicode.c | Replaced |  | through its caller `search_and_replace` |
+| `ascii_to_wide` | text/unicode.c | Replaced |  | through its caller `set_textbox_to_build_number` |
 
-111 Missing (41 reached from `main_loop`), by file:
+96 Missing (26 reached from `main_loop`), by file:
 
-- text/draw_string.c: `draw_string_initialize`, `draw_string_initialize_for_new_map`, `draw_string_dispose_from_old_map`, `draw_string_dispose`, `text_bounds_draw_character`, `text_pick_draw_character`, `draw_string_get_string`, `draw_string_set_tab_stops`, `draw_string_set_indents`, `draw_string_set_color`, `draw_string_get_color`, `draw_string_set_font`, `draw_string_set_format`, `draw_string_set_draw_mode`, `draw_string_set_highlight`, `bitmap_draw_character`, `styled_font_get`, `parse_string_new`, `parse_string`, `parse_unicode_string`, `draw_string_partial`, `draw_unicode_string_partial`, `draw_unicode_string`, `draw_string_compute_bounds`, `draw_unicode_string_compute_bounds`, `draw_string_pick`, `bitmap_draw_string`
-- text/font_group.c: `font_get_character_by_ascii_code`
-- text/international_strings.c: `set_language_code`, `double_byte_character`, `get_next_character`, `get_previous_character`, `align_to_character`, `character_in_pattern`
+- text/draw_string.c: `draw_string_initialize`, `draw_string_initialize_for_new_map`, `draw_string_dispose_from_old_map`, `draw_string_dispose`, `text_pick_draw_character`, `draw_string_get_string`, `draw_string_set_tab_stops`, `draw_string_set_color`, `draw_string_set_font`, `draw_string_set_format`, `draw_string_set_draw_mode`, `draw_string_set_highlight`, `bitmap_draw_character`, `draw_string_compute_bounds`, `draw_string_pick`, `bitmap_draw_string`
+- text/international_strings.c: `set_language_code`, `double_byte_character`, `get_next_character`, `get_previous_character`, `align_to_character`
 - text/text_group.c: `string_list_get_string`, `unicode_string_list_get_string`, `fallback_string`
-- text/unicode.c: `umemchr`, `umemcpy`, `umemcmp`, `umemmove`, `umemset`, `ustrcpy`, `ustrcat`, `ustrcmp`, `ustrlen`, `ustrnlen`, `ustrchr`, `ustrcoll`, `ustrcspn`, `ustrncat`, `ustrncmp`, `ustrncpy`, `ustrpbrk`, `ustrrchr`, `ustrspn`, `ustrstr`, `ustrtok`, `ustrxfrm`, `ustrlwr`, `ustrupr`, `ustrnlwr`, `ustrnupr`, `ustrcasecmp`, `ustrncasecmp`, `uisalpha`, `uisupper`, `uislower`, `uisdigit`, `uisxdigit`, `uisspace`, `uispunct`, `uisalnum`, `uisprint`, `uisgraph`, `uiscntrl`, `utoupper`, `utolower`, `ufgetc`, `ufputc`, `uungetc`, `ufgets`, `ufputs`, `ugets`, `uputs`, `ufprintf`, `uprintf`, `usnprintf`, `usprintf`, `uvfprintf`, `uvprintf`, `uvsnprintf`, `uvsprintf`, `ufdopen`, `ufopen`, `ufclose`, `ufreopen`, `uperror`, `upopen`, `uremove`, `utmpnam`, `ustrtol`, `ustrtoul`, `ustrtod`, `uatoi`, `uctime`, `uasctime`, `wide_to_ascii`, `ascii_to_wide`, `ustrerror`, `ustring_format_takes`
+- text/unicode.c: `umemchr`, `umemcpy`, `umemcmp`, `umemmove`, `umemset`, `ustrcpy`, `ustrcat`, `ustrcmp`, `ustrlen`, `ustrnlen`, `ustrchr`, `ustrcoll`, `ustrcspn`, `ustrncat`, `ustrncmp`, `ustrncpy`, `ustrpbrk`, `ustrrchr`, `ustrspn`, `ustrtok`, `ustrxfrm`, `ustrlwr`, `ustrupr`, `ustrnlwr`, `ustrnupr`, `ustrcasecmp`, `ustrncasecmp`, `uisalpha`, `uisupper`, `uislower`, `uisdigit`, `uisxdigit`, `uisspace`, `uispunct`, `uisalnum`, `uisprint`, `uisgraph`, `uiscntrl`, `utoupper`, `utolower`, `ufgetc`, `ufputc`, `uungetc`, `ufgets`, `ufputs`, `ugets`, `uputs`, `ufprintf`, `uprintf`, `usnprintf`, `usprintf`, `uvfprintf`, `uvprintf`, `uvsnprintf`, `uvsprintf`, `ufdopen`, `ufopen`, `ufclose`, `ufreopen`, `uperror`, `upopen`, `uremove`, `utmpnam`, `ustrtol`, `ustrtoul`, `ustrtod`, `uatoi`, `uctime`, `uasctime`, `wide_to_ascii`, `ustrerror`, `ustring_format_takes`
 
 ## `tool`
 
-
-27 Missing (0 reached from `main_loop`), by file:
-
-- tool/connected_geometry.c: `connected_geometry_new`, `connected_geometry_delete`, `connected_geometry_group_recursive`, `connected_geometry_find_or_add_vertex`, `connected_geometry_find_or_add_edge`, `plane3d_from_points`, `connected_geometry_add_triangle`, `triangle_coplanar`, `connected_geometry_add_intermediate_triangle`, `connected_geometry_group_coplanar`
-- tool/error_geometry.c: `error_geometry_file_is_open`, `error_geometry_initialize`, `error_geometry_dispose`, `error_geometry_set_name`, `error_geometry_line`, `error_geometry_triangle`, `error_geometry_polygon`, `error_geometry_polygon_list`, `error_geometry_polygon_mesh__textured_with_no_import_scale`, `error_geometry_comment`, `error_geometry_rectangle3d`, `error_geometry_bounded_line`, `error_geometry_bounded_triangle`, `error_geometry_bounded_polygon`, `error_geometry_set_transform`, `error_geometry_point`, `error_geometry_bounded_point`
+| Function | File | Class | Engine | Evidence |
+| --- | --- | --- | --- | --- |
+| `connected_geometry_new` | tool/connected_geometry.c | Replaced | bake/src/lib.rs | the editor and tools |
+| `connected_geometry_delete` | tool/connected_geometry.c | Replaced | bake/src/lib.rs | the editor and tools |
+| `connected_geometry_group_recursive` | tool/connected_geometry.c | Replaced | bake/src/lib.rs | the editor and tools |
+| `connected_geometry_find_or_add_vertex` | tool/connected_geometry.c | Replaced | bake/src/lib.rs | the editor and tools |
+| `connected_geometry_find_or_add_edge` | tool/connected_geometry.c | Replaced | bake/src/lib.rs | the editor and tools |
+| `plane3d_from_points` | tool/connected_geometry.c | Replaced | bake/src/lib.rs | the editor and tools |
+| `connected_geometry_add_triangle` | tool/connected_geometry.c | Replaced | bake/src/lib.rs | the editor and tools |
+| `triangle_coplanar` | tool/connected_geometry.c | Replaced | bake/src/lib.rs | the editor and tools |
+| `connected_geometry_add_intermediate_triangle` | tool/connected_geometry.c | Replaced | bake/src/lib.rs | the editor and tools |
+| `connected_geometry_group_coplanar` | tool/connected_geometry.c | Replaced | bake/src/lib.rs | the editor and tools |
+| `error_geometry_file_is_open` | tool/error_geometry.c | Replaced | bake/src/lib.rs | the editor and tools |
+| `error_geometry_initialize` | tool/error_geometry.c | Replaced | bake/src/lib.rs | the editor and tools |
+| `error_geometry_dispose` | tool/error_geometry.c | Replaced | bake/src/lib.rs | the editor and tools |
+| `error_geometry_set_name` | tool/error_geometry.c | Replaced | bake/src/lib.rs | the editor and tools |
+| `error_geometry_line` | tool/error_geometry.c | Replaced | bake/src/lib.rs | the editor and tools |
+| `error_geometry_triangle` | tool/error_geometry.c | Replaced | bake/src/lib.rs | the editor and tools |
+| `error_geometry_polygon` | tool/error_geometry.c | Replaced | bake/src/lib.rs | the editor and tools |
+| `error_geometry_polygon_list` | tool/error_geometry.c | Replaced | bake/src/lib.rs | the editor and tools |
+| `error_geometry_polygon_mesh__textured_with_no_import_scale` | tool/error_geometry.c | Replaced | bake/src/lib.rs | the editor and tools |
+| `error_geometry_comment` | tool/error_geometry.c | Replaced | bake/src/lib.rs | the editor and tools |
+| `error_geometry_rectangle3d` | tool/error_geometry.c | Replaced | bake/src/lib.rs | the editor and tools |
+| `error_geometry_bounded_line` | tool/error_geometry.c | Replaced | bake/src/lib.rs | the editor and tools |
+| `error_geometry_bounded_triangle` | tool/error_geometry.c | Replaced | bake/src/lib.rs | the editor and tools |
+| `error_geometry_bounded_polygon` | tool/error_geometry.c | Replaced | bake/src/lib.rs | the editor and tools |
+| `error_geometry_set_transform` | tool/error_geometry.c | Replaced | bake/src/lib.rs | the editor and tools |
+| `error_geometry_point` | tool/error_geometry.c | Replaced | bake/src/lib.rs | the editor and tools |
+| `error_geometry_bounded_point` | tool/error_geometry.c | Replaced | bake/src/lib.rs | the editor and tools |
 
 ## `units`
 
