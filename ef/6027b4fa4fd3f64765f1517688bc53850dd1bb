@@ -1,0 +1,4 @@
+Task: Cameras and cutscenes (camera, cutscene)
+Class the cameras and cutscenes: the script camera and cinematic natives Matched, the editor camera Replaced
+
+The cinematic natives in campaign/src/cinematic.rs and the player cameras in sim/src/player.rs are classed Matched, owing a check against the original; the first-person camera and suppress_bsp_object_creation are Partial; the editor's flying camera is Replaced by the free camera. The director's update, the observer and recorded animations stay Missing, noted for the report. census --check passes.
