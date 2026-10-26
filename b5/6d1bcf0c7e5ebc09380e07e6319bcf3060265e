@@ -1,0 +1,1 @@
+Task: Upscaling and the parallel simulation. Swift suite: 221 tests, 2 failures (the HUD and weapons-station golden frames, both stale before this task). DynamicResolutionTests 7/7; Blood Gulch 4K at 90 Hz settles at 0.67, mean 8.9 ms.
