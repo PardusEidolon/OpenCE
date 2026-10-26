@@ -12,9 +12,9 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `bitmaps` | | 1 (224 B) | | | 15 (5424 B) | 197 (58480 B) | 1 |
 | `bungie_net` | | | | | 109 (18992 B) | | 0 |
 | `cache` | | | | | 102 (9680 B) | 122 (15104 B) | 0 |
-| `camera` | | 9 (5392 B) | | | | 137 (31152 B) | 9 |
+| `camera` | | 19 (6832 B) | | 2 (256 B) | 17 (2448 B) | 108 (27008 B) | 21 |
 | `cseries` | | | | | 34 (7488 B) | 117 (14352 B) | 0 |
-| `cutscene` | | | | | | 81 (10528 B) | 0 |
+| `cutscene` | | 8 (288 B) | | 1 (32 B) | | 72 (10208 B) | 9 |
 | `devices` | | 17 (3728 B) | | | | 43 (3456 B) | 17 |
 | `dialogs` | | | | | | 6 (1328 B) | 0 |
 | `editor` | | | | | 9 (0 B) | | 0 |
@@ -43,7 +43,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `text` | | 1 (912 B) | | | 15 (4240 B) | 96 (11760 B) | 1 |
 | `tool` | | | | | 27 (8752 B) | | 0 |
 | `units` | 8 (1824 B) | 67 (19968 B) | | 14 (1008 B) | | 278 (84720 B) | 81 |
-| **all** | 81 (16832 B) | 472 (129408 B) | | 75 (33968 B) | 2109 (408704 B) | 5764 (1022210 B) | 547 |
+| **all** | 81 (16832 B) | 490 (131136 B) | | 78 (34256 B) | 2126 (411152 B) | 5726 (1017746 B) | 568 |
 
 ## `ai`
 
@@ -538,26 +538,55 @@ docs/engine.md's "The coverage census" says what each class needs.
 
 | Function | File | Class | Engine | Evidence |
 | --- | --- | --- | --- | --- |
+| `scripted_camera_enable` | camera/camera_scripting.c | Matched | campaign/src/cinematic.rs | owed: the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet |
+| `scripted_camera_set_animation` | camera/camera_scripting.c | Matched | campaign/src/cinematic.rs | owed: the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet |
+| `scripted_camera_set_first_person` | camera/camera_scripting.c | Matched | campaign/src/cinematic.rs | owed: the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet |
+| `scripted_camera_set_dead` | camera/camera_scripting.c | Matched | campaign/src/cinematic.rs | owed: the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet |
+| `scripted_camera_set` | camera/camera_scripting.c | Matched | campaign/src/cinematic.rs | owed: the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet |
+| `scripted_camera_set_camera_point_relative` | camera/camera_scripting.c | Matched | campaign/src/cinematic.rs | owed: the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet |
+| `scripted_camera_time` | camera/camera_scripting.c | Matched | campaign/src/cinematic.rs | owed: the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet |
 | `scripted_camera_update` | camera/camera_scripting.c | Matched | campaign/src/cinematic.rs:122 | owed: cutscene cameras; reads the object, tag and map world, which the fake worlds do not hold; campaign/tests/cutscenes.rs |
 | `dead_camera_new` | camera/dead_camera.c | Matched | sim/src/dead_camera.rs:46 | owed: the engine cites it, with no check against the original yet |
 | `dead_camera_update` | camera/dead_camera.c | Matched | sim/src/lib.rs:1399 | owed: the engine cites it, with no check against the original yet |
 | `director_desired_perspective` | camera/director.c | Matched | sim/src/seats.rs:1223 | owed: the camera; reads the object, tag and map world, which the fake worlds do not hold (the unit's seat); Phase 14's death camera |
+| `director_script_camera` | camera/director.c | Matched | campaign/src/cinematic.rs | owed: the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet |
+| `editor_camera_new` | camera/editor_flying_camera.c | Replaced | app/Sources/OpenCEEngineKit/FlyControls.swift | the editor and tools |
+| `editor_camera_get_focus` | camera/editor_flying_camera.c | Replaced | app/Sources/OpenCEEngineKit/FlyControls.swift | the editor and tools |
+| `editor_camera_set_focus` | camera/editor_flying_camera.c | Replaced | app/Sources/OpenCEEngineKit/FlyControls.swift | the editor and tools |
+| `editor_camera_set_position` | camera/editor_flying_camera.c | Replaced | app/Sources/OpenCEEngineKit/FlyControls.swift | the editor and tools |
+| `editor_camera_bump_speed` | camera/editor_flying_camera.c | Replaced | app/Sources/OpenCEEngineKit/FlyControls.swift | the editor and tools |
+| `editor_camera_get_speed` | camera/editor_flying_camera.c | Replaced | app/Sources/OpenCEEngineKit/FlyControls.swift | the editor and tools |
+| `editor_camera_use_roll` | camera/editor_flying_camera.c | Replaced | app/Sources/OpenCEEngineKit/FlyControls.swift | the editor and tools |
+| `editor_camera_get_unit_focus` | camera/editor_flying_camera.c | Replaced | app/Sources/OpenCEEngineKit/FlyControls.swift | the editor and tools |
+| `editor_camera_set_mode` | camera/editor_flying_camera.c | Replaced | app/Sources/OpenCEEngineKit/FlyControls.swift | the editor and tools |
+| `editor_camera_get_mode` | camera/editor_flying_camera.c | Replaced | app/Sources/OpenCEEngineKit/FlyControls.swift | the editor and tools |
+| `editor_camera_get_scripted` | camera/editor_flying_camera.c | Replaced | app/Sources/OpenCEEngineKit/FlyControls.swift | the editor and tools |
+| `editor_camera_get_field_of_view` | camera/editor_flying_camera.c | Replaced | app/Sources/OpenCEEngineKit/FlyControls.swift | the editor and tools |
+| `editor_camera_move_to_point` | camera/editor_flying_camera.c | Replaced | app/Sources/OpenCEEngineKit/FlyControls.swift | the editor and tools |
+| `editor_camera_set_position_and_roll` | camera/editor_flying_camera.c | Replaced | app/Sources/OpenCEEngineKit/FlyControls.swift | the editor and tools |
+| `editor_camera_set_unit_focus` | camera/editor_flying_camera.c | Replaced | app/Sources/OpenCEEngineKit/FlyControls.swift | the editor and tools |
+| `editor_camera_update` | camera/editor_flying_camera.c | Replaced | app/Sources/OpenCEEngineKit/FlyControls.swift | the editor and tools |
+| `editor_camera_set_scripted` | camera/editor_flying_camera.c | Replaced | app/Sources/OpenCEEngineKit/FlyControls.swift | the editor and tools |
+| `first_person_camera_new` | camera/first_person_camera.c | Partial | sim/src/player.rs | leaves out the camera's own smoothing: the engine puts the camera at the eyes each tick; owed: the engine's own tests (sim/src/player.rs); no check against the original yet |
+| `first_person_camera_update` | camera/first_person_camera.c | Partial | sim/src/player.rs | leaves out the camera's own smoothing: the engine puts the camera at the eyes each tick; owed: the engine's own tests (sim/src/player.rs); no check against the original yet |
+| `following_camera_new` | camera/following_camera.c | Matched | sim/src/player.rs | owed: the engine's own tests (sim/src/player.rs); no check against the original yet |
 | `uniform_cubic_spline` | camera/following_camera.c | Matched | sim/src/player.rs:1631 | owed: the engine cites it, with no check against the original yet |
+| `following_camera_deterministic` | camera/following_camera.c | Matched | sim/src/player.rs | owed: the engine's own tests (sim/src/player.rs); no check against the original yet |
 | `following_camera_update` | camera/following_camera.c | Matched | sim/src/player.rs:765 | owed: the camera; reads the object, tag and map world, which the fake worlds do not hold; Phase 14's death camera |
 | `observer_up_from_forward` | camera/observer.c | Matched | sim/src/dead_camera.rs:95 | owed: the engine cites it, with no check against the original yet |
 | `camera_track_splut` | camera/following_camera.c | Matched | sim/src/player.rs:1597 | owed: cutscene cameras; reads the object, tag and map world, which the fake worlds do not hold (the camera track tag); campaign/tests/cutscenes.rs |
 | `observer_update_polynomial` | camera/observer.c | Matched | sim/src/dead_camera.rs:9 | owed: the engine cites it, with no check against the original yet |
 
-137 Missing (77 reached from `main_loop`), by file:
+108 Missing (67 reached from `main_loop`), by file:
 
 - camera/bored_camera.c: `bored_camera_new`, `code_00073000`, `code_00073020`, `is_bored`, `is_still_bored`, `real_local_random_range`, `valid_real_vector3d`, `valid_real_vector3d_axes2`, `bored_camera_update`, `bored_camera_shot_threshold_milliseconds`, `bored_camera_shot_duration_milliseconds`
-- camera/camera_scripting.c: `scripted_camera_enable`, `scripted_camera_set_animation`, `scripted_camera_set_first_person`, `scripted_camera_set_dead`, `scripted_camera_object_is_first_person_camera`, `scripted_camera_set`, `scripted_camera_set_absolute`, `scripted_camera_set_camera_point_relative`, `scripted_camera_set_camera_point_absolute`, `scripted_camera_next_camera_point`, `scripted_camera_object_relative_to`, `scripted_camera_time`
+- camera/camera_scripting.c: `scripted_camera_object_is_first_person_camera`, `scripted_camera_set_absolute`, `scripted_camera_set_camera_point_absolute`, `scripted_camera_next_camera_point`, `scripted_camera_object_relative_to`
 - camera/dead_camera.c: `player_has_allies`, `player_get_next_player_with_a_unit`
-- camera/director.c: `director_get`, `director_initialize`, `director_dispose`, `director_inhibit_facing`, `director_inhibit_input`, `director_inhibited_facing`, `director_inhibited_input`, `director_set_mode`, `director_save_camera`, `director_get_perspective`, `director_set_camera`, `director_initialize_variables`, `director_process_variables`, `director_dispose_from_old_map`, `director_load_camera`, `director_rotate_cameras`, `director_camera_deterministic`, `director_choose_game_perspective`, `director_script_camera`, `director_choose_camera_game`, `director_choose_camera_editor`, `director_choose_camera_script_camera_record`, `director_update_controls`, `director_choose_camera`, `director_initialize_for_new_map`, `director_update`, `director_initialize_for_saved_game`
-- camera/editor_flying_camera.c: `editor_camera_new`, `editor_camera_get_focus`, `editor_camera_set_focus`, `editor_camera_set_position`, `editor_camera_bump_speed`, `editor_camera_get_speed`, `editor_camera_use_roll`, `editor_camera_get_unit_focus`, `editor_camera_set_mode`, `editor_camera_get_mode`, `editor_camera_get_scripted`, `code_00076270`, `editor_camera_get_field_of_view`, `editor_camera_move_to_point`, `editor_camera_set_position_and_roll`, `editor_camera_set_unit_focus`, `editor_camera_update`, `editor_camera_set_scripted`, `code_00076870`, `code_000768d0`, `code_00076e50`, `editor_camera_flying_update`, `editor_camera_orbiting_update`, `translate_orbiting_to_flying`, `translate_flying_to_orbiting`
-- camera/first_person_camera.c: `first_person_camera_new`, `first_person_camera_deterministic`, `code_000773c0`, `first_person_camera_fake`, `first_person_camera_update`, `first_person_camera_for_unit_and_vector`
+- camera/director.c: `director_get`, `director_initialize`, `director_dispose`, `director_inhibit_facing`, `director_inhibit_input`, `director_inhibited_facing`, `director_inhibited_input`, `director_set_mode`, `director_save_camera`, `director_get_perspective`, `director_set_camera`, `director_initialize_variables`, `director_process_variables`, `director_dispose_from_old_map`, `director_load_camera`, `director_rotate_cameras`, `director_camera_deterministic`, `director_choose_game_perspective`, `director_choose_camera_game`, `director_choose_camera_editor`, `director_choose_camera_script_camera_record`, `director_update_controls`, `director_choose_camera`, `director_initialize_for_new_map`, `director_update`, `director_initialize_for_saved_game`
+- camera/editor_flying_camera.c: `code_00076270`, `code_00076870`, `code_000768d0`, `code_00076e50`, `editor_camera_flying_update`, `editor_camera_orbiting_update`, `translate_orbiting_to_flying`, `translate_flying_to_orbiting`
+- camera/first_person_camera.c: `first_person_camera_deterministic`, `code_000773c0`, `first_person_camera_fake`, `first_person_camera_for_unit_and_vector`
 - camera/flying_camera.c: `flying_camera_new`, `flying_camera_new_from_point_and_vector`, `flying_camera_update`
-- camera/following_camera.c: `following_camera_new`, `code_00077f20`, `arcsine`, `uniform_cubic_spline_vector3d`, `code_00078120`, `following_camera_deterministic`, `unit_camera_get`
+- camera/following_camera.c: `code_00077f20`, `arcsine`, `uniform_cubic_spline_vector3d`, `code_00078120`, `unit_camera_get`
 - camera/observer.c: `code_00078970`, `observer_initialize`, `code_000789c0`, `observer_initialize_for_new_map`, `observer_dispose_from_old_map`, `observer_get_camera`, `observer_command_has_finished`, `observer_reconnect_to_structure_bsp`, `code_00078cd0`, `code_00078ea0`, `observer_obsolete_position`, `code_00079180`, `code_00079200`, `code_000792e0`, `observer_set_camera`, `code_000796d0`, `code_00079ae0`, `code_0007a080`, `code_0007a6a0`, `code_0007a7c0`, `code_0007aab0`, `code_0007ab20`, `code_0007b360`, `code_0007b3b0`, `observer_update`, `observer_get`, `observer_clear`, `observer_update_accelerations`, `observer_update_velocities`, `observer_collision_test_with_t`, `observer_collision_test_differential`, `observer_update_command`, `observer_apply_rotational_displacement`, `observer_update_positions`, `observer_rotational_displacement`, `observer_find_displacement`, `observer_check_penetration`, `observer_postcheck`, `observer_update_displacements`, `observer_pass_time`
 - camera/orbiting_camera.c: `orbiting_camera_new`, `orbiting_camera_update`
 - camera/static_camera.c: `static_camera_new`, `static_camera_update`
@@ -614,10 +643,21 @@ docs/engine.md's "The coverage census" says what each class needs.
 
 ## `cutscene`
 
+| Function | File | Class | Engine | Evidence |
+| --- | --- | --- | --- | --- |
+| `cinematic_start` | cutscene/cinematics.c | Matched | campaign/src/cinematic.rs | owed: the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet |
+| `cinematic_can_be_skipped` | cutscene/cinematics.c | Matched | campaign/src/cinematic.rs | owed: the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet |
+| `cinematic_skip_start` | cutscene/cinematics.c | Matched | campaign/src/cinematic.rs | owed: the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet |
+| `cinematic_skip_stop` | cutscene/cinematics.c | Matched | campaign/src/cinematic.rs | owed: the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet |
+| `cinematic_show_letterbox` | cutscene/cinematics.c | Matched | campaign/src/cinematic.rs | owed: the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet |
+| `cinematic_suppress_bsp_object_creation` | cutscene/cinematics.c | Partial | campaign/src/presented.rs | leaves out what it does: the engine keeps it only as an event, which nothing acts on yet; owed: the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet |
+| `cinematic_stop` | cutscene/cinematics.c | Matched | campaign/src/cinematic.rs | owed: the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet |
+| `cinematic_in_progress` | cutscene/cinematics.c | Matched | campaign/src/cinematic.rs | owed: the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet |
+| `cinematic_set_title` | cutscene/cinematics.c | Matched | campaign/src/cinematic.rs | owed: the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet |
 
-81 Missing (40 reached from `main_loop`), by file:
+72 Missing (38 reached from `main_loop`), by file:
 
-- cutscene/cinematics.c: `cinematic_initialize`, `cinematic_dispose`, `cinematic_initialize_for_new_map`, `cinematic_dispose_from_old_map`, `cinematic_start`, `cinematic_can_be_skipped`, `cinematic_skip_start`, `cinematic_skip_stop`, `cinematic_show_letterbox`, `draw_quad`, `cinematic_force_title`, `cinematic_suppress_bsp_object_creation`, `cinematic_stop`, `cinematic_in_progress`, `cinematic_set_title_delayed`, `cinematic_render`, `cinematic_set_title`
+- cutscene/cinematics.c: `cinematic_initialize`, `cinematic_dispose`, `cinematic_initialize_for_new_map`, `cinematic_dispose_from_old_map`, `draw_quad`, `cinematic_force_title`, `cinematic_set_title_delayed`, `cinematic_render`
 - cutscene/recorded_animation_definitions.c: `code_00081cd0`, `scenario_get_animation_by_name`, `byte_swap_recording`
 - cutscene/recorded_animation_initialize.c: `recorded_animation_byteswap_unit_control`, `recorded_animation_initialize_unit_control`, `recorded_animation_write_unit_control`
 - cutscene/recorded_animation_playback.c: `code_00081ef0`, `code_00081f80`, `code_00082010`, `code_000820a0`, `code_00082130`, `code_000821d0`, `code_00082210`, `code_00082250`, `code_00082290`, `code_00082490`, `recorded_animation_initialize_event_stream`, `recorded_animation_initialize_event_stream_with_size`, `recorded_animation_apply_event_stream`, `byte_swap_recording_stream`, `apply_animation_state`, `apply_aiming_speed`, `apply_control_flags`, `apply_weapon_index`, `apply_throttle`, `update_controller_char`, `update_controller_short`, `uncompress_vector_from_controller`, `apply_vector_char_difference`, `apply_vector_short_difference`

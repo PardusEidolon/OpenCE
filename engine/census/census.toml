@@ -502,6 +502,52 @@ class = "matched"
 engine = "audio/src/mixer.rs"
 owed = "the engine's own tests (audio/src/mixer.rs); no check against the original yet"
 
+[function.cinematic_can_be_skipped]
+class = "matched"
+engine = "campaign/src/cinematic.rs"
+owed = "the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet"
+
+[function.cinematic_in_progress]
+class = "matched"
+engine = "campaign/src/cinematic.rs"
+owed = "the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet"
+
+[function.cinematic_set_title]
+class = "matched"
+engine = "campaign/src/cinematic.rs"
+owed = "the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet"
+
+[function.cinematic_show_letterbox]
+class = "matched"
+engine = "campaign/src/cinematic.rs"
+owed = "the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet"
+
+[function.cinematic_skip_start]
+class = "matched"
+engine = "campaign/src/cinematic.rs"
+owed = "the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet"
+
+[function.cinematic_skip_stop]
+class = "matched"
+engine = "campaign/src/cinematic.rs"
+owed = "the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet"
+
+[function.cinematic_start]
+class = "matched"
+engine = "campaign/src/cinematic.rs"
+owed = "the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet"
+
+[function.cinematic_stop]
+class = "matched"
+engine = "campaign/src/cinematic.rs"
+owed = "the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet"
+
+[function.cinematic_suppress_bsp_object_creation]
+class = "partial"
+engine = "campaign/src/presented.rs"
+leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
+owed = "the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet"
+
 [function.collision_debug_render]
 class = "replaced"
 because = "tools"
@@ -868,9 +914,99 @@ owed = "the engine cites it, with no check against the original yet"
 class = "matched"
 owed = "the camera; reads the object, tag and map world, which the fake worlds do not hold (the unit's seat); Phase 14's death camera"
 
+[function.director_script_camera]
+class = "matched"
+engine = "campaign/src/cinematic.rs"
+owed = "the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet"
+
 [function.draw_string]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
+
+[function.editor_camera_bump_speed]
+class = "replaced"
+because = "tools"
+stands_in = "app/Sources/OpenCEEngineKit/FlyControls.swift"
+
+[function.editor_camera_get_field_of_view]
+class = "replaced"
+because = "tools"
+stands_in = "app/Sources/OpenCEEngineKit/FlyControls.swift"
+
+[function.editor_camera_get_focus]
+class = "replaced"
+because = "tools"
+stands_in = "app/Sources/OpenCEEngineKit/FlyControls.swift"
+
+[function.editor_camera_get_mode]
+class = "replaced"
+because = "tools"
+stands_in = "app/Sources/OpenCEEngineKit/FlyControls.swift"
+
+[function.editor_camera_get_scripted]
+class = "replaced"
+because = "tools"
+stands_in = "app/Sources/OpenCEEngineKit/FlyControls.swift"
+
+[function.editor_camera_get_speed]
+class = "replaced"
+because = "tools"
+stands_in = "app/Sources/OpenCEEngineKit/FlyControls.swift"
+
+[function.editor_camera_get_unit_focus]
+class = "replaced"
+because = "tools"
+stands_in = "app/Sources/OpenCEEngineKit/FlyControls.swift"
+
+[function.editor_camera_move_to_point]
+class = "replaced"
+because = "tools"
+stands_in = "app/Sources/OpenCEEngineKit/FlyControls.swift"
+
+[function.editor_camera_new]
+class = "replaced"
+because = "tools"
+stands_in = "app/Sources/OpenCEEngineKit/FlyControls.swift"
+
+[function.editor_camera_set_focus]
+class = "replaced"
+because = "tools"
+stands_in = "app/Sources/OpenCEEngineKit/FlyControls.swift"
+
+[function.editor_camera_set_mode]
+class = "replaced"
+because = "tools"
+stands_in = "app/Sources/OpenCEEngineKit/FlyControls.swift"
+
+[function.editor_camera_set_position]
+class = "replaced"
+because = "tools"
+stands_in = "app/Sources/OpenCEEngineKit/FlyControls.swift"
+
+[function.editor_camera_set_position_and_roll]
+class = "replaced"
+because = "tools"
+stands_in = "app/Sources/OpenCEEngineKit/FlyControls.swift"
+
+[function.editor_camera_set_scripted]
+class = "replaced"
+because = "tools"
+stands_in = "app/Sources/OpenCEEngineKit/FlyControls.swift"
+
+[function.editor_camera_set_unit_focus]
+class = "replaced"
+because = "tools"
+stands_in = "app/Sources/OpenCEEngineKit/FlyControls.swift"
+
+[function.editor_camera_update]
+class = "replaced"
+because = "tools"
+stands_in = "app/Sources/OpenCEEngineKit/FlyControls.swift"
+
+[function.editor_camera_use_roll]
+class = "replaced"
+because = "tools"
+stands_in = "app/Sources/OpenCEEngineKit/FlyControls.swift"
 
 [function.effect_allocate]
 class = "matched"
@@ -1014,6 +1150,18 @@ class = "replaced"
 because = "tools"
 stands_in = "dev/src/draw.rs"
 
+[function.first_person_camera_new]
+class = "partial"
+engine = "sim/src/player.rs"
+leaves_out = ["the camera's own smoothing: the engine puts the camera at the eyes each tick"]
+owed = "the engine's own tests (sim/src/player.rs); no check against the original yet"
+
+[function.first_person_camera_update]
+class = "partial"
+engine = "sim/src/player.rs"
+leaves_out = ["the camera's own smoothing: the engine puts the camera at the eyes each tick"]
+owed = "the engine's own tests (sim/src/player.rs); no check against the original yet"
+
 [function.first_person_weapon_animation_fits]
 class = "matched"
 owed = "reads the object, tag and map world, which the fake worlds do not hold (the first-person model's nodes); sim/tests/first_person.rs"
@@ -1029,6 +1177,16 @@ owed = "the engine cites it, with no check against the original yet"
 [function.first_person_weapon_update]
 class = "matched"
 owed = "reads the object, tag and map world, which the fake worlds do not hold (the weapon tag); its states are first_person_reference's"
+
+[function.following_camera_deterministic]
+class = "matched"
+engine = "sim/src/player.rs"
+owed = "the engine's own tests (sim/src/player.rs); no check against the original yet"
+
+[function.following_camera_new]
+class = "matched"
+engine = "sim/src/player.rs"
+owed = "the engine's own tests (sim/src/player.rs); no check against the original yet"
 
 [function.following_camera_update]
 class = "matched"
@@ -2384,6 +2542,41 @@ owed = "the engine's own tests (sim/src/scenery.rs); no check against the origin
 class = "matched"
 engine = "sim/src/scenery.rs"
 owed = "the engine's own tests (sim/src/scenery.rs); no check against the original yet"
+
+[function.scripted_camera_enable]
+class = "matched"
+engine = "campaign/src/cinematic.rs"
+owed = "the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet"
+
+[function.scripted_camera_set]
+class = "matched"
+engine = "campaign/src/cinematic.rs"
+owed = "the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet"
+
+[function.scripted_camera_set_animation]
+class = "matched"
+engine = "campaign/src/cinematic.rs"
+owed = "the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet"
+
+[function.scripted_camera_set_camera_point_relative]
+class = "matched"
+engine = "campaign/src/cinematic.rs"
+owed = "the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet"
+
+[function.scripted_camera_set_dead]
+class = "matched"
+engine = "campaign/src/cinematic.rs"
+owed = "the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet"
+
+[function.scripted_camera_set_first_person]
+class = "matched"
+engine = "campaign/src/cinematic.rs"
+owed = "the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet"
+
+[function.scripted_camera_time]
+class = "matched"
+engine = "campaign/src/cinematic.rs"
+owed = "the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet"
 
 [function.scripted_camera_update]
 class = "matched"
