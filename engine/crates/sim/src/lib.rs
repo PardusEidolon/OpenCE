@@ -414,10 +414,10 @@ impl Simulation {
         // (the dead neither move nor fire, though they still fall)
         let inputs: Vec<TickInput> = (0..self.players.len())
             .map(|index| {
-                let dead = self.players.get(index).is_some_and(|player| {
-                    self.component::<damage::Vitality>(player.handle())
-                        .is_some_and(|vitality| vitality.dead)
-                });
+                let dead = self
+                    .players
+                    .get(index)
+                    .is_some_and(|player| self.is_dead(player.handle()));
                 match inputs.get(index) {
                     Some(input) if !dead => *input,
                     _ => TickInput::default(),
@@ -437,8 +437,10 @@ impl Simulation {
             .players
             .iter()
             .map(|player| {
-                self.component::<unit_animator::UnitAnimator>(player.handle())
-                    .is_some_and(|animator| unit_states::busy(animator.animation.state))
+                self.read_component(player.handle(), |animator: &unit_animator::UnitAnimator| {
+                    unit_states::busy(animator.animation.state)
+                })
+                .unwrap_or(false)
             })
             .collect();
         for index in 0..self.players.len() {
@@ -563,7 +565,7 @@ impl Simulation {
             .players
             .iter()
             .map(|player| {
-                self.component::<unit_animator::UnitAnimator>(player.handle())
+                self.read_component(player.handle(), |_: &unit_animator::UnitAnimator| ())
                     .is_some()
             })
             .collect();
@@ -626,10 +628,11 @@ impl Simulation {
     /// The hand marker of the unit `holder` that holds its weapon, in the
     /// world at the last tick, and the weapon's marker it grips.
     fn held_hand(&self, holder: ObjectHandle) -> Option<(animation::NodeMatrix, String)> {
-        let player = self.component::<AnimationPlayer>(holder)?;
+        let entity = self.entity(holder)?;
+        let player = entity.get::<AnimationPlayer>()?;
         let model = player.model.as_ref()?;
-        let nodes = self.component::<NodeMatrices>(holder)?;
-        let animator = self.component::<unit_animator::UnitAnimator>(holder)?;
+        let nodes = entity.get::<NodeMatrices>()?;
+        let animator = entity.get::<unit_animator::UnitAnimator>()?;
         let seat = animator.animation.seat?;
         let class = player
             .graph
@@ -1264,9 +1267,7 @@ impl Simulation {
             self.first_person.hide();
             return;
         };
-        let dead = self
-            .component::<damage::Vitality>(player.handle())
-            .is_some_and(|vitality| vitality.dead);
+        let dead = self.is_dead(player.handle());
         if dead || player.view() != View::FirstPerson {
             self.first_person.hide();
             return;
@@ -1404,9 +1405,7 @@ impl Simulation {
             return;
         };
         let handle = player.handle();
-        let dead = self
-            .component::<damage::Vitality>(handle)
-            .is_some_and(|vitality| vitality.dead);
+        let dead = self.is_dead(handle);
         let body = self.component::<Transform>(handle);
         let (true, Some(body)) = (dead, body) else {
             self.dead_camera = None;
@@ -1872,6 +1871,22 @@ impl Simulation {
     /// One of an object's components, if `handle` is still in the world.
     pub fn component<C: Component + Clone>(&self, handle: ObjectHandle) -> Option<C> {
         self.entity(handle)?.get::<C>().cloned()
+    }
+
+    /// What `read` makes of one of an object's components, borrowed rather
+    /// than cloned, if `handle` is still in the world and has it.
+    pub fn read_component<C: Component, R>(
+        &self,
+        handle: ObjectHandle,
+        read: impl FnOnce(&C) -> R,
+    ) -> Option<R> {
+        self.entity(handle)?.get::<C>().map(read)
+    }
+
+    /// Whether `handle` is in the world and is dead.
+    fn is_dead(&self, handle: ObjectHandle) -> bool {
+        self.read_component(handle, |vitality: &damage::Vitality| vitality.dead)
+            .unwrap_or(false)
     }
 
     /// Kills an object outright, as the scripts' `unit_kill` does: a

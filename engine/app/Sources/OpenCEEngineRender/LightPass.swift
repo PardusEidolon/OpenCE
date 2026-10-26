@@ -67,6 +67,12 @@ final class LightPass {
     /// Bound for a frame without lights.
     private let none: MTLBuffer
     private let depthState: MTLDepthStencilState
+    /// The lights, cells and indices of each frame in flight, made at load
+    /// with room for every light a snapshot carries, so that play makes
+    /// none.
+    private let lists: [(lights: MTLBuffer, cells: MTLBuffer, indices: MTLBuffer)]
+    private var list = 0
+    private static let inFlight = 3
     /// The shadow cubes (one texel until a light casts).
     private(set) var shadows: MTLTexture
     /// The last frame's, for tests.
@@ -89,6 +95,16 @@ final class LightPass {
             let shadows = Self.cubes(device, size: 1)
         else {
             throw LevelRendererError.resources("lights")
+        }
+        lists = try (0..<Self.inFlight).map { _ in
+            guard
+                let lights = device.makeBuffer(
+                    length: Int(OCE_MAX_LIGHTS) * MemoryLayout<GPULight>.stride, options: .storageModeShared),
+                let cells = device.makeBuffer(length: 2 * Self.cells * 4, options: .storageModeShared),
+                let indices = device.makeBuffer(
+                    length: Int(OCE_MAX_CLUSTER_INDICES) * 2, options: .storageModeShared)
+            else { throw LevelRendererError.resources("light lists") }
+            return (lights, cells, indices)
         }
         self.none = none
         self.depthState = depthState
@@ -207,26 +223,15 @@ final class LightPass {
                 flags: SIMD4(light.flags, slot, shadowOf[index] ?? UInt32.max, 0))
         }
         lastShadowCount = frame.shadowed.count
-        // (made each frame: Phase 10 keeps them)
-        guard
-            let (lightBuffer, cellBuffer, indexBuffer) = HitchLog.shared.note(
-                .allocation, "light lists",
-                {
-                    () -> (MTLBuffer, MTLBuffer, MTLBuffer)? in
-                    guard
-                        let lights = device.makeBuffer(
-                            bytes: records, length: records.count * MemoryLayout<GPULight>.stride,
-                            options: .storageModeShared),
-                        let cells = device.makeBuffer(
-                            bytes: cells, length: cells.count * 4, options: .storageModeShared),
-                        let indices = device.makeBuffer(
-                            bytes: indices, length: max(Int(written), 1) * 2,
-                            options: .storageModeShared)
-                    else { return nil }
-                    return (lights, cells, indices)
-                })
-        else {
-            return frame
+        // (this frame's lists, the oldest in flight's; the records are
+        // as many as the lights, prefixed to OCE_MAX_LIGHTS above)
+        list = (list + 1) % Self.inFlight
+        let (lightBuffer, cellBuffer, indexBuffer) = lists[list]
+        records.withUnsafeBytes { lightBuffer.contents().copyMemory(from: $0.baseAddress!, byteCount: $0.count) }
+        cells.withUnsafeBytes { cellBuffer.contents().copyMemory(from: $0.baseAddress!, byteCount: $0.count) }
+        indices.withUnsafeBytes {
+            indexBuffer.contents().copyMemory(
+                from: $0.baseAddress!, byteCount: min(max(Int(written), 1) * 2, $0.count))
         }
         frame.lights = lightBuffer
         frame.cells = cellBuffer

@@ -1,9 +1,11 @@
 //! How many allocations a frame makes, counted by the engine's allocator
 //! (`stat allocations`): a number on an empty world, and on devgulch's AI
-//! station no more than its budget (that part needs assets/maps).
+//! station and on each benchmark path no more than its budget (that part
+//! needs assets/maps).
 
 use std::path::Path;
 
+use opence_ffi::benchmark::BenchmarkPath;
 use opence_ffi::{Engine, LevelGeometry};
 use serde_json::Value;
 
@@ -97,5 +99,64 @@ fn a_frame_of_the_ai_station_keeps_to_its_budget() -> Result {
         mean <= BUDGET,
         "{mean:.1} allocations a frame, over {BUDGET}"
     );
+    Ok(())
+}
+
+/// The most allocations a frame of a benchmark path may make, on average:
+/// with the player alone 199 (Blood Gulch) and 256 (devgulch) at first, 136
+/// once the projectiles' targets were gathered only with something in
+/// flight, the dead and the animators read rather than cloned, the bodies'
+/// materials found at load and the animations' poses kept in their room;
+/// with sixteen players 704 at first, 377 after. The rest is reported.
+fn path_budget(path: BenchmarkPath) -> f64 {
+    match path {
+        BenchmarkPath::Devgulch | BenchmarkPath::BloodGulch => 160.0,
+        BenchmarkPath::BloodGulch16 => 420.0,
+    }
+}
+
+#[test]
+fn a_frame_of_each_benchmark_path_keeps_to_its_budget() -> Result {
+    let maps = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../assets/maps");
+    if !maps.join("bloodgulch.map").exists() {
+        return Ok(()); // (no game data here)
+    }
+    let cache = Path::new(env!("CARGO_TARGET_TMPDIR")).join("allocations_paths");
+    std::fs::create_dir_all(&cache)?;
+    for path in BenchmarkPath::ALL {
+        let map = maps.join(format!("{}.map", path.map()));
+        let geometry = LevelGeometry::load(
+            map.to_string_lossy().into_owned(),
+            cache.to_string_lossy().into_owned(),
+            0,
+        )?;
+        let engine = Engine::new();
+        engine.start_level(geometry, 1)?;
+        engine.start_benchmark(path)?;
+        // (two seconds played first: the players spread out and their
+        // first shots made)
+        for _ in 0..120 {
+            engine.advance(1.0 / 60.0)?;
+        }
+        const FRAMES: u32 = 600;
+        let (mut count, mut most) = (0.0, 0.0f64);
+        for _ in 0..FRAMES {
+            engine.advance(1.0 / 60.0)?;
+            let (frame, _) = counted();
+            count += frame;
+            most = most.max(frame);
+        }
+        let mean = count / f64::from(FRAMES);
+        let budget = path_budget(path);
+        println!(
+            "{}: {mean:.1} allocations a frame, at most {most}",
+            path.name()
+        );
+        assert!(
+            mean <= budget,
+            "{}: {mean:.1} allocations a frame, over {budget}",
+            path.name()
+        );
+    }
     Ok(())
 }

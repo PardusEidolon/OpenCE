@@ -1012,6 +1012,11 @@ impl Player {
                 flight.follow(frame(world, parent));
             }
         }
+        // (nothing in flight, nothing to gather the targets for)
+        if self.flights.is_empty() {
+            world.get_resource_or_init::<ProjectilePoses>();
+            return fired;
+        }
         // (not the vehicle it rides)
         let mut targets = damage::targets(world, &mut self.placed, self.handle);
         if let Some(seat) = self.seat {

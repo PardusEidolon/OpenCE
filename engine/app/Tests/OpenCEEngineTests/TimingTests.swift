@@ -161,6 +161,48 @@ final class TimingTests: XCTestCase {
         XCTAssertEqual(HitchLog.shared.entries, [])
     }
 
+    /// Each benchmark path played after the load's preparation and a
+    /// warm-up compiles no pipeline, uploads nothing and makes no buffer
+    /// (skipped without assets/maps).
+    func testABenchmarkPathPlaysWithoutAHitch() throws {
+        let maps = StockLevel.root.appendingPathComponent("assets/maps")
+        guard FileManager.default.fileExists(atPath: maps.appendingPathComponent("bloodgulch.map").path) else {
+            throw XCTSkip("no assets/maps/bloodgulch.map")
+        }
+        let device = try XCTUnwrap(MTLCreateSystemDefaultDevice(), "no Metal device")
+        let queue = try XCTUnwrap(device.makeCommandQueue())
+        let cache = StockLevel.root.appendingPathComponent("build/engine/cache")
+        try FileManager.default.createDirectory(at: cache, withIntermediateDirectories: true)
+        let size = (width: 640, height: 360)
+        for path in [BenchmarkPath.devgulch, .bloodGulch, .bloodGulch16] {
+            let map = maps.appendingPathComponent("\(benchmarkPathMap(path: path)).map").path
+            let level = try LoadedLevel(
+                map: map, cacheFolder: cache.path, device: device,
+                settings: VideoSettings(antiAliasing: .temporal), bakeAtLoad: .cachedOnly, prepare: size)
+            let engine = Engine()
+            let snapshots = SnapshotReader(engine: engine)
+            _ = try engine.startLevel(geometry: level.geometry, difficulty: 1)
+            _ = try engine.startBenchmark(path: path)
+            let renderer = level.renderer
+            HitchLog.shared.reset()
+            _ = try renderer.benchmark(width: size.width, height: size.height, seconds: 3, queue: queue) { elapsed in
+                // (counted once the warm-up is over, as play is after the load)
+                HitchLog.shared.playing = elapsed != nil
+                _ = try engine.advance(frameSeconds: 1.0 / 60)
+                let frame = snapshots.acquire()
+                renderer.time = Float((Double(frame.tick) + Double(frame.alpha)) / 60)
+                renderer.lights = frame.drawnLights()
+                renderer.laidDecals = Array(frame.decals)
+                renderer.laidParticles = Array(frame.particles)
+                return (ViewCamera(frame.camera, alpha: frame.alpha), frame.drawnObjects())
+            }
+            HitchLog.shared.playing = false
+            let entries = HitchLog.shared.take()
+            XCTAssertEqual(entries.filter { $0.kind == .compile }, [], "\(benchmarkPathName(path: path))")
+            XCTAssertEqual(entries, [], "\(benchmarkPathName(path: path))")
+        }
+    }
+
     func testPerfLogWritesALineASecond() throws {
         let url = FileManager.default.temporaryDirectory
             .appendingPathComponent("perf-\(UUID().uuidString)/perf.log")

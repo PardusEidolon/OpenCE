@@ -95,7 +95,15 @@ public final class ParticlePass {
         self.sampler = sampler
         self.white = white
         self.whiteVolume = whiteVolume
-        buffers = []
+        // (made at load, room for the details and every sprite a snapshot
+        // carries, so that play makes none)
+        let length = (details.count + Int(OCE_MAX_PARTICLES)) * MemoryLayout<OCEParticleSnapshot>.stride
+        buffers = try (0..<Self.framesInFlight).map { _ in
+            guard let buffer = device.makeBuffer(length: length, options: .storageModeShared) else {
+                throw LevelRendererError.resources("particles")
+            }
+            return buffer
+        }
     }
 
     private static func pipeline(device: MTLDevice, source: String, reactive: Bool) throws
@@ -163,28 +171,16 @@ public final class ParticlePass {
         let rows = details + sprites
         guard !rows.isEmpty else { return false }
         let size = rows.count * MemoryLayout<OCEParticleSnapshot>.stride
-        if buffers.count < Self.framesInFlight {
+        slot = (slot + 1) % Self.framesInFlight
+        if buffers[slot].length < size {
             guard
                 let buffer = HitchLog.shared.note(
                     .allocation, "particles \(size) bytes",
                     {
-                        device.makeBuffer(length: max(size, 4096), options: .storageModeShared)
+                        device.makeBuffer(length: size * 2, options: .storageModeShared)
                     })
             else { return false }
-            buffers.append(buffer)
-            slot = buffers.count - 1
-        } else {
-            slot = (slot + 1) % Self.framesInFlight
-            if buffers[slot].length < size {
-                guard
-                    let buffer = HitchLog.shared.note(
-                        .allocation, "particles \(size) bytes",
-                        {
-                            device.makeBuffer(length: size * 2, options: .storageModeShared)
-                        })
-                else { return false }
-                buffers[slot] = buffer
-            }
+            buffers[slot] = buffer
         }
         let buffer = buffers[slot]
         rows.withUnsafeBytes { buffer.contents().copyMemory(from: $0.baseAddress!, byteCount: size) }

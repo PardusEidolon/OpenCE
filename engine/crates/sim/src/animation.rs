@@ -1151,10 +1151,24 @@ pub fn node_matrices(
     orientations: &[Orientation],
     root: &NodeMatrix,
 ) -> Vec<NodeMatrix> {
+    let mut matrices = Vec::new();
+    node_matrices_into(nodes, orientations, root, &mut matrices);
+    matrices
+}
+
+/// [`node_matrices`], into `matrices` (whose room is kept from tick to
+/// tick).
+pub fn node_matrices_into(
+    nodes: &[AnimationNode],
+    orientations: &[Orientation],
+    root: &NodeMatrix,
+    matrices: &mut Vec<NodeMatrix>,
+) {
     let node_count = nodes.len().min(MAX_NODES);
-    let mut matrices = vec![NodeMatrix::IDENTITY; node_count];
+    matrices.clear();
+    matrices.resize(node_count, NodeMatrix::IDENTITY);
     if node_count == 0 {
-        return matrices;
+        return;
     }
     let mut queue = [0u16; MAX_NODES];
     let (mut read, mut write) = (0, 1);
@@ -1183,7 +1197,6 @@ pub fn node_matrices(
             }
         }
     }
-    matrices
 }
 
 /// What happened to an animation in a frame (`animation_update_result`).
@@ -1537,16 +1550,22 @@ impl AnimationPlayer {
 
     /// The pose with the blend into the animation applied.
     pub fn blended_pose(&self) -> Vec<Orientation> {
-        let mut nodes = self.pose();
+        let mut nodes = Vec::new();
+        self.blended_pose_into(&mut nodes);
+        nodes
+    }
+
+    /// [`blended_pose`](Self::blended_pose), into `nodes`.
+    pub fn blended_pose_into(&self, nodes: &mut Vec<Orientation>) {
+        self.pose_into(nodes);
         if let Some(blend) = &self.blend {
             interpolate_orientations(
                 &blend.from,
-                &mut nodes,
+                nodes,
                 i16::try_from(blend.frame).unwrap_or(i16::MAX),
                 i16::try_from(blend.frames).unwrap_or(i16::MAX),
             );
         }
-        nodes
     }
 
     /// Plays an automatic animation at the game's frame `object_frame`
@@ -1662,28 +1681,37 @@ impl AnimationPlayer {
     /// poses them; a replacement or an overlay goes over the model's
     /// default pose.
     pub fn pose(&self) -> Vec<Orientation> {
-        let mut nodes = vec![Orientation::REST; self.links.len().min(MAX_NODES)];
+        let mut nodes = Vec::new();
+        self.pose_into(&mut nodes);
+        nodes
+    }
+
+    /// [`pose`](Self::pose), into `nodes` (whose room is kept from tick to
+    /// tick).
+    pub fn pose_into(&self, nodes: &mut Vec<Orientation>) {
+        nodes.clear();
+        nodes.resize(self.links.len().min(MAX_NODES), Orientation::REST);
+        let nodes = nodes.as_mut_slice();
         let model = self.model.as_deref();
         let frame = i16::try_from(self.state.frame).unwrap_or(i16::MAX);
         let animation = self.graph.animations.get(usize::from(self.state.animation));
         match animation {
             Some(animation) if animation.kind == AnimationKind::Base => {
-                base_orientations(model, animation, frame, &mut nodes);
+                base_orientations(model, animation, frame, nodes);
             }
             _ => {
                 if let Some(model) = model {
-                    model_orientations(model, &mut nodes);
+                    model_orientations(model, nodes);
                 }
                 match animation {
                     Some(animation) if animation.kind == AnimationKind::Replacement => {
-                        apply_replacement(animation, frame, &mut nodes);
+                        apply_replacement(animation, frame, nodes);
                     }
-                    Some(animation) => apply_overlay(animation, frame, &mut nodes),
+                    Some(animation) => apply_overlay(animation, frame, nodes),
                     None => {}
                 }
             }
         }
-        nodes
     }
 
     /// The nodes' matrices in the world, for an object at `transform`.
@@ -1739,6 +1767,14 @@ pub(crate) fn game_tick(tick: Option<&Tick>) -> bool {
     tick.is_none_or(|tick| tick.0.is_multiple_of(TICKS_PER_GAME_TICK))
 }
 
+/// The lists `play_animations` keeps from tick to tick: the objects in the
+/// order of their ids, and a pose.
+#[derive(Default)]
+pub(crate) struct PlayScratch {
+    entities: Vec<(Entity, ObjectId)>,
+    nodes: Vec<Orientation>,
+}
+
 /// Plays each object's animation on by a frame on the game's ticks, and
 /// poses its nodes on every tick (where it is moves between them), in the
 /// order of the objects' ids, so that the seed is drawn from in the same
@@ -1746,14 +1782,16 @@ pub(crate) fn game_tick(tick: Option<&Tick>) -> bool {
 pub(crate) fn play_animations(
     tick: Option<Res<Tick>>,
     mut seed: ResMut<RandomSeed>,
-    motions: Option<Res<VehicleMotions>>,
-    table: Option<Res<ObjectTable>>,
+    (motions, table): (Option<Res<VehicleMotions>>, Option<Res<ObjectTable>>),
     functions: Option<Res<FunctionTable>>,
     order: Query<(Entity, &ObjectId), With<AnimationPlayer>>,
     mut players: Query<PlayedObject>,
+    mut scratch: Local<PlayScratch>,
 ) {
-    let mut entities: Vec<(Entity, ObjectId)> =
-        order.iter().map(|(entity, id)| (entity, *id)).collect();
+    // (the lists' room is kept from tick to tick)
+    let PlayScratch { entities, nodes } = &mut *scratch;
+    entities.clear();
+    entities.extend(order.iter().map(|(entity, id)| (entity, *id)));
     entities.sort_by_key(|(_, id)| *id);
     // (a vehicle's overlays over its animation, by its movement)
     let motions: Vec<(Entity, &VehicleMotion)> = match (&motions, &table) {
@@ -1768,7 +1806,7 @@ pub(crate) fn play_animations(
     let game_time = tick
         .as_deref()
         .map_or(0, |tick| tick.0 / TICKS_PER_GAME_TICK);
-    for (entity, id) in entities {
+    for &(entity, id) in entities.iter() {
         let Ok((transform, mut player, mut matrices, device, unit, values, object)) =
             players.get_mut(entity)
         else {
@@ -1785,7 +1823,7 @@ pub(crate) fn play_animations(
         } else {
             player.hold();
         }
-        let mut nodes = player.blended_pose();
+        player.blended_pose_into(nodes);
         let model_nodes = player
             .model
             .as_ref()
@@ -1812,21 +1850,29 @@ pub(crate) fn play_animations(
                 model_nodes,
                 &driven[..count.min(OUTGOING_FUNCTIONS)],
                 object_frame,
-                &mut nodes,
+                nodes,
             );
         }
         if let Some((_, motion)) = motions.iter().find(|(vehicle, _)| *vehicle == entity) {
-            apply_vehicle_overlays(&player.graph, model_nodes, motion, &mut nodes);
+            apply_vehicle_overlays(&player.graph, model_nodes, motion, nodes);
         } else if let Some(pose) = device {
             // (a device's position and power overlays over its animation)
-            apply_device_overlays(&player.graph, pose, &mut nodes);
+            apply_device_overlays(&player.graph, pose, nodes);
         } else if let Some(unit) = unit {
             // (a biped's action, flinch and aiming screens over its base)
             let layers = unit_layers(unit, transform);
-            unit_pose(&player.graph, model_nodes, &layers, &mut nodes);
+            unit_pose(&player.graph, model_nodes, &layers, nodes);
         }
-        let current = node_matrices(&player.links, &nodes, &root_matrix(transform));
-        matrices.previous = std::mem::replace(&mut matrices.current, current);
+        // (the last tick's become the one's before, whose room takes this
+        // tick's)
+        let matrices = &mut *matrices;
+        std::mem::swap(&mut matrices.previous, &mut matrices.current);
+        node_matrices_into(
+            &player.links,
+            nodes,
+            &root_matrix(transform),
+            &mut matrices.current,
+        );
     }
 }
 

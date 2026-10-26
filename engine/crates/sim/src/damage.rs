@@ -351,6 +351,8 @@ pub struct Damageable {
     /// Its model's nodes: the name, where it is at the default pose (from
     /// the object's origin), and its collision node.
     pub nodes: Vec<(String, Vec3, Option<usize>)>,
+    /// The material type of its body (-1: none), found once at load.
+    pub material: i16,
 }
 
 /// The level's damage: each damaged kind of object, by its tag, and every
@@ -525,6 +527,7 @@ impl DamageTable {
                 Some((
                     object.tag.clone(),
                     Damageable {
+                        material: body_material(&model),
                         model,
                         pill,
                         sphere,
@@ -737,23 +740,17 @@ pub fn targets(
     let Some(table) = world.get_resource::<DamageTable>() else {
         return Vec::new();
     };
-    let shapes: BTreeMap<&TagRef, (Shape, i16)> = table
-        .objects
-        .iter()
-        .filter_map(|(tag, damageable)| {
+    let mut targets: Vec<Target> = placed
+        .iter(world)
+        .filter(|(handle, ..)| **handle != except)
+        .filter_map(|(handle, object, transform)| {
+            let damageable = table.objects.get(&object.tag)?;
             let shape = match (damageable.pill, damageable.sphere) {
                 (Some(pill), _) => Shape::Pill(pill),
                 (None, Some(radius)) => Shape::Sphere(radius, damageable.centre),
                 (None, None) => return None,
             };
-            Some((tag, (shape, body_material(&damageable.model))))
-        })
-        .collect();
-    let mut targets: Vec<Target> = placed
-        .iter(world)
-        .filter(|(handle, ..)| **handle != except)
-        .filter_map(|(handle, object, transform)| {
-            let (shape, material) = *shapes.get(&object.tag)?;
+            let material = damageable.material;
             let target = match shape {
                 Shape::Pill((radius, height)) => {
                     let radius = radius * transform.scale;
@@ -1548,6 +1545,7 @@ mod tests {
                     immune_to_falling,
                     centre: Vec3::new(0.0, 0.0, 0.35),
                     nodes: Vec::new(),
+                    material: body_material(&cyborg()),
                 },
             )]),
             effects: BTreeMap::from([

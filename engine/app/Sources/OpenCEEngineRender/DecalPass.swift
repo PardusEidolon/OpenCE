@@ -98,6 +98,15 @@ public final class DecalPass {
             bytesPerRow: 4)
         self.sampler = sampler
         self.white = white
+        // (made at load, room for every decal a snapshot carries, so that
+        // play makes none)
+        let length = Int(OCE_MAX_DECALS) * MemoryLayout<OCEDecalSnapshot>.stride
+        laidBuffers = try (0..<Self.inFlight).map { _ in
+            guard let buffer = device.makeBuffer(length: length, options: .storageModeShared) else {
+                throw LevelRendererError.resources("decals")
+            }
+            return buffer
+        }
         var gpu: [GPUDecal] = []
         var runs: [(first: Int, count: Int, picture: MTLTexture?)] = []
         for decal in decals {
@@ -146,17 +155,6 @@ public final class DecalPass {
     private func prepare(_ laid: [OCEDecalSnapshot]) -> (MTLBuffer, [(first: Int, count: Int, picture: MTLTexture?)])? {
         let count = min(laid.count, Int(OCE_MAX_DECALS))
         guard count > 0 else { return nil }
-        if laidBuffers.count < Self.inFlight {
-            let length = Int(OCE_MAX_DECALS) * MemoryLayout<OCEDecalSnapshot>.stride
-            guard
-                let made = HitchLog.shared.note(
-                    .allocation, "decals",
-                    {
-                        device.makeBuffer(length: length, options: .storageModeShared)
-                    })
-            else { return nil }
-            laidBuffers.append(made)
-        }
         let buffer = laidBuffers[nextBuffer % laidBuffers.count]
         nextBuffer += 1
         var runs: [(first: Int, count: Int, picture: MTLTexture?)] = []
