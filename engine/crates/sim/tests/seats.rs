@@ -847,3 +847,76 @@ fn an_animated_rider_leaves_its_seat_as_its_animation_of_it_ends() -> Result {
     );
     Ok(())
 }
+
+#[test]
+fn a_driven_warthogs_wheels_turn_at_its_speed_round_their_circumference() -> Result {
+    let Some(level) = bloodgulch()? else {
+        return Ok(());
+    };
+    let flags = seat_flags(&level)?;
+    let driver = seat_with(&flags, VehicleSeat::DRIVER, 0)?;
+    let (mut simulation, warthog) = beside_a_warthog(&level)?;
+    let tag = level
+        .objects
+        .iter()
+        .find(|object| object.tag.path.eq_ignore_ascii_case(WARTHOG))
+        .map(|object| object.tag.clone())
+        .ok_or("no warthog")?;
+    let vehicle = level
+        .object(&tag)
+        .and_then(|definition| definition.vehicle.clone())
+        .ok_or("no vehicle")?;
+    let circumference = vehicle.wheel_circumference;
+    assert!(
+        circumference > 0.0,
+        "the Warthog's wheels have no circumference"
+    );
+    enter(&mut simulation, warthog, driver)?;
+    let state = |simulation: &Simulation| {
+        simulation
+            .rides()
+            .ride(warthog)
+            .map(|ride| ride.state.clone())
+    };
+    let mut before = state(&simulation).ok_or("no ride")?;
+    let (mut turns, mut fastest) = (0, 0.0_f32);
+    for _ in 0..3 * clock::TICKS_PER_SECOND {
+        simulation.step(TickInput {
+            forward: 127,
+            ..TickInput::default()
+        });
+        let after = state(&simulation).ok_or("no ride")?;
+        if after.wheel != before.wheel {
+            // (as the original's jeep: the wheel rolls on by this tick's
+            // speed, kept within its circumference)
+            let mut rolled = libm::fmodf(before.wheel + after.speed, circumference);
+            if rolled < 0.0 {
+                rolled += circumference;
+            }
+            assert!(
+                (after.wheel - rolled).abs() < 1e-5,
+                "the wheel went {} to {} at speed {} (circumference {circumference}, functions {:?})",
+                before.wheel,
+                after.wheel,
+                after.speed,
+                vehicle.function_modes
+            );
+            assert!((0.0..circumference).contains(&after.wheel));
+            turns += 1;
+            fastest = fastest.max(after.speed.abs());
+        }
+        before = after;
+    }
+    assert!(
+        turns > 10,
+        "the Warthog's wheels turned on only {turns} ticks"
+    );
+    // (less than half a turn between game ticks, so the drawn wheel, eased
+    // the short way round between them, cannot turn backwards)
+    assert!(
+        fastest / circumference < 0.5,
+        "the wheels turn {} of a turn in a tick",
+        fastest / circumference
+    );
+    Ok(())
+}

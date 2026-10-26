@@ -11,11 +11,12 @@ use rkyv::{Archive, Deserialize, Serialize};
 use crate::TagRef;
 
 /// How a vehicle moves, as its tag's type says.
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, Archive, Serialize, Deserialize)]
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Hash, Archive, Serialize, Deserialize)]
 pub enum VehicleKind {
     /// Treads (the Scorpion).
     HumanTank,
     /// Wheels that steer (the Warthog).
+    #[default]
     HumanJeep,
     /// A boat.
     HumanBoat,
@@ -43,7 +44,7 @@ impl VehicleKind {
 }
 
 /// A vehicle's own part of its definition.
-#[derive(Clone, Debug, PartialEq, Archive, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Archive, Serialize, Deserialize)]
 pub struct Vehicle {
     /// Its flags ([`Vehicle::CAUSES_COLLISION_DAMAGE`] and the rest).
     pub flags: u32,

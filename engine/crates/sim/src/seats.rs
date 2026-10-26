@@ -607,9 +607,15 @@ impl Rides {
                         WeaponExport::of(state, Some(weapon), rounds),
                     ))
                 });
+                let vehicle = kind.map_or([None; 4], |kind| {
+                    kind.vehicle.function_modes.map(|mode| {
+                        vehicle::export_function_value(mode, &ride.state, &kind.vehicle)
+                    })
+                });
                 let export = RideExport {
                     seat_power: ride.power,
                     turret,
+                    vehicle,
                 };
                 (ride.handle, export)
             })

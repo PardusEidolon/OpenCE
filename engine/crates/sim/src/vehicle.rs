@@ -132,7 +132,7 @@ pub struct Slip {
 
 /// A vehicle's state between game ticks (its object's and its
 /// _vehicle_datum's).
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 pub struct VehicleState {
     /// Its centre of mass.
     pub position: Vec3,
@@ -175,6 +175,8 @@ pub struct VehicleState {
     pub under_water: bool,
     /// Whether it is braking.
     pub brake: bool,
+    /// Whether its driver holds crouch.
+    pub crouch: bool,
     /// Each mass point's flags, as it left the last tick.
     pub points: Vec<u8>,
     /// The push of the vehicles it met, for its next step.
@@ -213,6 +215,7 @@ impl VehicleState {
             in_water: false,
             under_water: false,
             brake: false,
+            crouch: false,
             points: vec![0; physics.mass_points.len()],
             collision_force: Vec3::ZERO,
             collision_torque: Vec3::ZERO,
@@ -516,6 +519,7 @@ pub fn game_tick(
 ) -> Result<(), PhysicsError> {
     state.points.resize(physics.mass_points.len(), 0);
     let throttle = controls.throttle;
+    state.crouch = controls.crouch;
     state.brake = controls.jump
         || (vehicle.flags & Vehicle::CONTROL_OPPOSITE_SPEED_SETS_BRAKE != 0
             && ((throttle.x > 0.0 && state.speed < 0.0)
@@ -1519,6 +1523,90 @@ fn physics_update(
         && acceleration.dot(acceleration) <= REST_ACCELERATION_SQUARED
         && angular_acceleration.dot(angular_acceleration) <= REST_ANGULAR_ACCELERATION_SQUARED;
     Ok(())
+}
+
+/// The value a vehicle exports by its function mode `mode` (none: it
+/// leaves the value as it is), as `vehicle_export_function_values` gives
+/// it: its speeds, slides and turns over their fastest, its wheels' and
+/// treads' places round their circumference, and the rest, pinned between
+/// 0 and 1. Where the original divides nothing by nothing (a vehicle with
+/// no fastest slide, say) it gives not a number; the port takes that part
+/// as 0.
+pub fn export_function_value(mode: i16, state: &VehicleState, vehicle: &Vehicle) -> Option<f32> {
+    if mode == 0 {
+        return None;
+    }
+    let forward_speed = vehicle.maximum_forward_speed.abs();
+    let reverse_speed = vehicle.maximum_reverse_speed.abs();
+    let maximum_speed = forward_speed.max(reverse_speed);
+    let left_slide = vehicle.maximum_left_slide.abs();
+    let right_slide = vehicle.maximum_right_slide.abs();
+    let maximum_slide = left_slide.max(right_slide);
+    let left_turn = vehicle.maximum_left_turn.abs();
+    let right_turn = vehicle.maximum_right_turn.abs();
+    let maximum_turn = left_turn.max(right_turn);
+    let flag = |set: bool| f32::from(u8::from(set));
+    let velocity = state.velocity.length();
+    let result = match mode {
+        1 | 28..=31 => state.speed.abs() / maximum_speed,
+        2 => state.speed.max(0.0) / forward_speed,
+        3 => state.speed.min(0.0).abs() / reverse_speed,
+        4 => state.slide.abs() / maximum_slide,
+        5 => state.slide.abs() / left_slide,
+        6 => state.slide.abs() / right_slide,
+        7 => (state.speed.abs() / maximum_speed).max(state.slide.abs() / maximum_slide),
+        8 => state.turn.abs() / maximum_turn,
+        9 => state.turn.abs() / left_turn,
+        10 => state.turn.abs() / right_turn,
+        11 => flag(state.crouch),
+        12 => flag(state.brake),
+        14 => velocity / maximum_speed,
+        // (on, partly or wholly under water)
+        15 => {
+            if state.in_water || state.under_water {
+                velocity / maximum_speed
+            } else {
+                0.0
+            }
+        }
+        16 => {
+            if state.on_ground {
+                velocity / maximum_speed
+            } else {
+                0.0
+            }
+        }
+        17 => state.velocity.dot(state.forward).abs() / maximum_speed,
+        18 | 19 => state.velocity.dot(state.up).abs() / maximum_speed,
+        20 => state.treads[0] / vehicle.wheel_circumference,
+        21 => state.treads[1] / vehicle.wheel_circumference,
+        22 => (state.speed - state.turn).abs() / maximum_speed,
+        23 => (state.turn + state.speed).abs() / maximum_speed,
+        24..=27 => state.wheel / vehicle.wheel_circumference,
+        32 => {
+            let along = state.forward * state.velocity.dot(state.forward);
+            let across = (state.velocity - along).length() * (1.0 / 0.3);
+            across * across
+        }
+        33 => state.hover,
+        34 => state.thrust,
+        35 => {
+            let along = state.velocity.dot(state.forward).abs() / maximum_speed;
+            let forward = state.speed.abs() / forward_speed;
+            let blend = ((f32::from(state.airborne_ticks) * 0.2 + 1.0) * 0.5).clamp(0.0, 1.0);
+            along * (1.0 - blend) + forward * blend
+        }
+        36 => {
+            let boost = velocity / vehicle.maximum_forward_speed;
+            (boost * state.thrust - 0.05) * (1.0 / (0.9 - 0.05))
+        }
+        _ => 0.0,
+    };
+    Some(if result.is_nan() {
+        0.0
+    } else {
+        result.clamp(0.0, 1.0)
+    })
 }
 
 #[cfg(test)]

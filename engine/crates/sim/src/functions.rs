@@ -218,6 +218,9 @@ pub struct RideExport {
     pub seat_power: [f32; 2],
     /// Its gun's tag and what its state exports.
     pub turret: Option<(TagRef, WeaponExport)>,
+    /// What it exports by its vehicle definition's own modes (its speeds,
+    /// wheels and treads: `vehicle_export_function_values`).
+    pub vehicle: [Option<f32>; 4],
 }
 
 /// The value an object's part exports by `mode` (none: it leaves the
@@ -427,6 +430,15 @@ pub fn update(
             }),
         };
         let mut incoming = incoming(&functions.modes, &exported);
+        // (a vehicle's own values, after its unit's)
+        for (value, exported) in incoming
+            .iter_mut()
+            .zip(ride.map_or([None; 4], |ride| ride.vehicle))
+        {
+            if let Some(exported) = exported {
+                *value = exported;
+            }
+        }
         // (a vehicle's gun's values, by the gun's own modes)
         if let Some((tag, turret)) = ride.and_then(|ride| ride.turret.as_ref()) {
             if let Some(gun) = table.0.get(tag) {
