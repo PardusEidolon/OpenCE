@@ -22,13 +22,14 @@ fn names_in_backticks_are_quoted() {
 }
 
 #[test]
-fn citations_come_from_src_comments_and_swift_but_not_tests() -> Result<(), Failure> {
+fn citations_come_from_src_comments_and_swift_but_not_tests_or_the_census() -> Result<(), Failure> {
     let tree = Tree::new("citations")
         .with(
             "crates/sim/src/units.rs",
             "//! Units.\n\n/// `unit_kill`, then `unit_delete`.\nfn kill() {}\nlet s = \"`unit_update`\"; // `unit_update`\n",
         )
         .with("crates/sim/tests/units.rs", "// `unit_spawn`\n")
+        .with("crates/census/src/lib.rs", "//! Reads `unit_spawn`'s citations.\n")
         .with("crates/physics/src/a/b.rs", "// `unit_kill` again\n")
         .with(
             "app/Sources/Render/LightPass.swift",

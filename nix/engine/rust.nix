@@ -29,7 +29,8 @@ let
   '';
 in
 rec {
-  # the workspace, without the Swift app and the fuzzing workspace (but
+  # the workspace, without the Swift app, the census's manifest and the
+  # fuzzing workspace (but
   # with its manifest and targets, which the importer's fuzz smoke test
   # reads), and what its builds read outside it: Jolt and the physics
   # wrapper (the physics crate's build.rs), the ragdolls' overrides (the
@@ -38,6 +39,7 @@ rec {
     (fs.difference (root + /engine) (
       fs.unions [
         (root + /engine/app)
+        (root + /engine/census)
         (root + /engine/fuzz)
       ]
     ))
@@ -68,8 +70,8 @@ rec {
   };
 
   # the tests' source: the workspace's, and what the census's tests read
-  # (engine/crates/census): the original's C and headers, the app's Swift
-  # and the docs it writes; only the tests check is built from it, so the
+  # (engine/crates/census): the original's C and headers, the app's Swift,
+  # the census's manifest and the docs it writes; only the tests check is built from it, so the
   # packages do not build again when these change
   testArgs = commonArgs // {
     src = fs.toSource {
@@ -78,6 +80,7 @@ rec {
         commonFiles
         (fs.fileFilter (file: file.hasExt "c" || file.hasExt "h") (root + /source))
         (root + /engine/app/Sources)
+        (root + /engine/census)
         (root + /docs)
       ];
     };

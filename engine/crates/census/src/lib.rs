@@ -13,11 +13,15 @@ use std::path::{Path, PathBuf};
 pub mod c;
 mod census;
 pub mod citations;
+pub mod classes;
 pub mod graph;
 pub mod original;
 pub mod symbols;
+pub mod traced;
 
-pub use census::{census, Census, Mode, MAIN};
+pub use census::{
+    census, check_traces, read_traced, Census, Function, Mode, MAIN, MANIFEST, TRACED,
+};
 
 /// What the census could not read.
 #[derive(Debug, thiserror::Error)]
@@ -30,8 +34,9 @@ pub enum Error {
         /// Why.
         source: std::io::Error,
     },
-    /// A symbol header that is not in the format the census reads.
-    #[error("{file}:{line}: a malformed symbol header ({why})")]
+    /// A symbol header or a census file that is not in the format the
+    /// census reads.
+    #[error("{file}:{line}: malformed ({why})")]
     Malformed {
         /// The file of `source/`.
         file: String,

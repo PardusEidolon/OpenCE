@@ -1,0 +1,700 @@
+# The coverage census's manifest: the class of each function of the
+# original (source/) and the evidence for it. docs/census.md says what each
+# class needs; `opence census --check` fails when a function lacks it.
+#
+# Rules class whole directories, files or name prefixes; a [function.NAME]
+# entry classes one function and beats any rule. A function a reference
+# trace compiles (traced.tsv) is Ported without an entry. `owed` says why
+# evidence is still lacking, for the coverage-completion track.
+
+[[rule]]
+class = "missing"
+
+[function.accelerate_to_position]
+class = "matched"
+owed = "a first-person weapon's sway; checked through first_person_weapon_update's trace"
+
+[function.actor_action_handle_surprise]
+class = "matched"
+owed = "AI; reads the object, tag and map world, which the fake worlds do not hold (the actor and its prop); Phase 11's divergences"
+
+[function.actor_action_try_to_dive]
+class = "matched"
+owed = "AI; reads the object, tag and map world, which the fake worlds do not hold (the actor and its prop); Phase 11's divergences"
+
+[function.ai_conversation]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.ai_conversation_advance]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.ai_conversation_line]
+class = "matched"
+owed = "AI; reads the object, tag and map world, which the fake worlds do not hold (the scenario's conversations); campaign/tests/flow.rs"
+
+[function.ai_conversation_status]
+class = "matched"
+owed = "AI; reads the object, tag and map world, which the fake worlds do not hold (the scenario's conversations); campaign/tests/flow.rs"
+
+[function.ai_place]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.animation_choose_random_permutation_internal]
+class = "matched"
+owed = "draws from the game's random seed; checked through the animation trace's permutation weights"
+
+[function.animation_update_internal]
+class = "matched"
+owed = "reads the object, tag and map world, which the fake worlds do not hold (the animation tag's frames); checked by the animation trace's frame counts"
+
+[function.area_of_effect_cause_damage_to_object]
+class = "matched"
+owed = "damage; reads the object, tag and map world, which the fake worlds do not hold; Phase 12's explosions"
+
+[function.begin_music_fade_out]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.biped_accelerate]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.biped_make_footstep]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.biped_start_limp_body_physics]
+class = "matched"
+owed = "death; reads the object, tag and map world, which the fake worlds do not hold; Phase 14's ragdoll"
+
+[function.biped_update]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.biped_update_landing]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.biped_update_turning]
+class = "matched"
+owed = "a biped's turning; reads the object, tag and map world, which the fake worlds do not hold; Phase 11's divergences"
+
+[function.bitmap_group_get_bitmap_from_sequence]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.blip_size_get]
+class = "matched"
+owed = "the motion sensor's blips; checked by sim/tests/hud.rs"
+
+[function.bsp3d_test_point]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.build_damage_animation_index]
+class = "matched"
+owed = "the damage animations; reads the object, tag and map world, which the fake worlds do not hold (the animation graph)"
+
+[function.camera_track_splut]
+class = "matched"
+owed = "cutscene cameras; reads the object, tag and map world, which the fake worlds do not hold (the camera track tag); campaign/tests/cutscenes.rs"
+
+[function.contrail_add_points]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.contrail_fade]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.contrail_next_frame]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.contrail_scale_random_value]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.contrail_scale_value]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.contrail_update_points]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.create_ghost_effect]
+class = "matched"
+owed = "a vehicle's effects; reads the object, tag and map world, which the fake worlds do not hold; Phase 13's effects on the move"
+
+[function.create_pelican_effect]
+class = "matched"
+owed = "a vehicle's effects; reads the object, tag and map world, which the fake worlds do not hold; Phase 13's effects on the move"
+
+[function.data_next_index]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.datum_new]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.dead_camera_new]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.dead_camera_update]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.decal_new]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.decal_new_from_collision]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.decals_update]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.detail_sound_random_offset]
+class = "matched"
+owed = "a looping sound's details; draws from the game's random seed; Phase 15"
+
+[function.device_export_function_values]
+class = "matched"
+owed = "devices; reads the object, tag and map world, which the fake worlds do not hold"
+
+[function.device_preprocess_node_orientations]
+class = "matched"
+owed = "devices; reads the object, tag and map world, which the fake worlds do not hold (the device's model)"
+
+[function.device_update]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.director_desired_perspective]
+class = "matched"
+owed = "the camera; reads the object, tag and map world, which the fake worlds do not hold (the unit's seat); Phase 14's death camera"
+
+[function.draw_string]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.effect_new_unattached_from_markers]
+class = "matched"
+owed = "particles; reads the object, tag and map world, which the fake worlds do not hold (the effect tag); Phase 12's explosions"
+
+[function.effect_scale]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.equipment_handle_pickup]
+class = "matched"
+owed = "items; reads the object, tag and map world, which the fake worlds do not hold"
+
+[function.equipment_place]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.first_person_weapon_animation_fits]
+class = "matched"
+owed = "reads the object, tag and map world, which the fake worlds do not hold (the first-person model's nodes); sim/tests/first_person.rs"
+
+[function.first_person_weapon_build_node_matrices]
+class = "matched"
+owed = "reads the object, tag and map world, which the fake worlds do not hold (the first-person model's nodes); sim/tests/first_person.rs"
+
+[function.first_person_weapon_switch_weapons]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.first_person_weapon_update]
+class = "matched"
+owed = "reads the object, tag and map world, which the fake worlds do not hold (the weapon tag); its states are first_person_reference's"
+
+[function.following_camera_update]
+class = "matched"
+owed = "the camera; reads the object, tag and map world, which the fake worlds do not hold; Phase 14's death camera"
+
+[function.get_flash_color]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.get_material_type]
+class = "matched"
+owed = "the ground's material; reads the object, tag and map world, which the fake worlds do not hold (the structure's collision)"
+
+[function.get_sprite_clip_rect]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.get_ui_rgb_white]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.hs_cast]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.hs_return]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.hs_thread_main]
+class = "matched"
+owed = "scripts; reads the object, tag and map world, which the fake worlds do not hold (the scenario's compiled scripts); script/tests"
+
+[function.hud_calculate_bitmap_bounds]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.hud_calculate_point]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.hud_draw_meter]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.hud_draw_numbers]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.hud_draw_static_element]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.hud_render_unit_interface]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.hud_show_action_response]
+class = "matched"
+owed = "the HUD's messages; reads the object, tag and map world, which the fake worlds do not hold"
+
+[function.limit_pitch]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.machine_update]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.main_menu_initialize]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.match_game_type]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.material_effect_new]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.matrix4x3_rotation_from_angles]
+class = "matched"
+owed = "rotations; checked through the item trace's object matrices"
+
+[function.model_build_remapping_table_for_animation_graph]
+class = "matched"
+owed = "reads the object, tag and map world, which the fake worlds do not hold (the model's and graph's node names)"
+
+[function.motion_sensor_update]
+class = "matched"
+owed = "the motion sensor; reads the object, tag and map world, which the fake worlds do not hold; sim/tests/hud.rs"
+
+[function.object_cause_damage]
+class = "matched"
+owed = "damage; reads the object, tag and map world, which the fake worlds do not hold; Phase 12"
+
+[function.object_choose_random_change_colors]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.object_compute_function_values]
+class = "matched"
+owed = "object functions; reads the object, tag and map world, which the fake worlds do not hold; Phase 13's animations driven by their functions"
+
+[function.object_compute_node_matrices]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.object_damage_aftermath]
+class = "matched"
+owed = "damage; reads the object, tag and map world, which the fake worlds do not hold; Phase 12"
+
+[function.object_export_function_values]
+class = "matched"
+owed = "object functions; reads the object, tag and map world, which the fake worlds do not hold; Phase 13's animations driven by their functions"
+
+[function.object_get_function_value]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.object_new]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.object_new_from_scenario]
+class = "matched"
+owed = "placement; reads the object, tag and map world, which the fake worlds do not hold; tools/engine_placement_traces.py records its results"
+
+[function.object_start_interpolation]
+class = "matched"
+owed = "interpolation; reads the object, tag and map world, which the fake worlds do not hold; Phase 12's impacts"
+
+[function.object_types_disconnect_from_structure_bsp]
+class = "matched"
+owed = "placement; reads the object, tag and map world, which the fake worlds do not hold"
+
+[function.object_types_place_all]
+class = "matched"
+owed = "placement; reads the object, tag and map world, which the fake worlds do not hold; tools/engine_placement_traces.py records its results"
+
+[function.object_types_place_objects]
+class = "matched"
+owed = "placement; reads the object, tag and map world, which the fake worlds do not hold; tools/engine_placement_traces.py records its results"
+
+[function.observer_up_from_forward]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.observer_update_polynomial]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.overlay_animation_apply_continuous_scaled]
+class = "matched"
+owed = "checked through the animation trace's overlays"
+
+[function.particle_get_radius]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.particle_update_physics]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.physics_compute_biped_collision]
+class = "matched"
+owed = "physics; Jolt stands for the original's collision; tools/engine_movement_traces.py"
+
+[function.player_examine_nearby_objects]
+class = "matched"
+owed = "the action button; reads the object, tag and map world, which the fake worlds do not hold"
+
+[function.players_update_after_game]
+class = "matched"
+owed = "the end of a level; reads the object, tag and map world, which the fake worlds do not hold; campaign/tests/flow.rs"
+
+[function.point_physics_update]
+class = "matched"
+owed = "particles; reads the object, tag and map world, which the fake worlds do not hold (the point physics tag); Phase 12's particles"
+
+[function.process_looping_sounds]
+class = "matched"
+owed = "sound; reads the object, tag and map world, which the fake worlds do not hold; Phase 15"
+
+[function.projectile_collision]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.projectile_detonate]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.projectile_update]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.rasterizer_lens_flare_submit_for_cluster]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.rasterizer_lens_flares_draw]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.real_random_range]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.render_blip]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.render_frustum_sphere_diameter_in_pixels]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.render_grenade_hud]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.render_model]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.render_state_bitmap]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.scenario_location_water_depth]
+class = "matched"
+owed = "water; reads the object, tag and map world, which the fake worlds do not hold (the structure's fog planes)"
+
+[function.scenario_trigger_volume_test_point]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.scenery_new]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.scripted_camera_update]
+class = "matched"
+owed = "cutscene cameras; reads the object, tag and map world, which the fake worlds do not hold; campaign/tests/cutscenes.rs"
+
+[function.scripted_sound_time]
+class = "matched"
+owed = "sound; reads the object, tag and map world, which the fake worlds do not hold (the sound tag); campaign/tests/sounds.rs"
+
+[function.seed_random_direction3d]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.sound_channel_summary_build]
+class = "matched"
+owed = "the mixer's channels; reads the object, tag and map world, which the fake worlds do not hold (the sound manager); Phase 15"
+
+[function.sound_class_set_gain]
+class = "matched"
+owed = "the sound classes; reads the object, tag and map world, which the fake worlds do not hold (the sound manager); Phase 15"
+
+[function.sound_classes_update]
+class = "matched"
+owed = "the sound classes; reads the object, tag and map world, which the fake worlds do not hold (the sound manager); Phase 15"
+
+[function.sound_find_like_channel]
+class = "matched"
+owed = "the mixer's channels; reads the object, tag and map world, which the fake worlds do not hold (the sound manager); Phase 15"
+
+[function.sound_manager_master_gain]
+class = "matched"
+owed = "the sound manager's gain; reads the object, tag and map world, which the fake worlds do not hold; Phase 15"
+
+[function.sound_new_impulse]
+class = "matched"
+owed = "sound; reads the object, tag and map world, which the fake worlds do not hold; Phase 15"
+
+[function.sound_refresh_looping]
+class = "matched"
+owed = "sound; reads the object, tag and map world, which the fake worlds do not hold; Phase 15"
+
+[function.structure_bsp_get_cluster_encoded_sound_distance]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.triple_product3d]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.ui_start_main_menu_music]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.uncompress_int32_to_real_vector3d]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.uniform_cubic_spline]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.unit_animation_aiming_screen]
+class = "ported"
+why = "checked through unit_animation_state_get_aiming_screen_index's trace"
+through = "unit_animation_state_get_aiming_screen_index"
+
+[function.unit_animation_busy]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.unit_animation_impulse_get_index]
+class = "matched"
+owed = "AI's impulses; reads the object, tag and map world, which the fake worlds do not hold (the animation graph)"
+
+[function.unit_animation_set_state]
+class = "matched"
+owed = "checked through the unit state trace's rules"
+
+[function.unit_animation_update]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.unit_can_play_animation_impulse]
+class = "matched"
+owed = "AI's impulses; reads the object, tag and map world, which the fake worlds do not hold (the animation graph)"
+
+[function.unit_cause_melee_damage]
+class = "matched"
+owed = "damage; reads the object, tag and map world, which the fake worlds do not hold; Phase 12"
+
+[function.unit_custom_animation_at_frame]
+class = "matched"
+owed = "scripts' custom animations; reads the object, tag and map world, which the fake worlds do not hold"
+
+[function.unit_destroy]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.unit_detach_from_parent]
+class = "matched"
+owed = "seats; reads the object, tag and map world, which the fake worlds do not hold; Phase 13's getting in and out"
+
+[function.unit_enter_seat]
+class = "matched"
+owed = "seats; reads the object, tag and map world, which the fake worlds do not hold; Phase 13's getting in and out"
+
+[function.unit_exit_seat_end]
+class = "matched"
+owed = "seats; reads the object, tag and map world, which the fake worlds do not hold; Phase 13's getting in and out"
+
+[function.unit_find_nearby_seat]
+class = "matched"
+owed = "seats; reads the object, tag and map world, which the fake worlds do not hold; Phase 13's getting in and out"
+
+[function.unit_get_camera_position]
+class = "matched"
+owed = "seats; reads the object, tag and map world, which the fake worlds do not hold (the seat's camera marker)"
+
+[function.unit_get_seat_entrance_point]
+class = "matched"
+owed = "seats; reads the object, tag and map world, which the fake worlds do not hold (the seat's marker)"
+
+[function.unit_kill]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.unit_melee_sound]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.unit_preprocess_node_orientations]
+class = "matched"
+owed = "checked through the animation trace's aiming blends"
+
+[function.unit_seat_update]
+class = "matched"
+owed = "seats; reads the object, tag and map world, which the fake worlds do not hold; Phase 13"
+
+[function.unit_set_or_test_seat_and_weapon_label]
+class = "matched"
+owed = "checked through the animation trace's labels"
+
+[function.unit_start_animation_impulse]
+class = "matched"
+owed = "AI's impulses; reads the object, tag and map world, which the fake worlds do not hold (the animation graph)"
+
+[function.unit_test_animation_impulse]
+class = "matched"
+owed = "AI's impulses; reads the object, tag and map world, which the fake worlds do not hold (the animation graph)"
+
+[function.unit_throw_grenade_release]
+class = "matched"
+owed = "grenades; reads the object, tag and map world, which the fake worlds do not hold; Phase 12's thrown grenades"
+
+[function.unit_try_and_exit_seat]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.unit_update_animation]
+class = "matched"
+owed = "checked through the unit state trace's rules"
+
+[function.unspatialized_impulse_sound_new]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.update_suspension]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.vector3d_from_euler_angles2d]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.vehicle_accelerate]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.vehicle_is_flipped]
+class = "matched"
+owed = "vehicles; reads the object, tag and map world, which the fake worlds do not hold (the vehicle's physics); Phase 13"
+
+[function.vehicle_new]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.vehicle_preprocess_node_orientations]
+class = "matched"
+owed = "vehicles; reads the object, tag and map world, which the fake worlds do not hold (the vehicle's model); Phase 13's wheels and tracks"
+
+[function.weapon_effect_new]
+class = "matched"
+owed = "weapons; reads the object, tag and map world, which the fake worlds do not hold; Phase 12's effects"
+
+[function.weapon_export_function_values]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.weapon_magazine_finish_reload]
+class = "matched"
+owed = "weapons; reads the object, tag and map world, which the fake worlds do not hold (the weapon tag)"
+
+[function.weapon_magazine_start_reload]
+class = "matched"
+owed = "weapons; reads the object, tag and map world, which the fake worlds do not hold (the weapon tag)"
+
+[function.weapon_new]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.weapon_place]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.weapon_trigger_begin_firing]
+class = "matched"
+owed = "weapons; reads the object, tag and map world, which the fake worlds do not hold (the weapon tag)"
+
+[function.weapon_trigger_can_fire_again]
+class = "matched"
+owed = "weapons; reads the object, tag and map world, which the fake worlds do not hold (the weapon tag)"
+
+[function.weapon_trigger_fire]
+class = "matched"
+owed = "weapons; reads the object, tag and map world, which the fake worlds do not hold (the weapon tag); Phase 12"
+
+[function.weapon_trigger_recover]
+class = "matched"
+owed = "weapons; reads the object, tag and map world, which the fake worlds do not hold (the weapon tag)"
+
+[function.weapon_trigger_release_charge]
+class = "matched"
+owed = "weapons; reads the object, tag and map world, which the fake worlds do not hold (the weapon tag)"
+
+[function.weapon_update]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"
+
+[function.widget_instance_render_recursive]
+class = "matched"
+owed = "the engine cites it, with no check against the original yet"

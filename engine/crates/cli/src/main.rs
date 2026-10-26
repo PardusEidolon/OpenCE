@@ -164,7 +164,18 @@ fn start(arguments: &[String]) -> Result<(), Error> {
                 Some(root) => root,
                 None => repository()?,
             };
-            match opence_census::census(&root, mode) {
+            let checked = opence_census::census(&root, mode).and_then(|summary| {
+                // (the traces' own checks need Python and clang, so they run
+                // here and not in the crate's cargo test)
+                match mode {
+                    opence_census::Mode::Check => match opence_census::check_traces(&root)? {
+                        problems if problems.is_empty() => Ok(summary),
+                        problems => Err(opence_census::Error::Problems(problems)),
+                    },
+                    opence_census::Mode::Summary | opence_census::Mode::Write => Ok(summary),
+                }
+            });
+            match checked {
                 Ok(summary) => Ok(write!(out, "{summary}")?),
                 Err(opence_census::Error::Problems(problems)) => {
                     for problem in &problems {

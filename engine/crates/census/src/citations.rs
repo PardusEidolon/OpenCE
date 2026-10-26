@@ -24,8 +24,11 @@ pub fn collect(engine: &Path, known: &BTreeSet<String>) -> Result<Citations, Err
     if crates.is_dir() {
         for path in walk(&crates, &["rs"])? {
             let place = relative(&path, engine)?;
-            // (only a crate's src/: its tests and benches are not the engine)
-            if place.split('/').nth(1) == Some("src") {
+            // (only a crate's src/: its tests and benches are not the
+            // engine, and nor is the census, which names functions to
+            // explain itself)
+            let mut parts = place.split('/');
+            if parts.next() != Some("census") && parts.next() == Some("src") {
                 cite(&read_text(&path)?, &place, "//", known, &mut found);
             }
         }
