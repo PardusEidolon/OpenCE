@@ -1,0 +1,6 @@
+Task: Script functions and globals
+Mark each of the original's script functions and globals with whether the engine wires it
+
+The census reads the original's function table (with whether a map may call each function) and its globals' table, and marks each name with what the engine gives scripts: a native, a special form, or nothing. The engine's side is engine/census/script_wired.tsv, which a campaign test writes from the registry and the runtime's special forms and fails on when stale; census --write writes engine/census/scripts.tsv and --check fails when it is stale.
+
+293 of the 423 functions are wired (270 natives, 23 special forms) and 3 of the 443 globals. Of the 130 missing functions 76 are ones no map may call; on the ten campaign maps every one of the 291 functions their scripts call is wired. The census, campaign and script tests pass, the workspace's other tests passed, clippy is clean and census --check passes.
