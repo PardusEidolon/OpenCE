@@ -34,7 +34,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `rasterizer` | | 3 (2784 B) | | | 777 (182416 B) | | 2 |
 | `render` | 2 (592 B) | 2 (240 B) | | | 115 (37520 B) | | 2 |
 | `saved games` | | | | 2 (96 B) | 31 (3712 B) | 104 (21184 B) | 2 |
-| `scenario` | | 13 (4320 B) | | | 23 (3136 B) | 21 (2128 B) | 8 |
+| `scenario` | | 13 (4320 B) | | | 23 (3136 B) | 21 (2128 B) | 7 |
 | `shaders` | | | | | 21 (2624 B) | | 0 |
 | `shell` | | | | | 11 (528 B) | 2 (0 B) | 0 |
 | `sound` | 7 (1072 B) | 63 (15808 B) | | 2 (32 B) | 56 (2832 B) | 44 (7216 B) | 60 |
@@ -43,7 +43,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `text` | | 9 (1936 B) | 63 (6864 B) | | 19 (5744 B) | 21 (2368 B) | 9 |
 | `tool` | | | | | 27 (8752 B) | | 0 |
 | `units` | 9 (1856 B) | 67 (27888 B) | | 17 (17808 B) | 9 (1616 B) | 227 (58352 B) | 84 |
-| **all** | 147 (26112 B) | 577 (187824 B) | 332 (38896 B) | 123 (72592 B) | 2770 (569976 B) | 3678 (715722 B) | 660 |
+| **all** | 147 (26112 B) | 577 (187824 B) | 332 (38896 B) | 123 (72592 B) | 2770 (569976 B) | 3678 (715722 B) | 659 |
 
 ## `ai`
 
@@ -3792,8 +3792,8 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `scenario_switch_structure_bsp` | scenario/scenario.c | Matched | sim/src/lib.rs | owed: the engine's own tests (sim/src/lib.rs); no check against the original yet |
 | `scenario_reload_structure_bsp_if_necessary` | scenario/scenario.c | Replaced | import/src/lib.rs | maps imported to a typed format |
 | `scenario_get_structure_reference_index_from_tag_index` | scenario/scenario.c | Replaced | import/src/lib.rs | maps imported to a typed format |
-| `scenario_trigger_volume_test_point` | scenario/scenario.c | Matched | content/src/campaign.rs:138 | owed: the engine cites it, with no check against the original yet |
-| `scenario_trigger_volume_test_object` | scenario/scenario.c | Matched | campaign/src/objects.rs | owed: the engine's own tests (campaign/tests/scenarios.rs); no check against the original yet |
+| `scenario_trigger_volume_test_point` | scenario/scenario.c | Matched | content/src/campaign.rs:138 | content/tests/scenario_reference.rs (trace) |
+| `scenario_trigger_volume_test_object` | scenario/scenario.c | Matched | campaign/src/objects.rs | owed: its test is test_point's, traced (content/tests/scenario_reference.rs); the object's bounding-sphere centre it hands it is the units track's |
 | `scenario_debug_to_file` | scenario/scenario.c | Replaced |  | through its caller `_texture_cache_bitmap_get_hardware_format` |
 | `global_structure_bsp_index_get` | scenario/scenario.c | Replaced | import/src/lib.rs | maps imported to a typed format |
 | `scenario_load` | scenario/scenario.c | Replaced | import/src/lib.rs | maps imported to a typed format |

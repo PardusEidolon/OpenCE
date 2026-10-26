@@ -6999,11 +6999,13 @@ note = "not reached from a root of the game; the game loop track owns it"
 [function.scenario_trigger_volume_test_object]
 class = "matched"
 engine = "campaign/src/objects.rs"
-owed = "the engine's own tests (campaign/tests/scenarios.rs); no check against the original yet"
+owed = "its test is test_point's, traced (content/tests/scenario_reference.rs); the object's bounding-sphere centre it hands it is the units track's"
 
 [function.scenario_trigger_volume_test_point]
 class = "matched"
-owed = "the engine cites it, with no check against the original yet"
+engine = "content/src/campaign.rs"
+check = "content/tests/scenario_reference.rs"
+against = "trace"
 
 [function.scenario_unload]
 class = "replaced"
