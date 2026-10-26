@@ -1,0 +1,6 @@
+Task: Fields the original reads
+Mark each tag field with whether the original's C reads it, in engine/census/tag_fields.tsv
+
+The census's tag-field gaps need to know which fields the original uses at all: an unread field needs no importer or engine side. The C is followed through the pointers each function declares to a tag structure, and members declared as one, with reads inside an embedded structure credited wherever it is embedded (object_definition->object.flags reads every unit's flags).
+
+Checked: tests on a fake C file (declared pointers, member pointers, embedded structures, unbalanced and unterminated text); 3,230 of 5,142 leaf fields read; the written file is current in the crate's test and census --check; 56 census tests pass; clippy clean.
