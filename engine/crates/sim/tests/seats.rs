@@ -4,12 +4,14 @@
 //! Warthog destroyed takes no rider. Passes without
 //! assets/maps/bloodgulch.map.
 
+use std::collections::BTreeSet;
 use std::error::Error;
 use std::sync::Arc;
 
-use opence_content::{Level, ObjectKind, VehicleSeat};
+use opence_content::{Level, MaterialEffects, ObjectKind, VehicleSeat};
 use opence_import::testing::stock_level;
 use opence_sim::animation::{self, AnimationPlayer};
+use opence_sim::effects::Effects;
 use opence_sim::hud::ActionPrompt;
 use opence_sim::input::{Buttons, TickInput};
 use opence_sim::objects::{ObjectHandle, ObjectSpawn};
@@ -918,5 +920,98 @@ fn a_driven_warthogs_wheels_turn_at_its_speed_round_their_circumference() -> Res
         "the wheels turn {} of a turn in a tick",
         fastest / circumference
     );
+    Ok(())
+}
+
+#[test]
+fn a_driven_warthog_slips_its_material_effects_on_the_ground_each_game_tick() -> Result {
+    let Some(level) = bloodgulch()? else {
+        return Ok(());
+    };
+    let flags = seat_flags(&level)?;
+    let driver = seat_with(&flags, VehicleSeat::DRIVER, 0)?;
+    let (mut simulation, warthog) = beside_a_warthog(&level)?;
+    let tag = level
+        .objects
+        .iter()
+        .find(|object| object.tag.path.eq_ignore_ascii_case(WARTHOG))
+        .map(|object| object.tag.clone())
+        .ok_or("no warthog")?;
+    let vehicle = level
+        .object(&tag)
+        .and_then(|definition| definition.vehicle.clone())
+        .ok_or("no vehicle")?;
+    let foot = vehicle
+        .material_effects
+        .clone()
+        .ok_or("no material effects")?;
+    let effects_of = level
+        .material_effects(&foot)
+        .ok_or("no material effects tag")?;
+    // (the tag's slips differ by the ground's material, so a slip's
+    // material chooses what it makes)
+    let slipping: BTreeSet<_> = (0..40)
+        .filter_map(|material| effects_of.of(MaterialEffects::VEHICLE_SLIP, material))
+        .filter_map(|made| made.effect.clone())
+        .collect();
+    assert!(
+        slipping.len() > 1,
+        "the Warthog's slips are the same on every material: {slipping:?}"
+    );
+    let surfaces = simulation.rides().surfaces();
+    enter(&mut simulation, warthog, driver)?;
+    let mut effects = Effects::default();
+    let (mut slips, mut started, mut ticks) = (0, 0, BTreeSet::new());
+    // (hard away, turning, then braking hard)
+    for tick in 0..4 * clock::TICKS_PER_SECOND {
+        let forward = if tick < 2 * clock::TICKS_PER_SECOND {
+            127
+        } else {
+            -127
+        };
+        simulation.step(TickInput {
+            forward,
+            yaw: Radians(0.02),
+            ..TickInput::default()
+        });
+        let before = effects.running().len();
+        effects.trigger(&level, &simulation);
+        let mut expected = Vec::new();
+        for slipped in simulation.slips() {
+            let slip = &slipped.slip;
+            assert_eq!(slipped.material_effects, foot);
+            assert!(!slip.metallic, "a Warthog's wheel is not a tread");
+            assert!((0.0..=1.0).contains(&slip.scale), "{slip:?}");
+            // (the material is the ground's under the wheel)
+            assert_eq!(
+                slip.material,
+                surfaces.at(slip.position - slip.normal.normalize() * 0.003),
+                "{slip:?}"
+            );
+            ticks.insert(simulation.tick().0 % 2);
+            slips += 1;
+            if let Some(effect) = effects_of
+                .of(MaterialEffects::VEHICLE_SLIP, slip.material)
+                .and_then(|made| made.effect.clone())
+            {
+                expected.push((effect, slip.scale));
+            }
+        }
+        let new = &effects.running()[before..];
+        let made: Vec<_> = new
+            .iter()
+            .map(|running| (running.tag.clone(), running.origin.scale[0]))
+            .collect();
+        assert_eq!(
+            made, expected,
+            "tick {tick}: the slips started other effects"
+        );
+        started += new.len();
+        effects.tick(&level, |_| true, |_, _| None);
+    }
+    assert!(slips > 100, "the Warthog slipped only {slips} times");
+    assert!(started > 100, "the slips started only {started} effects");
+    // (a vehicle moves only on game ticks, so it slips on every other)
+    assert_eq!(ticks.len(), 1, "the Warthog slipped between game ticks");
     Ok(())
 }
