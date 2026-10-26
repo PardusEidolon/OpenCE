@@ -1,0 +1,4 @@
+Task: Review the unreached Missing functions and class or annotate each.
+Class each unreached Missing function or name the track that owns it
+
+The 336 functions no root of the game reaches were each reviewed. Network state, debug checks, byte swaps, the progress bar's D3D drawing, the pad and the movie are Replaced with their reason; the unicode helpers are Native strings; the rest stay Missing with a note naming the coverage track that owns them, which a new test in tests/reasons.rs requires. Missing fell from 3,864 to 3,696 and the ratchet follows. Checked: census --write, --ratchet and --check, clippy, and the workspace tests (1,307 passed, 3 skipped).
