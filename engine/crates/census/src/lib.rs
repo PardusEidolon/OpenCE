@@ -17,6 +17,7 @@ pub mod classes;
 pub mod docs;
 pub mod engine;
 pub mod fields;
+pub mod fixups;
 pub mod graph;
 pub mod importer;
 pub mod layout;

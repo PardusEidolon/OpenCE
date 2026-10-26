@@ -9,7 +9,7 @@ use std::path::Path;
 use crate::citations::{self, Citations};
 use crate::classes::{lacking, Class, Engine, From, Manifest, Traced};
 use crate::original::Original;
-use crate::{docs, fields, layout, read_text, traced, Error};
+use crate::{docs, fields, fixups, layout, read_text, traced, Error};
 
 /// The classes.
 pub const MANIFEST: &str = "census/census.toml";
@@ -352,6 +352,7 @@ pub fn census(root: &Path, mode: Mode) -> Result<String, Error> {
             let mut problems = census.problems();
             problems.extend(docs::stale(root, &census));
             problems.extend(fields::stale(root)?);
+            problems.extend(fixups::stale(root)?);
             if problems.is_empty() {
                 Ok(census.summary())
             } else {
