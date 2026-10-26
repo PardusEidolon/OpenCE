@@ -1,0 +1,1 @@
+Death camera: dead_camera.c ported (ease to 2-6 wu, 27-63 deg down over 3 s, follows the body's bounding sphere). Checked by tests/death_camera.rs and the workspace tests and clippy. Not done: switching to other players; fov stays the engine's.
