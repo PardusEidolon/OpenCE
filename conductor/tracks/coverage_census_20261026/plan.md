@@ -13,9 +13,9 @@ manual check is at the end, with the report.
 - [x] Task: Citations from Rust and Swift be343e52
   - [x] Tests on fake crates and fake Swift Sources: backtick names in doc comments, excluding tests/
   - [x] Collected from all crates and engine/app/Sources; the reference map's 159 reproduced as the floor (236 cited)
-- [ ] Task: The call graph and reachability
-  - [ ] Tests on a fake tree: calls, calls through function tables, and entry points
-  - [ ] Entry points for a campaign game and a multiplayer game (both run through `main_loop`); the reached set recorded
+- [x] Task: The call graph and reachability cd7ed869
+  - [x] Tests on a fake tree: calls, calls through function tables, and entry points
+  - [x] Entry points for a campaign game and a multiplayer game (both run through `main_loop`); the reached set recorded
 - [ ] Task: `opence census` and the flake check
   - [ ] The cli subcommand (summary, --check, --write)
   - [ ] source/'s headers and the app's Sources visible to the crate's test in nix flake check
