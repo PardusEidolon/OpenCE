@@ -22,9 +22,9 @@ manual check is at the end, with the report.
 - [x] Task: Conductor - User Manual Verification 'Phase 1: The census crate' (Protocol in workflow.md) (automated) 6f67c558
 
 ## Phase 2: The classes and their requirements
-- [ ] Task: engine/census.toml and the six classes
-  - [ ] Tests: one failing case per requirement (Ported without a trace, Matched with only an engine test, Native without a primitive, Partial with nothing left out, Replaced without a listed reason, a function with no class)
-  - [ ] The schema: rules by directory, file and name, entries for single functions, and the fixed list of Replaced reasons
+- [x] Task: engine/census.toml and the six classes 71ea835c
+  - [x] Tests: one failing case per requirement (Ported without a trace, Matched with only an engine test, Native without a primitive, Partial with nothing left out, Replaced without a listed reason, a function with no class)
+  - [x] The schema: rules by directory, file and name, entries for single functions, and the fixed list of Replaced reasons
 - [ ] Task: The reference map moved in
   - [ ] Its REASONS moved to census.toml, its table rewritten from the census, tools/engine_reference_map.py removed
   - [ ] `--check` runs the trace scripts' own --check; the cargo test checks that each cited trace exists
