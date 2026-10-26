@@ -1,0 +1,4 @@
+Task: The game loop (game, main, shell, saved games)
+Class the game loop: the rules and player control Matched, the clock, kills, spawns and saved games Partial, rumble and debug keys Replaced
+
+The engine's game rules (sim/src/game.rs) do the job of game_engine.c and the Slayer and CTF engines; they are Matched, owing a check against the original, since only the engine's own tests (sim/tests/game.rs) cover them. Kills and the update leave out the other variants and the announcer; the spawn rating leaves out the original's weights; the clock runs at 60 Hz; saved games hold inputs, not a memory image; the game_safe_to_* natives always pass. Player rumble is Replaced (keyboard and mouse), debug keys by the dev tools. Checked: opence census --check, and the census, sim and campaign tests (430 passed).
