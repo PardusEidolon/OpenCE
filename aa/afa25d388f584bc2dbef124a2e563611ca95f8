@@ -1,0 +1,1 @@
+Phase 16 checkpoint. Automated checks: Swift suite 221 tests, 2 known stale golden frames; Rust workspace tests pass except the known flaky UDP slayer test; clippy clean. Manual verification superseded at the user's instruction.
