@@ -72,8 +72,8 @@ entries list what they leave out.
 - [ ] Task: Conductor - User Manual Verification 'Phase 4: Tag fields and load-time fix-ups' (Protocol in workflow.md) (automated; deferred to the end)
 
 ## Phase 5: Scripts and sounds
-- [ ] Task: Script functions and globals
-  - [ ] Every one in the original's tables, marked wired or not, with the maps' calls counted where the user's maps are present (skipped without them)
+- [x] Task: Script functions and globals c43541d9
+  - [x] Every one in the original's tables, marked wired or not, with the maps' calls counted where the user's maps are present (skipped without them)
 - [ ] Task: Sounds
   - [ ] Every sound tag, and whether play asks for it, measured on devgulch and the campaign where the maps are present
   - [ ] The per-object sound limit recorded with what it needs (sound requests that know their object)
