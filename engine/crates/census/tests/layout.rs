@@ -6,8 +6,8 @@ mod common;
 
 use common::Tree;
 use opence_census::layout::{
-    asserts, disagreements, generate, read_dump, read_layout, tag_structures, write_layout, Assert,
-    LAYOUT,
+    asserts, disagreements, generate, is_tag_header, read_dump, read_layout, tag_structures,
+    write_layout, Assert, LAYOUT,
 };
 
 type Failure = Box<dyn std::error::Error>;
@@ -107,6 +107,18 @@ fn a_headers_tag_structures_and_asserts_are_read() {
 }
 
 #[test]
+fn a_tag_header_is_a_definitions_header_or_one_that_names_a_tag_group() {
+    let path = std::path::Path::new;
+    assert!(is_tag_header(path("units/unit_definitions.h"), ""));
+    assert!(is_tag_header(
+        path("bitmaps/bitmap_group.h"),
+        "enum\n{\n\tBITMAP_GROUP_TAG= 'bitm'\n};\n"
+    ));
+    assert!(!is_tag_header(path("math/real_math.h"), "enum { X= 1 };"));
+    assert!(!is_tag_header(path("units/units.h"), "#define TAG 'unit'"));
+}
+
+#[test]
 fn the_layout_round_trips_through_its_tsv() -> Result<(), Failure> {
     let records = read_dump(DUMP);
     assert_eq!(read_layout(&write_layout(&records))?, records);
@@ -188,8 +200,8 @@ fn the_written_layout_agrees_with_the_headers_asserts() -> Result<(), Failure> {
     let mut all = Vec::new();
     let mut names = Vec::new();
     for header in opence_census::walk(&root.join("source"), &["h"])? {
-        if header.to_string_lossy().ends_with("_definitions.h") {
-            let text = opence_census::read_text(&header)?;
+        let text = opence_census::read_text(&header)?;
+        if is_tag_header(&header, &text) {
             all.extend(asserts(&text));
             names.extend(tag_structures(&text));
         }

@@ -1,4 +1,4 @@
-//! The tag layout: every tag structure of `source/`'s `*_definitions.h`
+//! The tag layout: every tag structure of `source/`'s tag headers
 //! with each field's offset, as the original's compiler laid it out.
 //!
 //! clang lays the headers out for 32-bit MSVC (`i686-pc-windows-msvc`),
@@ -34,7 +34,7 @@ const PREAMBLE: &[&str] = &[
 const STAND_INS: &[(&str, &str)] = &[
     (
         "StdDef.h",
-        "#pragma once\n#define offsetof(t, m) __builtin_offsetof(t, m)\n#define NULL ((void *)0)\ntypedef unsigned int size_t;\n",
+        "#pragma once\n#define offsetof(t, m) __builtin_offsetof(t, m)\n#define NULL ((void *)0)\ntypedef unsigned int size_t;\ntypedef unsigned short wchar_t;\n",
     ),
     ("stdio.h", "#pragma once\n"),
     ("stdlib.h", "#pragma once\n"),
@@ -157,6 +157,22 @@ fn read_block(block: &str) -> Option<Record> {
         });
     }
     None
+}
+
+/// Whether a header holds tag structures: a `*_definitions.h`, or one
+/// that names a tag group (`X_TAG= 'abcd'`), as `bitmap_group.h` does.
+pub fn is_tag_header(path: &Path, text: &str) -> bool {
+    if path.to_string_lossy().ends_with("_definitions.h") {
+        return true;
+    }
+    text.match_indices("_TAG").any(|(at, word)| {
+        let rest = text[at + word.len()..].trim_start();
+        let Some(rest) = rest.strip_prefix('=') else {
+            return false;
+        };
+        let rest = rest.trim_start().as_bytes();
+        rest.len() >= 6 && rest[0] == b'\'' && rest[5] == b'\''
+    })
 }
 
 /// The structures a header defines (`struct name` with its body on the
@@ -341,22 +357,60 @@ fn run(command: &mut Command, what: &str) -> Result<String, Error> {
     Ok(String::from_utf8_lossy(&output.stdout).into_owned())
 }
 
+/// The old port's capacity macros the tag headers' includes use, at the
+/// original's own values (the stock values `halo_port_capacity.h` notes).
+const STOCK_CAPACITIES: [(&str, &str); 22] = [
+    ("HALO_PORT_MAXIMUM_ACTORS", "256"),
+    ("HALO_PORT_MAXIMUM_PROPS", "768"),
+    ("HALO_PORT_MAXIMUM_SWARMS", "32"),
+    ("HALO_PORT_MAXIMUM_SWARM_COMPONENTS", "256"),
+    ("HALO_PORT_MAXIMUM_OBJECTS_PER_MAP", "2048"),
+    ("HALO_PORT_OBJECT_MEMORY_POOL_SIZE", "0x100000"),
+    ("HALO_PORT_MAXIMUM_CLUSTER_REFERENCES", "2048"),
+    ("HALO_PORT_MAXIMUM_RENDERED_OBJECTS", "256"),
+    ("HALO_PORT_MAXIMUM_CACHED_OBJECT_RENDER_STATES", "256"),
+    ("HALO_PORT_MAXIMUM_AREA_OF_EFFECT_OBJECTS", "64"),
+    ("HALO_PORT_MAXIMUM_OBJECT_LISTS_PER_MAP", "48"),
+    ("HALO_PORT_MAXIMUM_LISTED_OBJECTS_PER_MAP", "128"),
+    ("HALO_PORT_MAXIMUM_WIDGETS", "64"),
+    ("HALO_PORT_MAXIMUM_LIGHT_VOLUMES", "256"),
+    ("HALO_PORT_MAXIMUM_EFFECTS", "256"),
+    ("HALO_PORT_MAXIMUM_EFFECT_LOCATIONS", "512"),
+    ("HALO_PORT_MAXIMUM_PARTICLES", "1024"),
+    ("HALO_PORT_MAXIMUM_PARTICLE_SYSTEMS", "64"),
+    ("HALO_PORT_MAXIMUM_SYSTEM_PARTICLES", "512"),
+    ("HALO_PORT_MAXIMUM_CONTRAILS", "256"),
+    ("HALO_PORT_MAXIMUM_CONTRAIL_POINTS", "1024"),
+    ("HALO_PORT_MAXIMUM_LIGHTS_PER_MAP", "896"),
+];
+
 /// The layout of the tag structures of the repository at `root`, from
 /// clang, sorted by name.
+///
+/// The `*_definitions.h` are laid out together; each other tag header is
+/// laid out on its own, since the original never includes some of them
+/// with the definitions (`point_physics.h` and `physics_definitions.h`
+/// both name `POINT_PHYSICS_DEFINITION_TAG`).
 pub fn generate(root: &Path) -> Result<Vec<Record>, Error> {
     let source = root.join("source");
-    let headers: Vec<PathBuf> = walk(&source, &["h"])?
-        .into_iter()
-        .filter(|h| h.to_string_lossy().ends_with("_definitions.h"))
+    let preamble: String = PREAMBLE
+        .iter()
+        .map(|header| format!("#include \"{header}\"\n"))
         .collect();
     let mut names = Vec::new();
-    let mut unit = String::new();
-    for header in PREAMBLE {
-        unit.push_str(&format!("#include \"{header}\"\n"));
-    }
-    for header in &headers {
-        names.extend(tag_structures(&read_text(header)?));
-        unit.push_str(&format!("#include \"{}\"\n", header.display()));
+    let mut units = vec![preamble.clone()];
+    for header in walk(&source, &["h"])? {
+        let text = read_text(&header)?;
+        if !is_tag_header(&header, &text) {
+            continue;
+        }
+        names.extend(tag_structures(&text));
+        let include = format!("#include \"{}\"\n", header.display());
+        if header.to_string_lossy().ends_with("_definitions.h") {
+            units[0].push_str(&include);
+        } else {
+            units.push(format!("{preamble}{include}"));
+        }
     }
     let scratch =
         Scratch(std::env::temp_dir().join(format!("opence-census-layout-{}", std::process::id())));
@@ -368,21 +422,19 @@ pub fn generate(root: &Path) -> Result<Vec<Record>, Error> {
     for (name, text) in STAND_INS {
         put(&stand_ins.join(name), text)?;
     }
-    let file = scratch.0.join("layout.c");
-    put(&file, &unit)?;
     let resources = run(
         Command::new("clang").arg("-print-resource-dir"),
         "clang -print-resource-dir",
     )?;
-    let mut clang = Command::new("clang");
-    clang
-        .args(["-cc1", "-triple", "i686-pc-windows-msvc", "-fsyntax-only"])
-        .args(["-fms-extensions", "-fms-compatibility", "-w"])
-        .args(["-DHALO_PORT_MAXIMUM_LIGHTS_PER_MAP=896"])
-        .arg("-internal-isystem")
-        .arg(Path::new(resources.trim()).join("include"))
-        .arg(format!("-I{}", stand_ins.display()))
-        .arg(format!("-I{}", source.display()));
+    let mut includes = vec![
+        "-internal-isystem".to_owned(),
+        Path::new(resources.trim())
+            .join("include")
+            .display()
+            .to_string(),
+        format!("-I{}", stand_ins.display()),
+        format!("-I{}", source.display()),
+    ];
     let mut folders = vec![source.clone()];
     while let Some(folder) = folders.pop() {
         let entries = std::fs::read_dir(&folder).map_err(|e| Error::Io {
@@ -396,16 +448,33 @@ pub fn generate(root: &Path) -> Result<Vec<Record>, Error> {
             .collect();
         found.sort();
         for path in found {
-            clang.arg(format!("-I{}", path.display()));
+            includes.push(format!("-I{}", path.display()));
             folders.push(path);
         }
     }
-    clang.arg("-fdump-record-layouts-complete").arg(&file);
-    let dump = run(&mut clang, "clang's layout of the tag structures")?;
-    let mut records: Vec<Record> = read_dump(&dump)
-        .into_iter()
-        .filter(|r| names.contains(&r.name))
-        .collect();
+    let mut records = Vec::new();
+    for (index, unit) in units.iter().enumerate() {
+        let file = scratch.0.join(format!("layout{index}.c"));
+        put(&file, unit)?;
+        let mut clang = Command::new("clang");
+        clang
+            .args(["-cc1", "-triple", "i686-pc-windows-msvc", "-fsyntax-only"])
+            .args(["-fms-extensions", "-fms-compatibility", "-w"])
+            .args(
+                STOCK_CAPACITIES
+                    .iter()
+                    .map(|(name, value)| format!("-D{name}={value}")),
+            )
+            .args(&includes)
+            .arg("-fdump-record-layouts-complete")
+            .arg(&file);
+        let dump = run(&mut clang, "clang's layout of the tag structures")?;
+        records.extend(
+            read_dump(&dump)
+                .into_iter()
+                .filter(|r| names.contains(&r.name)),
+        );
+    }
     records.sort_by(|a, b| a.name.cmp(&b.name));
     records.dedup_by(|a, b| a.name == b.name);
     Ok(records)

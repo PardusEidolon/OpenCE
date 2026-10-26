@@ -68,6 +68,30 @@ _biped_definition	contact_points	504	struct tag_block
 _biped_definition	contact_points.count	504	long
 _biped_definition	contact_points.address	508	void *
 _biped_definition	contact_points.definition	512	struct tag_block_definition *
+_control_datum		8	sizeof
+_control_datum	flags	0	unsigned long
+_control_datum	custom_name_index	4	short
+_control_definition		148	sizeof
+_control_definition	type	0	short
+_control_definition	triggers_when	2	short
+_control_definition	call_value	4	real
+_control_definition	reserved8	8	byte[80]
+_control_definition	on_effect	88	struct tag_reference
+_control_definition	on_effect.group_tag	88	unsigned long
+_control_definition	on_effect.name	92	char *
+_control_definition	on_effect.name_length	96	long
+_control_definition	on_effect.index	100	long
+_control_definition	off_effect	104	struct tag_reference
+_control_definition	off_effect.group_tag	104	unsigned long
+_control_definition	off_effect.name	108	char *
+_control_definition	off_effect.name_length	112	long
+_control_definition	off_effect.index	116	long
+_control_definition	denied_effect	120	struct tag_reference
+_control_definition	denied_effect.group_tag	120	unsigned long
+_control_definition	denied_effect.name	124	char *
+_control_definition	denied_effect.name_length	128	long
+_control_definition	denied_effect.index	132	long
+_control_definition	reserved88	136	byte[12]
 _device_definition		276	sizeof
 _device_definition	flags	0	unsigned int
 _device_definition	power_transition_time	4	real
@@ -165,6 +189,16 @@ _item_definition	detonation_effect.group_tag	380	unsigned long
 _item_definition	detonation_effect.name	384	char *
 _item_definition	detonation_effect.name_length	388	long
 _item_definition	detonation_effect.index	392	long
+_light_fixture_datum		24	sizeof
+_light_fixture_datum	color	0	union real_rgb_color
+_light_fixture_datum	color.n	0	real[3]
+_light_fixture_datum	color	0	struct real_rgb_color::(anonymous at source/math/real_math.h:525:2)
+_light_fixture_datum	color.red	0	real
+_light_fixture_datum	color.green	4	real
+_light_fixture_datum	color.blue	8	real
+_light_fixture_datum	intensity	12	real
+_light_fixture_datum	falloff_angle	16	real
+_light_fixture_datum	cutoff_angle	20	real
 _machine_definition		148	sizeof
 _machine_definition	type	0	short
 _machine_definition	flags	2	word
@@ -1507,6 +1541,275 @@ animation_list	animations	4	struct animation_list_entry *
 animation_list_entry		8	sizeof
 animation_list_entry	name	0	char *
 animation_list_entry	type	4	short
+antenna_datum		700	sizeof
+antenna_datum	identifier	0	short
+antenna_datum	pad02	2	word
+antenna_datum	initialized	4	boolean
+antenna_datum	disabled	5	boolean
+antenna_datum	updates_since_last_render	6	short
+antenna_datum	definition_index	8	long
+antenna_datum	object_index	12	long
+antenna_datum	last_attachment_location	16	union real_point3d
+antenna_datum	last_attachment_location.n	16	real[3]
+antenna_datum	last_attachment_location	16	struct real_point3d::(anonymous at source/math/real_math.h:421:2)
+antenna_datum	last_attachment_location.x	16	real
+antenna_datum	last_attachment_location.y	20	real
+antenna_datum	last_attachment_location.z	24	real
+antenna_datum	last_attachment_location	16	struct real_point3d::(anonymous at source/math/real_math.h:422:2)
+antenna_datum	last_attachment_location.u	16	real
+antenna_datum	last_attachment_location.v	20	real
+antenna_datum	last_attachment_location.w	24	real
+antenna_datum	vertices	28	struct antenna_vertex_datum[21]
+antenna_definition		208	sizeof
+antenna_definition	attachment_marker	0	char[32]
+antenna_definition	texture	32	struct tag_reference
+antenna_definition	texture.group_tag	32	unsigned long
+antenna_definition	texture.name	36	char *
+antenna_definition	texture.name_length	40	long
+antenna_definition	texture.index	44	long
+antenna_definition	physics	48	struct tag_reference
+antenna_definition	physics.group_tag	48	unsigned long
+antenna_definition	physics.name	52	char *
+antenna_definition	physics.name_length	56	long
+antenna_definition	physics.index	60	long
+antenna_definition	unknown040	64	long[20]
+antenna_definition	spring_coefficient	144	real
+antenna_definition	falloff_pixels	148	real
+antenna_definition	cutoff_pixels	152	real
+antenna_definition	runtime_total_length	156	real
+antenna_definition	unknown0A0	160	long[9]
+antenna_definition	vertices	196	struct tag_block
+antenna_definition	vertices.count	196	long
+antenna_definition	vertices.address	200	void *
+antenna_definition	vertices.definition	204	struct tag_block_definition *
+antenna_vertex_datum		32	sizeof
+antenna_vertex_datum	position	0	union real_point3d
+antenna_vertex_datum	position.n	0	real[3]
+antenna_vertex_datum	position	0	struct real_point3d::(anonymous at source/math/real_math.h:421:2)
+antenna_vertex_datum	position.x	0	real
+antenna_vertex_datum	position.y	4	real
+antenna_vertex_datum	position.z	8	real
+antenna_vertex_datum	position	0	struct real_point3d::(anonymous at source/math/real_math.h:422:2)
+antenna_vertex_datum	position.u	0	real
+antenna_vertex_datum	position.v	4	real
+antenna_vertex_datum	position.w	8	real
+antenna_vertex_datum	velocity	12	union real_vector3d
+antenna_vertex_datum	velocity.n	12	real[3]
+antenna_vertex_datum	velocity	12	struct real_vector3d::(anonymous at source/math/real_math.h:436:2)
+antenna_vertex_datum	velocity.i	12	real
+antenna_vertex_datum	velocity.j	16	real
+antenna_vertex_datum	velocity.k	20	real
+antenna_vertex_datum	sprite_scale	24	real
+antenna_vertex_datum	sprite_index	28	short
+antenna_vertex_datum	pad1E	30	word
+antenna_vertex_definition		128	sizeof
+antenna_vertex_definition	spring_coefficient	0	real
+antenna_vertex_definition	unknown004	4	long[6]
+antenna_vertex_definition	angle_to_next	28	union real_euler_angles2d
+antenna_vertex_definition	angle_to_next.n	28	real[2]
+antenna_vertex_definition	angle_to_next	28	struct real_euler_angles2d::(anonymous at source/math/real_math.h:399:2)
+antenna_vertex_definition	angle_to_next.yaw	28	real
+antenna_vertex_definition	angle_to_next.pitch	32	real
+antenna_vertex_definition	length_to_next	36	real
+antenna_vertex_definition	sequence_index	40	short
+antenna_vertex_definition	pad2A	42	word
+antenna_vertex_definition	color	44	union real_argb_color
+antenna_vertex_definition	color.n	44	real[4]
+antenna_vertex_definition	color	44	struct real_argb_color::(anonymous at source/math/real_math.h:532:2)
+antenna_vertex_definition	color.alpha	44	real
+antenna_vertex_definition	color	48	union real_argb_color::(anonymous at source/math/real_math.h:535:3)
+antenna_vertex_definition	color.rgb	48	union real_rgb_color
+antenna_vertex_definition	color.rgb.n	48	real[3]
+antenna_vertex_definition	color.rgb	48	struct real_rgb_color::(anonymous at source/math/real_math.h:525:2)
+antenna_vertex_definition	color.rgb.red	48	real
+antenna_vertex_definition	color.rgb.green	52	real
+antenna_vertex_definition	color.rgb.blue	56	real
+antenna_vertex_definition	color	48	struct real_argb_color::(anonymous at source/math/real_math.h:538:4)
+antenna_vertex_definition	color.red	48	real
+antenna_vertex_definition	color.green	52	real
+antenna_vertex_definition	color.blue	56	real
+antenna_vertex_definition	lod_color	60	union real_argb_color
+antenna_vertex_definition	lod_color.n	60	real[4]
+antenna_vertex_definition	lod_color	60	struct real_argb_color::(anonymous at source/math/real_math.h:532:2)
+antenna_vertex_definition	lod_color.alpha	60	real
+antenna_vertex_definition	lod_color	64	union real_argb_color::(anonymous at source/math/real_math.h:535:3)
+antenna_vertex_definition	lod_color.rgb	64	union real_rgb_color
+antenna_vertex_definition	lod_color.rgb.n	64	real[3]
+antenna_vertex_definition	lod_color.rgb	64	struct real_rgb_color::(anonymous at source/math/real_math.h:525:2)
+antenna_vertex_definition	lod_color.rgb.red	64	real
+antenna_vertex_definition	lod_color.rgb.green	68	real
+antenna_vertex_definition	lod_color.rgb.blue	72	real
+antenna_vertex_definition	lod_color	64	struct real_argb_color::(anonymous at source/math/real_math.h:538:4)
+antenna_vertex_definition	lod_color.red	64	real
+antenna_vertex_definition	lod_color.green	68	real
+antenna_vertex_definition	lod_color.blue	72	real
+antenna_vertex_definition	unknown04C	76	long[10]
+antenna_vertex_definition	vector_to_next	116	union real_vector3d
+antenna_vertex_definition	vector_to_next.n	116	real[3]
+antenna_vertex_definition	vector_to_next	116	struct real_vector3d::(anonymous at source/math/real_math.h:436:2)
+antenna_vertex_definition	vector_to_next.i	116	real
+antenna_vertex_definition	vector_to_next.j	120	real
+antenna_vertex_definition	vector_to_next.k	124	real
+auxilary_meter_definition		324	sizeof
+auxilary_meter_definition	type	0	short
+auxilary_meter_definition	pad	2	short
+auxilary_meter_definition	unused0	4	long[4]
+auxilary_meter_definition	panel	20	struct metered_panel_definition
+auxilary_meter_definition	panel.background	20	struct static_hud_element_definition
+auxilary_meter_definition	panel.background.placement	20	struct hud_placement_definition
+auxilary_meter_definition	panel.background.placement.offset	20	union point2d
+auxilary_meter_definition	panel.background.placement.offset.n	20	short[2]
+auxilary_meter_definition	panel.background.placement.offset	20	struct point2d::(anonymous at source/math/integer_math.h:25:2)
+auxilary_meter_definition	panel.background.placement.offset.x	20	short
+auxilary_meter_definition	panel.background.placement.offset.y	22	short
+auxilary_meter_definition	panel.background.placement.scale	24	union real_vector2d
+auxilary_meter_definition	panel.background.placement.scale.n	24	real[2]
+auxilary_meter_definition	panel.background.placement.scale	24	struct real_vector2d::(anonymous at source/math/real_math.h:429:2)
+auxilary_meter_definition	panel.background.placement.scale.i	24	real
+auxilary_meter_definition	panel.background.placement.scale.j	28	real
+auxilary_meter_definition	panel.background.placement.multiplayer_scaling_flags	32	short
+auxilary_meter_definition	panel.background.placement.pad	34	short
+auxilary_meter_definition	panel.background.placement.unused0	36	long[5]
+auxilary_meter_definition	panel.background.interface_bitmap	56	struct tag_reference
+auxilary_meter_definition	panel.background.interface_bitmap.group_tag	56	unsigned long
+auxilary_meter_definition	panel.background.interface_bitmap.name	60	char *
+auxilary_meter_definition	panel.background.interface_bitmap.name_length	64	long
+auxilary_meter_definition	panel.background.interface_bitmap.index	68	long
+auxilary_meter_definition	panel.background.colors	72	struct hud_color_definition
+auxilary_meter_definition	panel.background.colors.color	72	unsigned long
+auxilary_meter_definition	panel.background.colors.flash_color	76	unsigned long
+auxilary_meter_definition	panel.background.colors.flash_period	80	real
+auxilary_meter_definition	panel.background.colors.flash_delay	84	real
+auxilary_meter_definition	panel.background.colors.number_of_flashes	88	short
+auxilary_meter_definition	panel.background.colors.flash_flags	90	word
+auxilary_meter_definition	panel.background.colors.flash_length	92	real
+auxilary_meter_definition	panel.background.colors.disabled_color	96	unsigned long
+auxilary_meter_definition	panel.background.colors.custom	100	union hud_color_definition::(unnamed at source/interface/hud_definitions.h:59:2)
+auxilary_meter_definition	panel.background.colors.custom.unused	100	long
+auxilary_meter_definition	panel.background.colors.custom.objective	100	struct hud_color_definition::(unnamed at source/interface/hud_definitions.h:62:3)
+auxilary_meter_definition	panel.background.colors.custom.objective.up_ticks	100	short
+auxilary_meter_definition	panel.background.colors.custom.objective.fade_ticks	102	short
+auxilary_meter_definition	panel.background.sequence_index	104	short
+auxilary_meter_definition	panel.background.pad	106	short
+auxilary_meter_definition	panel.background.multitexture_overlays	108	struct tag_block
+auxilary_meter_definition	panel.background.multitexture_overlays.count	108	long
+auxilary_meter_definition	panel.background.multitexture_overlays.address	112	void *
+auxilary_meter_definition	panel.background.multitexture_overlays.definition	116	struct tag_block_definition *
+auxilary_meter_definition	panel.background.unused0	120	long[1]
+auxilary_meter_definition	panel.meter	124	struct meter_hud_element_definition
+auxilary_meter_definition	panel.meter.placement	124	struct hud_placement_definition
+auxilary_meter_definition	panel.meter.placement.offset	124	union point2d
+auxilary_meter_definition	panel.meter.placement.offset.n	124	short[2]
+auxilary_meter_definition	panel.meter.placement.offset	124	struct point2d::(anonymous at source/math/integer_math.h:25:2)
+auxilary_meter_definition	panel.meter.placement.offset.x	124	short
+auxilary_meter_definition	panel.meter.placement.offset.y	126	short
+auxilary_meter_definition	panel.meter.placement.scale	128	union real_vector2d
+auxilary_meter_definition	panel.meter.placement.scale.n	128	real[2]
+auxilary_meter_definition	panel.meter.placement.scale	128	struct real_vector2d::(anonymous at source/math/real_math.h:429:2)
+auxilary_meter_definition	panel.meter.placement.scale.i	128	real
+auxilary_meter_definition	panel.meter.placement.scale.j	132	real
+auxilary_meter_definition	panel.meter.placement.multiplayer_scaling_flags	136	short
+auxilary_meter_definition	panel.meter.placement.pad	138	short
+auxilary_meter_definition	panel.meter.placement.unused0	140	long[5]
+auxilary_meter_definition	panel.meter.meter_bitmap	160	struct tag_reference
+auxilary_meter_definition	panel.meter.meter_bitmap.group_tag	160	unsigned long
+auxilary_meter_definition	panel.meter.meter_bitmap.name	164	char *
+auxilary_meter_definition	panel.meter.meter_bitmap.name_length	168	long
+auxilary_meter_definition	panel.meter.meter_bitmap.index	172	long
+auxilary_meter_definition	panel.meter.min_color	176	unsigned long
+auxilary_meter_definition	panel.meter.max_color	180	unsigned long
+auxilary_meter_definition	panel.meter.flash_color	184	unsigned long
+auxilary_meter_definition	panel.meter.empty_color	188	unsigned long
+auxilary_meter_definition	panel.meter.meter_flags	192	byte
+auxilary_meter_definition	panel.meter.minimum_value	193	byte
+auxilary_meter_definition	panel.meter.sequence_index	194	short
+auxilary_meter_definition	panel.meter.alpha_multiplier	196	byte
+auxilary_meter_definition	panel.meter.alpha_bias	197	byte
+auxilary_meter_definition	panel.meter.value_scale	198	short
+auxilary_meter_definition	panel.meter.opacity	200	real
+auxilary_meter_definition	panel.meter.fade	204	real
+auxilary_meter_definition	panel.meter.disabled_color	208	unsigned long
+auxilary_meter_definition	panel.meter.multitexture_overlays	212	struct tag_block
+auxilary_meter_definition	panel.meter.multitexture_overlays.count	212	long
+auxilary_meter_definition	panel.meter.multitexture_overlays.address	216	void *
+auxilary_meter_definition	panel.meter.multitexture_overlays.definition	220	struct tag_block_definition *
+auxilary_meter_definition	panel.meter.unused0	224	long[1]
+auxilary_meter_definition	panel	228	union metered_panel_definition::(anonymous at source/interface/unit_hud_interface_definition.h:113:2)
+auxilary_meter_definition	panel.shield_extras	228	struct shield_meter_extras_definition
+auxilary_meter_definition	panel.shield_extras.overcharge_min_color	228	unsigned long
+auxilary_meter_definition	panel.shield_extras.overcharge_max_color	232	unsigned long
+auxilary_meter_definition	panel.shield_extras.overcharge_flash_color	236	unsigned long
+auxilary_meter_definition	panel.shield_extras.overcharge_empty_color	240	unsigned long
+auxilary_meter_definition	panel.health_extras	228	struct health_meter_extras_definition
+auxilary_meter_definition	panel.health_extras.mid_color	228	unsigned long
+auxilary_meter_definition	panel.health_extras.max_cutoff	232	real
+auxilary_meter_definition	panel.health_extras.min_cutoff	236	real
+auxilary_meter_definition	panel.health_extras.pad	240	long
+auxilary_meter_definition	panel.aux_extras	228	struct auxilary_meter_extras_definition
+auxilary_meter_definition	panel.aux_extras.min_cutoff	228	real
+auxilary_meter_definition	panel.aux_extras.flags	232	unsigned long
+auxilary_meter_definition	panel.aux_extras.pad	236	long[2]
+auxilary_meter_definition	panel.unused	244	long[4]
+auxilary_meter_definition	unused1	260	long[16]
+auxilary_meter_extras_definition		16	sizeof
+auxilary_meter_extras_definition	min_cutoff	0	real
+auxilary_meter_extras_definition	flags	4	unsigned long
+auxilary_meter_extras_definition	pad	8	long[2]
+auxilary_overlay_definition		132	sizeof
+auxilary_overlay_definition	static_element	0	struct static_hud_element_definition
+auxilary_overlay_definition	static_element.placement	0	struct hud_placement_definition
+auxilary_overlay_definition	static_element.placement.offset	0	union point2d
+auxilary_overlay_definition	static_element.placement.offset.n	0	short[2]
+auxilary_overlay_definition	static_element.placement.offset	0	struct point2d::(anonymous at source/math/integer_math.h:25:2)
+auxilary_overlay_definition	static_element.placement.offset.x	0	short
+auxilary_overlay_definition	static_element.placement.offset.y	2	short
+auxilary_overlay_definition	static_element.placement.scale	4	union real_vector2d
+auxilary_overlay_definition	static_element.placement.scale.n	4	real[2]
+auxilary_overlay_definition	static_element.placement.scale	4	struct real_vector2d::(anonymous at source/math/real_math.h:429:2)
+auxilary_overlay_definition	static_element.placement.scale.i	4	real
+auxilary_overlay_definition	static_element.placement.scale.j	8	real
+auxilary_overlay_definition	static_element.placement.multiplayer_scaling_flags	12	short
+auxilary_overlay_definition	static_element.placement.pad	14	short
+auxilary_overlay_definition	static_element.placement.unused0	16	long[5]
+auxilary_overlay_definition	static_element.interface_bitmap	36	struct tag_reference
+auxilary_overlay_definition	static_element.interface_bitmap.group_tag	36	unsigned long
+auxilary_overlay_definition	static_element.interface_bitmap.name	40	char *
+auxilary_overlay_definition	static_element.interface_bitmap.name_length	44	long
+auxilary_overlay_definition	static_element.interface_bitmap.index	48	long
+auxilary_overlay_definition	static_element.colors	52	struct hud_color_definition
+auxilary_overlay_definition	static_element.colors.color	52	unsigned long
+auxilary_overlay_definition	static_element.colors.flash_color	56	unsigned long
+auxilary_overlay_definition	static_element.colors.flash_period	60	real
+auxilary_overlay_definition	static_element.colors.flash_delay	64	real
+auxilary_overlay_definition	static_element.colors.number_of_flashes	68	short
+auxilary_overlay_definition	static_element.colors.flash_flags	70	word
+auxilary_overlay_definition	static_element.colors.flash_length	72	real
+auxilary_overlay_definition	static_element.colors.disabled_color	76	unsigned long
+auxilary_overlay_definition	static_element.colors.custom	80	union hud_color_definition::(unnamed at source/interface/hud_definitions.h:59:2)
+auxilary_overlay_definition	static_element.colors.custom.unused	80	long
+auxilary_overlay_definition	static_element.colors.custom.objective	80	struct hud_color_definition::(unnamed at source/interface/hud_definitions.h:62:3)
+auxilary_overlay_definition	static_element.colors.custom.objective.up_ticks	80	short
+auxilary_overlay_definition	static_element.colors.custom.objective.fade_ticks	82	short
+auxilary_overlay_definition	static_element.sequence_index	84	short
+auxilary_overlay_definition	static_element.pad	86	short
+auxilary_overlay_definition	static_element.multitexture_overlays	88	struct tag_block
+auxilary_overlay_definition	static_element.multitexture_overlays.count	88	long
+auxilary_overlay_definition	static_element.multitexture_overlays.address	92	void *
+auxilary_overlay_definition	static_element.multitexture_overlays.definition	96	struct tag_block_definition *
+auxilary_overlay_definition	static_element.unused0	100	long[1]
+auxilary_overlay_definition	type	104	short
+auxilary_overlay_definition	flags	106	word
+auxilary_overlay_definition	unused0	108	long[6]
+auxilary_panel_definition		64	sizeof
+auxilary_panel_definition	absolute_placement	0	struct hud_absolute_placement_definition
+auxilary_panel_definition	absolute_placement.corner	0	short
+auxilary_panel_definition	absolute_placement.pad	2	short
+auxilary_panel_definition	absolute_placement.unused	4	long[8]
+auxilary_panel_definition	auxilary_overlays	36	struct tag_block
+auxilary_panel_definition	auxilary_overlays.count	36	long
+auxilary_panel_definition	auxilary_overlays.address	40	void *
+auxilary_panel_definition	auxilary_overlays.definition	44	struct tag_block_definition *
+auxilary_panel_definition	unused	48	long[4]
 biped_definition		1268	sizeof
 biped_definition	object	0	struct _object_definition
 biped_definition	object.type	0	short
@@ -1754,6 +2057,93 @@ biped_definition	biped.contact_points	1256	struct tag_block
 biped_definition	biped.contact_points.count	1256	long
 biped_definition	biped.contact_points.address	1260	void *
 biped_definition	biped.contact_points.definition	1264	struct tag_block_definition *
+bitmap_data		48	sizeof
+bitmap_data	signature	0	unsigned long
+bitmap_data	width	4	short
+bitmap_data	height	6	short
+bitmap_data	depth	8	short
+bitmap_data	type	10	short
+bitmap_data	format	12	short
+bitmap_data	flags	14	unsigned short
+bitmap_data	registration_point	16	union point2d
+bitmap_data	registration_point.n	16	short[2]
+bitmap_data	registration_point	16	struct point2d::(anonymous at source/math/integer_math.h:25:2)
+bitmap_data	registration_point.x	16	short
+bitmap_data	registration_point.y	18	short
+bitmap_data	mipmap_count	20	short
+bitmap_data	mipmap_pad	22	short
+bitmap_data	pixels_offset	24	long
+bitmap_data	pixels_size	28	long
+bitmap_data	tag_index	32	long
+bitmap_data	cache_block_index	36	long
+bitmap_data	hardware_format	40	void *
+bitmap_data	base_address	44	void *
+bitmap_group		108	sizeof
+bitmap_group	type	0	short
+bitmap_group	format	2	short
+bitmap_group	usage	4	short
+bitmap_group	flags	6	unsigned short
+bitmap_group	detail_fade	8	real
+bitmap_group	sharpen_amount	12	real
+bitmap_group	bump_height	16	real
+bitmap_group	sprite_budget_size	20	short
+bitmap_group	sprite_budget_count	22	unsigned short
+bitmap_group	import_width	24	short
+bitmap_group	import_height	26	short
+bitmap_group	import_bitmap	28	struct tag_data
+bitmap_group	import_bitmap.size	28	long
+bitmap_group	import_bitmap.pad	32	unsigned long
+bitmap_group	import_bitmap.file_offset	36	long
+bitmap_group	import_bitmap.address	40	void *
+bitmap_group	import_bitmap.definition	44	struct tag_data_definition *
+bitmap_group	pixel_data	48	struct tag_data
+bitmap_group	pixel_data.size	48	long
+bitmap_group	pixel_data.pad	52	unsigned long
+bitmap_group	pixel_data.file_offset	56	long
+bitmap_group	pixel_data.address	60	void *
+bitmap_group	pixel_data.definition	64	struct tag_data_definition *
+bitmap_group	smoothing_filter_size	68	real
+bitmap_group	alpha_bias	72	real
+bitmap_group	mipmap_count	76	short
+bitmap_group	sprite_usage	78	short
+bitmap_group	sprite_spacing	80	short
+bitmap_group	unused	82	unsigned short
+bitmap_group	sequences	84	struct tag_block
+bitmap_group	sequences.count	84	long
+bitmap_group	sequences.address	88	void *
+bitmap_group	sequences.definition	92	struct tag_block_definition *
+bitmap_group	bitmaps	96	struct tag_block
+bitmap_group	bitmaps.count	96	long
+bitmap_group	bitmaps.address	100	void *
+bitmap_group	bitmaps.definition	104	struct tag_block_definition *
+bitmap_group_sequence		64	sizeof
+bitmap_group_sequence	name	0	char[32]
+bitmap_group_sequence	first_bitmap_index	32	short
+bitmap_group_sequence	bitmap_count	34	short
+bitmap_group_sequence	unused	36	long[4]
+bitmap_group_sequence	sprites	52	struct tag_block
+bitmap_group_sequence	sprites.count	52	long
+bitmap_group_sequence	sprites.address	56	void *
+bitmap_group_sequence	sprites.definition	60	struct tag_block_definition *
+bitmap_group_sprite		32	sizeof
+bitmap_group_sprite	bitmap_index	0	short
+bitmap_group_sprite	bitmap_pad	2	short
+bitmap_group_sprite	unused	4	long
+bitmap_group_sprite	bounds	8	union real_rectangle2d
+bitmap_group_sprite	bounds.n	8	real[4]
+bitmap_group_sprite	bounds	8	struct real_rectangle2d::(anonymous at source/math/real_math.h:511:2)
+bitmap_group_sprite	bounds.x0	8	real
+bitmap_group_sprite	bounds.x1	12	real
+bitmap_group_sprite	bounds.y0	16	real
+bitmap_group_sprite	bounds.y1	20	real
+bitmap_group_sprite	registration_point	24	union real_point2d
+bitmap_group_sprite	registration_point.n	24	real[2]
+bitmap_group_sprite	registration_point	24	struct real_point2d::(anonymous at source/math/real_math.h:413:2)
+bitmap_group_sprite	registration_point.x	24	real
+bitmap_group_sprite	registration_point.y	28	real
+bitmap_group_sprite	registration_point	24	struct real_point2d::(anonymous at source/math/real_math.h:414:2)
+bitmap_group_sprite	registration_point.u	24	real
+bitmap_group_sprite	registration_point.v	28	real
 breakable_surface		84	sizeof
 breakable_surface	maximum_vitality	0	real
 breakable_surface	unused1	4	long[2]
@@ -1972,6 +2362,28 @@ collision_vertex	point.u	0	real
 collision_vertex	point.v	4	real
 collision_vertex	point.w	8	real
 collision_vertex	first_edge_index	12	long
+color_table_color		48	sizeof
+color_table_color	name	0	char[32]
+color_table_color	real_color	32	union real_argb_color
+color_table_color	real_color.n	32	real[4]
+color_table_color	real_color	32	struct real_argb_color::(anonymous at source/math/real_math.h:532:2)
+color_table_color	real_color.alpha	32	real
+color_table_color	real_color	36	union real_argb_color::(anonymous at source/math/real_math.h:535:3)
+color_table_color	real_color.rgb	36	union real_rgb_color
+color_table_color	real_color.rgb.n	36	real[3]
+color_table_color	real_color.rgb	36	struct real_rgb_color::(anonymous at source/math/real_math.h:525:2)
+color_table_color	real_color.rgb.red	36	real
+color_table_color	real_color.rgb.green	40	real
+color_table_color	real_color.rgb.blue	44	real
+color_table_color	real_color	36	struct real_argb_color::(anonymous at source/math/real_math.h:538:4)
+color_table_color	real_color.red	36	real
+color_table_color	real_color.green	40	real
+color_table_color	real_color.blue	44	real
+color_table_definition		12	sizeof
+color_table_definition	colors	0	struct tag_block
+color_table_definition	colors.count	0	long
+color_table_definition	colors.address	4	void *
+color_table_definition	colors.definition	8	struct tag_block_definition *
 continuous_camera_shake_definition		64	sizeof
 continuous_camera_shake_definition	random_translation_magnitude	0	real
 continuous_camera_shake_definition	random_rotation_magnitude	4	real
@@ -2146,6 +2558,293 @@ contrail_shader	shader.base.pad	38	short
 contrail_shader	reserved28	40	byte[4]
 contrail_shader	framebuffer_fade_mode	44	short
 contrail_shader	reserved2E	46	byte[134]
+control_datum		460	sizeof
+control_datum	definition_index	0	long
+control_datum	object	4	struct _object_datum
+control_datum	object.flags	4	unsigned long
+control_datum	object.magic_number	8	long
+control_datum	object.position	12	union real_point3d
+control_datum	object.position.n	12	real[3]
+control_datum	object.position	12	struct real_point3d::(anonymous at source/math/real_math.h:421:2)
+control_datum	object.position.x	12	real
+control_datum	object.position.y	16	real
+control_datum	object.position.z	20	real
+control_datum	object.position	12	struct real_point3d::(anonymous at source/math/real_math.h:422:2)
+control_datum	object.position.u	12	real
+control_datum	object.position.v	16	real
+control_datum	object.position.w	20	real
+control_datum	object.translational_velocity	24	union real_vector3d
+control_datum	object.translational_velocity.n	24	real[3]
+control_datum	object.translational_velocity	24	struct real_vector3d::(anonymous at source/math/real_math.h:436:2)
+control_datum	object.translational_velocity.i	24	real
+control_datum	object.translational_velocity.j	28	real
+control_datum	object.translational_velocity.k	32	real
+control_datum	object.forward	36	union real_vector3d
+control_datum	object.forward.n	36	real[3]
+control_datum	object.forward	36	struct real_vector3d::(anonymous at source/math/real_math.h:436:2)
+control_datum	object.forward.i	36	real
+control_datum	object.forward.j	40	real
+control_datum	object.forward.k	44	real
+control_datum	object.up	48	union real_vector3d
+control_datum	object.up.n	48	real[3]
+control_datum	object.up	48	struct real_vector3d::(anonymous at source/math/real_math.h:436:2)
+control_datum	object.up.i	48	real
+control_datum	object.up.j	52	real
+control_datum	object.up.k	56	real
+control_datum	object.angular_velocity	60	union real_vector3d
+control_datum	object.angular_velocity.n	60	real[3]
+control_datum	object.angular_velocity	60	struct real_vector3d::(anonymous at source/math/real_math.h:436:2)
+control_datum	object.angular_velocity.i	60	real
+control_datum	object.angular_velocity.j	64	real
+control_datum	object.angular_velocity.k	68	real
+control_datum	object.location	72	struct location
+control_datum	object.location.leaf_index	72	long
+control_datum	object.location.cluster_index	76	short
+control_datum	object.location.bonus	78	word
+control_datum	object.bounding_sphere_center	80	union real_point3d
+control_datum	object.bounding_sphere_center.n	80	real[3]
+control_datum	object.bounding_sphere_center	80	struct real_point3d::(anonymous at source/math/real_math.h:421:2)
+control_datum	object.bounding_sphere_center.x	80	real
+control_datum	object.bounding_sphere_center.y	84	real
+control_datum	object.bounding_sphere_center.z	88	real
+control_datum	object.bounding_sphere_center	80	struct real_point3d::(anonymous at source/math/real_math.h:422:2)
+control_datum	object.bounding_sphere_center.u	80	real
+control_datum	object.bounding_sphere_center.v	84	real
+control_datum	object.bounding_sphere_center.w	88	real
+control_datum	object.bounding_sphere_radius	92	real
+control_datum	object.scale	96	real
+control_datum	object.type	100	short
+control_datum	object.render_flags	102	word
+control_datum	object.owner_team_index	104	short
+control_datum	object.name_index	106	short
+control_datum	object.idle_ticks	108	short
+control_datum	object.variant_number	110	short
+control_datum	object.owner_player_index	112	long
+control_datum	object.owner_object_index	116	long
+control_datum	object.owner_object_definition_index	120	long
+control_datum	object.animation	124	struct object_animation_state
+control_datum	object.animation.animation_graph_index	124	long
+control_datum	object.animation.state	128	struct animation_state
+control_datum	object.animation.state.index	128	short
+control_datum	object.animation.state.frame_index	130	short
+control_datum	object.animation.interpolation_frame_index	132	short
+control_datum	object.animation.interpolation_frame_count	134	short
+control_datum	object.maximum_body_vitality	136	real
+control_datum	object.maximum_shield_vitality	140	real
+control_datum	object.body_vitality	144	real
+control_datum	object.shield_vitality	148	real
+control_datum	object.current_shield_damage	152	real
+control_datum	object.current_body_damage	156	real
+control_datum	object.umbrella_shield_object_index	160	long
+control_datum	object.recent_shield_damage	164	real
+control_datum	object.recent_body_damage	168	real
+control_datum	object.shield_damage_decay_timer	172	long
+control_datum	object.body_damage_decay_timer	176	long
+control_datum	object.shield_stun_ticks	180	short
+control_datum	object.damage_flags	182	word
+control_datum	object.scenery_idx	184	long
+control_datum	object.first_cluster_reference_index	188	long
+control_datum	object.next_garbage_object_index	192	long
+control_datum	object.next_object_index	196	long
+control_datum	object.first_child_object_index	200	long
+control_datum	object.parent_object_index	204	long
+control_datum	object.parent_node_index	208	char
+control_datum	object.pad	209	byte[1]
+control_datum	object.force_shield_update	210	boolean
+control_datum	object.functions_active_flags	211	byte
+control_datum	object.incoming_function_values	212	real[4]
+control_datum	object.outgoing_function_values	228	real[4]
+control_datum	object.attachment_types	244	char[8]
+control_datum	object.attachment_indices	252	long[8]
+control_datum	object.first_widget_index	284	long
+control_datum	object.cached_render_state_index	288	long
+control_datum	object.regions_destroyed_flags	292	word
+control_datum	object.forced_shader_permutation_index	294	short
+control_datum	object.region_damage	296	byte[8]
+control_datum	object.region_permutations	304	byte[8]
+control_datum	object.base_change_colors	312	real_rgb_color[4]
+control_datum	object.outgoing_change_colors	360	real_rgb_color[4]
+control_datum	object.original_node_orientations	408	struct object_header_block_reference
+control_datum	object.original_node_orientations.size	408	short
+control_datum	object.original_node_orientations.offset	410	short
+control_datum	object.node_orientations	412	struct object_header_block_reference
+control_datum	object.node_orientations.size	412	short
+control_datum	object.node_orientations.offset	414	short
+control_datum	object.node_matrices	416	struct object_header_block_reference
+control_datum	object.node_matrices.size	416	short
+control_datum	object.node_matrices.offset	418	short
+control_datum	device	420	struct _device_datum
+control_datum	device.flags	420	unsigned long
+control_datum	device.power_group_index	424	short
+control_datum	device.power	428	real
+control_datum	device.power_velocity	432	real
+control_datum	device.position_group_index	436	short
+control_datum	device.position	440	real
+control_datum	device.position_velocity	444	real
+control_datum	device.delay_ticks	448	short
+control_datum	control	452	struct _control_datum
+control_datum	control.flags	452	unsigned long
+control_datum	control.custom_name_index	456	short
+control_definition		804	sizeof
+control_definition	object	0	struct _object_definition
+control_definition	object.type	0	short
+control_definition	object.flags	2	word
+control_definition	object.bounding_radius	4	real
+control_definition	object.bounding_offset	8	union real_point3d
+control_definition	object.bounding_offset.n	8	real[3]
+control_definition	object.bounding_offset	8	struct real_point3d::(anonymous at source/math/real_math.h:421:2)
+control_definition	object.bounding_offset.x	8	real
+control_definition	object.bounding_offset.y	12	real
+control_definition	object.bounding_offset.z	16	real
+control_definition	object.bounding_offset	8	struct real_point3d::(anonymous at source/math/real_math.h:422:2)
+control_definition	object.bounding_offset.u	8	real
+control_definition	object.bounding_offset.v	12	real
+control_definition	object.bounding_offset.w	16	real
+control_definition	object.origin_offset	20	union real_point3d
+control_definition	object.origin_offset.n	20	real[3]
+control_definition	object.origin_offset	20	struct real_point3d::(anonymous at source/math/real_math.h:421:2)
+control_definition	object.origin_offset.x	20	real
+control_definition	object.origin_offset.y	24	real
+control_definition	object.origin_offset.z	28	real
+control_definition	object.origin_offset	20	struct real_point3d::(anonymous at source/math/real_math.h:422:2)
+control_definition	object.origin_offset.u	20	real
+control_definition	object.origin_offset.v	24	real
+control_definition	object.origin_offset.w	28	real
+control_definition	object.acceleration_scale	32	real
+control_definition	object.runtime_flags	36	unsigned long
+control_definition	object.model	40	struct tag_reference
+control_definition	object.model.group_tag	40	unsigned long
+control_definition	object.model.name	44	char *
+control_definition	object.model.name_length	48	long
+control_definition	object.model.index	52	long
+control_definition	object.animation_graph	56	struct tag_reference
+control_definition	object.animation_graph.group_tag	56	unsigned long
+control_definition	object.animation_graph.name	60	char *
+control_definition	object.animation_graph.name_length	64	long
+control_definition	object.animation_graph.index	68	long
+control_definition	object.unused3	72	long[10]
+control_definition	object.collision_model	112	struct tag_reference
+control_definition	object.collision_model.group_tag	112	unsigned long
+control_definition	object.collision_model.name	116	char *
+control_definition	object.collision_model.name_length	120	long
+control_definition	object.collision_model.index	124	long
+control_definition	object.physics	128	struct tag_reference
+control_definition	object.physics.group_tag	128	unsigned long
+control_definition	object.physics.name	132	char *
+control_definition	object.physics.name_length	136	long
+control_definition	object.physics.index	140	long
+control_definition	object.modifier_shader	144	struct tag_reference
+control_definition	object.modifier_shader.group_tag	144	unsigned long
+control_definition	object.modifier_shader.name	148	char *
+control_definition	object.modifier_shader.name_length	152	long
+control_definition	object.modifier_shader.index	156	long
+control_definition	object.creation_effect	160	struct tag_reference
+control_definition	object.creation_effect.group_tag	160	unsigned long
+control_definition	object.creation_effect.name	164	char *
+control_definition	object.creation_effect.name_length	168	long
+control_definition	object.creation_effect.index	172	long
+control_definition	object.unused1	176	long[21]
+control_definition	object.render_bounding_radius	260	real
+control_definition	object.function_modes	264	short[4]
+control_definition	object.unused2	272	long[11]
+control_definition	object.icon_text_index	316	short
+control_definition	object.forced_shader_permutation_index	318	short
+control_definition	object.attachments	320	struct tag_block
+control_definition	object.attachments.count	320	long
+control_definition	object.attachments.address	324	void *
+control_definition	object.attachments.definition	328	struct tag_block_definition *
+control_definition	object.widgets	332	struct tag_block
+control_definition	object.widgets.count	332	long
+control_definition	object.widgets.address	336	void *
+control_definition	object.widgets.definition	340	struct tag_block_definition *
+control_definition	object.functions	344	struct tag_block
+control_definition	object.functions.count	344	long
+control_definition	object.functions.address	348	void *
+control_definition	object.functions.definition	352	struct tag_block_definition *
+control_definition	object.change_colors	356	struct tag_block
+control_definition	object.change_colors.count	356	long
+control_definition	object.change_colors.address	360	void *
+control_definition	object.change_colors.definition	364	struct tag_block_definition *
+control_definition	object.predicted_resources	368	struct tag_block
+control_definition	object.predicted_resources.count	368	long
+control_definition	object.predicted_resources.address	372	void *
+control_definition	object.predicted_resources.definition	376	struct tag_block_definition *
+control_definition	device	380	struct _device_definition
+control_definition	device.flags	380	unsigned int
+control_definition	device.power_transition_time	384	real
+control_definition	device.power_acceleration_time	388	real
+control_definition	device.powered_position_transition_time	392	real
+control_definition	device.powered_position_acceleration_time	396	real
+control_definition	device.depowered_position_transition_time	400	real
+control_definition	device.depowered_position_acceleration_time	404	real
+control_definition	device.function_modes	408	short[4]
+control_definition	device.positive_start_effect	416	struct tag_reference
+control_definition	device.positive_start_effect.group_tag	416	unsigned long
+control_definition	device.positive_start_effect.name	420	char *
+control_definition	device.positive_start_effect.name_length	424	long
+control_definition	device.positive_start_effect.index	428	long
+control_definition	device.negative_start_effect	432	struct tag_reference
+control_definition	device.negative_start_effect.group_tag	432	unsigned long
+control_definition	device.negative_start_effect.name	436	char *
+control_definition	device.negative_start_effect.name_length	440	long
+control_definition	device.negative_start_effect.index	444	long
+control_definition	device.positive_stop_effect	448	struct tag_reference
+control_definition	device.positive_stop_effect.group_tag	448	unsigned long
+control_definition	device.positive_stop_effect.name	452	char *
+control_definition	device.positive_stop_effect.name_length	456	long
+control_definition	device.positive_stop_effect.index	460	long
+control_definition	device.negative_stop_effect	464	struct tag_reference
+control_definition	device.negative_stop_effect.group_tag	464	unsigned long
+control_definition	device.negative_stop_effect.name	468	char *
+control_definition	device.negative_stop_effect.name_length	472	long
+control_definition	device.negative_stop_effect.index	476	long
+control_definition	device.depowered_effect	480	struct tag_reference
+control_definition	device.depowered_effect.group_tag	480	unsigned long
+control_definition	device.depowered_effect.name	484	char *
+control_definition	device.depowered_effect.name_length	488	long
+control_definition	device.depowered_effect.index	492	long
+control_definition	device.repowered_effect	496	struct tag_reference
+control_definition	device.repowered_effect.group_tag	496	unsigned long
+control_definition	device.repowered_effect.name	500	char *
+control_definition	device.repowered_effect.name_length	504	long
+control_definition	device.repowered_effect.index	508	long
+control_definition	device.delay_time	512	real
+control_definition	device.delay_unused	516	unsigned long[2]
+control_definition	device.delay_effect	524	struct tag_reference
+control_definition	device.delay_effect.group_tag	524	unsigned long
+control_definition	device.delay_effect.name	528	char *
+control_definition	device.delay_effect.name_length	532	long
+control_definition	device.delay_effect.index	536	long
+control_definition	device.automatic_activation_radius	540	real
+control_definition	device.unused	544	unsigned long[21]
+control_definition	device.runtime_maximum_power_acceleration	628	real
+control_definition	device.runtime_maximum_power_velocity	632	real
+control_definition	device.runtime_maximum_depowered_position_acceleration	636	real
+control_definition	device.runtime_maximum_depowered_position_velocity	640	real
+control_definition	device.runtime_maximum_powered_position_acceleration	644	real
+control_definition	device.runtime_maximum_powered_position_velocity	648	real
+control_definition	device.runtime_delay_ticks	652	real
+control_definition	control	656	struct _control_definition
+control_definition	control.type	656	short
+control_definition	control.triggers_when	658	short
+control_definition	control.call_value	660	real
+control_definition	control.reserved8	664	byte[80]
+control_definition	control.on_effect	744	struct tag_reference
+control_definition	control.on_effect.group_tag	744	unsigned long
+control_definition	control.on_effect.name	748	char *
+control_definition	control.on_effect.name_length	752	long
+control_definition	control.on_effect.index	756	long
+control_definition	control.off_effect	760	struct tag_reference
+control_definition	control.off_effect.group_tag	760	unsigned long
+control_definition	control.off_effect.name	764	char *
+control_definition	control.off_effect.name_length	768	long
+control_definition	control.off_effect.index	772	long
+control_definition	control.denied_effect	776	struct tag_reference
+control_definition	control.denied_effect.group_tag	776	unsigned long
+control_definition	control.denied_effect.name	780	char *
+control_definition	control.denied_effect.name_length	784	long
+control_definition	control.denied_effect.index	788	long
+control_definition	control.reserved88	792	byte[12]
 damage_breaking_effect_definition		48	sizeof
 damage_breaking_effect_definition	forward_velocity	0	real
 damage_breaking_effect_definition	forward_radius	4	real
@@ -2655,6 +3354,348 @@ fog_definition	sound_environment.group_tag	260	unsigned long
 fog_definition	sound_environment.name	264	char *
 fog_definition	sound_environment.name_length	268	long
 fog_definition	sound_environment.index	272	long
+font_character_table		12	sizeof
+font_character_table	character_indices	0	struct tag_block
+font_character_table	character_indices.count	0	long
+font_character_table	character_indices.address	4	void *
+font_character_table	character_indices.definition	8	struct tag_block_definition *
+font_header		156	sizeof
+font_header	flags	0	unsigned long
+font_header	ascending_height	4	short
+font_header	descending_height	6	short
+font_header	leading_height	8	short
+font_header	leading_width	10	short
+font_header	pad	12	long[9]
+font_header	character_tables	48	struct tag_block
+font_header	character_tables.count	48	long
+font_header	character_tables.address	52	void *
+font_header	character_tables.definition	56	struct tag_block_definition *
+font_header	style_fonts	60	struct tag_reference[4]
+font_header	characters	124	struct tag_block
+font_header	characters.count	124	long
+font_header	characters.address	128	void *
+font_header	characters.definition	132	struct tag_block_definition *
+font_header	pixels	136	struct tag_data
+font_header	pixels.size	136	long
+font_header	pixels.pad	140	unsigned long
+font_header	pixels.file_offset	144	long
+font_header	pixels.address	148	void *
+font_header	pixels.definition	152	struct tag_data_definition *
+game_globals		428	sizeof
+game_globals	flags	0	unsigned long
+game_globals	unused0	4	long[61]
+game_globals	sounds	248	struct tag_block
+game_globals	sounds.count	248	long
+game_globals	sounds.address	252	void *
+game_globals	sounds.definition	256	struct tag_block_definition *
+game_globals	camera	260	struct tag_block
+game_globals	camera.count	260	long
+game_globals	camera.address	264	void *
+game_globals	camera.definition	268	struct tag_block_definition *
+game_globals	player_control	272	struct tag_block
+game_globals	player_control.count	272	long
+game_globals	player_control.address	276	void *
+game_globals	player_control.definition	280	struct tag_block_definition *
+game_globals	difficulty_information	284	struct tag_block
+game_globals	difficulty_information.count	284	long
+game_globals	difficulty_information.address	288	void *
+game_globals	difficulty_information.definition	292	struct tag_block_definition *
+game_globals	grenades	296	struct tag_block
+game_globals	grenades.count	296	long
+game_globals	grenades.address	300	void *
+game_globals	grenades.definition	304	struct tag_block_definition *
+game_globals	rasterizer_data	308	struct tag_block
+game_globals	rasterizer_data.count	308	long
+game_globals	rasterizer_data.address	312	void *
+game_globals	rasterizer_data.definition	316	struct tag_block_definition *
+game_globals	interface_tag_references	320	struct tag_block
+game_globals	interface_tag_references.count	320	long
+game_globals	interface_tag_references.address	324	void *
+game_globals	interface_tag_references.definition	328	struct tag_block_definition *
+game_globals	weapon_list	332	struct tag_block
+game_globals	weapon_list.count	332	long
+game_globals	weapon_list.address	336	void *
+game_globals	weapon_list.definition	340	struct tag_block_definition *
+game_globals	cheat_powerups	344	struct tag_block
+game_globals	cheat_powerups.count	344	long
+game_globals	cheat_powerups.address	348	void *
+game_globals	cheat_powerups.definition	352	struct tag_block_definition *
+game_globals	multiplayer_information	356	struct tag_block
+game_globals	multiplayer_information.count	356	long
+game_globals	multiplayer_information.address	360	void *
+game_globals	multiplayer_information.definition	364	struct tag_block_definition *
+game_globals	player_information	368	struct tag_block
+game_globals	player_information.count	368	long
+game_globals	player_information.address	372	void *
+game_globals	player_information.definition	376	struct tag_block_definition *
+game_globals	first_person_interface	380	struct tag_block
+game_globals	first_person_interface.count	380	long
+game_globals	first_person_interface.address	384	void *
+game_globals	first_person_interface.definition	388	struct tag_block_definition *
+game_globals	falling_damage	392	struct tag_block
+game_globals	falling_damage.count	392	long
+game_globals	falling_damage.address	396	void *
+game_globals	falling_damage.definition	400	struct tag_block_definition *
+game_globals	materials	404	struct tag_block
+game_globals	materials.count	404	long
+game_globals	materials.address	408	void *
+game_globals	materials.definition	412	struct tag_block_definition *
+game_globals	playlist	416	struct tag_block
+game_globals	playlist.count	416	long
+game_globals	playlist.address	420	void *
+game_globals	playlist.definition	424	struct tag_block_definition *
+game_globals_difficulty_information		644	sizeof
+game_globals_difficulty_information	values	0	real[35][4]
+game_globals_difficulty_information	pad	560	real[21]
+game_globals_first_person_interface		192	sizeof
+game_globals_first_person_interface	hands	0	struct tag_reference
+game_globals_first_person_interface	hands.group_tag	0	unsigned long
+game_globals_first_person_interface	hands.name	4	char *
+game_globals_first_person_interface	hands.name_length	8	long
+game_globals_first_person_interface	hands.index	12	long
+game_globals_first_person_interface	hud_base	16	struct tag_reference
+game_globals_first_person_interface	hud_base.group_tag	16	unsigned long
+game_globals_first_person_interface	hud_base.name	20	char *
+game_globals_first_person_interface	hud_base.name_length	24	long
+game_globals_first_person_interface	hud_base.index	28	long
+game_globals_first_person_interface	hud_shield_meter	32	struct tag_reference
+game_globals_first_person_interface	hud_shield_meter.group_tag	32	unsigned long
+game_globals_first_person_interface	hud_shield_meter.name	36	char *
+game_globals_first_person_interface	hud_shield_meter.name_length	40	long
+game_globals_first_person_interface	hud_shield_meter.index	44	long
+game_globals_first_person_interface	hud_shield_meter_origin	48	union point2d
+game_globals_first_person_interface	hud_shield_meter_origin.n	48	short[2]
+game_globals_first_person_interface	hud_shield_meter_origin	48	struct point2d::(anonymous at source/math/integer_math.h:25:2)
+game_globals_first_person_interface	hud_shield_meter_origin.x	48	short
+game_globals_first_person_interface	hud_shield_meter_origin.y	50	short
+game_globals_first_person_interface	hud_body_meter	52	struct tag_reference
+game_globals_first_person_interface	hud_body_meter.group_tag	52	unsigned long
+game_globals_first_person_interface	hud_body_meter.name	56	char *
+game_globals_first_person_interface	hud_body_meter.name_length	60	long
+game_globals_first_person_interface	hud_body_meter.index	64	long
+game_globals_first_person_interface	hud_body_meter_origin	68	union point2d
+game_globals_first_person_interface	hud_body_meter_origin.n	68	short[2]
+game_globals_first_person_interface	hud_body_meter_origin	68	struct point2d::(anonymous at source/math/integer_math.h:25:2)
+game_globals_first_person_interface	hud_body_meter_origin.x	68	short
+game_globals_first_person_interface	hud_body_meter_origin.y	70	short
+game_globals_first_person_interface	night_vision_off_on_effect	72	struct tag_reference
+game_globals_first_person_interface	night_vision_off_on_effect.group_tag	72	unsigned long
+game_globals_first_person_interface	night_vision_off_on_effect.name	76	char *
+game_globals_first_person_interface	night_vision_off_on_effect.name_length	80	long
+game_globals_first_person_interface	night_vision_off_on_effect.index	84	long
+game_globals_first_person_interface	night_vision_on_off_effect	88	struct tag_reference
+game_globals_first_person_interface	night_vision_on_off_effect.group_tag	88	unsigned long
+game_globals_first_person_interface	night_vision_on_off_effect.name	92	char *
+game_globals_first_person_interface	night_vision_on_off_effect.name_length	96	long
+game_globals_first_person_interface	night_vision_on_off_effect.index	100	long
+game_globals_first_person_interface	unused	104	unsigned long[22]
+game_globals_grenade		68	sizeof
+game_globals_grenade	maximum_count	0	short
+game_globals_grenade	mp_spawn_default	2	short
+game_globals_grenade	throwing_effect	4	struct tag_reference
+game_globals_grenade	throwing_effect.group_tag	4	unsigned long
+game_globals_grenade	throwing_effect.name	8	char *
+game_globals_grenade	throwing_effect.name_length	12	long
+game_globals_grenade	throwing_effect.index	16	long
+game_globals_grenade	hud_interface	20	struct tag_reference
+game_globals_grenade	hud_interface.group_tag	20	unsigned long
+game_globals_grenade	hud_interface.name	24	char *
+game_globals_grenade	hud_interface.name_length	28	long
+game_globals_grenade	hud_interface.index	32	long
+game_globals_grenade	item	36	struct tag_reference
+game_globals_grenade	item.group_tag	36	unsigned long
+game_globals_grenade	item.name	40	char *
+game_globals_grenade	item.name_length	44	long
+game_globals_grenade	item.index	48	long
+game_globals_grenade	projectile	52	struct tag_reference
+game_globals_grenade	projectile.group_tag	52	unsigned long
+game_globals_grenade	projectile.name	56	char *
+game_globals_grenade	projectile.name_length	60	long
+game_globals_grenade	projectile.index	64	long
+game_globals_interface_tag_references		304	sizeof
+game_globals_interface_tag_references	interface_tag_references	0	struct tag_reference[16]
+game_globals_interface_tag_references	unused0	256	long[12]
+game_globals_multiplayer_information		160	sizeof
+game_globals_multiplayer_information	flag	0	struct tag_reference
+game_globals_multiplayer_information	flag.group_tag	0	unsigned long
+game_globals_multiplayer_information	flag.name	4	char *
+game_globals_multiplayer_information	flag.name_length	8	long
+game_globals_multiplayer_information	flag.index	12	long
+game_globals_multiplayer_information	unit	16	struct tag_reference
+game_globals_multiplayer_information	unit.group_tag	16	unsigned long
+game_globals_multiplayer_information	unit.name	20	char *
+game_globals_multiplayer_information	unit.name_length	24	long
+game_globals_multiplayer_information	unit.index	28	long
+game_globals_multiplayer_information	vehicles	32	struct tag_block
+game_globals_multiplayer_information	vehicles.count	32	long
+game_globals_multiplayer_information	vehicles.address	36	void *
+game_globals_multiplayer_information	vehicles.definition	40	struct tag_block_definition *
+game_globals_multiplayer_information	hill_shader	44	struct tag_reference
+game_globals_multiplayer_information	hill_shader.group_tag	44	unsigned long
+game_globals_multiplayer_information	hill_shader.name	48	char *
+game_globals_multiplayer_information	hill_shader.name_length	52	long
+game_globals_multiplayer_information	hill_shader.index	56	long
+game_globals_multiplayer_information	flag_shader	60	struct tag_reference
+game_globals_multiplayer_information	flag_shader.group_tag	60	unsigned long
+game_globals_multiplayer_information	flag_shader.name	64	char *
+game_globals_multiplayer_information	flag_shader.name_length	68	long
+game_globals_multiplayer_information	flag_shader.index	72	long
+game_globals_multiplayer_information	ball	76	struct tag_reference
+game_globals_multiplayer_information	ball.group_tag	76	unsigned long
+game_globals_multiplayer_information	ball.name	80	char *
+game_globals_multiplayer_information	ball.name_length	84	long
+game_globals_multiplayer_information	ball.index	88	long
+game_globals_multiplayer_information	sounds	92	struct tag_block
+game_globals_multiplayer_information	sounds.count	92	long
+game_globals_multiplayer_information	sounds.address	96	void *
+game_globals_multiplayer_information	sounds.definition	100	struct tag_block_definition *
+game_globals_multiplayer_information	tag_padding	104	byte[56]
+game_globals_player_control		128	sizeof
+game_globals_player_control	magnetism_friction	0	real
+game_globals_player_control	magnetism_adhesion	4	real
+game_globals_player_control	magnetism_inconsequential_target_scale	8	real
+game_globals_player_control	magnetism_unused	12	real[13]
+game_globals_player_control	look_acceleration_time	64	real
+game_globals_player_control	look_acceleration_scale	68	real
+game_globals_player_control	look_pegging_threshold	72	real
+game_globals_player_control	look_default_pitch_rate	76	real
+game_globals_player_control	look_default_yaw_rate	80	real
+game_globals_player_control	look_autolevel_scale	84	real
+game_globals_player_control	look_unused	88	real[5]
+game_globals_player_control	minimum_weapon_swap_ticks	108	short
+game_globals_player_control	minimum_autolevel_enabled_ticks	110	short
+game_globals_player_control	minimum_vehicle_flipping_angle	112	real
+game_globals_player_control	look_function	116	struct tag_block
+game_globals_player_control	look_function.count	116	long
+game_globals_player_control	look_function.address	120	void *
+game_globals_player_control	look_function.definition	124	struct tag_block_definition *
+game_globals_player_information		244	sizeof
+game_globals_player_information	player_unit	0	struct tag_reference
+game_globals_player_information	player_unit.group_tag	0	unsigned long
+game_globals_player_information	player_unit.name	4	char *
+game_globals_player_information	player_unit.name_length	8	long
+game_globals_player_information	player_unit.index	12	long
+game_globals_player_information	unused1	16	long[7]
+game_globals_player_information	walking_speed	44	real
+game_globals_player_information	double_speed_multiplier	48	real
+game_globals_player_information	run_forward_speed	52	real
+game_globals_player_information	run_backward_speed	56	real
+game_globals_player_information	run_sideways_speed	60	real
+game_globals_player_information	run_acceleration	64	real
+game_globals_player_information	sneak_forward_speed	68	real
+game_globals_player_information	sneak_backward_speed	72	real
+game_globals_player_information	sneak_sideways_speed	76	real
+game_globals_player_information	sneak_acceleration	80	real
+game_globals_player_information	airborne_acceleration	84	real
+game_globals_player_information	multiplayer_only_speed_muliplier	88	real
+game_globals_player_information	movement_unused	92	long[3]
+game_globals_player_information	grenade_origin	104	union real_vector3d
+game_globals_player_information	grenade_origin.n	104	real[3]
+game_globals_player_information	grenade_origin	104	struct real_vector3d::(anonymous at source/math/real_math.h:436:2)
+game_globals_player_information	grenade_origin.i	104	real
+game_globals_player_information	grenade_origin.j	108	real
+game_globals_player_information	grenade_origin.k	112	real
+game_globals_player_information	grenade_unused	116	real[3]
+game_globals_player_information	stun_movement_penalty	128	real
+game_globals_player_information	stun_turning_penalty	132	real
+game_globals_player_information	stun_jumping_penalty	136	real
+game_globals_player_information	minimum_stun_time	140	real
+game_globals_player_information	maximum_stun_time	144	real
+game_globals_player_information	stun_unused	148	real[2]
+game_globals_player_information	first_person_idle_time_lower_bound	156	real
+game_globals_player_information	first_person_idle_time_upper_bound	160	real
+game_globals_player_information	first_person_idle_skip_fraction	164	real
+game_globals_player_information	unused_first_person_unused	168	long[4]
+game_globals_player_information	coop_respawn_effect	184	struct tag_reference
+game_globals_player_information	coop_respawn_effect.group_tag	184	unsigned long
+game_globals_player_information	coop_respawn_effect.name	188	char *
+game_globals_player_information	coop_respawn_effect.name_length	192	long
+game_globals_player_information	coop_respawn_effect.index	196	long
+game_globals_player_information	unused2	200	long[11]
+game_globals_rasterizer_data		428	sizeof
+game_globals_rasterizer_data	distance_attenuation	0	struct tag_reference
+game_globals_rasterizer_data	distance_attenuation.group_tag	0	unsigned long
+game_globals_rasterizer_data	distance_attenuation.name	4	char *
+game_globals_rasterizer_data	distance_attenuation.name_length	8	long
+game_globals_rasterizer_data	distance_attenuation.index	12	long
+game_globals_rasterizer_data	vector_normalization	16	struct tag_reference
+game_globals_rasterizer_data	vector_normalization.group_tag	16	unsigned long
+game_globals_rasterizer_data	vector_normalization.name	20	char *
+game_globals_rasterizer_data	vector_normalization.name_length	24	long
+game_globals_rasterizer_data	vector_normalization.index	28	long
+game_globals_rasterizer_data	atmospheric_fog_density	32	struct tag_reference
+game_globals_rasterizer_data	atmospheric_fog_density.group_tag	32	unsigned long
+game_globals_rasterizer_data	atmospheric_fog_density.name	36	char *
+game_globals_rasterizer_data	atmospheric_fog_density.name_length	40	long
+game_globals_rasterizer_data	atmospheric_fog_density.index	44	long
+game_globals_rasterizer_data	planar_fog_density	48	struct tag_reference
+game_globals_rasterizer_data	planar_fog_density.group_tag	48	unsigned long
+game_globals_rasterizer_data	planar_fog_density.name	52	char *
+game_globals_rasterizer_data	planar_fog_density.name_length	56	long
+game_globals_rasterizer_data	planar_fog_density.index	60	long
+game_globals_rasterizer_data	linear_corner_fade	64	struct tag_reference
+game_globals_rasterizer_data	linear_corner_fade.group_tag	64	unsigned long
+game_globals_rasterizer_data	linear_corner_fade.name	68	char *
+game_globals_rasterizer_data	linear_corner_fade.name_length	72	long
+game_globals_rasterizer_data	linear_corner_fade.index	76	long
+game_globals_rasterizer_data	active_camouflage_distortion	80	struct tag_reference
+game_globals_rasterizer_data	active_camouflage_distortion.group_tag	80	unsigned long
+game_globals_rasterizer_data	active_camouflage_distortion.name	84	char *
+game_globals_rasterizer_data	active_camouflage_distortion.name_length	88	long
+game_globals_rasterizer_data	active_camouflage_distortion.index	92	long
+game_globals_rasterizer_data	glow	96	struct tag_reference
+game_globals_rasterizer_data	glow.group_tag	96	unsigned long
+game_globals_rasterizer_data	glow.name	100	char *
+game_globals_rasterizer_data	glow.name_length	104	long
+game_globals_rasterizer_data	glow.index	108	long
+game_globals_rasterizer_data	unused1	112	long[15]
+game_globals_rasterizer_data	default_textures	172	struct tag_reference[3]
+game_globals_rasterizer_data	test	220	struct tag_reference[4]
+game_globals_rasterizer_data	screen_effect_video_scanline_map	284	struct tag_reference
+game_globals_rasterizer_data	screen_effect_video_scanline_map.group_tag	284	unsigned long
+game_globals_rasterizer_data	screen_effect_video_scanline_map.name	288	char *
+game_globals_rasterizer_data	screen_effect_video_scanline_map.name_length	292	long
+game_globals_rasterizer_data	screen_effect_video_scanline_map.index	296	long
+game_globals_rasterizer_data	screen_effect_video_noise_map	300	struct tag_reference
+game_globals_rasterizer_data	screen_effect_video_noise_map.group_tag	300	unsigned long
+game_globals_rasterizer_data	screen_effect_video_noise_map.name	304	char *
+game_globals_rasterizer_data	screen_effect_video_noise_map.name_length	308	long
+game_globals_rasterizer_data	screen_effect_video_noise_map.index	312	long
+game_globals_rasterizer_data	unused2	316	long[13]
+game_globals_rasterizer_data	active_camouflage_flags	368	word
+game_globals_rasterizer_data	pad	370	word
+game_globals_rasterizer_data	active_camouflage_refraction_amount	372	real
+game_globals_rasterizer_data	active_camouflage_distance_falloff	376	real
+game_globals_rasterizer_data	active_camouflage_tint_color	380	union real_rgb_color
+game_globals_rasterizer_data	active_camouflage_tint_color.n	380	real[3]
+game_globals_rasterizer_data	active_camouflage_tint_color	380	struct real_rgb_color::(anonymous at source/math/real_math.h:525:2)
+game_globals_rasterizer_data	active_camouflage_tint_color.red	380	real
+game_globals_rasterizer_data	active_camouflage_tint_color.green	384	real
+game_globals_rasterizer_data	active_camouflage_tint_color.blue	388	real
+game_globals_rasterizer_data	active_camouflage_hyper_stealth_refraction_amount	392	real
+game_globals_rasterizer_data	active_camouflage_hyper_stealth_distance_falloff	396	real
+game_globals_rasterizer_data	active_camouflage_hyper_stealth_tint_color	400	union real_rgb_color
+game_globals_rasterizer_data	active_camouflage_hyper_stealth_tint_color.n	400	real[3]
+game_globals_rasterizer_data	active_camouflage_hyper_stealth_tint_color	400	struct real_rgb_color::(anonymous at source/math/real_math.h:525:2)
+game_globals_rasterizer_data	active_camouflage_hyper_stealth_tint_color.red	400	real
+game_globals_rasterizer_data	active_camouflage_hyper_stealth_tint_color.green	404	real
+game_globals_rasterizer_data	active_camouflage_hyper_stealth_tint_color.blue	408	real
+game_globals_rasterizer_data	distance_attenuation_2d_for_the_pc	412	struct tag_reference
+game_globals_rasterizer_data	distance_attenuation_2d_for_the_pc.group_tag	412	unsigned long
+game_globals_rasterizer_data	distance_attenuation_2d_for_the_pc.name	416	char *
+game_globals_rasterizer_data	distance_attenuation_2d_for_the_pc.name_length	420	long
+game_globals_rasterizer_data	distance_attenuation_2d_for_the_pc.index	424	long
+game_globals_vehicle		16	sizeof
+game_globals_vehicle	vehicle	0	struct tag_reference
+game_globals_vehicle	vehicle.group_tag	0	unsigned long
+game_globals_vehicle	vehicle.name	4	char *
+game_globals_vehicle	vehicle.name_length	8	long
+game_globals_vehicle	vehicle.index	12	long
+health_meter_extras_definition		16	sizeof
+health_meter_extras_definition	mid_color	0	unsigned long
+health_meter_extras_definition	max_cutoff	4	real
+health_meter_extras_definition	min_cutoff	8	real
+health_meter_extras_definition	pad	12	long
 hs_global		92	sizeof
 hs_global	name	0	char[32]
 hs_global	type	32	short
@@ -3320,6 +4361,140 @@ item_permutation_definition	item.name	40	char *
 item_permutation_definition	item.name_length	44	long
 item_permutation_definition	item.index	48	long
 item_permutation_definition	unused2	52	long[8]
+light_fixture_datum		476	sizeof
+light_fixture_datum	definition_index	0	long
+light_fixture_datum	object	4	struct _object_datum
+light_fixture_datum	object.flags	4	unsigned long
+light_fixture_datum	object.magic_number	8	long
+light_fixture_datum	object.position	12	union real_point3d
+light_fixture_datum	object.position.n	12	real[3]
+light_fixture_datum	object.position	12	struct real_point3d::(anonymous at source/math/real_math.h:421:2)
+light_fixture_datum	object.position.x	12	real
+light_fixture_datum	object.position.y	16	real
+light_fixture_datum	object.position.z	20	real
+light_fixture_datum	object.position	12	struct real_point3d::(anonymous at source/math/real_math.h:422:2)
+light_fixture_datum	object.position.u	12	real
+light_fixture_datum	object.position.v	16	real
+light_fixture_datum	object.position.w	20	real
+light_fixture_datum	object.translational_velocity	24	union real_vector3d
+light_fixture_datum	object.translational_velocity.n	24	real[3]
+light_fixture_datum	object.translational_velocity	24	struct real_vector3d::(anonymous at source/math/real_math.h:436:2)
+light_fixture_datum	object.translational_velocity.i	24	real
+light_fixture_datum	object.translational_velocity.j	28	real
+light_fixture_datum	object.translational_velocity.k	32	real
+light_fixture_datum	object.forward	36	union real_vector3d
+light_fixture_datum	object.forward.n	36	real[3]
+light_fixture_datum	object.forward	36	struct real_vector3d::(anonymous at source/math/real_math.h:436:2)
+light_fixture_datum	object.forward.i	36	real
+light_fixture_datum	object.forward.j	40	real
+light_fixture_datum	object.forward.k	44	real
+light_fixture_datum	object.up	48	union real_vector3d
+light_fixture_datum	object.up.n	48	real[3]
+light_fixture_datum	object.up	48	struct real_vector3d::(anonymous at source/math/real_math.h:436:2)
+light_fixture_datum	object.up.i	48	real
+light_fixture_datum	object.up.j	52	real
+light_fixture_datum	object.up.k	56	real
+light_fixture_datum	object.angular_velocity	60	union real_vector3d
+light_fixture_datum	object.angular_velocity.n	60	real[3]
+light_fixture_datum	object.angular_velocity	60	struct real_vector3d::(anonymous at source/math/real_math.h:436:2)
+light_fixture_datum	object.angular_velocity.i	60	real
+light_fixture_datum	object.angular_velocity.j	64	real
+light_fixture_datum	object.angular_velocity.k	68	real
+light_fixture_datum	object.location	72	struct location
+light_fixture_datum	object.location.leaf_index	72	long
+light_fixture_datum	object.location.cluster_index	76	short
+light_fixture_datum	object.location.bonus	78	word
+light_fixture_datum	object.bounding_sphere_center	80	union real_point3d
+light_fixture_datum	object.bounding_sphere_center.n	80	real[3]
+light_fixture_datum	object.bounding_sphere_center	80	struct real_point3d::(anonymous at source/math/real_math.h:421:2)
+light_fixture_datum	object.bounding_sphere_center.x	80	real
+light_fixture_datum	object.bounding_sphere_center.y	84	real
+light_fixture_datum	object.bounding_sphere_center.z	88	real
+light_fixture_datum	object.bounding_sphere_center	80	struct real_point3d::(anonymous at source/math/real_math.h:422:2)
+light_fixture_datum	object.bounding_sphere_center.u	80	real
+light_fixture_datum	object.bounding_sphere_center.v	84	real
+light_fixture_datum	object.bounding_sphere_center.w	88	real
+light_fixture_datum	object.bounding_sphere_radius	92	real
+light_fixture_datum	object.scale	96	real
+light_fixture_datum	object.type	100	short
+light_fixture_datum	object.render_flags	102	word
+light_fixture_datum	object.owner_team_index	104	short
+light_fixture_datum	object.name_index	106	short
+light_fixture_datum	object.idle_ticks	108	short
+light_fixture_datum	object.variant_number	110	short
+light_fixture_datum	object.owner_player_index	112	long
+light_fixture_datum	object.owner_object_index	116	long
+light_fixture_datum	object.owner_object_definition_index	120	long
+light_fixture_datum	object.animation	124	struct object_animation_state
+light_fixture_datum	object.animation.animation_graph_index	124	long
+light_fixture_datum	object.animation.state	128	struct animation_state
+light_fixture_datum	object.animation.state.index	128	short
+light_fixture_datum	object.animation.state.frame_index	130	short
+light_fixture_datum	object.animation.interpolation_frame_index	132	short
+light_fixture_datum	object.animation.interpolation_frame_count	134	short
+light_fixture_datum	object.maximum_body_vitality	136	real
+light_fixture_datum	object.maximum_shield_vitality	140	real
+light_fixture_datum	object.body_vitality	144	real
+light_fixture_datum	object.shield_vitality	148	real
+light_fixture_datum	object.current_shield_damage	152	real
+light_fixture_datum	object.current_body_damage	156	real
+light_fixture_datum	object.umbrella_shield_object_index	160	long
+light_fixture_datum	object.recent_shield_damage	164	real
+light_fixture_datum	object.recent_body_damage	168	real
+light_fixture_datum	object.shield_damage_decay_timer	172	long
+light_fixture_datum	object.body_damage_decay_timer	176	long
+light_fixture_datum	object.shield_stun_ticks	180	short
+light_fixture_datum	object.damage_flags	182	word
+light_fixture_datum	object.scenery_idx	184	long
+light_fixture_datum	object.first_cluster_reference_index	188	long
+light_fixture_datum	object.next_garbage_object_index	192	long
+light_fixture_datum	object.next_object_index	196	long
+light_fixture_datum	object.first_child_object_index	200	long
+light_fixture_datum	object.parent_object_index	204	long
+light_fixture_datum	object.parent_node_index	208	char
+light_fixture_datum	object.pad	209	byte[1]
+light_fixture_datum	object.force_shield_update	210	boolean
+light_fixture_datum	object.functions_active_flags	211	byte
+light_fixture_datum	object.incoming_function_values	212	real[4]
+light_fixture_datum	object.outgoing_function_values	228	real[4]
+light_fixture_datum	object.attachment_types	244	char[8]
+light_fixture_datum	object.attachment_indices	252	long[8]
+light_fixture_datum	object.first_widget_index	284	long
+light_fixture_datum	object.cached_render_state_index	288	long
+light_fixture_datum	object.regions_destroyed_flags	292	word
+light_fixture_datum	object.forced_shader_permutation_index	294	short
+light_fixture_datum	object.region_damage	296	byte[8]
+light_fixture_datum	object.region_permutations	304	byte[8]
+light_fixture_datum	object.base_change_colors	312	real_rgb_color[4]
+light_fixture_datum	object.outgoing_change_colors	360	real_rgb_color[4]
+light_fixture_datum	object.original_node_orientations	408	struct object_header_block_reference
+light_fixture_datum	object.original_node_orientations.size	408	short
+light_fixture_datum	object.original_node_orientations.offset	410	short
+light_fixture_datum	object.node_orientations	412	struct object_header_block_reference
+light_fixture_datum	object.node_orientations.size	412	short
+light_fixture_datum	object.node_orientations.offset	414	short
+light_fixture_datum	object.node_matrices	416	struct object_header_block_reference
+light_fixture_datum	object.node_matrices.size	416	short
+light_fixture_datum	object.node_matrices.offset	418	short
+light_fixture_datum	device	420	struct _device_datum
+light_fixture_datum	device.flags	420	unsigned long
+light_fixture_datum	device.power_group_index	424	short
+light_fixture_datum	device.power	428	real
+light_fixture_datum	device.power_velocity	432	real
+light_fixture_datum	device.position_group_index	436	short
+light_fixture_datum	device.position	440	real
+light_fixture_datum	device.position_velocity	444	real
+light_fixture_datum	device.delay_ticks	448	short
+light_fixture_datum	light_fixture	452	struct _light_fixture_datum
+light_fixture_datum	light_fixture.color	452	union real_rgb_color
+light_fixture_datum	light_fixture.color.n	452	real[3]
+light_fixture_datum	light_fixture.color	452	struct real_rgb_color::(anonymous at source/math/real_math.h:525:2)
+light_fixture_datum	light_fixture.color.red	452	real
+light_fixture_datum	light_fixture.color.green	456	real
+light_fixture_datum	light_fixture.color.blue	460	real
+light_fixture_datum	light_fixture.intensity	464	real
+light_fixture_datum	light_fixture.falloff_angle	468	real
+light_fixture_datum	light_fixture.cutoff_angle	472	real
 looping_sound_definition		84	sizeof
 looping_sound_definition	flags	0	unsigned long
 looping_sound_definition	scale_lower_bound	4	struct looping_sound_scale_modifiers
@@ -3648,6 +4823,140 @@ material_effects_definition	effects	0	struct tag_block
 material_effects_definition	effects.count	0	long
 material_effects_definition	effects.address	4	void *
 material_effects_definition	effects.definition	8	struct tag_block_definition *
+meter_hud_element_definition		104	sizeof
+meter_hud_element_definition	placement	0	struct hud_placement_definition
+meter_hud_element_definition	placement.offset	0	union point2d
+meter_hud_element_definition	placement.offset.n	0	short[2]
+meter_hud_element_definition	placement.offset	0	struct point2d::(anonymous at source/math/integer_math.h:25:2)
+meter_hud_element_definition	placement.offset.x	0	short
+meter_hud_element_definition	placement.offset.y	2	short
+meter_hud_element_definition	placement.scale	4	union real_vector2d
+meter_hud_element_definition	placement.scale.n	4	real[2]
+meter_hud_element_definition	placement.scale	4	struct real_vector2d::(anonymous at source/math/real_math.h:429:2)
+meter_hud_element_definition	placement.scale.i	4	real
+meter_hud_element_definition	placement.scale.j	8	real
+meter_hud_element_definition	placement.multiplayer_scaling_flags	12	short
+meter_hud_element_definition	placement.pad	14	short
+meter_hud_element_definition	placement.unused0	16	long[5]
+meter_hud_element_definition	meter_bitmap	36	struct tag_reference
+meter_hud_element_definition	meter_bitmap.group_tag	36	unsigned long
+meter_hud_element_definition	meter_bitmap.name	40	char *
+meter_hud_element_definition	meter_bitmap.name_length	44	long
+meter_hud_element_definition	meter_bitmap.index	48	long
+meter_hud_element_definition	min_color	52	unsigned long
+meter_hud_element_definition	max_color	56	unsigned long
+meter_hud_element_definition	flash_color	60	unsigned long
+meter_hud_element_definition	empty_color	64	unsigned long
+meter_hud_element_definition	meter_flags	68	byte
+meter_hud_element_definition	minimum_value	69	byte
+meter_hud_element_definition	sequence_index	70	short
+meter_hud_element_definition	alpha_multiplier	72	byte
+meter_hud_element_definition	alpha_bias	73	byte
+meter_hud_element_definition	value_scale	74	short
+meter_hud_element_definition	opacity	76	real
+meter_hud_element_definition	fade	80	real
+meter_hud_element_definition	disabled_color	84	unsigned long
+meter_hud_element_definition	multitexture_overlays	88	struct tag_block
+meter_hud_element_definition	multitexture_overlays.count	88	long
+meter_hud_element_definition	multitexture_overlays.address	92	void *
+meter_hud_element_definition	multitexture_overlays.definition	96	struct tag_block_definition *
+meter_hud_element_definition	unused0	100	long[1]
+metered_panel_definition		240	sizeof
+metered_panel_definition	background	0	struct static_hud_element_definition
+metered_panel_definition	background.placement	0	struct hud_placement_definition
+metered_panel_definition	background.placement.offset	0	union point2d
+metered_panel_definition	background.placement.offset.n	0	short[2]
+metered_panel_definition	background.placement.offset	0	struct point2d::(anonymous at source/math/integer_math.h:25:2)
+metered_panel_definition	background.placement.offset.x	0	short
+metered_panel_definition	background.placement.offset.y	2	short
+metered_panel_definition	background.placement.scale	4	union real_vector2d
+metered_panel_definition	background.placement.scale.n	4	real[2]
+metered_panel_definition	background.placement.scale	4	struct real_vector2d::(anonymous at source/math/real_math.h:429:2)
+metered_panel_definition	background.placement.scale.i	4	real
+metered_panel_definition	background.placement.scale.j	8	real
+metered_panel_definition	background.placement.multiplayer_scaling_flags	12	short
+metered_panel_definition	background.placement.pad	14	short
+metered_panel_definition	background.placement.unused0	16	long[5]
+metered_panel_definition	background.interface_bitmap	36	struct tag_reference
+metered_panel_definition	background.interface_bitmap.group_tag	36	unsigned long
+metered_panel_definition	background.interface_bitmap.name	40	char *
+metered_panel_definition	background.interface_bitmap.name_length	44	long
+metered_panel_definition	background.interface_bitmap.index	48	long
+metered_panel_definition	background.colors	52	struct hud_color_definition
+metered_panel_definition	background.colors.color	52	unsigned long
+metered_panel_definition	background.colors.flash_color	56	unsigned long
+metered_panel_definition	background.colors.flash_period	60	real
+metered_panel_definition	background.colors.flash_delay	64	real
+metered_panel_definition	background.colors.number_of_flashes	68	short
+metered_panel_definition	background.colors.flash_flags	70	word
+metered_panel_definition	background.colors.flash_length	72	real
+metered_panel_definition	background.colors.disabled_color	76	unsigned long
+metered_panel_definition	background.colors.custom	80	union hud_color_definition::(unnamed at source/interface/hud_definitions.h:59:2)
+metered_panel_definition	background.colors.custom.unused	80	long
+metered_panel_definition	background.colors.custom.objective	80	struct hud_color_definition::(unnamed at source/interface/hud_definitions.h:62:3)
+metered_panel_definition	background.colors.custom.objective.up_ticks	80	short
+metered_panel_definition	background.colors.custom.objective.fade_ticks	82	short
+metered_panel_definition	background.sequence_index	84	short
+metered_panel_definition	background.pad	86	short
+metered_panel_definition	background.multitexture_overlays	88	struct tag_block
+metered_panel_definition	background.multitexture_overlays.count	88	long
+metered_panel_definition	background.multitexture_overlays.address	92	void *
+metered_panel_definition	background.multitexture_overlays.definition	96	struct tag_block_definition *
+metered_panel_definition	background.unused0	100	long[1]
+metered_panel_definition	meter	104	struct meter_hud_element_definition
+metered_panel_definition	meter.placement	104	struct hud_placement_definition
+metered_panel_definition	meter.placement.offset	104	union point2d
+metered_panel_definition	meter.placement.offset.n	104	short[2]
+metered_panel_definition	meter.placement.offset	104	struct point2d::(anonymous at source/math/integer_math.h:25:2)
+metered_panel_definition	meter.placement.offset.x	104	short
+metered_panel_definition	meter.placement.offset.y	106	short
+metered_panel_definition	meter.placement.scale	108	union real_vector2d
+metered_panel_definition	meter.placement.scale.n	108	real[2]
+metered_panel_definition	meter.placement.scale	108	struct real_vector2d::(anonymous at source/math/real_math.h:429:2)
+metered_panel_definition	meter.placement.scale.i	108	real
+metered_panel_definition	meter.placement.scale.j	112	real
+metered_panel_definition	meter.placement.multiplayer_scaling_flags	116	short
+metered_panel_definition	meter.placement.pad	118	short
+metered_panel_definition	meter.placement.unused0	120	long[5]
+metered_panel_definition	meter.meter_bitmap	140	struct tag_reference
+metered_panel_definition	meter.meter_bitmap.group_tag	140	unsigned long
+metered_panel_definition	meter.meter_bitmap.name	144	char *
+metered_panel_definition	meter.meter_bitmap.name_length	148	long
+metered_panel_definition	meter.meter_bitmap.index	152	long
+metered_panel_definition	meter.min_color	156	unsigned long
+metered_panel_definition	meter.max_color	160	unsigned long
+metered_panel_definition	meter.flash_color	164	unsigned long
+metered_panel_definition	meter.empty_color	168	unsigned long
+metered_panel_definition	meter.meter_flags	172	byte
+metered_panel_definition	meter.minimum_value	173	byte
+metered_panel_definition	meter.sequence_index	174	short
+metered_panel_definition	meter.alpha_multiplier	176	byte
+metered_panel_definition	meter.alpha_bias	177	byte
+metered_panel_definition	meter.value_scale	178	short
+metered_panel_definition	meter.opacity	180	real
+metered_panel_definition	meter.fade	184	real
+metered_panel_definition	meter.disabled_color	188	unsigned long
+metered_panel_definition	meter.multitexture_overlays	192	struct tag_block
+metered_panel_definition	meter.multitexture_overlays.count	192	long
+metered_panel_definition	meter.multitexture_overlays.address	196	void *
+metered_panel_definition	meter.multitexture_overlays.definition	200	struct tag_block_definition *
+metered_panel_definition	meter.unused0	204	long[1]
+metered_panel_definition		208	union metered_panel_definition::(anonymous at source/interface/unit_hud_interface_definition.h:113:2)
+metered_panel_definition	shield_extras	208	struct shield_meter_extras_definition
+metered_panel_definition	shield_extras.overcharge_min_color	208	unsigned long
+metered_panel_definition	shield_extras.overcharge_max_color	212	unsigned long
+metered_panel_definition	shield_extras.overcharge_flash_color	216	unsigned long
+metered_panel_definition	shield_extras.overcharge_empty_color	220	unsigned long
+metered_panel_definition	health_extras	208	struct health_meter_extras_definition
+metered_panel_definition	health_extras.mid_color	208	unsigned long
+metered_panel_definition	health_extras.max_cutoff	212	real
+metered_panel_definition	health_extras.min_cutoff	216	real
+metered_panel_definition	health_extras.pad	220	long
+metered_panel_definition	aux_extras	208	struct auxilary_meter_extras_definition
+metered_panel_definition	aux_extras.min_cutoff	208	real
+metered_panel_definition	aux_extras.flags	212	unsigned long
+metered_panel_definition	aux_extras.pad	216	long[2]
+metered_panel_definition	unused	224	long[4]
 model		232	sizeof
 model	flags	0	unsigned long
 model	node_list_checksum	4	unsigned long
@@ -3789,6 +5098,161 @@ model_region_permutation	markers	76	struct tag_block
 model_region_permutation	markers.count	76	long
 model_region_permutation	markers.address	80	void *
 model_region_permutation	markers.definition	84	struct tag_block_definition *
+motion_sensor_panel_definition		240	sizeof
+motion_sensor_panel_definition	background	0	struct static_hud_element_definition
+motion_sensor_panel_definition	background.placement	0	struct hud_placement_definition
+motion_sensor_panel_definition	background.placement.offset	0	union point2d
+motion_sensor_panel_definition	background.placement.offset.n	0	short[2]
+motion_sensor_panel_definition	background.placement.offset	0	struct point2d::(anonymous at source/math/integer_math.h:25:2)
+motion_sensor_panel_definition	background.placement.offset.x	0	short
+motion_sensor_panel_definition	background.placement.offset.y	2	short
+motion_sensor_panel_definition	background.placement.scale	4	union real_vector2d
+motion_sensor_panel_definition	background.placement.scale.n	4	real[2]
+motion_sensor_panel_definition	background.placement.scale	4	struct real_vector2d::(anonymous at source/math/real_math.h:429:2)
+motion_sensor_panel_definition	background.placement.scale.i	4	real
+motion_sensor_panel_definition	background.placement.scale.j	8	real
+motion_sensor_panel_definition	background.placement.multiplayer_scaling_flags	12	short
+motion_sensor_panel_definition	background.placement.pad	14	short
+motion_sensor_panel_definition	background.placement.unused0	16	long[5]
+motion_sensor_panel_definition	background.interface_bitmap	36	struct tag_reference
+motion_sensor_panel_definition	background.interface_bitmap.group_tag	36	unsigned long
+motion_sensor_panel_definition	background.interface_bitmap.name	40	char *
+motion_sensor_panel_definition	background.interface_bitmap.name_length	44	long
+motion_sensor_panel_definition	background.interface_bitmap.index	48	long
+motion_sensor_panel_definition	background.colors	52	struct hud_color_definition
+motion_sensor_panel_definition	background.colors.color	52	unsigned long
+motion_sensor_panel_definition	background.colors.flash_color	56	unsigned long
+motion_sensor_panel_definition	background.colors.flash_period	60	real
+motion_sensor_panel_definition	background.colors.flash_delay	64	real
+motion_sensor_panel_definition	background.colors.number_of_flashes	68	short
+motion_sensor_panel_definition	background.colors.flash_flags	70	word
+motion_sensor_panel_definition	background.colors.flash_length	72	real
+motion_sensor_panel_definition	background.colors.disabled_color	76	unsigned long
+motion_sensor_panel_definition	background.colors.custom	80	union hud_color_definition::(unnamed at source/interface/hud_definitions.h:59:2)
+motion_sensor_panel_definition	background.colors.custom.unused	80	long
+motion_sensor_panel_definition	background.colors.custom.objective	80	struct hud_color_definition::(unnamed at source/interface/hud_definitions.h:62:3)
+motion_sensor_panel_definition	background.colors.custom.objective.up_ticks	80	short
+motion_sensor_panel_definition	background.colors.custom.objective.fade_ticks	82	short
+motion_sensor_panel_definition	background.sequence_index	84	short
+motion_sensor_panel_definition	background.pad	86	short
+motion_sensor_panel_definition	background.multitexture_overlays	88	struct tag_block
+motion_sensor_panel_definition	background.multitexture_overlays.count	88	long
+motion_sensor_panel_definition	background.multitexture_overlays.address	92	void *
+motion_sensor_panel_definition	background.multitexture_overlays.definition	96	struct tag_block_definition *
+motion_sensor_panel_definition	background.unused0	100	long[1]
+motion_sensor_panel_definition	foreground	104	struct static_hud_element_definition
+motion_sensor_panel_definition	foreground.placement	104	struct hud_placement_definition
+motion_sensor_panel_definition	foreground.placement.offset	104	union point2d
+motion_sensor_panel_definition	foreground.placement.offset.n	104	short[2]
+motion_sensor_panel_definition	foreground.placement.offset	104	struct point2d::(anonymous at source/math/integer_math.h:25:2)
+motion_sensor_panel_definition	foreground.placement.offset.x	104	short
+motion_sensor_panel_definition	foreground.placement.offset.y	106	short
+motion_sensor_panel_definition	foreground.placement.scale	108	union real_vector2d
+motion_sensor_panel_definition	foreground.placement.scale.n	108	real[2]
+motion_sensor_panel_definition	foreground.placement.scale	108	struct real_vector2d::(anonymous at source/math/real_math.h:429:2)
+motion_sensor_panel_definition	foreground.placement.scale.i	108	real
+motion_sensor_panel_definition	foreground.placement.scale.j	112	real
+motion_sensor_panel_definition	foreground.placement.multiplayer_scaling_flags	116	short
+motion_sensor_panel_definition	foreground.placement.pad	118	short
+motion_sensor_panel_definition	foreground.placement.unused0	120	long[5]
+motion_sensor_panel_definition	foreground.interface_bitmap	140	struct tag_reference
+motion_sensor_panel_definition	foreground.interface_bitmap.group_tag	140	unsigned long
+motion_sensor_panel_definition	foreground.interface_bitmap.name	144	char *
+motion_sensor_panel_definition	foreground.interface_bitmap.name_length	148	long
+motion_sensor_panel_definition	foreground.interface_bitmap.index	152	long
+motion_sensor_panel_definition	foreground.colors	156	struct hud_color_definition
+motion_sensor_panel_definition	foreground.colors.color	156	unsigned long
+motion_sensor_panel_definition	foreground.colors.flash_color	160	unsigned long
+motion_sensor_panel_definition	foreground.colors.flash_period	164	real
+motion_sensor_panel_definition	foreground.colors.flash_delay	168	real
+motion_sensor_panel_definition	foreground.colors.number_of_flashes	172	short
+motion_sensor_panel_definition	foreground.colors.flash_flags	174	word
+motion_sensor_panel_definition	foreground.colors.flash_length	176	real
+motion_sensor_panel_definition	foreground.colors.disabled_color	180	unsigned long
+motion_sensor_panel_definition	foreground.colors.custom	184	union hud_color_definition::(unnamed at source/interface/hud_definitions.h:59:2)
+motion_sensor_panel_definition	foreground.colors.custom.unused	184	long
+motion_sensor_panel_definition	foreground.colors.custom.objective	184	struct hud_color_definition::(unnamed at source/interface/hud_definitions.h:62:3)
+motion_sensor_panel_definition	foreground.colors.custom.objective.up_ticks	184	short
+motion_sensor_panel_definition	foreground.colors.custom.objective.fade_ticks	186	short
+motion_sensor_panel_definition	foreground.sequence_index	188	short
+motion_sensor_panel_definition	foreground.pad	190	short
+motion_sensor_panel_definition	foreground.multitexture_overlays	192	struct tag_block
+motion_sensor_panel_definition	foreground.multitexture_overlays.count	192	long
+motion_sensor_panel_definition	foreground.multitexture_overlays.address	196	void *
+motion_sensor_panel_definition	foreground.multitexture_overlays.definition	200	struct tag_block_definition *
+motion_sensor_panel_definition	foreground.unused0	204	long[1]
+motion_sensor_panel_definition	unused	208	long[8]
+multiplayer_scenario_description		12	sizeof
+multiplayer_scenario_description	scenarios	0	struct tag_block
+multiplayer_scenario_description	scenarios.count	0	long
+multiplayer_scenario_description	scenarios.address	4	void *
+multiplayer_scenario_description	scenarios.definition	8	struct tag_block_definition *
+multiplayer_scenario_description_item		36	sizeof
+multiplayer_scenario_description_item	descriptive_bitmap	0	struct tag_reference
+multiplayer_scenario_description_item	descriptive_bitmap.group_tag	0	unsigned long
+multiplayer_scenario_description_item	descriptive_bitmap.name	4	char *
+multiplayer_scenario_description_item	descriptive_bitmap.name_length	8	long
+multiplayer_scenario_description_item	descriptive_bitmap.index	12	long
+multiplayer_scenario_description_item	displayed_map_name	16	struct tag_reference
+multiplayer_scenario_description_item	displayed_map_name.group_tag	16	unsigned long
+multiplayer_scenario_description_item	displayed_map_name.name	20	char *
+multiplayer_scenario_description_item	displayed_map_name.name_length	24	long
+multiplayer_scenario_description_item	displayed_map_name.index	28	long
+multiplayer_scenario_description_item	scenario_tag_path	32	char[1]
+new_particle_data		92	sizeof
+new_particle_data	definition_index	0	long
+new_particle_data	object_index	4	long
+new_particle_data	node_index	8	short
+new_particle_data	local_player_index	10	short
+new_particle_data	attached_to_local_player	12	boolean
+new_particle_data	dont_draw_first_person	13	boolean
+new_particle_data	dont_draw_third_person	14	boolean
+new_particle_data	position	16	union real_point3d
+new_particle_data	position.n	16	real[3]
+new_particle_data	position	16	struct real_point3d::(anonymous at source/math/real_math.h:421:2)
+new_particle_data	position.x	16	real
+new_particle_data	position.y	20	real
+new_particle_data	position.z	24	real
+new_particle_data	position	16	struct real_point3d::(anonymous at source/math/real_math.h:422:2)
+new_particle_data	position.u	16	real
+new_particle_data	position.v	20	real
+new_particle_data	position.w	24	real
+new_particle_data	direction	28	union real_vector3d
+new_particle_data	direction.n	28	real[3]
+new_particle_data	direction	28	struct real_vector3d::(anonymous at source/math/real_math.h:436:2)
+new_particle_data	direction.i	28	real
+new_particle_data	direction.j	32	real
+new_particle_data	direction.k	36	real
+new_particle_data	velocity	40	union real_vector3d
+new_particle_data	velocity.n	40	real[3]
+new_particle_data	velocity	40	struct real_vector3d::(anonymous at source/math/real_math.h:436:2)
+new_particle_data	velocity.i	40	real
+new_particle_data	velocity.j	44	real
+new_particle_data	velocity.k	48	real
+new_particle_data	initial_impulse	52	union real_vector3d
+new_particle_data	initial_impulse.n	52	real[3]
+new_particle_data	initial_impulse	52	struct real_vector3d::(anonymous at source/math/real_math.h:436:2)
+new_particle_data	initial_impulse.i	52	real
+new_particle_data	initial_impulse.j	56	real
+new_particle_data	initial_impulse.k	60	real
+new_particle_data	rotation	64	real
+new_particle_data	angular_velocity	68	real
+new_particle_data	radius	72	real
+new_particle_data	color	76	union real_argb_color
+new_particle_data	color.n	76	real[4]
+new_particle_data	color	76	struct real_argb_color::(anonymous at source/math/real_math.h:532:2)
+new_particle_data	color.alpha	76	real
+new_particle_data	color	80	union real_argb_color::(anonymous at source/math/real_math.h:535:3)
+new_particle_data	color.rgb	80	union real_rgb_color
+new_particle_data	color.rgb.n	80	real[3]
+new_particle_data	color.rgb	80	struct real_rgb_color::(anonymous at source/math/real_math.h:525:2)
+new_particle_data	color.rgb.red	80	real
+new_particle_data	color.rgb.green	84	real
+new_particle_data	color.rgb.blue	88	real
+new_particle_data	color	80	struct real_argb_color::(anonymous at source/math/real_math.h:538:4)
+new_particle_data	color.red	80	real
+new_particle_data	color.green	84	real
+new_particle_data	color.blue	88	real
 object_attachment_definition		72	sizeof
 object_attachment_definition	type	0	struct tag_reference
 object_attachment_definition	type.group_tag	0	unsigned long
@@ -3961,6 +5425,180 @@ old_particle_system_type	type_states.count	104	long
 old_particle_system_type	type_states.address	108	void *
 old_particle_system_type	type_states.definition	112	struct tag_block_definition *
 old_particle_system_type	reserved74	116	byte[12]
+particle_datum		112	sizeof
+particle_datum	header	0	struct datum_header
+particle_datum	header.identifier	0	short
+particle_datum	flags	2	word
+particle_datum	definition_index	4	long
+particle_datum	object_index	8	long
+particle_datum	node_index	12	short
+particle_datum	state	14	byte
+particle_datum	local_player_index	15	byte
+particle_datum	last_rendered_frame_index	16	long
+particle_datum	age	20	real
+particle_datum	lifespan	24	real
+particle_datum	frame_time	28	real
+particle_datum	frame_span	32	real
+particle_datum	sequence_index	36	short
+particle_datum	frame_index	38	short
+particle_datum	location	40	struct location
+particle_datum	location.leaf_index	40	long
+particle_datum	location.cluster_index	44	short
+particle_datum	location.bonus	46	word
+particle_datum	position	48	union real_point3d
+particle_datum	position.n	48	real[3]
+particle_datum	position	48	struct real_point3d::(anonymous at source/math/real_math.h:421:2)
+particle_datum	position.x	48	real
+particle_datum	position.y	52	real
+particle_datum	position.z	56	real
+particle_datum	position	48	struct real_point3d::(anonymous at source/math/real_math.h:422:2)
+particle_datum	position.u	48	real
+particle_datum	position.v	52	real
+particle_datum	position.w	56	real
+particle_datum	direction	60	union real_vector3d
+particle_datum	direction.n	60	real[3]
+particle_datum	direction	60	struct real_vector3d::(anonymous at source/math/real_math.h:436:2)
+particle_datum	direction.i	60	real
+particle_datum	direction.j	64	real
+particle_datum	direction.k	68	real
+particle_datum	translational_velocity	72	union real_vector3d
+particle_datum	translational_velocity.n	72	real[3]
+particle_datum	translational_velocity	72	struct real_vector3d::(anonymous at source/math/real_math.h:436:2)
+particle_datum	translational_velocity.i	72	real
+particle_datum	translational_velocity.j	76	real
+particle_datum	translational_velocity.k	80	real
+particle_datum	rotation	84	real
+particle_datum	angular_velocity	88	real
+particle_datum	radius	92	real
+particle_datum	color	96	union real_argb_color
+particle_datum	color.n	96	real[4]
+particle_datum	color	96	struct real_argb_color::(anonymous at source/math/real_math.h:532:2)
+particle_datum	color.alpha	96	real
+particle_datum	color	100	union real_argb_color::(anonymous at source/math/real_math.h:535:3)
+particle_datum	color.rgb	100	union real_rgb_color
+particle_datum	color.rgb.n	100	real[3]
+particle_datum	color.rgb	100	struct real_rgb_color::(anonymous at source/math/real_math.h:525:2)
+particle_datum	color.rgb.red	100	real
+particle_datum	color.rgb.green	104	real
+particle_datum	color.rgb.blue	108	real
+particle_datum	color	100	struct real_argb_color::(anonymous at source/math/real_math.h:538:4)
+particle_datum	color.red	100	real
+particle_datum	color.green	104	real
+particle_datum	color.blue	108	real
+particle_definition		356	sizeof
+particle_definition	flags	0	unsigned long
+particle_definition	bitmap	4	struct tag_reference
+particle_definition	bitmap.group_tag	4	unsigned long
+particle_definition	bitmap.name	8	char *
+particle_definition	bitmap.name_length	12	long
+particle_definition	bitmap.index	16	long
+particle_definition	physics	20	struct tag_reference
+particle_definition	physics.group_tag	20	unsigned long
+particle_definition	physics.name	24	char *
+particle_definition	physics.name_length	28	long
+particle_definition	physics.index	32	long
+particle_definition	collision_material_effects	36	struct tag_reference
+particle_definition	collision_material_effects.group_tag	36	unsigned long
+particle_definition	collision_material_effects.name	40	char *
+particle_definition	collision_material_effects.name_length	44	long
+particle_definition	collision_material_effects.index	48	long
+particle_definition	reserved34	52	long
+particle_definition	life_span_lower_bound	56	real
+particle_definition	life_span_upper_bound	60	real
+particle_definition	fade_in_time	64	real
+particle_definition	fade_out_time	68	real
+particle_definition	collision_effect	72	struct tag_reference
+particle_definition	collision_effect.group_tag	72	unsigned long
+particle_definition	collision_effect.name	76	char *
+particle_definition	collision_effect.name_length	80	long
+particle_definition	collision_effect.index	84	long
+particle_definition	effect	88	struct tag_reference
+particle_definition	effect.group_tag	88	unsigned long
+particle_definition	effect.name	92	char *
+particle_definition	effect.name_length	96	long
+particle_definition	effect.index	100	long
+particle_definition	minimum_pixels	104	real
+particle_definition	reserved6C	108	long[2]
+particle_definition	radius_lower_bound	116	real
+particle_definition	radius_upper_bound	120	real
+particle_definition	reserved7C	124	long
+particle_definition	frames_per_second_lower_bound	128	real
+particle_definition	frames_per_second_upper_bound	132	real
+particle_definition	frames_per_second_contact_deterioration	136	real
+particle_definition	lod_falloff	140	real
+particle_definition	lod_cutoff	144	real
+particle_definition	reserved94	148	long
+particle_definition	first_sequence_index	152	short
+particle_definition	initial_sequence_count	154	short
+particle_definition	looping_sequence_count	156	short
+particle_definition	final_sequence_count	158	short
+particle_definition	reservedA0	160	long[2]
+particle_definition	runtime_oo_width	168	real
+particle_definition	sprite_orientation	172	short
+particle_definition	padAE	174	word
+particle_definition	shader	176	struct shader_effect_definition
+particle_definition	shader.shader	176	struct shader
+particle_definition	shader.shader.base	176	struct shader_base
+particle_definition	shader.shader.base.radiosity	176	struct shader_radiosity_properties
+particle_definition	shader.shader.base.radiosity.flags	176	unsigned short
+particle_definition	shader.shader.base.radiosity.detail_level	178	short
+particle_definition	shader.shader.base.radiosity.power	180	real
+particle_definition	shader.shader.base.radiosity.color_of_emitted_light	184	union real_rgb_color
+particle_definition	shader.shader.base.radiosity.color_of_emitted_light.n	184	real[3]
+particle_definition	shader.shader.base.radiosity.color_of_emitted_light	184	struct real_rgb_color::(anonymous at source/math/real_math.h:525:2)
+particle_definition	shader.shader.base.radiosity.color_of_emitted_light.red	184	real
+particle_definition	shader.shader.base.radiosity.color_of_emitted_light.green	188	real
+particle_definition	shader.shader.base.radiosity.color_of_emitted_light.blue	192	real
+particle_definition	shader.shader.base.radiosity.tint_color	196	union real_rgb_color
+particle_definition	shader.shader.base.radiosity.tint_color.n	196	real[3]
+particle_definition	shader.shader.base.radiosity.tint_color	196	struct real_rgb_color::(anonymous at source/math/real_math.h:525:2)
+particle_definition	shader.shader.base.radiosity.tint_color.red	196	real
+particle_definition	shader.shader.base.radiosity.tint_color.green	200	real
+particle_definition	shader.shader.base.radiosity.tint_color.blue	204	real
+particle_definition	shader.shader.base.physics	208	struct shader_physics_properties
+particle_definition	shader.shader.base.physics.flags	208	unsigned short
+particle_definition	shader.shader.base.physics.material_type	210	short
+particle_definition	shader.shader.base.type	212	short
+particle_definition	shader.shader.base.pad	214	short
+particle_definition	shader.flags	216	unsigned short
+particle_definition	shader.framebuffer_blend_function	218	short
+particle_definition	shader.framebuffer_fade_mode	220	short
+particle_definition	shader.primary_map_flags	222	unsigned short
+particle_definition	shader.reserved_before_secondary_map	224	byte[28]
+particle_definition	shader.secondary_map	252	struct tag_reference
+particle_definition	shader.secondary_map.group_tag	252	unsigned long
+particle_definition	shader.secondary_map.name	256	char *
+particle_definition	shader.secondary_map.name_length	260	long
+particle_definition	shader.secondary_map.index	264	long
+particle_definition	shader.secondary_map_anchor	268	short
+particle_definition	shader.secondary_map_flags	270	unsigned short
+particle_definition	shader.secondary_map_animation	272	struct shader_texture_animation
+particle_definition	shader.secondary_map_animation.u_source	272	short
+particle_definition	shader.secondary_map_animation.u_function	274	short
+particle_definition	shader.secondary_map_animation.u_period	276	real
+particle_definition	shader.secondary_map_animation.u_phase	280	real
+particle_definition	shader.secondary_map_animation.u_scale	284	real
+particle_definition	shader.secondary_map_animation.v_source	288	short
+particle_definition	shader.secondary_map_animation.v_function	290	short
+particle_definition	shader.secondary_map_animation.v_period	292	real
+particle_definition	shader.secondary_map_animation.v_phase	296	real
+particle_definition	shader.secondary_map_animation.v_scale	300	real
+particle_definition	shader.secondary_map_animation.r_source	304	short
+particle_definition	shader.secondary_map_animation.r_function	306	short
+particle_definition	shader.secondary_map_animation.r_period	308	real
+particle_definition	shader.secondary_map_animation.r_phase	312	real
+particle_definition	shader.secondary_map_animation.r_scale	316	real
+particle_definition	shader.secondary_map_animation.r_center	320	union real_point2d
+particle_definition	shader.secondary_map_animation.r_center.n	320	real[2]
+particle_definition	shader.secondary_map_animation.r_center	320	struct real_point2d::(anonymous at source/math/real_math.h:413:2)
+particle_definition	shader.secondary_map_animation.r_center.x	320	real
+particle_definition	shader.secondary_map_animation.r_center.y	324	real
+particle_definition	shader.secondary_map_animation.r_center	320	struct real_point2d::(anonymous at source/math/real_math.h:414:2)
+particle_definition	shader.secondary_map_animation.r_center.u	320	real
+particle_definition	shader.secondary_map_animation.r_center.v	324	real
+particle_definition	shader.secondary_map_radius	328	real
+particle_definition	shader.secondary_map_zsprite_radius_scale	332	real
+particle_definition	shader.reserved_after_secondary_map_zsprite_radius_scale	336	byte[20]
 particle_system_definition		104	sizeof
 particle_system_definition	reserved00	0	byte[56]
 particle_system_definition	system_update_point_physics	56	struct tag_reference
@@ -4303,6 +5941,18 @@ player_starting_location	team_index	16	short
 player_starting_location	structure_bsp_reference_index	18	short
 player_starting_location	game_types	20	short[4]
 player_starting_location	unused1C	28	byte[24]
+point_physics_definition		64	sizeof
+point_physics_definition	flags	0	unsigned long
+point_physics_definition	runtime_mass_over_radius_cubed	4	real
+point_physics_definition	runtime_water_buoyancy_scale	8	real
+point_physics_definition	runtime_air_buoyancy_scale	12	real
+point_physics_definition	unused1	16	long[4]
+point_physics_definition	density	32	real
+point_physics_definition	air_friction	36	real
+point_physics_definition	water_friction	40	real
+point_physics_definition	contact_friction	44	real
+point_physics_definition	elasticity	48	real
+point_physics_definition	unused2	52	long[3]
 powered_seat_definition		68	sizeof
 powered_seat_definition	pad	0	long
 powered_seat_definition	powerup_time	4	real
@@ -4815,6 +6465,44 @@ scenario_decal_palette_entry	reference.group_tag	0	unsigned long
 scenario_decal_palette_entry	reference.name	4	char *
 scenario_decal_palette_entry	reference.name_length	8	long
 scenario_decal_palette_entry	reference.index	12	long
+scenario_light_fixture_datum		72	sizeof
+scenario_light_fixture_datum	object	0	struct scenario_object_datum
+scenario_light_fixture_datum	object.palette_entry_index	0	short
+scenario_light_fixture_datum	object.name_index	2	short
+scenario_light_fixture_datum	object.placement_flags	4	word
+scenario_light_fixture_datum	object.variant_number	6	short
+scenario_light_fixture_datum	object.position	8	union real_point3d
+scenario_light_fixture_datum	object.position.n	8	real[3]
+scenario_light_fixture_datum	object.position	8	struct real_point3d::(anonymous at source/math/real_math.h:421:2)
+scenario_light_fixture_datum	object.position.x	8	real
+scenario_light_fixture_datum	object.position.y	12	real
+scenario_light_fixture_datum	object.position.z	16	real
+scenario_light_fixture_datum	object.position	8	struct real_point3d::(anonymous at source/math/real_math.h:422:2)
+scenario_light_fixture_datum	object.position.u	8	real
+scenario_light_fixture_datum	object.position.v	12	real
+scenario_light_fixture_datum	object.position.w	16	real
+scenario_light_fixture_datum	object.rotation	20	union real_euler_angles3d
+scenario_light_fixture_datum	object.rotation.n	20	real[3]
+scenario_light_fixture_datum	object.rotation	20	struct real_euler_angles3d::(anonymous at source/math/real_math.h:406:2)
+scenario_light_fixture_datum	object.rotation.yaw	20	real
+scenario_light_fixture_datum	object.rotation.pitch	24	real
+scenario_light_fixture_datum	object.rotation.roll	28	real
+scenario_light_fixture_datum	object.on_bsp_flags	32	word
+scenario_light_fixture_datum	object.misc_flags	34	word
+scenario_light_fixture_datum	object.unused	36	unsigned long
+scenario_light_fixture_datum	device	40	struct scenario_device_datum
+scenario_light_fixture_datum	device.power_group_index	40	short
+scenario_light_fixture_datum	device.position_group_index	42	short
+scenario_light_fixture_datum	device.flags	44	unsigned long
+scenario_light_fixture_datum	color	48	union real_rgb_color
+scenario_light_fixture_datum	color.n	48	real[3]
+scenario_light_fixture_datum	color	48	struct real_rgb_color::(anonymous at source/math/real_math.h:525:2)
+scenario_light_fixture_datum	color.red	48	real
+scenario_light_fixture_datum	color.green	52	real
+scenario_light_fixture_datum	color.blue	56	real
+scenario_light_fixture_datum	intensity	60	real
+scenario_light_fixture_datum	falloff_angle	64	real
+scenario_light_fixture_datum	cutoff_angle	68	real
 scenario_netgame_equipment		144	sizeof
 scenario_netgame_equipment	flags	0	long
 scenario_netgame_equipment	game_type	4	short[4]
@@ -5194,6 +6882,11 @@ shader_radiosity_properties	tint_color	20	struct real_rgb_color::(anonymous at s
 shader_radiosity_properties	tint_color.red	20	real
 shader_radiosity_properties	tint_color.green	24	real
 shader_radiosity_properties	tint_color.blue	28	real
+shield_meter_extras_definition		16	sizeof
+shield_meter_extras_definition	overcharge_min_color	0	unsigned long
+shield_meter_extras_definition	overcharge_max_color	4	unsigned long
+shield_meter_extras_definition	overcharge_flash_color	8	unsigned long
+shield_meter_extras_definition	overcharge_empty_color	12	unsigned long
 sky		168	sizeof
 sky	unused00	0	byte[88]
 sky	outdoor_fog	88	struct sky_atmospheric_fog
@@ -5376,6 +7069,59 @@ squad_definition	unused_block	220	struct tag_block
 squad_definition	unused_block.count	220	long
 squad_definition	unused_block.address	224	void *
 squad_definition	unused_block.definition	228	struct tag_block_definition *
+static_hud_element_definition		104	sizeof
+static_hud_element_definition	placement	0	struct hud_placement_definition
+static_hud_element_definition	placement.offset	0	union point2d
+static_hud_element_definition	placement.offset.n	0	short[2]
+static_hud_element_definition	placement.offset	0	struct point2d::(anonymous at source/math/integer_math.h:25:2)
+static_hud_element_definition	placement.offset.x	0	short
+static_hud_element_definition	placement.offset.y	2	short
+static_hud_element_definition	placement.scale	4	union real_vector2d
+static_hud_element_definition	placement.scale.n	4	real[2]
+static_hud_element_definition	placement.scale	4	struct real_vector2d::(anonymous at source/math/real_math.h:429:2)
+static_hud_element_definition	placement.scale.i	4	real
+static_hud_element_definition	placement.scale.j	8	real
+static_hud_element_definition	placement.multiplayer_scaling_flags	12	short
+static_hud_element_definition	placement.pad	14	short
+static_hud_element_definition	placement.unused0	16	long[5]
+static_hud_element_definition	interface_bitmap	36	struct tag_reference
+static_hud_element_definition	interface_bitmap.group_tag	36	unsigned long
+static_hud_element_definition	interface_bitmap.name	40	char *
+static_hud_element_definition	interface_bitmap.name_length	44	long
+static_hud_element_definition	interface_bitmap.index	48	long
+static_hud_element_definition	colors	52	struct hud_color_definition
+static_hud_element_definition	colors.color	52	unsigned long
+static_hud_element_definition	colors.flash_color	56	unsigned long
+static_hud_element_definition	colors.flash_period	60	real
+static_hud_element_definition	colors.flash_delay	64	real
+static_hud_element_definition	colors.number_of_flashes	68	short
+static_hud_element_definition	colors.flash_flags	70	word
+static_hud_element_definition	colors.flash_length	72	real
+static_hud_element_definition	colors.disabled_color	76	unsigned long
+static_hud_element_definition	colors.custom	80	union hud_color_definition::(unnamed at source/interface/hud_definitions.h:59:2)
+static_hud_element_definition	colors.custom.unused	80	long
+static_hud_element_definition	colors.custom.objective	80	struct hud_color_definition::(unnamed at source/interface/hud_definitions.h:62:3)
+static_hud_element_definition	colors.custom.objective.up_ticks	80	short
+static_hud_element_definition	colors.custom.objective.fade_ticks	82	short
+static_hud_element_definition	sequence_index	84	short
+static_hud_element_definition	pad	86	short
+static_hud_element_definition	multitexture_overlays	88	struct tag_block
+static_hud_element_definition	multitexture_overlays.count	88	long
+static_hud_element_definition	multitexture_overlays.address	92	void *
+static_hud_element_definition	multitexture_overlays.definition	96	struct tag_block_definition *
+static_hud_element_definition	unused0	100	long[1]
+string_list		12	sizeof
+string_list	strings	0	struct tag_block
+string_list	strings.count	0	long
+string_list	strings.address	4	void *
+string_list	strings.definition	8	struct tag_block_definition *
+string_list_entry		20	sizeof
+string_list_entry	string	0	struct tag_data
+string_list_entry	string.size	0	long
+string_list_entry	string.pad	4	unsigned long
+string_list_entry	string.file_offset	8	long
+string_list_entry	string.address	12	void *
+string_list_entry	string.definition	16	struct tag_data_definition *
 structure_background_sound_palette_entry		116	sizeof
 structure_background_sound_palette_entry	unused0	0	byte[32]
 structure_background_sound_palette_entry	background_sound	32	struct tag_reference
@@ -5964,6 +7710,362 @@ unit_dialogue_variant	variant_number	0	short
 unit_dialogue_variant	pad	2	short
 unit_dialogue_variant	__unknown04	4	char[16]
 unit_dialogue_variant	dialogue_index	20	long
+unit_hud_interface_definition		1388	sizeof
+unit_hud_interface_definition	absolute_placement	0	struct hud_absolute_placement_definition
+unit_hud_interface_definition	absolute_placement.corner	0	short
+unit_hud_interface_definition	absolute_placement.pad	2	short
+unit_hud_interface_definition	absolute_placement.unused	4	long[8]
+unit_hud_interface_definition	background	36	struct static_hud_element_definition
+unit_hud_interface_definition	background.placement	36	struct hud_placement_definition
+unit_hud_interface_definition	background.placement.offset	36	union point2d
+unit_hud_interface_definition	background.placement.offset.n	36	short[2]
+unit_hud_interface_definition	background.placement.offset	36	struct point2d::(anonymous at source/math/integer_math.h:25:2)
+unit_hud_interface_definition	background.placement.offset.x	36	short
+unit_hud_interface_definition	background.placement.offset.y	38	short
+unit_hud_interface_definition	background.placement.scale	40	union real_vector2d
+unit_hud_interface_definition	background.placement.scale.n	40	real[2]
+unit_hud_interface_definition	background.placement.scale	40	struct real_vector2d::(anonymous at source/math/real_math.h:429:2)
+unit_hud_interface_definition	background.placement.scale.i	40	real
+unit_hud_interface_definition	background.placement.scale.j	44	real
+unit_hud_interface_definition	background.placement.multiplayer_scaling_flags	48	short
+unit_hud_interface_definition	background.placement.pad	50	short
+unit_hud_interface_definition	background.placement.unused0	52	long[5]
+unit_hud_interface_definition	background.interface_bitmap	72	struct tag_reference
+unit_hud_interface_definition	background.interface_bitmap.group_tag	72	unsigned long
+unit_hud_interface_definition	background.interface_bitmap.name	76	char *
+unit_hud_interface_definition	background.interface_bitmap.name_length	80	long
+unit_hud_interface_definition	background.interface_bitmap.index	84	long
+unit_hud_interface_definition	background.colors	88	struct hud_color_definition
+unit_hud_interface_definition	background.colors.color	88	unsigned long
+unit_hud_interface_definition	background.colors.flash_color	92	unsigned long
+unit_hud_interface_definition	background.colors.flash_period	96	real
+unit_hud_interface_definition	background.colors.flash_delay	100	real
+unit_hud_interface_definition	background.colors.number_of_flashes	104	short
+unit_hud_interface_definition	background.colors.flash_flags	106	word
+unit_hud_interface_definition	background.colors.flash_length	108	real
+unit_hud_interface_definition	background.colors.disabled_color	112	unsigned long
+unit_hud_interface_definition	background.colors.custom	116	union hud_color_definition::(unnamed at source/interface/hud_definitions.h:59:2)
+unit_hud_interface_definition	background.colors.custom.unused	116	long
+unit_hud_interface_definition	background.colors.custom.objective	116	struct hud_color_definition::(unnamed at source/interface/hud_definitions.h:62:3)
+unit_hud_interface_definition	background.colors.custom.objective.up_ticks	116	short
+unit_hud_interface_definition	background.colors.custom.objective.fade_ticks	118	short
+unit_hud_interface_definition	background.sequence_index	120	short
+unit_hud_interface_definition	background.pad	122	short
+unit_hud_interface_definition	background.multitexture_overlays	124	struct tag_block
+unit_hud_interface_definition	background.multitexture_overlays.count	124	long
+unit_hud_interface_definition	background.multitexture_overlays.address	128	void *
+unit_hud_interface_definition	background.multitexture_overlays.definition	132	struct tag_block_definition *
+unit_hud_interface_definition	background.unused0	136	long[1]
+unit_hud_interface_definition	shield_meter	140	struct metered_panel_definition
+unit_hud_interface_definition	shield_meter.background	140	struct static_hud_element_definition
+unit_hud_interface_definition	shield_meter.background.placement	140	struct hud_placement_definition
+unit_hud_interface_definition	shield_meter.background.placement.offset	140	union point2d
+unit_hud_interface_definition	shield_meter.background.placement.offset.n	140	short[2]
+unit_hud_interface_definition	shield_meter.background.placement.offset	140	struct point2d::(anonymous at source/math/integer_math.h:25:2)
+unit_hud_interface_definition	shield_meter.background.placement.offset.x	140	short
+unit_hud_interface_definition	shield_meter.background.placement.offset.y	142	short
+unit_hud_interface_definition	shield_meter.background.placement.scale	144	union real_vector2d
+unit_hud_interface_definition	shield_meter.background.placement.scale.n	144	real[2]
+unit_hud_interface_definition	shield_meter.background.placement.scale	144	struct real_vector2d::(anonymous at source/math/real_math.h:429:2)
+unit_hud_interface_definition	shield_meter.background.placement.scale.i	144	real
+unit_hud_interface_definition	shield_meter.background.placement.scale.j	148	real
+unit_hud_interface_definition	shield_meter.background.placement.multiplayer_scaling_flags	152	short
+unit_hud_interface_definition	shield_meter.background.placement.pad	154	short
+unit_hud_interface_definition	shield_meter.background.placement.unused0	156	long[5]
+unit_hud_interface_definition	shield_meter.background.interface_bitmap	176	struct tag_reference
+unit_hud_interface_definition	shield_meter.background.interface_bitmap.group_tag	176	unsigned long
+unit_hud_interface_definition	shield_meter.background.interface_bitmap.name	180	char *
+unit_hud_interface_definition	shield_meter.background.interface_bitmap.name_length	184	long
+unit_hud_interface_definition	shield_meter.background.interface_bitmap.index	188	long
+unit_hud_interface_definition	shield_meter.background.colors	192	struct hud_color_definition
+unit_hud_interface_definition	shield_meter.background.colors.color	192	unsigned long
+unit_hud_interface_definition	shield_meter.background.colors.flash_color	196	unsigned long
+unit_hud_interface_definition	shield_meter.background.colors.flash_period	200	real
+unit_hud_interface_definition	shield_meter.background.colors.flash_delay	204	real
+unit_hud_interface_definition	shield_meter.background.colors.number_of_flashes	208	short
+unit_hud_interface_definition	shield_meter.background.colors.flash_flags	210	word
+unit_hud_interface_definition	shield_meter.background.colors.flash_length	212	real
+unit_hud_interface_definition	shield_meter.background.colors.disabled_color	216	unsigned long
+unit_hud_interface_definition	shield_meter.background.colors.custom	220	union hud_color_definition::(unnamed at source/interface/hud_definitions.h:59:2)
+unit_hud_interface_definition	shield_meter.background.colors.custom.unused	220	long
+unit_hud_interface_definition	shield_meter.background.colors.custom.objective	220	struct hud_color_definition::(unnamed at source/interface/hud_definitions.h:62:3)
+unit_hud_interface_definition	shield_meter.background.colors.custom.objective.up_ticks	220	short
+unit_hud_interface_definition	shield_meter.background.colors.custom.objective.fade_ticks	222	short
+unit_hud_interface_definition	shield_meter.background.sequence_index	224	short
+unit_hud_interface_definition	shield_meter.background.pad	226	short
+unit_hud_interface_definition	shield_meter.background.multitexture_overlays	228	struct tag_block
+unit_hud_interface_definition	shield_meter.background.multitexture_overlays.count	228	long
+unit_hud_interface_definition	shield_meter.background.multitexture_overlays.address	232	void *
+unit_hud_interface_definition	shield_meter.background.multitexture_overlays.definition	236	struct tag_block_definition *
+unit_hud_interface_definition	shield_meter.background.unused0	240	long[1]
+unit_hud_interface_definition	shield_meter.meter	244	struct meter_hud_element_definition
+unit_hud_interface_definition	shield_meter.meter.placement	244	struct hud_placement_definition
+unit_hud_interface_definition	shield_meter.meter.placement.offset	244	union point2d
+unit_hud_interface_definition	shield_meter.meter.placement.offset.n	244	short[2]
+unit_hud_interface_definition	shield_meter.meter.placement.offset	244	struct point2d::(anonymous at source/math/integer_math.h:25:2)
+unit_hud_interface_definition	shield_meter.meter.placement.offset.x	244	short
+unit_hud_interface_definition	shield_meter.meter.placement.offset.y	246	short
+unit_hud_interface_definition	shield_meter.meter.placement.scale	248	union real_vector2d
+unit_hud_interface_definition	shield_meter.meter.placement.scale.n	248	real[2]
+unit_hud_interface_definition	shield_meter.meter.placement.scale	248	struct real_vector2d::(anonymous at source/math/real_math.h:429:2)
+unit_hud_interface_definition	shield_meter.meter.placement.scale.i	248	real
+unit_hud_interface_definition	shield_meter.meter.placement.scale.j	252	real
+unit_hud_interface_definition	shield_meter.meter.placement.multiplayer_scaling_flags	256	short
+unit_hud_interface_definition	shield_meter.meter.placement.pad	258	short
+unit_hud_interface_definition	shield_meter.meter.placement.unused0	260	long[5]
+unit_hud_interface_definition	shield_meter.meter.meter_bitmap	280	struct tag_reference
+unit_hud_interface_definition	shield_meter.meter.meter_bitmap.group_tag	280	unsigned long
+unit_hud_interface_definition	shield_meter.meter.meter_bitmap.name	284	char *
+unit_hud_interface_definition	shield_meter.meter.meter_bitmap.name_length	288	long
+unit_hud_interface_definition	shield_meter.meter.meter_bitmap.index	292	long
+unit_hud_interface_definition	shield_meter.meter.min_color	296	unsigned long
+unit_hud_interface_definition	shield_meter.meter.max_color	300	unsigned long
+unit_hud_interface_definition	shield_meter.meter.flash_color	304	unsigned long
+unit_hud_interface_definition	shield_meter.meter.empty_color	308	unsigned long
+unit_hud_interface_definition	shield_meter.meter.meter_flags	312	byte
+unit_hud_interface_definition	shield_meter.meter.minimum_value	313	byte
+unit_hud_interface_definition	shield_meter.meter.sequence_index	314	short
+unit_hud_interface_definition	shield_meter.meter.alpha_multiplier	316	byte
+unit_hud_interface_definition	shield_meter.meter.alpha_bias	317	byte
+unit_hud_interface_definition	shield_meter.meter.value_scale	318	short
+unit_hud_interface_definition	shield_meter.meter.opacity	320	real
+unit_hud_interface_definition	shield_meter.meter.fade	324	real
+unit_hud_interface_definition	shield_meter.meter.disabled_color	328	unsigned long
+unit_hud_interface_definition	shield_meter.meter.multitexture_overlays	332	struct tag_block
+unit_hud_interface_definition	shield_meter.meter.multitexture_overlays.count	332	long
+unit_hud_interface_definition	shield_meter.meter.multitexture_overlays.address	336	void *
+unit_hud_interface_definition	shield_meter.meter.multitexture_overlays.definition	340	struct tag_block_definition *
+unit_hud_interface_definition	shield_meter.meter.unused0	344	long[1]
+unit_hud_interface_definition	shield_meter	348	union metered_panel_definition::(anonymous at source/interface/unit_hud_interface_definition.h:113:2)
+unit_hud_interface_definition	shield_meter.shield_extras	348	struct shield_meter_extras_definition
+unit_hud_interface_definition	shield_meter.shield_extras.overcharge_min_color	348	unsigned long
+unit_hud_interface_definition	shield_meter.shield_extras.overcharge_max_color	352	unsigned long
+unit_hud_interface_definition	shield_meter.shield_extras.overcharge_flash_color	356	unsigned long
+unit_hud_interface_definition	shield_meter.shield_extras.overcharge_empty_color	360	unsigned long
+unit_hud_interface_definition	shield_meter.health_extras	348	struct health_meter_extras_definition
+unit_hud_interface_definition	shield_meter.health_extras.mid_color	348	unsigned long
+unit_hud_interface_definition	shield_meter.health_extras.max_cutoff	352	real
+unit_hud_interface_definition	shield_meter.health_extras.min_cutoff	356	real
+unit_hud_interface_definition	shield_meter.health_extras.pad	360	long
+unit_hud_interface_definition	shield_meter.aux_extras	348	struct auxilary_meter_extras_definition
+unit_hud_interface_definition	shield_meter.aux_extras.min_cutoff	348	real
+unit_hud_interface_definition	shield_meter.aux_extras.flags	352	unsigned long
+unit_hud_interface_definition	shield_meter.aux_extras.pad	356	long[2]
+unit_hud_interface_definition	shield_meter.unused	364	long[4]
+unit_hud_interface_definition	health_meter	380	struct metered_panel_definition
+unit_hud_interface_definition	health_meter.background	380	struct static_hud_element_definition
+unit_hud_interface_definition	health_meter.background.placement	380	struct hud_placement_definition
+unit_hud_interface_definition	health_meter.background.placement.offset	380	union point2d
+unit_hud_interface_definition	health_meter.background.placement.offset.n	380	short[2]
+unit_hud_interface_definition	health_meter.background.placement.offset	380	struct point2d::(anonymous at source/math/integer_math.h:25:2)
+unit_hud_interface_definition	health_meter.background.placement.offset.x	380	short
+unit_hud_interface_definition	health_meter.background.placement.offset.y	382	short
+unit_hud_interface_definition	health_meter.background.placement.scale	384	union real_vector2d
+unit_hud_interface_definition	health_meter.background.placement.scale.n	384	real[2]
+unit_hud_interface_definition	health_meter.background.placement.scale	384	struct real_vector2d::(anonymous at source/math/real_math.h:429:2)
+unit_hud_interface_definition	health_meter.background.placement.scale.i	384	real
+unit_hud_interface_definition	health_meter.background.placement.scale.j	388	real
+unit_hud_interface_definition	health_meter.background.placement.multiplayer_scaling_flags	392	short
+unit_hud_interface_definition	health_meter.background.placement.pad	394	short
+unit_hud_interface_definition	health_meter.background.placement.unused0	396	long[5]
+unit_hud_interface_definition	health_meter.background.interface_bitmap	416	struct tag_reference
+unit_hud_interface_definition	health_meter.background.interface_bitmap.group_tag	416	unsigned long
+unit_hud_interface_definition	health_meter.background.interface_bitmap.name	420	char *
+unit_hud_interface_definition	health_meter.background.interface_bitmap.name_length	424	long
+unit_hud_interface_definition	health_meter.background.interface_bitmap.index	428	long
+unit_hud_interface_definition	health_meter.background.colors	432	struct hud_color_definition
+unit_hud_interface_definition	health_meter.background.colors.color	432	unsigned long
+unit_hud_interface_definition	health_meter.background.colors.flash_color	436	unsigned long
+unit_hud_interface_definition	health_meter.background.colors.flash_period	440	real
+unit_hud_interface_definition	health_meter.background.colors.flash_delay	444	real
+unit_hud_interface_definition	health_meter.background.colors.number_of_flashes	448	short
+unit_hud_interface_definition	health_meter.background.colors.flash_flags	450	word
+unit_hud_interface_definition	health_meter.background.colors.flash_length	452	real
+unit_hud_interface_definition	health_meter.background.colors.disabled_color	456	unsigned long
+unit_hud_interface_definition	health_meter.background.colors.custom	460	union hud_color_definition::(unnamed at source/interface/hud_definitions.h:59:2)
+unit_hud_interface_definition	health_meter.background.colors.custom.unused	460	long
+unit_hud_interface_definition	health_meter.background.colors.custom.objective	460	struct hud_color_definition::(unnamed at source/interface/hud_definitions.h:62:3)
+unit_hud_interface_definition	health_meter.background.colors.custom.objective.up_ticks	460	short
+unit_hud_interface_definition	health_meter.background.colors.custom.objective.fade_ticks	462	short
+unit_hud_interface_definition	health_meter.background.sequence_index	464	short
+unit_hud_interface_definition	health_meter.background.pad	466	short
+unit_hud_interface_definition	health_meter.background.multitexture_overlays	468	struct tag_block
+unit_hud_interface_definition	health_meter.background.multitexture_overlays.count	468	long
+unit_hud_interface_definition	health_meter.background.multitexture_overlays.address	472	void *
+unit_hud_interface_definition	health_meter.background.multitexture_overlays.definition	476	struct tag_block_definition *
+unit_hud_interface_definition	health_meter.background.unused0	480	long[1]
+unit_hud_interface_definition	health_meter.meter	484	struct meter_hud_element_definition
+unit_hud_interface_definition	health_meter.meter.placement	484	struct hud_placement_definition
+unit_hud_interface_definition	health_meter.meter.placement.offset	484	union point2d
+unit_hud_interface_definition	health_meter.meter.placement.offset.n	484	short[2]
+unit_hud_interface_definition	health_meter.meter.placement.offset	484	struct point2d::(anonymous at source/math/integer_math.h:25:2)
+unit_hud_interface_definition	health_meter.meter.placement.offset.x	484	short
+unit_hud_interface_definition	health_meter.meter.placement.offset.y	486	short
+unit_hud_interface_definition	health_meter.meter.placement.scale	488	union real_vector2d
+unit_hud_interface_definition	health_meter.meter.placement.scale.n	488	real[2]
+unit_hud_interface_definition	health_meter.meter.placement.scale	488	struct real_vector2d::(anonymous at source/math/real_math.h:429:2)
+unit_hud_interface_definition	health_meter.meter.placement.scale.i	488	real
+unit_hud_interface_definition	health_meter.meter.placement.scale.j	492	real
+unit_hud_interface_definition	health_meter.meter.placement.multiplayer_scaling_flags	496	short
+unit_hud_interface_definition	health_meter.meter.placement.pad	498	short
+unit_hud_interface_definition	health_meter.meter.placement.unused0	500	long[5]
+unit_hud_interface_definition	health_meter.meter.meter_bitmap	520	struct tag_reference
+unit_hud_interface_definition	health_meter.meter.meter_bitmap.group_tag	520	unsigned long
+unit_hud_interface_definition	health_meter.meter.meter_bitmap.name	524	char *
+unit_hud_interface_definition	health_meter.meter.meter_bitmap.name_length	528	long
+unit_hud_interface_definition	health_meter.meter.meter_bitmap.index	532	long
+unit_hud_interface_definition	health_meter.meter.min_color	536	unsigned long
+unit_hud_interface_definition	health_meter.meter.max_color	540	unsigned long
+unit_hud_interface_definition	health_meter.meter.flash_color	544	unsigned long
+unit_hud_interface_definition	health_meter.meter.empty_color	548	unsigned long
+unit_hud_interface_definition	health_meter.meter.meter_flags	552	byte
+unit_hud_interface_definition	health_meter.meter.minimum_value	553	byte
+unit_hud_interface_definition	health_meter.meter.sequence_index	554	short
+unit_hud_interface_definition	health_meter.meter.alpha_multiplier	556	byte
+unit_hud_interface_definition	health_meter.meter.alpha_bias	557	byte
+unit_hud_interface_definition	health_meter.meter.value_scale	558	short
+unit_hud_interface_definition	health_meter.meter.opacity	560	real
+unit_hud_interface_definition	health_meter.meter.fade	564	real
+unit_hud_interface_definition	health_meter.meter.disabled_color	568	unsigned long
+unit_hud_interface_definition	health_meter.meter.multitexture_overlays	572	struct tag_block
+unit_hud_interface_definition	health_meter.meter.multitexture_overlays.count	572	long
+unit_hud_interface_definition	health_meter.meter.multitexture_overlays.address	576	void *
+unit_hud_interface_definition	health_meter.meter.multitexture_overlays.definition	580	struct tag_block_definition *
+unit_hud_interface_definition	health_meter.meter.unused0	584	long[1]
+unit_hud_interface_definition	health_meter	588	union metered_panel_definition::(anonymous at source/interface/unit_hud_interface_definition.h:113:2)
+unit_hud_interface_definition	health_meter.shield_extras	588	struct shield_meter_extras_definition
+unit_hud_interface_definition	health_meter.shield_extras.overcharge_min_color	588	unsigned long
+unit_hud_interface_definition	health_meter.shield_extras.overcharge_max_color	592	unsigned long
+unit_hud_interface_definition	health_meter.shield_extras.overcharge_flash_color	596	unsigned long
+unit_hud_interface_definition	health_meter.shield_extras.overcharge_empty_color	600	unsigned long
+unit_hud_interface_definition	health_meter.health_extras	588	struct health_meter_extras_definition
+unit_hud_interface_definition	health_meter.health_extras.mid_color	588	unsigned long
+unit_hud_interface_definition	health_meter.health_extras.max_cutoff	592	real
+unit_hud_interface_definition	health_meter.health_extras.min_cutoff	596	real
+unit_hud_interface_definition	health_meter.health_extras.pad	600	long
+unit_hud_interface_definition	health_meter.aux_extras	588	struct auxilary_meter_extras_definition
+unit_hud_interface_definition	health_meter.aux_extras.min_cutoff	588	real
+unit_hud_interface_definition	health_meter.aux_extras.flags	592	unsigned long
+unit_hud_interface_definition	health_meter.aux_extras.pad	596	long[2]
+unit_hud_interface_definition	health_meter.unused	604	long[4]
+unit_hud_interface_definition	motion_sensor	620	struct motion_sensor_panel_definition
+unit_hud_interface_definition	motion_sensor.background	620	struct static_hud_element_definition
+unit_hud_interface_definition	motion_sensor.background.placement	620	struct hud_placement_definition
+unit_hud_interface_definition	motion_sensor.background.placement.offset	620	union point2d
+unit_hud_interface_definition	motion_sensor.background.placement.offset.n	620	short[2]
+unit_hud_interface_definition	motion_sensor.background.placement.offset	620	struct point2d::(anonymous at source/math/integer_math.h:25:2)
+unit_hud_interface_definition	motion_sensor.background.placement.offset.x	620	short
+unit_hud_interface_definition	motion_sensor.background.placement.offset.y	622	short
+unit_hud_interface_definition	motion_sensor.background.placement.scale	624	union real_vector2d
+unit_hud_interface_definition	motion_sensor.background.placement.scale.n	624	real[2]
+unit_hud_interface_definition	motion_sensor.background.placement.scale	624	struct real_vector2d::(anonymous at source/math/real_math.h:429:2)
+unit_hud_interface_definition	motion_sensor.background.placement.scale.i	624	real
+unit_hud_interface_definition	motion_sensor.background.placement.scale.j	628	real
+unit_hud_interface_definition	motion_sensor.background.placement.multiplayer_scaling_flags	632	short
+unit_hud_interface_definition	motion_sensor.background.placement.pad	634	short
+unit_hud_interface_definition	motion_sensor.background.placement.unused0	636	long[5]
+unit_hud_interface_definition	motion_sensor.background.interface_bitmap	656	struct tag_reference
+unit_hud_interface_definition	motion_sensor.background.interface_bitmap.group_tag	656	unsigned long
+unit_hud_interface_definition	motion_sensor.background.interface_bitmap.name	660	char *
+unit_hud_interface_definition	motion_sensor.background.interface_bitmap.name_length	664	long
+unit_hud_interface_definition	motion_sensor.background.interface_bitmap.index	668	long
+unit_hud_interface_definition	motion_sensor.background.colors	672	struct hud_color_definition
+unit_hud_interface_definition	motion_sensor.background.colors.color	672	unsigned long
+unit_hud_interface_definition	motion_sensor.background.colors.flash_color	676	unsigned long
+unit_hud_interface_definition	motion_sensor.background.colors.flash_period	680	real
+unit_hud_interface_definition	motion_sensor.background.colors.flash_delay	684	real
+unit_hud_interface_definition	motion_sensor.background.colors.number_of_flashes	688	short
+unit_hud_interface_definition	motion_sensor.background.colors.flash_flags	690	word
+unit_hud_interface_definition	motion_sensor.background.colors.flash_length	692	real
+unit_hud_interface_definition	motion_sensor.background.colors.disabled_color	696	unsigned long
+unit_hud_interface_definition	motion_sensor.background.colors.custom	700	union hud_color_definition::(unnamed at source/interface/hud_definitions.h:59:2)
+unit_hud_interface_definition	motion_sensor.background.colors.custom.unused	700	long
+unit_hud_interface_definition	motion_sensor.background.colors.custom.objective	700	struct hud_color_definition::(unnamed at source/interface/hud_definitions.h:62:3)
+unit_hud_interface_definition	motion_sensor.background.colors.custom.objective.up_ticks	700	short
+unit_hud_interface_definition	motion_sensor.background.colors.custom.objective.fade_ticks	702	short
+unit_hud_interface_definition	motion_sensor.background.sequence_index	704	short
+unit_hud_interface_definition	motion_sensor.background.pad	706	short
+unit_hud_interface_definition	motion_sensor.background.multitexture_overlays	708	struct tag_block
+unit_hud_interface_definition	motion_sensor.background.multitexture_overlays.count	708	long
+unit_hud_interface_definition	motion_sensor.background.multitexture_overlays.address	712	void *
+unit_hud_interface_definition	motion_sensor.background.multitexture_overlays.definition	716	struct tag_block_definition *
+unit_hud_interface_definition	motion_sensor.background.unused0	720	long[1]
+unit_hud_interface_definition	motion_sensor.foreground	724	struct static_hud_element_definition
+unit_hud_interface_definition	motion_sensor.foreground.placement	724	struct hud_placement_definition
+unit_hud_interface_definition	motion_sensor.foreground.placement.offset	724	union point2d
+unit_hud_interface_definition	motion_sensor.foreground.placement.offset.n	724	short[2]
+unit_hud_interface_definition	motion_sensor.foreground.placement.offset	724	struct point2d::(anonymous at source/math/integer_math.h:25:2)
+unit_hud_interface_definition	motion_sensor.foreground.placement.offset.x	724	short
+unit_hud_interface_definition	motion_sensor.foreground.placement.offset.y	726	short
+unit_hud_interface_definition	motion_sensor.foreground.placement.scale	728	union real_vector2d
+unit_hud_interface_definition	motion_sensor.foreground.placement.scale.n	728	real[2]
+unit_hud_interface_definition	motion_sensor.foreground.placement.scale	728	struct real_vector2d::(anonymous at source/math/real_math.h:429:2)
+unit_hud_interface_definition	motion_sensor.foreground.placement.scale.i	728	real
+unit_hud_interface_definition	motion_sensor.foreground.placement.scale.j	732	real
+unit_hud_interface_definition	motion_sensor.foreground.placement.multiplayer_scaling_flags	736	short
+unit_hud_interface_definition	motion_sensor.foreground.placement.pad	738	short
+unit_hud_interface_definition	motion_sensor.foreground.placement.unused0	740	long[5]
+unit_hud_interface_definition	motion_sensor.foreground.interface_bitmap	760	struct tag_reference
+unit_hud_interface_definition	motion_sensor.foreground.interface_bitmap.group_tag	760	unsigned long
+unit_hud_interface_definition	motion_sensor.foreground.interface_bitmap.name	764	char *
+unit_hud_interface_definition	motion_sensor.foreground.interface_bitmap.name_length	768	long
+unit_hud_interface_definition	motion_sensor.foreground.interface_bitmap.index	772	long
+unit_hud_interface_definition	motion_sensor.foreground.colors	776	struct hud_color_definition
+unit_hud_interface_definition	motion_sensor.foreground.colors.color	776	unsigned long
+unit_hud_interface_definition	motion_sensor.foreground.colors.flash_color	780	unsigned long
+unit_hud_interface_definition	motion_sensor.foreground.colors.flash_period	784	real
+unit_hud_interface_definition	motion_sensor.foreground.colors.flash_delay	788	real
+unit_hud_interface_definition	motion_sensor.foreground.colors.number_of_flashes	792	short
+unit_hud_interface_definition	motion_sensor.foreground.colors.flash_flags	794	word
+unit_hud_interface_definition	motion_sensor.foreground.colors.flash_length	796	real
+unit_hud_interface_definition	motion_sensor.foreground.colors.disabled_color	800	unsigned long
+unit_hud_interface_definition	motion_sensor.foreground.colors.custom	804	union hud_color_definition::(unnamed at source/interface/hud_definitions.h:59:2)
+unit_hud_interface_definition	motion_sensor.foreground.colors.custom.unused	804	long
+unit_hud_interface_definition	motion_sensor.foreground.colors.custom.objective	804	struct hud_color_definition::(unnamed at source/interface/hud_definitions.h:62:3)
+unit_hud_interface_definition	motion_sensor.foreground.colors.custom.objective.up_ticks	804	short
+unit_hud_interface_definition	motion_sensor.foreground.colors.custom.objective.fade_ticks	806	short
+unit_hud_interface_definition	motion_sensor.foreground.sequence_index	808	short
+unit_hud_interface_definition	motion_sensor.foreground.pad	810	short
+unit_hud_interface_definition	motion_sensor.foreground.multitexture_overlays	812	struct tag_block
+unit_hud_interface_definition	motion_sensor.foreground.multitexture_overlays.count	812	long
+unit_hud_interface_definition	motion_sensor.foreground.multitexture_overlays.address	816	void *
+unit_hud_interface_definition	motion_sensor.foreground.multitexture_overlays.definition	820	struct tag_block_definition *
+unit_hud_interface_definition	motion_sensor.foreground.unused0	824	long[1]
+unit_hud_interface_definition	motion_sensor.unused	828	long[8]
+unit_hud_interface_definition	blip_placement	860	struct hud_placement_definition
+unit_hud_interface_definition	blip_placement.offset	860	union point2d
+unit_hud_interface_definition	blip_placement.offset.n	860	short[2]
+unit_hud_interface_definition	blip_placement.offset	860	struct point2d::(anonymous at source/math/integer_math.h:25:2)
+unit_hud_interface_definition	blip_placement.offset.x	860	short
+unit_hud_interface_definition	blip_placement.offset.y	862	short
+unit_hud_interface_definition	blip_placement.scale	864	union real_vector2d
+unit_hud_interface_definition	blip_placement.scale.n	864	real[2]
+unit_hud_interface_definition	blip_placement.scale	864	struct real_vector2d::(anonymous at source/math/real_math.h:429:2)
+unit_hud_interface_definition	blip_placement.scale.i	864	real
+unit_hud_interface_definition	blip_placement.scale.j	868	real
+unit_hud_interface_definition	blip_placement.multiplayer_scaling_flags	872	short
+unit_hud_interface_definition	blip_placement.pad	874	short
+unit_hud_interface_definition	blip_placement.unused0	876	long[5]
+unit_hud_interface_definition	auxilary_panel	896	struct auxilary_panel_definition
+unit_hud_interface_definition	auxilary_panel.absolute_placement	896	struct hud_absolute_placement_definition
+unit_hud_interface_definition	auxilary_panel.absolute_placement.corner	896	short
+unit_hud_interface_definition	auxilary_panel.absolute_placement.pad	898	short
+unit_hud_interface_definition	auxilary_panel.absolute_placement.unused	900	long[8]
+unit_hud_interface_definition	auxilary_panel.auxilary_overlays	932	struct tag_block
+unit_hud_interface_definition	auxilary_panel.auxilary_overlays.count	932	long
+unit_hud_interface_definition	auxilary_panel.auxilary_overlays.address	936	void *
+unit_hud_interface_definition	auxilary_panel.auxilary_overlays.definition	940	struct tag_block_definition *
+unit_hud_interface_definition	auxilary_panel.unused	944	long[4]
+unit_hud_interface_definition	warning_sounds	960	struct tag_block
+unit_hud_interface_definition	warning_sounds.count	960	long
+unit_hud_interface_definition	warning_sounds.address	964	void *
+unit_hud_interface_definition	warning_sounds.definition	968	struct tag_block_definition *
+unit_hud_interface_definition	auxilary_meters	972	struct tag_block
+unit_hud_interface_definition	auxilary_meters.count	972	long
+unit_hud_interface_definition	auxilary_meters.address	976	void *
+unit_hud_interface_definition	auxilary_meters.definition	980	struct tag_block_definition *
+unit_hud_interface_definition	unused1	984	long[89]
+unit_hud_interface_definition	unused2	1340	long[12]
 unit_hud_reference		48	sizeof
 unit_hud_reference	hud	0	struct tag_reference
 unit_hud_reference	hud.group_tag	0	unsigned long
