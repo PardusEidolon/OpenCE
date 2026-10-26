@@ -821,7 +821,10 @@ public final class LevelRenderer {
                 times.completed(start: buffer.gpuStartTime, end: buffer.gpuEndTime)
             }
         }
+        // (the exposure and the bloom are taken from the temporal
+        // scaler's output, the tone map from the frame at the target's size)
         let shown: MTLTexture
+        let toned: MTLTexture
         if settings.antiAliasing == .temporal,
             let temporal = temporalScaling(
                 width: target.width,
@@ -833,7 +836,7 @@ public final class LevelRenderer {
                 height: temporal.inputHeight)
             // (the scaler's input samples its maps as the output would, as
             // MetalFX asks: log2 of the scale, a level sharper at half)
-            let mipBias = log2(Float(temporal.inputWidth) / Float(max(target.width, 1)))
+            let mipBias = log2(Float(temporal.inputWidth) / Float(max(temporal.outputWidth, 1)))
             var reacting = false
             profiled("level", scopes) {
                 reacting = drawLevel(
@@ -855,6 +858,7 @@ public final class LevelRenderer {
             temporal.encode(into: commands, jitter: jitter, reacting: reacting)
             lastInputSize = (temporal.inputWidth, temporal.inputHeight)
             shown = temporal.output
+            toned = temporal.shown
         } else {
             guard let (frame, depth) = targets(width: target.width, height: target.height) else { return }
             profiled("level", scopes) {
@@ -864,6 +868,7 @@ public final class LevelRenderer {
             }
             lastInputSize = (target.width, target.height)
             shown = frame
+            toned = frame
         }
 
         if switches.exposure || switches.view == .luminance {
@@ -884,7 +889,7 @@ public final class LevelRenderer {
         tonePass.colorAttachments[0].storeAction = .store
         guard let toneEncoder = commands.timedRenderEncoder("tone map", descriptor: tonePass) else { return }
         toneEncoder.setRenderPipelineState(tone)
-        toneEncoder.setFragmentTexture(shown, index: 0)
+        toneEncoder.setFragmentTexture(toned, index: 0)
         toneEncoder.setFragmentTexture(bloom ?? cameraPass.blackLevel(), index: 1)
         toneEncoder.setFragmentBytes(&toneUniforms, length: MemoryLayout<ToneUniforms>.stride, index: 0)
         toneEncoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: 3)
@@ -956,7 +961,7 @@ public final class LevelRenderer {
         profiled("shadows", scopes) {
             shadows.encode(
                 into: commands, camera: camera, aspect: Float(frame.width) / Float(max(frame.height, 1)),
-                towards: towards, wrap: wrap,
+                towards: towards, resolution: switches.shadowResolution, wrap: wrap,
                 level: { encoder, casting, light in self.encodeShadowCasters(encoder, casting, light) },
                 objects: { encoder, casting, light in
                     self.models.encodeShadowCasters(prepared, casting, light: light, into: encoder)
@@ -1131,8 +1136,10 @@ public final class LevelRenderer {
         guard width > 0, height > 0 else { return nil }
         let scale = preparingScale ?? dynamic?.scale ?? settings.renderScale
         let input = settings.inputSize(width: width, height: height, scale: scale)
+        let output = settings.temporalOutputSize(width: width, height: height)
         func fits(_ made: TemporalScaling) -> Bool {
-            made.outputWidth == width && made.outputHeight == height && made.inputWidth == input.width
+            made.targetWidth == width && made.targetHeight == height && made.outputWidth == output.width
+                && made.outputHeight == output.height && made.inputWidth == input.width
                 && made.inputHeight == input.height
         }
         if let temporal, fits(temporal) {
@@ -1147,8 +1154,9 @@ public final class LevelRenderer {
         }
         guard supportsTemporal,
             let made = HitchLog.shared.note(
-                .allocation, "temporal scaler \(input.width)×\(input.height) to \(width)×\(height)",
-                { TemporalScaling(device: device, input: input, output: (width, height)) })
+                .allocation,
+                "temporal scaler \(input.width)×\(input.height) to \(output.width)×\(output.height) for \(width)×\(height)",
+                { TemporalScaling(device: device, input: input, output: output, target: (width, height)) })
         else { return nil }
         if temporals.count >= Self.temporalsKept { temporals.removeFirst() }
         temporals.append(made)

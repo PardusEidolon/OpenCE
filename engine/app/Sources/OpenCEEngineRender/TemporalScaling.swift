@@ -29,15 +29,32 @@ public struct VideoSettings: Equatable, Sendable {
     public var dynamicResolution: Bool
     /// The frame time dynamic resolution holds to, in milliseconds.
     public var frameTargetMilliseconds: Double
+    /// The tallest output the temporal scaler gathers into (0: the
+    /// output's own): a taller output is gathered at this height and
+    /// scaled the rest of the way by MetalFX's spatial scaler, since the
+    /// temporal scaler's cost goes with its output (about 5.5 ms a frame
+    /// into 4K on an M1 Max, 2 into 1440p).
+    public var temporalHeightLimit: Int
 
     public init(
         antiAliasing: AntiAliasing = .temporal, renderScale: Float = 1, dynamicResolution: Bool = false,
-        frameTargetMilliseconds: Double = 1000.0 / 120
+        frameTargetMilliseconds: Double = 1000.0 / 120, temporalHeightLimit: Int = 0
     ) {
         self.antiAliasing = antiAliasing
         self.renderScale = renderScale
         self.dynamicResolution = dynamicResolution
         self.frameTargetMilliseconds = frameTargetMilliseconds
+        self.temporalHeightLimit = temporalHeightLimit
+    }
+
+    /// The size the temporal scaler gathers into for an output `width` by
+    /// `height`: the output's, or no taller than `temporalHeightLimit`.
+    public func temporalOutputSize(width: Int, height: Int) -> (width: Int, height: Int) {
+        guard antiAliasing == .temporal, temporalHeightLimit > 0, height > temporalHeightLimit else {
+            return (width, height)
+        }
+        let scaled = (Double(width) * Double(temporalHeightLimit) / Double(height)).rounded()
+        return (max(Int(scaled), 1), temporalHeightLimit)
     }
 
     /// The smallest and largest render scales.
@@ -48,9 +65,11 @@ public struct VideoSettings: Equatable, Sendable {
         inputSize(width: width, height: height, scale: renderScale)
     }
 
-    /// The size drawn for an output `width` by `height` at `renderScale`.
+    /// The size drawn for an output `width` by `height` at `renderScale`
+    /// (a share of the temporal scaler's output).
     public func inputSize(width: Int, height: Int, scale renderScale: Float) -> (width: Int, height: Int) {
         guard antiAliasing == .temporal else { return (width, height) }
+        let (width, height) = temporalOutputSize(width: width, height: height)
         let scale = renderScale.isFinite ? min(max(renderScale, Self.renderScales.lowerBound), 1) : 1
         return (max(Int((Float(width) * scale).rounded()), 1), max(Int((Float(height) * scale).rounded()), 1))
     }
@@ -100,9 +119,13 @@ struct MotionUniforms {
 }
 
 /// MetalFX's temporal scaler for one input and output size, and what it
-/// remembers between frames.
+/// remembers between frames; and, when the output is limited below the
+/// target's size, the spatial scaler that takes it the rest of the way.
 final class TemporalScaling {
     let scaler: MTLFXTemporalScaler
+    let spatial: MTLFXSpatialScaler?
+    /// The spatial scaler's output, at the target's size.
+    let upscaled: MTLTexture?
     let color: MTLTexture
     let depth: MTLTexture
     let motion: MTLTexture
@@ -120,7 +143,10 @@ final class TemporalScaling {
         MTLFXTemporalScalerDescriptor.supportsDevice(device)
     }
 
-    init?(device: MTLDevice, input: (width: Int, height: Int), output: (width: Int, height: Int)) {
+    init?(
+        device: MTLDevice, input: (width: Int, height: Int), output: (width: Int, height: Int),
+        target: (width: Int, height: Int)? = nil
+    ) {
         let descriptor = MTLFXTemporalScalerDescriptor()
         descriptor.inputWidth = input.width
         descriptor.inputHeight = input.height
@@ -161,6 +187,28 @@ final class TemporalScaling {
             let reactive = texture(Self.reactiveFormat, input, scaler.reactiveTextureUsage.union(.renderTarget)),
             let out = texture(LevelRenderer.frameFormat, output, scaler.outputTextureUsage.union(.shaderRead))
         else { return nil }
+        if let target, target != output {
+            let spatialDescriptor = MTLFXSpatialScalerDescriptor()
+            spatialDescriptor.inputWidth = output.width
+            spatialDescriptor.inputHeight = output.height
+            spatialDescriptor.outputWidth = target.width
+            spatialDescriptor.outputHeight = target.height
+            spatialDescriptor.colorTextureFormat = LevelRenderer.frameFormat
+            spatialDescriptor.outputTextureFormat = LevelRenderer.frameFormat
+            // (the frame is linear and not yet exposed)
+            spatialDescriptor.colorProcessingMode = .hdr
+            guard let spatial = spatialDescriptor.makeSpatialScaler(device: device),
+                let upscaled = texture(
+                    LevelRenderer.frameFormat, target, spatial.outputTextureUsage.union(.shaderRead))
+            else { return nil }
+            spatial.inputContentWidth = output.width
+            spatial.inputContentHeight = output.height
+            self.spatial = spatial
+            self.upscaled = upscaled
+        } else {
+            spatial = nil
+            upscaled = nil
+        }
         self.scaler = scaler
         self.color = color
         self.depth = depth
@@ -173,6 +221,11 @@ final class TemporalScaling {
     var inputHeight: Int { color.height }
     var outputWidth: Int { output.width }
     var outputHeight: Int { output.height }
+    /// The size this scaling ends at (the spatial scaler's, if any).
+    var targetWidth: Int { upscaled?.width ?? output.width }
+    var targetHeight: Int { upscaled?.height ?? output.height }
+    /// The frame at the target's size.
+    var shown: MTLTexture { upscaled ?? output }
 
     /// The motion pass's uniforms for this frame's unjittered
     /// view-projection (and remembers it for the next frame).
@@ -211,5 +264,10 @@ final class TemporalScaling {
         scaler.reset = frame == 0
         scaler.encode(commandBuffer: commands)
         frame += 1
+        if let spatial, let upscaled {
+            spatial.colorTexture = output
+            spatial.outputTexture = upscaled
+            spatial.encode(commandBuffer: commands)
+        }
     }
 }

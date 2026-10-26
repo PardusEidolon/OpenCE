@@ -25,8 +25,10 @@ struct ShadowUniforms {
 }
 
 final class ShadowPass {
-    /// The maps' width and height, in texels.
-    static let resolution = 2048
+    /// The widths and heights the maps can be drawn at, in texels
+    /// (`render.shadow_resolution`).
+    static let resolutions = [1024, 2048, 4096]
+    static let defaultResolution = 2048
     /// How far the cascades reach ahead of the camera, in world units.
     static let distance: Float = 64
     static let cascadeCount = 4
@@ -115,8 +117,11 @@ final class ShadowPass {
     }
 
     /// The cascades for `camera` seeing a view `aspect` times as wide as
-    /// high, with the sun towards `towards` (none: no shadows).
-    static func uniforms(camera: ViewCamera, aspect: Float, towards: SIMD3<Float>?) -> ShadowUniforms {
+    /// high, with the sun towards `towards` (none: no shadows), in maps
+    /// `resolution` texels wide.
+    static func uniforms(
+        camera: ViewCamera, aspect: Float, towards: SIMD3<Float>?, resolution: Int
+    ) -> ShadowUniforms {
         var uniforms = ShadowUniforms()
         guard let towards else { return uniforms }
         let forward = camera.rotation.act([1, 0, 0])
@@ -143,21 +148,23 @@ final class ShadowPass {
         return uniforms
     }
 
-    /// Draws the casters for `camera` into the maps, the level's by
+    /// Draws the casters for `camera` into the maps (remade when
+    /// `resolution` changes), the level's by
     /// `level` and the objects' by `objects`, each called once a cascade
     /// with the encoder (its light at vertex buffer 1, `wrap` at sampler
     /// 0) and the pipelines for its kind; with no sun, only clears the
     /// uniforms.
     func encode(
         into commands: MTLCommandBuffer, camera: ViewCamera, aspect: Float, towards: SIMD3<Float>?,
-        wrap: MTLSamplerState, level: (MTLRenderCommandEncoder, Casting, simd_float4x4) -> Void,
+        resolution: Int, wrap: MTLSamplerState, level: (MTLRenderCommandEncoder, Casting, simd_float4x4) -> Void,
         objects: (MTLRenderCommandEncoder, Casting, simd_float4x4) -> Void
     ) {
-        uniforms = Self.uniforms(camera: camera, aspect: aspect, towards: towards)
+        let resolution = Self.resolutions.contains(resolution) ? resolution : Self.defaultResolution
+        uniforms = Self.uniforms(camera: camera, aspect: aspect, towards: towards, resolution: resolution)
         guard uniforms.forward.w > 0 else { return }
-        if maps.width != Self.resolution {
-            guard let levelMaps = Self.maps(device, size: Self.resolution),
-                let maps = Self.maps(device, size: Self.resolution)
+        if maps.width != resolution {
+            guard let levelMaps = Self.maps(device, size: resolution),
+                let maps = Self.maps(device, size: resolution)
             else {
                 uniforms = ShadowUniforms()
                 return

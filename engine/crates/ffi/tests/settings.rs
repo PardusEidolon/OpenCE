@@ -110,3 +110,43 @@ fn the_launchers_settings_are_kept() -> Result {
     );
     Ok(())
 }
+
+#[test]
+fn every_graphics_setting_has_its_default_and_range() -> Result {
+    let stock = stock_settings().graphics;
+    assert_eq!(stock.tier, "", "picked for the Mac on the first run");
+    assert_eq!(stock.ambient_occlusion, "half");
+    assert!(stock.reflections && stock.contact_shadows && stock.dynamic_resolution);
+    assert_eq!(
+        (stock.shadow_resolution, stock.upscale_height),
+        (2048, 1440)
+    );
+
+    let mut graphics = stock.clone();
+    graphics.tier = "custom".into();
+    graphics.ambient_occlusion = "full".into();
+    graphics.reflections = false;
+    graphics.shadow_resolution = 4096;
+    graphics.upscale_height = 0;
+    let mut settings = stock_settings();
+    settings.graphics = graphics.clone();
+    let text = settings_to_toml(settings)?;
+    assert!(text.contains("[graphics]"), "{text}");
+    assert_eq!(settings_from_toml(text)?.graphics, graphics);
+
+    let read = settings_from_toml(
+        "[graphics]\ntier = \"epic\"\nambient_occlusion = \"quarter\"\n\
+         shadow_resolution = 512\nupscale_height = 100\n"
+            .into(),
+    )?
+    .graphics;
+    assert_eq!(read.tier, stock.tier);
+    assert_eq!(read.ambient_occlusion, stock.ambient_occlusion);
+    assert_eq!(read.shadow_resolution, stock.shadow_resolution);
+    assert_eq!(read.upscale_height, 720);
+    for tier in opence_ffi::settings::QUALITY_TIERS {
+        let read = settings_from_toml(format!("[graphics]\ntier = \"{tier}\"\n"))?;
+        assert_eq!(read.graphics.tier, *tier);
+    }
+    Ok(())
+}

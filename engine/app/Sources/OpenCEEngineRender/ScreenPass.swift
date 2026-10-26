@@ -40,6 +40,8 @@ public struct RenderSwitches: Equatable, Sendable {
     /// The occlusion and contact shadows found at half resolution and
     /// brought up to the frame's (`render.ao_quality` half).
     public var halfOcclusion = true
+    /// The sun's shadow maps' width, in texels (`render.shadow_resolution`).
+    public var shadowResolution = ShadowPass.defaultResolution
     /// The level and the objects drawn as their triangles' edges.
     public var wireframe = false
     /// The level lit by its lightmaps (off: lit flat, white).
@@ -76,6 +78,7 @@ public struct RenderSwitches: Equatable, Sendable {
         decals = flag("render.decals")
         particles = flag("render.particles")
         halfOcclusion = value("render.ao_quality") != "full"
+        shadowResolution = Int(value("render.shadow_resolution")) ?? ShadowPass.defaultResolution
         wireframe = flag("render.wireframe")
         lightmaps = flag("render.lightmaps")
         objects = flag("render.objects")

@@ -271,6 +271,11 @@ pub const RENDER_VIEWS: &[&str] = &[
 /// frame's budget at 4K; full is sharper.
 pub const AO_QUALITIES: &[&str] = &["half", "full"];
 
+/// The widths the sun's shadow maps can be drawn at, in texels
+/// (`render.shadow_resolution`): each doubling sharpens the shadows' edges
+/// and costs four times the memory (2048: 128 MB for both sets of maps).
+pub const SHADOW_RESOLUTIONS: &[&str] = &["1024", "2048", "4096"];
+
 // (the debug drawing's layers: `debug.draw.<layer>`)
 const LAYERS: [(Layer, &str); 9] = [
     (
@@ -491,6 +496,13 @@ pub(crate) fn registry() -> Registry<State> {
         "The resolution of the ambient occlusion and contact shadows (half or full).",
         VarKind::Enum(AO_QUALITIES),
         VarValue::String("half".into()),
+        true,
+    );
+    registry.variable(
+        "render.shadow_resolution",
+        "The width of the sun's shadow maps, in texels (1024, 2048 or 4096).",
+        VarKind::Enum(SHADOW_RESOLUTIONS),
+        VarValue::String("2048".into()),
         true,
     );
     registry.variable(

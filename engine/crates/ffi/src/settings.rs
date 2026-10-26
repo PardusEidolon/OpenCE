@@ -1,5 +1,5 @@
 //! The app's settings: one typed structure for the game, the controls,
-//! the video and the audio, saved as TOML in
+//! the video, the graphics and the audio, saved as TOML in
 //! `~/Library/Application Support/OpenCE/settings.toml`. A setting that is
 //! missing or out of range is the stock one; unknown ones are ignored.
 
@@ -105,6 +105,49 @@ impl Default for VideoOptions {
     }
 }
 
+/// The quality tiers a graphics preset is named by, lowest first.
+pub const QUALITY_TIERS: &[&str] = &["low", "medium", "high", "ultra"];
+
+/// The graphics: a quality tier's preset, or each setting chosen by hand.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize, uniffi::Record)]
+#[serde(default)]
+pub struct GraphicsSettings {
+    /// The tier the settings are the preset of ("low", "medium", "high"
+    /// or "ultra"), "custom" once one is changed by hand, or empty until
+    /// the app picks one for the Mac on its first run.
+    pub tier: String,
+    /// The ambient occlusion: "off", "half" (found at half resolution) or
+    /// "full".
+    pub ambient_occlusion: String,
+    /// Whether the screen-space reflections are drawn.
+    pub reflections: bool,
+    /// Whether the screen-space contact shadows are drawn.
+    pub contact_shadows: bool,
+    /// The width of the sun's shadow maps, in texels (1024, 2048 or 4096).
+    pub shadow_resolution: u32,
+    /// Whether the render scale steps down when the GPU's frames run long
+    /// (temporal anti-aliasing only).
+    pub dynamic_resolution: bool,
+    /// The tallest picture the temporal scaler gathers into, scaled the
+    /// rest of the way to the window's size (0: the window's own; else 720
+    /// to 2160).
+    pub upscale_height: u32,
+}
+
+impl Default for GraphicsSettings {
+    fn default() -> Self {
+        Self {
+            tier: String::new(),
+            ambient_occlusion: "half".into(),
+            reflections: true,
+            contact_shadows: true,
+            shadow_resolution: 2048,
+            dynamic_resolution: true,
+            upscale_height: 1440,
+        }
+    }
+}
+
 /// The sound's volumes, each from 0 to 1.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize, uniffi::Record)]
 #[serde(default)]
@@ -165,6 +208,8 @@ pub struct Settings {
     pub controls: ControlSettings,
     /// The picture.
     pub video: VideoOptions,
+    /// The graphics' quality.
+    pub graphics: GraphicsSettings,
     /// The sound.
     pub audio: AudioSettings,
     /// The data folders.
@@ -200,6 +245,7 @@ impl Settings {
             game,
             controls,
             video,
+            graphics,
             audio,
             data,
             ui,
@@ -266,6 +312,33 @@ impl Settings {
                 frame_cap: match video.frame_cap {
                     0 => 0,
                     cap => cap.clamp(30, 360),
+                },
+            },
+            graphics: GraphicsSettings {
+                tier: if graphics.tier.is_empty()
+                    || graphics.tier == "custom"
+                    || QUALITY_TIERS.contains(&graphics.tier.as_str())
+                {
+                    graphics.tier
+                } else {
+                    stock.graphics.tier
+                },
+                ambient_occlusion: one_of(
+                    graphics.ambient_occlusion,
+                    &["off", "half", "full"],
+                    stock.graphics.ambient_occlusion,
+                ),
+                reflections: graphics.reflections,
+                contact_shadows: graphics.contact_shadows,
+                shadow_resolution: if [1024, 2048, 4096].contains(&graphics.shadow_resolution) {
+                    graphics.shadow_resolution
+                } else {
+                    stock.graphics.shadow_resolution
+                },
+                dynamic_resolution: graphics.dynamic_resolution,
+                upscale_height: match graphics.upscale_height {
+                    0 => 0,
+                    height => height.clamp(720, 2160),
                 },
             },
             audio: AudioSettings {

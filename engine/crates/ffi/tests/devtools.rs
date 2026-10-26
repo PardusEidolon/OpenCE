@@ -153,6 +153,23 @@ fn the_screen_passes_can_be_switched_off_and_shown_alone() -> Result {
         Some("full")
     );
     refused(&engine, "render.ao_quality quarter")?;
+    // (the sun's shadow maps are 2048 texels unless told, and kept)
+    assert_eq!(
+        engine.shell_value("render.shadow_resolution".into()),
+        "2048"
+    );
+    for size in ["1024", "2048", "4096"] {
+        run(&engine, &format!("render.shadow_resolution {size}"))?;
+        assert_eq!(engine.shell_value("render.shadow_resolution".into()), size);
+    }
+    assert_eq!(
+        engine
+            .saved_shell_variables()
+            .get("render.shadow_resolution")
+            .map(String::as_str),
+        Some("4096")
+    );
+    refused(&engine, "render.shadow_resolution 512")?;
     Ok(())
 }
 
@@ -187,7 +204,7 @@ fn variables_completion_and_bindings() -> Result {
         ("true", "false")
     );
     assert_eq!(engine.complete_command("nocl".into()), ["noclip"]);
-    assert_eq!(engine.complete_command("ren".into()).len(), 17);
+    assert_eq!(engine.complete_command("ren".into()).len(), 18);
     run(&engine, "bind f5 pause")?;
     engine.start_empty_world();
     assert!(engine.press_key("f5".into()).ok);
