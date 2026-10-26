@@ -9,7 +9,7 @@ Every task is test first (`workflow.md`): the trace, measurement or census test 
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: The fake world' (Protocol in workflow.md) (automated)
 
 ## Phase 2: The top of the owed list
-- [ ] Task: Traces for `data_next_index`, `datum_new`, `object_new` and `object_delete`.
+- [x] Task: Traces for `data_next_index`, `datum_new`, `object_new` and `object_delete`. 602a3326
 - [ ] Task: Traces for `real_random_range` and the other random helpers.
 - [ ] Task: Traces for `hs_evaluate`, `hs_return` and `sound_class_get`.
 - [ ] Task: A trace for `game_tick` over a short run of the fake world.
