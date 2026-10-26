@@ -1,0 +1,4 @@
+Task: Physics (physics)
+Class the physics: the collision queries and rigid bodies Partial through Jolt, the physics variables Matched, debug drawing and collision logging Replaced
+
+The physics walk of the census. Jolt answers the collision queries on a mesh made from the collision BSP, and it moves the rigid bodies, so those are Partial and leave out the original's BSP walk and its integrator. The physics variables, pin_fraction and friction_evaluate are Matched in the vehicle code. Debug drawing and the collision log are tools. The BSP's internals and breakable glass stay Missing; no listed reason fits a library standing in for an algorithm. Checked: census --check, and the census tests (39/39).
