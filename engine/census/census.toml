@@ -236,6 +236,24 @@ stands_in = "physics/src/lib.rs"
 lives_on = "the same floors, walls and line of sight: Jolt answers the queries (physics/src/lib.rs) on a mesh of the same collision BSP surfaces (physics/src/mesh.rs); the Partial entries of collision_fix_pill and the queries say where an edge can differ"
 
 [[rule]]
+file = "game/cheats.c"
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/control.rs"
+
+[[rule]]
+file = "interface/terminal.c"
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+
+[[rule]]
+file = "main/console.c"
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/script.rs"
+
+[[rule]]
 file = "physics/collision_usage.c"
 class = "replaced"
 because = "tools"
@@ -773,6 +791,11 @@ engine = "campaign/src/conversations.rs"
 leaves_out = ["the participants' gestures and looking at each other"]
 owed = "the engine's own version; no check against the original yet"
 
+[function.ai_debug_vocalize_evaluate]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/script.rs"
+
 [function.ai_erase]
 class = "matched"
 engine = "campaign/src/ai.rs"
@@ -905,6 +928,11 @@ owed = "the engine's own tests (physics/src/movement.rs); no check against the o
 [function.biped_make_footstep]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
+
+[function.biped_render_debug]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/draw.rs"
 
 [function.biped_start_landing]
 class = "matched"
@@ -2203,6 +2231,11 @@ class = "matched"
 engine = "sim/src/damage.rs"
 owed = "the engine's own tests (sim/src/damage.rs); no check against the original yet"
 
+[function.damage_render_debug]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/draw.rs"
+
 [function.data_allocation_size]
 class = "native"
 primitive = "Vec"
@@ -2390,6 +2423,16 @@ class = "replaced"
 because = "tools"
 stands_in = "ffi/src/allocations.rs"
 
+[function.debug_player_teleport]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/control.rs"
+
+[function.debug_pvs]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/draw.rs"
+
 [function.debug_realloc]
 class = "replaced"
 because = "tools"
@@ -2400,10 +2443,20 @@ class = "replaced"
 because = "tools"
 stands_in = "dev/src/control.rs"
 
+[function.debug_sound_classes_enable_evaluate]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/script.rs"
+
 [function.debug_sound_classes_set_distances]
 class = "replaced"
 because = "tools"
 stands_in = "dev/src/control.rs"
+
+[function.debug_sound_classes_set_distances_evaluate]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/script.rs"
 
 [function.debug_sound_classes_set_wet]
 class = "replaced"
@@ -2538,6 +2591,11 @@ owed = "the engine's own tests (campaign/src/devices.rs); no check against the o
 [function.device_preprocess_node_orientations]
 class = "matched"
 owed = "devices; reads the object, tag and map world, which the fake worlds do not hold (the device's model)"
+
+[function.device_render_debug]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/draw.rs"
 
 [function.device_set_actual_position]
 class = "matched"
@@ -3621,6 +3679,11 @@ engine = "script/src/lib.rs"
 leaves_out = ["the game's own random numbers: the shuffle draws on the runtime's xorshift"]
 owed = "the engine's runtime (script/src/lib.rs); no check against the original yet"
 
+[function.hs_evaluate_debug_string]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/script.rs"
+
 [function.hs_evaluate_equality]
 class = "matched"
 engine = "script/src/lib.rs"
@@ -3750,6 +3813,11 @@ owed = "the script function's wrapper, which the campaign wires; no check agains
 class = "matched"
 engine = "campaign/src/objects.rs"
 owed = "the script function's wrapper, which the campaign wires; no check against the original yet"
+
+[function.hs_parse_debug_string]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/script.rs"
 
 [function.hs_players]
 class = "matched"
@@ -4230,6 +4298,11 @@ owed = "the engine cites it, with no check against the original yet"
 [function.magnitude_squared3d_right_associated]
 class = "native"
 primitive = "glam::Vec3"
+
+[function.main_frame_rate_debug]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/profile.rs"
 
 [function.main_loop]
 class = "partial"
@@ -4740,6 +4813,11 @@ engine = "campaign/src/presented.rs"
 leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
 owed = "the engine's own tests (campaign/src/lib.rs); no check against the original yet"
 
+[function.object_render_debug]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/draw.rs"
+
 [function.object_scripting_set_collideable]
 class = "partial"
 engine = "campaign/src/presented.rs"
@@ -4778,6 +4856,11 @@ class = "partial"
 engine = "physics/src/lib.rs"
 leaves_out = ["the original's collision BSP walk: Jolt answers the query on a mesh made from the collision BSP, so what is hit at an edge, and in what order, can differ"]
 owed = "the engine's own tests (physics/tests/world.rs); no check against the original yet"
+
+[function.object_type_render_debug]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/draw.rs"
 
 [function.object_types_disconnect_from_structure_bsp]
 class = "matched"
@@ -5168,6 +5251,11 @@ engine = "sim/src/lib.rs"
 leaves_out = ["the spawn's choice by the game engine's weights", "the starting equipment's profiles"]
 owed = "the engine's own version; no check against the original yet"
 
+[function.players_debug_render]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/draw.rs"
+
 [function.players_update_after_game]
 class = "matched"
 owed = "the end of a level; reads the object, tag and map world, which the fake worlds do not hold; campaign/tests/flow.rs"
@@ -5511,6 +5599,11 @@ class = "matched"
 engine = "sim/src/game.rs"
 owed = "the engine's own tests (sim/tests/game.rs); no check against the original yet"
 
+[function.random_seed_debug_log]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+
 [function.random_vector_in_cone3d]
 class = "matched"
 engine = "sim/src/projectile.rs"
@@ -5670,6 +5763,11 @@ class = "replaced"
 because = "tools"
 stands_in = "dev/src/draw.rs"
 
+[function.render_debug_object_damage]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/draw.rs"
+
 [function.render_debug_obstacle_path]
 class = "replaced"
 because = "tools"
@@ -5691,6 +5789,21 @@ because = "tools"
 stands_in = "dev/src/draw.rs"
 
 [function.render_debug_point_physics]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/draw.rs"
+
+[function.render_debug_profile]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/profile.rs"
+
+[function.render_debug_profile_stall_tick]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/profile.rs"
+
+[function.render_debug_recording]
 class = "replaced"
 because = "tools"
 stands_in = "dev/src/draw.rs"
@@ -6868,6 +6981,21 @@ owed = "the engine's own tests (sim/src/projectile.rs); no check against the ori
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
 
+[function.ui_debug_draw_mark]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/draw.rs"
+
+[function.ui_debug_draw_outline]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/draw.rs"
+
+[function.ui_debug_draw_targets]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/draw.rs"
+
 [function.ui_debug_log_click]
 class = "replaced"
 because = "keyboard_mouse"
@@ -6877,6 +7005,16 @@ stands_in = "ui/src/pointer.rs"
 class = "replaced"
 because = "keyboard_mouse"
 stands_in = "ui/src/pointer.rs"
+
+[function.ui_debug_set_mark]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/draw.rs"
+
+[function.ui_debug_targets_enabled]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/draw.rs"
 
 [function.ui_mouse_child_index]
 class = "replaced"
@@ -7002,6 +7140,11 @@ class = "matched"
 engine = "ui/src/lib.rs"
 owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
 
+[function.ui_widget_debug_show_path]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/draw.rs"
+
 [function.ui_widget_delete]
 class = "matched"
 engine = "ui/src/lib.rs"
@@ -7124,6 +7267,11 @@ owed = "the engine's own tests (campaign/src/lib.rs); no check against the origi
 class = "matched"
 owed = "scripts' custom animations; reads the object, tag and map world, which the fake worlds do not hold"
 
+[function.unit_debug_ninja_rope]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/control.rs"
+
 [function.unit_destroy]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
@@ -7180,6 +7328,11 @@ owed = "the engine's own tests (campaign/src/lib.rs); no check against the origi
 [function.unit_preprocess_node_orientations]
 class = "matched"
 owed = "checked through the animation trace's aiming blends"
+
+[function.unit_render_debug]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/draw.rs"
 
 [function.unit_scripting_doesnt_drop_items]
 class = "partial"
@@ -7311,6 +7464,16 @@ owed = "the engine's own version; no check against the original yet"
 [function.unit_update_animation]
 class = "matched"
 owed = "checked through the unit state trace's rules"
+
+[function.units_debug_get_closest_unit]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/control.rs"
+
+[function.units_debug_get_next_unit]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/control.rs"
 
 [function.units_scripting_set_current_vitality]
 class = "matched"
@@ -7467,6 +7630,11 @@ owed = "the engine cites it, with no check against the original yet"
 [function.vehicle_preprocess_node_orientations]
 class = "matched"
 owed = "vehicles; reads the object, tag and map world, which the fake worlds do not hold (the vehicle's model); Phase 13's wheels and tracks"
+
+[function.vehicle_render_debug]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/draw.rs"
 
 [function.vehicle_scripting_load_magic]
 class = "matched"
