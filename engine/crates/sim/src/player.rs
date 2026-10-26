@@ -161,6 +161,8 @@ pub struct Player {
     /// It flies where it looks, through the level, as the shell's
     /// `noclip` makes it.
     noclip: bool,
+    /// Its biped's bounding sphere's centre, from its object's origin.
+    bounding_offset: Vec3,
 }
 
 /// A vehicle's seat the player sits in.
@@ -345,6 +347,9 @@ impl Player {
         let unit_melee = level
             .object(&unit)
             .and_then(|object| object.unit_melee_damage.clone());
+        let bounding_offset = level.object(&unit).map_or(Vec3::ZERO, |object| {
+            Vec3::from_array(object.bounding_offset)
+        });
         Ok(Player {
             physics,
             mover,
@@ -371,6 +376,7 @@ impl Player {
             seat_camera: None,
             exiting: false,
             noclip: false,
+            bounding_offset,
         })
     }
 
@@ -734,11 +740,7 @@ impl Player {
             View::ThirdPerson => {
                 let back =
                     rotation * Vec3::new(-FOLLOW_DISTANCE, 0.0, 0.0) + Vec3::Z * FOLLOW_HEIGHT;
-                let reach = match lock(&self.physics).cast_ray(eyes, back, Layers::LEVEL) {
-                    Ok(Some(hit)) => (hit.fraction - FOLLOW_MARGIN / back.length()).max(0.0),
-                    _ => 1.0,
-                };
-                eyes + back * reach
+                eyes + back * self.camera_reach(eyes, back)
             }
         };
         Transform {
@@ -761,11 +763,30 @@ impl Player {
         let depth = offset.length().max(FOLLOW_SEAT_DEPTH);
         let focus = position + rotation * Vec3::X * depth;
         let back = position - focus;
-        let reach = match lock(&self.physics).cast_ray(focus, back, Layers::LEVEL) {
+        focus + back * self.camera_reach(focus, back)
+    }
+
+    /// How much of the way `back` from `focus` a camera may go before the
+    /// level, short of it by the margin a camera keeps.
+    pub(crate) fn camera_reach(&self, focus: Vec3, back: Vec3) -> f32 {
+        match lock(&self.physics).cast_ray(focus, back, Layers::LEVEL) {
             Ok(Some(hit)) => (hit.fraction - FOLLOW_MARGIN / back.length()).max(0.0),
             _ => 1.0,
-        };
-        focus + back * reach
+        }
+    }
+
+    /// Its biped's bounding sphere's centre from its root node, its first
+    /// node or else its object at `transform` (`object_compute_node_matrices`
+    /// sets `bounding_sphere_center` so).
+    pub(crate) fn bounding_centre(
+        &self,
+        root: Option<&crate::animation::NodeMatrix>,
+        transform: &Transform,
+    ) -> Vec3 {
+        match root {
+            Some(root) => Vec3::from_array(root.transform_point(self.bounding_offset.to_array())),
+            None => transform.position + transform.rotation * self.bounding_offset,
+        }
     }
 
     /// This tick's throttle: forward, left.

@@ -16,6 +16,7 @@ pub mod cached;
 pub mod clock;
 pub mod crates;
 pub mod damage;
+mod dead_camera;
 pub mod debris;
 pub mod device_animation;
 pub mod effects;
@@ -224,6 +225,11 @@ pub struct Simulation {
     actor_inputs: Vec<TickInput>,
     /// The queries asked each frame, kept.
     queries: Queries,
+    /// The local player's camera while it is dead.
+    dead_camera: Option<dead_camera::DeadCamera>,
+    /// The random numbers no other machine shares (`local_random_seed`),
+    /// which the camera draws from.
+    local_random: random::RandomSeed,
 }
 
 /// What [`Simulation::visit_lit`] reads of each object.
@@ -359,6 +365,8 @@ impl Simulation {
             actors: Vec::new(),
             actor_inputs: Vec::new(),
             queries: Queries::default(),
+            dead_camera: None,
+            local_random: random::RandomSeed::default(),
         }
     }
 
@@ -387,6 +395,7 @@ impl Simulation {
         self.players.append(&mut self.actors);
         self.step_everyone(first, &inputs);
         self.actors = self.players.split_off(humans.min(self.players.len()));
+        self.place_dead_camera();
         self.update_motion_sensor();
         self.update_first_person();
     }
@@ -1382,6 +1391,41 @@ impl Simulation {
         player.set_view(view);
         self.place_player_camera();
         true
+    }
+
+    /// The local player's camera while it is dead (`dead_camera_update`):
+    /// from where it saw as it died, eased out to look at its body as the
+    /// body falls; gone once it lives again.
+    fn place_dead_camera(&mut self) {
+        let Some(player) = self.players.first() else {
+            self.dead_camera = None;
+            return;
+        };
+        let handle = player.handle();
+        let dead = self
+            .component::<damage::Vitality>(handle)
+            .is_some_and(|vitality| vitality.dead);
+        let body = self.component::<Transform>(handle);
+        let (true, Some(body)) = (dead, body) else {
+            self.dead_camera = None;
+            return;
+        };
+        let mut camera = self.camera();
+        let dead_camera = match &mut self.dead_camera {
+            Some(dead_camera) => {
+                dead_camera.step();
+                *dead_camera
+            }
+            None => *self.dead_camera.insert(dead_camera::DeadCamera::new(
+                &camera.transform,
+                &mut self.local_random,
+            )),
+        };
+        let nodes = self.component::<NodeMatrices>(handle);
+        let root = nodes.as_ref().and_then(|nodes| nodes.current.first());
+        let focus = player.bounding_centre(root, &body);
+        camera.transform = dead_camera.place(focus, |focus, back| player.camera_reach(focus, back));
+        self.world.insert_resource(camera);
     }
 
     /// The camera at the player's view now, as if it had always been there.
