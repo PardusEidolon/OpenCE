@@ -83,6 +83,6 @@ entries list what they leave out.
 - [x] Task: The numbers 41d6f7c7
   - [x] Per system and class, in counts and bytes; tag-field gaps; fix-ups that differ; scripts and sounds
   - [x] The Missing, Partial and evidence-less items, ranked by reach and by how much of play depends on them
-- [ ] Task: The report Artifact and the proposed completion track
-  - [ ] The phases of the coverage-completion track proposed from the ranking, to become a new track after your review
+- [x] Task: The report Artifact and the proposed completion track (https://claude.ai/artifact/DQrVNw5htahKJAG4RBUgcu; kept off the repository, since it holds counts measured on the user's maps)
+  - [x] The phases of the coverage-completion track proposed from the ranking, to become a new track after your review
 - [ ] Task: Conductor - User Manual Verification 'Phase 6: The report' (Protocol in workflow.md) (the one manual check: you review the report)
