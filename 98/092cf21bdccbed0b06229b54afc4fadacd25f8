@@ -1,0 +1,4 @@
+Task: Helpers (math, cseries, memory) as Native, checked against the math reference trace and the fixed-order rule
+Class the helpers: 296 Native on glam, libm, Vec, BTreeMap and std::fs; diagnostics and codecs Replaced
+
+The math, cseries, memory and file helpers that a primitive does in the engine are now Native, each naming the primitive; census --check confirms every primitive is one the engine uses and refuses HashMap and HashSet, so the hashtable and vector tree stand on BTreeMap. Profiling, error logging, stack walks and the debug allocator are Replaced by the dev tools; data encoding by the network wire; zlib, crc and data_compress by the importer. The geometry queries (intersection tests, accelerate_to_*, convex hulls) are left Missing: they have behaviour to match and go to the report. Checked: census --check, the census crate's tests.
