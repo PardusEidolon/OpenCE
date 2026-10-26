@@ -27,7 +27,7 @@ Every task is test first (`workflow.md`): the trace, measurement or census test 
 - [x] Task: Conductor - User Manual Verification 'Phase 4: Names' (Protocol in workflow.md) (automated)
 
 ## Phase 5: The report
-- [ ] Task: Run `census` and record the counts before and after this track, per system and per class.
+- [x] Task: Run `census` and record the counts before and after this track, per system and per class. ac77e257
 - [ ] Task: Write the data-backed report and lower the ratchet to the new counts.
 - [ ] Task: Send the user the report; it sets up the next track.
 - [ ] Task: Conductor - User Manual Verification 'Phase 5: The report' (Protocol in workflow.md) (automated)
