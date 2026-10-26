@@ -44,7 +44,7 @@ entries list what they leave out.
 - [x] Task: Scripts (hs) 7f89d235
 - [x] Task: The game loop (game, main, shell, saved games) 28013b2a
 - [x] Task: Objects (objects, units, items, devices) 4e032e6a
-- [ ] Task: Physics (physics)
+- [x] Task: Physics (physics) 862c7d77
 - [ ] Task: Effects (effects)
 - [ ] Task: Sound (sound)
 - [ ] Task: Animation (models, first_person)
