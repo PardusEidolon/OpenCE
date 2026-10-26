@@ -1,0 +1,4 @@
+Task: Sounds
+Say in the sound player that the class's per-object limit is not kept
+
+The census measured every sound tag against what play asks for: on Blood Gulch the sweep asks for 77 of the 321 the level refers to, with no unknown or failed paths, and two idle minutes on each campaign map ask for under 1% of its sounds (the counts are in the report, not the repository). The per-object limit is lower than the per-sound one in 26 of the 51 classes, and the player cannot keep it because a Source names no object. Checked: clippy on opence_audio; comment only.
