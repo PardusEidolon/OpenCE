@@ -1,0 +1,4 @@
+Task: The interface, HUD, UI and input (interface, dialogs, text, strings, input)
+Class the interface: the widget tree, HUD drawing and motion sensor Matched, the virtual keyboard and terminal Replaced
+
+ui_widget.c's tree, focus and event functions are Matched by crates/ui, the HUD's weapon and state-message drawing by ffi/src/hud.rs and hud_text.rs, the motion sensor by sim/src/hud.rs, all owing a check against the original. The HUD script natives kept as events, the player0 stubs and hud_draw_screen are Partial. The virtual keyboard and mouse code, the input abstraction, the terminal and edit_text are Replaced. census --check passes.
