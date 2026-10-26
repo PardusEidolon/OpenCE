@@ -1,0 +1,8 @@
+Task: The call graph and reachability
+Check the original's call graph: calls, tables of functions, macros and its main loop
+
+The census reaches a function when the original can call it: a node is a top-level function, initialised data or macro of source/, and an edge a name in its body that names another node, so functions reached only through a table (the script functions, the object types) or a macro are reached. Reach can walk on only through the nodes a test accepts, which is how a function called only from Replaced code will be Replaced through its caller.
+
+A campaign game and a multiplayer game both run through main_loop, so it is the one entry point; the rest of the original is reached from it except what nothing calls in the C (debug commands, the editor's own paths).
+
+Checked: tests on a fake tree (calls, a table of functions, a macro, a walk that stops at a node, the old port's additions set apart) and on the real tree.
