@@ -21,7 +21,7 @@ manual check is at the end, with the report.
   - [x] source/'s headers and the app's Sources visible to the crate's test in nix flake check
 - [x] Task: Conductor - User Manual Verification 'Phase 1: The census crate' (Protocol in workflow.md) (automated) 6f67c558
 
-## Phase 2: The classes and their requirements
+## Phase 2: The classes and their requirements [checkpoint: f7f0d4ad]
 - [x] Task: engine/census.toml and the six classes 71ea835c
   - [x] Tests: one failing case per requirement (Ported without a trace, Matched with only an engine test, Native without a primitive, Partial with nothing left out, Replaced without a listed reason, a function with no class)
   - [x] The schema: rules by directory, file and name, entries for single functions, and the fixed list of Replaced reasons
@@ -34,7 +34,7 @@ manual check is at the end, with the report.
 - [x] Task: Replaced by rule f28dc8db
   - [x] Directory rules for rasterizer, render, shaders, bink, bungie_net, networking, editor, tool and the Xbox-only files, each with its stand-in named
   - [x] Replaced through a caller, from reachability
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: The classes and their requirements' (Protocol in workflow.md) (automated; deferred to the end)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: The classes and their requirements' (Protocol in workflow.md) (automated) f7f0d4ad
 
 ## Phase 3: The walk through the systems
 Each task reads the Rust and Swift sides, adds the citations they lack, and
