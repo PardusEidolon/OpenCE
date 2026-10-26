@@ -37,13 +37,13 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `scenario` | | 2 (608 B) | | | 5 (1456 B) | 50 (7520 B) | 2 |
 | `shaders` | | | | | 21 (2624 B) | | 0 |
 | `shell` | | | | | 10 (528 B) | 3 (0 B) | 0 |
-| `sound` | 5 (672 B) | 63 (6864 B) | | 2 (32 B) | 45 (656 B) | 103 (18736 B) | 65 |
+| `sound` | 5 (672 B) | 63 (6864 B) | | 2 (32 B) | 55 (2624 B) | 93 (16768 B) | 65 |
 | `structures` | | 1 (0 B) | | | 55 (15968 B) | 71 (15744 B) | 1 |
 | `tag_files` | | | | | | 49 (4288 B) | 0 |
 | `text` | | 1 (912 B) | | | 15 (4240 B) | 96 (11760 B) | 1 |
 | `tool` | | | | | 27 (8752 B) | | 0 |
 | `units` | 8 (1824 B) | 67 (19968 B) | | 14 (1008 B) | | 278 (84720 B) | 81 |
-| **all** | 81 (16832 B) | 464 (128336 B) | | 74 (33504 B) | 2092 (405120 B) | 5790 (1027330 B) | 538 |
+| **all** | 81 (16832 B) | 464 (128336 B) | | 74 (33504 B) | 2102 (407088 B) | 5780 (1025362 B) | 538 |
 
 ## `ai`
 
@@ -2899,6 +2899,16 @@ docs/engine.md's "The coverage census" says what each class needs.
 
 | Function | File | Class | Engine | Evidence |
 | --- | --- | --- | --- | --- |
+| `sound_file_is_aiff` | sound/sound_import/sound_aiff.c | Replaced | import/src/lib.rs | the editor and tools |
+| `sound_file_aiff_info_get` | sound/sound_import/sound_aiff.c | Replaced | import/src/lib.rs | the editor and tools |
+| `sound_file_aiff_raw_data_get` | sound/sound_import/sound_aiff.c | Replaced | import/src/lib.rs | the editor and tools |
+| `sound_file_aiff_format` | sound/sound_import/sound_aiff.c | Replaced | import/src/lib.rs | the editor and tools |
+| `sound_file_info_get` | sound/sound_import/sound_import.c | Replaced | import/src/lib.rs | the editor and tools |
+| `sound_raw_sample_data_get` | sound/sound_import/sound_import.c | Replaced | import/src/lib.rs | the editor and tools |
+| `sound_file_is_wave` | sound/sound_import/sound_wave.c | Replaced | import/src/lib.rs | the editor and tools |
+| `sound_file_wave_info_get` | sound/sound_import/sound_wave.c | Replaced | import/src/lib.rs | the editor and tools |
+| `sound_file_wave_raw_data_get` | sound/sound_import/sound_wave.c | Replaced | import/src/lib.rs | the editor and tools |
+| `sound_file_wave_format` | sound/sound_import/sound_wave.c | Replaced | import/src/lib.rs | the editor and tools |
 | `game_looping_sound_new` | sound/game_sound.c | Matched | ffi/src/sound_world.rs | owed: the engine's own tests (ffi/src/sound_world.rs); no check against the original yet |
 | `game_looping_sound_delete` | sound/game_sound.c | Matched | ffi/src/sound_world.rs | owed: the engine's own tests (ffi/src/sound_world.rs); no check against the original yet |
 | `unattached_impulse_sound_new` | sound/game_sound.c | Matched | ffi/src/sound_events.rs | owed: the engine's own tests (ffi/src/sound_events.rs); no check against the original yet |
@@ -3015,15 +3025,12 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `refresh_listener` | sound/sound_manager.c | Matched | audio/src/player.rs | owed: the engine's own tests (audio/src/player.rs); no check against the original yet |
 | `detail_sound_random_offset` | sound/sound_manager.c | Matched | audio/src/player/looping.rs:686 | owed: a looping sound's details; draws from the game's random seed; Phase 15 |
 
-103 Missing (37 reached from `main_loop`), by file:
+93 Missing (37 reached from `main_loop`), by file:
 
 - sound/game_sound.c: `game_sound_initialize`, `game_sound_dispose`, `game_sound_initialize_for_new_map`, `game_sound_clear`, `game_sound_restore`, `scripted_foley_predict`, `scripted_looping_sound_set_scale`, `code_001b7290`, `game_sound_set_mouth_aperture`, `code_001b7630`, `code_001b7720`, `code_001b7790`, `code_001b7800`, `code_001b7860`, `game_sound_dispose_from_old_map`, `obstruction_cache_slot`, `compute_combined_pas`, `looping_sound_definition_is_music`, `scripted_music_stop_all`
 - sound/ima_adpcm.c: `byte_swap_bungie_ima_adpcm_header`
 - sound/sound_classes.c: `sound_classes_initialize`, `sound_classes_dispose_from_old_map`, `sound_classes_dispose`, `sound_classes_initialize_for_new_map`
 - sound/sound_definitions.c: `sound_permutation_get_mouth_aperture`, `sound_permutation_get_real_mouth_aperture`
-- sound/sound_import/sound_aiff.c: `sound_file_is_aiff`, `sound_file_aiff_info_get`, `sound_file_aiff_raw_data_get`, `sound_file_aiff_format`
-- sound/sound_import/sound_import.c: `sound_file_info_get`, `sound_raw_sample_data_get`
-- sound/sound_import/sound_wave.c: `sound_file_is_wave`, `sound_file_wave_info_get`, `sound_file_wave_raw_data_get`, `sound_file_wave_format`
 - sound/sound_manager.c: `sound_valid_for_channel`, `current_platform_definition`, `sound_initialize_for_new_map`, `sound_dispose`, `sound_pause`, `sound_render_time`, `sound_reconnect_to_structure_bsp`, `sound_try_and_get`, `sound_enable`, `code_001bb4c0`, `code_001bb4f0`, `code_001bb510`, `code_001bb570`, `code_001bb5b0`, `code_001bb5f0`, `code_001bb690`, `code_001bb6c0`, `code_001bb710`, `code_001bb730`, `code_001bb820`, `code_001bba20`, `code_001bbaa0`, `code_001bbb40`, `code_001bbc30`, `code_001bbcb0`, `code_001bbcf0`, `code_001bbde0`, `code_001bbe00`, `code_001bbf30`, `code_001bbf80`, `code_001bbfe0`, `code_001bc0a0`, `sound_initialize`, `code_001bc3b0`, `code_001bc3e0`, `code_001bc550`, `code_001bc6d0`, `code_001bc790`, `code_001bc860`, `code_001bc970`, `code_001bca70`, `code_001bcc80`, `code_001bcdb0`, `code_001bce80`, `sound_stop_impulse`, `sound_stop_impulse_by_source_and_definition`, `code_001bd090`, `code_001bd180`, `code_001bd3a0`, `code_001bd540`, `code_001bd720`, `code_001be4b0`, `code_001be6a0`, `code_001be890`, `code_001bebf0`, `sound_idle`, `code_001bee50`, `sound_dispose_from_old_map`, `sound_update_time`, `sound_delete`, `channel_queue_sound`, `sound_set_definition_begin`, `sound_set_definition_end`, `source_audible`, `prioritize_sounds`
 - sound/sound_scenery.c: `sound_scenery_new`, `sound_scenery_delete`
 

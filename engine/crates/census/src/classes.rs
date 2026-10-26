@@ -16,8 +16,10 @@
 //!
 //! A function takes the class of its own entry, or else of the most
 //! specific rule that matches it (a file is more specific than a
-//! directory, and a prefix adds to either; of two equally specific rules
-//! the later wins; a rule that selects nothing is the default). Paths name the engine's files from `engine/crates`
+//! directory, a deeper directory than its parent, and a prefix adds to
+//! either; of two equally specific rules the later wins; a rule that
+//! selects nothing is the default). A directory names its files and those
+//! of its subdirectories. Paths name the engine's files from `engine/crates`
 //! (`sim/src/units.rs`) or from `engine` for the app (`app/Sources/...`).
 
 use std::collections::{BTreeMap, BTreeSet};
@@ -172,17 +174,23 @@ pub struct Entry {
 
 impl Entry {
     /// How specific a rule is (more wins).
-    fn specificity(&self) -> u8 {
-        u8::from(self.directory.is_some())
-            + 2 * u8::from(self.file.is_some())
-            + 2 * u8::from(self.prefix.is_some())
+    fn specificity(&self) -> usize {
+        // (a directory counts its steps, so `sound/sound_import` outranks
+        // `sound`; a file or a prefix outranks any directory)
+        const STEP: usize = 64;
+        self.directory
+            .as_deref()
+            .map_or(0, |d| d.split('/').count())
+            + STEP * usize::from(self.file.is_some())
+            + STEP * usize::from(self.prefix.is_some())
     }
 
     /// Whether a rule selects `name` of `file`.
     fn selects(&self, name: &str, file: &str) -> bool {
-        let directory = file.split('/').next().unwrap_or("");
-        self.directory.as_deref().is_none_or(|d| d == directory)
-            && self.file.as_deref().is_none_or(|f| f == file)
+        self.directory.as_deref().is_none_or(|d| {
+            file.strip_prefix(d)
+                .is_some_and(|rest| rest.starts_with('/'))
+        }) && self.file.as_deref().is_none_or(|f| f == file)
             && self.prefix.as_deref().is_none_or(|p| name.starts_with(p))
     }
 }
@@ -229,7 +237,7 @@ impl Manifest {
         if let Some(entry) = self.function.get(name) {
             return (Some(entry), From::Entry);
         }
-        let mut best: Option<(u8, usize)> = None;
+        let mut best: Option<(usize, usize)> = None;
         for (index, rule) in self.rule.iter().enumerate() {
             if rule.selects(name, file) && best.is_none_or(|(s, _)| rule.specificity() >= s) {
                 best = Some((rule.specificity(), index));

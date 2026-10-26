@@ -506,3 +506,37 @@ fn the_docs_are_written_and_then_not_stale() -> Result<(), Failure> {
     );
     Ok(())
 }
+
+#[test]
+fn a_directory_rule_selects_its_subdirectories_and_the_deeper_wins() -> Result<(), Failure> {
+    let manifest = Manifest::parse(
+        "census.toml",
+        r#"
+[[rule]]
+directory = "sound/sound_import"
+class = "replaced"
+[[rule]]
+directory = "sound"
+class = "native"
+[[rule]]
+file = "sound/sound_import/sound_wave.c"
+class = "matched"
+"#,
+    )?;
+    let class = |name, file| manifest.lookup(name, file).0.and_then(|entry| entry.class);
+    assert_eq!(
+        class("sound_file_is_aiff", "sound/sound_import/sound_aiff.c"),
+        Some(Class::Replaced)
+    );
+    assert_eq!(
+        class("sound_stop", "sound/sound_manager.c"),
+        Some(Class::Native)
+    );
+    assert_eq!(
+        class("sound_file_is_wave", "sound/sound_import/sound_wave.c"),
+        Some(Class::Matched)
+    );
+    // (a directory is a whole step of the path, not a prefix of a name)
+    assert_eq!(class("x", "sound_extra/x.c"), None);
+    Ok(())
+}
