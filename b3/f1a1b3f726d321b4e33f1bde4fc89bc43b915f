@@ -1,0 +1,17 @@
+Task: Fields the engine uses
+Mark each kept tag field with whether the engine reads what the importer fills from it
+
+The spec's third mark: a field the importer keeps is used when the
+engine reads it. The importer's readers now record the label of each
+read; the census traces a label through the call it is passed to, to
+the field or local that call fills, and looks for that name read
+through a '.' in the engine's crates (not the importer, the census or
+the CLI, and not their test modules).
+
+Of 2811 kept fields, 2144 are used, 516 unused (declared in content
+and read nowhere, e.g. the biped's slope and landing fields, checked by
+hand) and 151 untraced (labels passed through helpers the trace cannot
+follow). The match is by name, so a name two types share can overstate
+'used'.
+
+Checked: the workspace's 1273 tests, clippy, census --check.
