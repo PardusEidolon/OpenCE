@@ -1,0 +1,1 @@
+Music task (Phase 15): main menu title music via functions 23/100 and widget sounds through play_sound. Tests: ui_host host test, ffi tests/menu_music.rs on ui.map, MenuTests Swift. Workspace tests + clippy pass.
