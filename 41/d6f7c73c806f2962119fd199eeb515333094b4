@@ -1,0 +1,6 @@
+Task: The numbers
+Rank the census's gaps by the missing bytes behind them and their callers
+
+opence census --rank prints each Missing or Partial function main_loop reaches, and each that owes evidence, by the Missing bytes of the gap it heads (walking only through Missing and Partial functions) and then by its direct callers. Counting every caller saturates at about 4,680, since the reached original is one cycle through the main loop, so direct callers are used instead. The ranking feeds the census report and the coverage-completion track.
+
+Checked: tests/ranking.rs (a fake tree with a Replaced function the walk stops at), the census crate's tests, clippy on the workspace, and the real tree's ranking against the scratch measurement (actor_update 115,264 B, ai_update 132,800 B).
