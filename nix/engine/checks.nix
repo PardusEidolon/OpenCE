@@ -33,8 +33,10 @@ in
   # the network
   deny = craneLib.cargoDeny commonArgs;
   # the workspace's coverage (lcov), the tests run as `tests` runs them
+  # (from the tests' source, which has the census's manifest and the
+  # files its tests read)
   coverage = craneLib.cargoLlvmCov (
-    commonArgs
+    testArgs
     // {
       cargoArtifacts = testArtifacts;
       CARGO_PROFILE = "test-opt";

@@ -139,21 +139,32 @@ fn watch_follows_the_log() -> Result {
     let mut watching = Command::new(env!("CARGO_BIN_EXE_opence"))
         .arg("--socket")
         .arg(&engine.socket)
-        .args(["watch", "--backlog", "1"])
+        .args(["watch", "--backlog", "20"])
         .stdout(Stdio::piped())
         .spawn()?;
     let mut lines = BufReader::new(watching.stdout.take().ok_or("no stdout")?).lines();
-    let first = lines.next().ok_or("no backlog")??;
-    assert!(first.ends_with("swift: before"), "{first}");
+    // (the logbook is the process's: under `cargo test` the other tests'
+    // engines, run on other threads, log into it too, so their lines are
+    // passed over)
+    let mut backlog = false;
+    for _ in 0..20 {
+        let line = lines.next().ok_or("no backlog")??;
+        if line.ends_with("swift: before") {
+            backlog = true;
+            break;
+        }
+    }
+    assert!(backlog, "the backlog has no \"before\"");
     // (until the subscription is made, a line may come before it)
     let mut found = false;
     for _ in 0..50 {
         opence_ffi::control::engine_log("warn".into(), "swift".into(), "after".into());
         std::thread::sleep(Duration::from_millis(20));
         if let Some(Ok(line)) = lines.next() {
-            assert!(line.contains("warn swift: after"), "{line}");
-            found = true;
-            break;
+            if line.contains("warn swift: after") {
+                found = true;
+                break;
+            }
         }
     }
     watching.kill()?;

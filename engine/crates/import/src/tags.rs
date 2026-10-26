@@ -691,7 +691,11 @@ mod tests {
             label: label.to_owned(),
         })
         .collect();
-        assert_eq!(reads.into_iter().collect::<Vec<_>>(), expected);
+        // (the recording has every thread's reads, and under `cargo test`
+        // the other tests read tags on other threads, so this test's are
+        // looked for among them)
+        let missing: Vec<_> = expected.iter().filter(|r| !reads.contains(r)).collect();
+        assert!(missing.is_empty(), "not recorded: {missing:?} in {reads:?}");
     }
 
     #[test]
