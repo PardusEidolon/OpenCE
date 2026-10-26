@@ -106,8 +106,13 @@ pub fn read_ratchet(text: &str) -> Result<Ratchet, Error> {
 }
 
 /// What differs between the `recorded` ratchet and the `current` counts:
-/// first the counts that rose, then those that fell. A system either
-/// does not name counts zero.
+/// first the counts that rose, then those that changed otherwise. A
+/// system either does not name counts zero.
+///
+/// The counts are stages a function moves through, so a function that
+/// moves forward is not a rise: Missing never rises, Missing and Partial
+/// together never rise, and owed rises by no more than Missing fell (a
+/// Missing function becomes Matched or Partial and owes its check).
 pub fn compare(recorded: &Ratchet, current: &Ratchet) -> (Vec<String>, Vec<String>) {
     let mut rose = Vec::new();
     let mut fell = Vec::new();
@@ -116,12 +121,23 @@ pub fn compare(recorded: &Ratchet, current: &Ratchet) -> (Vec<String>, Vec<Strin
     for system in systems {
         let was = recorded.get(system).copied().unwrap_or_default();
         let now = current.get(system).copied().unwrap_or_default();
-        for ((name, was), (_, now)) in was.named().into_iter().zip(now.named()) {
-            if now > was {
+        let freed = was.missing.saturating_sub(now.missing);
+        let rises = [
+            now.missing > was.missing,
+            now.partial > was.partial && now.missing + now.partial > was.missing + was.partial,
+            now.owed > was.owed + freed,
+        ];
+        for (((name, was), (_, now)), rises) in was.named().into_iter().zip(now.named()).zip(rises)
+        {
+            if rises {
                 rose.push(format!("{system}: {name} rose from {was} to {now}"));
             } else if now < was {
                 fell.push(format!(
                     "{system}: {name} fell from {was} to {now}: run opence census --ratchet"
+                ));
+            } else if now > was {
+                fell.push(format!(
+                    "{system}: {name} rose from {was} to {now} as Missing fell: run opence census --ratchet"
                 ));
             }
         }

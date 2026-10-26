@@ -138,3 +138,101 @@ fn the_real_tree_has_a_ratchet() {
     };
     assert!(root.join("engine").join(ratchet::RATCHET).is_file());
 }
+
+#[test]
+fn a_function_moving_from_missing_to_owed_is_a_fall() {
+    // (one of the three Missing functions is now Matched and owes its check)
+    let mut was = ratchet::Ratchet::new();
+    was.insert(
+        "units".to_owned(),
+        ratchet::Counts {
+            missing: 3,
+            partial: 0,
+            owed: 0,
+        },
+    );
+    let mut now = ratchet::Ratchet::new();
+    now.insert(
+        "units".to_owned(),
+        ratchet::Counts {
+            missing: 2,
+            partial: 0,
+            owed: 1,
+        },
+    );
+    let (rose, fell) = ratchet::compare(&was, &now);
+    assert!(rose.is_empty(), "{rose:?}");
+    assert!(!fell.is_empty());
+}
+
+#[test]
+fn a_function_moving_from_missing_to_an_owing_partial_is_a_fall() {
+    let mut was = ratchet::Ratchet::new();
+    was.insert(
+        "units".to_owned(),
+        ratchet::Counts {
+            missing: 3,
+            partial: 0,
+            owed: 0,
+        },
+    );
+    let mut now = ratchet::Ratchet::new();
+    now.insert(
+        "units".to_owned(),
+        ratchet::Counts {
+            missing: 2,
+            partial: 1,
+            owed: 1,
+        },
+    );
+    let (rose, _) = ratchet::compare(&was, &now);
+    assert!(rose.is_empty(), "{rose:?}");
+}
+
+#[test]
+fn owed_that_rises_more_than_missing_fell_is_a_rise() {
+    let mut was = ratchet::Ratchet::new();
+    was.insert(
+        "units".to_owned(),
+        ratchet::Counts {
+            missing: 3,
+            partial: 1,
+            owed: 0,
+        },
+    );
+    let mut now = ratchet::Ratchet::new();
+    now.insert(
+        "units".to_owned(),
+        ratchet::Counts {
+            missing: 2,
+            partial: 1,
+            owed: 2,
+        },
+    );
+    let (rose, _) = ratchet::compare(&was, &now);
+    assert!(rose.iter().any(|r| r.contains("owed rose")), "{rose:?}");
+}
+
+#[test]
+fn partial_that_rises_without_missing_falling_is_a_rise() {
+    let mut was = ratchet::Ratchet::new();
+    was.insert(
+        "units".to_owned(),
+        ratchet::Counts {
+            missing: 3,
+            partial: 1,
+            owed: 0,
+        },
+    );
+    let mut now = ratchet::Ratchet::new();
+    now.insert(
+        "units".to_owned(),
+        ratchet::Counts {
+            missing: 3,
+            partial: 2,
+            owed: 0,
+        },
+    );
+    let (rose, _) = ratchet::compare(&was, &now);
+    assert!(rose.iter().any(|r| r.contains("Partial rose")), "{rose:?}");
+}
