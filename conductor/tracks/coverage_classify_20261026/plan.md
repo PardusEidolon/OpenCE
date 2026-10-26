@@ -21,7 +21,7 @@ Every task is test first (`workflow.md`): the trace, measurement or census test 
 - [x] Task: Conductor - User Manual Verification 'Phase 3: Reasons' (Protocol in workflow.md) (automated)
 
 ## Phase 4: Names
-- [ ] Task: Write a test that no census entry is known only by its address.
+- [x] Task: Write a test that no census entry is known only by its address. f2b2bc0c
 - [ ] Task: Name the 1,168 address-only functions by system, from callers, strings and context, in a names table the census reads.
 - [ ] Task: Review the unreached Missing functions and class or annotate each.
 - [ ] Task: Conductor - User Manual Verification 'Phase 4: Names' (Protocol in workflow.md) (automated)
