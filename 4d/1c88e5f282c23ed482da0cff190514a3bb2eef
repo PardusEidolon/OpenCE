@@ -1,0 +1,29 @@
+Task: Traces for `hs_evaluate`, `hs_return` and `sound_class_get`.
+Trace the game's sound classes and script casts against the engine's
+
+The sound classes (sound_class_get, the table, and the fades
+sound_class_set_gain sets and sound_classes_update steps) match the
+game's exactly, over the 51 classes, indices either side and 400 random
+fade steps.
+
+The script casts (hs_can_cast over every pair, hs_cast over values of
+each castable pair, 536 casts) match but for 16 pairs, which the test
+names and the census records as Partial with leaves_out:
+
+- number and string to boolean: the decompilation reads n==0, so zero
+  would be true; the engine keeps zero false until the user's maps
+  settle it;
+- typecasting_procedures holds 4 enum entries for 5 enum types and 5
+  object entries for 6 object types, each run one place earlier than
+  the last, which reads as a miscounted table rather than another enum;
+  the engine casts each type as its own (and an enum to its index,
+  where hs_enum_to_real adds one).
+
+The ratchet now lets Partial rise by as many as owed fell: an owed
+function its new check finds short is progress, not a regression
+(tested in census/tests/ratchet.rs).
+
+hs_evaluate's thread trace and hs_return itself are left to the scripts
+and sounds track, which owns the evaluator. Checked: the script, audio
+and census crates' tests, clippy, both references' --check, census
+--check.
