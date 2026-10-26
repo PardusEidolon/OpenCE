@@ -161,9 +161,9 @@ Found in play (2026-10-25): getting in and out is too quick; vehicles collide on
 - [x] Task: Animations driven by their functions 084e3c0c
     - [x] Write tests: a turret, barrel or other overlay moves only when its function (aim, firing, speed) changes, as the original's object functions say; the warthog's chaingun barrel stays still with no gunner
     - [x] The fixes
-- [ ] Task: Wheels and tracks
-    - [ ] Write tests: wheels turn at the ground speed over their radius and tracks scroll with speed, against the original's functions; golden frames of a moving wheel show no smear between ticks
-    - [ ] The fixes
+- [x] Task: Wheels and tracks dcab43b3
+    - [x] Write tests: wheels turn at the ground speed over their radius and tracks scroll with speed, against the original's functions; golden frames of a moving wheel show no smear between ticks (checked numerically instead: a tick turns a wheel at most 0.25 of a turn, under the half that would ease it backwards)
+    - [x] The fixes
 - [ ] Task: Effects on the move
     - [ ] Write tests: tyre and dust effects spawn at the rate their tags give and change with the ground's material
     - [ ] The fixes
