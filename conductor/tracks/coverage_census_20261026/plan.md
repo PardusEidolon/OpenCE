@@ -40,7 +40,7 @@ manual check is at the end, with the report.
 Each task reads the Rust and Swift sides, adds the citations they lack, and
 classes every function of its directories with its evidence. Partial
 entries list what they leave out.
-- [ ] Task: AI (ai)
+- [x] Task: AI (ai) ac315e46
 - [ ] Task: Scripts (hs)
 - [ ] Task: The game loop (game, main, shell, saved games)
 - [ ] Task: Objects (objects, units, items, devices)
