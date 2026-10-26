@@ -1,0 +1,8 @@
+Task: Citations from Rust and Swift
+Read the original's C and the names the engine's Rust and Swift cite from it
+
+The census needs every function of the original, not just those with a symbol: 1,754 functions the C defines have no symbol of their own (statics the compiler inlined), so a C reader finds the top-level functions, initialised data and macros of source/, skipping comments, literals and other preprocessor lines. 290 definitions without symbols carry a port: comment or 'port' in their name; they are the old hosted port's additions and are set apart, not counted as the original's. The original is then 8,501 functions.
+
+The citations are names of those functions in backticks in a comment of a crate's src/ or of the app's Swift (not tests, not the Swift uniffi generates). 236 are cited today, a superset of the reference map's 159.
+
+Checked: tests on fake crates and Swift sources, and on the real tree.
