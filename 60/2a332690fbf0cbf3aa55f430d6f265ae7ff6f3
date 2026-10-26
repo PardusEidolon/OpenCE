@@ -1,0 +1,8 @@
+Task: Write a reference test that compiles `object_new` and `object_delete` against the fake world and fails on an empty trace.
+Trace the game's object table against the engine's
+
+tools/engine_data_reference.py compiles data.c's data array and objects.c's object header table (object_header_new, object_header_delete, the allocating part of object_new and object_delete) against the shared fake world, and runs 1,500 random makes and deletes on the retail game's 2048 objects. sim/tests/data_reference.rs replays it on the engine: each new object takes the game's slot, the table walks in the game's order, a deleted handle is refused and the table fills at the same count. The test failed to build before the trace existed.
+
+Divergence recorded for the game loop track: the game defers an object's delete to the end of objects_update (only the being-deleted bit is set at once), and the engine frees the slot at once. Handle values differ too (a global identifier against a salt per slot); only networking observes them.
+
+Census: data_next_index and datum_new are Matched against the trace; object_header_new and object_header_delete are Ported through it. Owed 698 -> 696. census --check is clean.
