@@ -11,7 +11,9 @@ The functions are source/math/real_math.c's `angle_between_vectors3d` and
 `matrix4x3_transform_normal` and `matrix4x3_inverse_transform_normal`,
 source/math/geometry.c's `geosphere_new` and its helpers, and
 source/math/random_math.c's seeded numbers and
-`seed_random_vector_in_cone3d`, with real_math.h's inline helpers, found by name as tools/harness finds them, and
+`seed_random_vector_in_cone3d`, with real_math.h's inline helpers (and its
+one-operation helpers, which the engine leaves to glam and libm, run over
+vectors of their own), found by name as tools/harness finds them, and
 compiled for this machine against a small fake world. The table is written
 to engine/crates/sim/tests/math_reference.txt, which
 engine/crates/sim/tests/math_reference.rs reads.
@@ -49,6 +51,43 @@ INLINE_FUNCTIONS = [
     "cross_product3d",
 ]
 
+# real_math.h's helpers of one operation each, which the engine does with a
+# glam or libm primitive (in the order they call one another)
+HELPER_FUNCTIONS = [
+    "reciprocal_square_root",
+    "arcsine",
+    "tangent",
+    "power",
+    "valid_real",
+    "interpolate_scalar",
+    "set_real_vector2d",
+    "set_real_point2d",
+    "set_real_vector3d",
+    "set_real_euler_angles2d",
+    "dot_product2d",
+    "cross_product2d",
+    "magnitude_squared2d",
+    "magnitude2d",
+    "scale_vector2d",
+    "negate_vector2d",
+    "negate_vector3d",
+    "vector_from_points2d",
+    "vector_from_points3d",
+    "distance_squared2d",
+    "distance_squared3d",
+    "distance2d",
+    "distance3d",
+    "midpoint3d",
+    "point_from_line2d",
+    "point_from_line3d",
+    "point_in_circle",
+    "point_in_sphere",
+    "rotate_vector2d",
+    "limit2d",
+    "limit3d",
+    "plane3d_distance_to_point",
+]
+
 GEOMETRY_FUNCTIONS = [
     "geosphere_new",
     "geosphere_dispose",
@@ -79,6 +118,8 @@ typedef float real;
 typedef int boolean;
 
 #define NONE (-1)
+#define TRUE 1
+#define FALSE 0
 #define MIN(a,b) ((a)<(b)?(a):(b))
 #define MAX(a,b) ((a)>(b)?(a):(b))
 #define NUMBER_OF_VERTICES_PER_TRIANGLE 3
@@ -96,6 +137,9 @@ typedef int boolean;
 typedef struct { real i, j, k; } real_vector3d;
 typedef struct { real x, y, z; } real_point3d;
 typedef struct { real yaw, pitch; } real_euler_angles2d;
+typedef struct { real i, j; } real_vector2d;
+typedef struct { real x, y; } real_point2d;
+typedef struct { real_vector3d n; real d; } real_plane3d;
 typedef struct
 {
 	real scale;
@@ -223,6 +267,121 @@ int main(void)
 			printf(" %u\n", cone_seed);
 		}
 	}
+	/* the one-operation helpers, over vectors of their own: at random,
+	with zero vectors and a zero length now and then, and the reals that
+	are not numbers */
+	for (step = 0; step<400; step++)
+	{
+		static real const special[] = { INFINITY, -INFINITY, NAN, 0.0f };
+		real_vector3d a3 = vector();
+		real_vector3d b3 = vector();
+		real_vector3d v3 = vector();
+		real_vector3d r3;
+		real_vector2d a2, b2, r2;
+		real_point2d p2, q2, s2;
+		real_point3d p3, q3, s3;
+		real_euler_angles2d angles;
+		real_plane3d plane;
+		real t = component();
+		real x = component()*0.5f;
+		real angle = component()*_pi;
+		real length = step%40==6 ? 0.0f : fabsf(component())*1.5f;
+		real base = fabsf(component())*2.0f;
+		real current = component();
+		real n = step%10==0 ? special[(step/10)%4] : t;
+		real sine_value = sinf(angle);
+		real cosine_value = cosf(angle);
+
+		if (step%50==5) { a3.i = 0.0f; a3.j = 0.0f; a3.k = 0.0f; }
+		set_real_vector2d(&a2, a3.i, a3.j);
+		set_real_vector2d(&b2, b3.i, b3.j);
+		set_real_point2d(&p2, a3.k, b3.k);
+		set_real_point2d(&q2, v3.i, v3.j);
+		p3.x = a3.i; p3.y = a3.j; p3.z = a3.k;
+		q3.x = b3.i; q3.y = b3.j; q3.z = b3.k;
+		set_real_vector3d(&plane.n, v3.k, v3.i, v3.j);
+		plane.d = t;
+		set_real_euler_angles2d(&angles, t, angle);
+		printf("set_real_euler_angles2d %.9g %.9g %.9g %.9g\n", t, angle, angles.yaw, angles.pitch);
+		printf("arcsine %.9g %.9g\n", x, arcsine(x));
+		printf("tangent %.9g %.9g\n", angle, tangent(angle));
+		printf("power %.9g %.9g %.9g\n", base, t, power(base, t));
+		printf("valid_real %.9g %d\n", n, valid_real(n) ? 1 : 0);
+		{
+			real moved = current;
+
+			interpolate_scalar(&moved, t, length);
+			printf("interpolate_scalar %.9g %.9g %.9g %.9g\n", current, t, length, moved);
+		}
+		printf("dot_product2d %.9g %.9g %.9g %.9g %.9g\n", a2.i, a2.j, b2.i, b2.j, dot_product2d(&a2, &b2));
+		printf("cross_product2d %.9g %.9g %.9g %.9g %.9g\n", a2.i, a2.j, b2.i, b2.j, cross_product2d(&a2, &b2));
+		printf("magnitude_squared2d %.9g %.9g %.9g\n", a2.i, a2.j, magnitude_squared2d(&a2));
+		printf("magnitude2d %.9g %.9g %.9g\n", a2.i, a2.j, magnitude2d(&a2));
+		scale_vector2d(&a2, t, &r2);
+		printf("scale_vector2d %.9g %.9g %.9g %.9g %.9g\n", a2.i, a2.j, t, r2.i, r2.j);
+		negate_vector2d(&a2, &r2);
+		printf("negate_vector2d %.9g %.9g %.9g %.9g\n", a2.i, a2.j, r2.i, r2.j);
+		negate_vector3d(&a3, &r3);
+		printf("negate_vector3d");
+		print_vector(&a3);
+		print_vector(&r3);
+		printf("\n");
+		vector_from_points2d(&p2, &q2, &r2);
+		printf("vector_from_points2d %.9g %.9g %.9g %.9g %.9g %.9g\n", p2.x, p2.y, q2.x, q2.y, r2.i, r2.j);
+		vector_from_points3d(&p3, &q3, &r3);
+		printf("vector_from_points3d");
+		print_vector(&a3);
+		print_vector(&b3);
+		print_vector(&r3);
+		printf("\n");
+		printf("distance_squared2d %.9g %.9g %.9g %.9g %.9g\n", p2.x, p2.y, q2.x, q2.y, distance_squared2d(&p2, &q2));
+		printf("distance2d %.9g %.9g %.9g %.9g %.9g\n", p2.x, p2.y, q2.x, q2.y, distance2d(&p2, &q2));
+		printf("distance_squared3d");
+		print_vector(&a3);
+		print_vector(&b3);
+		printf(" %.9g\n", distance_squared3d(&p3, &q3));
+		printf("distance3d");
+		print_vector(&a3);
+		print_vector(&b3);
+		printf(" %.9g\n", distance3d(&p3, &q3));
+		midpoint3d(&p3, &q3, &s3);
+		printf("midpoint3d");
+		print_vector(&a3);
+		print_vector(&b3);
+		printf(" %.9g %.9g %.9g\n", s3.x, s3.y, s3.z);
+		point_from_line2d(&p2, &a2, t, &s2);
+		printf("point_from_line2d %.9g %.9g %.9g %.9g %.9g %.9g %.9g\n", p2.x, p2.y, a2.i, a2.j, t, s2.x, s2.y);
+		point_from_line3d(&p3, &v3, t, &s3);
+		printf("point_from_line3d");
+		print_vector(&a3);
+		print_vector(&v3);
+		printf(" %.9g %.9g %.9g %.9g\n", t, s3.x, s3.y, s3.z);
+		printf("point_in_circle %.9g %.9g %.9g %.9g %.9g %d\n", p2.x, p2.y, q2.x, q2.y, length*2.0f, point_in_circle(&p2, &q2, length*2.0f) ? 1 : 0);
+		printf("point_in_sphere");
+		print_vector(&a3);
+		print_vector(&b3);
+		printf(" %.9g %d\n", length*2.0f, point_in_sphere(&p3, &q3, length*2.0f) ? 1 : 0);
+		rotate_vector2d(&a2, sine_value, cosine_value, &r2);
+		printf("rotate_vector2d %.9g %.9g %.9g %.9g %.9g %.9g\n", a2.i, a2.j, sine_value, cosine_value, r2.i, r2.j);
+		{
+			real_vector2d limited2 = a2;
+			real_vector3d limited3 = a3;
+			boolean limited = limit2d(&limited2, length);
+
+			printf("limit2d %.9g %.9g %.9g %d %.9g %.9g\n", a2.i, a2.j, length, limited ? 1 : 0, limited2.i, limited2.j);
+			limited = limit3d(&limited3, length);
+			printf("limit3d");
+			print_vector(&a3);
+			printf(" %.9g %d", length, limited ? 1 : 0);
+			print_vector(&limited3);
+			printf("\n");
+		}
+		printf("plane3d_distance_to_point");
+		print_vector(&plane.n);
+		printf(" %.9g", plane.d);
+		print_vector(&a3);
+		printf(" %.9g\n", plane3d_distance_to_point(&plane, &p3));
+	}
 	return 0;
 }
 """
@@ -236,7 +395,7 @@ def source_file():
     geometry_c = read("source/math/geometry.c")
     geometry_h = read("source/math/geometry.h")
     random_c = read("source/math/random_math.c")
-    helpers = [inline(real_math_h, name) for name in INLINE_FUNCTIONS]
+    helpers = [inline(real_math_h, name) for name in INLINE_FUNCTIONS + HELPER_FUNCTIONS]
     definitions = [function(real_math_c, name) for name in REAL_MATH_FUNCTIONS]
     definitions += [function(matrix_c, name) for name in MATRIX_FUNCTIONS]
     # the geosphere: its counts, its structure, the private functions'
@@ -277,7 +436,8 @@ def reference():
         "# angle <a> <b> <angle between>\n"
         "# frame <forward> <up> <vector> <yaw> <pitch> <the frame turning the vector>\n"
         "# direction <the random direction table's vector, in order>\n"
-        "# cone <seed before> <axis> <inner> <outer> <the vector drawn> <seed after>\n" + output
+        "# cone <seed before> <axis> <inner> <outer> <the vector drawn> <seed after>\n"
+        "# <a one-operation helper's name> <its arguments> <what it gives>\n" + output
     )
 
 

@@ -38,6 +38,7 @@ pub mod point_physics;
 pub mod projectile;
 pub mod ragdoll;
 pub mod random;
+pub mod real_math;
 pub mod scenery;
 pub mod seats;
 pub mod unit_animator;
