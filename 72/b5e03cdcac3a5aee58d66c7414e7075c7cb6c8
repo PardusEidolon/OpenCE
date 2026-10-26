@@ -1,0 +1,8 @@
+Task: Traces for `real_random_range` and the other random helpers.
+Trace the game's random helpers against the engine's seeds
+
+tools/engine_random_reference.py compiles random_math.c's seeds and real_math.h's helpers (random_range, real_random_range, random_direction3d, the cone, and the local seed's twins) and draws 3,000 numbers from both seeds in turn. sim/tests/random_reference.rs draws each again from a RandomSeed holding the seed before and checks the number and the seed after: all match, and a locked seed still draws while no game engine runs.
+
+Nine census entries move from owed to matched against the trace (689 owe evidence, from 696). The particles draw on a xorshift of their own, not the game's local seed; the census notes that for the animation and world track.
+
+Checked: the new tests pass, census --check is clean, the workspace's tests pass.
