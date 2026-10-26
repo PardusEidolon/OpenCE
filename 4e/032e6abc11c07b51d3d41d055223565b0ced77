@@ -1,0 +1,4 @@
+Task: Objects (objects, units, items, devices)
+Class the objects: placement, damage, devices, projectiles and vehicles Matched, the biped mover, attach, scale and the presented natives Partial, object lights and shadows Replaced
+
+The objects walk of the census. Placement, vitality and damage, scenery, projectiles, the device natives, the unit script natives and the vehicle physics are Matched, each owing a check against the original. The biped's update physics is Partial, since a character controller moves it; attach takes the parent's origin, not its markers; scale is taken at once; and the natives the engine only records as an event leave out what they do. Object lights and shadows are the renderer's. Checked: census --check, and the census and campaign tests (75/75).
