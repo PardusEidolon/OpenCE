@@ -13,7 +13,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `bungie_net` | | | | | 109 (18992 B) | | 0 |
 | `cache` | | | | | 187 (18400 B) | 37 (6384 B) | 0 |
 | `camera` | | 19 (6832 B) | | 2 (256 B) | 17 (2448 B) | 108 (27008 B) | 21 |
-| `cseries` | | | | | 36 (7632 B) | 115 (14208 B) | 0 |
+| `cseries` | | | 29 (3168 B) | | 122 (18672 B) | | 0 |
 | `cutscene` | | 8 (288 B) | | 1 (32 B) | | 72 (10208 B) | 9 |
 | `devices` | | 17 (3728 B) | | | | 43 (3456 B) | 17 |
 | `dialogs` | | | | | 5 (1200 B) | 1 (128 B) | 0 |
@@ -24,9 +24,9 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `input` | | | | | 51 (6912 B) | 5 (304 B) | 0 |
 | `interface` | 6 (0 B) | 96 (21808 B) | | 16 (1744 B) | 62 (6784 B) | 734 (126344 B) | 112 |
 | `items` | 7 (4048 B) | 24 (9024 B) | | | | 151 (22976 B) | 24 |
-| `main` | | | | | 15 (768 B) | 141 (15072 B) | 0 |
-| `math` | 36 (4096 B) | 5 (240 B) | | | 19 (3072 B) | 156 (15760 B) | 5 |
-| `memory` | | 2 (336 B) | | | 61 (9136 B) | 196 (25824 B) | 2 |
+| `main` | | | | | 18 (1440 B) | 138 (14400 B) | 0 |
+| `math` | 36 (4096 B) | 5 (240 B) | 72 (4720 B) | | 19 (3072 B) | 84 (11040 B) | 5 |
+| `memory` | | 2 (336 B) | 151 (19856 B) | | 106 (15104 B) | | 2 |
 | `models` | 17 (6080 B) | 12 (4880 B) | | 1 (464 B) | 7 (1616 B) | 16 (4528 B) | 13 |
 | `networking` | | | | | 313 (49824 B) | | 0 |
 | `objects` | | 47 (9776 B) | | 12 (96 B) | 49 (12832 B) | 241 (28880 B) | 59 |
@@ -39,11 +39,11 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `shell` | | | | | 10 (528 B) | 3 (0 B) | 0 |
 | `sound` | 5 (672 B) | 63 (6864 B) | | 2 (32 B) | 55 (2624 B) | 93 (16768 B) | 65 |
 | `structures` | | 1 (0 B) | | | 98 (27920 B) | 28 (3792 B) | 1 |
-| `tag_files` | | | | | 5 (0 B) | 44 (4288 B) | 0 |
+| `tag_files` | | | 44 (4288 B) | | 5 (0 B) | | 0 |
 | `text` | | 9 (1936 B) | | | 17 (4496 B) | 86 (10480 B) | 9 |
 | `tool` | | | | | 27 (8752 B) | | 0 |
 | `units` | 8 (1824 B) | 67 (19968 B) | | 14 (1008 B) | | 278 (84720 B) | 81 |
-| **all** | 81 (16832 B) | 581 (146624 B) | | 94 (36000 B) | 2553 (502208 B) | 5192 (909458 B) | 675 |
+| **all** | 81 (16832 B) | 581 (146624 B) | 296 (32032 B) | 94 (36000 B) | 2687 (519888 B) | 4762 (859746 B) | 675 |
 
 ## `ai`
 
@@ -857,51 +857,155 @@ docs/engine.md's "The coverage census" says what each class needs.
 | --- | --- | --- | --- | --- |
 | `cseries_initialize` | cseries/cseries.c | Replaced |  | through its caller `shell_initialize` |
 | `cseries_dispose` | cseries/cseries.c | Replaced |  | through its caller `shell_dispose` |
+| `string_to_tag` | cseries/cseries.c | Replaced | import/src/lib.rs | maps imported to a typed format |
 | `tag_to_string` | cseries/cseries.c | Replaced |  | through its caller `tag_get` |
 | `strnlen` | cseries/cseries.c | Replaced |  | through its caller `data_encode_string` |
+| `strnupr` | cseries/cseries.c | Native |  | `String` |
+| `strnlwr` | cseries/cseries.c | Native |  | `String` |
+| `strupr` | cseries/cseries.c | Native |  | `String` |
+| `strlwr` | cseries/cseries.c | Native |  | `String` |
+| `csprintf` | cseries/cseries.c | Native |  | `String` |
+| `display_assert` | cseries/cseries.c | Replaced | dev/src/logbook.rs | the editor and tools |
+| `csmemcmp` | cseries/cseries.c | Native |  | `copy_from_slice` |
+| `csmemmove` | cseries/cseries.c | Native |  | `copy_from_slice` |
+| `csmemset` | cseries/cseries.c | Native |  | `copy_from_slice` |
+| `csstrcat` | cseries/cseries.c | Native |  | `String` |
+| `csstrcmp` | cseries/cseries.c | Native |  | `String` |
+| `csstrncat` | cseries/cseries.c | Native |  | `String` |
+| `csstrncmp` | cseries/cseries.c | Native |  | `String` |
+| `csstrncpy` | cseries/cseries.c | Native |  | `String` |
+| `csstrtok` | cseries/cseries.c | Native |  | `String` |
+| `csstrlen` | cseries/cseries.c | Native |  | `String` |
+| `csstrcpy` | cseries/cseries.c | Native |  | `String` |
+| `csmemcpy` | cseries/cseries.c | Native |  | `copy_from_slice` |
+| `csstrcasecmp` | cseries/cseries.c | Native |  | `String` |
+| `stristr` | cseries/cseries.c | Native |  | `String` |
+| `string_hash` | cseries/cseries.c | Native |  | `std::collections::BTreeMap` |
+| `display_debug_string` | cseries/cseries_windows.c | Replaced | dev/src/logbook.rs | the editor and tools |
+| `system_exit` | cseries/cseries_windows.c | Replaced | app/Sources/OpenCEEngineKit/PlayControls.swift | Xbox-only hardware |
+| `system_unique_identifier_get` | cseries/cseries_windows.c | Replaced | app/Sources/OpenCEEngineKit/PlayControls.swift | Xbox-only hardware |
+| `system_unique_identifiers_equal` | cseries/cseries_windows.c | Replaced | app/Sources/OpenCEEngineKit/PlayControls.swift | Xbox-only hardware |
+| `system_milliseconds` | cseries/cseries_windows.c | Native |  | `std::time::Instant` |
 | `system_seconds` | cseries/cseries_windows.c | Replaced |  | through its caller `get_number_suitable_for_initializing_random_seed` |
+| `system_get_user_name` | cseries/cseries_windows.c | Replaced | app/Sources/OpenCEEngineKit/PlayControls.swift | Xbox-only hardware |
+| `system_calloc` | cseries/cseries_windows.c | Native |  | `Vec` |
+| `system_malloc` | cseries/cseries_windows.c | Native |  | `Vec` |
+| `system_free` | cseries/cseries_windows.c | Native |  | `Vec` |
+| `system_realloc` | cseries/cseries_windows.c | Native |  | `Vec` |
+| `system_get_used_memory_size` | cseries/cseries_windows.c | Replaced | ffi/src/allocations.rs | the editor and tools |
 | `system_memory_information_get` | cseries/cseries_windows.c | Replaced |  | through its caller `render_debug_profile` |
+| `system_show_wait_cursor` | cseries/cseries_windows.c | Replaced | app/Sources/OpenCEEngineKit/PlayControls.swift | Xbox-only hardware |
+| `system_alert` | cseries/cseries_windows.c | Replaced | dev/src/logbook.rs | the editor and tools |
+| `system_kill_screen_saver` | cseries/cseries_windows.c | Replaced | app/Sources/OpenCEEngineKit/PlayControls.swift | Xbox-only hardware |
 | `exception_code_get_string` | cseries/cseries_windows.c | Replaced |  | through its caller `generic_exception_filter` |
 | `generic_exception_filter` | cseries/cseries_windows.c | Replaced |  | through its caller `main` |
 | `debug_memory_manager_initialize` | cseries/debug_memory.c | Replaced |  | through its caller `cseries_initialize` |
+| `code_0007ccf0` | cseries/debug_memory.c | Replaced | ffi/src/allocations.rs | the editor and tools |
+| `code_0007cd40` | cseries/debug_memory.c | Replaced | ffi/src/allocations.rs | the editor and tools |
+| `code_0007cd90` | cseries/debug_memory.c | Replaced | ffi/src/allocations.rs | the editor and tools |
+| `code_0007cdc0` | cseries/debug_memory.c | Replaced | ffi/src/allocations.rs | the editor and tools |
 | `check_memory_status` | cseries/debug_memory.c | Replaced |  | through its caller `scenario_load` |
+| `local_random` | cseries/debug_memory.c | Replaced | ffi/src/allocations.rs | the editor and tools |
+| `code_0007ce40` | cseries/debug_memory.c | Replaced | ffi/src/allocations.rs | the editor and tools |
+| `code_0007cf50` | cseries/debug_memory.c | Replaced | ffi/src/allocations.rs | the editor and tools |
+| `code_0007cfc0` | cseries/debug_memory.c | Replaced | ffi/src/allocations.rs | the editor and tools |
+| `code_0007d060` | cseries/debug_memory.c | Replaced | ffi/src/allocations.rs | the editor and tools |
 | `debug_check_memory` | cseries/debug_memory.c | Replaced |  | through its caller `debug_dump_memory_for_file` |
 | `debug_dump_memory_for_file` | cseries/debug_memory.c | Replaced |  | through its caller `debug_dump_memory` |
+| `debug_dump_memory_by_file` | cseries/debug_memory.c | Replaced | ffi/src/allocations.rs | the editor and tools |
+| `debug_malloc` | cseries/debug_memory.c | Replaced | ffi/src/allocations.rs | the editor and tools |
+| `debug_free` | cseries/debug_memory.c | Replaced | ffi/src/allocations.rs | the editor and tools |
+| `debug_realloc` | cseries/debug_memory.c | Replaced | ffi/src/allocations.rs | the editor and tools |
 | `debug_dump_memory` | cseries/debug_memory.c | Replaced |  | through its caller `cseries_dispose` |
 | `errors_dispose` | cseries/errors.c | Replaced |  | through its caller `shell_dispose` |
+| `errors_output_to_debug_file` | cseries/errors.c | Replaced | dev/src/logbook.rs | the editor and tools |
+| `errors_overflow_suppression_enable` | cseries/errors.c | Replaced | dev/src/logbook.rs | the editor and tools |
+| `error_get` | cseries/errors.c | Replaced | dev/src/logbook.rs | the editor and tools |
+| `write_to_error_file` | cseries/errors.c | Replaced | dev/src/logbook.rs | the editor and tools |
+| `code_0007d9d0` | cseries/errors.c | Replaced | dev/src/logbook.rs | the editor and tools |
 | `errors_initialize` | cseries/errors.c | Replaced |  | through its caller `shell_initialize` |
+| `error` | cseries/errors.c | Replaced | dev/src/logbook.rs | the editor and tools |
+| `errors_handle` | cseries/errors.c | Replaced | dev/src/logbook.rs | the editor and tools |
+| `errors_clear` | cseries/errors.c | Replaced | dev/src/logbook.rs | the editor and tools |
 | `profile_initialize` | cseries/profile.c | Replaced |  | through its caller `cseries_initialize` |
+| `profile_internal_step` | cseries/profile.c | Replaced | dev/src/logbook.rs | the editor and tools |
 | `profile_rasterizer_stats` | cseries/profile.c | Replaced |  | through its caller `rasterizer_profile_frame_end` |
+| `profile_timesection_inherit` | cseries/profile.c | Replaced | dev/src/logbook.rs | the editor and tools |
+| `profile_seconds_elapsed` | cseries/profile.c | Replaced | dev/src/logbook.rs | the editor and tools |
+| `profile_lapsed_frames` | cseries/profile.c | Replaced | dev/src/logbook.rs | the editor and tools |
+| `profile_lapsed_msec` | cseries/profile.c | Replaced | dev/src/logbook.rs | the editor and tools |
+| `find_profile_section` | cseries/profile.c | Replaced | dev/src/logbook.rs | the editor and tools |
+| `profile_enter_private` | cseries/profile.c | Replaced | dev/src/logbook.rs | the editor and tools |
+| `profile_exit_private` | cseries/profile.c | Replaced | dev/src/logbook.rs | the editor and tools |
+| `profile_describe_frame` | cseries/profile.c | Replaced | dev/src/logbook.rs | the editor and tools |
+| `profile_timesection_begin` | cseries/profile.c | Replaced | dev/src/logbook.rs | the editor and tools |
+| `profile_timesection_end` | cseries/profile.c | Replaced | dev/src/logbook.rs | the editor and tools |
 | `compare_profile_sections` | cseries/profile.c | Replaced |  | through its caller `profile_dump` |
 | `profile_dump` | cseries/profile.c | Replaced |  | through its caller `render_debug_profile` |
+| `profile_dump_to_file` | cseries/profile.c | Replaced | dev/src/logbook.rs | the editor and tools |
+| `profile_dump_frame` | cseries/profile.c | Replaced | dev/src/logbook.rs | the editor and tools |
+| `profile_dump_frame_stop` | cseries/profile.c | Replaced | dev/src/logbook.rs | the editor and tools |
+| `string_has_prefix` | cseries/profile.c | Replaced | dev/src/logbook.rs | the editor and tools |
+| `profile_sections_activation` | cseries/profile.c | Replaced | dev/src/logbook.rs | the editor and tools |
+| `profile_sections_activate` | cseries/profile.c | Replaced | dev/src/logbook.rs | the editor and tools |
+| `profile_sections_deactivate` | cseries/profile.c | Replaced | dev/src/logbook.rs | the editor and tools |
 | `profile_find_frame_value` | cseries/profile.c | Replaced |  | through its caller `render_debug_profile` |
+| `profile_find_game_value` | cseries/profile.c | Replaced | dev/src/logbook.rs | the editor and tools |
 | `profile_frame_get_value` | cseries/profile.c | Replaced |  | through its caller `render_debug_profile` |
 | `profile_frame_iterator_new` | cseries/profile.c | Replaced |  | through its caller `render_debug_profile` |
 | `profile_frame_iterator_next` | cseries/profile.c | Replaced |  | through its caller `render_debug_profile` |
 | `profile_frame_get_messages` | cseries/profile.c | Replaced |  | through its caller `render_debug_profile` |
 | `profile_frame_get_stalls` | cseries/profile.c | Replaced |  | through its caller `render_debug_profile` |
+| `profile_rasterizer_stalls` | cseries/profile.c | Replaced | dev/src/logbook.rs | the editor and tools |
+| `profile_timesection_begin_now` | cseries/profile.c | Replaced | dev/src/logbook.rs | the editor and tools |
+| `profile_timesection_end_now` | cseries/profile.c | Replaced | dev/src/logbook.rs | the editor and tools |
+| `profile_tick_start` | cseries/profile.c | Replaced | dev/src/logbook.rs | the editor and tools |
+| `profile_tick_end` | cseries/profile.c | Replaced | dev/src/logbook.rs | the editor and tools |
+| `profile_render_start` | cseries/profile.c | Replaced | dev/src/logbook.rs | the editor and tools |
+| `profile_render_end` | cseries/profile.c | Replaced | dev/src/logbook.rs | the editor and tools |
 | `profile_render_window_start` | cseries/profile.c | Replaced |  | through its caller `render_frame_pregame` |
 | `profile_render_window_end` | cseries/profile.c | Replaced |  | through its caller `render_frame_pregame` |
 | `profile_texture_start` | cseries/profile.c | Replaced |  | through its caller `rasterizer_set_texture_bitmap_data` |
 | `profile_texture_end` | cseries/profile.c | Replaced |  | through its caller `rasterizer_set_texture_bitmap_data` |
+| `profile_frame_start` | cseries/profile.c | Replaced | dev/src/logbook.rs | the editor and tools |
+| `profile_frame_end` | cseries/profile.c | Replaced | dev/src/logbook.rs | the editor and tools |
+| `profile_idle_start` | cseries/profile.c | Replaced | dev/src/logbook.rs | the editor and tools |
+| `profile_idle_end` | cseries/profile.c | Replaced | dev/src/logbook.rs | the editor and tools |
+| `progress_new` | cseries/progress.c | Replaced | dev/src/logbook.rs | the editor and tools |
+| `progress_update` | cseries/progress.c | Replaced | dev/src/logbook.rs | the editor and tools |
+| `code_00080360` | cseries/sort.c | Native |  | `sort_by` |
+| `code_000803c0` | cseries/sort.c | Native |  | `sort_by` |
 | `qsort_2byte` | cseries/sort.c | Replaced |  | through its caller `rasterizer_frame_statistics_count_dynamic_vertices` |
+| `qsort_4byte` | cseries/sort.c | Native |  | `sort_by` |
+| `stack_walk_global_function_offset` | cseries/stack_walk_windows.c | Replaced | dev/src/logbook.rs | the editor and tools |
+| `stack_walk_disregard_symbol_names` | cseries/stack_walk_windows.c | Replaced | dev/src/logbook.rs | the editor and tools |
 | `symbol_sort_proc` | cseries/stack_walk_windows.c | Replaced |  | through its caller `load_symbol_table` |
 | `free_symbol_table` | cseries/stack_walk_windows.c | Replaced |  | through its caller `load_symbol_table` |
+| `symbol_name_from_address` | cseries/stack_walk_windows.c | Replaced | dev/src/logbook.rs | the editor and tools |
+| `base_address_from_symbol_name` | cseries/stack_walk_windows.c | Replaced | dev/src/logbook.rs | the editor and tools |
+| `is_valid_ebp` | cseries/stack_walk_windows.c | Replaced | dev/src/logbook.rs | the editor and tools |
+| `walk_up` | cseries/stack_walk_windows.c | Replaced | dev/src/logbook.rs | the editor and tools |
+| `initialize_stack_walk` | cseries/stack_walk_windows.c | Replaced | dev/src/logbook.rs | the editor and tools |
+| `walk_stack_context` | cseries/stack_walk_windows.c | Replaced | dev/src/logbook.rs | the editor and tools |
+| `walk_stack` | cseries/stack_walk_windows.c | Replaced | dev/src/logbook.rs | the editor and tools |
 | `stack_walk_dispose` | cseries/stack_walk_windows.c | Replaced |  | through its caller `errors_dispose` |
+| `stack_walk_with_context` | cseries/stack_walk_windows.c | Replaced | dev/src/logbook.rs | the editor and tools |
 | `load_symbol_table` | cseries/stack_walk_windows.c | Replaced |  | through its caller `stack_walk_initialize` |
 | `stack_walk_initialize` | cseries/stack_walk_windows.c | Replaced |  | through its caller `errors_initialize` |
+| `stack_walk` | cseries/stack_walk_windows.c | Replaced | dev/src/logbook.rs | the editor and tools |
+| `debug_check_memory_globals` | cseries/debug_memory.c | Replaced | ffi/src/allocations.rs | the editor and tools |
+| `debug_memory_header_checksum` | cseries/debug_memory.c | Replaced | ffi/src/allocations.rs | the editor and tools |
+| `compare_file_pointer_totals` | cseries/debug_memory.c | Replaced | ffi/src/allocations.rs | the editor and tools |
+| `debug_check_pointer_header` | cseries/debug_memory.c | Replaced | ffi/src/allocations.rs | the editor and tools |
+| `debug_check_pointer_overrun` | cseries/debug_memory.c | Replaced | ffi/src/allocations.rs | the editor and tools |
+| `debug_memory_fill_with_random` | cseries/debug_memory.c | Replaced | ffi/src/allocations.rs | the editor and tools |
+| `debug_memory_add_pointer` | cseries/debug_memory.c | Replaced | ffi/src/allocations.rs | the editor and tools |
+| `debug_memory_remove_pointer` | cseries/debug_memory.c | Replaced | ffi/src/allocations.rs | the editor and tools |
+| `write_to_debug_file` | cseries/errors.c | Replaced | dev/src/logbook.rs | the editor and tools |
+| `reset_error_state` | cseries/errors.c | Replaced | dev/src/logbook.rs | the editor and tools |
+| `profile_append` | cseries/profile.c | Replaced | dev/src/logbook.rs | the editor and tools |
 | `shortsort_2byte` | cseries/sort.c | Replaced |  | through its caller `qsort_2byte` |
-
-115 Missing (71 reached from `main_loop`), by file:
-
-- cseries/cseries.c: `string_to_tag`, `strnupr`, `strnlwr`, `strupr`, `strlwr`, `csprintf`, `display_assert`, `csmemcmp`, `csmemmove`, `csmemset`, `csstrcat`, `csstrcmp`, `csstrncat`, `csstrncmp`, `csstrncpy`, `csstrtok`, `csstrlen`, `csstrcpy`, `csmemcpy`, `csstrcasecmp`, `stristr`, `string_hash`
-- cseries/cseries_windows.c: `display_debug_string`, `system_exit`, `system_unique_identifier_get`, `system_unique_identifiers_equal`, `system_milliseconds`, `system_get_user_name`, `system_calloc`, `system_malloc`, `system_free`, `system_realloc`, `system_get_used_memory_size`, `system_show_wait_cursor`, `system_alert`, `system_kill_screen_saver`
-- cseries/debug_memory.c: `code_0007ccf0`, `code_0007cd40`, `code_0007cd90`, `code_0007cdc0`, `local_random`, `code_0007ce40`, `code_0007cf50`, `code_0007cfc0`, `code_0007d060`, `debug_dump_memory_by_file`, `debug_malloc`, `debug_free`, `debug_realloc`, `debug_check_memory_globals`, `debug_memory_header_checksum`, `compare_file_pointer_totals`, `debug_check_pointer_header`, `debug_check_pointer_overrun`, `debug_memory_fill_with_random`, `debug_memory_add_pointer`, `debug_memory_remove_pointer`
-- cseries/errors.c: `errors_output_to_debug_file`, `errors_overflow_suppression_enable`, `error_get`, `write_to_error_file`, `code_0007d9d0`, `error`, `errors_handle`, `errors_clear`, `write_to_debug_file`, `reset_error_state`
-- cseries/profile.c: `profile_internal_step`, `profile_timesection_inherit`, `profile_seconds_elapsed`, `profile_lapsed_frames`, `profile_lapsed_msec`, `find_profile_section`, `profile_enter_private`, `profile_exit_private`, `profile_describe_frame`, `profile_timesection_begin`, `profile_timesection_end`, `profile_dump_to_file`, `profile_dump_frame`, `profile_dump_frame_stop`, `string_has_prefix`, `profile_sections_activation`, `profile_sections_activate`, `profile_sections_deactivate`, `profile_find_game_value`, `profile_rasterizer_stalls`, `profile_timesection_begin_now`, `profile_timesection_end_now`, `profile_tick_start`, `profile_tick_end`, `profile_render_start`, `profile_render_end`, `profile_frame_start`, `profile_frame_end`, `profile_idle_start`, `profile_idle_end`, `profile_append`
-- cseries/progress.c: `progress_new`, `progress_update`
-- cseries/sort.c: `code_00080360`, `code_000803c0`, `qsort_4byte`, `shortsort_4byte`
-- cseries/stack_walk_windows.c: `stack_walk_global_function_offset`, `stack_walk_disregard_symbol_names`, `symbol_name_from_address`, `base_address_from_symbol_name`, `is_valid_ebp`, `walk_up`, `initialize_stack_walk`, `walk_stack_context`, `walk_stack`, `stack_walk_with_context`, `stack_walk`
+| `shortsort_4byte` | cseries/sort.c | Native |  | `sort_by` |
 
 ## `cutscene`
 
@@ -1560,6 +1664,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `main_menu_unload` | main/main.c | Replaced |  | through its caller `network_game_create_game_objects` |
 | `main_get_window_count` | main/main.c | Replaced |  | through its caller `_rasterizer_detail_objects_begin` |
 | `main_framerate_render` | main/main.c | Replaced |  | through its caller `interface_draw_fullscreen_overlays` |
+| `halt_and_catch_fire` | main/main.c | Replaced |  | through its caller `main` |
 | `debug_keys_initialize` | main/debug_keys.c | Replaced | dev/src/control.rs | the editor and tools |
 | `debug_keys_dispose` | main/debug_keys.c | Replaced | dev/src/control.rs | the editor and tools |
 | `debug_keys_update` | main/debug_keys.c | Replaced | dev/src/control.rs | the editor and tools |
@@ -1572,30 +1677,59 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `debug_key_profile_reset` | main/debug_keys.c | Replaced | dev/src/control.rs | the editor and tools |
 | `debug_key_erase_all_actors` | main/debug_keys.c | Replaced | dev/src/control.rs | the editor and tools |
 | `debug_key_play_animation` | main/debug_keys.c | Replaced | dev/src/control.rs | the editor and tools |
+| `main_native_build_label` | main/main.c | Replaced |  | through its caller `halt_and_catch_fire` |
+| `main_native_error_tail` | main/main.c | Replaced |  | through its caller `halt_and_catch_fire` |
 
-141 Missing (91 reached from `main_loop`), by file:
+138 Missing (88 reached from `main_loop`), by file:
 
 - main/console.c: `console_initialize`, `console_initialize_for_new_map`, `console_open`, `console_close`, `console_is_active`, `console_printf`, `console_warning`, `code_000eede0`, `code_000eee50`, `code_000eee90`, `console_startup`, `console_dispose`, `console_update`, `console_process_command`, `console_get_text_to_autocomplete`, `console_complete`
-- main/main.c: `main_get_seconds_elapsed`, `gamepad_button_is_down`, `game_connection_set`, `game_connection`, `main_disallow_persistent_storage`, `main_set_map_name`, `main_defer_map_map_change`, `main_set_multiplayer_map_name`, `main_get_map_name`, `main_get_multiplayer_map_name`, `main_set_difficulty`, `main_get_difficulty`, `sort_desired_local_player_controllers`, `code_000ef8e0`, `main_reset_map`, `main_revert_map`, `main_skip_cinematic`, `main_save_map_nonsafe`, `main_saving_map`, `main_save_cancel`, `main_save_map_safe`, `main_won_map`, `main_lost_map`, `main_respawn`, `main_save_core`, `main_save_core_name`, `main_load_core`, `main_load_core_at_startup`, `main_load_core_name`, `main_load_core_name_at_startup`, `main_switch_structure_bsp`, `main_skip`, `main_queue_map_name`, `code_000efde0`, `main_goto_main_menu`, `main_menu_precache_resources`, `main_menu_ensure_player_queues_exist`, `main_menu_fade_active`, `main_menu_switch_to_single_player`, `main_set_game_connection_to_film_playback`, `main_get_solo_level_from_name`, `main_get_current_solo_level`, `main_get_solo_level_name`, `main_run_demos`, `code_000f00b0`, `compute_window_bounds`, `code_000f0350`, `code_000f0420`, `code_000f05a0`, `code_000f05c0`, `code_000f05f0`, `code_000f06a0`, `code_000f06c0`, `code_000f07a0`, `code_000f07d0`, `code_000f0810`, `code_000f0850`, `code_000f08b0`, `code_000f08d0`, `code_000f08f0`, `code_000f0930`, `code_000f0940`, `code_000f0b60`, `code_000f0bb0`, `main_framerate_throttle_enabled`, `code_000f0bf0`, `main_rasterizer_throttle`, `code_000f13a0`, `main_taking_screenshot`, `main_movie_start`, `main_movie_stop`, `main_stop_time`, `main_start_time`, `main_crash`, `main_print_version`, `main_vertical_blank_interrupt_handler`, `main_save_current_solo_map`, `main_load_last_solo_map`, `main_save_map_no_timeout`, `main_load_ui_scenario`, `main_menu_load`, `main_roll_credits`, `main_pregame_render`, `set_window_camera_values`, `main_present_frame`, `code_000f1c20`, `code_000f1ce0`, `code_000f1d30`, `halt_and_catch_fire`, `main_loop_of_death`, `code_000f24a0`, `main_loop`, `create_local_players`, `main_queue_map_private`, `screenshot_record`, `compute_subframe_counts`, `main_new_map`, `main_change_map_name`, `main_native_build_label`, `main_native_error_tail`, `main_coop_host`, `main_revert_map_private`, `main_skip_cinematic_private`, `main_skip_private`, `main_saving_map_private`, `main_save_map_private`, `main_switch_to_structure_bsp_private`, `main_death_timer_expired`, `main_lost_map_private`, `main_respawn_private`, `main_load_core_private`, `main_save_core_private`, `main_run_demos_private`, `main_frame_rate_debug`, `main_won_map_private`, `main_exit`, `main_reset_time`, `main_update_time_unthrottled`, `main_update_time`, `main_setup_connection`, `main_initialize_time`, `main_reset_map_private`, `screenshot_render`, `main_game_render`, `main_loop_iteration`
+- main/main.c: `main_get_seconds_elapsed`, `gamepad_button_is_down`, `game_connection_set`, `game_connection`, `main_disallow_persistent_storage`, `main_set_map_name`, `main_defer_map_map_change`, `main_set_multiplayer_map_name`, `main_get_map_name`, `main_get_multiplayer_map_name`, `main_set_difficulty`, `main_get_difficulty`, `sort_desired_local_player_controllers`, `code_000ef8e0`, `main_reset_map`, `main_revert_map`, `main_skip_cinematic`, `main_save_map_nonsafe`, `main_saving_map`, `main_save_cancel`, `main_save_map_safe`, `main_won_map`, `main_lost_map`, `main_respawn`, `main_save_core`, `main_save_core_name`, `main_load_core`, `main_load_core_at_startup`, `main_load_core_name`, `main_load_core_name_at_startup`, `main_switch_structure_bsp`, `main_skip`, `main_queue_map_name`, `code_000efde0`, `main_goto_main_menu`, `main_menu_precache_resources`, `main_menu_ensure_player_queues_exist`, `main_menu_fade_active`, `main_menu_switch_to_single_player`, `main_set_game_connection_to_film_playback`, `main_get_solo_level_from_name`, `main_get_current_solo_level`, `main_get_solo_level_name`, `main_run_demos`, `code_000f00b0`, `compute_window_bounds`, `code_000f0350`, `code_000f0420`, `code_000f05a0`, `code_000f05c0`, `code_000f05f0`, `code_000f06a0`, `code_000f06c0`, `code_000f07a0`, `code_000f07d0`, `code_000f0810`, `code_000f0850`, `code_000f08b0`, `code_000f08d0`, `code_000f08f0`, `code_000f0930`, `code_000f0940`, `code_000f0b60`, `code_000f0bb0`, `main_framerate_throttle_enabled`, `code_000f0bf0`, `main_rasterizer_throttle`, `code_000f13a0`, `main_taking_screenshot`, `main_movie_start`, `main_movie_stop`, `main_stop_time`, `main_start_time`, `main_crash`, `main_print_version`, `main_vertical_blank_interrupt_handler`, `main_save_current_solo_map`, `main_load_last_solo_map`, `main_save_map_no_timeout`, `main_load_ui_scenario`, `main_menu_load`, `main_roll_credits`, `main_pregame_render`, `set_window_camera_values`, `main_present_frame`, `code_000f1c20`, `code_000f1ce0`, `code_000f1d30`, `main_loop_of_death`, `code_000f24a0`, `main_loop`, `create_local_players`, `main_queue_map_private`, `screenshot_record`, `compute_subframe_counts`, `main_new_map`, `main_change_map_name`, `main_coop_host`, `main_revert_map_private`, `main_skip_cinematic_private`, `main_skip_private`, `main_saving_map_private`, `main_save_map_private`, `main_switch_to_structure_bsp_private`, `main_death_timer_expired`, `main_lost_map_private`, `main_respawn_private`, `main_load_core_private`, `main_save_core_private`, `main_run_demos_private`, `main_frame_rate_debug`, `main_won_map_private`, `main_exit`, `main_reset_time`, `main_update_time_unthrottled`, `main_update_time`, `main_setup_connection`, `main_initialize_time`, `main_reset_map_private`, `screenshot_render`, `main_game_render`, `main_loop_iteration`
 
 ## `math`
 
 | Function | File | Class | Engine | Evidence |
 | --- | --- | --- | --- | --- |
 | `geosphere_dispose` | math/geometry.c | Ported |  | `tools/engine_math_reference.py` |
+| `plane2d_distance_to_point` | math/geometry.c | Native |  | `glam::Vec2` |
 | `vector_intersect_plane2d` | math/geometry.c | Replaced |  | through its caller `convex_polygon2d_clip_to_plane` |
 | `convex_polygon2d_clip_to_plane` | math/geometry.c | Replaced |  | through its caller `convex_hull2d_intersect` |
 | `convex_polygon3d_clip_to_plane` | math/geometry.c | Replaced |  | through its caller `portal_hull_from_points` |
 | `convex_hull2d_intersect` | math/geometry.c | Replaced |  | through its caller `structure_visibility_find_mirror` |
 | `geosphere_new` | math/geometry.c | Ported | sim/src/random.rs:5 | `tools/engine_math_reference.py` |
+| `matrix4x3_identity` | math/matrix_math.c | Native |  | `glam::Affine3A` |
+| `matrix4x3_transpose` | math/matrix_math.c | Native |  | `glam::Affine3A` |
+| `matrix4x3_inverse` | math/matrix_math.c | Native |  | `glam::Affine3A` |
+| `matrix4x3_scale` | math/matrix_math.c | Native |  | `glam::Affine3A` |
+| `matrix4x3_translation` | math/matrix_math.c | Native |  | `glam::Affine3A` |
+| `matrix4x3_rotation_from_axis_and_angle` | math/matrix_math.c | Native |  | `glam::Affine3A` |
 | `matrix4x3_rotation_from_quaternion` | math/matrix_math.c | Ported |  | `tools/engine_animation_reference.py` |
+| `matrix4x3_from_point_and_quaternion` | math/matrix_math.c | Native |  | `glam::Affine3A` |
 | `matrix4x3_from_orientation` | math/matrix_math.c | Ported | sim/src/animation.rs:104 | `tools/engine_animation_reference.py` |
+| `matrix4x3_to_point_and_vectors` | math/matrix_math.c | Native |  | `glam::Affine3A` |
+| `matrix4x3_transform_point` | math/matrix_math.c | Native |  | `glam::Affine3A` |
+| `matrix4x3_transform_vector` | math/matrix_math.c | Native |  | `glam::Affine3A` |
 | `matrix4x3_transform_normal` | math/matrix_math.c | Ported | sim/src/animation.rs:169 | `tools/engine_math_reference.py` |
+| `matrix4x3_inverse_transform_point` | math/matrix_math.c | Native |  | `glam::Affine3A` |
+| `matrix4x3_inverse_transform_vector` | math/matrix_math.c | Native |  | `glam::Affine3A` |
 | `matrix4x3_inverse_transform_normal` | math/matrix_math.c | Ported | sim/src/animation_blend.rs:178 | `tools/engine_math_reference.py` |
 | `matrix4x3_multiply` | math/matrix_math.c | Ported | sim/src/animation.rs:131 | `tools/engine_animation_reference.py` |
+| `matrix3x3_determinant` | math/matrix_math.c | Native |  | `glam::Mat3` |
+| `matrix3x3_transpose` | math/matrix_math.c | Native |  | `glam::Mat3` |
+| `matrix3x3_inverse` | math/matrix_math.c | Native |  | `glam::Mat3` |
+| `matrix3x3_from_axis_and_angle` | math/matrix_math.c | Native |  | `glam::Mat3` |
+| `matrix3x3_multiply` | math/matrix_math.c | Native |  | `glam::Mat3` |
+| `matrix3x3_transform_vector` | math/matrix_math.c | Native |  | `glam::Mat3` |
 | `matrix4x3_rotation_from_vectors` | math/matrix_math.c | Ported |  | `tools/engine_animation_reference.py` |
 | `matrix4x3_rotation_from_angles` | math/matrix_math.c | Matched | sim/src/objects.rs:399 | owed: rotations; checked through the item trace's object matrices |
+| `matrix4x3_rotation_to_angles` | math/matrix_math.c | Native |  | `glam::Quat` |
+| `matrix4x3_rotation_to_quaternion` | math/matrix_math.c | Native |  | `glam::Quat` |
 | `matrix4x3_from_point_and_vectors` | math/matrix_math.c | Ported | sim/src/animation.rs:93 | `tools/engine_animation_reference.py` |
+| `vector_from_matrices4x3` | math/matrix_math.c | Native |  | `glam::Affine3A` |
+| `matrix4x3_transform_plane` | math/matrix_math.c | Native |  | `glam::Affine3A` |
+| `matrix4x3_inverse_transform_plane` | math/matrix_math.c | Native |  | `glam::Affine3A` |
+| `matrix3x3_from_forward_and_up` | math/matrix_math.c | Native |  | `glam::Mat3` |
+| `matrix3x3_rotation_to_quaternion` | math/matrix_math.c | Native |  | `glam::Quat` |
+| `matrix4x3_from_plane` | math/matrix_math.c | Native |  | `glam::Affine3A` |
 | `periodic_functions_dispose` | math/periodic_functions.c | Replaced |  | through its caller `real_math_dispose` |
 | `periodic_function_evaluate` | math/periodic_functions.c | Ported | sim/src/periodic.rs:165 | `tools/engine_periodic_reference.py` |
 | `transition_function_evaluate` | math/periodic_functions.c | Ported | sim/src/damage.rs:37 | `tools/engine_periodic_reference.py` |
@@ -1612,18 +1746,45 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `direction3d_from_table` | math/random_math.c | Ported |  | `tools/engine_math_reference.py` |
 | `seed_random_direction3d` | math/random_math.c | Matched | sim/src/random.rs:55 | owed: the engine cites it, with no check against the original yet |
 | `seed_random_vector_in_cone3d` | math/random_math.c | Ported | sim/src/random.rs:66 | `tools/engine_math_reference.py` |
+| `vector_tree_new` | math/vector_tree.c | Native |  | `std::collections::BTreeMap` |
+| `vector_tree_delete` | math/vector_tree.c | Native |  | `std::collections::BTreeMap` |
+| `code_00100040` | math/vector_tree.c | Native |  | `std::collections::BTreeMap` |
+| `code_00100080` | math/vector_tree.c | Native |  | `std::collections::BTreeMap` |
+| `vector_tree_find` | math/vector_tree.c | Native |  | `std::collections::BTreeMap` |
 | `subdivide_triangle` | math/geometry.c | Ported | sim/src/random.rs:178 | `tools/engine_math_reference.py` |
 | `get_face_vertex` | math/geometry.c | Ported | sim/src/random.rs:193 | `tools/engine_math_reference.py` |
 | `get_edge_vertex` | math/geometry.c | Ported | sim/src/random.rs:224 | `tools/engine_math_reference.py` |
 | `calculate_vertex` | math/geometry.c | Ported | sim/src/random.rs:255 | `tools/engine_math_reference.py` |
 | `set_rectangle2d` | math/integer_math.c | Replaced |  | through its caller `rasterizer_draw_string` |
+| `set_point2d` | math/integer_math.c | Native |  | `min` |
+| `offset_point2d` | math/integer_math.c | Native |  | `min` |
 | `rectangle2d_width` | math/integer_math.c | Replaced |  | through its caller `draw_string` |
+| `rectangle2d_height` | math/integer_math.c | Native |  | `min` |
+| `inset_rectangle2d` | math/integer_math.c | Native |  | `min` |
 | `offset_rectangle2d` | math/integer_math.c | Replaced |  | through its caller `bink_draw_frame` |
+| `adjust_rectangle2d` | math/integer_math.c | Native |  | `min` |
+| `intersect_rectangles2d` | math/integer_math.c | Native |  | `min` |
+| `rectangle2d_hull_from_rectangles2d` | math/integer_math.c | Native |  | `min` |
+| `point2d_in_rectangle2d` | math/integer_math.c | Native |  | `min` |
+| `interior_rectangle2d` | math/integer_math.c | Native |  | `min` |
+| `equal_rectangle2d` | math/integer_math.c | Native |  | `min` |
+| `equal_point2d` | math/integer_math.c | Native |  | `min` |
 | `floor_log2` | math/integer_math.c | Replaced |  | through its caller `bitmap_swizzle_vector2d` |
+| `ceiling_log2` | math/integer_math.c | Native |  | `next_power_of_two` |
+| `floor_power2` | math/integer_math.c | Native |  | `next_power_of_two` |
+| `ceiling_power2` | math/integer_math.c | Native |  | `next_power_of_two` |
+| `bit_vector_and` | math/integer_math.c | Native |  | `u32` |
+| `bit_vector_or` | math/integer_math.c | Native |  | `u32` |
 | `bit_vector_not` | math/integer_math.c | Replaced |  | through its caller `ai_debug_communication_toggle_bits` |
+| `scale_rectangle2d` | math/integer_math.c | Native |  | `min` |
 | `periodic_function_build_variable_period_x_table` | math/periodic_functions.c | Ported | sim/src/periodic.rs:73 | `tools/engine_periodic_reference.py` |
+| `magnitude_squared3d_right_associated` | math/real_math.c | Native |  | `glam::Vec3` |
 | `real_math_initialize` | math/real_math.c | Replaced |  | through its caller `shell_initialize` |
 | `real_math_dispose` | math/real_math.c | Replaced |  | through its caller `shell_dispose` |
+| `real_math_reset_precision` | math/real_math.c | Native |  | `libm::sqrtf` |
+| `perpendicular2d` | math/real_math.c | Native |  | `glam::Vec2` |
+| `perpendicular3d` | math/real_math.c | Native |  | `glam::Vec3` |
+| `perpendicular4d` | math/real_math.c | Native |  | `glam::Vec3` |
 | `rotate_vector_about_axis` | math/real_math.c | Ported | ffi/src/sprite.rs:102 | `tools/engine_item_reference.py` |
 | `vectors_interpolate` | math/real_math.c | Replaced |  | through its caller `get_flash_color` |
 | `points_interpolate` | math/real_math.c | Ported |  | `tools/engine_animation_reference.py` |
@@ -1634,33 +1795,63 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `quaternions_interpolate` | math/real_math.c | Ported | sim/src/animation.rs:208 | `tools/engine_animation_reference.py` |
 | `quaternion_transform_point` | math/real_math.c | Ported |  | `tools/engine_item_reference.py` |
 | `point_in_triangle3d` | math/real_math.c | Replaced |  | through its caller `structure_render_surface_from_point_and_leaf` |
+| `fast_normalize2d` | math/real_math.c | Native |  | `glam::Vec2` |
+| `fast_normalize3d` | math/real_math.c | Native |  | `glam::Vec3` |
+| `cross_product_magnitude3d` | math/real_math.c | Native |  | `glam::Vec3` |
 | `quantize_real_to_byte_lower_bound` | math/real_math.c | Matched | sim/src/vehicle_animation.rs:171 | owed: the engine's own tests (sim/tests/vehicle_traces.rs); no check against the original yet; only from 0 to 1, where the original's step down to the byte below the value is the floor of value * 255 |
+| `signed_angle_between_vectors2d` | math/real_math.c | Native |  | `glam::Vec2` |
+| `angle_between_vectors2d` | math/real_math.c | Native |  | `glam::Vec2` |
 | `angle_between_vectors3d` | math/real_math.c | Ported | sim/src/vehicle.rs:917 | `tools/engine_math_reference.py` |
+| `angle_between_normals3d` | math/real_math.c | Native |  | `glam::Vec3` |
+| `fast_normals_interpolate` | math/real_math.c | Native |  | `glam::Vec3` |
+| `normals_interpolate` | math/real_math.c | Native |  | `glam::Vec3` |
+| `reflect_vector3d` | math/real_math.c | Native |  | `glam::Vec3` |
 | `quaternion_normalize` | math/real_math.c | Ported | sim/src/animation.rs:190 | `tools/engine_animation_reference.py` |
+| `quaternion_from_angle_and_vector` | math/real_math.c | Native |  | `glam::Quat` |
+| `quaternion_to_angle_and_vector` | math/real_math.c | Native |  | `glam::Quat` |
 | `quaternions_interpolate_and_normalize` | math/real_math.c | Ported | sim/src/animation.rs:202 | `tools/engine_animation_reference.py` |
 | `orientations_interpolate` | math/real_math.c | Replaced |  | through its caller `first_person_weapon_build_node_matrices` |
 | `euler_angles2d_from_vector3d` | math/real_math.c | Ported | sim/src/animation_blend.rs:179 | `tools/engine_math_reference.py` |
+| `vector3d_from_angle` | math/real_math.c | Native |  | `libm::sinf` |
 | `vector3d_from_euler_angles2d` | math/real_math.c | Matched | content/src/level.rs:375 | owed: the engine cites it, with no check against the original yet |
+| `point_to_line_distance_squared3d` | math/real_math.c | Native |  | `glam::Vec3` |
+| `vector_to_line_distance_squared3d` | math/real_math.c | Native |  | `glam::Vec3` |
 | `accelerate_to_position` | math/real_math.c | Matched | sim/src/device_animation.rs:3 | owed: a first-person weapon's sway; checked through first_person_weapon_update's trace |
+| `valid_real_sine_cosine` | math/real_math.c | Native |  | `libm::sinf` |
+| `set_real_point3d` | math/real_math.h | Native |  | `glam::Vec3` |
+| `vectors_equal` | math/vector_tree.c | Native |  | `std::collections::BTreeMap` |
+| `vector_tree_add_node` | math/vector_tree.c | Native |  | `std::collections::BTreeMap` |
 
-156 Missing (64 reached from `main_loop`), by file:
+84 Missing (27 reached from `main_loop`), by file:
 
-- math/geometry.c: `convex_hull3d_verify`, `plane2d_distance_to_point`, `vector_intersect_plane3d`, `code_000f5050`, `build_torus`, `code_000f54a0`, `convex_hull2d`, `convex_hull2d_verify`, `convex_hull2d_test_circle`, `convex_hull2d_test_point`, `convex_hull2d_test_point_indexed`, `convex_hull2d_area`, `convex_hull2d_perimeter`, `convex_hull2d_test_vector`, `convex_polygon2d_verify`, `convex_polygon3d_verify`, `convex_hull3d_begin`, `convex_hull3d_expand`, `convex_hull3d`, `convex_hull3d_test_point`, `convex_hull3d_test_vector`, `code_000f76e0`, `code_000f7a90`, `code_000f7c20`, `points_dimension2d`
-- math/integer_math.c: `set_point2d`, `offset_point2d`, `rectangle2d_height`, `inset_rectangle2d`, `adjust_rectangle2d`, `intersect_rectangles2d`, `rectangle2d_hull_from_rectangles2d`, `point2d_in_rectangle2d`, `interior_rectangle2d`, `equal_rectangle2d`, `equal_point2d`, `ceiling_log2`, `floor_power2`, `ceiling_power2`, `integer_square_root`, `bit_vector_and`, `bit_vector_or`, `scale_rectangle2d`
-- math/matrix_math.c: `matrix4x3_identity`, `matrix4x3_transpose`, `matrix4x3_inverse`, `matrix4x3_scale`, `matrix4x3_translation`, `matrix4x3_rotation_from_axis_and_angle`, `matrix4x3_from_point_and_quaternion`, `matrix4x3_to_point_and_vectors`, `matrix4x3_transform_point`, `matrix4x3_transform_vector`, `matrix4x3_inverse_transform_point`, `matrix4x3_inverse_transform_vector`, `matrix3x3_determinant`, `matrix3x3_transpose`, `matrix3x3_inverse`, `matrix3x3_from_axis_and_angle`, `matrix3x3_multiply`, `matrix3x3_transform_vector`, `matrix4x3_rotation_to_angles`, `matrix4x3_rotation_to_quaternion`, `vector_from_matrices4x3`, `matrix4x3_transform_plane`, `matrix4x3_inverse_transform_plane`, `matrix3x3_from_forward_and_up`, `matrix3x3_rotation_to_quaternion`, `valid_real_plane3d`, `matrix4x3_from_plane`
+- math/geometry.c: `convex_hull3d_verify`, `vector_intersect_plane3d`, `code_000f5050`, `build_torus`, `code_000f54a0`, `convex_hull2d`, `convex_hull2d_verify`, `convex_hull2d_test_circle`, `convex_hull2d_test_point`, `convex_hull2d_test_point_indexed`, `convex_hull2d_area`, `convex_hull2d_perimeter`, `convex_hull2d_test_vector`, `convex_polygon2d_verify`, `convex_polygon3d_verify`, `convex_hull3d_begin`, `convex_hull3d_expand`, `convex_hull3d`, `convex_hull3d_test_point`, `convex_hull3d_test_vector`, `code_000f76e0`, `code_000f7a90`, `code_000f7c20`, `points_dimension2d`
+- math/integer_math.c: `integer_square_root`
+- math/matrix_math.c: `valid_real_plane3d`
 - math/periodic_functions.c: `@periodic_function_build_variable_period_x_table`
 - math/probability.c: `factorial`, `permutations`, `combinations`, `permute`, `combine`
 - math/random_math.c: `lock_global_random_seed`, `unlock_global_random_seed`, `get_global_random_seed_address`, `get_random_seed`, `get_global_local_random_seed_address`, `random_seed_debug_log`, `seed_random_orientation`
-- math/real_math.c: `magnitude_squared3d_right_associated`, `real_math_reset_precision`, `perpendicular2d`, `perpendicular3d`, `perpendicular4d`, `component_vectors_from_direction3d`, `vectors3d_from_euler_angles3d`, `fast_vector_intersects_sphere`, `fast_vector_intersection_with_sphere`, `point_in_rectangle2d`, `point_in_rectangle3d`, `circle_intersects_rectangle2d`, `point_in_cone2d`, `point_in_cone3d`, `point_in_sector2d`, `point_in_sector3d`, `circle_intersects_cone2d`, `circle_intersects_sector2d`, `sphere_intersects_cone3d`, `sphere_intersects_sector3d`, `point_in_triangle2d`, `circle_intersects_triangle2d`, `pill_intersects_triangle2d`, `pill_intersects_rectangle2d`, `sphere_intersects_rectangle3d`, `sphere_intersects_triangle3d`, `pill_intersects_triangle3d`, `vector_intersects_rectangle2d`, `vector_intersects_pill2d`, `vector_intersects_pill3d`, `vector_intersects_triangle2d`, `vector_intersects_triangle3d`, `vector_intersects_rectangle3d`, `pill_intersects_rectangle3d`, `fast_normalize2d`, `fast_normalize3d`, `cross_product_magnitude3d`, `dequantize_byte_to_real`, `quantize_real_to_byte_upper_bound`, `quantize_real_to_byte_rectangle3d`, `signed_angle_between_vectors2d`, `angle_between_vectors2d`, `angle_between_normals3d`, `yaw_vectors`, `pitch_vectors`, `fast_normals_interpolate`, `normals_interpolate`, `pin_normal_to_cone3d`, `reflect_vector3d`, `refract_vector3d`, `quaternion_from_angle_and_vector`, `quaternion_to_angle_and_vector`, `vector3d_from_angle`, `point_in_pill2d`, `point_to_line_distance_squared3d`, `vector_to_line_distance_squared3d`, `sphere_test_vector3d`, `pill_test_vector3d`, `point_from_planes3d`, `line_from_planes3d`, `angular_accelerate_to_position`, `accelerate_to_velocity3d`, `accerate_to_position3d`, `accelerate_to_velocity`, `valid_real_sine_cosine`
-- math/real_math.h: `set_real_point3d`
-- math/vector_tree.c: `vector_tree_new`, `vector_tree_delete`, `code_00100040`, `code_00100080`, `vector_tree_find`, `vectors_equal`, `vector_tree_add_node`
+- math/real_math.c: `component_vectors_from_direction3d`, `vectors3d_from_euler_angles3d`, `fast_vector_intersects_sphere`, `fast_vector_intersection_with_sphere`, `point_in_rectangle2d`, `point_in_rectangle3d`, `circle_intersects_rectangle2d`, `point_in_cone2d`, `point_in_cone3d`, `point_in_sector2d`, `point_in_sector3d`, `circle_intersects_cone2d`, `circle_intersects_sector2d`, `sphere_intersects_cone3d`, `sphere_intersects_sector3d`, `point_in_triangle2d`, `circle_intersects_triangle2d`, `pill_intersects_triangle2d`, `pill_intersects_rectangle2d`, `sphere_intersects_rectangle3d`, `sphere_intersects_triangle3d`, `pill_intersects_triangle3d`, `vector_intersects_rectangle2d`, `vector_intersects_pill2d`, `vector_intersects_pill3d`, `vector_intersects_triangle2d`, `vector_intersects_triangle3d`, `vector_intersects_rectangle3d`, `pill_intersects_rectangle3d`, `dequantize_byte_to_real`, `quantize_real_to_byte_upper_bound`, `quantize_real_to_byte_rectangle3d`, `yaw_vectors`, `pitch_vectors`, `pin_normal_to_cone3d`, `refract_vector3d`, `point_in_pill2d`, `sphere_test_vector3d`, `pill_test_vector3d`, `point_from_planes3d`, `line_from_planes3d`, `angular_accelerate_to_position`, `accelerate_to_velocity3d`, `accerate_to_position3d`, `accelerate_to_velocity`
 
 ## `memory`
 
 | Function | File | Class | Engine | Evidence |
 | --- | --- | --- | --- | --- |
+| `dynamic_array_new` | memory/array.c | Native |  | `Vec` |
+| `dynamic_array_resize` | memory/array.c | Native |  | `Vec` |
+| `dynamic_array_delete` | memory/array.c | Native |  | `Vec` |
+| `dynamic_array_add_element` | memory/array.c | Native |  | `Vec` |
+| `dynamic_array_get_element` | memory/array.c | Native |  | `Vec` |
+| `dynamic_array_delete_element` | memory/array.c | Native |  | `Vec` |
+| `static_array_new` | memory/array.c | Native |  | `Vec` |
+| `static_array_resize` | memory/array.c | Native |  | `Vec` |
+| `static_array_add_element` | memory/array.c | Native |  | `Vec` |
+| `static_array_get_element` | memory/array.c | Native |  | `Vec` |
+| `static_array_delete_element` | memory/array.c | Native |  | `Vec` |
 | `byte_swap_memory` | memory/byte_swapping.c | Replaced |  | through its caller `data_decode_memory` |
+| `code_00108010` | memory/byte_swapping.c | Native |  | `from_le_bytes` |
+| `byte_swap_codes_size` | memory/byte_swapping.c | Native |  | `from_le_bytes` |
 | `byte_swap_data` | memory/byte_swapping.c | Replaced |  | through its caller `data_packet_group_append_packet_header` |
+| `byte_swap_data_explicit` | memory/byte_swapping.c | Native |  | `from_le_bytes` |
 | `circular_queue_reset` | memory/circular_queue.c | Replaced |  | through its caller `network_client_unreliable_connection_read` |
 | `circular_queue_verify` | memory/circular_queue.c | Replaced |  | through its caller `circular_queue_delete` |
 | `circular_queue_new` | memory/circular_queue.c | Replaced |  | through its caller `network_connection_create_client_from_endpoint` |
@@ -1669,27 +1860,107 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `circular_queue_free_space` | memory/circular_queue.c | Replaced |  | through its caller `network_connection_idle` |
 | `circular_queue_queue_data` | memory/circular_queue.c | Replaced |  | through its caller `network_connection_idle` |
 | `circular_queue_dequeue_data` | memory/circular_queue.c | Replaced |  | through its caller `network_client_reliable_connection_read` |
+| `crc_new` | memory/crc.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `build_crc_table` | memory/crc.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `crc_checksum_buffer` | memory/crc.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `data_allocation_size` | memory/data.c | Native |  | `Vec` |
+| `data_initialize` | memory/data.c | Native |  | `Vec` |
+| `datum_try_and_get` | memory/data.c | Native |  | `Vec` |
+| `datum_get` | memory/data.c | Native |  | `Vec` |
+| `data_verify` | memory/data.c | Native |  | `Vec` |
+| `datum_initialize` | memory/data.c | Native |  | `Vec` |
+| `data_new` | memory/data.c | Native |  | `Vec` |
+| `data_dispose` | memory/data.c | Native |  | `Vec` |
+| `data_make_invalid` | memory/data.c | Native |  | `Vec` |
+| `datum_new_at_index` | memory/data.c | Native |  | `Vec` |
 | `datum_new` | memory/data.c | Matched | ffi/src/particles/slots.rs:3 | owed: the engine cites it, with no check against the original yet |
+| `datum_delete` | memory/data.c | Native |  | `Vec` |
+| `data_delete_all` | memory/data.c | Native |  | `Vec` |
+| `data_iterator_new` | memory/data.c | Native |  | `Vec` |
+| `data_iterator_next` | memory/data.c | Native |  | `Vec` |
 | `data_next_index` | memory/data.c | Matched | ffi/src/particles/slots.rs:4 | owed: the engine cites it, with no check against the original yet |
 | `data_prev_index` | memory/data.c | Replaced |  | through its caller `ai_debug_change_selected_encounter` |
+| `data_compact` | memory/data.c | Native |  | `Vec` |
+| `data_make_valid` | memory/data.c | Native |  | `Vec` |
+| `data_compress` | memory/data_compress.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `data_decompressed_size` | memory/data_compress.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `data_decompress` | memory/data_compress.c | Replaced | import/src/lib.rs | maps imported to a typed format |
 | `data_encode_new` | memory/data_encoding.c | Replaced |  | through its caller `data_packet_encode` |
 | `data_encode_memory` | memory/data_encoding.c | Replaced |  | through its caller `_data_packet_encode` |
 | `data_encode_integer` | memory/data_encoding.c | Replaced |  | through its caller `_data_packet_encode` |
+| `data_encode_structures` | memory/data_encoding.c | Replaced | net/src/wire.rs | networking and Xbox Live |
+| `data_encode_array` | memory/data_encoding.c | Replaced | net/src/wire.rs | networking and Xbox Live |
 | `data_encode_string` | memory/data_encoding.c | Replaced |  | through its caller `_data_packet_encode` |
 | `data_decode_new` | memory/data_encoding.c | Replaced |  | through its caller `data_packet_decode` |
+| `data_decode_structures` | memory/data_encoding.c | Replaced | net/src/wire.rs | networking and Xbox Live |
 | `data_decode_memory` | memory/data_encoding.c | Replaced |  | through its caller `_data_packet_decode` |
 | `data_decode_byte` | memory/data_encoding.c | Replaced |  | through its caller `data_decode_integer` |
 | `data_decode_short` | memory/data_encoding.c | Replaced |  | through its caller `data_decode_integer` |
 | `data_decode_long` | memory/data_encoding.c | Replaced |  | through its caller `data_decode_integer` |
+| `data_decode_int64` | memory/data_encoding.c | Replaced | net/src/wire.rs | networking and Xbox Live |
 | `data_decode_integer` | memory/data_encoding.c | Replaced |  | through its caller `_data_packet_decode` |
+| `data_decode_array` | memory/data_encoding.c | Replaced | net/src/wire.rs | networking and Xbox Live |
 | `data_decode_string` | memory/data_encoding.c | Replaced |  | through its caller `_data_packet_decode` |
 | `data_packet_group_initialize` | memory/data_packet_groups.c | Replaced |  | through its caller `initialize_network_game_packets` |
+| `data_packet_groups_get_error` | memory/data_packet_groups.c | Replaced | net/src/wire.rs | networking and Xbox Live |
 | `data_packet_group_decode_packet` | memory/data_packet_groups.c | Replaced |  | through its caller `decode_network_game_message` |
 | `data_packet_group_append_packet_header` | memory/data_packet_groups.c | Replaced |  | through its caller `data_packet_group_encode_packet` |
 | `data_packet_group_encode_packet` | memory/data_packet_groups.c | Replaced |  | through its caller `encode_network_game_message` |
+| `code_0010a5f0` | memory/data_packets.c | Replaced | net/src/wire.rs | networking and Xbox Live |
+| `code_0010a7c0` | memory/data_packets.c | Replaced | net/src/wire.rs | networking and Xbox Live |
+| `code_0010aac0` | memory/data_packets.c | Replaced | net/src/wire.rs | networking and Xbox Live |
 | `data_packet_verify` | memory/data_packets.c | Replaced |  | through its caller `data_packet_decode` |
 | `data_packet_encode` | memory/data_packets.c | Replaced |  | through its caller `data_packet_group_encode_packet` |
 | `data_packet_decode` | memory/data_packets.c | Replaced |  | through its caller `data_packet_group_decode_packet` |
+| `hashtable_new` | memory/hashtable.c | Native |  | `std::collections::BTreeMap` |
+| `hashtable_set_user_data` | memory/hashtable.c | Native |  | `std::collections::BTreeMap` |
+| `hashtable_delete` | memory/hashtable.c | Native |  | `std::collections::BTreeMap` |
+| `default_hash_function` | memory/hashtable.c | Native |  | `std::collections::BTreeMap` |
+| `code_0010b270` | memory/hashtable.c | Native |  | `std::collections::BTreeMap` |
+| `hashtable_get` | memory/hashtable.c | Native |  | `std::collections::BTreeMap` |
+| `hashtable_remove` | memory/hashtable.c | Native |  | `std::collections::BTreeMap` |
+| `code_0010b630` | memory/hashtable.c | Native |  | `std::collections::BTreeMap` |
+| `hashtable_grow` | memory/hashtable.c | Native |  | `std::collections::BTreeMap` |
+| `hashtable_put` | memory/hashtable.c | Native |  | `std::collections::BTreeMap` |
+| `lra_full` | memory/lra_cache.c | Native |  | `Vec` |
+| `lra_default_update_proc` | memory/lra_cache.c | Native |  | `Vec` |
+| `lra_default_delete_proc` | memory/lra_cache.c | Native |  | `Vec` |
+| `lra_block_delete` | memory/lra_cache.c | Native |  | `Vec` |
+| `verify_lra_cache_block` | memory/lra_cache.c | Native |  | `Vec` |
+| `verify_lra_cache` | memory/lra_cache.c | Native |  | `Vec` |
+| `lra_new` | memory/lra_cache.c | Native |  | `Vec` |
+| `lra_dispose` | memory/lra_cache.c | Native |  | `Vec` |
+| `lra_flush` | memory/lra_cache.c | Native |  | `Vec` |
+| `lra_free` | memory/lra_cache.c | Native |  | `Vec` |
+| `lra_lock` | memory/lra_cache.c | Native |  | `Vec` |
+| `lra_unlock` | memory/lra_cache.c | Native |  | `Vec` |
+| `lra_block_offset` | memory/lra_cache.c | Native |  | `Vec` |
+| `lra_allocate` | memory/lra_cache.c | Native |  | `Vec` |
+| `lrar_default_lock_proc` | memory/lrar_cache.c | Native |  | `Vec` |
+| `lrar_default_unlock_proc` | memory/lrar_cache.c | Native |  | `Vec` |
+| `lrar_unlock_block` | memory/lrar_cache.c | Native |  | `Vec` |
+| `verify_lrar_cache_block` | memory/lrar_cache.c | Native |  | `Vec` |
+| `verify_lrar_cache` | memory/lrar_cache.c | Native |  | `Vec` |
+| `lrar_new` | memory/lrar_cache.c | Native |  | `Vec` |
+| `lrar_dispose` | memory/lrar_cache.c | Native |  | `Vec` |
+| `get_lrar_cache_block` | memory/lrar_cache.c | Native |  | `Vec` |
+| `lrar_flush` | memory/lrar_cache.c | Native |  | `Vec` |
+| `lrar_allocate` | memory/lrar_cache.c | Native |  | `Vec` |
+| `lrar_block_address` | memory/lrar_cache.c | Native |  | `Vec` |
+| `lrar_deallocate` | memory/lrar_cache.c | Native |  | `Vec` |
+| `lru_default_new_block_proc` | memory/lru_cache.c | Native |  | `Vec` |
+| `lru_default_purge_block_proc` | memory/lru_cache.c | Native |  | `Vec` |
+| `get_lru_cache_block_offset` | memory/lru_cache.c | Native |  | `Vec` |
+| `verify_lru_cache_block` | memory/lru_cache.c | Native |  | `Vec` |
+| `verify_lru_cache` | memory/lru_cache.c | Native |  | `Vec` |
+| `lru_new` | memory/lru_cache.c | Native |  | `Vec` |
+| `lru_dispose` | memory/lru_cache.c | Native |  | `Vec` |
+| `lru_flush` | memory/lru_cache.c | Native |  | `Vec` |
+| `lru_free_blocks` | memory/lru_cache.c | Native |  | `Vec` |
+| `lru_allocate` | memory/lru_cache.c | Native |  | `Vec` |
+| `lru_lock` | memory/lru_cache.c | Native |  | `Vec` |
+| `lru_unlock` | memory/lru_cache.c | Native |  | `Vec` |
+| `lru_touch` | memory/lru_cache.c | Native |  | `Vec` |
 | `lruv_allocation_size` | memory/lruv_cache.c | Replaced |  | through its caller `game_state_lruv_cache_new` |
 | `lruv_update_function_pointers` | memory/lruv_cache.c | Replaced |  | through its caller `_rasterizer_decals_update_function_pointers` |
 | `lruv_has_locked_proc` | memory/lruv_cache.c | Replaced |  | through its caller `rasterizer_decal_vertices_purge_proc` |
@@ -1708,10 +1979,105 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `lruv_new` | memory/lruv_cache.c | Replaced |  | through its caller `sound_cache_new` |
 | `lruv_flush` | memory/lruv_cache.c | Replaced |  | through its caller `_rasterizer_decals_dispose_from_old_map` |
 | `lruv_block_new` | memory/lruv_cache.c | Replaced |  | through its caller `_rasterizer_decal_vertices_new` |
+| `memory_pool_allocation_size` | memory/memory_pool.c | Native |  | `Vec` |
+| `memory_pool_initialize` | memory/memory_pool.c | Native |  | `Vec` |
+| `memory_pool_get_free_size` | memory/memory_pool.c | Native |  | `Vec` |
+| `memory_pool_get_used_size` | memory/memory_pool.c | Native |  | `Vec` |
+| `memory_pool_get_contiguous_free_size` | memory/memory_pool.c | Native |  | `Vec` |
+| `memory_pool_block_compute_actual_size` | memory/memory_pool.c | Native |  | `Vec` |
+| `memory_pool_block_new` | memory/memory_pool.c | Native |  | `Vec` |
+| `memory_pool_verify` | memory/memory_pool.c | Native |  | `Vec` |
+| `memory_pool_block_get` | memory/memory_pool.c | Native |  | `Vec` |
+| `memory_pool_new` | memory/memory_pool.c | Native |  | `Vec` |
+| `memory_pool_delete` | memory/memory_pool.c | Native |  | `Vec` |
+| `memory_pool_block_allocate` | memory/memory_pool.c | Native |  | `Vec` |
+| `memory_pool_block_free` | memory/memory_pool.c | Native |  | `Vec` |
+| `memory_pool_compact` | memory/memory_pool.c | Native |  | `Vec` |
+| `memory_pool_block_reallocate` | memory/memory_pool.c | Native |  | `Vec` |
+| `stack_memory_pool_reset` | memory/stack_memory_pool.c | Native |  | `Vec` |
+| `code_0010e270` | memory/stack_memory_pool.c | Native |  | `Vec` |
+| `code_0010e2b0` | memory/stack_memory_pool.c | Native |  | `Vec` |
+| `code_0010e2e0` | memory/stack_memory_pool.c | Native |  | `Vec` |
+| `code_0010e330` | memory/stack_memory_pool.c | Native |  | `Vec` |
+| `code_0010e360` | memory/stack_memory_pool.c | Native |  | `Vec` |
+| `code_0010e3e0` | memory/stack_memory_pool.c | Native |  | `Vec` |
+| `code_0010e430` | memory/stack_memory_pool.c | Native |  | `Vec` |
+| `stack_memory_pool_find_space_between_blocks` | memory/stack_memory_pool.c | Native |  | `Vec` |
+| `code_0010e510` | memory/stack_memory_pool.c | Native |  | `Vec` |
+| `code_0010e5b0` | memory/stack_memory_pool.c | Native |  | `Vec` |
+| `code_0010e5f0` | memory/stack_memory_pool.c | Native |  | `Vec` |
+| `code_0010e630` | memory/stack_memory_pool.c | Native |  | `Vec` |
+| `code_0010e670` | memory/stack_memory_pool.c | Native |  | `Vec` |
+| `code_0010e6a0` | memory/stack_memory_pool.c | Native |  | `Vec` |
+| `code_0010e770` | memory/stack_memory_pool.c | Native |  | `Vec` |
+| `code_0010e7f0` | memory/stack_memory_pool.c | Native |  | `Vec` |
+| `code_0010e890` | memory/stack_memory_pool.c | Native |  | `Vec` |
+| `code_0010e960` | memory/stack_memory_pool.c | Native |  | `Vec` |
+| `code_0010ea00` | memory/stack_memory_pool.c | Native |  | `Vec` |
+| `dispose_handle` | memory/stack_memory_pool.c | Native |  | `Vec` |
+| `lock_handle` | memory/stack_memory_pool.c | Native |  | `Vec` |
+| `unlock_handle` | memory/stack_memory_pool.c | Native |  | `Vec` |
+| `dispose_pointer` | memory/stack_memory_pool.c | Native |  | `Vec` |
+| `code_0010eef0` | memory/stack_memory_pool.c | Native |  | `Vec` |
+| `code_0010ef10` | memory/stack_memory_pool.c | Native |  | `Vec` |
+| `code_0010ef70` | memory/stack_memory_pool.c | Native |  | `Vec` |
+| `pool_new_handle` | memory/stack_memory_pool.c | Native |  | `Vec` |
+| `pool_new_handle_clear` | memory/stack_memory_pool.c | Native |  | `Vec` |
+| `pool_resize_handle` | memory/stack_memory_pool.c | Native |  | `Vec` |
+| `pool_new_pointer` | memory/stack_memory_pool.c | Native |  | `Vec` |
+| `pool_new_pointer_clear` | memory/stack_memory_pool.c | Native |  | `Vec` |
+| `pool_resize_pointer` | memory/stack_memory_pool.c | Native |  | `Vec` |
+| `texture_page_fraction_used` | memory/texture_page.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | the enhanced lighting and Metal renderer |
+| `texture_page_verify` | memory/texture_page.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | the enhanced lighting and Metal renderer |
+| `texture_page_new` | memory/texture_page.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | the enhanced lighting and Metal renderer |
+| `texture_page_delete` | memory/texture_page.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | the enhanced lighting and Metal renderer |
+| `texture_page_textures_begin` | memory/texture_page.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | the enhanced lighting and Metal renderer |
+| `texture_page_texture_get` | memory/texture_page.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | the enhanced lighting and Metal renderer |
+| `qsort_texture_indexes` | memory/texture_page.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | the enhanced lighting and Metal renderer |
+| `texture_page_resort` | memory/texture_page.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | the enhanced lighting and Metal renderer |
+| `texture_page_texture_new` | memory/texture_page.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | the enhanced lighting and Metal renderer |
+| `texture_page_textures_cancel` | memory/texture_page.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | the enhanced lighting and Metal renderer |
+| `texture_page_textures_end` | memory/texture_page.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | the enhanced lighting and Metal renderer |
+| `texture_page_texture_delete` | memory/texture_page.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | the enhanced lighting and Metal renderer |
+| `texture_page_resize` | memory/texture_page.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | the enhanced lighting and Metal renderer |
 | `_byte_swap_data` | memory/byte_swapping.c | Replaced |  | through its caller `byte_swap_data` |
+| `data_usable` | memory/data.c | Native |  | `Vec` |
 | `_data_packet_verify` | memory/data_packets.c | Replaced |  | through its caller `_data_packet_decode` |
 | `_data_packet_encode` | memory/data_packets.c | Replaced |  | through its caller `data_packet_encode` |
 | `_data_packet_decode` | memory/data_packets.c | Replaced |  | through its caller `data_packet_decode` |
+| `hashtable_search` | memory/hashtable.c | Native |  | `std::collections::BTreeMap` |
+| `hashtable_capacious_put` | memory/hashtable.c | Native |  | `std::collections::BTreeMap` |
+| `memory_block_set_size_and_index` | memory/stack_memory_pool.c | Native |  | `Vec` |
+| `memory_block_get_real_size` | memory/stack_memory_pool.c | Native |  | `Vec` |
+| `memory_block_get_user_size` | memory/stack_memory_pool.c | Native |  | `Vec` |
+| `memory_block_get_pool_index` | memory/stack_memory_pool.c | Native |  | `Vec` |
+| `stack_memory_pool_free_space_at_end_of_pool` | memory/stack_memory_pool.c | Native |  | `Vec` |
+| `stack_memory_pool_find_first_unused_memory_block` | memory/stack_memory_pool.c | Native |  | `Vec` |
+| `stack_memory_pool_set_next_block_index` | memory/stack_memory_pool.c | Native |  | `Vec` |
+| `memory_block_valid` | memory/stack_memory_pool.c | Native |  | `Vec` |
+| `memory_block_lock` | memory/stack_memory_pool.c | Native |  | `Vec` |
+| `memory_block_unlock` | memory/stack_memory_pool.c | Native |  | `Vec` |
+| `memory_block_is_locked` | memory/stack_memory_pool.c | Native |  | `Vec` |
+| `memory_block_get_user_address` | memory/stack_memory_pool.c | Native |  | `Vec` |
+| `stack_memory_pool_compact` | memory/stack_memory_pool.c | Native |  | `Vec` |
+| `stack_memory_pool_valid_block` | memory/stack_memory_pool.c | Native |  | `Vec` |
+| `stack_memory_pool_dispose_block` | memory/stack_memory_pool.c | Native |  | `Vec` |
+| `stack_memory_pool_lock_block` | memory/stack_memory_pool.c | Native |  | `Vec` |
+| `stack_memory_pool_unlock_block` | memory/stack_memory_pool.c | Native |  | `Vec` |
+| `stack_memory_pool_allocate` | memory/stack_memory_pool.c | Native |  | `Vec` |
+| `stack_memory_pool_new_block` | memory/stack_memory_pool.c | Native |  | `Vec` |
+| `stack_memory_pool_new_block_clear` | memory/stack_memory_pool.c | Native |  | `Vec` |
+| `stack_memory_pool_resize_block` | memory/stack_memory_pool.c | Native |  | `Vec` |
+| `texture_page_verify_and_return` | memory/texture_page.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | the enhanced lighting and Metal renderer |
+| `match_init` | memory/zlib/contrib/asm386/gvmat32c.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `longest_match` | memory/zlib/contrib/asm386/gvmat32c.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `setcompressionlevel` | memory/zlib/contrib/iostream/zfstream.h | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `setcompressionstrategy` | memory/zlib/contrib/iostream/zfstream.h | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `read` | memory/zlib/contrib/iostream2/zstream.h | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `zstringlen` | memory/zlib/contrib/iostream2/zstream.h | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `write` | memory/zlib/contrib/iostream2/zstream.h | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `allocate_new_datablock` | memory/zlib/contrib/minizip/zip.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `OF` | memory/zlib/contrib/untgz/untgz.c | Replaced | import/src/lib.rs | maps imported to a typed format |
 | `getoct` | memory/zlib/contrib/untgz/untgz.c | Replaced |  | through its caller `tar` |
 | `strtime` | memory/zlib/contrib/untgz/untgz.c | Replaced |  | through its caller `tar` |
 | `ExprMatch` | memory/zlib/contrib/untgz/untgz.c | Replaced |  | through its caller `matchname` |
@@ -1719,35 +2085,16 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `matchname` | memory/zlib/contrib/untgz/untgz.c | Replaced |  | through its caller `tar` |
 | `tar` | memory/zlib/contrib/untgz/untgz.c | Replaced |  | through its caller `main` |
 | `help` | memory/zlib/contrib/untgz/untgz.c | Replaced |  | through its caller `main` |
+| `make_crc_table` | memory/zlib/crc32.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `get_crc_table` | memory/zlib/crc32.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `crc32` | memory/zlib/crc32.c | Replaced | import/src/lib.rs | maps imported to a typed format |
 | `maketree` | memory/zlib/maketree.c | Replaced |  | through its caller `main` |
+| `send_bits` | memory/zlib/trees.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `tr_static_init` | memory/zlib/trees.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `gen_trees_header` | memory/zlib/trees.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `zlibVersion` | memory/zlib/zutil.c | Replaced | import/src/lib.rs | maps imported to a typed format |
 | `zcalloc` | memory/zlib/zutil.c | Replaced |  | through its caller `main` |
 | `zcfree` | memory/zlib/zutil.c | Replaced |  | through its caller `main` |
-
-196 Missing (61 reached from `main_loop`), by file:
-
-- memory/array.c: `dynamic_array_new`, `dynamic_array_resize`, `dynamic_array_delete`, `dynamic_array_add_element`, `dynamic_array_get_element`, `dynamic_array_delete_element`, `static_array_new`, `static_array_resize`, `static_array_add_element`, `static_array_get_element`, `static_array_delete_element`
-- memory/byte_swapping.c: `code_00108010`, `byte_swap_codes_size`, `byte_swap_data_explicit`
-- memory/crc.c: `crc_new`, `build_crc_table`, `crc_checksum_buffer`
-- memory/data.c: `data_allocation_size`, `data_initialize`, `datum_try_and_get`, `datum_get`, `data_verify`, `datum_initialize`, `data_new`, `data_dispose`, `data_make_invalid`, `datum_new_at_index`, `datum_delete`, `data_delete_all`, `data_iterator_new`, `data_iterator_next`, `data_compact`, `data_make_valid`, `data_usable`
-- memory/data_compress.c: `data_compress`, `data_decompressed_size`, `data_decompress`
-- memory/data_encoding.c: `data_encode_structures`, `data_encode_array`, `data_decode_structures`, `data_decode_int64`, `data_decode_array`
-- memory/data_packet_groups.c: `data_packet_groups_get_error`
-- memory/data_packets.c: `code_0010a5f0`, `code_0010a7c0`, `code_0010aac0`
-- memory/hashtable.c: `hashtable_new`, `hashtable_set_user_data`, `hashtable_delete`, `default_hash_function`, `code_0010b270`, `hashtable_get`, `hashtable_remove`, `code_0010b630`, `hashtable_grow`, `hashtable_put`, `hashtable_search`, `hashtable_capacious_put`
-- memory/lra_cache.c: `lra_full`, `lra_default_update_proc`, `lra_default_delete_proc`, `lra_block_delete`, `verify_lra_cache_block`, `verify_lra_cache`, `lra_new`, `lra_dispose`, `lra_flush`, `lra_free`, `lra_lock`, `lra_unlock`, `lra_block_offset`, `lra_allocate`
-- memory/lrar_cache.c: `lrar_default_lock_proc`, `lrar_default_unlock_proc`, `lrar_unlock_block`, `verify_lrar_cache_block`, `verify_lrar_cache`, `lrar_new`, `lrar_dispose`, `get_lrar_cache_block`, `lrar_flush`, `lrar_allocate`, `lrar_block_address`, `lrar_deallocate`
-- memory/lru_cache.c: `lru_default_new_block_proc`, `lru_default_purge_block_proc`, `get_lru_cache_block_offset`, `verify_lru_cache_block`, `verify_lru_cache`, `lru_new`, `lru_dispose`, `lru_flush`, `lru_free_blocks`, `lru_allocate`, `lru_lock`, `lru_unlock`, `lru_touch`
-- memory/memory_pool.c: `memory_pool_allocation_size`, `memory_pool_initialize`, `memory_pool_get_free_size`, `memory_pool_get_used_size`, `memory_pool_get_contiguous_free_size`, `memory_pool_block_compute_actual_size`, `memory_pool_block_new`, `memory_pool_verify`, `memory_pool_block_get`, `memory_pool_new`, `memory_pool_delete`, `memory_pool_block_allocate`, `memory_pool_block_free`, `memory_pool_compact`, `memory_pool_block_reallocate`
-- memory/stack_memory_pool.c: `stack_memory_pool_reset`, `code_0010e270`, `code_0010e2b0`, `code_0010e2e0`, `code_0010e330`, `code_0010e360`, `code_0010e3e0`, `code_0010e430`, `stack_memory_pool_find_space_between_blocks`, `code_0010e510`, `code_0010e5b0`, `code_0010e5f0`, `code_0010e630`, `code_0010e670`, `code_0010e6a0`, `code_0010e770`, `code_0010e7f0`, `code_0010e890`, `code_0010e960`, `code_0010ea00`, `dispose_handle`, `lock_handle`, `unlock_handle`, `dispose_pointer`, `code_0010eef0`, `code_0010ef10`, `code_0010ef70`, `pool_new_handle`, `pool_new_handle_clear`, `pool_resize_handle`, `pool_new_pointer`, `pool_new_pointer_clear`, `pool_resize_pointer`, `memory_block_set_size_and_index`, `memory_block_get_real_size`, `memory_block_get_user_size`, `memory_block_get_pool_index`, `stack_memory_pool_free_space_at_end_of_pool`, `stack_memory_pool_find_first_unused_memory_block`, `stack_memory_pool_set_next_block_index`, `memory_block_valid`, `memory_block_lock`, `memory_block_unlock`, `memory_block_is_locked`, `memory_block_get_user_address`, `stack_memory_pool_compact`, `stack_memory_pool_valid_block`, `stack_memory_pool_dispose_block`, `stack_memory_pool_lock_block`, `stack_memory_pool_unlock_block`, `stack_memory_pool_allocate`, `stack_memory_pool_new_block`, `stack_memory_pool_new_block_clear`, `stack_memory_pool_resize_block`
-- memory/texture_page.c: `texture_page_fraction_used`, `texture_page_verify`, `texture_page_new`, `texture_page_delete`, `texture_page_textures_begin`, `texture_page_texture_get`, `qsort_texture_indexes`, `texture_page_resort`, `texture_page_texture_new`, `texture_page_textures_cancel`, `texture_page_textures_end`, `texture_page_texture_delete`, `texture_page_resize`, `texture_page_verify_and_return`
-- memory/zlib/contrib/asm386/gvmat32c.c: `match_init`, `longest_match`
-- memory/zlib/contrib/iostream/zfstream.h: `setcompressionlevel`, `setcompressionstrategy`
-- memory/zlib/contrib/iostream2/zstream.h: `read`, `zstringlen`, `write`
-- memory/zlib/contrib/minizip/zip.c: `allocate_new_datablock`
-- memory/zlib/contrib/untgz/untgz.c: `OF`
-- memory/zlib/crc32.c: `make_crc_table`, `get_crc_table`, `crc32`
-- memory/zlib/trees.c: `send_bits`, `tr_static_init`, `gen_trees_header`
-- memory/zlib/zutil.c: `zlibVersion`
 
 ## `models`
 
@@ -3662,16 +4009,55 @@ docs/engine.md's "The coverage census" says what each class needs.
 
 | Function | File | Class | Engine | Evidence |
 | --- | --- | --- | --- | --- |
+| `file_location_is_valid` | tag_files/files_windows.c | Native |  | `std::fs` |
+| `file_compare_last_modification_dates` | tag_files/files_windows.c | Native |  | `std::fs` |
+| `find_files_start` | tag_files/files_windows.c | Native |  | `std::fs` |
+| `file_path_add_name` | tag_files/files_windows.c | Native |  | `std::fs` |
+| `file_path_add_extension` | tag_files/files_windows.c | Native |  | `std::fs` |
+| `file_path_remove_name` | tag_files/files_windows.c | Native |  | `std::fs` |
+| `file_path_split` | tag_files/files_windows.c | Native |  | `std::fs` |
+| `file_location_get_full_path` | tag_files/files_windows.c | Native |  | `std::fs` |
+| `file_read_only` | tag_files/files_windows.c | Native |  | `std::fs` |
+| `code_00189ca0` | tag_files/files_windows.c | Native |  | `std::fs` |
+| `file_create` | tag_files/files_windows.c | Native |  | `std::fs` |
+| `file_delete` | tag_files/files_windows.c | Native |  | `std::fs` |
+| `file_exists` | tag_files/files_windows.c | Native |  | `std::fs` |
+| `file_rename` | tag_files/files_windows.c | Native |  | `std::fs` |
+| `file_open` | tag_files/files_windows.c | Native |  | `std::fs` |
+| `file_close` | tag_files/files_windows.c | Native |  | `std::fs` |
+| `file_get_position` | tag_files/files_windows.c | Native |  | `std::fs` |
+| `file_set_position` | tag_files/files_windows.c | Native |  | `std::fs` |
+| `file_get_eof` | tag_files/files_windows.c | Native |  | `std::fs` |
+| `file_set_eof` | tag_files/files_windows.c | Native |  | `std::fs` |
+| `file_read` | tag_files/files_windows.c | Native |  | `std::fs` |
+| `file_write` | tag_files/files_windows.c | Native |  | `std::fs` |
+| `file_read_from_position` | tag_files/files_windows.c | Native |  | `std::fs` |
+| `file_write_to_position` | tag_files/files_windows.c | Native |  | `std::fs` |
+| `file_get_last_modification_date` | tag_files/files_windows.c | Native |  | `std::fs` |
+| `file_get_size` | tag_files/files_windows.c | Native |  | `std::fs` |
+| `find_files_next` | tag_files/files_windows.c | Native |  | `std::fs` |
+| `file_location_set_volume` | tag_files/files.c | Native |  | `std::fs` |
+| `file_reference_create` | tag_files/files.c | Native |  | `std::fs` |
+| `find_files` | tag_files/files.c | Native |  | `std::fs` |
+| `file_read_into_memory` | tag_files/files.c | Native |  | `std::fs` |
+| `file_printf` | tag_files/files.c | Native |  | `std::fs` |
+| `file_reference_get_info` | tag_files/files.c | Native |  | `std::fs` |
+| `file_reference_copy` | tag_files/files.c | Native |  | `std::fs` |
+| `file_reference_add_directory` | tag_files/files.c | Native |  | `std::fs` |
+| `file_reference_set_name` | tag_files/files.c | Native |  | `std::fs` |
+| `file_reference_get_location` | tag_files/files.c | Native |  | `std::fs` |
+| `file_reference_get_name` | tag_files/files.c | Native |  | `std::fs` |
+| `file_references_equal` | tag_files/files.c | Native |  | `std::fs` |
+| `file_reference_create_from_path` | tag_files/files.c | Native |  | `std::fs` |
+| `directory_create_or_delete_contents` | tag_files/files.c | Native |  | `std::fs` |
+| `datastore_read` | tag_files/files.c | Native |  | `std::fs` |
+| `datastore_write` | tag_files/files.c | Native |  | `std::fs` |
+| `file_error` | tag_files/files_windows.c | Native |  | `std::fs` |
 | `tag_name_strip_path` | tag_files/tag_files.c | Replaced | import/src/lib.rs | maps imported to a typed format |
 | `tag_empty_data` | tag_files/tag_groups.c | Replaced | import/src/lib.rs | maps imported to a typed format |
 | `tag_data_get_pointer` | tag_files/tag_groups.c | Replaced | import/src/lib.rs | maps imported to a typed format |
 | `tag_block_get_element_with_size` | tag_files/tag_groups.c | Replaced | import/src/lib.rs | maps imported to a typed format |
 | `tag_block_get_element_fast` | tag_files/tag_groups.h | Replaced | import/src/lib.rs | maps imported to a typed format |
-
-44 Missing (30 reached from `main_loop`), by file:
-
-- tag_files/files.c: `file_location_set_volume`, `file_reference_create`, `find_files`, `file_read_into_memory`, `file_printf`, `file_reference_get_info`, `file_reference_copy`, `file_reference_add_directory`, `file_reference_set_name`, `file_reference_get_location`, `file_reference_get_name`, `file_references_equal`, `file_reference_create_from_path`, `directory_create_or_delete_contents`, `datastore_read`, `datastore_write`
-- tag_files/files_windows.c: `file_location_is_valid`, `file_compare_last_modification_dates`, `find_files_start`, `file_path_add_name`, `file_path_add_extension`, `file_path_remove_name`, `file_path_split`, `file_location_get_full_path`, `file_read_only`, `code_00189ca0`, `file_create`, `file_delete`, `file_exists`, `file_rename`, `file_open`, `file_close`, `file_get_position`, `file_set_position`, `file_get_eof`, `file_set_eof`, `file_read`, `file_write`, `file_read_from_position`, `file_write_to_position`, `file_get_last_modification_date`, `file_get_size`, `find_files_next`, `file_error`
 
 ## `text`
 

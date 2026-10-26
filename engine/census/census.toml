@@ -326,6 +326,11 @@ class = "replaced"
 because = "imported"
 stands_in = "import/src/lib.rs"
 
+[function.OF]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
 [function.Quantize]
 class = "replaced"
 because = "tools"
@@ -692,6 +697,10 @@ engine = "campaign/src/actors.rs"
 leaves_out = ["actions and their state machines", "emotions", "swarms", "dormancy and activation", "props"]
 owed = "the campaign's rewrite of the AI; no check against the original yet (Phase 11's divergences)"
 
+[function.adjust_rectangle2d]
+class = "native"
+primitive = "min"
+
 [function.ai_conversation]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
@@ -763,6 +772,19 @@ engine = "campaign/src/actors.rs"
 leaves_out = ["inactive encounters and swarms released", "team status", "the AI's spatial effects", "the conversations' own update"]
 owed = "the campaign's rewrite of the AI; no check against the original yet (Phase 11's divergences)"
 
+[function.allocate_new_datablock]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.angle_between_normals3d]
+class = "native"
+primitive = "glam::Vec3"
+
+[function.angle_between_vectors2d]
+class = "native"
+primitive = "glam::Vec2"
+
 [function.animation_choose_random_permutation_internal]
 class = "matched"
 owed = "draws from the game's random seed; checked through the animation trace's permutation weights"
@@ -805,6 +827,11 @@ owed = "damage; reads the object, tag and map world, which the fake worlds do no
 class = "replaced"
 because = "tools"
 stands_in = "import/src/lib.rs"
+
+[function.base_address_from_symbol_name]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
 
 [function.begin_music_fade_out]
 class = "matched"
@@ -871,6 +898,14 @@ owed = "the engine's own tests (physics/src/movement.rs); no check against the o
 [function.biped_update_turning]
 class = "matched"
 owed = "a biped's turning; reads the object, tag and map world, which the fake worlds do not hold; Phase 11's divergences"
+
+[function.bit_vector_and]
+class = "native"
+primitive = "u32"
+
+[function.bit_vector_or]
+class = "native"
+primitive = "u32"
 
 [function.bitmap_2d_address]
 class = "replaced"
@@ -1264,6 +1299,11 @@ stands_in = "app/Sources/OpenCEEngineRender/DecalPass.swift"
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
 
+[function.build_crc_table]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
 [function.build_damage_animation_index]
 class = "matched"
 owed = "the damage animations; reads the object, tag and map world, which the fake worlds do not hold (the animation graph)"
@@ -1302,6 +1342,14 @@ stands_in = "ffi/src/lights.rs"
 class = "replaced"
 because = "tools"
 stands_in = "import/src/lib.rs"
+
+[function.byte_swap_codes_size]
+class = "native"
+primitive = "from_le_bytes"
+
+[function.byte_swap_data_explicit]
+class = "native"
+primitive = "from_le_bytes"
 
 [function.cache_copy_begin]
 class = "replaced"
@@ -1572,6 +1620,14 @@ stands_in = "import/src/lib.rs"
 class = "matched"
 owed = "cutscene cameras; reads the object, tag and map world, which the fake worlds do not hold (the camera track tag); campaign/tests/cutscenes.rs"
 
+[function.ceiling_log2]
+class = "native"
+primitive = "next_power_of_two"
+
+[function.ceiling_power2]
+class = "native"
+primitive = "next_power_of_two"
+
 [function.channel_set_properties_hardware]
 class = "matched"
 engine = "audio/src/mixer.rs"
@@ -1627,6 +1683,182 @@ owed = "the engine's own tests (campaign/tests/cutscenes.rs); no check against t
 class = "replaced"
 because = "renderer"
 stands_in = "ffi/src/lights.rs"
+
+[function.code_0007ccf0]
+class = "replaced"
+because = "tools"
+stands_in = "ffi/src/allocations.rs"
+
+[function.code_0007cd40]
+class = "replaced"
+because = "tools"
+stands_in = "ffi/src/allocations.rs"
+
+[function.code_0007cd90]
+class = "replaced"
+because = "tools"
+stands_in = "ffi/src/allocations.rs"
+
+[function.code_0007cdc0]
+class = "replaced"
+because = "tools"
+stands_in = "ffi/src/allocations.rs"
+
+[function.code_0007ce40]
+class = "replaced"
+because = "tools"
+stands_in = "ffi/src/allocations.rs"
+
+[function.code_0007cf50]
+class = "replaced"
+because = "tools"
+stands_in = "ffi/src/allocations.rs"
+
+[function.code_0007cfc0]
+class = "replaced"
+because = "tools"
+stands_in = "ffi/src/allocations.rs"
+
+[function.code_0007d060]
+class = "replaced"
+because = "tools"
+stands_in = "ffi/src/allocations.rs"
+
+[function.code_0007d9d0]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+
+[function.code_00080360]
+class = "native"
+primitive = "sort_by"
+
+[function.code_000803c0]
+class = "native"
+primitive = "sort_by"
+
+[function.code_00100040]
+class = "native"
+primitive = "std::collections::BTreeMap"
+
+[function.code_00100080]
+class = "native"
+primitive = "std::collections::BTreeMap"
+
+[function.code_00108010]
+class = "native"
+primitive = "from_le_bytes"
+
+[function.code_0010a5f0]
+class = "replaced"
+because = "network"
+stands_in = "net/src/wire.rs"
+
+[function.code_0010a7c0]
+class = "replaced"
+because = "network"
+stands_in = "net/src/wire.rs"
+
+[function.code_0010aac0]
+class = "replaced"
+because = "network"
+stands_in = "net/src/wire.rs"
+
+[function.code_0010b270]
+class = "native"
+primitive = "std::collections::BTreeMap"
+
+[function.code_0010b630]
+class = "native"
+primitive = "std::collections::BTreeMap"
+
+[function.code_0010e270]
+class = "native"
+primitive = "Vec"
+
+[function.code_0010e2b0]
+class = "native"
+primitive = "Vec"
+
+[function.code_0010e2e0]
+class = "native"
+primitive = "Vec"
+
+[function.code_0010e330]
+class = "native"
+primitive = "Vec"
+
+[function.code_0010e360]
+class = "native"
+primitive = "Vec"
+
+[function.code_0010e3e0]
+class = "native"
+primitive = "Vec"
+
+[function.code_0010e430]
+class = "native"
+primitive = "Vec"
+
+[function.code_0010e510]
+class = "native"
+primitive = "Vec"
+
+[function.code_0010e5b0]
+class = "native"
+primitive = "Vec"
+
+[function.code_0010e5f0]
+class = "native"
+primitive = "Vec"
+
+[function.code_0010e630]
+class = "native"
+primitive = "Vec"
+
+[function.code_0010e670]
+class = "native"
+primitive = "Vec"
+
+[function.code_0010e6a0]
+class = "native"
+primitive = "Vec"
+
+[function.code_0010e770]
+class = "native"
+primitive = "Vec"
+
+[function.code_0010e7f0]
+class = "native"
+primitive = "Vec"
+
+[function.code_0010e890]
+class = "native"
+primitive = "Vec"
+
+[function.code_0010e960]
+class = "native"
+primitive = "Vec"
+
+[function.code_0010ea00]
+class = "native"
+primitive = "Vec"
+
+[function.code_0010eef0]
+class = "native"
+primitive = "Vec"
+
+[function.code_0010ef10]
+class = "native"
+primitive = "Vec"
+
+[function.code_0010ef70]
+class = "native"
+primitive = "Vec"
+
+[function.code_00189ca0]
+class = "native"
+primitive = "std::fs"
 
 [function.collision_debug_render]
 class = "replaced"
@@ -1717,6 +1949,11 @@ engine = "physics/src/lib.rs"
 leaves_out = ["the original's collision BSP walk: Jolt answers the query on a mesh made from the collision BSP, so what is hit at an edge, and in what order, can differ"]
 owed = "the engine's own tests (physics/tests/world.rs); no check against the original yet"
 
+[function.compare_file_pointer_totals]
+class = "replaced"
+because = "tools"
+stands_in = "ffi/src/allocations.rs"
+
 [function.compare_temp_markers]
 class = "replaced"
 because = "renderer"
@@ -1781,6 +2018,21 @@ class = "matched"
 engine = "ffi/src/particles/contrails.rs"
 owed = "the engine's own tests (ffi/src/particles/contrails.rs); no check against the original yet"
 
+[function.crc32]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.crc_checksum_buffer]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.crc_new]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
 [function.create_ghost_effect]
 class = "matched"
 owed = "a vehicle's effects; reads the object, tag and map world, which the fake worlds do not hold; Phase 13's effects on the move"
@@ -1799,10 +2051,70 @@ class = "matched"
 engine = "sim/src/vehicle.rs"
 owed = "the engine's own tests (sim/src/vehicle.rs); no check against the original yet"
 
+[function.cross_product_magnitude3d]
+class = "native"
+primitive = "glam::Vec3"
+
 [function.crosshairs_draw]
 class = "matched"
 engine = "ffi/src/hud.rs"
 owed = "the engine's own tests (ffi/tests/hud.rs); no check against the original yet"
+
+[function.csmemcmp]
+class = "native"
+primitive = "copy_from_slice"
+
+[function.csmemcpy]
+class = "native"
+primitive = "copy_from_slice"
+
+[function.csmemmove]
+class = "native"
+primitive = "copy_from_slice"
+
+[function.csmemset]
+class = "native"
+primitive = "copy_from_slice"
+
+[function.csprintf]
+class = "native"
+primitive = "String"
+
+[function.csstrcasecmp]
+class = "native"
+primitive = "String"
+
+[function.csstrcat]
+class = "native"
+primitive = "String"
+
+[function.csstrcmp]
+class = "native"
+primitive = "String"
+
+[function.csstrcpy]
+class = "native"
+primitive = "String"
+
+[function.csstrlen]
+class = "native"
+primitive = "String"
+
+[function.csstrncat]
+class = "native"
+primitive = "String"
+
+[function.csstrncmp]
+class = "native"
+primitive = "String"
+
+[function.csstrncpy]
+class = "native"
+primitive = "String"
+
+[function.csstrtok]
+class = "native"
+primitive = "String"
 
 [function.ctf_award_capture]
 class = "matched"
@@ -1840,13 +2152,134 @@ class = "matched"
 engine = "sim/src/damage.rs"
 owed = "the engine's own tests (sim/src/damage.rs); no check against the original yet"
 
+[function.data_allocation_size]
+class = "native"
+primitive = "Vec"
+
+[function.data_compact]
+class = "native"
+primitive = "Vec"
+
+[function.data_compress]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.data_decode_array]
+class = "replaced"
+because = "network"
+stands_in = "net/src/wire.rs"
+
+[function.data_decode_int64]
+class = "replaced"
+because = "network"
+stands_in = "net/src/wire.rs"
+
+[function.data_decode_structures]
+class = "replaced"
+because = "network"
+stands_in = "net/src/wire.rs"
+
+[function.data_decompress]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.data_decompressed_size]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.data_delete_all]
+class = "native"
+primitive = "Vec"
+
+[function.data_dispose]
+class = "native"
+primitive = "Vec"
+
+[function.data_encode_array]
+class = "replaced"
+because = "network"
+stands_in = "net/src/wire.rs"
+
+[function.data_encode_structures]
+class = "replaced"
+because = "network"
+stands_in = "net/src/wire.rs"
+
+[function.data_initialize]
+class = "native"
+primitive = "Vec"
+
+[function.data_iterator_new]
+class = "native"
+primitive = "Vec"
+
+[function.data_iterator_next]
+class = "native"
+primitive = "Vec"
+
+[function.data_make_invalid]
+class = "native"
+primitive = "Vec"
+
+[function.data_make_valid]
+class = "native"
+primitive = "Vec"
+
+[function.data_new]
+class = "native"
+primitive = "Vec"
+
 [function.data_next_index]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
 
+[function.data_packet_groups_get_error]
+class = "replaced"
+because = "network"
+stands_in = "net/src/wire.rs"
+
+[function.data_usable]
+class = "native"
+primitive = "Vec"
+
+[function.data_verify]
+class = "native"
+primitive = "Vec"
+
+[function.datastore_read]
+class = "native"
+primitive = "std::fs"
+
+[function.datastore_write]
+class = "native"
+primitive = "std::fs"
+
+[function.datum_delete]
+class = "native"
+primitive = "Vec"
+
+[function.datum_get]
+class = "native"
+primitive = "Vec"
+
+[function.datum_initialize]
+class = "native"
+primitive = "Vec"
+
 [function.datum_new]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
+
+[function.datum_new_at_index]
+class = "native"
+primitive = "Vec"
+
+[function.datum_try_and_get]
+class = "native"
+primitive = "Vec"
 
 [function.dead_camera_new]
 class = "matched"
@@ -1855,6 +2288,61 @@ owed = "the engine cites it, with no check against the original yet"
 [function.dead_camera_update]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
+
+[function.debug_check_memory_globals]
+class = "replaced"
+because = "tools"
+stands_in = "ffi/src/allocations.rs"
+
+[function.debug_check_pointer_header]
+class = "replaced"
+because = "tools"
+stands_in = "ffi/src/allocations.rs"
+
+[function.debug_check_pointer_overrun]
+class = "replaced"
+because = "tools"
+stands_in = "ffi/src/allocations.rs"
+
+[function.debug_dump_memory_by_file]
+class = "replaced"
+because = "tools"
+stands_in = "ffi/src/allocations.rs"
+
+[function.debug_free]
+class = "replaced"
+because = "tools"
+stands_in = "ffi/src/allocations.rs"
+
+[function.debug_malloc]
+class = "replaced"
+because = "tools"
+stands_in = "ffi/src/allocations.rs"
+
+[function.debug_memory_add_pointer]
+class = "replaced"
+because = "tools"
+stands_in = "ffi/src/allocations.rs"
+
+[function.debug_memory_fill_with_random]
+class = "replaced"
+because = "tools"
+stands_in = "ffi/src/allocations.rs"
+
+[function.debug_memory_header_checksum]
+class = "replaced"
+because = "tools"
+stands_in = "ffi/src/allocations.rs"
+
+[function.debug_memory_remove_pointer]
+class = "replaced"
+because = "tools"
+stands_in = "ffi/src/allocations.rs"
+
+[function.debug_realloc]
+class = "replaced"
+because = "tools"
+stands_in = "ffi/src/allocations.rs"
 
 [function.debug_sound_classes_enable]
 class = "replaced"
@@ -1922,6 +2410,10 @@ owed = "the engine's own tests (audio/src/decode.rs); no check against the origi
 class = "replaced"
 because = "tools"
 stands_in = "import/src/lib.rs"
+
+[function.default_hash_function]
+class = "native"
+primitive = "std::collections::BTreeMap"
 
 [function.default_material_definition_get]
 class = "replaced"
@@ -2029,11 +2521,33 @@ class = "matched"
 engine = "campaign/src/cinematic.rs"
 owed = "the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet"
 
+[function.directory_create_or_delete_contents]
+class = "native"
+primitive = "std::fs"
+
+[function.display_assert]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+
+[function.display_debug_string]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+
 [function.display_scenario_help]
 class = "partial"
 engine = "campaign/src/presented.rs"
 leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
 owed = "the engine's own tests (campaign/src/presented.rs); no check against the original yet"
+
+[function.dispose_handle]
+class = "native"
+primitive = "Vec"
+
+[function.dispose_pointer]
+class = "native"
+primitive = "Vec"
 
 [function.dispose_widget_stack]
 class = "matched"
@@ -2093,6 +2607,30 @@ owed = "the engine's own tests (ui/tests/draw.rs); no check against the original
 class = "matched"
 engine = "ui/src/draw.rs"
 owed = "the engine's own tests (ui/tests/draw.rs); no check against the original yet"
+
+[function.dynamic_array_add_element]
+class = "native"
+primitive = "Vec"
+
+[function.dynamic_array_delete]
+class = "native"
+primitive = "Vec"
+
+[function.dynamic_array_delete_element]
+class = "native"
+primitive = "Vec"
+
+[function.dynamic_array_get_element]
+class = "native"
+primitive = "Vec"
+
+[function.dynamic_array_new]
+class = "native"
+primitive = "Vec"
+
+[function.dynamic_array_resize]
+class = "native"
+primitive = "Vec"
 
 [function.edit_text_fix_selection]
 class = "replaced"
@@ -2333,6 +2871,14 @@ engine = "campaign/src/actors.rs"
 leaves_out = ["activation cluster bit vectors", "firing position owner indices", "the encounter's own state (respawn, timers)"]
 owed = "the campaign's rewrite of the AI; no check against the original yet (Phase 11's divergences)"
 
+[function.equal_point2d]
+class = "native"
+primitive = "min"
+
+[function.equal_rectangle2d]
+class = "native"
+primitive = "min"
+
 [function.equipment_handle_pickup]
 class = "matched"
 owed = "items; reads the object, tag and map world, which the fake worlds do not hold"
@@ -2340,6 +2886,36 @@ owed = "items; reads the object, tag and map world, which the fake worlds do not
 [function.equipment_place]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
+
+[function.error]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+
+[function.error_get]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+
+[function.errors_clear]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+
+[function.errors_handle]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+
+[function.errors_output_to_debug_file]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+
+[function.errors_overflow_suppression_enable]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
 
 [function.event_controller_index_compatible_with_widget]
 class = "matched"
@@ -2446,15 +3022,192 @@ class = "replaced"
 because = "tools"
 stands_in = "import/src/lib.rs"
 
+[function.fast_normalize2d]
+class = "native"
+primitive = "glam::Vec2"
+
+[function.fast_normalize3d]
+class = "native"
+primitive = "glam::Vec3"
+
+[function.fast_normals_interpolate]
+class = "native"
+primitive = "glam::Vec3"
+
+[function.file_close]
+class = "native"
+primitive = "std::fs"
+
+[function.file_compare_last_modification_dates]
+class = "native"
+primitive = "std::fs"
+
+[function.file_create]
+class = "native"
+primitive = "std::fs"
+
+[function.file_delete]
+class = "native"
+primitive = "std::fs"
+
+[function.file_error]
+class = "native"
+primitive = "std::fs"
+
+[function.file_exists]
+class = "native"
+primitive = "std::fs"
+
+[function.file_get_eof]
+class = "native"
+primitive = "std::fs"
+
+[function.file_get_last_modification_date]
+class = "native"
+primitive = "std::fs"
+
+[function.file_get_position]
+class = "native"
+primitive = "std::fs"
+
+[function.file_get_size]
+class = "native"
+primitive = "std::fs"
+
+[function.file_location_get_full_path]
+class = "native"
+primitive = "std::fs"
+
+[function.file_location_is_valid]
+class = "native"
+primitive = "std::fs"
+
+[function.file_location_set_volume]
+class = "native"
+primitive = "std::fs"
+
+[function.file_open]
+class = "native"
+primitive = "std::fs"
+
+[function.file_path_add_extension]
+class = "native"
+primitive = "std::fs"
+
+[function.file_path_add_name]
+class = "native"
+primitive = "std::fs"
+
+[function.file_path_remove_name]
+class = "native"
+primitive = "std::fs"
+
+[function.file_path_split]
+class = "native"
+primitive = "std::fs"
+
+[function.file_printf]
+class = "native"
+primitive = "std::fs"
+
+[function.file_read]
+class = "native"
+primitive = "std::fs"
+
+[function.file_read_from_position]
+class = "native"
+primitive = "std::fs"
+
+[function.file_read_into_memory]
+class = "native"
+primitive = "std::fs"
+
+[function.file_read_only]
+class = "native"
+primitive = "std::fs"
+
+[function.file_reference_add_directory]
+class = "native"
+primitive = "std::fs"
+
+[function.file_reference_copy]
+class = "native"
+primitive = "std::fs"
+
+[function.file_reference_create]
+class = "native"
+primitive = "std::fs"
+
+[function.file_reference_create_from_path]
+class = "native"
+primitive = "std::fs"
+
+[function.file_reference_get_info]
+class = "native"
+primitive = "std::fs"
+
+[function.file_reference_get_location]
+class = "native"
+primitive = "std::fs"
+
+[function.file_reference_get_name]
+class = "native"
+primitive = "std::fs"
+
+[function.file_reference_set_name]
+class = "native"
+primitive = "std::fs"
+
+[function.file_references_equal]
+class = "native"
+primitive = "std::fs"
+
+[function.file_rename]
+class = "native"
+primitive = "std::fs"
+
+[function.file_set_eof]
+class = "native"
+primitive = "std::fs"
+
+[function.file_set_position]
+class = "native"
+primitive = "std::fs"
+
+[function.file_write]
+class = "native"
+primitive = "std::fs"
+
+[function.file_write_to_position]
+class = "native"
+primitive = "std::fs"
+
 [function.findScheme]
 class = "replaced"
 because = "tools"
 stands_in = "import/src/lib.rs"
 
+[function.find_files]
+class = "native"
+primitive = "std::fs"
+
+[function.find_files_next]
+class = "native"
+primitive = "std::fs"
+
+[function.find_files_start]
+class = "native"
+primitive = "std::fs"
+
 [function.find_like_crossing]
 class = "replaced"
 because = "imported"
 stands_in = "import/src/level.rs"
+
+[function.find_profile_section]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
 
 [function.firing_position_store_evaluation_debug]
 class = "replaced"
@@ -2488,6 +3241,10 @@ owed = "the engine cites it, with no check against the original yet"
 [function.first_person_weapon_update]
 class = "matched"
 owed = "reads the object, tag and map world, which the fake worlds do not hold (the weapon tag); its states are first_person_reference's"
+
+[function.floor_power2]
+class = "native"
+primitive = "next_power_of_two"
 
 [function.following_camera_deterministic]
 class = "matched"
@@ -2618,9 +3375,19 @@ engine = "campaign/src/presented.rs"
 leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
 owed = "the engine's own tests (campaign/src/lib.rs); no check against the original yet"
 
+[function.gen_trees_header]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
 [function.getMode]
 class = "replaced"
 because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.get_crc_table]
+class = "replaced"
+because = "imported"
 stands_in = "import/src/lib.rs"
 
 [function.get_crosshair_state]
@@ -2631,6 +3398,14 @@ owed = "the engine's own tests (ffi/tests/hud.rs); no check against the original
 [function.get_flash_color]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
+
+[function.get_lrar_cache_block]
+class = "native"
+primitive = "Vec"
+
+[function.get_lru_cache_block_offset]
+class = "native"
+primitive = "Vec"
 
 [function.get_material_type]
 class = "matched"
@@ -2688,6 +3463,42 @@ stands_in = "import/src/lib.rs"
 class = "matched"
 engine = "sim/src/player.rs"
 owed = "the engine's own tests (sim/tests/player.rs); no check against the original yet"
+
+[function.hashtable_capacious_put]
+class = "native"
+primitive = "std::collections::BTreeMap"
+
+[function.hashtable_delete]
+class = "native"
+primitive = "std::collections::BTreeMap"
+
+[function.hashtable_get]
+class = "native"
+primitive = "std::collections::BTreeMap"
+
+[function.hashtable_grow]
+class = "native"
+primitive = "std::collections::BTreeMap"
+
+[function.hashtable_new]
+class = "native"
+primitive = "std::collections::BTreeMap"
+
+[function.hashtable_put]
+class = "native"
+primitive = "std::collections::BTreeMap"
+
+[function.hashtable_remove]
+class = "native"
+primitive = "std::collections::BTreeMap"
+
+[function.hashtable_search]
+class = "native"
+primitive = "std::collections::BTreeMap"
+
+[function.hashtable_set_user_data]
+class = "native"
+primitive = "std::collections::BTreeMap"
 
 [function.hs_arguments_evaluate]
 class = "matched"
@@ -3012,6 +3823,11 @@ owed = "the engine's own tests (ffi/tests/hud_text.rs); no check against the ori
 class = "matched"
 owed = "the HUD's messages; reads the object, tag and map world, which the fake worlds do not hold"
 
+[function.initialize_stack_walk]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+
 [function.input_abstraction_dispose]
 class = "replaced"
 because = "keyboard_mouse"
@@ -3042,10 +3858,27 @@ class = "replaced"
 because = "keyboard_mouse"
 stands_in = "app/Sources/OpenCEEngineKit/PlayControls.swift"
 
+[function.inset_rectangle2d]
+class = "native"
+primitive = "min"
+
+[function.interior_rectangle2d]
+class = "native"
+primitive = "min"
+
 [function.intersect_planes3d]
 class = "replaced"
 because = "imported"
 stands_in = "import/src/level.rs"
+
+[function.intersect_rectangles2d]
+class = "native"
+primitive = "min"
+
+[function.is_valid_ebp]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
 
 [function.keyboard_controls_update]
 class = "replaced"
@@ -3141,6 +3974,11 @@ class = "matched"
 engine = "audio/src/player.rs"
 owed = "the engine's own tests (audio/src/player.rs); no check against the original yet"
 
+[function.local_random]
+class = "replaced"
+because = "tools"
+stands_in = "ffi/src/allocations.rs"
+
 [function.local_random_direction3d]
 class = "matched"
 engine = "sim/src/effects.rs"
@@ -3161,6 +3999,15 @@ class = "matched"
 engine = "ffi/src/sound_world.rs"
 owed = "the engine's own tests (ffi/src/sound_world.rs); no check against the original yet"
 
+[function.lock_handle]
+class = "native"
+primitive = "Vec"
+
+[function.longest_match]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
 [function.looping_sound_find]
 class = "matched"
 engine = "audio/src/player/looping.rs"
@@ -3171,13 +4018,146 @@ class = "matched"
 engine = "audio/src/player/looping.rs"
 owed = "the engine's own tests (audio/src/player/looping.rs); no check against the original yet"
 
+[function.lra_allocate]
+class = "native"
+primitive = "Vec"
+
+[function.lra_block_delete]
+class = "native"
+primitive = "Vec"
+
+[function.lra_block_offset]
+class = "native"
+primitive = "Vec"
+
+[function.lra_default_delete_proc]
+class = "native"
+primitive = "Vec"
+
+[function.lra_default_update_proc]
+class = "native"
+primitive = "Vec"
+
+[function.lra_dispose]
+class = "native"
+primitive = "Vec"
+
+[function.lra_flush]
+class = "native"
+primitive = "Vec"
+
+[function.lra_free]
+class = "native"
+primitive = "Vec"
+
+[function.lra_full]
+class = "native"
+primitive = "Vec"
+
+[function.lra_lock]
+class = "native"
+primitive = "Vec"
+
+[function.lra_new]
+class = "native"
+primitive = "Vec"
+
+[function.lra_unlock]
+class = "native"
+primitive = "Vec"
+
+[function.lrar_allocate]
+class = "native"
+primitive = "Vec"
+
+[function.lrar_block_address]
+class = "native"
+primitive = "Vec"
+
+[function.lrar_deallocate]
+class = "native"
+primitive = "Vec"
+
+[function.lrar_default_lock_proc]
+class = "native"
+primitive = "Vec"
+
+[function.lrar_default_unlock_proc]
+class = "native"
+primitive = "Vec"
+
+[function.lrar_dispose]
+class = "native"
+primitive = "Vec"
+
+[function.lrar_flush]
+class = "native"
+primitive = "Vec"
+
+[function.lrar_new]
+class = "native"
+primitive = "Vec"
+
+[function.lrar_unlock_block]
+class = "native"
+primitive = "Vec"
+
+[function.lru_allocate]
+class = "native"
+primitive = "Vec"
+
+[function.lru_default_new_block_proc]
+class = "native"
+primitive = "Vec"
+
+[function.lru_default_purge_block_proc]
+class = "native"
+primitive = "Vec"
+
+[function.lru_dispose]
+class = "native"
+primitive = "Vec"
+
+[function.lru_flush]
+class = "native"
+primitive = "Vec"
+
+[function.lru_free_blocks]
+class = "native"
+primitive = "Vec"
+
+[function.lru_lock]
+class = "native"
+primitive = "Vec"
+
+[function.lru_new]
+class = "native"
+primitive = "Vec"
+
+[function.lru_touch]
+class = "native"
+primitive = "Vec"
+
+[function.lru_unlock]
+class = "native"
+primitive = "Vec"
+
 [function.machine_update]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
 
+[function.magnitude_squared3d_right_associated]
+class = "native"
+primitive = "glam::Vec3"
+
 [function.main_menu_initialize]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
+
+[function.make_crc_table]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
 
 [function.map_leaf_find_face_on_node]
 class = "replaced"
@@ -3188,6 +4168,11 @@ stands_in = "import/src/level.rs"
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
 
+[function.match_init]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
 [function.material_effect_new]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
@@ -3197,9 +4182,205 @@ class = "matched"
 engine = "sim/src/effects.rs"
 owed = "the engine's own tests (sim/src/effects.rs); no check against the original yet"
 
+[function.matrix3x3_determinant]
+class = "native"
+primitive = "glam::Mat3"
+
+[function.matrix3x3_from_axis_and_angle]
+class = "native"
+primitive = "glam::Mat3"
+
+[function.matrix3x3_from_forward_and_up]
+class = "native"
+primitive = "glam::Mat3"
+
+[function.matrix3x3_inverse]
+class = "native"
+primitive = "glam::Mat3"
+
+[function.matrix3x3_multiply]
+class = "native"
+primitive = "glam::Mat3"
+
+[function.matrix3x3_rotation_to_quaternion]
+class = "native"
+primitive = "glam::Quat"
+
+[function.matrix3x3_transform_vector]
+class = "native"
+primitive = "glam::Mat3"
+
+[function.matrix3x3_transpose]
+class = "native"
+primitive = "glam::Mat3"
+
+[function.matrix4x3_from_plane]
+class = "native"
+primitive = "glam::Affine3A"
+
+[function.matrix4x3_from_point_and_quaternion]
+class = "native"
+primitive = "glam::Affine3A"
+
+[function.matrix4x3_identity]
+class = "native"
+primitive = "glam::Affine3A"
+
+[function.matrix4x3_inverse]
+class = "native"
+primitive = "glam::Affine3A"
+
+[function.matrix4x3_inverse_transform_plane]
+class = "native"
+primitive = "glam::Affine3A"
+
+[function.matrix4x3_inverse_transform_point]
+class = "native"
+primitive = "glam::Affine3A"
+
+[function.matrix4x3_inverse_transform_vector]
+class = "native"
+primitive = "glam::Affine3A"
+
 [function.matrix4x3_rotation_from_angles]
 class = "matched"
 owed = "rotations; checked through the item trace's object matrices"
+
+[function.matrix4x3_rotation_from_axis_and_angle]
+class = "native"
+primitive = "glam::Affine3A"
+
+[function.matrix4x3_rotation_to_angles]
+class = "native"
+primitive = "glam::Quat"
+
+[function.matrix4x3_rotation_to_quaternion]
+class = "native"
+primitive = "glam::Quat"
+
+[function.matrix4x3_scale]
+class = "native"
+primitive = "glam::Affine3A"
+
+[function.matrix4x3_to_point_and_vectors]
+class = "native"
+primitive = "glam::Affine3A"
+
+[function.matrix4x3_transform_plane]
+class = "native"
+primitive = "glam::Affine3A"
+
+[function.matrix4x3_transform_point]
+class = "native"
+primitive = "glam::Affine3A"
+
+[function.matrix4x3_transform_vector]
+class = "native"
+primitive = "glam::Affine3A"
+
+[function.matrix4x3_translation]
+class = "native"
+primitive = "glam::Affine3A"
+
+[function.matrix4x3_transpose]
+class = "native"
+primitive = "glam::Affine3A"
+
+[function.memory_block_get_pool_index]
+class = "native"
+primitive = "Vec"
+
+[function.memory_block_get_real_size]
+class = "native"
+primitive = "Vec"
+
+[function.memory_block_get_user_address]
+class = "native"
+primitive = "Vec"
+
+[function.memory_block_get_user_size]
+class = "native"
+primitive = "Vec"
+
+[function.memory_block_is_locked]
+class = "native"
+primitive = "Vec"
+
+[function.memory_block_lock]
+class = "native"
+primitive = "Vec"
+
+[function.memory_block_set_size_and_index]
+class = "native"
+primitive = "Vec"
+
+[function.memory_block_unlock]
+class = "native"
+primitive = "Vec"
+
+[function.memory_block_valid]
+class = "native"
+primitive = "Vec"
+
+[function.memory_pool_allocation_size]
+class = "native"
+primitive = "Vec"
+
+[function.memory_pool_block_allocate]
+class = "native"
+primitive = "Vec"
+
+[function.memory_pool_block_compute_actual_size]
+class = "native"
+primitive = "Vec"
+
+[function.memory_pool_block_free]
+class = "native"
+primitive = "Vec"
+
+[function.memory_pool_block_get]
+class = "native"
+primitive = "Vec"
+
+[function.memory_pool_block_new]
+class = "native"
+primitive = "Vec"
+
+[function.memory_pool_block_reallocate]
+class = "native"
+primitive = "Vec"
+
+[function.memory_pool_compact]
+class = "native"
+primitive = "Vec"
+
+[function.memory_pool_delete]
+class = "native"
+primitive = "Vec"
+
+[function.memory_pool_get_contiguous_free_size]
+class = "native"
+primitive = "Vec"
+
+[function.memory_pool_get_free_size]
+class = "native"
+primitive = "Vec"
+
+[function.memory_pool_get_used_size]
+class = "native"
+primitive = "Vec"
+
+[function.memory_pool_initialize]
+class = "native"
+primitive = "Vec"
+
+[function.memory_pool_new]
+class = "native"
+primitive = "Vec"
+
+[function.memory_pool_verify]
+class = "native"
+primitive = "Vec"
 
 [function.model_build_remapping_table_for_animation_graph]
 class = "matched"
@@ -3284,6 +4465,10 @@ stands_in = "import/src/level.rs"
 class = "replaced"
 because = "imported"
 stands_in = "import/src/level.rs"
+
+[function.normals_interpolate]
+class = "native"
+primitive = "glam::Vec3"
 
 [function.object_add_scenario_permutation]
 class = "matched"
@@ -3559,6 +4744,10 @@ owed = "the engine cites it, with no check against the original yet"
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
 
+[function.offset_point2d]
+class = "native"
+primitive = "min"
+
 [function.overlay_animation_apply_continuous_scaled]
 class = "matched"
 owed = "checked through the animation trace's overlays"
@@ -3706,6 +4895,18 @@ class = "matched"
 engine = "ffi/src/particles.rs"
 owed = "the engine's own tests (ffi/src/particles.rs); no check against the original yet"
 
+[function.perpendicular2d]
+class = "native"
+primitive = "glam::Vec2"
+
+[function.perpendicular3d]
+class = "native"
+primitive = "glam::Vec3"
+
+[function.perpendicular4d]
+class = "native"
+primitive = "glam::Vec3"
+
 [function.physical_memory_free]
 class = "replaced"
 because = "xbox"
@@ -3814,6 +5015,10 @@ class = "matched"
 engine = "sim/src/vehicle.rs"
 owed = "the engine's own tests (sim/src/vehicle.rs); no check against the original yet"
 
+[function.plane2d_distance_to_point]
+class = "native"
+primitive = "glam::Vec2"
+
 [function.plane2d_from_points]
 class = "replaced"
 because = "renderer"
@@ -3850,6 +5055,10 @@ owed = "the action button; reads the object, tag and map world, which the fake w
 class = "matched"
 owed = "the end of a level; reads the object, tag and map world, which the fake worlds do not hold; campaign/tests/flow.rs"
 
+[function.point2d_in_rectangle2d]
+class = "native"
+primitive = "min"
+
 [function.point_physics_definition_get_mass]
 class = "matched"
 engine = "sim/src/point_physics.rs"
@@ -3858,6 +5067,34 @@ owed = "the engine's own tests (sim/src/point_physics.rs); no check against the 
 [function.point_physics_update]
 class = "matched"
 owed = "particles; reads the object, tag and map world, which the fake worlds do not hold (the point physics tag); Phase 12's particles"
+
+[function.point_to_line_distance_squared3d]
+class = "native"
+primitive = "glam::Vec3"
+
+[function.pool_new_handle]
+class = "native"
+primitive = "Vec"
+
+[function.pool_new_handle_clear]
+class = "native"
+primitive = "Vec"
+
+[function.pool_new_pointer]
+class = "native"
+primitive = "Vec"
+
+[function.pool_new_pointer_clear]
+class = "native"
+primitive = "Vec"
+
+[function.pool_resize_handle]
+class = "native"
+primitive = "Vec"
+
+[function.pool_resize_pointer]
+class = "native"
+primitive = "Vec"
 
 [function.pop_widget]
 class = "matched"
@@ -3892,6 +5129,161 @@ owed = "sound; reads the object, tag and map world, which the fake worlds do not
 class = "matched"
 engine = "ui/src/lib.rs"
 owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+
+[function.profile_append]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+
+[function.profile_describe_frame]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+
+[function.profile_dump_frame]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+
+[function.profile_dump_frame_stop]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+
+[function.profile_dump_to_file]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+
+[function.profile_enter_private]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+
+[function.profile_exit_private]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+
+[function.profile_find_game_value]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+
+[function.profile_frame_end]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+
+[function.profile_frame_start]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+
+[function.profile_idle_end]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+
+[function.profile_idle_start]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+
+[function.profile_internal_step]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+
+[function.profile_lapsed_frames]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+
+[function.profile_lapsed_msec]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+
+[function.profile_rasterizer_stalls]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+
+[function.profile_render_end]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+
+[function.profile_render_start]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+
+[function.profile_seconds_elapsed]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+
+[function.profile_sections_activate]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+
+[function.profile_sections_activation]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+
+[function.profile_sections_deactivate]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+
+[function.profile_tick_end]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+
+[function.profile_tick_start]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+
+[function.profile_timesection_begin]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+
+[function.profile_timesection_begin_now]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+
+[function.profile_timesection_end]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+
+[function.profile_timesection_end_now]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+
+[function.profile_timesection_inherit]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+
+[function.progress_new]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+
+[function.progress_update]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
 
 [function.project_point2d]
 class = "replaced"
@@ -3950,6 +5342,15 @@ class = "matched"
 engine = "ui/src/lib.rs"
 owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
 
+[function.qsort_4byte]
+class = "native"
+primitive = "sort_by"
+
+[function.qsort_texture_indexes]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/LoadedLevel.swift"
+
 [function.quantize_real_to_byte_lower_bound]
 class = "matched"
 engine = "sim/src/vehicle_animation.rs"
@@ -3967,6 +5368,14 @@ class = "replaced"
 because = "imported"
 stands_in = "import/src/object.rs"
 note = "the tool's, when it builds an animation: nothing in the game calls it, and the importer reads what it made"
+
+[function.quaternion_from_angle_and_vector]
+class = "native"
+primitive = "glam::Quat"
+
+[function.quaternion_to_angle_and_vector]
+class = "native"
+primitive = "glam::Quat"
 
 [function.random_item]
 class = "matched"
@@ -3991,6 +5400,11 @@ owed = "the engine cites it, with no check against the original yet"
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
 
+[function.read]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
 [function.read_sound_preferences]
 class = "partial"
 engine = "ffi/src/settings.rs"
@@ -4007,6 +5421,10 @@ class = "matched"
 engine = "sim/src/effects.rs"
 owed = "the engine's own tests (sim/src/effects.rs); no check against the original yet"
 
+[function.real_math_reset_precision]
+class = "native"
+primitive = "libm::sqrtf"
+
 [function.real_random_range]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
@@ -4020,6 +5438,18 @@ stands_in = "import/src/lib.rs"
 class = "replaced"
 because = "tools"
 stands_in = "import/src/lib.rs"
+
+[function.rectangle2d_height]
+class = "native"
+primitive = "min"
+
+[function.rectangle2d_hull_from_rectangles2d]
+class = "native"
+primitive = "min"
+
+[function.reflect_vector3d]
+class = "native"
+primitive = "glam::Vec3"
 
 [function.refresh_listener]
 class = "matched"
@@ -4186,6 +5616,11 @@ class = "matched"
 engine = "ffi/src/hud.rs"
 owed = "the engine's own tests (ffi/tests/hud.rs); no check against the original yet"
 
+[function.reset_error_state]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+
 [function.rgb_color_to_hsv_color]
 class = "replaced"
 because = "tools"
@@ -4205,6 +5640,10 @@ stands_in = "import/src/lib.rs"
 class = "replaced"
 because = "tools"
 stands_in = "import/src/lib.rs"
+
+[function.scale_rectangle2d]
+class = "native"
+primitive = "min"
 
 [function.scenario_fog_at_point]
 class = "replaced"
@@ -4516,10 +5955,37 @@ owed = "the engine's own tests (ui/tests/tree.rs); no check against the original
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
 
+[function.send_bits]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
 [function.set_default_game_input_preferences]
 class = "replaced"
 because = "keyboard_mouse"
 stands_in = "app/Sources/OpenCEEngineKit/PlayControls.swift"
+
+[function.set_point2d]
+class = "native"
+primitive = "min"
+
+[function.set_real_point3d]
+class = "native"
+primitive = "glam::Vec3"
+
+[function.setcompressionlevel]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.setcompressionstrategy]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.shortsort_4byte]
+class = "native"
+primitive = "sort_by"
 
 [function.should_draw_object]
 class = "matched"
@@ -4535,6 +6001,10 @@ stands_in = "ui/src/pointer.rs"
 class = "matched"
 engine = "sim/src/hud.rs"
 owed = "the engine's own tests (sim/src/hud.rs); no check against the original yet"
+
+[function.signed_angle_between_vectors2d]
+class = "native"
+primitive = "glam::Vec2"
 
 [function.slayer_engine_player_killed_player]
 class = "partial"
@@ -4695,6 +6165,132 @@ class = "matched"
 engine = "ui/src/lib.rs"
 owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
 
+[function.stack_memory_pool_allocate]
+class = "native"
+primitive = "Vec"
+
+[function.stack_memory_pool_compact]
+class = "native"
+primitive = "Vec"
+
+[function.stack_memory_pool_dispose_block]
+class = "native"
+primitive = "Vec"
+
+[function.stack_memory_pool_find_first_unused_memory_block]
+class = "native"
+primitive = "Vec"
+
+[function.stack_memory_pool_find_space_between_blocks]
+class = "native"
+primitive = "Vec"
+
+[function.stack_memory_pool_free_space_at_end_of_pool]
+class = "native"
+primitive = "Vec"
+
+[function.stack_memory_pool_lock_block]
+class = "native"
+primitive = "Vec"
+
+[function.stack_memory_pool_new_block]
+class = "native"
+primitive = "Vec"
+
+[function.stack_memory_pool_new_block_clear]
+class = "native"
+primitive = "Vec"
+
+[function.stack_memory_pool_reset]
+class = "native"
+primitive = "Vec"
+
+[function.stack_memory_pool_resize_block]
+class = "native"
+primitive = "Vec"
+
+[function.stack_memory_pool_set_next_block_index]
+class = "native"
+primitive = "Vec"
+
+[function.stack_memory_pool_unlock_block]
+class = "native"
+primitive = "Vec"
+
+[function.stack_memory_pool_valid_block]
+class = "native"
+primitive = "Vec"
+
+[function.stack_walk]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+
+[function.stack_walk_disregard_symbol_names]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+
+[function.stack_walk_global_function_offset]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+
+[function.stack_walk_with_context]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+
+[function.static_array_add_element]
+class = "native"
+primitive = "Vec"
+
+[function.static_array_delete_element]
+class = "native"
+primitive = "Vec"
+
+[function.static_array_get_element]
+class = "native"
+primitive = "Vec"
+
+[function.static_array_new]
+class = "native"
+primitive = "Vec"
+
+[function.static_array_resize]
+class = "native"
+primitive = "Vec"
+
+[function.string_has_prefix]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+
+[function.string_hash]
+class = "native"
+primitive = "std::collections::BTreeMap"
+
+[function.string_to_tag]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.stristr]
+class = "native"
+primitive = "String"
+
+[function.strlwr]
+class = "native"
+primitive = "String"
+
+[function.strnlwr]
+class = "native"
+primitive = "String"
+
+[function.strnupr]
+class = "native"
+primitive = "String"
+
 [function.structure_bsp_get_cluster_encoded_sound_distance]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
@@ -4778,6 +6374,75 @@ stands_in = "ffi/src/render_level.rs"
 class = "replaced"
 because = "renderer"
 stands_in = "ffi/src/lights.rs"
+
+[function.strupr]
+class = "native"
+primitive = "String"
+
+[function.symbol_name_from_address]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+
+[function.system_alert]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+
+[function.system_calloc]
+class = "native"
+primitive = "Vec"
+
+[function.system_exit]
+class = "replaced"
+because = "xbox"
+stands_in = "app/Sources/OpenCEEngineKit/PlayControls.swift"
+
+[function.system_free]
+class = "native"
+primitive = "Vec"
+
+[function.system_get_used_memory_size]
+class = "replaced"
+because = "tools"
+stands_in = "ffi/src/allocations.rs"
+
+[function.system_get_user_name]
+class = "replaced"
+because = "xbox"
+stands_in = "app/Sources/OpenCEEngineKit/PlayControls.swift"
+
+[function.system_kill_screen_saver]
+class = "replaced"
+because = "xbox"
+stands_in = "app/Sources/OpenCEEngineKit/PlayControls.swift"
+
+[function.system_malloc]
+class = "native"
+primitive = "Vec"
+
+[function.system_milliseconds]
+class = "native"
+primitive = "std::time::Instant"
+
+[function.system_realloc]
+class = "native"
+primitive = "Vec"
+
+[function.system_show_wait_cursor]
+class = "replaced"
+because = "xbox"
+stands_in = "app/Sources/OpenCEEngineKit/PlayControls.swift"
+
+[function.system_unique_identifier_get]
+class = "replaced"
+because = "xbox"
+stands_in = "app/Sources/OpenCEEngineKit/PlayControls.swift"
+
+[function.system_unique_identifiers_equal]
+class = "replaced"
+because = "xbox"
+stands_in = "app/Sources/OpenCEEngineKit/PlayControls.swift"
 
 [function.tag_block_add_element]
 class = "replaced"
@@ -4959,6 +6624,71 @@ class = "replaced"
 because = "tools"
 stands_in = "app/Sources/OpenCEEngineKit/Shell/ShellOverlay.swift"
 
+[function.texture_page_delete]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/LoadedLevel.swift"
+
+[function.texture_page_fraction_used]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/LoadedLevel.swift"
+
+[function.texture_page_new]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/LoadedLevel.swift"
+
+[function.texture_page_resize]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/LoadedLevel.swift"
+
+[function.texture_page_resort]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/LoadedLevel.swift"
+
+[function.texture_page_texture_delete]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/LoadedLevel.swift"
+
+[function.texture_page_texture_get]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/LoadedLevel.swift"
+
+[function.texture_page_texture_new]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/LoadedLevel.swift"
+
+[function.texture_page_textures_begin]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/LoadedLevel.swift"
+
+[function.texture_page_textures_cancel]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/LoadedLevel.swift"
+
+[function.texture_page_textures_end]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/LoadedLevel.swift"
+
+[function.texture_page_verify]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/LoadedLevel.swift"
+
+[function.texture_page_verify_and_return]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/LoadedLevel.swift"
+
 [function.tiff_export]
 class = "replaced"
 because = "tools"
@@ -4972,6 +6702,11 @@ stands_in = "import/src/lib.rs"
 [function.tiff_import]
 class = "replaced"
 because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.tr_static_init]
+class = "replaced"
+because = "imported"
 stands_in = "import/src/lib.rs"
 
 [function.track_loop_impulse_sound]
@@ -5446,6 +7181,10 @@ engine = "campaign/src/presented.rs"
 leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
 owed = "the engine's own tests (campaign/src/lib.rs); no check against the original yet"
 
+[function.unlock_handle]
+class = "native"
+primitive = "Vec"
+
 [function.unspatialized_impulse_sound_new]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
@@ -5509,9 +7248,45 @@ class = "replaced"
 because = "tools"
 stands_in = "import/src/lib.rs"
 
+[function.valid_real_sine_cosine]
+class = "native"
+primitive = "libm::sinf"
+
+[function.vector3d_from_angle]
+class = "native"
+primitive = "libm::sinf"
+
 [function.vector3d_from_euler_angles2d]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
+
+[function.vector_from_matrices4x3]
+class = "native"
+primitive = "glam::Affine3A"
+
+[function.vector_to_line_distance_squared3d]
+class = "native"
+primitive = "glam::Vec3"
+
+[function.vector_tree_add_node]
+class = "native"
+primitive = "std::collections::BTreeMap"
+
+[function.vector_tree_delete]
+class = "native"
+primitive = "std::collections::BTreeMap"
+
+[function.vector_tree_find]
+class = "native"
+primitive = "std::collections::BTreeMap"
+
+[function.vector_tree_new]
+class = "native"
+primitive = "std::collections::BTreeMap"
+
+[function.vectors_equal]
+class = "native"
+primitive = "std::collections::BTreeMap"
 
 [function.vehicle_accelerate]
 class = "matched"
@@ -5554,6 +7329,30 @@ owed = "the engine's own tests (campaign/src/units.rs); no check against the ori
 class = "matched"
 engine = "sim/src/vehicle.rs"
 owed = "the engine's own tests (sim/src/vehicle.rs); no check against the original yet"
+
+[function.verify_lra_cache]
+class = "native"
+primitive = "Vec"
+
+[function.verify_lra_cache_block]
+class = "native"
+primitive = "Vec"
+
+[function.verify_lrar_cache]
+class = "native"
+primitive = "Vec"
+
+[function.verify_lrar_cache_block]
+class = "native"
+primitive = "Vec"
+
+[function.verify_lru_cache]
+class = "native"
+primitive = "Vec"
+
+[function.verify_lru_cache_block]
+class = "native"
+primitive = "Vec"
 
 [function.vertex_type_from_shader_tag]
 class = "replaced"
@@ -5669,6 +7468,21 @@ stands_in = "ui/src/pointer.rs"
 class = "replaced"
 because = "keyboard_mouse"
 stands_in = "ui/src/pointer.rs"
+
+[function.walk_stack]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+
+[function.walk_stack_context]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+
+[function.walk_up]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
 
 [function.weapon_effect_new]
 class = "matched"
@@ -5947,8 +7761,33 @@ class = "matched"
 engine = "ffi/src/particles/wind.rs"
 owed = "the engine's own tests (ffi/src/particles/wind.rs); no check against the original yet"
 
+[function.write]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
 [function.write_sound_preferences]
 class = "partial"
 engine = "ffi/src/settings.rs"
 leaves_out = ["the original's preferences file: the volumes are kept with the app's settings"]
 owed = "the engine's own tests (ffi/src/settings.rs); no check against the original yet"
+
+[function.write_to_debug_file]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+
+[function.write_to_error_file]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+
+[function.zlibVersion]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.zstringlen]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
