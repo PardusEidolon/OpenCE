@@ -26,8 +26,8 @@ Every task is test first (`workflow.md`): the trace, measurement or census test 
 - [x] Task: Review the unreached Missing functions and class or annotate each. 1f03014e
 - [x] Task: Conductor - User Manual Verification 'Phase 4: Names' (Protocol in workflow.md) (automated)
 
-## Phase 5: The report
+## Phase 5: The report [checkpoint: 28f04103]
 - [x] Task: Run `census` and record the counts before and after this track, per system and per class. ac77e257
 - [x] Task: Write the data-backed report and lower the ratchet to the new counts. ac77e257
 - [x] Task: Send the user the report; it sets up the next track. (with the final report of all eleven tracks)
-- [ ] Task: Conductor - User Manual Verification 'Phase 5: The report' (Protocol in workflow.md) (automated)
+- [x] Task: Conductor - User Manual Verification 'Phase 5: The report' (Protocol in workflow.md) (automated)
