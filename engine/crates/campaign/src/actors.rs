@@ -260,7 +260,8 @@ impl Mission {
     }
 }
 
-/// Places the encounters made when the mission begins.
+/// Places the encounters made when the mission begins
+/// (`encounters_create_for_new_map`).
 pub(crate) fn begin(mission: &mut Mission) {
     let level = Arc::clone(&mission.level);
     for (index, encounter) in level.scenario.campaign.encounters.iter().enumerate() {
@@ -301,7 +302,7 @@ pub(crate) fn place(mission: &mut Mission, reference: AiReference) {
 }
 
 /// Places squad `s` of encounter `e`, an actor at each of its starting
-/// locations its count reaches.
+/// locations its count reaches (`actor_place`).
 fn place_squad(mission: &mut Mission, level: &Level, encounter: &Encounter, (e, s): (u16, u8)) {
     let campaign = &level.scenario.campaign;
     let Some(squad) = encounter.squads.get(usize::from(s)) else {
@@ -379,7 +380,7 @@ fn place_squad(mission: &mut Mission, level: &Level, encounter: &Encounter, (e, 
 }
 
 /// Takes actor `unit` out of the world, with its unit; false if it is no
-/// actor.
+/// actor (`actor_erase`).
 pub(crate) fn erase(mission: &mut Mission, unit: ObjectHandle) -> bool {
     let Some(index) = mission.actors.iter().position(|a| a.unit == unit) else {
         return false;
@@ -389,7 +390,7 @@ pub(crate) fn erase(mission: &mut Mission, unit: ObjectHandle) -> bool {
     mission.sim.remove_actor(index)
 }
 
-/// Kills actor `unit` where it stands.
+/// Kills actor `unit` where it stands (`actor_kill`).
 pub(crate) fn kill(mission: &mut Mission, unit: ObjectHandle) {
     if let Some(mut vitality) = mission.sim.component::<Vitality>(unit) {
         vitality.body = -1.0;
@@ -400,7 +401,7 @@ pub(crate) fn kill(mission: &mut Mission, unit: ObjectHandle) {
 }
 
 /// Decides what each actor does this tick and gives the simulation their
-/// inputs.
+/// inputs (`ai_update`, `actors_update`).
 pub(crate) fn think(mission: &mut Mission) {
     if !mission.ai.enabled {
         mission.sim.steer_actors(&[]);
@@ -506,7 +507,8 @@ fn throttle(yaw: f32, direction: Vec3) -> (i8, i8) {
 }
 
 /// The nearest enemy `index` sees: within its vision's distance and angle,
-/// or near enough to hear, with nothing of the level between.
+/// or near enough to hear, with nothing of the level between
+/// (`actor_perception_update`).
 fn perceive(
     mission: &Mission,
     definition: &ActorVariant,
@@ -536,7 +538,8 @@ fn perceive(
 
 /// Where actor `index` stands to fight or hide from `target`: among its
 /// squad's firing positions, the one nearest its combat range from the
-/// target (fighting) or the nearest the target cannot see (hiding).
+/// target (fighting) or the nearest the target cannot see (hiding)
+/// (`actor_select_firing_position`).
 fn pick_goal(
     mission: &Mission,
     level: &Level,

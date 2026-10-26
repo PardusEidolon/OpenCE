@@ -220,6 +220,7 @@ fn ai_place(mission: &mut Mission, arguments: &[Value]) -> Value {
     Value::Void
 }
 
+/// The script's `ai_erase`: takes a reference's actors out of the world.
 fn ai_erase(mission: &mut Mission, arguments: &[Value]) -> Value {
     for unit in mission.ai.units(AiReference::of(index(arguments, 0))) {
         actors::erase(mission, unit);

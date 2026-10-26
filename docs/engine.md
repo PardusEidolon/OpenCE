@@ -832,7 +832,7 @@ when any trace is stale (each script's own `--check`).
 <!-- coverage census: opence census --write writes this table -->
 | System | Ported | Matched | Native | Partial | Replaced | Missing | Owed |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| `ai` | | 8 (2048 B) | | | | 1071 (294218 B) | 8 |
+| `ai` | | 19 (3408 B) | | 6 (11296 B) | 103 (3744 B) | 951 (277818 B) | 25 |
 | `bink` | | | | | 33 (3968 B) | | 0 |
 | `bitmaps` | | 1 (224 B) | | | 5 (976 B) | 207 (62928 B) | 1 |
 | `bungie_net` | | | | | 109 (18992 B) | | 0 |
@@ -850,8 +850,8 @@ when any trace is stale (each script's own `--check`).
 | `interface` | 6 (0 B) | 24 (11056 B) | | | | 884 (145624 B) | 24 |
 | `items` | 7 (4048 B) | 17 (8544 B) | | | | 158 (23456 B) | 17 |
 | `main` | | | | | 3 (768 B) | 153 (15072 B) | 0 |
-| `math` | 36 (4096 B) | 4 (240 B) | | | 14 (2016 B) | 162 (16816 B) | 4 |
-| `memory` | | 2 (336 B) | | | 60 (8992 B) | 197 (25968 B) | 2 |
+| `math` | 36 (4096 B) | 4 (240 B) | | | 15 (2016 B) | 161 (16816 B) | 4 |
+| `memory` | | 2 (336 B) | | | 61 (9136 B) | 196 (25824 B) | 2 |
 | `models` | 17 (6080 B) | 5 (3808 B) | | | | 31 (7680 B) | 5 |
 | `networking` | | | | | 313 (49824 B) | | 0 |
 | `objects` | | 15 (4864 B) | | | | 334 (46720 B) | 15 |
@@ -868,7 +868,7 @@ when any trace is stale (each script's own `--check`).
 | `text` | | 1 (912 B) | | | 15 (4240 B) | 96 (11760 B) | 1 |
 | `tool` | | | | | 27 (8752 B) | | 0 |
 | `units` | 8 (1824 B) | 37 (15360 B) | | | | 322 (90336 B) | 37 |
-| **all** | 81 (16832 B) | 171 (75008 B) | | | 1848 (363040 B) | 6401 (1156242 B) | 171 |
+| **all** | 81 (16832 B) | 182 (76368 B) | | 6 (11296 B) | 1953 (366928 B) | 6279 (1139698 B) | 188 |
 <!-- end of the coverage census -->
 
 ### The divergences

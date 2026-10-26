@@ -178,9 +178,26 @@ class = "replaced"
 because = "xbox"
 stands_in = "sim/src/lib.rs"
 
+[[rule]]
+file = "ai/ai_debug.c"
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/draw.rs"
+
+[[rule]]
+file = "ai/ai_profile.c"
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/draw.rs"
+
 [function.accelerate_to_position]
 class = "matched"
 owed = "a first-person weapon's sway; checked through first_person_weapon_update's trace"
+
+[function.actor_action_debug_color]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/draw.rs"
 
 [function.actor_action_handle_surprise]
 class = "matched"
@@ -189,6 +206,45 @@ owed = "AI; reads the object, tag and map world, which the fake worlds do not ho
 [function.actor_action_try_to_dive]
 class = "matched"
 owed = "AI; reads the object, tag and map world, which the fake worlds do not hold (the actor and its prop); Phase 11's divergences"
+
+[function.actor_activation_debug_color]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/draw.rs"
+
+[function.actor_erase]
+class = "matched"
+engine = "campaign/src/actors.rs"
+owed = "the campaign's rewrite of the AI; no check against the original yet"
+
+[function.actor_kill]
+class = "matched"
+engine = "campaign/src/actors.rs"
+owed = "the campaign's rewrite of the AI; no check against the original yet"
+
+[function.actor_perception_update]
+class = "partial"
+engine = "campaign/src/actors.rs"
+leaves_out = ["props and their knowledge states", "acknowledgement and orphans", "danger zones", "the target weights", "searching and uncovering"]
+owed = "the campaign's rewrite of the AI; no check against the original yet (Phase 11's divergences)"
+
+[function.actor_place]
+class = "partial"
+engine = "campaign/src/actors.rs"
+leaves_out = ["swarms", "the starting location's initial state and animation", "mounted weapons", "major upgrades"]
+owed = "the campaign's rewrite of the AI; no check against the original yet (Phase 11's divergences)"
+
+[function.actor_select_firing_position]
+class = "partial"
+engine = "campaign/src/actors.rs"
+leaves_out = ["the pre- and post-evaluators", "discarded positions", "line of sight from each position", "the firing position groups"]
+owed = "the campaign's rewrite of the AI; no check against the original yet (Phase 11's divergences)"
+
+[function.actors_update]
+class = "partial"
+engine = "campaign/src/actors.rs"
+leaves_out = ["actions and their state machines", "emotions", "swarms", "dormancy and activation", "props"]
+owed = "the campaign's rewrite of the AI; no check against the original yet (Phase 11's divergences)"
 
 [function.ai_conversation]
 class = "matched"
@@ -206,9 +262,60 @@ owed = "AI; reads the object, tag and map world, which the fake worlds do not ho
 class = "matched"
 owed = "AI; reads the object, tag and map world, which the fake worlds do not hold (the scenario's conversations); campaign/tests/flow.rs"
 
+[function.ai_conversation_stop]
+class = "matched"
+engine = "campaign/src/conversations.rs"
+owed = "a script function the campaign wires; no check against the original yet"
+
+[function.ai_erase]
+class = "matched"
+engine = "campaign/src/ai.rs"
+owed = "a script function the campaign wires; no check against the original yet"
+
 [function.ai_place]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
+
+[function.ai_scripting_conversation]
+class = "matched"
+engine = "campaign/src/conversations.rs"
+owed = "a script function the campaign wires; no check against the original yet"
+
+[function.ai_scripting_conversation_advance]
+class = "matched"
+engine = "campaign/src/conversations.rs"
+owed = "a script function the campaign wires; no check against the original yet"
+
+[function.ai_scripting_conversation_line]
+class = "matched"
+engine = "campaign/src/conversations.rs"
+owed = "a script function the campaign wires; no check against the original yet"
+
+[function.ai_scripting_conversation_status]
+class = "matched"
+engine = "campaign/src/conversations.rs"
+owed = "a script function the campaign wires; no check against the original yet"
+
+[function.ai_scripting_conversation_stop]
+class = "matched"
+engine = "campaign/src/conversations.rs"
+owed = "a script function the campaign wires; no check against the original yet"
+
+[function.ai_scripting_erase]
+class = "matched"
+engine = "campaign/src/ai.rs"
+owed = "a script function the campaign wires; no check against the original yet"
+
+[function.ai_scripting_place]
+class = "matched"
+engine = "campaign/src/ai.rs"
+owed = "a script function the campaign wires; no check against the original yet"
+
+[function.ai_update]
+class = "partial"
+engine = "campaign/src/actors.rs"
+leaves_out = ["inactive encounters and swarms released", "team status", "the AI's spatial effects", "the conversations' own update"]
+owed = "the campaign's rewrite of the AI; no check against the original yet (Phase 11's divergences)"
 
 [function.animation_choose_random_permutation_internal]
 class = "matched"
@@ -362,6 +469,12 @@ owed = "particles; reads the object, tag and map world, which the fake worlds do
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
 
+[function.encounters_create_for_new_map]
+class = "partial"
+engine = "campaign/src/actors.rs"
+leaves_out = ["activation cluster bit vectors", "firing position owner indices", "the encounter's own state (respawn, timers)"]
+owed = "the campaign's rewrite of the AI; no check against the original yet (Phase 11's divergences)"
+
 [function.equipment_handle_pickup]
 class = "matched"
 owed = "items; reads the object, tag and map world, which the fake worlds do not hold"
@@ -369,6 +482,11 @@ owed = "items; reads the object, tag and map world, which the fake worlds do not
 [function.equipment_place]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
+
+[function.firing_position_store_evaluation_debug]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/draw.rs"
 
 [function.first_person_weapon_animation_fits]
 class = "matched"
@@ -597,6 +715,21 @@ owed = "the engine cites it, with no check against the original yet"
 [function.render_blip]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
+
+[function.render_debug_obstacle_path]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/draw.rs"
+
+[function.render_debug_obstacles]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/draw.rs"
+
+[function.render_debug_path]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/draw.rs"
 
 [function.render_frustum_sphere_diameter_in_pixels]
 class = "matched"

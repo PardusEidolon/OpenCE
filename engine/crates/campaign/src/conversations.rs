@@ -343,6 +343,7 @@ fn ai_conversation(mission: &mut Mission, arguments: &[Value]) -> Value {
     Value::Boolean(true)
 }
 
+/// The script's `ai_conversation_stop`: ends a conversation where it is.
 fn ai_conversation_stop(mission: &mut Mission, arguments: &[Value]) -> Value {
     if let Some(at) = named(mission, arguments) {
         mission.conversations.stop(at);
