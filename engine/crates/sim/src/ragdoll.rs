@@ -3,7 +3,8 @@
 //! model's nodes and its collision model's pieces. Its motors follow the
 //! biped's pose (its death animation, if one plays) for a moment, then it
 //! goes limp and settles where it falls. Explosions push the ragdolls in
-//! reach and can tear their limbs off at joints the overrides let break.
+//! reach and, with dismemberment on (it is off, as the original has none),
+//! tear their limbs off at joints the overrides let break.
 //! The corpses stay, up to a cap; the oldest goes first.
 
 use std::collections::BTreeMap;
@@ -745,7 +746,8 @@ impl Default for Ragdolls {
             species: BTreeMap::new(),
             active: Vec::new(),
             corpses: CORPSES_DEFAULT,
-            dismemberment: true,
+            // (the original tears no limbs off)
+            dismemberment: false,
         }
     }
 }
@@ -808,7 +810,8 @@ impl Ragdolls {
         self.corpses = corpses.max(1);
     }
 
-    /// Sets whether explosions tear limbs off.
+    /// Sets whether explosions tear limbs off (off by default: the original
+    /// tears none).
     pub fn set_dismemberment(&mut self, dismemberment: bool) {
         self.dismemberment = dismemberment;
     }
@@ -1032,28 +1035,31 @@ fn part_centre(ragdoll: &Ragdoll, part: usize) -> Vec3 {
     pose.position + pose.rotation * ragdoll.species.body.parts[part].centre
 }
 
-/// A hit's push on a ragdoll: lifted, the ragdoll's mass at the hit's
-/// speed, on the part nearest the epicenter, away from it.
+/// A hit's push on a ragdoll: lifted, away from the epicenter from the
+/// part nearest it, each part at the hit's speed (its mass's share of the
+/// impulse, at its centre), so the body moves as one and no joint is
+/// pulled apart.
 fn push(physics: &mut PhysicsWorld, ragdoll: &Ragdoll, hit: &Hit) {
     if hit.speed <= 0.0 {
         return;
     }
-    let count = ragdoll.species.body.parts.len();
-    let Some(nearest) = (0..count).min_by(|&a, &b| {
+    let parts = &ragdoll.species.body.parts;
+    let Some(nearest) = (0..parts.len()).min_by(|&a, &b| {
         let a = part_centre(ragdoll, a).distance_squared(hit.epicenter);
         let b = part_centre(ragdoll, b).distance_squared(hit.epicenter);
         a.total_cmp(&b)
     }) else {
         return;
     };
-    let point = part_centre(ragdoll, nearest);
-    let away = (point - hit.epicenter).normalize_or_zero();
+    let away = (part_centre(ragdoll, nearest) - hit.epicenter).normalize_or_zero();
     let direction = (away + Vec3::new(0.0, 0.0, PUSH_LIFT)).normalize_or_zero();
     if direction == Vec3::ZERO {
         return;
     }
-    let impulse = direction * hit.speed * ragdoll.species.body.mass;
-    let _ = physics.push_ragdoll(ragdoll.id, nearest, impulse, point);
+    for (index, part) in parts.iter().enumerate() {
+        let impulse = direction * hit.speed * part.mass;
+        let _ = physics.push_ragdoll(ragdoll.id, index, impulse, part_centre(ragdoll, index));
+    }
 }
 
 /// A hit's tearing of a ragdoll's joints: each part whose joint can break

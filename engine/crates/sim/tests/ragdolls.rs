@@ -1,12 +1,16 @@
 //! Ragdolls on bloodgulch: a cyborg killed by a scripted grenade becomes a
 //! ragdoll that follows its pose, then goes loose and is still there a
-//! minute later; the corpse cap removes the oldest; strong blasts tear its
-//! limbs off. Passes without assets/maps/bloodgulch.map.
+//! minute later; it starts from the pose it died in, keeps its bones'
+//! lengths and carries its model; the corpse cap removes the oldest; with
+//! dismemberment on, strong blasts tear its limbs off. Passes without
+//! assets/maps/bloodgulch.map.
 
 use std::error::Error;
+use std::sync::Arc;
 
 use opence_content::{Level, ObjectKind};
 use opence_import::testing::stock_level;
+use opence_sim::animation::{AnimationPlayer, NodeMatrices};
 use opence_sim::damage::Vitality;
 use opence_sim::input::{Buttons, TickInput};
 use opence_sim::objects::{ObjectHandle, ObjectSpawn};
@@ -163,6 +167,101 @@ fn a_cyborg_killed_by_a_grenade_becomes_a_ragdoll_that_stays() -> Result<(), Box
     Ok(())
 }
 
+/// Each node's distance from its parent, as `object` is posed.
+fn bones(
+    simulation: &Simulation,
+    object: ObjectHandle,
+    parents: &[Option<u16>],
+) -> Result<Vec<f32>, Box<dyn Error>> {
+    let nodes = simulation
+        .component::<NodeMatrices>(object)
+        .ok_or("no nodes")?;
+    let at = |node: usize| Vec3::from(nodes.current[node].position);
+    Ok(parents
+        .iter()
+        .enumerate()
+        .map(|(node, parent)| {
+            parent.map_or(0.0, |parent| at(node).distance(at(usize::from(parent))))
+        })
+        .collect())
+}
+
+#[test]
+fn a_ragdoll_keeps_its_bones_and_carries_its_model() -> Result<(), Box<dyn Error>> {
+    let Some(level) = bloodgulch()? else {
+        return Ok(());
+    };
+    let (mut simulation, grenade) = settled(&level)?;
+    let cyborg = cyborg(&mut simulation, &level, 4.0, 0.0)?;
+    // (animated as the app animates a biped)
+    let unit = level.globals.multiplayer_unit.clone().ok_or("no unit")?;
+    let definition = level
+        .objects
+        .iter()
+        .find(|object| object.tag == unit)
+        .ok_or("no definition")?;
+    let model = definition
+        .model
+        .as_ref()
+        .and_then(|model| level.model_index(model))
+        .and_then(|model| level.models.get(model))
+        .ok_or("no model")?;
+    let graph = definition
+        .animation_graph
+        .as_ref()
+        .and_then(|graph| level.animation_graph(graph))
+        .ok_or("no animations")?;
+    let player = AnimationPlayer::for_object(
+        Arc::new(graph.clone()),
+        Some(Arc::new(model.clone())),
+        ObjectKind::Biped,
+        0.5,
+    );
+    assert!(simulation.animate_unit(cyborg, player));
+    for _ in 0..10 {
+        simulation.step(TickInput::default());
+    }
+    let parents: Vec<Option<u16>> = model.nodes.iter().map(|node| node.parent).collect();
+
+    // (killed by a blast, no limb torn off: its bones as it fell)
+    let feet = position(&simulation, cyborg)?;
+    while simulation.ragdolls().of(cyborg).is_none() {
+        blast(&mut simulation, &grenade, feet + Vec3::new(0.3, 0.0, 0.1));
+    }
+    let ragdoll = simulation.ragdolls().of(cyborg).ok_or("no ragdoll")?;
+    assert_eq!(ragdoll.torn, 0, "the original tears no limbs off");
+    let fell = bones(&simulation, cyborg, &parents)?;
+    for tick in 0..10 * clock::TICKS_PER_SECOND {
+        simulation.step(TickInput::default());
+        let ragdoll = simulation.ragdolls().of(cyborg).ok_or("the corpse went")?;
+        // (no bone stretched)
+        let lying = bones(&simulation, cyborg, &parents)?;
+        // (it slides off the ledge and lands two units down, the joints
+        // giving 0.012 at the most as it lands; lying still, they are back)
+        let give = if tick < 5 * clock::TICKS_PER_SECOND {
+            0.02
+        } else {
+            0.005
+        };
+        for (node, (lying, fell)) in lying.iter().zip(&fell).enumerate() {
+            assert!(
+                (lying - fell).abs() < give,
+                "tick {tick}: {} {fell} {lying}",
+                model.nodes[node].name
+            );
+        }
+        // (the model where its parts are, every tick)
+        let nodes = simulation
+            .component::<NodeMatrices>(cyborg)
+            .ok_or("no nodes")?;
+        for (part, pose) in ragdoll.body().parts.iter().zip(ragdoll.poses()) {
+            let node = Vec3::from(nodes.current[part.node].position);
+            assert!(node.distance(pose.position) < 1e-4, "tick {tick}");
+        }
+    }
+    Ok(())
+}
+
 #[test]
 fn the_corpse_cap_removes_the_oldest() -> Result<(), Box<dyn Error>> {
     let Some(level) = bloodgulch()? else {
@@ -190,11 +289,12 @@ fn the_corpse_cap_removes_the_oldest() -> Result<(), Box<dyn Error>> {
 }
 
 #[test]
-fn strong_blasts_tear_limbs_off() -> Result<(), Box<dyn Error>> {
+fn strong_blasts_tear_limbs_off_with_dismemberment_on() -> Result<(), Box<dyn Error>> {
     let Some(level) = bloodgulch()? else {
         return Ok(());
     };
     let (mut simulation, grenade) = settled(&level)?;
+    simulation.set_dismemberment(true);
     let cyborg = cyborg(&mut simulation, &level, 4.0, 0.0)?;
     simulation.step(TickInput::default());
     kill(&mut simulation, &grenade, cyborg)?;
@@ -216,7 +316,7 @@ fn strong_blasts_tear_limbs_off() -> Result<(), Box<dyn Error>> {
     let torn = simulation.ragdolls().of(cyborg).ok_or("no ragdoll")?.torn;
     assert_ne!(torn, 0);
 
-    // (none, with the tearing off)
+    // (none, with the tearing off, as it is by default)
     let (mut simulation, grenade) = settled(&level)?;
     simulation.set_dismemberment(false);
     let cyborg = self::cyborg(&mut simulation, &level, 4.0, 0.0)?;

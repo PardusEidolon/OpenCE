@@ -1087,7 +1087,8 @@ impl Simulation {
         self.debris.set_cap(pieces);
     }
 
-    /// Sets whether explosions tear limbs off.
+    /// Sets whether explosions tear limbs off (off by default: the original
+    /// tears none).
     pub fn set_dismemberment(&mut self, dismemberment: bool) {
         self.ragdolls.set_dismemberment(dismemberment);
     }
