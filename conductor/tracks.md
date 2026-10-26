@@ -65,9 +65,6 @@ This file tracks all major tracks for the project.
 - [ ] **Track: Coverage: data fidelity: every tag field, stride and load-time fix-up matched to the original, vehicle_definition and the shader subtypes from a second source, and the kept-but-unused and untraced fields wired or justified**
   *Link: [./tracks/coverage_data_20261026/](./tracks/coverage_data_20261026/)*
 
-- [ ] **Track: Coverage: AI core: actor update, the decide-action and action-handle families, perception, firing positions, placement, props, knowledge, emotions, swarms and dormancy, ported from source/ and traced**
-  *Link: [./tracks/coverage_ai_20261026/](./tracks/coverage_ai_20261026/)*
-
 - [ ] **Track: Coverage: units, players' effects and the object systems: unit update and damage, biped movement, player effects, objects, items, devices, effects and physics, ported and traced**
   *Link: [./tracks/coverage_units_20261026/](./tracks/coverage_units_20261026/)*
 
@@ -85,6 +82,9 @@ This file tracks all major tracks for the project.
 
 - [ ] **Track: Coverage: scripts and sounds: the script system, every allowed native and global, sound requests that carry their object, per-object limits, the mouth aperture, and play sweeps of each campaign map**
   *Link: [./tracks/coverage_scripts_sounds_20261026/](./tracks/coverage_scripts_sounds_20261026/)*
+
+- [ ] **Track: Coverage: AI core: actor update, the decide-action and action-handle families, perception, firing positions, placement, props, knowledge, emotions, swarms and dormancy, ported from source/ and traced**
+  *Link: [./tracks/coverage_ai_20261026/](./tracks/coverage_ai_20261026/)*
 
 - [ ] **Track: Coverage: the 100% gate: the ratchet at zero in every system, a final census and measurement sweep against the stock game, and the report that hands over to features**
   *Link: [./tracks/coverage_complete_20261026/](./tracks/coverage_complete_20261026/)*
