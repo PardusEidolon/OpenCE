@@ -48,11 +48,15 @@ fn bloodgulch_has_its_flags_starts_and_equipment() -> Result<(), Box<dyn Error>>
     assert!(slayer.len() >= 10, "{} items for Slayer", slayer.len());
     for equipment in &slayer {
         assert!(!equipment.items.is_empty());
-        for choice in &equipment.items {
+        for item in equipment
+            .items
+            .iter()
+            .filter_map(|choice| choice.item.as_ref())
+        {
             assert!(
-                level.objects.iter().any(|object| object.tag == choice.item),
+                level.objects.iter().any(|object| &object.tag == item),
                 "{} is not imported",
-                choice.item.path
+                item.path
             );
         }
     }

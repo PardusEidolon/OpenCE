@@ -4004,10 +4004,19 @@ engine = "sim/src/game.rs"
 leaves_out = ["the oddball, king, race and juggernaut variants", "the game's announcer and score messages"]
 owed = "the engine's own tests (sim/tests/game.rs); no check against the original yet"
 
-[function.game_engine_update_item_spawn]
-class = "matched"
+[function.game_engine_update_purge]
+class = "partial"
 engine = "sim/src/game.rs"
-owed = "the engine's own tests (sim/tests/game.rs); no check against the original yet"
+check = "sim/tests/item_spawn_reference.rs"
+against = "trace"
+leaves_out = ["the purge of dropped weapons and dead bipeds, which the units' own garbage handles", "can_delete_item's flags"]
+
+[function.game_engine_update_item_spawn]
+class = "partial"
+engine = "sim/src/game.rs"
+check = "sim/tests/item_spawn_reference.rs"
+against = "trace"
+leaves_out = ["the placement's created at rest flag", "the game type's no map weapons", "Custom Edition's facing"]
 
 [function.game_engine_write_network_state]
 class = "replaced"
@@ -6628,7 +6637,8 @@ primitive = "glam::Quat"
 [function.random_item]
 class = "matched"
 engine = "sim/src/game.rs"
-owed = "the engine's own tests (sim/tests/game.rs); no check against the original yet"
+check = "sim/tests/item_spawn_reference.rs"
+against = "trace"
 
 [function.random_seed_debug_log]
 class = "replaced"

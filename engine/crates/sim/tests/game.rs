@@ -218,6 +218,9 @@ fn blood_gulch_plays_capture_the_flag() -> Result {
     let mut game = Game::start(&mut simulation, &level, Variant::ctf());
     assert_eq!(game.rules().flags().len(), 2);
     assert!(game.flag_objects().iter().all(Option::is_some));
+    // (the equipment stands with the first step)
+    simulation.step_all(&[TickInput::default(), TickInput::default()]);
+    game.step(&mut simulation, &level);
     let equipment = game.equipment_objects();
     assert!(
         level
@@ -241,7 +244,7 @@ fn blood_gulch_plays_capture_the_flag() -> Result {
     assert!(respawned);
     assert_ne!(simulation.players()[1].handle(), before);
 
-    // (taken equipment comes back)
+    // (taken equipment comes back with its placement's period)
     if let Some(&taken) = equipment.first() {
         simulation.remove(taken);
         game.step(&mut simulation, &level);
@@ -249,7 +252,13 @@ fn blood_gulch_plays_capture_the_flag() -> Result {
         for _ in 0..120 * TICKS_PER_SECOND {
             game.step(&mut simulation, &level);
         }
-        assert_eq!(game.equipment_objects().len(), equipment.len());
+        let now = game.equipment_objects();
+        assert!(
+            now.len() >= equipment.len(),
+            "{} of {}",
+            now.len(),
+            equipment.len()
+        );
     }
     Ok(())
 }

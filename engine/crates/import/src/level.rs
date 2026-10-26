@@ -252,7 +252,7 @@ pub fn import_level(cache: &Cache) -> Result<Level, ImportError> {
         netgame_equipment
             .iter()
             .flat_map(|equipment| &equipment.items)
-            .map(|choice| &choice.item),
+            .filter_map(|choice| choice.item.as_ref()),
     )
     // (and the units and weapons of the AI's actors)
     .chain(
@@ -984,17 +984,19 @@ fn import_netgame_equipment(
             if !weight.is_finite() || weight < 0.0 {
                 return Err(permutation.fault("weight", format!("is {weight}")));
             }
-            if let Some(item) = permutation.reference(0x24, "item", &[])? {
-                items.push(ItemChoice {
-                    item: tag_ref(cache, item),
-                    weight,
-                });
-            }
+            // (an empty permutation keeps its weight: the game's roll can land on it)
+            let item = permutation.reference(0x24, "item", &[])?;
+            items.push(ItemChoice {
+                item: item.map(|item| tag_ref(cache, item)),
+                weight,
+            });
         }
         let seconds = |at: usize, element: &Element<'_>| {
             element
                 .i16(at, "spawn time")
-                .map(|seconds| u16::try_from(seconds).ok().filter(|&seconds| seconds > 0))
+                // (a negative time repeats as its size does: the game's
+                // `game_time % period` is zero at the same ticks)
+                .map(|seconds| Some(seconds.unsigned_abs()).filter(|&seconds| seconds > 0))
         };
         let (position, facing) = placed(&element, 0x40)?;
         imported.push(NetgameEquipment {
@@ -2812,7 +2814,7 @@ pub(crate) mod tests {
                     position: [1.0, 2.0, 3.0],
                     facing: 0.5,
                     items: vec![ItemChoice {
-                        item: pack.clone(),
+                        item: Some(pack.clone()),
                         weight: 2.0,
                     }],
                 }]

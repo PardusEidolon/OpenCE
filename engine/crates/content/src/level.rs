@@ -533,8 +533,8 @@ pub struct NetgameEquipment {
 /// One of the items of an item collection.
 #[derive(Clone, Debug, PartialEq, Archive, Serialize, Deserialize)]
 pub struct ItemChoice {
-    /// The weapon or equipment.
-    pub item: TagRef,
+    /// The weapon or equipment (none: nothing, which still has its weight).
+    pub item: Option<TagRef>,
     /// How likely it is, against the others' weights.
     pub weight: f32,
 }

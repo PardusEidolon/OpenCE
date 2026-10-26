@@ -33,8 +33,8 @@ pub const FLAG_RETURN_TICKS: u32 = 17 * GAME_TICKS_PER_SECOND;
 /// run.
 const STEPS_PER_GAME_TICK: u32 = TICKS_PER_SECOND / GAME_TICKS_PER_SECOND;
 
-/// How long taken equipment waits to come back when neither its placement
-/// nor its item collection says.
+/// The seconds between a placement's items when neither it nor its item
+/// collection says.
 pub const DEFAULT_EQUIPMENT_SECONDS: u16 = 30;
 
 /// Halo's game ticks as the engine's.
@@ -577,13 +577,85 @@ impl Rules {
     }
 }
 
-/// A netgame equipment placement in play: what stands there and how long
-/// until it comes back.
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
-struct EquipmentSpot {
-    placement: usize,
-    object: Option<ObjectHandle>,
-    wait_ticks: u32,
+/// The game's ticks an item a placement stood lies untaken before it goes
+/// (`game_engine_update_purge`), which a placement's new item is given less
+/// of so that it lasts one period.
+const ITEM_PURGE_GAME_TICKS: i64 = 30 * 30;
+
+/// The game's ticks between a placement's items: its spawn time, else its
+/// collection's (as the importer gives it), else 30 seconds.
+/// (`game_engine_update_item_spawn`)
+pub fn item_respawn_period(seconds: Option<u16>) -> u32 {
+    u32::from(seconds.unwrap_or(DEFAULT_EQUIPMENT_SECONDS)) * 30
+}
+
+/// An item collection's weights' total, a whole number again after each
+/// weight is added (`item_collection_get_total`).
+pub fn item_collection_total(weights: impl IntoIterator<Item = f32>) -> i32 {
+    weights
+        .into_iter()
+        .fold(0, |total, weight| (total as f32 + weight) as i32)
+}
+
+/// Which of a collection's permutations a placement stands, by weight
+/// (`random_item`): a whole number below the total, from which each weight
+/// is taken in turn until it falls below zero. None when the weights run
+/// out first.
+pub fn random_item(seed: &mut RandomSeed, weights: &[f32]) -> Option<usize> {
+    let total = item_collection_total(weights.iter().copied());
+    let mut remaining = i32::from(seed.next_range(0, total as i16));
+    for (index, &weight) in weights.iter().enumerate() {
+        remaining = (remaining as f32 - weight) as i32;
+        if remaining < 0 {
+            return Some(index);
+        }
+    }
+    None
+}
+
+/// The items the placements stood that still lie where they were put, with
+/// the game tick each was last owned at: one is purged a period after it
+/// was stood, as the next one stands (`game_engine_update_purge`).
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct LyingItems<H> {
+    lying: Vec<(H, i64)>,
+}
+
+impl<H> Default for LyingItems<H> {
+    fn default() -> Self {
+        Self { lying: Vec::new() }
+    }
+}
+
+impl<H: Copy> LyingItems<H> {
+    /// An item stood at game tick `now` by a placement of `period` ticks.
+    pub fn stood(&mut self, item: H, now: u32, period: u32) {
+        let owned = i64::from(now) + i64::from(period) - ITEM_PURGE_GAME_TICKS;
+        self.lying.push((item, owned));
+    }
+
+    /// At game tick `now`, forgets the items that were `taken` and returns
+    /// those that lay untouched too long, oldest first, to delete.
+    pub fn purge(&mut self, now: u32, taken: impl Fn(H) -> bool) -> Vec<H> {
+        let cutoff = i64::from(now) - ITEM_PURGE_GAME_TICKS;
+        let mut purged = Vec::new();
+        self.lying.retain(|&(item, owned)| {
+            if taken(item) {
+                false
+            } else if owned < cutoff {
+                purged.push(item);
+                false
+            } else {
+                true
+            }
+        });
+        purged
+    }
+
+    /// The items lying there.
+    pub fn items(&self) -> impl Iterator<Item = H> + '_ {
+        self.lying.iter().map(|&(item, _)| item)
+    }
 }
 
 /// A game played over a [`Simulation`].
@@ -591,14 +663,18 @@ struct EquipmentSpot {
 pub struct Game {
     rules: Rules,
     flag_objects: Vec<Option<ObjectHandle>>,
-    equipment: Vec<EquipmentSpot>,
+    /// The netgame equipment placements in play.
+    placements: Vec<usize>,
+    items: LyingItems<ObjectHandle>,
+    steps: u32,
     seed: RandomSeed,
 }
 
 impl Game {
     /// Starts a game of `variant` on `level` with the simulation's players
     /// (alternating between teams 0 and 1 in a game with teams): its
-    /// flags go to their stands and its equipment to its placements.
+    /// flags go to their stands; its equipment stands at its placements
+    /// with the first step.
     /// (`game_engine_game_starting`)
     pub fn start(simulation: &mut Simulation, level: &Level, variant: Variant) -> Self {
         let stands: Vec<(u16, [f32; 3])> = level
@@ -615,26 +691,20 @@ impl Game {
         let mut game = Self {
             flag_objects: vec![None; rules.flags().len()],
             rules,
-            equipment: Vec::new(),
+            placements: level
+                .scenario
+                .netgame_equipment
+                .iter()
+                .enumerate()
+                .filter(|(_, placement)| placement.game_types.matches(variant.game_type))
+                .map(|(placement, _)| placement)
+                .collect(),
+            items: LyingItems::default(),
+            steps: 0,
             seed: RandomSeed::default(),
         };
         for flag in 0..game.flag_objects.len() {
             game.place_flag(simulation, level, flag);
-        }
-        game.equipment = level
-            .scenario
-            .netgame_equipment
-            .iter()
-            .enumerate()
-            .filter(|(_, placement)| placement.game_types.matches(variant.game_type))
-            .map(|(placement, _)| EquipmentSpot {
-                placement,
-                object: None,
-                wait_ticks: 0,
-            })
-            .collect();
-        for spot in 0..game.equipment.len() {
-            game.place_equipment(simulation, level, spot);
         }
         game
     }
@@ -659,12 +729,9 @@ impl Game {
         &self.flag_objects
     }
 
-    /// The equipment standing at the placements in play.
+    /// The items the placements stood that still lie where they were put.
     pub fn equipment_objects(&self) -> Vec<ObjectHandle> {
-        self.equipment
-            .iter()
-            .filter_map(|spot| spot.object)
-            .collect()
+        self.items.items().collect()
     }
 
     /// One tick, after the simulation's: the kills it saw are scored, the
@@ -705,28 +772,51 @@ impl Game {
                 GameEvent::Killed { .. } | GameEvent::GameOver => {}
             }
         }
-        for spot in 0..self.equipment.len() {
-            let taken = self.equipment[spot]
-                .object
-                .is_some_and(|handle| simulation.object(handle).is_none());
-            if taken {
-                let seconds = level
-                    .scenario
-                    .netgame_equipment
-                    .get(self.equipment[spot].placement)
-                    .and_then(|placement| placement.spawn_seconds)
-                    .unwrap_or(DEFAULT_EQUIPMENT_SECONDS);
-                self.equipment[spot].object = None;
-                self.equipment[spot].wait_ticks = u32::from(seconds) * TICKS_PER_SECOND;
-            } else if self.equipment[spot].object.is_none() {
-                let wait = &mut self.equipment[spot].wait_ticks;
-                *wait = wait.saturating_sub(1);
-                if *wait == 0 {
-                    self.place_equipment(simulation, level, spot);
-                }
+        if self.steps.is_multiple_of(STEPS_PER_GAME_TICK) {
+            self.update_items(simulation, level, self.steps / STEPS_PER_GAME_TICK);
+        }
+        self.steps += 1;
+        events
+    }
+
+    /// One of the game's ticks of its items at game tick `now`: the
+    /// untouched are purged, then each placement whose period comes round
+    /// stands an item chosen by weight (`game_engine_update_purge`,
+    /// `game_engine_update_item_spawn`).
+    fn update_items(&mut self, simulation: &mut Simulation, level: &Level, now: u32) {
+        for item in self
+            .items
+            .purge(now, |item| simulation.object(item).is_none())
+        {
+            simulation.remove(item);
+        }
+        for &index in &self.placements {
+            let Some(placement) = level.scenario.netgame_equipment.get(index) else {
+                continue;
+            };
+            let period = item_respawn_period(placement.spawn_seconds);
+            if !now.is_multiple_of(period) {
+                continue;
+            }
+            let weights: Vec<f32> = placement.items.iter().map(|item| item.weight).collect();
+            let Some(tag) = random_item(&mut self.seed, &weights)
+                .and_then(|chosen| placement.items.get(chosen))
+                .and_then(|choice| choice.item.clone())
+            else {
+                continue;
+            };
+            let team = (placement.team != 0).then_some(placement.team);
+            if let Some(item) = spawn_item(
+                simulation,
+                level,
+                tag,
+                placement.position,
+                placement.facing,
+                team,
+            ) {
+                self.items.stood(item, now, period);
             }
         }
-        events
     }
 
     /// Stands player `index` at the start for the game type and its team
@@ -810,40 +900,6 @@ impl Game {
         if let Some(slot) = self.flag_objects.get_mut(flag) {
             *slot = spawned;
         }
-    }
-
-    /// Stands one of placement `spot`'s items there, chosen by weight.
-    /// (`game_engine_update_item_spawn`)
-    fn place_equipment(&mut self, simulation: &mut Simulation, level: &Level, spot: usize) {
-        let Some(placement) = level
-            .scenario
-            .netgame_equipment
-            .get(self.equipment[spot].placement)
-        else {
-            return;
-        };
-        let total: f32 = placement.items.iter().map(|item| item.weight).sum();
-        let mut roll = self.seed.next_real() * total;
-        let mut chosen = placement.items.first();
-        for item in &placement.items {
-            chosen = Some(item);
-            if roll < item.weight {
-                break;
-            }
-            roll -= item.weight;
-        }
-        let Some(item) = chosen else {
-            return;
-        };
-        let team = (placement.team != 0).then_some(placement.team);
-        self.equipment[spot].object = spawn_item(
-            simulation,
-            level,
-            item.item.clone(),
-            placement.position,
-            placement.facing,
-            team,
-        );
     }
 }
 

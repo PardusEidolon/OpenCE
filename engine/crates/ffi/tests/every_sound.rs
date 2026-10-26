@@ -278,8 +278,19 @@ fn sweep(engine: &Engine) -> Result {
         press(engine, Buttons::RELOAD, 60)?;
     }
 
-    // (the powerups and equipment, picked up)
-    for row in rows(engine, "equipment")? {
+    // (the powerups and equipment, picked up: listed again before each, as
+    // the game purges an untaken item when its period passes and stands
+    // another in its place)
+    let mut visited = BTreeSet::new();
+    for _ in 0..rows(engine, "equipment")?.len() {
+        let mut next = None;
+        for row in rows(engine, "equipment")? {
+            if visited.insert(id(&row)?) {
+                next = Some(row);
+                break;
+            }
+        }
+        let Some(row) = next else { break };
         if run(engine, &format!("teleport {}", id(&row)?)).is_ok() {
             play(
                 engine,
