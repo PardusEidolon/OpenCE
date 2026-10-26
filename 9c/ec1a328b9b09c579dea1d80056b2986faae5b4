@@ -1,0 +1,8 @@
+Task: `opence census` and the flake check
+Add opence census, and give the flake's tests the original's C and the app's Swift
+
+opence census prints the census's summary (the original's functions and bytes, the engine's citations, what main_loop reaches); --check and --write take the same path and grow with the classes in Phase 2. The repository is found upwards from the current folder, or given with --root.
+
+The flake's tests check now builds from its own source: the workspace's, plus source/'s .c and .h files, engine/app/Sources and docs/, so the census's tests on the real tree run there instead of skipping. Only that check reads them, so the packages do not rebuild when they change.
+
+Checked: the workspace's tests (1222 passed) and clippy with -D warnings; opence census and opence census --check on the real tree.
