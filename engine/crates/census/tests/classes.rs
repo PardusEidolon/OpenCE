@@ -270,6 +270,28 @@ fn replaced_without_a_listed_reason_is_a_problem() -> Result<(), Failure> {
 }
 
 #[test]
+fn a_library_stands_in_and_says_what_the_player_sees() -> Result<(), Failure> {
+    let library = GOOD.replace("\"renderer\"", "\"library\"");
+    let found = problems("library", &library)?;
+    assert!(
+        has(
+            &found,
+            "rasterizer_frame: a library stands in but nothing says what the player sees"
+        ),
+        "{found:#?}"
+    );
+    let found = problems(
+        "library-noted",
+        &library.replace(
+            "stands_in = \"app/Sources/Render/Frame.swift\"\n",
+            "stands_in = \"app/Sources/Render/Frame.swift\"\nlives_on = \"the same frames\"\n",
+        ),
+    )?;
+    assert!(found.is_empty(), "{found:#?}");
+    Ok(())
+}
+
+#[test]
 fn a_function_with_no_class_is_a_problem() -> Result<(), Failure> {
     let found = problems(
         "unclassed",

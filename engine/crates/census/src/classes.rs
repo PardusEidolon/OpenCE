@@ -95,6 +95,9 @@ pub enum Because {
     Network,
     /// Bink's videos.
     Bink,
+    /// A library does the job (Jolt's collision for the collision BSP), so
+    /// what the player sees has to be said (`lives_on`).
+    Library,
 }
 
 impl Because {
@@ -108,6 +111,7 @@ impl Because {
             Self::Tools => "the editor and tools",
             Self::Network => "networking and Xbox Live",
             Self::Bink => "Bink",
+            Self::Library => "a library does the job",
         }
     }
 }
@@ -447,6 +451,11 @@ pub fn lacking(
         Class::Replaced => {
             if entry.because.is_none() {
                 lacks.wrong.push("Replaced gives no reason".to_owned());
+            }
+            if entry.because == Some(Because::Library) && entry.lives_on.is_none() {
+                lacks
+                    .wrong
+                    .push("a library stands in but nothing says what the player sees".to_owned());
             }
             match &entry.stands_in {
                 Some(place) => exists(place, &mut lacks),
