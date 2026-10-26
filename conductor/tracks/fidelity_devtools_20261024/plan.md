@@ -214,9 +214,9 @@ Found in play (2026-10-25): music and many sounds (hitting surfaces and the rest
 - [x] Task: The settings model and screens 0df4b858
     - [x] Write tests: every setting exists with its default; presets; one change gives Custom; each setting changes the frame; screens show descriptions, measured cost and the memory meter
     - [x] The settings in Rust and Swift, the SwiftUI screens, the benchmark button
-- [ ] Task: Meeting the targets
-    - [ ] Write tests: each path at Ultra on the M1 Max meets 8.33 ms p99
-    - [ ] The last fixes; docs/engine.md updated
+- [x] Task: Meeting the targets 737bee85
+    - [x] Write tests: each path at Ultra on the M1 Max meets 8.33 ms p99
+    - [x] The last fixes; docs/engine.md updated
 - [x] Task: Conductor - User Manual Verification 'Phase 17: Tiers and graphics settings' (Protocol in workflow.md)
 
 ## Wrap-up
