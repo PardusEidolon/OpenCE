@@ -14,6 +14,7 @@ pub mod c;
 mod census;
 pub mod citations;
 pub mod classes;
+pub mod docs;
 pub mod graph;
 pub mod original;
 pub mod symbols;

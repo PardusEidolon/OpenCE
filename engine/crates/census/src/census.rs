@@ -9,7 +9,7 @@ use std::path::Path;
 use crate::citations::{self, Citations};
 use crate::classes::{lacking, Class, Engine, From, Manifest, Traced};
 use crate::original::Original;
-use crate::{read_text, traced, Error};
+use crate::{docs, read_text, traced, Error};
 
 /// The classes.
 pub const MANIFEST: &str = "census/census.toml";
@@ -338,7 +338,15 @@ impl Census {
 pub fn census(root: &Path, mode: Mode) -> Result<String, Error> {
     let census = Census::read(root)?;
     match mode {
-        Mode::Check if !census.problems.is_empty() => Err(Error::Problems(census.problems)),
+        Mode::Check => {
+            let mut problems = census.problems();
+            problems.extend(docs::stale(root, &census));
+            if problems.is_empty() {
+                Ok(census.summary())
+            } else {
+                Err(Error::Problems(problems))
+            }
+        }
         Mode::Write => {
             let path = root.join("engine").join(TRACED);
             if let Some(folder) = path.parent() {
@@ -349,9 +357,11 @@ pub fn census(root: &Path, mode: Mode) -> Result<String, Error> {
             }
             std::fs::write(&path, traced::write_traced(&traced::generate(root)?))
                 .map_err(|source| Error::Io { path, source })?;
-            Ok(Census::read(root)?.summary())
+            let census = Census::read(root)?;
+            docs::write(root, &census)?;
+            Ok(census.summary())
         }
-        Mode::Summary | Mode::Check => Ok(census.summary()),
+        Mode::Summary => Ok(census.summary()),
     }
 }
 

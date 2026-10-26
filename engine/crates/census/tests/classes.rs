@@ -460,3 +460,32 @@ fn the_summary_counts_each_class() -> Result<(), Failure> {
     );
     Ok(())
 }
+
+#[test]
+fn the_docs_are_written_and_then_not_stale() -> Result<(), Failure> {
+    use opence_census::docs;
+    let tree = tree("docs", GOOD).with(
+        "docs/engine.md",
+        &format!(
+            "# Engine\n\n{}\nold table\n{}\n\nAfter.\n",
+            docs::BEGIN,
+            docs::END
+        ),
+    );
+    let census = Census::read(tree.root())?;
+    assert_eq!(docs::stale(tree.root(), &census).len(), 2);
+    docs::write(tree.root(), &census)?;
+    assert!(docs::stale(tree.root(), &census).is_empty());
+    let engine_md = std::fs::read_to_string(tree.root().join("docs/engine.md"))?;
+    assert!(
+        engine_md.contains("| `units` | 2 (") && engine_md.ends_with("\n\nAfter.\n"),
+        "{engine_md}"
+    );
+    let census_md = std::fs::read_to_string(tree.root().join("docs/census.md"))?;
+    assert!(census_md.contains("| `unit_think` | units/units.c | Ported | sim/src/units.rs:3 | through `unit_kill`'s trace;"), "{census_md}");
+    assert!(
+        census_md.contains("- units/units.c: `unit_orphan`"),
+        "{census_md}"
+    );
+    Ok(())
+}
