@@ -164,9 +164,9 @@ Found in play (2026-10-25): getting in and out is too quick; vehicles collide on
 - [x] Task: Wheels and tracks dcab43b3
     - [x] Write tests: wheels turn at the ground speed over their radius and tracks scroll with speed, against the original's functions; golden frames of a moving wheel show no smear between ticks (checked numerically instead: a tick turns a wheel at most 0.25 of a turn, under the half that would ease it backwards)
     - [x] The fixes
-- [ ] Task: Effects on the move
-    - [ ] Write tests: tyre and dust effects spawn at the rate their tags give and change with the ground's material
-    - [ ] The fixes
+- [x] Task: Effects on the move 2d9318d2
+    - [x] Write tests: tyre and dust effects spawn at the rate their tags give and change with the ground's material
+    - [x] The fixes (none needed: the slips were already the original's)
 - [ ] Task: The vehicle HUDs
     - [ ] Write tests: each vehicle and seat shows the HUD interface, icons and meters its tags name
     - [ ] The fixes
