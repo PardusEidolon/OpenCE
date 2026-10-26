@@ -1,0 +1,4 @@
+Task: Build the shared fake world: object table, tag instances, a small synthetic map.
+Add the shared fake world the reference traces compile against
+
+tools/harness/world.py gives a reference script the original's own data arrays (data.c, compiled as it is) and the object header table with its memory pool, with the least stand-ins they need; a failed assertion prints its file and line and stops the trace. Tag instances and a map are not needed by the traces that use it yet, so it holds none: a script that needs them adds them to the world when it comes. Checked by tools/engine_data_reference.py, the first script built on it.
