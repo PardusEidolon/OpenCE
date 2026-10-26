@@ -9,7 +9,7 @@ use std::path::Path;
 use crate::citations::{self, Citations};
 use crate::classes::{lacking, Class, Engine, From, Manifest, Traced};
 use crate::original::Original;
-use crate::{docs, read_text, traced, Error};
+use crate::{docs, layout, read_text, traced, Error};
 
 /// The classes.
 pub const MANIFEST: &str = "census/census.toml";
@@ -367,6 +367,9 @@ pub fn census(root: &Path, mode: Mode) -> Result<String, Error> {
             }
             std::fs::write(&path, traced::write_traced(&traced::generate(root)?))
                 .map_err(|source| Error::Io { path, source })?;
+            let path = root.join("engine").join(layout::LAYOUT);
+            std::fs::write(&path, layout::write_layout(&layout::generate(root)?))
+                .map_err(|source| Error::Io { path, source })?;
             let census = Census::read(root)?;
             docs::write(root, &census)?;
             Ok(census.summary())
@@ -376,8 +379,9 @@ pub fn census(root: &Path, mode: Mode) -> Result<String, Error> {
 }
 
 /// What `opence census --check` finds beyond the crate's own check: a
-/// `traced.tsv` that is not what the reference scripts compile, and the
-/// scripts whose trace is stale (both need Python and clang).
+/// `traced.tsv` that is not what the reference scripts compile, the
+/// scripts whose trace is stale (both need Python and clang), and a
+/// `tag_layout.tsv` that is not clang's layout of the tag structures.
 pub fn check_traces(root: &Path) -> Result<Vec<String>, Error> {
     let mut found = Vec::new();
     let written = read_text(&root.join("engine").join(TRACED)).unwrap_or_default();
@@ -387,6 +391,13 @@ pub fn check_traces(root: &Path) -> Result<Vec<String>, Error> {
         ));
     }
     found.extend(traced::stale(root)?);
+    let written = read_text(&root.join("engine").join(layout::LAYOUT)).unwrap_or_default();
+    if written != layout::write_layout(&layout::generate(root)?) {
+        found.push(format!(
+            "engine/{} is stale: run opence census --write",
+            layout::LAYOUT
+        ));
+    }
     Ok(found)
 }
 

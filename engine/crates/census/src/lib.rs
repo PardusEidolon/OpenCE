@@ -16,6 +16,7 @@ pub mod citations;
 pub mod classes;
 pub mod docs;
 pub mod graph;
+pub mod layout;
 pub mod original;
 pub mod symbols;
 pub mod traced;
