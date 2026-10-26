@@ -438,6 +438,11 @@ owed = "the engine cites it, with no check against the original yet"
 class = "matched"
 owed = "the motion sensor's blips; checked by sim/tests/hud.rs"
 
+[function.bsp3d_get_plane_from_designator]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/DecalPass.swift"
+
 [function.bsp3d_test_point]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
@@ -563,9 +568,24 @@ owed = "the engine's own tests (sim/src/vehicle.rs); no check against the origin
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
 
+[function.contrail_compute_new_point_count]
+class = "matched"
+engine = "ffi/src/particles/contrails.rs"
+owed = "the engine's own tests (ffi/src/particles/contrails.rs); no check against the original yet"
+
+[function.contrail_delete]
+class = "matched"
+engine = "ffi/src/particles/contrails.rs"
+owed = "the engine's own tests (ffi/src/particles/contrails.rs); no check against the original yet"
+
 [function.contrail_fade]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
+
+[function.contrail_new]
+class = "matched"
+engine = "ffi/src/particles/contrails.rs"
+owed = "the engine's own tests (ffi/src/particles/contrails.rs); no check against the original yet"
 
 [function.contrail_next_frame]
 class = "matched"
@@ -582,6 +602,11 @@ owed = "the engine cites it, with no check against the original yet"
 [function.contrail_update_points]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
+
+[function.contrails_update]
+class = "matched"
+engine = "ffi/src/particles/contrails.rs"
+owed = "the engine's own tests (ffi/src/particles/contrails.rs); no check against the original yet"
 
 [function.create_ghost_effect]
 class = "matched"
@@ -653,6 +678,21 @@ owed = "the engine cites it, with no check against the original yet"
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
 
+[function.decal_clip_to_surface]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/DecalPass.swift"
+
+[function.decal_delete]
+class = "matched"
+engine = "ffi/src/dynamic_decals.rs"
+owed = "the engine's own tests (ffi/src/dynamic_decals.rs); no check against the original yet"
+
+[function.decal_insert]
+class = "matched"
+engine = "ffi/src/dynamic_decals.rs"
+owed = "the engine's own tests (ffi/src/dynamic_decals.rs); no check against the original yet"
+
 [function.decal_new]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
@@ -660,6 +700,21 @@ owed = "the engine cites it, with no check against the original yet"
 [function.decal_new_from_collision]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
+
+[function.decal_projection_create]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/DecalPass.swift"
+
+[function.decal_sprite_get_bounds]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/DecalPass.swift"
+
+[function.decal_update]
+class = "matched"
+engine = "ffi/src/dynamic_decals.rs"
+owed = "the engine's own tests (ffi/src/dynamic_decals.rs); no check against the original yet"
 
 [function.decals_update]
 class = "matched"
@@ -755,13 +810,128 @@ owed = "the camera; reads the object, tag and map world, which the fake worlds d
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
 
+[function.effect_allocate]
+class = "matched"
+engine = "sim/src/effects.rs"
+owed = "the engine's own tests (sim/src/effects.rs); no check against the original yet"
+
+[function.effect_allowed_by_environment]
+class = "matched"
+engine = "sim/src/effects.rs"
+owed = "the engine's own tests (sim/src/effects.rs); no check against the original yet"
+
+[function.effect_build_location]
+class = "matched"
+engine = "sim/src/effects.rs"
+owed = "the engine's own tests (sim/src/effects.rs); no check against the original yet"
+
+[function.effect_build_locations]
+class = "matched"
+engine = "sim/src/effects.rs"
+owed = "the engine's own tests (sim/src/effects.rs); no check against the original yet"
+
+[function.effect_delete]
+class = "matched"
+engine = "sim/src/effects.rs"
+owed = "the engine's own tests (sim/src/effects.rs); no check against the original yet"
+
+[function.effect_generate_part]
+class = "matched"
+engine = "sim/src/effects.rs"
+owed = "the engine's own tests (sim/src/effects.rs); no check against the original yet"
+
+[function.effect_generate_particles]
+class = "matched"
+engine = "ffi/src/particles.rs"
+owed = "the engine's own tests (ffi/src/particles.rs); no check against the original yet"
+
+[function.effect_generate_parts]
+class = "matched"
+engine = "sim/src/effects.rs"
+owed = "the engine's own tests (sim/src/effects.rs); no check against the original yet"
+
+[function.effect_get_random_seed]
+class = "matched"
+engine = "sim/src/effects.rs"
+owed = "the engine's own tests (sim/src/effects.rs); no check against the original yet"
+
+[function.effect_location_get_next_instance]
+class = "matched"
+engine = "sim/src/effects.rs"
+owed = "the engine's own tests (sim/src/effects.rs); no check against the original yet"
+
+[function.effect_marker_list_get_marker]
+class = "matched"
+engine = "sim/src/effects.rs"
+owed = "the engine's own tests (sim/src/effects.rs); no check against the original yet"
+
+[function.effect_marker_list_get_markers_by_name]
+class = "matched"
+engine = "sim/src/effects.rs"
+owed = "the engine's own tests (sim/src/effects.rs); no check against the original yet"
+
+[function.effect_new_attached_from_markers]
+class = "matched"
+engine = "sim/src/effects.rs"
+owed = "the engine's own tests (sim/src/effects.rs); no check against the original yet"
+
+[function.effect_new_from_object]
+class = "matched"
+engine = "sim/src/effects.rs"
+owed = "the engine's own tests (sim/src/effects.rs); no check against the original yet"
+
+[function.effect_new_looping]
+class = "matched"
+engine = "sim/src/effects.rs"
+owed = "the engine's own tests (sim/src/effects.rs); no check against the original yet"
+
 [function.effect_new_unattached_from_markers]
 class = "matched"
 owed = "particles; reads the object, tag and map world, which the fake worlds do not hold (the effect tag); Phase 12's explosions"
 
+[function.effect_part_allowed_by_disposition]
+class = "matched"
+engine = "sim/src/effects.rs"
+owed = "the engine's own tests (sim/src/effects.rs); no check against the original yet"
+
+[function.effect_random_angular_velocity]
+class = "matched"
+engine = "sim/src/effects.rs"
+owed = "the engine's own tests (sim/src/effects.rs); no check against the original yet"
+
+[function.effect_random_translational_velocity]
+class = "matched"
+engine = "sim/src/effects.rs"
+owed = "the engine's own tests (sim/src/effects.rs); no check against the original yet"
+
+[function.effect_real_random_range]
+class = "matched"
+engine = "sim/src/effects.rs"
+owed = "the engine's own tests (sim/src/effects.rs); no check against the original yet"
+
 [function.effect_scale]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
+
+[function.effect_set_event]
+class = "matched"
+engine = "sim/src/effects.rs"
+owed = "the engine's own tests (sim/src/effects.rs); no check against the original yet"
+
+[function.effect_stop]
+class = "matched"
+engine = "sim/src/effects.rs"
+owed = "the engine's own tests (sim/src/effects.rs); no check against the original yet"
+
+[function.effect_update]
+class = "matched"
+engine = "sim/src/effects.rs"
+owed = "the engine's own tests (sim/src/effects.rs); no check against the original yet"
+
+[function.effects_update]
+class = "matched"
+engine = "sim/src/effects.rs"
+owed = "the engine's own tests (sim/src/effects.rs); no check against the original yet"
 
 [function.encounters_create_for_new_map]
 class = "partial"
@@ -1199,6 +1369,21 @@ owed = "the HUD's messages; reads the object, tag and map world, which the fake 
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
 
+[function.local_random_direction3d]
+class = "matched"
+engine = "sim/src/effects.rs"
+owed = "the engine's own tests (sim/src/effects.rs); no check against the original yet"
+
+[function.local_random_range]
+class = "matched"
+engine = "ffi/src/particles/contrails.rs"
+owed = "the engine's own tests (ffi/src/particles/contrails.rs); no check against the original yet"
+
+[function.local_random_vector_in_cone3d]
+class = "matched"
+engine = "ffi/src/particles/contrails.rs"
+owed = "the engine's own tests (ffi/src/particles/contrails.rs); no check against the original yet"
+
 [function.machine_update]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
@@ -1215,6 +1400,11 @@ owed = "the engine cites it, with no check against the original yet"
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
 
+[function.material_effect_new_from_point]
+class = "matched"
+engine = "sim/src/effects.rs"
+owed = "the engine's own tests (sim/src/effects.rs); no check against the original yet"
+
 [function.matrix4x3_rotation_from_angles]
 class = "matched"
 owed = "rotations; checked through the item trace's object matrices"
@@ -1226,6 +1416,11 @@ owed = "reads the object, tag and map world, which the fake worlds do not hold (
 [function.motion_sensor_update]
 class = "matched"
 owed = "the motion sensor; reads the object, tag and map world, which the fake worlds do not hold; sim/tests/hud.rs"
+
+[function.new_particle_is_visible]
+class = "matched"
+engine = "ffi/src/particles.rs"
+owed = "the engine's own tests (ffi/src/particles.rs); no check against the original yet"
 
 [function.object_add_scenario_permutation]
 class = "matched"
@@ -1500,13 +1695,143 @@ owed = "the engine cites it, with no check against the original yet"
 class = "matched"
 owed = "checked through the animation trace's overlays"
 
+[function.particle_delete]
+class = "matched"
+engine = "ffi/src/particles.rs"
+owed = "the engine's own tests (ffi/src/particles.rs); no check against the original yet"
+
+[function.particle_die]
+class = "matched"
+engine = "ffi/src/particles.rs"
+owed = "the engine's own tests (ffi/src/particles.rs); no check against the original yet"
+
+[function.particle_effect_new]
+class = "matched"
+engine = "ffi/src/particles.rs"
+owed = "the engine's own tests (ffi/src/particles.rs); no check against the original yet"
+
 [function.particle_get_radius]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
 
+[function.particle_new]
+class = "matched"
+engine = "ffi/src/particles.rs"
+owed = "the engine's own tests (ffi/src/particles.rs); no check against the original yet"
+
+[function.particle_next_frame]
+class = "matched"
+engine = "ffi/src/particles.rs"
+owed = "the engine's own tests (ffi/src/particles.rs); no check against the original yet"
+
+[function.particle_next_sequence]
+class = "matched"
+engine = "ffi/src/particles.rs"
+owed = "the engine's own tests (ffi/src/particles.rs); no check against the original yet"
+
+[function.particle_system_delete]
+class = "matched"
+engine = "ffi/src/particles/systems.rs"
+owed = "the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet"
+
+[function.particle_system_initialize]
+class = "matched"
+engine = "ffi/src/particles/systems.rs"
+owed = "the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet"
+
+[function.particle_system_new_attached]
+class = "matched"
+engine = "ffi/src/particles/systems.rs"
+owed = "the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet"
+
+[function.particle_system_new_particle_default]
+class = "matched"
+engine = "ffi/src/particles/systems.rs"
+owed = "the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet"
+
+[function.particle_system_new_particle_explosion]
+class = "matched"
+engine = "ffi/src/particles/systems.rs"
+owed = "the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet"
+
+[function.particle_system_new_particle_jet]
+class = "matched"
+engine = "ffi/src/particles/systems.rs"
+owed = "the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet"
+
+[function.particle_system_new_particles]
+class = "matched"
+engine = "ffi/src/particles/systems.rs"
+owed = "the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet"
+
+[function.particle_system_new_unattached]
+class = "matched"
+engine = "ffi/src/particles/systems.rs"
+owed = "the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet"
+
+[function.particle_system_next_particle_state_index]
+class = "matched"
+engine = "ffi/src/particles/systems.rs"
+owed = "the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet"
+
+[function.particle_system_next_type_state_index]
+class = "matched"
+engine = "ffi/src/particles/systems.rs"
+owed = "the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet"
+
+[function.particle_system_orphan]
+class = "matched"
+engine = "ffi/src/particles/systems.rs"
+owed = "the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet"
+
+[function.particle_system_render]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/ParticlePass.swift"
+
+[function.particle_system_update]
+class = "matched"
+engine = "ffi/src/particles/systems.rs"
+owed = "the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet"
+
+[function.particle_system_update_default]
+class = "matched"
+engine = "ffi/src/particles/systems.rs"
+owed = "the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet"
+
+[function.particle_system_update_explosion]
+class = "matched"
+engine = "ffi/src/particles/systems.rs"
+owed = "the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet"
+
+[function.particle_system_update_particle_default]
+class = "matched"
+engine = "ffi/src/particles/systems.rs"
+owed = "the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet"
+
+[function.particle_systems_render]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/ParticlePass.swift"
+
+[function.particle_systems_update]
+class = "matched"
+engine = "ffi/src/particles/systems.rs"
+owed = "the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet"
+
+[function.particle_update_frame_time]
+class = "matched"
+engine = "ffi/src/particles.rs"
+owed = "the engine's own tests (ffi/src/particles.rs); no check against the original yet"
+
 [function.particle_update_physics]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
+
+[function.particles_update]
+class = "matched"
+engine = "ffi/src/particles.rs"
+owed = "the engine's own tests (ffi/src/particles.rs); no check against the original yet"
 
 [function.physics_compute_biped_collision]
 class = "matched"
@@ -1606,6 +1931,11 @@ class = "matched"
 engine = "sim/src/vehicle.rs"
 owed = "the engine's own tests (sim/src/vehicle.rs); no check against the original yet"
 
+[function.plane2d_from_points]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/DecalPass.swift"
+
 [function.player_control_update]
 class = "matched"
 engine = "sim/src/player.rs"
@@ -1631,6 +1961,11 @@ owed = "particles; reads the object, tag and map world, which the fake worlds do
 [function.process_looping_sounds]
 class = "matched"
 owed = "sound; reads the object, tag and map world, which the fake worlds do not hold; Phase 15"
+
+[function.project_point2d]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/DecalPass.swift"
 
 [function.projectile_calculate_deceleration]
 class = "matched"
@@ -1669,6 +2004,16 @@ owed = "the engine's own tests (sim/src/projectile.rs); no check against the ori
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
 
+[function.projection_from_vector3d]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/DecalPass.swift"
+
+[function.projection_sign_from_vector3d]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/DecalPass.swift"
+
 [function.random_item]
 class = "matched"
 engine = "sim/src/game.rs"
@@ -1679,6 +2024,11 @@ class = "matched"
 engine = "sim/src/projectile.rs"
 owed = "the engine's own tests (sim/src/projectile.rs); no check against the original yet"
 
+[function.randomize_particle_variables]
+class = "matched"
+engine = "ffi/src/particles/systems.rs"
+owed = "the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet"
+
 [function.rasterizer_lens_flare_submit_for_cluster]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
@@ -1686,6 +2036,11 @@ owed = "the engine cites it, with no check against the original yet"
 [function.rasterizer_lens_flares_draw]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
+
+[function.real_local_random]
+class = "matched"
+engine = "sim/src/effects.rs"
+owed = "the engine's own tests (sim/src/effects.rs); no check against the original yet"
 
 [function.real_random_range]
 class = "matched"
@@ -1736,6 +2091,11 @@ because = "tools"
 stands_in = "dev/src/draw.rs"
 
 [function.render_debug_collision_vertex]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/draw.rs"
+
+[function.render_debug_decals]
 class = "replaced"
 because = "tools"
 stands_in = "dev/src/draw.rs"
@@ -2271,6 +2631,86 @@ owed = "weapons; reads the object, tag and map world, which the fake worlds do n
 [function.weapon_update]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
+
+[function.weather_particle_system_box_offset_from_point3d]
+class = "matched"
+engine = "ffi/src/particles/weather.rs"
+owed = "the engine's own tests (ffi/src/particles/weather.rs); no check against the original yet"
+
+[function.weather_particle_system_build_clipping_planes]
+class = "matched"
+engine = "ffi/src/particles/weather.rs"
+owed = "the engine's own tests (ffi/src/particles/weather.rs); no check against the original yet"
+
+[function.weather_particle_system_delete]
+class = "matched"
+engine = "ffi/src/particles/weather.rs"
+owed = "the engine's own tests (ffi/src/particles/weather.rs); no check against the original yet"
+
+[function.weather_particle_system_get]
+class = "matched"
+engine = "ffi/src/particles/weather.rs"
+owed = "the engine's own tests (ffi/src/particles/weather.rs); no check against the original yet"
+
+[function.weather_particle_system_get_type]
+class = "matched"
+engine = "ffi/src/particles/weather.rs"
+owed = "the engine's own tests (ffi/src/particles/weather.rs); no check against the original yet"
+
+[function.weather_particle_system_new]
+class = "matched"
+engine = "ffi/src/particles/weather.rs"
+owed = "the engine's own tests (ffi/src/particles/weather.rs); no check against the original yet"
+
+[function.weather_particle_system_new_particle]
+class = "matched"
+engine = "ffi/src/particles/weather.rs"
+owed = "the engine's own tests (ffi/src/particles/weather.rs); no check against the original yet"
+
+[function.weather_particle_system_render]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/ParticlePass.swift"
+
+[function.weather_particle_system_transform_clip_planes_to_box]
+class = "matched"
+engine = "ffi/src/particles/weather.rs"
+owed = "the engine's own tests (ffi/src/particles/weather.rs); no check against the original yet"
+
+[function.weather_particle_system_type_delete_particle]
+class = "matched"
+engine = "ffi/src/particles/weather.rs"
+owed = "the engine's own tests (ffi/src/particles/weather.rs); no check against the original yet"
+
+[function.weather_particle_system_update]
+class = "matched"
+engine = "ffi/src/particles/weather.rs"
+owed = "the engine's own tests (ffi/src/particles/weather.rs); no check against the original yet"
+
+[function.weather_particle_system_update_particle_count]
+class = "matched"
+engine = "ffi/src/particles/weather.rs"
+owed = "the engine's own tests (ffi/src/particles/weather.rs); no check against the original yet"
+
+[function.weather_particle_system_wrap_point]
+class = "matched"
+engine = "ffi/src/particles/weather.rs"
+owed = "the engine's own tests (ffi/src/particles/weather.rs); no check against the original yet"
+
+[function.weather_particle_systems_render]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/ParticlePass.swift"
+
+[function.weather_particle_update_physics]
+class = "matched"
+engine = "ffi/src/particles/weather.rs"
+owed = "the engine's own tests (ffi/src/particles/weather.rs); no check against the original yet"
+
+[function.weather_polyhedra_find]
+class = "matched"
+engine = "ffi/src/particles/weather.rs"
+owed = "the engine's own tests (ffi/src/particles/weather.rs); no check against the original yet"
 
 [function.widget_instance_render_recursive]
 class = "matched"

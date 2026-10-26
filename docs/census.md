@@ -18,14 +18,14 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `devices` | | 17 (3728 B) | | | | 43 (3456 B) | 17 |
 | `dialogs` | | | | | | 6 (1328 B) | 0 |
 | `editor` | | | | | 9 (0 B) | | 0 |
-| `effects` | | 14 (10832 B) | | | | 176 (45776 B) | 14 |
+| `effects` | | 89 (35312 B) | | | 13 (7344 B) | 88 (13952 B) | 89 |
 | `game` | | 23 (5280 B) | | 10 (3296 B) | 12 (1488 B) | 675 (94016 B) | 33 |
 | `hs` | | 47 (8304 B) | | 2 (848 B) | 2 (1472 B) | 692 (56368 B) | 49 |
 | `input` | | | | | 42 (4064 B) | 14 (3152 B) | 0 |
 | `interface` | 6 (0 B) | 24 (11056 B) | | | | 884 (145624 B) | 24 |
 | `items` | 7 (4048 B) | 24 (9024 B) | | | | 151 (22976 B) | 24 |
 | `main` | | | | | 15 (768 B) | 141 (15072 B) | 0 |
-| `math` | 36 (4096 B) | 4 (240 B) | | | 16 (2016 B) | 160 (16816 B) | 4 |
+| `math` | 36 (4096 B) | 4 (240 B) | | | 18 (3072 B) | 158 (15760 B) | 4 |
 | `memory` | | 2 (336 B) | | | 61 (9136 B) | 196 (25824 B) | 2 |
 | `models` | 17 (6080 B) | 5 (3808 B) | | | | 31 (7680 B) | 5 |
 | `networking` | | | | | 313 (49824 B) | | 0 |
@@ -43,7 +43,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `text` | | 1 (912 B) | | | 15 (4240 B) | 96 (11760 B) | 1 |
 | `tool` | | | | | 27 (8752 B) | | 0 |
 | `units` | 8 (1824 B) | 67 (19968 B) | | 14 (1008 B) | | 278 (84720 B) | 81 |
-| **all** | 81 (16832 B) | 338 (99552 B) | | 72 (33472 B) | 2071 (396064 B) | 5939 (1065202 B) | 410 |
+| **all** | 81 (16832 B) | 413 (124032 B) | | 72 (33472 B) | 2086 (404464 B) | 5849 (1032322 B) | 485 |
 
 ## `ai`
 
@@ -679,30 +679,118 @@ docs/engine.md's "The coverage census" says what each class needs.
 | Function | File | Class | Engine | Evidence |
 | --- | --- | --- | --- | --- |
 | `contrail_scale_value` | effects/contrails.c | Matched | ffi/src/particles/contrails.rs:32 | owed: the engine cites it, with no check against the original yet |
+| `contrail_delete` | effects/contrails.c | Matched | ffi/src/particles/contrails.rs | owed: the engine's own tests (ffi/src/particles/contrails.rs); no check against the original yet |
+| `contrail_compute_new_point_count` | effects/contrails.c | Matched | ffi/src/particles/contrails.rs | owed: the engine's own tests (ffi/src/particles/contrails.rs); no check against the original yet |
+| `local_random_range` | effects/contrails.c | Matched | ffi/src/particles/contrails.rs | owed: the engine's own tests (ffi/src/particles/contrails.rs); no check against the original yet |
+| `local_random_vector_in_cone3d` | effects/contrails.c | Matched | ffi/src/particles/contrails.rs | owed: the engine's own tests (ffi/src/particles/contrails.rs); no check against the original yet |
 | `contrail_scale_random_value` | effects/contrails.c | Matched | ffi/src/particles/contrails.rs:42 | owed: the engine cites it, with no check against the original yet |
 | `contrail_next_frame` | effects/contrails.c | Matched | ffi/src/particles/contrails.rs:252 | owed: the engine cites it, with no check against the original yet |
 | `contrail_add_points` | effects/contrails.c | Matched | ffi/src/particles/contrails.rs:298 | owed: the engine cites it, with no check against the original yet |
 | `contrail_update_points` | effects/contrails.c | Matched | ffi/src/particles/contrails.rs:122 | owed: the engine cites it, with no check against the original yet |
+| `contrail_new` | effects/contrails.c | Matched | ffi/src/particles/contrails.rs | owed: the engine's own tests (ffi/src/particles/contrails.rs); no check against the original yet |
+| `contrails_update` | effects/contrails.c | Matched | ffi/src/particles/contrails.rs | owed: the engine's own tests (ffi/src/particles/contrails.rs); no check against the original yet |
+| `decal_sprite_get_bounds` | effects/decals.c | Replaced | app/Sources/OpenCEEngineRender/DecalPass.swift | the enhanced lighting and Metal renderer |
+| `render_debug_decals` | effects/decals.c | Replaced | dev/src/draw.rs | the editor and tools |
+| `projection_from_vector3d` | effects/decals.c | Replaced | app/Sources/OpenCEEngineRender/DecalPass.swift | the enhanced lighting and Metal renderer |
+| `projection_sign_from_vector3d` | effects/decals.c | Replaced | app/Sources/OpenCEEngineRender/DecalPass.swift | the enhanced lighting and Metal renderer |
+| `project_point2d` | effects/decals.c | Replaced | app/Sources/OpenCEEngineRender/DecalPass.swift | the enhanced lighting and Metal renderer |
 | `triple_product3d` | effects/decals.c | Matched | sim/src/vehicle_animation.rs:73 | owed: the engine cites it, with no check against the original yet |
+| `plane2d_from_points` | effects/decals.c | Replaced | app/Sources/OpenCEEngineRender/DecalPass.swift | the enhanced lighting and Metal renderer |
+| `bsp3d_get_plane_from_designator` | effects/decals.c | Replaced | app/Sources/OpenCEEngineRender/DecalPass.swift | the enhanced lighting and Metal renderer |
+| `decal_update` | effects/decals.c | Matched | ffi/src/dynamic_decals.rs | owed: the engine's own tests (ffi/src/dynamic_decals.rs); no check against the original yet |
+| `decal_insert` | effects/decals.c | Matched | ffi/src/dynamic_decals.rs | owed: the engine's own tests (ffi/src/dynamic_decals.rs); no check against the original yet |
 | `decals_update` | effects/decals.c | Matched | ffi/src/dynamic_decals.rs:4 | owed: the engine cites it, with no check against the original yet |
+| `decal_delete` | effects/decals.c | Matched | ffi/src/dynamic_decals.rs | owed: the engine's own tests (ffi/src/dynamic_decals.rs); no check against the original yet |
+| `decal_projection_create` | effects/decals.c | Replaced | app/Sources/OpenCEEngineRender/DecalPass.swift | the enhanced lighting and Metal renderer |
+| `decal_clip_to_surface` | effects/decals.c | Replaced | app/Sources/OpenCEEngineRender/DecalPass.swift | the enhanced lighting and Metal renderer |
 | `decal_new_from_collision` | effects/decals.c | Matched | ffi/src/decals.rs:179 | owed: the engine cites it, with no check against the original yet |
 | `decal_new` | effects/decals.c | Matched | ffi/src/decals.rs:144 | owed: the engine cites it, with no check against the original yet |
+| `effect_delete` | effects/effects.c | Matched | sim/src/effects.rs | owed: the engine's own tests (sim/src/effects.rs); no check against the original yet |
 | `effect_scale` | effects/effects.c | Matched | content/src/weapon.rs:602 | owed: the engine cites it, with no check against the original yet |
+| `effect_get_random_seed` | effects/effects.c | Matched | sim/src/effects.rs | owed: the engine's own tests (sim/src/effects.rs); no check against the original yet |
+| `effect_real_random_range` | effects/effects.c | Matched | sim/src/effects.rs | owed: the engine's own tests (sim/src/effects.rs); no check against the original yet |
+| `effect_random_angular_velocity` | effects/effects.c | Matched | sim/src/effects.rs | owed: the engine's own tests (sim/src/effects.rs); no check against the original yet |
+| `effect_allowed_by_environment` | effects/effects.c | Matched | sim/src/effects.rs | owed: the engine's own tests (sim/src/effects.rs); no check against the original yet |
+| `effect_part_allowed_by_disposition` | effects/effects.c | Matched | sim/src/effects.rs | owed: the engine's own tests (sim/src/effects.rs); no check against the original yet |
+| `effect_set_event` | effects/effects.c | Matched | sim/src/effects.rs | owed: the engine's own tests (sim/src/effects.rs); no check against the original yet |
+| `effect_build_location` | effects/effects.c | Matched | sim/src/effects.rs | owed: the engine's own tests (sim/src/effects.rs); no check against the original yet |
+| `effect_location_get_next_instance` | effects/effects.c | Matched | sim/src/effects.rs | owed: the engine's own tests (sim/src/effects.rs); no check against the original yet |
+| `real_local_random` | effects/effects.c | Matched | sim/src/effects.rs | owed: the engine's own tests (sim/src/effects.rs); no check against the original yet |
+| `local_random_direction3d` | effects/effects.c | Matched | sim/src/effects.rs | owed: the engine's own tests (sim/src/effects.rs); no check against the original yet |
+| `effect_stop` | effects/effects.c | Matched | sim/src/effects.rs | owed: the engine's own tests (sim/src/effects.rs); no check against the original yet |
+| `effect_random_translational_velocity` | effects/effects.c | Matched | sim/src/effects.rs | owed: the engine's own tests (sim/src/effects.rs); no check against the original yet |
+| `effect_allocate` | effects/effects.c | Matched | sim/src/effects.rs | owed: the engine's own tests (sim/src/effects.rs); no check against the original yet |
+| `effect_build_locations` | effects/effects.c | Matched | sim/src/effects.rs | owed: the engine's own tests (sim/src/effects.rs); no check against the original yet |
+| `effect_generate_particles` | effects/effects.c | Matched | ffi/src/particles.rs | owed: the engine's own tests (ffi/src/particles.rs); no check against the original yet |
+| `effect_generate_part` | effects/effects.c | Matched | sim/src/effects.rs | owed: the engine's own tests (sim/src/effects.rs); no check against the original yet |
+| `effect_marker_list_get_marker` | effects/effects.c | Matched | sim/src/effects.rs | owed: the engine's own tests (sim/src/effects.rs); no check against the original yet |
+| `effect_generate_parts` | effects/effects.c | Matched | sim/src/effects.rs | owed: the engine's own tests (sim/src/effects.rs); no check against the original yet |
+| `effect_marker_list_get_markers_by_name` | effects/effects.c | Matched | sim/src/effects.rs | owed: the engine's own tests (sim/src/effects.rs); no check against the original yet |
+| `effect_update` | effects/effects.c | Matched | sim/src/effects.rs | owed: the engine's own tests (sim/src/effects.rs); no check against the original yet |
+| `effect_new_looping` | effects/effects.c | Matched | sim/src/effects.rs | owed: the engine's own tests (sim/src/effects.rs); no check against the original yet |
+| `effect_new_from_object` | effects/effects.c | Matched | sim/src/effects.rs | owed: the engine's own tests (sim/src/effects.rs); no check against the original yet |
+| `effect_new_attached_from_markers` | effects/effects.c | Matched | sim/src/effects.rs | owed: the engine's own tests (sim/src/effects.rs); no check against the original yet |
 | `effect_new_unattached_from_markers` | effects/effects.c | Matched | sim/src/effects.rs:64 | owed: particles; reads the object, tag and map world, which the fake worlds do not hold (the effect tag); Phase 12's explosions |
+| `effects_update` | effects/effects.c | Matched | sim/src/effects.rs | owed: the engine's own tests (sim/src/effects.rs); no check against the original yet |
 | `material_effect_new` | effects/material_effects.c | Matched | ffi/src/sound_events.rs:210 | owed: the engine cites it, with no check against the original yet |
+| `material_effect_new_from_point` | effects/material_effects.c | Matched | sim/src/effects.rs | owed: the engine's own tests (sim/src/effects.rs); no check against the original yet |
+| `particle_system_orphan` | effects/particle_systems.c | Matched | ffi/src/particles/systems.rs | owed: the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet |
+| `particle_system_delete` | effects/particle_systems.c | Matched | ffi/src/particles/systems.rs | owed: the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet |
+| `particle_system_next_type_state_index` | effects/particle_systems.c | Matched | ffi/src/particles/systems.rs | owed: the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet |
+| `particle_system_next_particle_state_index` | effects/particle_systems.c | Matched | ffi/src/particles/systems.rs | owed: the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet |
+| `particle_system_update_default` | effects/particle_systems.c | Matched | ffi/src/particles/systems.rs | owed: the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet |
+| `particle_system_new_particle_default` | effects/particle_systems.c | Matched | ffi/src/particles/systems.rs | owed: the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet |
+| `particle_system_update_particle_default` | effects/particle_systems.c | Matched | ffi/src/particles/systems.rs | owed: the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet |
+| `particle_system_update_explosion` | effects/particle_systems.c | Matched | ffi/src/particles/systems.rs | owed: the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet |
+| `particle_system_new_particles` | effects/particle_systems.c | Matched | ffi/src/particles/systems.rs | owed: the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet |
+| `randomize_particle_variables` | effects/particle_systems.c | Matched | ffi/src/particles/systems.rs | owed: the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet |
+| `particle_system_update` | effects/particle_systems.c | Matched | ffi/src/particles/systems.rs | owed: the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet |
+| `particle_system_render` | effects/particle_systems.c | Replaced | app/Sources/OpenCEEngineRender/ParticlePass.swift | the enhanced lighting and Metal renderer |
+| `particle_system_new_particle_explosion` | effects/particle_systems.c | Matched | ffi/src/particles/systems.rs | owed: the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet |
+| `particle_system_new_particle_jet` | effects/particle_systems.c | Matched | ffi/src/particles/systems.rs | owed: the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet |
+| `particle_system_initialize` | effects/particle_systems.c | Matched | ffi/src/particles/systems.rs | owed: the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet |
+| `particle_systems_update` | effects/particle_systems.c | Matched | ffi/src/particles/systems.rs | owed: the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet |
+| `particle_systems_render` | effects/particle_systems.c | Replaced | app/Sources/OpenCEEngineRender/ParticlePass.swift | the enhanced lighting and Metal renderer |
+| `particle_system_new_unattached` | effects/particle_systems.c | Matched | ffi/src/particles/systems.rs | owed: the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet |
+| `particle_system_new_attached` | effects/particle_systems.c | Matched | ffi/src/particles/systems.rs | owed: the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet |
+| `particle_delete` | effects/particles.c | Matched | ffi/src/particles.rs | owed: the engine's own tests (ffi/src/particles.rs); no check against the original yet |
+| `new_particle_is_visible` | effects/particles.c | Matched | ffi/src/particles.rs | owed: the engine's own tests (ffi/src/particles.rs); no check against the original yet |
 | `particle_get_radius` | effects/particles.c | Matched | content/src/particle.rs:155 | owed: the engine cites it, with no check against the original yet |
+| `particle_effect_new` | effects/particles.c | Matched | ffi/src/particles.rs | owed: the engine's own tests (ffi/src/particles.rs); no check against the original yet |
+| `particle_die` | effects/particles.c | Matched | ffi/src/particles.rs | owed: the engine's own tests (ffi/src/particles.rs); no check against the original yet |
+| `particle_next_sequence` | effects/particles.c | Matched | ffi/src/particles.rs | owed: the engine's own tests (ffi/src/particles.rs); no check against the original yet |
+| `particle_next_frame` | effects/particles.c | Matched | ffi/src/particles.rs | owed: the engine's own tests (ffi/src/particles.rs); no check against the original yet |
+| `particle_update_frame_time` | effects/particles.c | Matched | ffi/src/particles.rs | owed: the engine's own tests (ffi/src/particles.rs); no check against the original yet |
 | `particle_update_physics` | effects/particles.c | Matched | ffi/src/particles.rs:514 | owed: the engine cites it, with no check against the original yet |
+| `particle_new` | effects/particles.c | Matched | ffi/src/particles.rs | owed: the engine's own tests (ffi/src/particles.rs); no check against the original yet |
+| `particles_update` | effects/particles.c | Matched | ffi/src/particles.rs | owed: the engine's own tests (ffi/src/particles.rs); no check against the original yet |
+| `weather_particle_system_get` | effects/weather_particle_systems.c | Matched | ffi/src/particles/weather.rs | owed: the engine's own tests (ffi/src/particles/weather.rs); no check against the original yet |
+| `weather_particle_system_get_type` | effects/weather_particle_systems.c | Matched | ffi/src/particles/weather.rs | owed: the engine's own tests (ffi/src/particles/weather.rs); no check against the original yet |
+| `weather_particle_system_type_delete_particle` | effects/weather_particle_systems.c | Matched | ffi/src/particles/weather.rs | owed: the engine's own tests (ffi/src/particles/weather.rs); no check against the original yet |
+| `weather_particle_system_wrap_point` | effects/weather_particle_systems.c | Matched | ffi/src/particles/weather.rs | owed: the engine's own tests (ffi/src/particles/weather.rs); no check against the original yet |
+| `weather_particle_system_new` | effects/weather_particle_systems.c | Matched | ffi/src/particles/weather.rs | owed: the engine's own tests (ffi/src/particles/weather.rs); no check against the original yet |
+| `weather_particle_system_delete` | effects/weather_particle_systems.c | Matched | ffi/src/particles/weather.rs | owed: the engine's own tests (ffi/src/particles/weather.rs); no check against the original yet |
+| `weather_particle_system_new_particle` | effects/weather_particle_systems.c | Matched | ffi/src/particles/weather.rs | owed: the engine's own tests (ffi/src/particles/weather.rs); no check against the original yet |
+| `weather_particle_system_box_offset_from_point3d` | effects/weather_particle_systems.c | Matched | ffi/src/particles/weather.rs | owed: the engine's own tests (ffi/src/particles/weather.rs); no check against the original yet |
+| `weather_particle_update_physics` | effects/weather_particle_systems.c | Matched | ffi/src/particles/weather.rs | owed: the engine's own tests (ffi/src/particles/weather.rs); no check against the original yet |
+| `weather_particle_system_build_clipping_planes` | effects/weather_particle_systems.c | Matched | ffi/src/particles/weather.rs | owed: the engine's own tests (ffi/src/particles/weather.rs); no check against the original yet |
+| `weather_particle_system_transform_clip_planes_to_box` | effects/weather_particle_systems.c | Matched | ffi/src/particles/weather.rs | owed: the engine's own tests (ffi/src/particles/weather.rs); no check against the original yet |
+| `weather_polyhedra_find` | effects/weather_particle_systems.c | Matched | ffi/src/particles/weather.rs | owed: the engine's own tests (ffi/src/particles/weather.rs); no check against the original yet |
+| `weather_particle_system_update_particle_count` | effects/weather_particle_systems.c | Matched | ffi/src/particles/weather.rs | owed: the engine's own tests (ffi/src/particles/weather.rs); no check against the original yet |
+| `weather_particle_system_update` | effects/weather_particle_systems.c | Matched | ffi/src/particles/weather.rs | owed: the engine's own tests (ffi/src/particles/weather.rs); no check against the original yet |
+| `weather_particle_system_render` | effects/weather_particle_systems.c | Replaced | app/Sources/OpenCEEngineRender/ParticlePass.swift | the enhanced lighting and Metal renderer |
+| `weather_particle_systems_render` | effects/weather_particle_systems.c | Replaced | app/Sources/OpenCEEngineRender/ParticlePass.swift | the enhanced lighting and Metal renderer |
 
-176 Missing (175 reached from `main_loop`), by file:
+88 Missing (87 reached from `main_loop`), by file:
 
-- effects/contrails.c: `contrails_initialize_for_new_map`, `contrails_dispose_from_old_map`, `contrails_dispose`, `contrail_delete`, `contrails_disconnect_from_structure_bsp`, `contrails_reconnect_to_structure_bsp`, `contrail_compute_new_point_count`, `contrail_verify`, `local_random_range`, `local_random_vector_in_cone3d`, `contrails_initialize`, `contrail_new`, `contrail_owner_collision`, `contrails_update`
-- effects/decals.c: `decal_check`, `decal_set_first_decal_index`, `decal_sprite_get_bounds`, `decals_initialize`, `decals_initialize_for_new_map`, `decals_dispose_from_old_map`, `decals_dispose`, `decals_unlock`, `decal_get_first_decal_index`, `decal_new_from_media_collision`, `render_debug_decals`, `projection_from_vector3d`, `projection_sign_from_vector3d`, `project_point2d`, `plane2d_from_points`, `plane3d_from_point_and_normal`, `plane3d_negate`, `plane3d_distance_to_point`, `real_a_rgb_color_to_pixel32`, `bsp3d_get_plane_from_designator`, `decal_update`, `decal_reinsert`, `decal_insert`, `decals_reconnect_to_structure_bsp`, `decals_disconnect_from_structure_bsp`, `decals_delete_permanent_from_cluster`, `decal_delete`, `decal_projection_create`, `decal_clip_to_surface`
-- effects/effects.c: `effects_initialize`, `effects_initialize_for_new_map`, `effects_dispose_from_old_map`, `effects_dispose`, `effects_object_is_corpse`, `effect_delete`, `effects_stop_on_first_person_weapon`, `effects_information_get`, `effects_disconnect_from_structure_bsp`, `effect_get_random_seed`, `effect_real_random_range`, `effect_random_angular_velocity`, `effect_allowed_by_environment`, `effect_part_allowed_by_disposition`, `effect_set_event`, `effect_build_location`, `effect_location_get_next_instance`, `effect_get_node_matrix`, `effect_evaluate_function_integral`, `real_local_random`, `local_random_direction3d`, `effect_stop`, `effects_reconnect_to_structure_bsp`, `dangerous_effects_near_player`, `effect_random_translational_velocity`, `effect_allocate`, `impulse_effect_initialize`, `effect_build_locations`, `effect_generate_particles`, `effect_generate_part`, `effects_start_on_first_person_weapon`, `effect_marker_list_get_marker`, `effect_generate_parts`, `effect_marker_list_get_markers_by_name`, `effect_update`, `effect_new_looping`, `effect_new_from_object`, `effect_new_attached_from_markers`, `effects_update`
-- effects/material_effects.c: `material_effect_visible`, `material_effect_new_from_point`
-- effects/particle_systems.c: `particle_systems_initialize`, `particle_systems_initialize_for_new_map`, `particle_system_orphan`, `particle_system_delete`, `particle_systems_dispose`, `particle_systems_disconnect_from_structure_bsp`, `particle_systems_reconnect_to_structure_bsp`, `particle_system_next_type_state_index`, `particle_system_next_particle_state_index`, `particle_system_update_default`, `particle_system_new_particle_default`, `particle_system_update_particle_default`, `particle_system_update_explosion`, `particle_systems_dispose_from_old_map`, `particle_system_new_particles`, `randomize_particle_variables`, `particle_system_update`, `particle_system_render`, `particle_system_new_particle_explosion`, `particle_system_new_particle_jet`, `particle_system_initialize`, `particle_systems_update`, `particle_systems_render`, `particle_system_new_unattached`, `particle_system_new_attached`
-- effects/particles.c: `particles_initialize`, `particles_initialize_for_new_map`, `particles_dispose_from_old_map`, `particles_dispose`, `particle_delete`, `particles_stop_on_first_person_weapon`, `particles_disconnect_from_structure_bsp`, `particles_reconnect_to_structure_bsp`, `new_particle_is_visible`, `valid_real_point3d`, `valid_real_argb_color`, `particle_effect_new`, `particle_die`, `particle_next_sequence`, `particle_next_frame`, `particle_update_frame_time`, `particle_new`, `particles_update`
+- effects/contrails.c: `contrails_initialize_for_new_map`, `contrails_dispose_from_old_map`, `contrails_dispose`, `contrails_disconnect_from_structure_bsp`, `contrails_reconnect_to_structure_bsp`, `contrail_verify`, `contrails_initialize`, `contrail_owner_collision`
+- effects/decals.c: `decal_check`, `decal_set_first_decal_index`, `decals_initialize`, `decals_initialize_for_new_map`, `decals_dispose_from_old_map`, `decals_dispose`, `decals_unlock`, `decal_get_first_decal_index`, `decal_new_from_media_collision`, `plane3d_from_point_and_normal`, `plane3d_negate`, `plane3d_distance_to_point`, `real_a_rgb_color_to_pixel32`, `decal_reinsert`, `decals_reconnect_to_structure_bsp`, `decals_disconnect_from_structure_bsp`, `decals_delete_permanent_from_cluster`
+- effects/effects.c: `effects_initialize`, `effects_initialize_for_new_map`, `effects_dispose_from_old_map`, `effects_dispose`, `effects_object_is_corpse`, `effects_stop_on_first_person_weapon`, `effects_information_get`, `effects_disconnect_from_structure_bsp`, `effect_get_node_matrix`, `effect_evaluate_function_integral`, `effects_reconnect_to_structure_bsp`, `dangerous_effects_near_player`, `impulse_effect_initialize`, `effects_start_on_first_person_weapon`
+- effects/material_effects.c: `material_effect_visible`
+- effects/particle_systems.c: `particle_systems_initialize`, `particle_systems_initialize_for_new_map`, `particle_systems_dispose`, `particle_systems_disconnect_from_structure_bsp`, `particle_systems_reconnect_to_structure_bsp`, `particle_systems_dispose_from_old_map`
+- effects/particles.c: `particles_initialize`, `particles_initialize_for_new_map`, `particles_dispose_from_old_map`, `particles_dispose`, `particles_stop_on_first_person_weapon`, `particles_disconnect_from_structure_bsp`, `particles_reconnect_to_structure_bsp`, `valid_real_point3d`, `valid_real_argb_color`
 - effects/player_effects.c: `player_effect_get`, `player_effect_initialize`, `player_effect_dispose`, `player_effect_initialize_for_new_map`, `player_effect_dispose_from_old_map`, `player_effect_add_continuous_effect`, `scripted_player_effect_set_rotation`, `scripted_player_effect_set_rumble`, `player_telefrag_effect_stop`, `player_effect_screen_fade_in`, `player_effect_screen_fade_out`, `player_effect_get_damage_indicators`, `player_effect_clear_damage_indicators`, `effect_scale_factor`, `player_effect_update_screen_flash`, `player_effect_update_camera_shake`, `effect_scale_value`, `player_effect_update`, `player_effect_continuous_refresh`, `scripted_player_effect_set_translation`, `scripted_player_effect_start`, `scripted_player_effect_stop`, `player_effect_screen_flash`, `player_telefrag_effect_start`, `player_effect_get_screen_flash`, `get_shake_matrix`, `player_effect_get_camera_effect_matrix`, `player_effect_update_camera_impulse`, `player_effect_start`
-- effects/weather_particle_systems.c: `weather_particle_system_get`, `weather_particle_system_get_type`, `weather_particle_systems_initialize`, `weather_particle_systems_initialize_for_new_map`, `weather_particle_systems_dispose_from_old_map`, `weather_particle_systems_dispose`, `weather_particle_system_type_delete_particle`, `weather_particle_system_wrap_point`, `weather_particle_system_new`, `weather_particle_system_delete`, `weather_particle_system_new_particle`, `weather_particle_system_box_offset_from_point3d`, `weather_particle_update_physics`, `weather_particle_system_build_clipping_planes`, `weather_particle_system_transform_clip_planes_to_box`, `weather_polyhedra_find`, `weather_particle_system_update_particle_count`, `weather_particle_system_update`, `weather_particle_system_render`, `weather_particle_systems_render`
+- effects/weather_particle_systems.c: `weather_particle_systems_initialize`, `weather_particle_systems_initialize_for_new_map`, `weather_particle_systems_dispose_from_old_map`, `weather_particle_systems_dispose`
 
 ## `game`
 
@@ -1028,6 +1116,8 @@ docs/engine.md's "The coverage census" says what each class needs.
 | Function | File | Class | Engine | Evidence |
 | --- | --- | --- | --- | --- |
 | `geosphere_dispose` | math/geometry.c | Ported |  | `tools/engine_math_reference.py` |
+| `vector_intersect_plane2d` | math/geometry.c | Replaced |  | through its caller `convex_polygon2d_clip_to_plane` |
+| `convex_polygon2d_clip_to_plane` | math/geometry.c | Replaced |  | through its caller `convex_hull2d_intersect` |
 | `convex_polygon3d_clip_to_plane` | math/geometry.c | Replaced |  | through its caller `portal_hull_from_points` |
 | `convex_hull2d_intersect` | math/geometry.c | Replaced |  | through its caller `structure_visibility_find_mirror` |
 | `geosphere_new` | math/geometry.c | Ported | sim/src/random.rs:5 | `tools/engine_math_reference.py` |
@@ -1084,9 +1174,9 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `vector3d_from_euler_angles2d` | math/real_math.c | Matched | content/src/level.rs:375 | owed: the engine cites it, with no check against the original yet |
 | `accelerate_to_position` | math/real_math.c | Matched | sim/src/device_animation.rs:3 | owed: a first-person weapon's sway; checked through first_person_weapon_update's trace |
 
-160 Missing (68 reached from `main_loop`), by file:
+158 Missing (66 reached from `main_loop`), by file:
 
-- math/geometry.c: `convex_hull3d_verify`, `plane2d_distance_to_point`, `vector_intersect_plane2d`, `vector_intersect_plane3d`, `code_000f5050`, `build_torus`, `code_000f54a0`, `convex_hull2d`, `convex_hull2d_verify`, `convex_hull2d_test_circle`, `convex_hull2d_test_point`, `convex_hull2d_test_point_indexed`, `convex_hull2d_area`, `convex_hull2d_perimeter`, `convex_hull2d_test_vector`, `convex_polygon2d_clip_to_plane`, `convex_polygon2d_verify`, `convex_polygon3d_verify`, `convex_hull3d_begin`, `convex_hull3d_expand`, `convex_hull3d`, `convex_hull3d_test_point`, `convex_hull3d_test_vector`, `code_000f76e0`, `code_000f7a90`, `code_000f7c20`, `points_dimension2d`
+- math/geometry.c: `convex_hull3d_verify`, `plane2d_distance_to_point`, `vector_intersect_plane3d`, `code_000f5050`, `build_torus`, `code_000f54a0`, `convex_hull2d`, `convex_hull2d_verify`, `convex_hull2d_test_circle`, `convex_hull2d_test_point`, `convex_hull2d_test_point_indexed`, `convex_hull2d_area`, `convex_hull2d_perimeter`, `convex_hull2d_test_vector`, `convex_polygon2d_verify`, `convex_polygon3d_verify`, `convex_hull3d_begin`, `convex_hull3d_expand`, `convex_hull3d`, `convex_hull3d_test_point`, `convex_hull3d_test_vector`, `code_000f76e0`, `code_000f7a90`, `code_000f7c20`, `points_dimension2d`
 - math/integer_math.c: `set_point2d`, `offset_point2d`, `rectangle2d_height`, `inset_rectangle2d`, `adjust_rectangle2d`, `intersect_rectangles2d`, `rectangle2d_hull_from_rectangles2d`, `point2d_in_rectangle2d`, `interior_rectangle2d`, `equal_rectangle2d`, `equal_point2d`, `floor_log2`, `ceiling_log2`, `floor_power2`, `ceiling_power2`, `integer_square_root`, `bit_vector_and`, `bit_vector_or`, `scale_rectangle2d`
 - math/matrix_math.c: `matrix4x3_identity`, `matrix4x3_transpose`, `matrix4x3_inverse`, `matrix4x3_scale`, `matrix4x3_translation`, `matrix4x3_rotation_from_axis_and_angle`, `matrix4x3_from_point_and_quaternion`, `matrix4x3_to_point_and_vectors`, `matrix4x3_transform_point`, `matrix4x3_transform_vector`, `matrix4x3_inverse_transform_point`, `matrix4x3_inverse_transform_vector`, `matrix3x3_determinant`, `matrix3x3_transpose`, `matrix3x3_inverse`, `matrix3x3_from_axis_and_angle`, `matrix3x3_multiply`, `matrix3x3_transform_vector`, `matrix4x3_rotation_to_angles`, `matrix4x3_rotation_to_quaternion`, `vector_from_matrices4x3`, `matrix4x3_transform_plane`, `matrix4x3_inverse_transform_plane`, `matrix3x3_from_forward_and_up`, `matrix3x3_rotation_to_quaternion`, `valid_real_plane3d`, `matrix4x3_from_plane`
 - math/periodic_functions.c: `@periodic_function_build_variable_period_x_table`
