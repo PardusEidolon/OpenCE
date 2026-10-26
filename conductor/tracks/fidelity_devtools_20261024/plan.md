@@ -207,7 +207,7 @@ Found in play (2026-10-25): music and many sounds (hitting surfaces and the rest
     - [x] MetalFX, dynamic resolution, the ECS in parallel (MetalFX golden frames at 0.67 and dynamic resolution built; the ECS in parallel measured slower and kept on one thread)
 - [x] Task: Conductor - User Manual Verification 'Phase 16: Performance' (Protocol in workflow.md)
 
-## Phase 17: Tiers and graphics settings
+## Phase 17: Tiers and graphics settings [checkpoint: 72069692]
 - [x] Task: Quality tiers b4d43366
     - [x] Write tests: each GPU family picks its tier; an 8 GB budget fits at Low
     - [x] The tier table and its detection
