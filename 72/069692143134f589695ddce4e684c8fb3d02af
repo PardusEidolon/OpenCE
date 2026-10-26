@@ -1,0 +1,1 @@
+Phase 17 checkpoint. Automated checks: Swift suite 239 tests (232 outside the scratch tests), 2 known stale golden frames; Rust workspace tests pass; clippy clean. Manual verification superseded at the user's instruction.
