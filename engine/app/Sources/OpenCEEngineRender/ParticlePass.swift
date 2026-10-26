@@ -117,7 +117,8 @@ public final class ParticlePass {
                 reactive ? "particle_reactive_fragment" : "particle_fragment")
             descriptor.colorAttachments[0].pixelFormat = LevelRenderer.frameFormat
             if reactive {
-                // (the most of any sprite over the pixel)
+                // (the most of any sprite over the pixel; Metal's attachment
+                // subscript makes a descriptor for any index, never nil)
                 let mask = descriptor.colorAttachments[1]!
                 mask.pixelFormat = TemporalScaling.reactiveFormat
                 mask.isBlendingEnabled = true

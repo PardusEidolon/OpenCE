@@ -177,6 +177,7 @@ struct Geometry {
 /// `velocity` met a surface at `position` with `normal`, each drawing its
 /// numbers from `seed` and grown by `radius_modifier` (none, as the game
 /// takes it, for 0) (`decal_new_from_collision`).
+// (the game's own arguments to `decal_new_from_collision`, kept as they are)
 #[allow(clippy::too_many_arguments)]
 pub(crate) fn lay(
     level: &Level,

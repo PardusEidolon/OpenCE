@@ -35,6 +35,7 @@ fn last_frame(engine: &Engine) -> Result<(f64, f64)> {
 
 /// The last whole frame's allocations, read without a command (which
 /// publishes a frame of its own for the panel).
+// (a frame's counts are far under 2^53: exact in an f64)
 #[allow(clippy::cast_precision_loss)]
 fn counted() -> (f64, f64) {
     let frame = opence_ffi::allocations::last_frame();

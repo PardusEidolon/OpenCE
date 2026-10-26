@@ -261,6 +261,7 @@ impl DynamicDecals {
     /// surface facing `normal`, struck going `velocity`; on the object `on`
     /// (with its transform), if one was struck; grown by `radius_modifier`
     /// (none for 0).
+    // (the arguments `decals::lay` takes from the game, passed on)
     #[allow(clippy::too_many_arguments)]
     pub(crate) fn lay_decals(
         &mut self,

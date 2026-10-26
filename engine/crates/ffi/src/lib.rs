@@ -1285,6 +1285,7 @@ impl Engine {
     /// The last measured frame's scopes, in the order first seen; none
     /// while frames are not measured.
     pub fn frame_scopes(&self) -> Vec<devtools::ScopeTime> {
+        // (a scope's nanoseconds are far under 2^53: exact in an f64)
         #[allow(clippy::cast_precision_loss)]
         let milliseconds = |nanoseconds: u64| nanoseconds as f64 / 1e6;
         opence_dev::profile::profiler()
