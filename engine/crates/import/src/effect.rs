@@ -8,8 +8,9 @@
 //! each) a block at 0x2C and its particles (0xE8 bytes each) one at 0x38,
 //! each with its location at 0x08. A part's environment is at 0x00, its
 //! mode at 0x02, its location at 0x04, its flags at 0x06, its tag a reference at 0x18, its velocity bounds at
-//! 0x40, its cone at 0x48, its angular velocity bounds at 0x4C and its
-//! radius modifier bounds at 0x54. A particle (`part`, 0x164 bytes) names
+//! 0x40, its cone at 0x48, its angular velocity bounds at 0x4C, its
+//! radius modifier bounds at 0x54 and the values scales A and B scale at
+//! 0x60 and 0x64. A particle (`part`, 0x164 bytes) names
 //! its point physics (`pphy`, 0x40 bytes) at 0x14 and its least radius at
 //! 0x74; the point physics' density is at 0x20, its contact friction at
 //! 0x2C and its elasticity at 0x30.
@@ -89,6 +90,10 @@ pub(crate) fn import_effect(cache: &Cache, index: usize) -> Result<Effect, Impor
                 velocity_cone_angle: part.f32(0x48, "velocity cone angle")?,
                 angular_velocity: vector(&part, 0x4C, "angular velocity bounds")?,
                 radius_modifier: vector(&part, 0x54, "radius modifier bounds")?,
+                scales: [
+                    part.u32(0x60, "a scales values")?,
+                    part.u32(0x64, "b scales values")?,
+                ],
             });
         }
         timeline.push(EffectEvent {

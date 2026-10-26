@@ -46,6 +46,8 @@ pub struct ArmoryGrenade {
     pub starting: i16,
     /// Its projectile, if the level has it.
     pub projectile: Option<(TagRef, Projectile)>,
+    /// The effect its throw makes.
+    pub throwing_effect: Option<TagRef>,
 }
 
 /// Every weapon of the level a player can carry, and its grenades.
@@ -56,6 +58,8 @@ pub struct Armory {
     /// The equipment of the level that is a grenade lying in the world,
     /// its kind and the sound of its being picked up.
     grenade_items: Vec<(TagRef, usize, Option<TagRef>)>,
+    /// The sound of a melee striking each material type.
+    melee_hit_sounds: Vec<Option<TagRef>>,
 }
 
 impl Armory {
@@ -102,6 +106,7 @@ impl Armory {
                     let projectile = level.object(tag)?.projectile.clone()?;
                     Some((tag.clone(), projectile))
                 }),
+                throwing_effect: grenade.throwing_effect.clone(),
             })
             .collect();
         let grenade_items = level
@@ -118,6 +123,7 @@ impl Armory {
             weapons,
             grenades,
             grenade_items,
+            melee_hit_sounds: level.globals.melee_hit_sounds.clone(),
         }
     }
 
@@ -135,6 +141,13 @@ impl Armory {
             .iter()
             .find(|(item, _, _)| item == tag)
             .and_then(|(_, _, sound)| sound.as_ref())
+    }
+
+    /// The sound of a melee striking the material type `material` (-1:
+    /// none).
+    pub fn melee_hit_sound(&self, material: i16) -> Option<&TagRef> {
+        let index = usize::try_from(material).ok()?;
+        self.melee_hit_sounds.get(index)?.as_ref()
     }
 
     /// The grenade of `kind` (0 frag, 1 plasma).
@@ -382,12 +395,23 @@ mod tests {
             maximum,
             starting: 2,
             projectile: None,
+            throwing_effect: None,
         };
         Armory {
             weapons: vec![weapon("a"), weapon("b"), weapon("c")],
             grenades: vec![grenade(4), grenade(2)],
             grenade_items: vec![(tag("frag"), 0, Some(tag("pickup")))],
+            melee_hit_sounds: vec![None, Some(tag("dirt"))],
         }
+    }
+
+    #[test]
+    fn a_melee_sounds_by_the_material_struck() {
+        let armory = armory();
+        assert_eq!(armory.melee_hit_sound(1), Some(&tag("dirt")));
+        assert_eq!(armory.melee_hit_sound(0), None);
+        assert_eq!(armory.melee_hit_sound(-1), None);
+        assert_eq!(armory.melee_hit_sound(2), None);
     }
 
     fn carried(index: usize) -> Carried {

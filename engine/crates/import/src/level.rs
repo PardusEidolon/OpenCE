@@ -277,7 +277,7 @@ pub fn import_level(cache: &Cache) -> Result<Level, ImportError> {
     let huds = crate::hud::import_huds(cache, &objects, &globals, &mut reached)?;
     let (sounds, looping_sounds) = crate::sound::import_sounds(cache)?;
     let material_effects = crate::sound::import_material_effects(cache)?;
-    let mut effects = import_effects(cache, &objects, &material_effects)?;
+    let mut effects = import_effects(cache, &objects, &globals, &material_effects)?;
     // (and those the particles make where they strike and die)
     let made = crate::particle::particle_effects(cache, &effects)?;
     effects.extend(made);
@@ -556,11 +556,12 @@ fn import_physics(
 
 /// The effects `objects`' projectiles detonate with and make where they
 /// strike, their weapons' shots make, their vehicles' thrusters make, and
-/// the material effects make (footsteps, landings and vehicles' slips),
-/// each once, by path.
+/// the material effects make (footsteps, landings and vehicles' slips)
+/// and the globals' grenades make when thrown, each once, by path.
 fn import_effects(
     cache: &Cache,
     objects: &[ObjectDefinition],
+    globals: &Globals,
     material_effects: &[MaterialEffects],
 ) -> Result<Vec<Effect>, ImportError> {
     let detonations = objects
@@ -605,12 +606,17 @@ fn import_effects(
         .flat_map(|effects| effects.events.iter().flatten())
         .filter_map(|made| made.effect.as_ref())
         .filter(|tag| tag.group.0 == *b"effe");
+    let throws = globals
+        .grenades
+        .iter()
+        .filter_map(|grenade| grenade.throwing_effect.as_ref());
     let tags: BTreeSet<&TagRef> = detonations
         .chain(strikes)
         .chain(shots)
         .chain(handling)
         .chain(thrusters)
         .chain(materials)
+        .chain(throws)
         .collect();
     let mut effects = Vec::with_capacity(tags.len());
     for tag in tags {
@@ -3144,6 +3150,23 @@ pub(crate) mod tests {
             panic!("the rifle has no melee damage");
         };
         assert!(level.damage_effect(melee).is_some());
+        // (its blow's sound, and dirt's, which a blow on the ground makes)
+        let sound = level
+            .damage_effect(melee)
+            .and_then(|effect| effect.sound.as_ref());
+        assert_eq!(
+            sound.map(|tag| tag.path.as_str()),
+            Some("sound\\sfx\\impulse\\melee\\assault_impact")
+        );
+        assert_eq!(
+            level.globals.melee_hit_sounds.len(),
+            level.globals.materials.len()
+        );
+        let dirt = level.globals.melee_hit_sounds[0].as_ref();
+        assert_eq!(
+            dirt.map(|tag| tag.path.as_str()),
+            Some("sound\\sfx\\impulse\\melee\\melee_dirt")
+        );
 
         assert_eq!(level.globals.grenades.len(), 2);
         for grenade in &level.globals.grenades {
@@ -3153,6 +3176,9 @@ pub(crate) mod tests {
                 .as_ref()
                 .and_then(|tag| level.object(tag));
             assert!(projectile.and_then(|o| o.projectile.as_ref()).is_some());
+            // (and the effect its throw makes)
+            let throwing = grenade.throwing_effect.as_ref();
+            assert!(throwing.and_then(|tag| level.effect(tag)).is_some());
         }
         let falling = level.globals.falling.falling_damage.as_ref();
         let falling = falling.and_then(|tag| level.damage_effect(tag));

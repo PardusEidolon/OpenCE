@@ -141,6 +141,8 @@ pub struct Player {
     unit_melee: Option<TagRef>,
     /// The speed of this tick's landing into the ground, if it landed.
     landed: Option<f32>,
+    /// Whether it jumped off the ground this tick.
+    jumped: bool,
     /// This tick's throttle: forward, left (what the first-person weapon
     /// sways after).
     throttle: Vec2,
@@ -246,6 +248,8 @@ pub struct PlayedSound {
     /// Where it plays: `None` plays it unspatialized, to the player who
     /// made it (a pickup's).
     pub position: Option<Vec3>,
+    /// Its scale, 0 to 1, between its sound's zero and one modifiers.
+    pub scale: f32,
 }
 
 /// What the tick's systems need of the player: where its object goes and
@@ -368,6 +372,7 @@ impl Player {
             melee_ticks: 0,
             unit_melee,
             landed: None,
+            jumped: false,
             throttle: Vec2::ZERO,
             grenade_velocity: biped.grenade_velocity,
             grenade_origin: Vec3::from_array(level.globals.player.grenade_origin),
@@ -414,6 +419,7 @@ impl Player {
         self.held = Buttons::default();
         self.melee_ticks = 0;
         self.landed = None;
+        self.jumped = false;
         self.seat = None;
         self.seat_body = None;
         self.seat_camera = None;
@@ -574,6 +580,7 @@ impl Player {
         self.yaw = libm::remainderf(self.yaw + input.yaw.0, std::f32::consts::TAU);
         self.pitch = (self.pitch + input.pitch.0).clamp(-max, max);
         self.throttle = throttle(input);
+        self.jumped = false;
         if self.seat.is_some() {
             self.landed = None;
             return self.pose();
@@ -593,6 +600,7 @@ impl Player {
         let airborne = self.mover.airborne;
         let _ = self.mover.step(&mut lock(&self.physics), &movement);
         self.landed = (airborne && !self.mover.airborne).then_some(self.mover.landing_velocity);
+        self.jumped = movement.jump && !airborne && self.mover.airborne;
         self.pose()
     }
 
@@ -799,6 +807,16 @@ impl Player {
         self.landed
     }
 
+    /// Whether it jumped off the ground this tick.
+    pub fn jumped(&self) -> bool {
+        self.jumped
+    }
+
+    /// Whether it is crouched (halfway down or more).
+    pub fn crouching(&self) -> bool {
+        self.mover.crouch >= 0.5
+    }
+
     /// Its eyes, and where they look.
     pub(crate) fn aim(&self) -> (Vec3, Quat) {
         (
@@ -877,12 +895,12 @@ impl Player {
             Arms::OnFoot { action } => {
                 self.pick_up(world, action, &mut fired.sounds);
                 if buttons.pressed(held, Buttons::MELEE) && self.melee_ticks == 0 {
-                    if let Some(impact) = self.melee(world, eyes, aim) {
+                    if let Some(impact) = self.melee(world, eyes, aim, &mut fired.sounds) {
                         fired.impacts.push(impact);
                     }
                 }
                 if buttons.pressed(held, Buttons::GRENADE) && self.melee_ticks == 0 {
-                    self.throw_grenade(world, eyes, aim);
+                    fired.ejections.extend(self.throw_grenade(world, eyes, aim));
                 }
             }
             Arms::Own => {}
@@ -915,8 +933,9 @@ impl Player {
     }
 
     /// Throws a grenade of the kind it has ready, if it has one and the
-    /// weapon in its hands allows it: from its eyes, along its aim.
-    fn throw_grenade(&mut self, world: &mut World, eyes: Vec3, aim: Quat) {
+    /// weapon in its hands allows it: from its eyes, along its aim. The
+    /// effect its throw makes, if any.
+    fn throw_grenade(&mut self, world: &mut World, eyes: Vec3, aim: Quat) -> Option<Ejection> {
         let prevented = self
             .inventory
             .current()
@@ -927,15 +946,11 @@ impl Player {
         let kind = self.inventory.grenade;
         let count = self.inventory.grenades.get(kind).copied().unwrap_or(0);
         if prevented || count <= 0 {
-            return;
+            return None;
         }
-        let Some((tag, projectile)) = self
-            .armory
-            .grenade(kind)
-            .and_then(|grenade| grenade.projectile.clone())
-        else {
-            return;
-        };
+        let grenade = self.armory.grenade(kind)?;
+        let throwing_effect = grenade.throwing_effect.clone();
+        let (tag, projectile) = grenade.projectile.clone()?;
         // (the globals' origin: forward, then across and above the aim as
         // the game takes them, from the world's up)
         let forward = aim * Vec3::X;
@@ -958,7 +973,7 @@ impl Player {
                 team: None,
             },
         ) else {
-            return; // (the world holds no more objects)
+            return None; // (the world holds no more objects)
         };
         let mut seed = world.get_resource_or_init::<RandomSeed>();
         self.flights.push(Flight::thrown(
@@ -974,6 +989,16 @@ impl Player {
         if let Some(carried) = self.inventory.grenades.get_mut(kind) {
             *carried -= 1;
         }
+        // (`unit_throw_grenade_release` makes it on the unit, at no scale)
+        throwing_effect.map(|effect| Ejection {
+            effect,
+            position: eyes,
+            rotation: aim,
+            velocity: Vec3::ZERO,
+            locations: Vec::new(),
+            holder: None,
+            weapon: None,
+        })
     }
 
     /// A tick of its projectiles' flight: those that hit something, are
@@ -1076,7 +1101,13 @@ impl Player {
     /// Its melee: the nearest biped within reach of its eyes along `aim`,
     /// before the level, struck with its weapon's melee damage (or, with
     /// no weapon, its biped's own).
-    fn melee(&mut self, world: &mut World, eyes: Vec3, aim: Quat) -> Option<Impact> {
+    fn melee(
+        &mut self,
+        world: &mut World,
+        eyes: Vec3,
+        aim: Quat,
+        sounds: &mut Vec<PlayedSound>,
+    ) -> Option<Impact> {
         let carried = self
             .inventory
             .current()
@@ -1094,8 +1125,14 @@ impl Player {
         self.melee_ticks = MELEE_RECOVERY_TICKS;
         let damage = damage?;
         let targets = damage::targets(world, &mut self.placed, self.handle);
-        // (a fan of rays about the aim, the nearest hit taken)
+        let surfaces = world
+            .get_resource::<crate::seats::LevelSurfaces>()
+            .cloned()
+            .unwrap_or_default();
+        // (a fan of rays about the aim, the nearest hit taken; the level
+        // struck nearest, if no object is)
         let mut nearest: Option<(f32, damage::Target, Vec3, Vec3)> = None;
+        let mut level: Option<(f32, Vec3)> = None;
         for step in 0..MELEE_RAYS * MELEE_RAYS {
             let across =
                 |index: u32| (index as f32 / (MELEE_RAYS - 1) as f32 - 0.5) * 2.0 * MELEE_SPREAD;
@@ -1105,10 +1142,34 @@ impl Player {
                 Ok(Some(hit)) => hit.fraction,
                 _ => 1.0,
             };
+            if reach < 1.0 && level.is_none_or(|(best, _)| reach < best) {
+                level = Some((reach, eyes + path * reach));
+            }
             if let Some((target, fraction, normal)) = damage::first_target(&targets, eyes, path) {
                 if fraction < reach && nearest.is_none_or(|(best, ..)| fraction < best) {
                     nearest = Some((fraction, target, path, normal));
                 }
+            }
+        }
+        // (`unit_melee_sound`: whatever it struck, the material's melee hit
+        // sound and the damage effect's, on the one who struck)
+        let material = match (&nearest, level) {
+            (Some((_, target, ..)), _) => target.material,
+            (None, Some((_, point))) => surfaces.at(point),
+            (None, None) => -1,
+        };
+        if material != -1 {
+            let effect = world
+                .get_resource::<damage::DamageTable>()
+                .and_then(|table| table.effects.get(&damage))
+                .and_then(|effect| effect.sound.clone());
+            let struck = self.armory.melee_hit_sound(material).cloned();
+            for sound in [struck, effect].into_iter().flatten() {
+                sounds.push(PlayedSound {
+                    sound,
+                    position: Some(self.mover.position),
+                    scale: 1.0,
+                });
             }
         }
         let (fraction, target, path, normal) = nearest?;
@@ -1157,6 +1218,7 @@ impl Player {
                     sounds.push(PlayedSound {
                         sound,
                         position: None,
+                        scale: 1.0,
                     });
                 }
                 objects::remove(world, handle);
@@ -1204,6 +1266,9 @@ impl Player {
                     sounds.push(PlayedSound {
                         sound: sound.clone(),
                         position: None,
+                        // (all of it, as `unspatialized_impulse_sound_new`
+                        // plays it in `weapon_handle_pickup`)
+                        scale: 1.0,
                     });
                 }
                 if let Some(entity) = world
@@ -1437,6 +1502,8 @@ fn shoot(
             fired.sounds.push(PlayedSound {
                 sound: effect.clone(),
                 position: Some(eyes),
+                // (none of it, as `weapon_effect_new` plays it)
+                scale: 0.0,
             });
         } else {
             fired

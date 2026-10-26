@@ -1138,28 +1138,32 @@ impl Engine {
                     .mixer()
                     .set_environment(environment.is_audible().then_some(environment));
                 for sound in &heard {
-                    if let Some(index) = player.sound_index(&sound.tag.path) {
-                        let source = opence_audio::Source {
-                            position: sound.position.map(|at| at.to_array()),
-                            scale: sound.scale,
-                            ..opence_audio::Source::default()
-                        };
-                        player.impulse(index, &source);
-                    }
+                    let Some(index) = player.sound_index(&sound.tag.path) else {
+                        player.note_unknown(&sound.tag.path);
+                        continue;
+                    };
+                    let source = opence_audio::Source {
+                        position: sound.position.map(|at| at.to_array()),
+                        scale: sound.scale,
+                        ..opence_audio::Source::default()
+                    };
+                    player.impulse(index, &source);
                 }
                 let ticks = i32::try_from(advanced.ticks).unwrap_or(i32::MAX);
                 player.advance((frame_seconds * scale * 1000.0) as f32, ticks);
                 for looping in &running.loops {
-                    if let Some(index) = player.looping_index(&looping.tag.path) {
-                        let source = opence_audio::Source {
-                            position: looping.position.map(|at| at.to_array()),
-                            velocity: looping.velocity.to_array(),
-                            obstruction: looping.obstruction,
-                            occlusion: looping.occlusion,
-                            ..opence_audio::Source::default()
-                        };
-                        player.refresh_looping(looping.key, index, &source, false);
-                    }
+                    let Some(index) = player.looping_index(&looping.tag.path) else {
+                        player.note_unknown(&looping.tag.path);
+                        continue;
+                    };
+                    let source = opence_audio::Source {
+                        position: looping.position.map(|at| at.to_array()),
+                        velocity: looping.velocity.to_array(),
+                        obstruction: looping.obstruction,
+                        occlusion: looping.occlusion,
+                        ..opence_audio::Source::default()
+                    };
+                    player.refresh_looping(looping.key, index, &source, false);
                 }
                 if let Some(campaign) = running.campaign.as_mut() {
                     campaign.play_sounds(player, &running.simulation);
@@ -1219,6 +1223,15 @@ impl Engine {
         audio::lock(&self.audio)
             .as_mut()
             .map_or_else(Vec::new, audio::census)
+    }
+
+    /// Every sound asked for since the level started, by its tag path,
+    /// with how often it played, was culled and failed (the `sounds`
+    /// command's list); none without a level.
+    pub fn sounds_heard(&self) -> Vec<audio::SoundHeard> {
+        audio::lock(&self.audio)
+            .as_mut()
+            .map_or_else(Vec::new, audio::heard)
     }
 
     /// Measures each frame's scopes for the dev panel's timings, or stops
@@ -1589,7 +1602,7 @@ pub(crate) fn run_ticks(state: &mut State, ticks: u32) -> Result<(), EngineError
                         .map(|played| sound_events::Heard {
                             tag: played.sound.clone(),
                             position: played.position,
-                            scale: 0.0,
+                            scale: played.scale,
                         }),
                 );
             sound_events::gather(

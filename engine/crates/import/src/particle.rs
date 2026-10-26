@@ -1471,6 +1471,7 @@ mod tests {
                     velocity_cone_angle: 0.0,
                     angular_velocity: [0.0; 2],
                     radius_modifier: [1.0; 2],
+                    scales: [0; 2],
                 }],
                 ..Default::default()
             }],

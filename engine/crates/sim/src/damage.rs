@@ -1306,6 +1306,7 @@ mod tests {
             side_effect: 0,
             category: 0,
             damage_flags: flags,
+            sound: None,
             area_of_effect_core_radius: 0.0,
             damage_minimum: damage,
             damage: [damage, damage],

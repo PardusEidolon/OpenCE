@@ -131,6 +131,9 @@ pub struct FiredPart {
     /// How much a decal it lays is grown, drawn between the part's bounds
     /// after its velocity, as the game draws it (0 for parts not decals).
     pub radius_modifier: f32,
+    /// The scale it is made at, 0 to 1: one, by the effect's scales that
+    /// scale it (a sound's volume between its zero and one modifiers).
+    pub scale: f32,
 }
 
 /// The effects running.
@@ -497,6 +500,7 @@ impl Effects {
                 on: running.origin.on.as_ref().map(|(handle, _)| *handle),
                 surface: running.origin.surface,
                 radius_modifier,
+                scale: part_scale(part, running.origin.scale),
             });
         }
     }
@@ -542,6 +546,16 @@ fn place(
         .unwrap_or((origin.position, origin.rotation))
 }
 
+/// The scale `part` is made at by an effect of scales `by`: one, times
+/// each scale whose mask scales it (`effect_scale`).
+fn part_scale(part: &EffectPart, by: [f32; 2]) -> f32 {
+    part.scales
+        .iter()
+        .zip(by)
+        .filter(|(mask, _)| *mask & EffectPart::SCALES_SCALE != 0)
+        .fold(1.0, |scale, (_, by)| scale * by)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -565,6 +579,7 @@ mod tests {
             velocity_cone_angle: 0.0,
             angular_velocity: [0.0, 0.0],
             radius_modifier: [1.0, 1.0],
+            scales: [0; 2],
         }
     }
 
@@ -625,6 +640,49 @@ mod tests {
             .map(|part| (part.tag.path.as_str(), part.position))
             .collect();
         assert_eq!(made, [("up", normal), ("there", at)]);
+    }
+
+    #[test]
+    fn a_part_is_made_at_one_scaled_by_the_scales_that_scale_it() {
+        // (`effect_scale(effect, 1.0f, part->scale_a_flags,
+        // part->scale_b_flags, _effect_part_type_scale_bit)`)
+        let mut level = level(-1);
+        let mut by_a = part("by a", 0);
+        by_a.scales = [EffectPart::SCALES_SCALE, 0];
+        let mut by_both = part("by both", 0);
+        by_both.scales = [EffectPart::SCALES_SCALE | 1, EffectPart::SCALES_SCALE];
+        let mut by_another = part("by another value", 0);
+        by_another.scales = [1, 1 << 6];
+        level.effects.push(Effect {
+            locations: vec![String::new()],
+            events: vec![event(
+                0.0,
+                0.0,
+                vec![part("by none", 0), by_a, by_both, by_another],
+            )],
+            ..Effect::new(tag(b"effe", "impact"))
+        });
+        let mut effects = Effects::default();
+        let origin = Origin {
+            scale: [0.5, 0.25],
+            ..Origin::at(Vec3::ZERO, Quat::IDENTITY)
+        };
+        effects.start(&level, &tag(b"effe", "impact"), origin);
+        effects.tick(&level, |_| true, |_, _| None);
+        let made: Vec<(&str, f32)> = effects
+            .fired()
+            .iter()
+            .map(|part| (part.tag.path.as_str(), part.scale))
+            .collect();
+        assert_eq!(
+            made,
+            [
+                ("by none", 1.0),
+                ("by a", 0.5),
+                ("by both", 0.125),
+                ("by another value", 1.0)
+            ]
+        );
     }
 
     #[test]

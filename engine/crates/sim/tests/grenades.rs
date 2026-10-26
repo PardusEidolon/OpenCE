@@ -136,3 +136,39 @@ fn a_plasma_sticks_to_the_player_it_strikes() -> Result {
     );
     Ok(())
 }
+
+#[test]
+fn a_throw_makes_the_grenades_throwing_effect_at_the_eyes() -> Result {
+    let Some(level) = bloodgulch()? else {
+        return Ok(());
+    };
+    let mut simulation = settled(&level)?;
+    assert!(simulation.give_grenades(FRAG, 1));
+    let effect = level
+        .globals
+        .grenades
+        .get(FRAG)
+        .and_then(|grenade| grenade.throwing_effect.clone())
+        .ok_or("the frag has no throwing effect")?;
+    simulation.step(TickInput {
+        buttons: Buttons::GRENADE,
+        ..TickInput::default()
+    });
+    let made: Vec<_> = simulation
+        .effects()
+        .iter()
+        .filter(|made| made.effect == effect)
+        .collect();
+    assert_eq!(made.len(), 1, "{:?}", simulation.effects());
+    let player = simulation.player().ok_or("no player")?;
+    let feet = player.mover().position;
+    // (from the unit, as `unit_throw_grenade_release` makes it)
+    assert!(made.iter().all(|made| made.position.distance(feet) < 1.0));
+    // (once: not again while the grenade flies)
+    simulation.step(TickInput::default());
+    assert!(simulation
+        .effects()
+        .iter()
+        .all(|made| made.effect != effect));
+    Ok(())
+}

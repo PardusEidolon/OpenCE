@@ -60,7 +60,7 @@ use objects::{
     kind_index, Object, ObjectHandle, ObjectKinds, ObjectName, ObjectSpawn, ObjectTable,
     Permutation, TableFull, Team,
 };
-use opence_content::{Level, ObjectKind, TagRef};
+use opence_content::{Level, MaterialEffects, ObjectKind, TagRef};
 use player::{Player, PlayerError, PlayerPoses, View};
 use units::{Radians, WorldUnits};
 
@@ -1289,6 +1289,8 @@ impl Simulation {
             self.sounds.push(player::PlayedSound {
                 sound: sound.clone(),
                 position: None,
+                // (all of it, as `first_person_weapon_update` plays it)
+                scale: 1.0,
             });
         }
     }
@@ -1690,9 +1692,47 @@ impl Simulation {
                     position: transform.position,
                     sound: player.sound().cloned(),
                     foot: player.foot(),
+                    step: MaterialEffects::RUN,
                 },
             )
             .collect();
+        // (a player's feet walk crouched, and make the jump and its landing
+        // with both at once, as `biped_make_footstep` makes them: a landing
+        // only one fast enough to land, as `biped_update_landing` runs, and
+        // as it lands rather than two ticks into its recovery)
+        for player in &self.players {
+            let handle = player.handle();
+            if player.crouching() {
+                for event in events.iter_mut().filter(|event| event.object == handle) {
+                    event.step = MaterialEffects::WALK;
+                }
+            }
+            let step = if player.jumped() {
+                MaterialEffects::JUMP
+            } else if player.landed().is_some() && player.mover().landing.is_some() {
+                MaterialEffects::JUMP_LAND
+            } else {
+                continue;
+            };
+            let (Some(tag), Some(transform)) = (
+                self.entity(handle)
+                    .and_then(|entity| entity.get::<objects::Object>())
+                    .map(|object| object.tag.clone()),
+                self.transform(handle),
+            ) else {
+                continue;
+            };
+            for foot in [animation::Foot::Left, animation::Foot::Right] {
+                events.push(animation::AnimationEvent {
+                    object: handle,
+                    tag: tag.clone(),
+                    position: transform.position,
+                    sound: None,
+                    foot: Some(foot),
+                    step,
+                });
+            }
+        }
         events.sort_by_key(|event| event.object);
         events
     }

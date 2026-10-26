@@ -430,6 +430,8 @@ pub struct DamageEffect {
     pub cutoff_scale: f32,
     /// Its flags ([`DamageEffect::DONT_SCALE_DAMAGE_BY_DISTANCE`]).
     pub flags: u32,
+    /// The sound it makes (a melee's, played on the one who struck).
+    pub sound: Option<TagRef>,
     /// Its side effect: 0 none, 1 harmless, 2 lethal to the unsuspecting,
     /// 3 emp.
     pub side_effect: i16,
@@ -591,9 +593,16 @@ pub struct EffectPart {
     pub angular_velocity: [f32; 2],
     /// The least and most its radius is scaled by.
     pub radius_modifier: [f32; 2],
+    /// The values the effect's scales A and B scale, each a mask
+    /// ([`EffectPart::SCALES_SCALE`]).
+    pub scales: [u32; 2],
 }
 
 impl EffectPart {
+    /// The scale scales the scale it is made at (`effect_scale` of the
+    /// part's `_effect_part_type_scale_bit`): a sound's volume between its
+    /// zero and one modifiers.
+    pub const SCALES_SCALE: u32 = 1 << 5;
     /// It faces down, wherever its location faces (a decal laid on the
     /// ground).
     pub const FACE_DOWN: u16 = 1;

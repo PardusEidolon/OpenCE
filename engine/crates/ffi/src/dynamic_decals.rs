@@ -491,6 +491,7 @@ mod tests {
             on: None,
             surface,
             radius_modifier: 0.0,
+            scale: 1.0,
         }
     }
 

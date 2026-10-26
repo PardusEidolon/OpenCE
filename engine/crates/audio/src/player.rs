@@ -159,6 +159,12 @@ impl SoundPlayer {
         self.paths.get(path).copied()
     }
 
+    /// Notes that `path`, asked for, names no sound of the level's (the
+    /// census lists it).
+    pub fn note_unknown(&mut self, path: &str) {
+        self.census.unknown(path);
+    }
+
     /// The tag path of sound `index`.
     pub fn sound_path(&self, index: usize) -> Option<&str> {
         self.bank
@@ -283,7 +289,7 @@ impl SoundPlayer {
                 Some(voice)
             }
             Err(why) => {
-                self.census.dropped(sound.class, why);
+                self.census.dropped(index, sound.class, why);
                 None
             }
         }
@@ -501,7 +507,7 @@ fn distance_between(a: [f32; 3], b: [f32; 3]) -> f32 {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::census::ClassCount;
+    use crate::census::{ClassCount, SoundCount};
     use opence_content::{
         Group, SoundCompression, SoundModifiers, SoundPermutation, SoundPitchRange, TagRef,
     };
@@ -684,6 +690,54 @@ mod tests {
                 failed: 0
             }
         );
+        Ok(())
+    }
+
+    #[test]
+    fn the_census_counts_each_sound_and_the_paths_the_level_has_none_of(
+    ) -> Result<(), Box<dyn Error>> {
+        let mut nothing = sound("nothing", 0, Vec::new());
+        nothing.pitch_ranges.clear();
+        let mut player = player(vec![
+            sound("a", 0, vec![permutation(16384, 480, None)]),
+            nothing,
+        ]);
+        let near = Source {
+            position: Some([5.0, 0.0, 0.0]),
+            ..Source::default()
+        };
+        let far = Source {
+            position: Some([50.0, 0.0, 0.0]),
+            ..Source::default()
+        };
+        player.impulse(0, &near).ok_or("no voice")?;
+        assert!(player.impulse(0, &far).is_none());
+        assert!(player.impulse(1, &near).is_none());
+        player.note_unknown("Sound\\Missing");
+        player.note_unknown("sound\\missing");
+        // (the voice ends; what was asked stays)
+        peak(&mut player, 4800);
+        let census = player.census();
+        let sounds: Vec<SoundCount> = census.sounds().copied().collect();
+        assert_eq!(
+            sounds,
+            vec![
+                SoundCount {
+                    sound: 0,
+                    played: 1,
+                    culled: 1,
+                    failed: 0
+                },
+                SoundCount {
+                    sound: 1,
+                    played: 0,
+                    culled: 0,
+                    failed: 1
+                },
+            ]
+        );
+        let unknown: Vec<(&str, u32)> = census.unknown_paths().collect();
+        assert_eq!(unknown, vec![("sound\\missing", 2)]);
         Ok(())
     }
 

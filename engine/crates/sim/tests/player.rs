@@ -3,9 +3,12 @@
 //! assets/maps/bloodgulch.map.
 
 use std::error::Error;
+use std::sync::Arc;
 
+use opence_content::sound::MaterialEffects;
 use opence_content::Level;
 use opence_import::testing::stock_level;
+use opence_sim::animation::{self, AnimationPlayer, Foot};
 use opence_sim::input::{Buttons, TickInput};
 use opence_sim::player::{View, FOLLOW_DISTANCE};
 use opence_sim::units::Radians;
@@ -187,5 +190,92 @@ fn a_players_replay_gives_the_same_hash() -> Result<(), Box<dyn Error>> {
     let mut changed = inputs.clone();
     changed[300].forward = 0;
     assert_ne!(hash(&changed)?, first);
+    Ok(())
+}
+
+/// The material events the player's feet made over `ticks` of `input`.
+fn steps(simulation: &mut Simulation, input: TickInput, ticks: usize) -> Vec<(usize, Foot)> {
+    let mut steps = Vec::new();
+    for _ in 0..ticks {
+        simulation.step(input);
+        steps.extend(
+            simulation
+                .animation_events()
+                .iter()
+                .filter_map(|event| event.foot.map(|foot| (event.step, foot))),
+        );
+    }
+    steps
+}
+
+#[test]
+fn the_feet_walk_crouched_run_standing_and_jump_and_land_together() -> Result<(), Box<dyn Error>> {
+    let Some(level) = bloodgulch()? else {
+        return Ok(());
+    };
+    let mut simulation = Simulation::empty();
+    simulation.spawn_player(&level, 0)?;
+    // (its biped animated as the app animates it)
+    let player = simulation.player().ok_or("no player")?;
+    let (handle, unit) = (player.handle(), player.unit().clone());
+    let definition = level.object(&unit).ok_or("no biped")?;
+    let graph = definition.animation_graph.as_ref().ok_or("no graph")?;
+    let graph = Arc::new(level.animation_graph(graph).ok_or("no graph")?.clone());
+    let standing = animation::standing_animation(&graph, true);
+    assert!(simulation.animate_unit(handle, AnimationPlayer::new(graph, None, standing)));
+    run(&mut simulation, TickInput::default(), 60);
+    let forward = TickInput {
+        forward: 127,
+        ..TickInput::default()
+    };
+    // (the terrain's own landings aside)
+    let strides = |steps: Vec<(usize, Foot)>| -> Vec<usize> {
+        steps
+            .into_iter()
+            .map(|(step, _)| step)
+            .filter(|step| *step != MaterialEffects::JUMP_LAND)
+            .collect()
+    };
+    let running = strides(steps(&mut simulation, forward, 90));
+    assert!(!running.is_empty());
+    assert!(
+        running.iter().all(|step| *step == MaterialEffects::RUN),
+        "{running:?}"
+    );
+    let crouched = TickInput {
+        buttons: Buttons::CROUCH,
+        ..forward
+    };
+    run(&mut simulation, crouched, 30);
+    let walking = strides(steps(&mut simulation, crouched, 90));
+    assert!(!walking.is_empty());
+    assert!(
+        walking.iter().all(|step| *step == MaterialEffects::WALK),
+        "{walking:?}"
+    );
+    run(&mut simulation, TickInput::default(), 30);
+    let jump = TickInput {
+        buttons: Buttons::JUMP,
+        ..TickInput::default()
+    };
+    let jumped = steps(&mut simulation, jump, 1);
+    assert_eq!(
+        jumped,
+        [
+            (MaterialEffects::JUMP, Foot::Left),
+            (MaterialEffects::JUMP, Foot::Right)
+        ]
+    );
+    let landed: Vec<_> = steps(&mut simulation, TickInput::default(), 120)
+        .into_iter()
+        .filter(|(step, _)| *step == MaterialEffects::JUMP_LAND)
+        .collect();
+    assert_eq!(
+        landed,
+        [
+            (MaterialEffects::JUMP_LAND, Foot::Left),
+            (MaterialEffects::JUMP_LAND, Foot::Right)
+        ]
+    );
     Ok(())
 }

@@ -307,6 +307,7 @@ pub(crate) fn import_damage_effect(
         radius: vector(&tag, 0x0, "radius")?,
         cutoff_scale: tag.f32(0x8, "cutoff scale")?,
         flags: tag.u32(0xC, "flags")?,
+        sound: reference(&tag, 0x114, "sound", &[SND])?,
         side_effect: tag.i16(at(0x0), "side effect")?,
         category: tag.i16(at(0x2), "category")?,
         damage_flags: tag.u32(at(0x4), "damage flags")?,
@@ -465,6 +466,8 @@ mod tests {
             .map(|n| n as f32 / 8.0)
             .collect();
         f32s(&mut effect, DAMAGE_PART + 0x3C, &modifiers);
+        let sound = fake.add_tag(SND, "sound\\test\\impact", &[0u8; 4]);
+        put_reference(&mut effect, 0x114, SND, fake.handle(sound));
         let index = fake.add_tag(JPT, "weapons\\test\\impact", &effect);
         let cache = Cache::open(fake.build())?;
 
@@ -478,6 +481,8 @@ mod tests {
         assert_eq!(effect.damage, [20.0, 25.0]);
         assert_eq!(effect.instantaneous_acceleration, 4.0);
         assert_eq!(effect.material_modifiers, modifiers);
+        let sound = effect.sound.as_ref().map(|tag| tag.path.as_str());
+        assert_eq!(sound, Some("sound\\test\\impact"));
         Ok(())
     }
 }

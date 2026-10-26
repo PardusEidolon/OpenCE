@@ -120,6 +120,9 @@ pub struct Globals {
     /// How each material type scales the ground's hold on a vehicle, by
     /// material type (the globals' `materials`).
     pub materials: Vec<MaterialPhysics>,
+    /// The sound a melee makes striking each material type, by material
+    /// type (the globals' materials' melee hit sounds).
+    pub melee_hit_sounds: Vec<Option<TagRef>>,
     /// The camera track a seat without one of its own follows (the
     /// globals' first `camera`): its control points, as
     /// [`crate::VehicleSeat::camera_track`]'s.

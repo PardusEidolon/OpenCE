@@ -268,8 +268,11 @@ impl SoundPlayer {
                     primary.primary = false;
                     if let Some(voice) = primary.voice {
                         self.mixer.truncate(voice);
-                        if let Some(samples) = stop.and_then(|stop| self.first_samples(stop)) {
+                        if let Some((stop, samples)) =
+                            stop.and_then(|stop| Some((stop, self.first_samples(stop)?)))
+                        {
                             self.mixer.queue(voice, samples);
+                            self.census.queued(stop);
                         }
                     }
                 }
@@ -553,7 +556,8 @@ impl SoundPlayer {
         };
         let pitch = self.random.between(sound.random_pitch_bounds);
         let Some(range) = pitch_range(sound, pitch, None) else {
-            self.census.dropped(sound.class, Dropped::Failed);
+            self.census
+                .dropped(component.gain_sound, sound.class, Dropped::Failed);
             return false;
         };
         component.pitch = pitch;
@@ -564,15 +568,22 @@ impl SoundPlayer {
             .and_then(|range| range.permutations.first())
             .map_or(1.0, |permutation| permutation.gain);
         let mut queue = Vec::new();
+        // (a head before a loop is the loop's voice's, and counted apart)
+        let mut queued = None;
         if let Some(head) = component.head.take() {
-            queue.extend(self.first_samples(head));
+            let samples = self.first_samples(head);
+            if samples.is_some() && head != component.gain_sound {
+                queued = Some(head);
+            }
+            queue.extend(samples);
         }
         if let Some(looping) = component.sound {
             queue.extend(self.next_samples(looping, range));
         }
         let mut queue = queue.into_iter();
         let Some(first) = queue.next() else {
-            self.census.dropped(sound.class, Dropped::Failed);
+            self.census
+                .dropped(component.gain_sound, sound.class, Dropped::Failed);
             return false;
         };
         let voice = self.mixer.play(
@@ -596,6 +607,9 @@ impl SoundPlayer {
                 .flatten(),
             started_ms: self.time_ms,
         });
+        if let Some(head) = queued {
+            self.census.queued(head);
+        }
         true
     }
 
@@ -856,6 +870,14 @@ mod tests {
         step(&mut player, 10.0, None);
         assert_eq!(player.looping_count(), 0);
         assert_eq!(player.mixer().voice_count(), 0);
+        // (the census counts the start and the stop, though they played
+        // on the loop's voice)
+        let played: Vec<(usize, u32)> = player
+            .census()
+            .sounds()
+            .map(|count| (count.sound, count.played))
+            .collect();
+        assert_eq!(played, [(0, 1), (2, 1), (3, 1)]);
     }
 
     #[test]

@@ -157,6 +157,11 @@ pub fn import_globals(cache: &Cache) -> Result<Globals, ImportError> {
             ground_depth_scale: f(0xA0, "physics ground depth scale")?,
             ground_damp_fraction_scale: f(0xA4, "physics ground damp fraction scale")?,
         });
+        // (at 0x364: `material_definition`'s unused fields before it are
+        // one word fewer than the header counts, the block 0x374 long)
+        imported
+            .melee_hit_sounds
+            .push(reference(&material, 0x364, "melee hit sound")?);
     }
 
     let difficulty = globals.block(DIFFICULTY_OFFSET, "difficulty", DIFFICULTY_SIZE, 1)?;

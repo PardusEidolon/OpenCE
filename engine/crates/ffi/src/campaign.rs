@@ -122,6 +122,7 @@ impl Campaign {
         };
         for sound in &orders.started {
             let Some(index) = player.sound_index(&sound.tag.path) else {
+                player.note_unknown(&sound.tag.path);
                 continue;
             };
             let source = opence_audio::Source {
@@ -144,14 +145,16 @@ impl Campaign {
         let mixer = player.mixer();
         self.voices.retain(|_, voice| mixer.is_playing(*voice));
         for (path, looping) in self.scripts.mission().loops() {
-            if let Some(index) = player.looping_index(&looping.tag.path) {
-                let source = opence_audio::Source {
-                    position: at(looping.object),
-                    scale: looping.scale,
-                    ..opence_audio::Source::default()
-                };
-                player.refresh_looping(loop_key(path), index, &source, looping.alternate);
-            }
+            let Some(index) = player.looping_index(&looping.tag.path) else {
+                player.note_unknown(&looping.tag.path);
+                continue;
+            };
+            let source = opence_audio::Source {
+                position: at(looping.object),
+                scale: looping.scale,
+                ..opence_audio::Source::default()
+            };
+            player.refresh_looping(loop_key(path), index, &source, looping.alternate);
         }
     }
 

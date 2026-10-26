@@ -263,6 +263,7 @@ mod tests {
                     velocity_cone_angle: 0.0,
                     angular_velocity: [0.0, 0.0],
                     radius_modifier: [1.0, 1.0],
+                    scales: [0; 2],
                 }],
                 particles: Vec::new(),
             }],

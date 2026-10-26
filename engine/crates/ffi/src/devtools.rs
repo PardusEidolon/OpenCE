@@ -432,6 +432,12 @@ pub(crate) fn registry() -> Registry<State> {
         effects,
     );
     registry.command(
+        "sounds",
+        "Lists the sounds asked for since the level started whose paths have the filter in them, with how often each played, was culled and failed.",
+        &[Param::optional("filter", ArgKind::String)],
+        sounds,
+    );
+    registry.command(
         "started",
         "Lists the last 64 effects begun whose tags have the filter in them, oldest first (a muzzle flash ends within its tick).",
         &[Param::optional("filter", ArgKind::String)],
@@ -1411,6 +1417,49 @@ fn effects(state: &mut State, args: &Args) -> Result<Output, CommandError> {
     let filter = args.string_or("filter", "")?.replace('/', "\\");
     let running = running(state)?;
     Ok(effect_rows(running.effects.running().iter(), &filter))
+}
+
+fn sounds(state: &mut State, args: &Args) -> Result<Output, CommandError> {
+    let filter = args.string_or("filter", "")?.replace('/', "\\");
+    running(state)?;
+    let heard = audio::lock(&state.audio)
+        .as_mut()
+        .map_or_else(Vec::new, audio::heard);
+    let found: Vec<_> = heard
+        .iter()
+        .filter(|sound| sound.path.contains(&filter))
+        .collect();
+    let text = found
+        .iter()
+        .map(|sound| {
+            format!(
+                "{:>5} {:>5} {:>5} {}{}",
+                sound.played,
+                sound.culled,
+                sound.failed,
+                sound.path,
+                if sound.in_level {
+                    ""
+                } else {
+                    " (not the level's)"
+                }
+            )
+        })
+        .collect::<Vec<_>>()
+        .join("\n");
+    let data = found
+        .iter()
+        .map(|sound| {
+            json!({
+                "path": sound.path,
+                "in_level": sound.in_level,
+                "played": sound.played,
+                "culled": sound.culled,
+                "failed": sound.failed,
+            })
+        })
+        .collect();
+    Ok(Output::with_data(text, Data::Array(data)))
 }
 
 fn started(state: &mut State, args: &Args) -> Result<Output, CommandError> {

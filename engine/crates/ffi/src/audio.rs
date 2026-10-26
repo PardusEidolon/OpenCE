@@ -60,6 +60,51 @@ pub(crate) fn census(player: &mut SoundPlayer) -> Vec<SoundClassCount> {
         .collect()
 }
 
+/// A sound asked for since the level started, by its tag path.
+#[derive(Clone, Debug, PartialEq, Eq, uniffi::Record)]
+pub struct SoundHeard {
+    /// The sound's tag path, as the level names it (lower case for one it
+    /// has none of).
+    pub path: String,
+    /// Whether the level has a sound of that path.
+    pub in_level: bool,
+    /// Its voices started.
+    pub played: u32,
+    /// Its sounds culled (skipped, out of hearing or silent).
+    pub culled: u32,
+    /// Its sounds with nothing to play, or asked for without being the
+    /// level's.
+    pub failed: u32,
+}
+
+/// Every sound asked of the player since the level started, the level's
+/// in its order and then the paths it has none of.
+pub(crate) fn heard(player: &mut SoundPlayer) -> Vec<SoundHeard> {
+    let census = player.census();
+    let mut heard: Vec<SoundHeard> = census
+        .sounds()
+        .map(|count| SoundHeard {
+            path: String::new(),
+            in_level: true,
+            played: count.played,
+            culled: count.culled,
+            failed: count.failed,
+        })
+        .collect();
+    let indices: Vec<usize> = census.sounds().map(|count| count.sound).collect();
+    heard.extend(census.unknown_paths().map(|(path, count)| SoundHeard {
+        path: path.to_owned(),
+        in_level: false,
+        played: 0,
+        culled: 0,
+        failed: count,
+    }));
+    for (heard, index) in heard.iter_mut().zip(indices) {
+        heard.path = player.sound_path(index).unwrap_or_default().to_owned();
+    }
+    heard
+}
+
 /// The frames a pull mixes ahead of what it is asked for (about 11 ms),
 /// to play on from while the tick holds the player.
 pub(crate) const AHEAD: usize = 512;

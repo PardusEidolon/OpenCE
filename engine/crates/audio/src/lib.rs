@@ -11,7 +11,7 @@ pub mod player;
 pub mod resample;
 pub mod reverb;
 
-pub use census::{Census, ClassCount, Dropped, Playing};
+pub use census::{Census, ClassCount, Dropped, Playing, SoundCount};
 pub use choice::{
     limit_pitch, next_permutation, pitch_range, scale_random_value, scale_value, LocalRandom,
     Promoted, Promotion, RangeState,

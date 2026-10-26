@@ -2,7 +2,9 @@
 //! panel's audio view and the object inspector: the voices playing, the
 //! sounds culled (skipped by their skip fraction or a promotion, out of
 //! hearing, silent at their scale) and those that failed (no pitch range or
-//! permutation to play, samples that would not decode).
+//! permutation to play, samples that would not decode). It keeps the same
+//! counts for each sound, and the paths asked for that the level has no
+//! sound of, so that a sweep of the level can list what never plays.
 
 use std::collections::BTreeMap;
 
@@ -46,23 +48,82 @@ pub struct ClassCount {
     pub failed: u32,
 }
 
+/// One sound's voices started, and its sounds culled and failed, since
+/// the level started.
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
+pub struct SoundCount {
+    /// The sound, in the bank's.
+    pub sound: usize,
+    /// Its voices started.
+    pub played: u32,
+    /// Its sounds culled.
+    pub culled: u32,
+    /// Its sounds that failed.
+    pub failed: u32,
+}
+
 /// The voices playing and the sounds dropped, kept by the player.
 #[derive(Debug, Default)]
 pub struct Census {
     playing: Vec<Playing>,
     /// Each class's culled and failed.
     dropped: BTreeMap<u16, [u32; 2]>,
+    /// Each sound's started, culled and failed.
+    sounds: BTreeMap<usize, SoundCount>,
+    /// The paths asked for that name no sound of the level's, and how
+    /// often.
+    unknown: BTreeMap<String, u32>,
 }
 
 impl Census {
     pub(crate) fn played(&mut self, playing: Playing) {
+        let count = self.sound(playing.sound);
+        count.played = count.played.saturating_add(1);
         self.playing.push(playing);
     }
 
-    pub(crate) fn dropped(&mut self, class: u16, why: Dropped) {
+    /// A sound queued on a voice already counted (a looping track's start
+    /// or stop on its loop's voice).
+    pub(crate) fn queued(&mut self, sound: usize) {
+        let count = self.sound(sound);
+        count.played = count.played.saturating_add(1);
+    }
+
+    pub(crate) fn dropped(&mut self, sound: usize, class: u16, why: Dropped) {
         let counts = self.dropped.entry(class).or_default();
         let count = &mut counts[usize::from(why == Dropped::Failed)];
         *count = count.saturating_add(1);
+        let count = self.sound(sound);
+        let count = match why {
+            Dropped::Culled => &mut count.culled,
+            Dropped::Failed => &mut count.failed,
+        };
+        *count = count.saturating_add(1);
+    }
+
+    pub(crate) fn unknown(&mut self, path: &str) {
+        let count = self.unknown.entry(path.to_ascii_lowercase()).or_default();
+        *count = count.saturating_add(1);
+    }
+
+    fn sound(&mut self, sound: usize) -> &mut SoundCount {
+        self.sounds.entry(sound).or_insert(SoundCount {
+            sound,
+            ..SoundCount::default()
+        })
+    }
+
+    /// Every sound asked for since the level started, in the bank's order.
+    pub fn sounds(&self) -> impl Iterator<Item = &SoundCount> {
+        self.sounds.values()
+    }
+
+    /// The paths asked for that name no sound of the level's, with how
+    /// often each was, in order.
+    pub fn unknown_paths(&self) -> impl Iterator<Item = (&str, u32)> {
+        self.unknown
+            .iter()
+            .map(|(path, &count)| (path.as_str(), count))
     }
 
     /// Forgets the voices that ended.

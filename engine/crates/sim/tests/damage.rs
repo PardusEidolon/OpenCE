@@ -10,6 +10,7 @@ use opence_import::testing::stock_level;
 use opence_sim::damage::{DamageEvent, Vitality};
 use opence_sim::input::{Buttons, TickInput};
 use opence_sim::objects::{ObjectHandle, ObjectSpawn};
+use opence_sim::units::Radians;
 use opence_sim::{clock, Quat, Simulation, Transform, Vec3};
 
 fn bloodgulch() -> Result<Option<Level>, Box<dyn Error>> {
@@ -211,6 +212,66 @@ fn the_melee_strikes_one_at_arms_length() -> Result<(), Box<dyn Error>> {
     }
     simulation.step(held(Buttons::MELEE));
     assert_eq!(simulation.damage_events().len(), 1);
+    Ok(())
+}
+
+/// The paths of the sounds played on the tick just stepped.
+fn sounds(simulation: &Simulation) -> Vec<String> {
+    simulation
+        .sounds()
+        .iter()
+        .map(|played| played.sound.path.clone())
+        .collect()
+}
+
+/// The sounds of the player's melee at the first start, looking `pitch`
+/// up from level.
+fn melee_looking(level: &Level, pitch: f32) -> Result<Vec<String>, Box<dyn Error>> {
+    let mut simulation = Simulation::empty();
+    simulation.spawn_player(level, 0)?;
+    for _ in 0..90 {
+        simulation.step(TickInput::default());
+    }
+    simulation.step(TickInput {
+        pitch: Radians(pitch),
+        ..TickInput::default()
+    });
+    simulation.step(held(Buttons::MELEE));
+    Ok(sounds(&simulation))
+}
+
+#[test]
+fn the_melee_sounds_what_it_strikes() -> Result<(), Box<dyn Error>> {
+    let Some(level) = bloodgulch()? else {
+        return Ok(());
+    };
+    let impact = "sound\\sfx\\impulse\\melee\\assault_impact";
+    // (`unit_melee_sound`: the material's melee hit sound, then the damage
+    // effect's)
+    let (mut simulation, _) = facing_a_cyborg(&level, 0.5, std::f32::consts::PI)?;
+    simulation.step(held(Buttons::MELEE));
+    let struck = sounds(&simulation);
+    let fleshy = "sound\\sfx\\impulse\\melee\\melee_impact_fleshy";
+    let at = struck.iter().position(|path| path.as_str() == fleshy);
+    let at = at.ok_or_else(|| format!("no fleshy sound: {struck:?}"))?;
+    assert_eq!(
+        struck.get(at + 1).map(String::as_str),
+        Some(impact),
+        "{struck:?}"
+    );
+    // (a melee at the ground before the player's feet strikes the level)
+    let struck = melee_looking(&level, -1.4)?;
+    assert!(
+        struck.iter().any(|path| path.as_str() == impact),
+        "{struck:?}"
+    );
+    assert!(struck.len() >= 2, "{struck:?}");
+    // (at the open sky, nothing is struck)
+    let struck = melee_looking(&level, 1.4)?;
+    assert!(
+        !struck.iter().any(|path| path.as_str() == impact),
+        "{struck:?}"
+    );
     Ok(())
 }
 

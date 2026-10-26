@@ -60,7 +60,7 @@ pub(crate) fn gather(
             .map(|part| Heard {
                 tag: part.tag.clone(),
                 position: Some(part.position),
-                scale: 0.0,
+                scale: part.scale,
             }),
     );
     for event in events {
@@ -68,7 +68,8 @@ pub(crate) fn gather(
             heard.push(Heard {
                 tag: sound.clone(),
                 position: Some(event.position),
-                scale: 0.0,
+                // (all of it, as `unit_animation_update` plays it)
+                scale: 1.0,
             });
         }
         if event.foot.is_none()
@@ -86,13 +87,14 @@ pub(crate) fn gather(
         let Some((point, normal, material)) = ground(event.position) else {
             continue;
         };
-        let Some(step) = effects.of(MaterialEffects::RUN, material) else {
+        let Some(step) = effects.of(event.step, material) else {
             continue;
         };
         if let Some(sound) = &step.sound {
             heard.push(Heard {
                 tag: sound.clone(),
                 position: Some(point),
+                // (none of it, as `biped_make_footstep` plays it)
                 scale: 0.0,
             });
         }
@@ -129,7 +131,7 @@ pub(crate) fn gather_items(
                 heard.push(Heard {
                     tag: sound.clone(),
                     position: Some(impact.point),
-                    scale: 0.0,
+                    scale: impact.scale,
                 });
             }
             if let Some(effect) = &made.effect {
@@ -144,7 +146,7 @@ pub(crate) fn gather_items(
             heard.push(Heard {
                 tag: sound.clone(),
                 position: Some(impact.sound_position),
-                scale: 0.0,
+                scale: impact.scale,
             });
         }
     }
@@ -166,7 +168,7 @@ pub(crate) fn gather_particles(
             heard.push(Heard {
                 tag: made.tag.clone(),
                 position: Some(made.point),
-                scale: 0.0,
+                scale: made.scale,
             });
         } else {
             stepped.push(Stepped {
@@ -192,7 +194,7 @@ pub(crate) fn gather_particles(
             heard.push(Heard {
                 tag: sound.clone(),
                 position: Some(impact.point),
-                scale: 0.0,
+                scale: impact.scale,
             });
         }
         if let Some(effect) = &made.effect {
@@ -281,6 +283,7 @@ mod tests {
             on: None,
             surface: None::<Surface>,
             radius_modifier: 0.0,
+            scale: 1.0,
         }
     }
 
@@ -296,6 +299,7 @@ mod tests {
             position,
             sound: sound.map(|path| tag(b"snd!", path)),
             foot,
+            step: MaterialEffects::RUN,
         }
     }
 
@@ -306,7 +310,10 @@ mod tests {
         gather(
             &level,
             &[
-                part(b"snd!", "bang", Vec3::X),
+                FiredPart {
+                    scale: 0.75,
+                    ..part(b"snd!", "bang", Vec3::X)
+                },
                 part(b"ligh", "flash", Vec3::Y),
             ],
             &[event("marine", Vec3::Z, Some("grunt"), None)],
@@ -321,12 +328,12 @@ mod tests {
                 Heard {
                     tag: tag(b"snd!", "bang"),
                     position: Some(Vec3::X),
-                    scale: 0.0,
+                    scale: 0.75,
                 },
                 Heard {
                     tag: tag(b"snd!", "grunt"),
                     position: Some(Vec3::Z),
-                    scale: 0.0,
+                    scale: 1.0,
                 },
             ]
         );
@@ -401,6 +408,42 @@ mod tests {
     }
 
     #[test]
+    fn a_step_is_heard_by_its_own_event() {
+        let mut level = level();
+        let mut landing = vec![MaterialEffect::default(); 3];
+        landing[2].sound = Some(tag(b"snd!", "thump"));
+        let events = &mut level.material_effects[0].events;
+        events.resize(MaterialEffects::JUMP_LAND + 1, Vec::new());
+        events[MaterialEffects::JUMP_LAND] = landing;
+        let (mut heard, mut stepped) = (Vec::new(), Vec::new());
+        let floor = Vec3::new(3.0, 0.0, 0.0);
+        let steps =
+            [MaterialEffects::JUMP_LAND, MaterialEffects::WALK].map(|step| AnimationEvent {
+                step,
+                ..event("marine", Vec3::new(3.0, 0.0, 1.0), None, Some(Foot::Left))
+            });
+        gather(
+            &level,
+            &[],
+            &steps,
+            Vec3::ZERO,
+            |_| Some((floor, Vec3::Z, 2)),
+            &mut heard,
+            &mut stepped,
+        );
+        // (the landing's; the walk has nothing on that material)
+        assert_eq!(
+            heard,
+            [Heard {
+                tag: tag(b"snd!", "thump"),
+                position: Some(floor),
+                scale: 0.0,
+            }]
+        );
+        assert!(stepped.is_empty());
+    }
+
+    #[test]
     fn a_definition_without_material_effects_is_not_cast_for() {
         let mut level = level();
         level.objects[0] = ObjectDefinition {
@@ -464,12 +507,12 @@ mod tests {
                 Heard {
                     tag: tag(b"snd!", "clank"),
                     position: Some(Vec3::new(1.0, 2.0, 0.0)),
-                    scale: 0.0,
+                    scale: 0.5,
                 },
                 Heard {
                     tag: tag(b"snd!", "thud"),
                     position: Some(Vec3::new(1.0, 2.0, 0.05)),
-                    scale: 0.0,
+                    scale: 0.5,
                 },
             ]
         );
@@ -521,13 +564,13 @@ mod tests {
             tag: tag(group, path),
             point: at,
             normal: Vec3::Z,
-            scale: 1.0,
+            scale: 0.25,
         };
         let impact = |effects: &str| ParticleImpact {
             material_effects: tag(b"foot", effects),
             point: at,
             normal: Vec3::Z,
-            scale: 1.0,
+            scale: 0.75,
         };
         let particles = ParticleEvents {
             made: vec![made(b"snd!", "ping"), made(b"effe", "puff")],
@@ -546,8 +589,12 @@ mod tests {
             &mut stepped,
         );
         assert_eq!(asked, [(at, Vec3::Z)]);
-        let heard: Vec<&str> = heard.iter().map(|one| one.tag.path.as_str()).collect();
-        assert_eq!(heard, ["ping", "tick"]);
+        // (as loud as the particle was fast)
+        let heard: Vec<(&str, f32)> = heard
+            .iter()
+            .map(|one| (one.tag.path.as_str(), one.scale))
+            .collect();
+        assert_eq!(heard, [("ping", 0.25), ("tick", 0.75)]);
         let stepped: Vec<&str> = stepped.iter().map(|one| one.effect.path.as_str()).collect();
         assert_eq!(stepped, ["puff", "chips"]);
     }

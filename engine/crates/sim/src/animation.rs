@@ -1317,6 +1317,9 @@ pub struct AnimationEvent {
     pub sound: Option<TagRef>,
     /// The foot its animation put down.
     pub foot: Option<Foot>,
+    /// The material event that foot makes (`MaterialEffects::RUN` and
+    /// the rest, as `biped_make_footstep` makes them).
+    pub step: usize,
 }
 
 /// A foot an animation puts down at its foot frame.
