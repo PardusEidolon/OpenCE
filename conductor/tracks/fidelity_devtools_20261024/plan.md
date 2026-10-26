@@ -208,9 +208,9 @@ Found in play (2026-10-25): music and many sounds (hitting surfaces and the rest
 - [x] Task: Conductor - User Manual Verification 'Phase 16: Performance' (Protocol in workflow.md)
 
 ## Phase 17: Tiers and graphics settings
-- [ ] Task: Quality tiers
-    - [ ] Write tests: each GPU family picks its tier; an 8 GB budget fits at Low
-    - [ ] The tier table and its detection
+- [x] Task: Quality tiers b4d43366
+    - [x] Write tests: each GPU family picks its tier; an 8 GB budget fits at Low
+    - [x] The tier table and its detection
 - [ ] Task: The settings model and screens
     - [ ] Write tests: every setting exists with its default; presets; one change gives Custom; each setting changes the frame; screens show descriptions, measured cost and the memory meter
     - [ ] The settings in Rust and Swift, the SwiftUI screens, the benchmark button
