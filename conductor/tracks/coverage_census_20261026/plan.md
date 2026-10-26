@@ -79,10 +79,10 @@ entries list what they leave out.
   - [x] The per-object sound limit recorded with what it needs (sound requests that know their object)
 - [x] Task: Conductor - User Manual Verification 'Phase 5: Scripts and sounds' (Protocol in workflow.md) (automated) 7473b424
 
-## Phase 6: The report
+## Phase 6: The report [checkpoint: 81cc2df4]
 - [x] Task: The numbers 41d6f7c7
   - [x] Per system and class, in counts and bytes; tag-field gaps; fix-ups that differ; scripts and sounds
   - [x] The Missing, Partial and evidence-less items, ranked by reach and by how much of play depends on them
 - [x] Task: The report Artifact and the proposed completion track (https://claude.ai/artifact/DQrVNw5htahKJAG4RBUgcu; kept off the repository, since it holds counts measured on the user's maps)
   - [x] The phases of the coverage-completion track proposed from the ranking, to become a new track after your review
-- [ ] Task: Conductor - User Manual Verification 'Phase 6: The report' (Protocol in workflow.md) (the one manual check: you review the report)
+- [x] Task: Conductor - User Manual Verification 'Phase 6: The report' (Protocol in workflow.md) (the one manual check: you review the report) 81cc2df4
