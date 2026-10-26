@@ -5,7 +5,7 @@ Every task is test first (`workflow.md`): the trace, measurement or census test 
 ## Phase 1: The fake world
 - [x] Task: Write a reference test that compiles `object_new` and `object_delete` against the fake world and fails on an empty trace. 602a3326
 - [x] Task: Build the shared fake world: object table, tag instances, a small synthetic map. bb93668a
-- [ ] Task: Port the existing reference scripts that need a world onto it, keeping their traces unchanged.
+- [x] Task: Port the existing reference scripts that need a world onto it, keeping their traces unchanged. b20c4d6d
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: The fake world' (Protocol in workflow.md) (automated)
 
 ## Phase 2: The top of the owed list
