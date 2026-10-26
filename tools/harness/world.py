@@ -8,6 +8,11 @@ A script takes `prelude()` (the types, macros and stand-ins), then
 then its own cases. The stand-ins are the least the functions need: a failed
 assertion prints `assert <file> <line>` and exits 1, so a trace never goes on
 past one.
+
+The scripts written before it (items, vehicle functions and the rest) reach
+their one object through a stand-in getter and never walk a table, so they
+keep their own stand-ins and their traces as they are; a script that needs a
+table of objects builds on this world.
 """
 
 from . import function, read, structure
