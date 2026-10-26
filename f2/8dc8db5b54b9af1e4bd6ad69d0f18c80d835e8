@@ -1,0 +1,4 @@
+Task: Replaced by rule
+Class the renderer, Xbox, network, tool and Bink code as Replaced, each with what stands in for it
+
+Directory rules class rasterizer, render, shaders, bink, bungie_net, networking, editor and tool as Replaced, and file rules the Xbox-only files (the texture and sound caches, DirectSound, the pad, the shell, the tag files and the game state), each naming the engine code that stands in. What only that code reaches is Replaced through its caller, 454 functions. The first measurement put 628 there, including the weather particles, decals, HUD and multiplayer score logic, which the original's renderer drives but play still needs, so Missing rules can now set through_callers = false, and the fourteen ported and matched systems do. Checked: a test for the new field, the census crate's tests, opence census --check: 1,848 Replaced, 6,401 Missing.
