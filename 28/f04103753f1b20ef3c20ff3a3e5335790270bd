@@ -1,0 +1,1 @@
+Phase 5 checked: census --check passes with the ratchet at the new counts; the report holds the before/after counts by class and system. No code changed since Phase 4's flake check.
