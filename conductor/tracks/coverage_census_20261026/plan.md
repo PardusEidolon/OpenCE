@@ -61,9 +61,9 @@ entries list what they leave out.
 - [x] Task: Fields the original reads 3a2bc162
   - [x] Tests: field accesses through each definition's pointers
   - [x] Marks for every field
-- [ ] Task: Fields the importer keeps
-  - [ ] Tests first: the importer's snapshots and the reference traces unchanged
-  - [ ] The readers register named offsets in place of bare constants; the census reads the registration
+- [x] Task: Fields the importer keeps a5d7e914
+  - [x] Tests first: the importer's snapshots and the reference traces unchanged
+  - [x] The readers register named offsets in place of bare constants; the census reads the registration
 - [ ] Task: Fields the engine uses
   - [ ] Typed fields read outside the importer, marked
 - [ ] Task: Load-time fix-ups
