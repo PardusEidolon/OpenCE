@@ -48,27 +48,42 @@ fn uniform_cubic_spline(f: [Vec3; 4], t0: f32, h: f32, t: f32) -> Vec3 {
     f1 -= f0;
     f3 -= f2;
     f2 -= f1;
-    f0 + (f1 + (f2 + (f3 - f2) * ((t - (t0 + 2.0 * h)) / (3.0 * h))) * ((t - (t0 + h)) / (2.0 * h)))
+    // (in the original's order: each factor's product, then its division)
+    f0 + (f1 + (f2 + (f3 - f2) * (t - (t0 + 2.0 * h)) / (3.0 * h)) * (t - (t0 + h)) / (2.0 * h))
         * ((t - t0) / h)
+}
+
+/// The original's arctangent, sine and cosine: the double's, rounded.
+fn arctangent(y: f32, x: f32) -> f32 {
+    libm::atan2(f64::from(y), f64::from(x)) as f32
+}
+
+fn sine(angle: f32) -> f32 {
+    libm::sin(f64::from(angle)) as f32
+}
+
+fn cosine(angle: f32) -> f32 {
+    libm::cos(f64::from(angle)) as f32
 }
 
 /// `[pitch, yaw]` of `vector`.
 fn euler_angles(vector: Vec3) -> [f32; 2] {
     [
-        libm::atan2f(
+        arctangent(
             vector.z,
             libm::sqrtf(vector.x * vector.x + vector.y * vector.y),
         ),
-        libm::atan2f(vector.y, vector.x),
+        arctangent(vector.y, vector.x),
     ]
 }
 
 /// The unit vector of `[pitch, yaw]`.
 fn from_euler_angles([pitch, yaw]: [f32; 2]) -> Vec3 {
+    let cosine_pitch = cosine(pitch);
     Vec3::new(
-        libm::cosf(yaw) * libm::cosf(pitch),
-        libm::sinf(yaw) * libm::cosf(pitch),
-        libm::sinf(pitch),
+        cosine(yaw) * cosine_pitch,
+        sine(yaw) * cosine_pitch,
+        sine(pitch),
     )
 }
 
@@ -92,10 +107,16 @@ impl Winds {
     /// Still air, its noise drawn from `random`: random directions at each
     /// control point, and splines between.
     pub(super) fn new(random: &mut Random) -> Self {
+        Self::from_directions(|| random.direction())
+    }
+
+    /// Still air, its noise's control points the directions `direction`
+    /// hands out, in the order the original draws them.
+    fn from_directions(mut direction: impl FnMut() -> Vec3) -> Self {
         let mut variance = [[Vec3::ZERO; SAMPLES]; 3];
         for point in 0..CONTROL_POINTS {
             for axis in &mut variance {
-                axis[point * CONTROL_POINTS] = random.direction();
+                axis[point * CONTROL_POINTS] = direction();
             }
         }
         for point in 0..CONTROL_POINTS {
@@ -125,6 +146,12 @@ impl Winds {
 
     /// One tick of BSP `bsp`'s winds: each wanders a step.
     pub(super) fn tick(&mut self, level: &Level, bsp: &StructureBsp, random: &mut Random) {
+        self.tick_with(level, bsp, || random.next() >= 0.5);
+    }
+
+    /// One tick of BSP `bsp`'s winds, each step up if `coin` is true and
+    /// down if not, in the order the original tosses them.
+    fn tick_with(&mut self, level: &Level, bsp: &StructureBsp, mut coin: impl FnMut() -> bool) {
         self.time = self.time.wrapping_add(1);
         let count = bsp.weather_palette.len().min(MAX_WINDS);
         self.states.resize(count, State::default());
@@ -137,7 +164,7 @@ impl Winds {
                 state.valid = false;
                 continue;
             };
-            let mut step = || if random.next() < 0.5 { -WANDER } else { WANDER };
+            let mut step = || if coin() { WANDER } else { -WANDER };
             state.velocity_variance = (state.velocity_variance + step()).clamp(0.0, 1.0);
             state.angular_variance[0] = (state.angular_variance[0] + step()).clamp(-1.0, 1.0);
             state.angular_variance[1] = (state.angular_variance[1] + step()).clamp(-1.0, 1.0);
@@ -145,7 +172,8 @@ impl Winds {
             state.velocity = (most - least) * state.velocity_variance + least;
             let [x, y, z, magnitude] = entry.wind;
             let [pitch, yaw] = euler_angles(Vec3::new(x, y, z));
-            let [area_pitch, area_yaw] = wind.variation_area;
+            // (the tag holds the area yaw first)
+            let [area_yaw, area_pitch] = wind.variation_area;
             let direction = [
                 pitch + area_pitch * state.angular_variance[0] * 0.5,
                 yaw + area_yaw * state.angular_variance[1] * 0.5,
@@ -163,11 +191,12 @@ impl Winds {
         let mut sum = Vec3::ZERO;
         for (axis, (noise, scale)) in self.variance.iter().zip(AXIS_SCALES).enumerate() {
             let key = (scale * self.time as f32 * rate + position[axis]) * 8.0;
-            // (to the nearest, half to even, as the original adds 2^23)
-            let index = libm::rintf(libm::fabsf(key)) as i64 as usize % SAMPLES;
-            sum += noise[index];
+            // (as the original: its magnitude plus 2^23, whose low bits are
+            // the key to the nearest, half to even, while it is below 2^23)
+            let key = f32::from_bits(key.to_bits() & 0x7fff_ffff) + 8_388_608.0;
+            sum += noise[(key.to_bits() & 0x3f) as usize];
         }
-        sum * (most / 3.0)
+        sum * (most * (1.0 / 3.0))
     }
 
     /// The air of palette entry `entry` at `position`: its wind with only
@@ -256,6 +285,9 @@ impl<'a> Air<'a> {
         self.of(self.entry_at(position), position, flags)
     }
 }
+
+#[cfg(test)]
+mod wind_reference;
 
 #[cfg(test)]
 mod tests {

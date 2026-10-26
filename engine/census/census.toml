@@ -6911,7 +6911,8 @@ owed = "the engine's own tests (ffi/src/particles/wind.rs); no check against the
 [function.scenario_get_current_from_weather_palette]
 class = "matched"
 engine = "ffi/src/particles/wind.rs"
-owed = "the engine's own tests (ffi/src/particles/wind.rs); no check against the original yet"
+check = "ffi/src/particles/wind/wind_reference.rs"
+against = "trace"
 
 [function.scenario_get_fog_region_index]
 class = "replaced"
@@ -9550,22 +9551,27 @@ owed = "the engine's own tests (ffi/src/particles/wind.rs); no check against the
 [function.wind_initialize_for_new_map]
 class = "matched"
 engine = "ffi/src/particles/wind.rs"
-owed = "the engine's own tests (ffi/src/particles/wind.rs); no check against the original yet"
+check = "ffi/src/particles/wind/wind_reference.rs"
+against = "trace"
+note = "its zeroed globals and its noise are the trace's start"
 
 [function.wind_update]
 class = "matched"
 engine = "ffi/src/particles/wind.rs"
-owed = "the engine's own tests (ffi/src/particles/wind.rs); no check against the original yet"
+check = "ffi/src/particles/wind/wind_reference.rs"
+against = "trace"
 
 [function.wind_variance_get]
 class = "matched"
 engine = "ffi/src/particles/wind.rs"
-owed = "the engine's own tests (ffi/src/particles/wind.rs); no check against the original yet"
+check = "ffi/src/particles/wind/wind_reference.rs"
+against = "trace"
 
 [function.wind_variance_initialize]
 class = "matched"
 engine = "ffi/src/particles/wind.rs"
-owed = "the engine's own tests (ffi/src/particles/wind.rs); no check against the original yet"
+check = "ffi/src/particles/wind/wind_reference.rs"
+against = "trace"
 
 [function.write]
 class = "replaced"

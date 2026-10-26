@@ -1,7 +1,7 @@
 system	missing	partial	owed
 ai	796	12	30
 bitmaps	0	0	1
-camera	80	3	22
+camera	79	3	22
 cutscene	48	2	10
 devices	42	0	17
 effects	87	0	85
@@ -18,7 +18,7 @@ physics	45	26	40
 rasterizer	0	0	2
 render	0	0	2
 saved games	104	2	2
-scenario	21	0	13
+scenario	21	0	8
 shell	2	0	0
 sound	44	2	60
 structures	26	0	1

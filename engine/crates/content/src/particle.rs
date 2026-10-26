@@ -652,7 +652,7 @@ pub struct Wind {
     pub tag: TagRef,
     /// The least and most it blows at.
     pub velocity: [f32; 2],
-    /// How far its direction wanders, pitch and yaw.
+    /// How far its direction wanders, yaw and pitch.
     pub variation_area: [f32; 2],
     /// How much of it varies from place to place.
     pub local_variation_weight: f32,

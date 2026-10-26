@@ -12,7 +12,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `bitmaps` | | 1 (224 B) | | | 209 (63904 B) | | 1 |
 | `bungie_net` | | | | | 105 (18992 B) | | 0 |
 | `cache` | | | | | 187 (24784 B) | | 0 |
-| `camera` | 2 (48 B) | 19 (8208 B) | | 3 (560 B) | 17 (2448 B) | 80 (25280 B) | 22 |
+| `camera` | 3 (192 B) | 19 (8208 B) | | 3 (560 B) | 17 (2448 B) | 79 (25136 B) | 22 |
 | `cseries` | | 1 (16 B) | 28 (3168 B) | | 111 (18656 B) | | 0 |
 | `cutscene` | | 8 (288 B) | | 2 (672 B) | 7 (1072 B) | 48 (8496 B) | 10 |
 | `devices` | | 17 (3728 B) | | | 1 (432 B) | 42 (3024 B) | 17 |
@@ -34,7 +34,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `rasterizer` | | 3 (2784 B) | | | 777 (182416 B) | | 2 |
 | `render` | 2 (592 B) | 2 (240 B) | | | 115 (37520 B) | | 2 |
 | `saved games` | | | | 2 (96 B) | 31 (3712 B) | 104 (21184 B) | 2 |
-| `scenario` | | 13 (4320 B) | | | 23 (3136 B) | 21 (2128 B) | 13 |
+| `scenario` | | 13 (4320 B) | | | 23 (3136 B) | 21 (2128 B) | 8 |
 | `shaders` | | | | | 21 (2624 B) | | 0 |
 | `shell` | | | | | 11 (528 B) | 2 (0 B) | 0 |
 | `sound` | 7 (1072 B) | 63 (15808 B) | | 2 (32 B) | 56 (2832 B) | 44 (7216 B) | 60 |
@@ -43,7 +43,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `text` | | 9 (1936 B) | 63 (6864 B) | | 19 (5744 B) | 21 (2368 B) | 9 |
 | `tool` | | | | | 27 (8752 B) | | 0 |
 | `units` | 9 (1856 B) | 67 (27888 B) | | 17 (17808 B) | 9 (1616 B) | 227 (58352 B) | 84 |
-| **all** | 146 (25968 B) | 577 (187824 B) | 332 (38896 B) | 123 (72592 B) | 2770 (569976 B) | 3679 (715866 B) | 665 |
+| **all** | 147 (26112 B) | 577 (187824 B) | 332 (38896 B) | 123 (72592 B) | 2770 (569976 B) | 3678 (715722 B) | 660 |
 
 ## `ai`
 
@@ -846,6 +846,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `following_camera_new` | camera/following_camera.c | Matched | sim/src/player.rs | owed: the engine's own tests (sim/src/player.rs); no check against the original yet |
 | `arcsine` | camera/following_camera.c | Ported |  | `tools/engine_math_reference.py` |
 | `uniform_cubic_spline` | camera/following_camera.c | Matched | sim/src/player.rs:1633 | owed: the engine cites it, with no check against the original yet |
+| `uniform_cubic_spline_vector3d` | camera/following_camera.c | Ported |  | `tools/engine_wind_reference.py` |
 | `camera_track_splut` | camera/following_camera.c | Matched | sim/src/player.rs:1599 | owed: cutscene cameras; reads the object, tag and map world, which the fake worlds do not hold (the camera track tag); campaign/tests/cutscenes.rs |
 | `following_camera_deterministic` | camera/following_camera.c | Matched | sim/src/player.rs | owed: the engine's own tests (sim/src/player.rs); no check against the original yet |
 | `following_camera_update` | camera/following_camera.c | Matched | sim/src/player.rs:766 | owed: the camera; reads the object, tag and map world, which the fake worlds do not hold; Phase 14's death camera |
@@ -853,7 +854,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `observer_update_polynomial` | camera/observer.c | Matched | sim/src/dead_camera.rs:9 | owed: the engine cites it, with no check against the original yet |
 | `observer_update` | camera/observer.c | Partial | sim/src/player.rs:737 | leaves out the observer's dynamics and its springs, the cutscenes' cameras; owed: the engine's own version; no check against the original yet |
 
-80 Missing (67 reached from `main_loop`), by file:
+79 Missing (66 reached from `main_loop`), by file:
 
 - camera/bored_camera.c: `bored_camera_new`, `bored_camera_shot_threshold_milliseconds`, `bored_camera_shot_duration_milliseconds`, `is_bored`, `is_still_bored`, `valid_real_vector3d`, `valid_real_vector3d_axes2`, `bored_camera_update`
 - camera/camera_scripting.c: `scripted_camera_object_is_first_person_camera`, `scripted_camera_set_absolute`, `scripted_camera_set_camera_point_absolute`, `scripted_camera_next_camera_point`, `scripted_camera_object_relative_to`
@@ -862,7 +863,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 - camera/editor_flying_camera.c: `editor_camera_flying_update`, `editor_camera_orbiting_update`, `translate_orbiting_to_flying`, `translate_flying_to_orbiting`
 - camera/first_person_camera.c: `first_person_camera_deterministic`, `first_person_camera_for_unit_and_vector`, `first_person_camera_fake`
 - camera/flying_camera.c: `flying_camera_new`, `flying_camera_new_from_point_and_vector`, `flying_camera_update`
-- camera/following_camera.c: `unit_camera_get`, `uniform_cubic_spline_vector3d`
+- camera/following_camera.c: `unit_camera_get`
 - camera/observer.c: `observer_get`, `observer_initialize`, `observer_clear`, `observer_initialize_for_new_map`, `observer_dispose_from_old_map`, `observer_get_camera`, `observer_command_has_finished`, `observer_reconnect_to_structure_bsp`, `observer_update_accelerations`, `observer_update_velocities`, `observer_obsolete_position`, `observer_collision_test_with_t`, `observer_collision_test_differential`, `observer_update_command`, `observer_set_camera`, `observer_apply_rotational_displacement`, `observer_update_positions`, `observer_rotational_displacement`, `observer_find_displacement`, `observer_check_penetration`, `observer_postcheck`, `observer_update_displacements`, `observer_pass_time`
 - camera/orbiting_camera.c: `orbiting_camera_new`, `orbiting_camera_update`
 - camera/static_camera.c: `static_camera_new`, `static_camera_update`
@@ -3802,11 +3803,11 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `interpolate_real_rgb_color` | scenario/scenario.c | Replaced |  | through its caller `object_render_state_refresh` |
 | `scenario_get_atmospheric_fog` | scenario/scenario.c | Replaced |  | through its caller `render_player_frame` |
 | `wind_dispose_from_old_map` | scenario/wind.c | Matched | ffi/src/particles/wind.rs | owed: the engine's own tests (ffi/src/particles/wind.rs); no check against the original yet |
-| `wind_variance_get` | scenario/wind.c | Matched | ffi/src/particles/wind.rs | owed: the engine's own tests (ffi/src/particles/wind.rs); no check against the original yet |
-| `wind_update` | scenario/wind.c | Matched | ffi/src/particles/wind.rs | owed: the engine's own tests (ffi/src/particles/wind.rs); no check against the original yet |
-| `scenario_get_current_from_weather_palette` | scenario/wind.c | Matched | ffi/src/particles/wind.rs | owed: the engine's own tests (ffi/src/particles/wind.rs); no check against the original yet |
-| `wind_variance_initialize` | scenario/wind.c | Matched | ffi/src/particles/wind.rs | owed: the engine's own tests (ffi/src/particles/wind.rs); no check against the original yet |
-| `wind_initialize_for_new_map` | scenario/wind.c | Matched | ffi/src/particles/wind.rs | owed: the engine's own tests (ffi/src/particles/wind.rs); no check against the original yet |
+| `wind_variance_get` | scenario/wind.c | Matched | ffi/src/particles/wind/wind_reference.rs:2 | ffi/src/particles/wind/wind_reference.rs (trace) |
+| `wind_update` | scenario/wind.c | Matched | ffi/src/particles/wind/wind_reference.rs:2 | ffi/src/particles/wind/wind_reference.rs (trace) |
+| `scenario_get_current_from_weather_palette` | scenario/wind.c | Matched | ffi/src/particles/wind/wind_reference.rs:3 | ffi/src/particles/wind/wind_reference.rs (trace) |
+| `wind_variance_initialize` | scenario/wind.c | Matched | ffi/src/particles/wind/wind_reference.rs:2 | ffi/src/particles/wind/wind_reference.rs (trace) |
+| `wind_initialize_for_new_map` | scenario/wind.c | Matched | ffi/src/particles/wind.rs | ffi/src/particles/wind/wind_reference.rs (trace); its zeroed globals and its noise are the trace's start |
 | `scenario_get_current` | scenario/wind.c | Matched | ffi/src/particles/wind.rs | owed: the engine's own tests (ffi/src/particles/wind.rs); no check against the original yet |
 | `scenario_get_wind` | scenario/wind.c | Matched | ffi/src/particles/wind.rs | owed: the engine's own tests (ffi/src/particles/wind.rs); no check against the original yet |
 
