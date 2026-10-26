@@ -1,0 +1,6 @@
+Task: The layout from source/
+Lay out the tag structures with clang for 32-bit MSVC into engine/census/tag_layout.tsv
+
+The census needs every tag field's offset as the original's compiler placed it, so it can say which fields the original reads, the importer keeps and the engine uses. clang -cc1 for i686-pc-windows-msvc dumps the record layout of the 197 structures in source/'s *_definitions.h; census --write records them and --check regenerates and compares (skipped without clang).
+
+Checked: every sizeof and offsetof assert in the headers agrees with the written layout; tests on a fake definitions header, the dump parser and malformed input; 48 census tests pass; census --check passes.
