@@ -1,0 +1,4 @@
+Task: Port the existing reference scripts that need a world onto it, keeping their traces unchanged.
+Say which reference scripts build on the shared fake world
+
+None of the ten reference scripts written before the shared world walks a table of objects: each reaches its one object through a stand-in getter (vehicle_datum_get, the item's). Moving them onto the world would change their C and not their traces, so they keep their stand-ins, and the world's docstring says so. Checked: every tools/engine_*_reference.py --check passes with its trace unchanged.
