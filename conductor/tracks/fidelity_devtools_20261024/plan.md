@@ -211,9 +211,9 @@ Found in play (2026-10-25): music and many sounds (hitting surfaces and the rest
 - [x] Task: Quality tiers b4d43366
     - [x] Write tests: each GPU family picks its tier; an 8 GB budget fits at Low
     - [x] The tier table and its detection
-- [ ] Task: The settings model and screens
-    - [ ] Write tests: every setting exists with its default; presets; one change gives Custom; each setting changes the frame; screens show descriptions, measured cost and the memory meter
-    - [ ] The settings in Rust and Swift, the SwiftUI screens, the benchmark button
+- [x] Task: The settings model and screens 0df4b858
+    - [x] Write tests: every setting exists with its default; presets; one change gives Custom; each setting changes the frame; screens show descriptions, measured cost and the memory meter
+    - [x] The settings in Rust and Swift, the SwiftUI screens, the benchmark button
 - [ ] Task: Meeting the targets
     - [ ] Write tests: each path at Ultra on the M1 Max meets 8.33 ms p99
     - [ ] The last fixes; docs/engine.md updated
