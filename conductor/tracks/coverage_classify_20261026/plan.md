@@ -2,11 +2,11 @@
 
 Every task is test first (`workflow.md`): the trace, measurement or census test is written and seen to fail before the change. Each phase ends with an automated check: the workspace tests, `census --check` with the ratchet, and `nix flake check`. The phases run to the end without manual stops.
 
-## Phase 1: The ratchet
+## Phase 1: The ratchet [checkpoint: 8398896e]
 - [x] Task: Write the failing test: a census whose Missing count for one system rises fails `--check`. 530eef73
 - [x] Task: Add `engine/census/ratchet.tsv` and the `--ratchet` command that writes it from the current census. 530eef73
 - [x] Task: Wire the ratchet into `census --check` and the flake's census test. 530eef73
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: The ratchet' (Protocol in workflow.md) (automated)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: The ratchet' (Protocol in workflow.md) (automated)
 
 ## Phase 2: Citations and Native
 - [ ] Task: Write tests that the named equivalents (`unit_update`, `main_loop`, `weapon_ready` and the others the report lists) are cited.
