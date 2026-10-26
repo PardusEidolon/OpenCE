@@ -187,9 +187,9 @@ Found in play (2026-10-25): music and many sounds (hitting surfaces and the rest
 - [x] Task: Music 8ebd591b
     - [x] Write tests: the scripted looping sounds (the music) start, change and stop as the scripts say
     - [x] The fixes
-- [ ] Task: Every sound
-    - [ ] Write tests: every sound Blood Gulch's tags refer to (impacts by material, footsteps, vehicles, weapons, ambience, dialogue) plays when its event happens; a list of any that don't
-    - [ ] The fixes
+- [x] Task: Every sound 8497da0a
+    - [x] Write tests: every sound Blood Gulch's tags refer to (impacts by material, footsteps, vehicles, weapons, ambience, dialogue) plays when its event happens; a list of any that don't
+    - [x] The fixes
 - [ ] Task: Conductor - User Manual Verification 'Phase 15: Sound' (Protocol in workflow.md)
 
 ## Phase 16: Performance
