@@ -61,6 +61,7 @@ pub struct Variant {
 
 impl Variant {
     /// Slayer, every player for themself, as Halo's default.
+    /// (`build_game_variant_slayer`)
     pub fn slayer() -> Self {
         Self {
             game_type: GameType::Slayer,
@@ -74,7 +75,7 @@ impl Variant {
         }
     }
 
-    /// Team Slayer.
+    /// Team Slayer (`build_game_variant_team_slayer`).
     pub fn team_slayer() -> Self {
         Self {
             teams: true,
@@ -82,7 +83,7 @@ impl Variant {
         }
     }
 
-    /// Capture the Flag, as Halo's default.
+    /// Capture the Flag, as Halo's default (`build_game_variant_ctf`).
     pub fn ctf() -> Self {
         Self {
             game_type: GameType::CaptureTheFlag,
@@ -278,6 +279,7 @@ impl Rules {
 
     /// A team's score: its players' scores in Slayer, its captures in
     /// Capture the Flag. Without teams, a player's.
+    /// (`slayer_get_score`, `ctf_get_score`, `game_engine_get_team_score`)
     pub fn team_score(&self, team: u16) -> i32 {
         self.contestants
             .iter()
@@ -306,6 +308,8 @@ impl Rules {
     /// Player `victim` died where it stood, at `at`, killed by `killer`
     /// (itself for a suicide; `None` for a fall or the level): its killer
     /// scores, it drops a flag it carried and waits to respawn.
+    /// (`game_engine_player_killed`, `slayer_engine_player_killed_player`,
+    /// `ctf_engine_player_killed_player`)
     pub fn player_killed(&mut self, victim: usize, killer: Option<usize>, at: [f32; 3]) {
         let Some(dead) = self.contestants.get(victim).copied() else {
             return;
@@ -361,6 +365,7 @@ impl Rules {
     /// the absent): the respawn timers count down, players touch flags
     /// and carry them home, and dropped flags go home in time. What
     /// happened since the last step is returned.
+    /// (`slayer_engine_update`, `ctf_engine_update`)
     pub fn step(&mut self, positions: &[Option<[f32; 3]>]) -> Vec<GameEvent> {
         if !self.over {
             self.ticks += 1;
@@ -518,6 +523,7 @@ impl Game {
     /// Starts a game of `variant` on `level` with the simulation's players
     /// (alternating between teams 0 and 1 in a game with teams): its
     /// flags go to their stands and its equipment to its placements.
+    /// (`game_engine_game_starting`)
     pub fn start(simulation: &mut Simulation, level: &Level, variant: Variant) -> Self {
         let stands: Vec<(u16, [f32; 3])> = level
             .scenario
@@ -587,7 +593,7 @@ impl Game {
 
     /// One tick, after the simulation's: the kills it saw are scored, the
     /// rules step, the players whose wait is over stand at a start, and
-    /// the flags and the taken equipment are put back.
+    /// the flags and the taken equipment are put back (`game_engine_update`).
     pub fn step(&mut self, simulation: &mut Simulation, level: &Level) -> Vec<GameEvent> {
         let handles: Vec<ObjectHandle> = simulation.players().iter().map(|p| p.handle()).collect();
         let player_of = |handle: ObjectHandle| handles.iter().position(|&h| h == handle);
@@ -649,6 +655,7 @@ impl Game {
 
     /// Stands player `index` at the start for the game type and its team
     /// farthest from its living enemies.
+    /// (`game_engine_get_starting_location_rating`)
     fn respawn(&mut self, simulation: &mut Simulation, level: &Level, index: usize) {
         let Some(contestant) = self.rules.contestants().get(index).copied() else {
             return;
@@ -730,6 +737,7 @@ impl Game {
     }
 
     /// Stands one of placement `spot`'s items there, chosen by weight.
+    /// (`game_engine_update_item_spawn`)
     fn place_equipment(&mut self, simulation: &mut Simulation, level: &Level, spot: usize) {
         let Some(placement) = level
             .scenario

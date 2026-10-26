@@ -32,7 +32,7 @@ pub struct Frame {
 }
 
 impl Clock {
-    /// Adds a frame's time and says how many ticks to run.
+    /// Adds a frame's time and says how many ticks to run (`game_time_update`).
     pub fn advance(&mut self, frame_seconds: f64) -> Frame {
         let frame_seconds = if frame_seconds.is_finite() && frame_seconds > 0.0 {
             frame_seconds

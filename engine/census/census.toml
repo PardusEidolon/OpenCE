@@ -190,6 +190,18 @@ class = "replaced"
 because = "tools"
 stands_in = "dev/src/draw.rs"
 
+[[rule]]
+file = "game/player_rumble.c"
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "app/Sources/OpenCEEngineKit/PlayControls.swift"
+
+[[rule]]
+file = "main/debug_keys.c"
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/control.rs"
+
 [function.accelerate_to_position]
 class = "matched"
 owed = "a first-person weapon's sway; checked through first_person_weapon_update's trace"
@@ -373,6 +385,21 @@ owed = "the engine cites it, with no check against the original yet"
 class = "matched"
 owed = "the damage animations; reads the object, tag and map world, which the fake worlds do not hold (the animation graph)"
 
+[function.build_game_variant_ctf]
+class = "matched"
+engine = "sim/src/game.rs"
+owed = "the engine's own tests (sim/tests/game.rs); no check against the original yet"
+
+[function.build_game_variant_slayer]
+class = "matched"
+engine = "sim/src/game.rs"
+owed = "the engine's own tests (sim/tests/game.rs); no check against the original yet"
+
+[function.build_game_variant_team_slayer]
+class = "matched"
+engine = "sim/src/game.rs"
+owed = "the engine's own tests (sim/tests/game.rs); no check against the original yet"
+
 [function.camera_track_splut]
 class = "matched"
 owed = "cutscene cameras; reads the object, tag and map world, which the fake worlds do not hold (the camera track tag); campaign/tests/cutscenes.rs"
@@ -409,6 +436,37 @@ owed = "a vehicle's effects; reads the object, tag and map world, which the fake
 class = "matched"
 owed = "a vehicle's effects; reads the object, tag and map world, which the fake worlds do not hold; Phase 13's effects on the move"
 
+[function.ctf_award_capture]
+class = "matched"
+engine = "sim/src/game.rs"
+owed = "the engine's own tests (sim/tests/game.rs); no check against the original yet"
+
+[function.ctf_engine_player_killed_player]
+class = "partial"
+engine = "sim/src/game.rs"
+leaves_out = ["the oddball, king, race and juggernaut variants", "the game's announcer and score messages"]
+owed = "the engine's own tests (sim/tests/game.rs); no check against the original yet"
+
+[function.ctf_engine_update]
+class = "matched"
+engine = "sim/src/game.rs"
+owed = "the engine's own tests (sim/tests/game.rs); no check against the original yet"
+
+[function.ctf_get_score]
+class = "matched"
+engine = "sim/src/game.rs"
+owed = "the engine's own tests (sim/tests/game.rs); no check against the original yet"
+
+[function.ctf_player_drop_flag]
+class = "matched"
+engine = "sim/src/game.rs"
+owed = "the engine's own tests (sim/tests/game.rs); no check against the original yet"
+
+[function.ctf_reset_flag]
+class = "matched"
+engine = "sim/src/game.rs"
+owed = "the engine's own tests (sim/tests/game.rs); no check against the original yet"
+
 [function.data_next_index]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
@@ -436,6 +494,12 @@ owed = "the engine cites it, with no check against the original yet"
 [function.decals_update]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
+
+[function.default_starting_location_rate_function]
+class = "partial"
+engine = "sim/src/game.rs"
+leaves_out = ["the rating's weights: the engine takes the spawn farthest from its living enemies"]
+owed = "the engine's own tests (sim/tests/game.rs); no check against the original yet"
 
 [function.detail_sound_random_offset]
 class = "matched"
@@ -508,6 +572,95 @@ owed = "reads the object, tag and map world, which the fake worlds do not hold (
 class = "matched"
 owed = "the camera; reads the object, tag and map world, which the fake worlds do not hold; Phase 14's death camera"
 
+[function.game_all_quiet]
+class = "partial"
+engine = "campaign/src/game.rs"
+leaves_out = ["the game's own test: the engine's always passes"]
+owed = "the engine's own tests (campaign/src/game.rs); no check against the original yet"
+
+[function.game_engine_game_starting]
+class = "matched"
+engine = "sim/src/game.rs"
+owed = "the engine's own tests (sim/tests/game.rs); no check against the original yet"
+
+[function.game_engine_get_starting_location_rating]
+class = "partial"
+engine = "sim/src/game.rs"
+leaves_out = ["the rating's weights: the engine takes the spawn farthest from its living enemies"]
+owed = "the engine's own tests (sim/tests/game.rs); no check against the original yet"
+
+[function.game_engine_get_team_score]
+class = "matched"
+engine = "sim/src/game.rs"
+owed = "the engine's own tests (sim/tests/game.rs); no check against the original yet"
+
+[function.game_engine_player_added]
+class = "matched"
+engine = "sim/src/game.rs"
+owed = "the engine's own tests (sim/tests/game.rs); no check against the original yet"
+
+[function.game_engine_player_killed]
+class = "partial"
+engine = "sim/src/game.rs"
+leaves_out = ["the oddball, king, race and juggernaut variants", "the game's announcer and score messages"]
+owed = "the engine's own tests (sim/tests/game.rs); no check against the original yet"
+
+[function.game_engine_should_end_game]
+class = "matched"
+engine = "sim/src/game.rs"
+owed = "the engine's own tests (sim/tests/game.rs); no check against the original yet"
+
+[function.game_engine_update]
+class = "partial"
+engine = "sim/src/game.rs"
+leaves_out = ["the oddball, king, race and juggernaut variants", "the game's announcer and score messages"]
+owed = "the engine's own tests (sim/tests/game.rs); no check against the original yet"
+
+[function.game_engine_update_item_spawn]
+class = "matched"
+engine = "sim/src/game.rs"
+owed = "the engine's own tests (sim/tests/game.rs); no check against the original yet"
+
+[function.game_is_cooperative]
+class = "matched"
+engine = "campaign/src/game.rs"
+owed = "the engine's own tests (campaign/src/game.rs); no check against the original yet"
+
+[function.game_safe_to_save]
+class = "partial"
+engine = "campaign/src/game.rs"
+leaves_out = ["the game's own test: the engine's always passes"]
+owed = "the engine's own tests (campaign/src/game.rs); no check against the original yet"
+
+[function.game_safe_to_speak]
+class = "partial"
+engine = "campaign/src/game.rs"
+leaves_out = ["the game's own test: the engine's always passes"]
+owed = "the engine's own tests (campaign/src/game.rs); no check against the original yet"
+
+[function.game_state_revert]
+class = "partial"
+engine = "campaign/src/checkpoint.rs"
+leaves_out = ["the memory image: the saved game holds the inputs, replayed from the mission's start"]
+owed = "the engine's own tests (campaign/src/checkpoint.rs); no check against the original yet"
+
+[function.game_state_save]
+class = "partial"
+engine = "campaign/src/checkpoint.rs"
+leaves_out = ["the memory image: the saved game holds the inputs, replayed from the mission's start"]
+owed = "the engine's own tests (campaign/src/checkpoint.rs); no check against the original yet"
+
+[function.game_tick]
+class = "matched"
+engine = "sim/src/lib.rs"
+owed = "the engine's own tests (sim/tests); no check against the original yet"
+
+[function.game_time_update]
+class = "partial"
+engine = "sim/src/clock.rs"
+leaves_out = ["Halo's 30 Hz tick: the engine's simulation runs at 60 Hz"]
+owed = "the engine's own tests (sim/src/clock.rs); no check against the original yet"
+
 [function.get_flash_color]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
@@ -523,6 +676,11 @@ owed = "the engine cites it, with no check against the original yet"
 [function.get_ui_rgb_white]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
+
+[function.handle_one_player_input]
+class = "matched"
+engine = "sim/src/player.rs"
+owed = "the engine's own tests (sim/tests/player.rs); no check against the original yet"
 
 [function.hs_arguments_evaluate]
 class = "matched"
@@ -904,6 +1062,11 @@ owed = "the engine cites it, with no check against the original yet"
 class = "matched"
 owed = "physics; Jolt stands for the original's collision; tools/engine_movement_traces.py"
 
+[function.player_control_update]
+class = "matched"
+engine = "sim/src/player.rs"
+owed = "the engine's own tests (sim/tests/player.rs); no check against the original yet"
+
 [function.player_examine_nearby_objects]
 class = "matched"
 owed = "the action button; reads the object, tag and map world, which the fake worlds do not hold"
@@ -931,6 +1094,11 @@ owed = "the engine cites it, with no check against the original yet"
 [function.projectile_update]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
+
+[function.random_item]
+class = "matched"
+engine = "sim/src/game.rs"
+owed = "the engine's own tests (sim/tests/game.rs); no check against the original yet"
 
 [function.rasterizer_lens_flare_submit_for_cluster]
 class = "matched"
@@ -1012,6 +1180,22 @@ owed = "sound; reads the object, tag and map world, which the fake worlds do not
 [function.seed_random_direction3d]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
+
+[function.slayer_engine_player_killed_player]
+class = "partial"
+engine = "sim/src/game.rs"
+leaves_out = ["the oddball, king, race and juggernaut variants", "the game's announcer and score messages"]
+owed = "the engine's own tests (sim/tests/game.rs); no check against the original yet"
+
+[function.slayer_engine_update]
+class = "matched"
+engine = "sim/src/game.rs"
+owed = "the engine's own tests (sim/tests/game.rs); no check against the original yet"
+
+[function.slayer_get_score]
+class = "matched"
+engine = "sim/src/game.rs"
+owed = "the engine's own tests (sim/tests/game.rs); no check against the original yet"
 
 [function.sound_channel_summary_build]
 class = "matched"

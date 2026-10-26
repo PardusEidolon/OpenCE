@@ -58,6 +58,7 @@ impl Checkpoint {
     /// The saved game as a file: a header (magic, version, difficulty and
     /// three zero bytes, the path's length), the scenario's path, then the
     /// inputs as an input record.
+    /// (`game_state_save`)
     pub fn to_bytes(&self) -> Vec<u8> {
         // (a longer path is cut, at a character's end)
         let mut path = self.scenario.as_str();
@@ -83,6 +84,7 @@ impl Checkpoint {
     }
 
     /// Reads a saved game, checking every field: the file is untrusted.
+    /// (`game_state_revert`)
     pub fn from_bytes(bytes: &[u8]) -> Result<Self, CheckpointError> {
         let header = bytes
             .get(..HEADER_SIZE)

@@ -575,6 +575,7 @@ impl Player {
 
     /// One tick of `input`: the mouse's turn, then the move (a seated
     /// player only turns; its vehicle moves it).
+    /// (`player_control_update`, `handle_one_player_input`)
     pub(crate) fn step(&mut self, input: &TickInput) -> PlayerPose {
         let max = FreeCamera::MAX_PITCH.0;
         self.yaw = libm::remainderf(self.yaw + input.yaw.0, std::f32::consts::TAU);

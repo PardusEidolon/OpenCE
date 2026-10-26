@@ -379,7 +379,7 @@ impl Simulation {
     /// Runs one tick with each player's input, in the players' order (a
     /// player past the inputs stands still): their bipeds move and fire,
     /// the vehicles move, then the world's systems run. The free camera
-    /// takes the first input.
+    /// takes the first input (`game_tick`).
     pub fn step_all(&mut self, inputs: &[TickInput]) {
         // (the actors move and fire after the players, as more of them)
         let humans = self.players.len();
