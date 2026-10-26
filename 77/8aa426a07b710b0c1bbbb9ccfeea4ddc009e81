@@ -1,0 +1,1 @@
+Phase 13 checkpoint: automated checks only. Rust workspace tests + clippy pass. Swift: 210 tests, 2 golden failures (HudTests and the station frames, stale since Phase 12 and changed again by the vehicle HUDs, to re-approve).
