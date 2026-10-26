@@ -27,7 +27,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `main` | | | | 1 (1648 B) | 34 (5440 B) | 91 (8752 B) | 1 |
 | `math` | 41 (5552 B) | 6 (256 B) | 70 (4720 B) | | 25 (4016 B) | 67 (8624 B) | 0 |
 | `memory` | | 2 (336 B) | 128 (19856 B) | | 102 (15104 B) | | 0 |
-| `models` | 17 (8928 B) | 12 (4880 B) | | 1 (464 B) | 7 (1616 B) | 11 (1680 B) | 12 |
+| `models` | 17 (8928 B) | 12 (4880 B) | | 1 (464 B) | 7 (1616 B) | 11 (1680 B) | 9 |
 | `networking` | | | | | 288 (49824 B) | | 0 |
 | `objects` | 2 (0 B) | 47 (9776 B) | | 12 (96 B) | 59 (13424 B) | 227 (28288 B) | 59 |
 | `physics` | | 14 (2672 B) | | 26 (18384 B) | 60 (19248 B) | 45 (6928 B) | 40 |
@@ -43,7 +43,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `text` | | 9 (1936 B) | 63 (6864 B) | | 19 (5744 B) | 21 (2368 B) | 9 |
 | `tool` | | | | | 27 (8752 B) | | 0 |
 | `units` | 9 (1856 B) | 67 (27888 B) | | 17 (17808 B) | 9 (1616 B) | 227 (58352 B) | 84 |
-| **all** | 147 (26112 B) | 577 (187824 B) | 332 (38896 B) | 123 (72592 B) | 2770 (569976 B) | 3678 (715722 B) | 653 |
+| **all** | 147 (26112 B) | 577 (187824 B) | 332 (38896 B) | 123 (72592 B) | 2770 (569976 B) | 3678 (715722 B) | 650 |
 
 ## `ai`
 
@@ -2255,12 +2255,12 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `model_interpolate_node_orientations` | models/models.c | Matched | sim/src/animation.rs | owed: the engine's own tests (sim/tests/stock_animations.rs); no check against the original yet |
 | `model_get_node_orientations` | models/models.c | Ported | sim/src/animation.rs:683 | `tools/engine_animation_reference.py` |
 | `model_get_node_matrices` | models/models.c | Matched | sim/src/animation.rs | owed: the engine's own tests (sim/tests/stock_animations.rs); no check against the original yet |
-| `model_node_matrices_from_orientations` | models/models.c | Matched | sim/src/animation.rs | owed: the engine's own tests (sim/tests/stock_animations.rs); no check against the original yet |
-| `model_find_marker` | models/models.c | Matched | sim/src/seats.rs | owed: the engine's own tests (sim/src/seats.rs); no check against the original yet |
+| `model_node_matrices_from_orientations` | models/models.c | Matched | sim/src/seats/model_reference.rs:2 | sim/src/seats/model_reference.rs (trace); the nodes' matrices match the game's bit for bit over six trees at sixty poses, with bad links and a loop; a node the walk never reaches keeps what its matrix had in the game and is the identity in the engine |
+| `model_find_marker` | models/models.c | Matched | sim/src/seats/model_reference.rs:3 | sim/src/seats/model_reference.rs (trace); the engine finds a marker by its name in any case, searching in turn where the game halves the sorted list: the same marker for the tools' sorted, unique names (traced through model_get_marker_by_name); a list out of order could find differently |
 | `model_get_default_inverse_matrix` | models/models.c | Replaced | ffi/src/render_model.rs | the enhanced lighting and Metal renderer |
 | `model_geometry_part_build_tangent_matrices` | models/models.c | Replaced | import/src/object.rs | maps imported to a typed format |
 | `render_model` | models/models.c | Matched | ffi/src/render_model.rs:67 | owed: the engine cites it, with no check against the original yet |
-| `model_get_marker_by_name` | models/models.c | Partial | sim/src/seats.rs | leaves out the marker's region and permutation: every instance of the marker is taken, whichever permutation is drawn; owed: the engine's own tests (sim/src/seats.rs); no check against the original yet |
+| `model_get_marker_by_name` | models/models.c | Partial | sim/src/seats/model_reference.rs:3 | sim/src/seats/model_reference.rs (trace); leaves out the marker's region and permutation: every instance of the marker is taken, whichever permutation is drawn, the mirrored flag, which turns the marker's left the other way, the most markers the caller has room for: every instance is taken; asked without permutations and unmirrored, the markers' matrices match the game's bit for bit over 960 lookups, markers on nodes the model does not have skipped as the game skips them |
 | `model_build_tangent_matrices` | models/models.c | Replaced | import/src/object.rs | maps imported to a typed format |
 
 11 Missing (9 reached from `main_loop`), by file:

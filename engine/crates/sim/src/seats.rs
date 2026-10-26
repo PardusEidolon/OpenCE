@@ -1353,6 +1353,9 @@ pub fn marker_matrix(model: &Model, matrices: &[NodeMatrix], name: &str) -> Opti
 }
 
 #[cfg(test)]
+mod model_reference;
+
+#[cfg(test)]
 mod tests {
     use super::*;
 

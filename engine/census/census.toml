@@ -5332,7 +5332,9 @@ stands_in = "import/src/object.rs"
 [function.model_find_marker]
 class = "matched"
 engine = "sim/src/seats.rs"
-owed = "the engine's own tests (sim/src/seats.rs); no check against the original yet"
+check = "sim/src/seats/model_reference.rs"
+against = "trace"
+note = "the engine finds a marker by its name in any case, searching in turn where the game halves the sorted list: the same marker for the tools' sorted, unique names (traced through model_get_marker_by_name); a list out of order could find differently"
 
 [function.model_geometry_part_build_tangent_matrices]
 class = "replaced"
@@ -5347,8 +5349,10 @@ stands_in = "ffi/src/render_model.rs"
 [function.model_get_marker_by_name]
 class = "partial"
 engine = "sim/src/seats.rs"
-leaves_out = ["the marker's region and permutation: every instance of the marker is taken, whichever permutation is drawn"]
-owed = "the engine's own tests (sim/src/seats.rs); no check against the original yet"
+leaves_out = ["the marker's region and permutation: every instance of the marker is taken, whichever permutation is drawn", "the mirrored flag, which turns the marker's left the other way", "the most markers the caller has room for: every instance is taken"]
+check = "sim/src/seats/model_reference.rs"
+against = "trace"
+note = "asked without permutations and unmirrored, the markers' matrices match the game's bit for bit over 960 lookups, markers on nodes the model does not have skipped as the game skips them"
 
 [function.model_get_node_matrices]
 class = "matched"
@@ -5363,7 +5367,9 @@ owed = "the engine's own tests (sim/tests/stock_animations.rs); no check against
 [function.model_node_matrices_from_orientations]
 class = "matched"
 engine = "sim/src/animation.rs"
-owed = "the engine's own tests (sim/tests/stock_animations.rs); no check against the original yet"
+check = "sim/src/seats/model_reference.rs"
+against = "trace"
+note = "the nodes' matrices match the game's bit for bit over six trees at sixty poses, with bad links and a loop; a node the walk never reaches keeps what its matrix had in the game and is the identity in the engine"
 
 [function.motion_sensor_blip_set_type_and_size]
 class = "matched"
