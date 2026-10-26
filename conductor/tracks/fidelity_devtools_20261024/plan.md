@@ -184,9 +184,9 @@ Found in play (2026-10-25): when a body dies the ragdoll stretches and splits, t
 
 ## Phase 15: Sound
 Found in play (2026-10-25): music and many sounds (hitting surfaces and the rest) are still missing.
-- [ ] Task: Music
-    - [ ] Write tests: the scripted looping sounds (the music) start, change and stop as the scripts say
-    - [ ] The fixes
+- [x] Task: Music 8ebd591b
+    - [x] Write tests: the scripted looping sounds (the music) start, change and stop as the scripts say
+    - [x] The fixes
 - [ ] Task: Every sound
     - [ ] Write tests: every sound Blood Gulch's tags refer to (impacts by material, footsteps, vehicles, weapons, ambience, dialogue) plays when its event happens; a list of any that don't
     - [ ] The fixes
