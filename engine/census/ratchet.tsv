@@ -6,7 +6,7 @@ cutscene	48	2	10
 devices	42	0	17
 effects	87	0	85
 game	609	16	39
-hs	578	3	50
+hs	576	8	37
 input	1	0	0
 interface	452	19	115
 items	102	1	24
@@ -20,7 +20,7 @@ render	0	0	2
 saved games	104	2	2
 scenario	21	0	13
 shell	2	0	0
-sound	46	2	65
+sound	44	2	60
 structures	26	0	1
 text	21	0	9
 units	227	17	84

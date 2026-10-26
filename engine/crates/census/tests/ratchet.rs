@@ -236,3 +236,21 @@ fn partial_that_rises_without_missing_falling_is_a_rise() {
     let (rose, _) = ratchet::compare(&was, &now);
     assert!(rose.iter().any(|r| r.contains("Partial rose")), "{rose:?}");
 }
+
+#[test]
+fn an_owed_function_its_check_finds_partial_is_no_rise() -> Result<(), Failure> {
+    let header = "system\tmissing\tpartial\towed\n";
+    let was = ratchet::read_ratchet(&format!("{header}units\t3\t0\t3\n"))?;
+    // (two owed functions given their checks, which find them short)
+    let checked = ratchet::read_ratchet(&format!("{header}units\t3\t2\t1\n"))?;
+    let (rose, _) = ratchet::compare(&was, &checked);
+    assert!(rose.is_empty(), "{rose:?}");
+    // (two found short with no check given them)
+    let unchecked = ratchet::read_ratchet(&format!("{header}units\t3\t2\t3\n"))?;
+    let (rose, _) = ratchet::compare(&was, &unchecked);
+    assert!(
+        rose.iter().any(|r| r.contains("Partial rose from 0 to 2")),
+        "{rose:?}"
+    );
+    Ok(())
+}

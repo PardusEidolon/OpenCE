@@ -4236,8 +4236,11 @@ engine = "script/src/lib.rs"
 owed = "the engine's runtime (script/src/lib.rs); no check against the original yet"
 
 [function.hs_cast]
-class = "matched"
-owed = "the engine cites it, with no check against the original yet"
+class = "partial"
+engine = "script/src/value.rs"
+leaves_out = ["typecasting_procedures as the decompilation miscounts it: the ai, enum and object rows each a place earlier than the last"]
+check = "script/tests/script_cast_reference.rs"
+against = "trace"
 
 [function.hs_compile]
 class = "partial"
@@ -4254,12 +4257,15 @@ owed = "the engine's own version; no check against the original yet"
 [function.hs_data_to_void]
 class = "matched"
 engine = "script/src/value.rs"
-owed = "one of hs_cast's conversions, in script/src/value.rs's cast; no check against the original yet"
+check = "script/tests/script_cast_reference.rs"
+against = "trace"
 
 [function.hs_enum_to_real]
-class = "matched"
+class = "partial"
 engine = "script/src/value.rs"
-owed = "one of hs_cast's conversions, in script/src/value.rs's cast; no check against the original yet"
+leaves_out = ["the one hs_enum_to_real adds to the index", "the enum rows of the table, one place early"]
+check = "script/tests/script_cast_reference.rs"
+against = "trace"
 
 [function.hs_evaluate]
 class = "matched"
@@ -4343,19 +4349,23 @@ stands_in = "dev/src/logbook.rs"
 note = "a debug check, statistic or editor hook of the original; the dev tools stand in"
 
 [function.hs_long_to_boolean]
-class = "matched"
+class = "partial"
 engine = "script/src/value.rs"
-owed = "one of hs_cast's conversions, in script/src/value.rs's cast; no check against the original yet"
+leaves_out = ["the decompilation's n==0, which makes zero true; the engine takes zero as false until the user's maps settle it"]
+check = "script/tests/script_cast_reference.rs"
+against = "trace"
 
 [function.hs_long_to_real]
 class = "matched"
 engine = "script/src/value.rs"
-owed = "one of hs_cast's conversions, in script/src/value.rs's cast; no check against the original yet"
+check = "script/tests/script_cast_reference.rs"
+against = "trace"
 
 [function.hs_long_to_short]
 class = "matched"
 engine = "script/src/value.rs"
-owed = "one of hs_cast's conversions, in script/src/value.rs's cast; no check against the original yet"
+check = "script/tests/script_cast_reference.rs"
+against = "trace"
 
 [function.hs_not]
 class = "matched"
@@ -4400,7 +4410,8 @@ owed = "the script function's wrapper, which the campaign wires; no check agains
 [function.hs_object_name_to_object_list]
 class = "matched"
 engine = "script/src/value.rs"
-owed = "one of hs_cast's conversions, in script/src/value.rs's cast; no check against the original yet"
+check = "script/tests/script_cast_reference.rs"
+against = "trace"
 
 [function.hs_object_set_facing]
 class = "matched"
@@ -4415,7 +4426,8 @@ owed = "the script function's wrapper, which the campaign wires; no check agains
 [function.hs_object_to_object_list]
 class = "matched"
 engine = "script/src/value.rs"
-owed = "one of hs_cast's conversions, in script/src/value.rs's cast; no check against the original yet"
+check = "script/tests/script_cast_reference.rs"
+against = "trace"
 
 [function.hs_objects_can_see_flag]
 class = "matched"
@@ -4445,12 +4457,14 @@ owed = "the script function's wrapper, which the campaign wires; no check agains
 [function.hs_real_to_long]
 class = "matched"
 engine = "script/src/value.rs"
-owed = "one of hs_cast's conversions, in script/src/value.rs's cast; no check against the original yet"
+check = "script/tests/script_cast_reference.rs"
+against = "trace"
 
 [function.hs_real_to_short]
 class = "matched"
 engine = "script/src/value.rs"
-owed = "one of hs_cast's conversions, in script/src/value.rs's cast; no check against the original yet"
+check = "script/tests/script_cast_reference.rs"
+against = "trace"
 
 [function.hs_recompile]
 class = "replaced"
@@ -4488,19 +4502,24 @@ stands_in = "dev/src/logbook.rs"
 note = "a debug check, statistic or editor hook of the original; the dev tools stand in"
 
 [function.hs_short_to_boolean]
-class = "matched"
+class = "partial"
 engine = "script/src/value.rs"
-owed = "one of hs_cast's conversions, in script/src/value.rs's cast; no check against the original yet"
+leaves_out = ["the decompilation's n==0, which makes zero true; the engine takes zero as false until the user's maps settle it"]
+check = "script/tests/script_cast_reference.rs"
+against = "trace"
 
 [function.hs_short_to_real]
 class = "matched"
 engine = "script/src/value.rs"
-owed = "one of hs_cast's conversions, in script/src/value.rs's cast; no check against the original yet"
+check = "script/tests/script_cast_reference.rs"
+against = "trace"
 
 [function.hs_string_to_boolean]
-class = "matched"
+class = "partial"
 engine = "script/src/value.rs"
-owed = "one of hs_cast's conversions, in script/src/value.rs's cast; no check against the original yet"
+leaves_out = ["the decompilation's n==0, which makes zero true; the engine takes zero as false until the user's maps settle it"]
+check = "script/tests/script_cast_reference.rs"
+against = "trace"
 
 [function.hs_syntax_data_byte_swap]
 class = "replaced"
@@ -7305,25 +7324,32 @@ owed = "the mixer's channels; reads the object, tag and map world, which the fak
 [function.sound_class_datum_get]
 class = "matched"
 engine = "audio/src/classes.rs"
-owed = "the engine's own tests (audio/src/classes.rs); no check against the original yet"
+check = "audio/tests/sound_class_reference.rs"
+against = "trace"
 
 [function.sound_class_get]
 class = "matched"
 engine = "audio/src/classes.rs"
-owed = "the engine's own tests (audio/src/classes.rs); no check against the original yet"
+check = "audio/tests/sound_class_reference.rs"
+against = "trace"
 
 [function.sound_class_get_gain]
 class = "matched"
 engine = "audio/src/classes.rs"
-owed = "the engine's own tests (audio/src/classes.rs); no check against the original yet"
+check = "audio/tests/sound_class_reference.rs"
+against = "trace"
 
 [function.sound_class_set_gain]
 class = "matched"
-owed = "the sound classes; reads the object, tag and map world, which the fake worlds do not hold (the sound manager); Phase 15"
+engine = "audio/src/classes.rs"
+check = "audio/tests/sound_class_reference.rs"
+against = "trace"
 
 [function.sound_classes_update]
 class = "matched"
-owed = "the sound classes; reads the object, tag and map world, which the fake worlds do not hold (the sound manager); Phase 15"
+engine = "audio/src/classes.rs"
+check = "audio/tests/sound_class_reference.rs"
+against = "trace"
 
 [function.sound_definition_get_maximum_distance]
 class = "matched"
