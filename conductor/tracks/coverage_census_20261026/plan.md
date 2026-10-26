@@ -71,13 +71,13 @@ entries list what they leave out.
   - [x] Each compared with the importer, and the ones that differ recorded
 - [x] Task: Conductor - User Manual Verification 'Phase 4: Tag fields and load-time fix-ups' (Protocol in workflow.md) (automated) 023a5289
 
-## Phase 5: Scripts and sounds
+## Phase 5: Scripts and sounds [checkpoint: 7473b424]
 - [x] Task: Script functions and globals c43541d9
   - [x] Every one in the original's tables, marked wired or not, with the maps' calls counted where the user's maps are present (skipped without them)
 - [x] Task: Sounds af93eaca
   - [x] Every sound tag, and whether play asks for it, measured on devgulch and the campaign where the maps are present
   - [x] The per-object sound limit recorded with what it needs (sound requests that know their object)
-- [ ] Task: Conductor - User Manual Verification 'Phase 5: Scripts and sounds' (Protocol in workflow.md) (automated; deferred to the end)
+- [x] Task: Conductor - User Manual Verification 'Phase 5: Scripts and sounds' (Protocol in workflow.md) (automated) 7473b424
 
 ## Phase 6: The report
 - [x] Task: The numbers 41d6f7c7
