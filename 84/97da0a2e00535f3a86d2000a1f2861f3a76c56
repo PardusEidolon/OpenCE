@@ -1,0 +1,1 @@
+Every sound: sweep of Blood Gulch's referred-to sounds (77 of 321 asked for); throw, jump/land, crouched footsteps, melee material and damage-effect sounds, effect scale on sound parts. Workspace tests and clippy pass but for the pre-existing net UDP flake; two golden frames stale at HEAD.
