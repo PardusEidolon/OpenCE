@@ -1,0 +1,4 @@
+Task: The world (scenario, structures, bitmaps, cache, tag_files)
+Class the world: wind, BSP switches and trigger volumes Matched, loading Replaced by the importer
+
+The wind (ffi/src/particles/wind.rs), the BSP switch, trigger volume tests and sound environments are Matched, owing a check. Cache files, tag groups, bitmap postprocessing and leaf maps are Replaced by the importer; the bitmap tools (libtiff, targa, s3tc, extract) by the importer as tools; decals, detail objects, lens flares, fog and bitmap drawing by the renderer. Scenario locations, PVS tests and cluster partitions stay Missing, noted for the report. census --check passes.
