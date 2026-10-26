@@ -226,6 +226,416 @@ class = "replaced"
 because = "tools"
 stands_in = "import/src/lib.rs"
 
+[function.AllSame]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.ClipExtrema]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.ColorToFcolor]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.ColorToRGB]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.DECLARE1]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.DECLARE2]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.DECLARE3]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.DecodeBlockAlpha3]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.DecodeBlockAlpha4]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.DecodeBlockRGB]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.EncodeBlockAlpha3]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.EncodeBlockAlpha4]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.EncodeBlockRGB]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.EncodeBlockRGBColorKey]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.FcolorToColor]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.IDirect3DIndexBuffer8_BlockUntilNotBusy]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.IDirect3DIndexBuffer8_IsBusy]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.IDirect3DVertexBuffer8_BlockUntilNotBusy]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.IDirect3DVertexBuffer8_IsBusy]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.IDirect3DVertexBuffer8_Register]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.Quantize]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.Square3x3]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.TIFFCheckRead]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.TIFFCurrentDirectory]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.TIFFCurrentRow]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.TIFFCurrentStrip]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.TIFFCurrentTile]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.TIFFError]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.TIFFFdOpen]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.TIFFFileName]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.TIFFFileno]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.TIFFFillStrip]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.TIFFFillTile]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.TIFFGetMode]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.TIFFInitOrder]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.TIFFInitThunderScan]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.TIFFIsTiled]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.TIFFLinkDirectory]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.TIFFNoDecode]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.TIFFNoEncode]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.TIFFNoRowDecode]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.TIFFNoRowEncode]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.TIFFNoStripDecode]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.TIFFNoStripEncode]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.TIFFNoTileDecode]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.TIFFNoTileEncode]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.TIFFOpen]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.TIFFReadBufferSetup]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.TIFFReadEncodedStrip]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.TIFFReadEncodedTile]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.TIFFReadRawStrip]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.TIFFReadRawStrip1]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.TIFFReadRawTile]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.TIFFReadRawTile1]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.TIFFReadScanline]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.TIFFReadTile]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.TIFFScanlineSize]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.TIFFSeek]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.TIFFSetCompressionScheme]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.TIFFSetErrorHandler]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.TIFFSetWarningHandler]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.TIFFSetupShortLong]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.TIFFSetupShortPair]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.TIFFStartStrip]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.TIFFStartTile]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.TIFFWarning]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.TIFFWriteData]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.TIFFWriteDirectory]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.TIFFWriteFloatArray]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.TIFFWriteJPEGCTables]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.TIFFWriteJPEGQTables]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.TIFFWriteLongArray]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.TIFFWriteNormalTag]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.TIFFWritePerSampleShorts]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.TIFFWriteRational]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.TIFFWriteRationalArray]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.TIFFWriteShortArray]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.TIFFWriteShortTable]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.TIFFWriteString]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.TIFFWriteTransferFunction]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.ThunderDecode]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.ThunderDecodeRow]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
 [function.accelerate_to_position]
 class = "matched"
 owed = "a first-person weapon's sway; checked through first_person_weapon_update's trace"
@@ -391,6 +801,11 @@ owed = "the engine's own tests (sim/src/damage.rs); no check against the origina
 class = "matched"
 owed = "damage; reads the object, tag and map world, which the fake worlds do not hold; Phase 12's explosions"
 
+[function.argb_color_to_real_argb_color]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
 [function.begin_music_fade_out]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
@@ -457,9 +872,379 @@ owed = "the engine's own tests (physics/src/movement.rs); no check against the o
 class = "matched"
 owed = "a biped's turning; reads the object, tag and map world, which the fake worlds do not hold; Phase 11's divergences"
 
+[function.bitmap_2d_address]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/LoadedLevel.swift"
+
+[function.bitmap_2d_alpha_bleed]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.bitmap_2d_compress_to_mipmap]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.bitmap_2d_height_map]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.bitmap_2d_new]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/LoadedLevel.swift"
+
+[function.bitmap_2d_sharpen]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.bitmap_2d_shrink]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.bitmap_2d_smooth]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.bitmap_2d_uncompress_from_mipmap]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.bitmap_2d_vector_map]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.bitmap_3d_alpha_bleed]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.bitmap_3d_compress_to_mipmap]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.bitmap_3d_height_map]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.bitmap_3d_new]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/LoadedLevel.swift"
+
+[function.bitmap_3d_sharpen]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.bitmap_3d_shrink]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.bitmap_3d_slice_extract]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/LoadedLevel.swift"
+
+[function.bitmap_3d_slice_insert]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/LoadedLevel.swift"
+
+[function.bitmap_3d_smooth]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.bitmap_3d_uncompress_from_mipmap]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.bitmap_3d_vector_map]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.bitmap_alpha_bleed]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.bitmap_alpha_to_rgb]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.bitmap_byte_swap_pixels]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/LoadedLevel.swift"
+
+[function.bitmap_changed]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/LoadedLevel.swift"
+
+[function.bitmap_clone]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.bitmap_cm_alpha_bleed]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.bitmap_cm_compress_to_mipmap]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.bitmap_cm_height_map]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.bitmap_cm_sharpen]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.bitmap_cm_shrink]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.bitmap_cm_smooth]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.bitmap_cm_uncompress_from_mipmap]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.bitmap_cm_vector_map]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.bitmap_compress_to_mipmap]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.bitmap_copy]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/UiPass.swift"
+
+[function.bitmap_cube_map_face_extract]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/LoadedLevel.swift"
+
+[function.bitmap_cube_map_face_insert]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/LoadedLevel.swift"
+
+[function.bitmap_cube_map_new]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/LoadedLevel.swift"
+
+[function.bitmap_delete]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/LoadedLevel.swift"
+
+[function.bitmap_draw_line]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/UiPass.swift"
+
+[function.bitmap_fade]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.bitmap_fill]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.bitmap_fill_rectangle]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/UiPass.swift"
+
+[function.bitmap_format_get_bits_per_pixel]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/LoadedLevel.swift"
+
+[function.bitmap_format_get_string]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/LoadedLevel.swift"
+
+[function.bitmap_format_type_valid_depth]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/LoadedLevel.swift"
+
+[function.bitmap_format_type_valid_height]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/LoadedLevel.swift"
+
+[function.bitmap_format_type_valid_width]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/LoadedLevel.swift"
+
+[function.bitmap_frame_rectangle]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/UiPass.swift"
+
+[function.bitmap_get_max_mipmap_count]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/LoadedLevel.swift"
+
+[function.bitmap_get_pixel_count]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/LoadedLevel.swift"
+
+[function.bitmap_get_pixel_data_size]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/LoadedLevel.swift"
+
+[function.bitmap_group_add_bitmap]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
 [function.bitmap_group_get_bitmap_from_sequence]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
+
+[function.bitmap_group_try_and_get_bitmap]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.bitmap_height_map]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.bitmap_initialize_line]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/UiPass.swift"
+
+[function.bitmap_mipmap_get_depth]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/LoadedLevel.swift"
+
+[function.bitmap_mipmap_get_height]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/LoadedLevel.swift"
+
+[function.bitmap_mipmap_get_pixel_count]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/LoadedLevel.swift"
+
+[function.bitmap_mipmap_get_width]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/LoadedLevel.swift"
+
+[function.bitmap_quantitize]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.bitmap_quantitize_read_row]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.bitmap_rebuild]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/LoadedLevel.swift"
+
+[function.bitmap_sharpen]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.bitmap_shrink]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.bitmap_smooth]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.bitmap_step_line]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/UiPass.swift"
+
+[function.bitmap_tile_and_bevel_rectangle]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/UiPass.swift"
+
+[function.bitmap_uncompress_from_mipmap]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.bitmap_vector_map]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.bitmap_verify]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/LoadedLevel.swift"
+
+[function.bitmaps_extract]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.bitmaps_extract_from_plate]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
 
 [function.blip_size_get]
 class = "matched"
@@ -497,6 +1282,291 @@ owed = "the engine's own tests (sim/tests/game.rs); no check against the origina
 class = "matched"
 engine = "sim/src/game.rs"
 owed = "the engine's own tests (sim/tests/game.rs); no check against the original yet"
+
+[function.build_horiz_mode_tables]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.build_null_mode_tables]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.build_structure_lens_flares]
+class = "replaced"
+because = "renderer"
+stands_in = "ffi/src/lights.rs"
+
+[function.build_uncomp_mode_tables]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.cache_copy_begin]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.cache_copy_buffer_size]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.cache_copy_compressed_file_complete]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.cache_copy_end]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.cache_copy_get_flags]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.cache_copy_get_status]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.cache_copy_print_timing]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.cache_copy_queue_end]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.cache_copy_set_priority]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.cache_empty_tag_instance]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.cache_file_block_until_not_busy]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.cache_file_blocking_io_completion_routine]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.cache_file_close]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.cache_file_get_map_path]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.cache_file_header_verify]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.cache_file_open]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.cache_file_read]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.cache_file_read_header_from_dvd]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.cache_file_windows_thread_wake]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.cache_files_build_region]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.cache_files_disable_writes]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.cache_files_enable_writes]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.cache_files_get_checksum]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.cache_files_give_time_to_precache]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.cache_files_map_directory]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.cache_files_map_plays_multiplayer]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.cache_files_multiplayer_region]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.cache_files_precache_in_progress]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.cache_files_precache_is_copying_map]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.cache_files_precache_map_begin]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.cache_files_precache_map_end]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.cache_files_precache_map_loaded]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.cache_files_precache_map_queue_end]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.cache_files_precache_map_status]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.cache_files_precache_set_priority]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.cache_files_set_tag_instances]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.cache_files_show_multiplayer_unavailable]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.cache_get_tag_instance]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.cache_request_get]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.cache_request_next_free_index]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.cache_requests_flush]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.cached_map_block_on_async_request]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.cached_map_file_get]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.cached_map_file_get_handle]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.cached_map_file_get_path]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.cached_map_file_get_size]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.cached_map_file_invalidate]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.cached_map_file_read_header]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.cached_map_file_set_modification_date]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.cached_map_files_find_free_map]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.cached_map_files_find_map]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.cached_map_issue_async_read]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.cached_map_issue_async_request]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
 
 [function.camera_track_splut]
 class = "matched"
@@ -552,6 +1622,11 @@ class = "partial"
 engine = "campaign/src/presented.rs"
 leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
 owed = "the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet"
+
+[function.cluster_index_from_point]
+class = "replaced"
+because = "renderer"
+stands_in = "ffi/src/lights.rs"
 
 [function.collision_debug_render]
 class = "replaced"
@@ -641,6 +1716,11 @@ class = "partial"
 engine = "physics/src/lib.rs"
 leaves_out = ["the original's collision BSP walk: Jolt answers the query on a mesh made from the collision BSP, so what is hit at an edge, and in what order, can differ"]
 owed = "the engine's own tests (physics/tests/world.rs); no check against the original yet"
+
+[function.compare_temp_markers]
+class = "replaced"
+because = "renderer"
+stands_in = "ffi/src/lights.rs"
 
 [function.compress_ima_adpcm_audio_data]
 class = "replaced"
@@ -838,11 +1918,31 @@ class = "matched"
 engine = "audio/src/decode.rs"
 owed = "the engine's own tests (audio/src/decode.rs); no check against the original yet"
 
+[function.defaultHandler]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.default_material_definition_get]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
 [function.default_starting_location_rate_function]
 class = "partial"
 engine = "sim/src/game.rs"
 leaves_out = ["the rating's weights: the engine takes the spawn farthest from its living enemies"]
 owed = "the engine's own tests (sim/tests/game.rs); no check against the original yet"
+
+[function.delete_bitmap]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.detail_object_offset]
+class = "replaced"
+because = "renderer"
+stands_in = "ffi/src/render_level.rs"
 
 [function.detail_sound_random_offset]
 class = "matched"
@@ -939,6 +2039,11 @@ owed = "the engine's own tests (campaign/src/presented.rs); no check against the
 class = "matched"
 engine = "ui/src/lib.rs"
 owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+
+[function.dot_product4d]
+class = "replaced"
+because = "renderer"
+stands_in = "ffi/src/render_level.rs"
 
 [function.draw_bitmap_in_rect]
 class = "matched"
@@ -1246,6 +2351,111 @@ class = "matched"
 engine = "ui/src/lib.rs"
 owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
 
+[function.extract_3d_textures]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.extract_add_bitmap]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.extract_bitmap]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.extract_build_debug_plate]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.extract_build_texture_pages_by_sequence]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.extract_cube_maps]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.extract_find_bitmap_bounds]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.extract_find_sequence_bounds]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.extract_get_bitmap_format]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.extract_initialize]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.extract_mipmaps_to_bitmap]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.extract_pixels_from_mipmap]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.extract_pixels_to_mipmap]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.extract_plateless_cube_map]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.extract_sequence]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.extract_sequences]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.extract_sprites]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.extract_warn_about_horizontal_border]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.extract_without_sequences]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.findScheme]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.find_like_crossing]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/level.rs"
+
 [function.firing_position_store_evaluation_debug]
 class = "replaced"
 because = "tools"
@@ -1408,6 +2618,11 @@ engine = "campaign/src/presented.rs"
 leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
 owed = "the engine's own tests (campaign/src/lib.rs); no check against the original yet"
 
+[function.getMode]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
 [function.get_crosshair_state]
 class = "matched"
 engine = "ffi/src/hud.rs"
@@ -1433,6 +2648,41 @@ owed = "the engine's own tests (ui/tests/draw.rs); no check against the original
 [function.get_ui_rgb_white]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
+
+[function.global_bsp3d_get]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.global_collision_bsp_get]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.global_scenario_get]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.global_scenario_try_and_get]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.global_structure_bsp_get]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.global_structure_bsp_index_get]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.global_structure_bsp_tag_index_get]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
 
 [function.handle_one_player_input]
 class = "matched"
@@ -1683,6 +2933,11 @@ class = "matched"
 engine = "script/src/lib.rs"
 owed = "the engine's runtime (script/src/lib.rs); no check against the original yet"
 
+[function.hsv_color_to_rgb_color]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
 [function.hud_calculate_bitmap_bounds]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
@@ -1787,6 +3042,11 @@ class = "replaced"
 because = "keyboard_mouse"
 stands_in = "app/Sources/OpenCEEngineKit/PlayControls.swift"
 
+[function.intersect_planes3d]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/level.rs"
+
 [function.keyboard_controls_update]
 class = "replaced"
 because = "keyboard_mouse"
@@ -1796,6 +3056,81 @@ stands_in = "app/Sources/OpenCEEngineKit/PlayControls.swift"
 class = "replaced"
 because = "keyboard_mouse"
 stands_in = "app/Sources/OpenCEEngineKit/PlayControls.swift"
+
+[function.leaf_face_get_vertex3d]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/level.rs"
+
+[function.leaf_map_build_leaf_face_for_leaf_on_node]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/level.rs"
+
+[function.leaf_map_build_leaf_faces]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/level.rs"
+
+[function.leaf_map_build_leaf_faces_for_leaf]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/level.rs"
+
+[function.leaf_map_build_portal_from_leaves]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/level.rs"
+
+[function.leaf_map_build_portals]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/level.rs"
+
+[function.leaf_map_build_portals_from_leaf]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/level.rs"
+
+[function.leaf_map_close_portal]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/level.rs"
+
+[function.leaf_map_closure]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/level.rs"
+
+[function.leaf_map_delete]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/level.rs"
+
+[function.leaf_map_family_mark]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/level.rs"
+
+[function.leaf_map_get_leaf_bounds]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/level.rs"
+
+[function.leaf_map_initialize_from_bsp]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/level.rs"
+
+[function.leaf_map_leaf_is_closed]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/level.rs"
+
+[function.leaf_map_leaf_spans_polygon]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/level.rs"
 
 [function.limit_pitch]
 class = "matched"
@@ -1843,6 +3178,11 @@ owed = "the engine cites it, with no check against the original yet"
 [function.main_menu_initialize]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
+
+[function.map_leaf_find_face_on_node]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/level.rs"
 
 [function.match_game_type]
 class = "matched"
@@ -1924,6 +3264,26 @@ owed = "the motion sensor; reads the object, tag and map world, which the fake w
 class = "matched"
 engine = "ffi/src/particles.rs"
 owed = "the engine's own tests (ffi/src/particles.rs); no check against the original yet"
+
+[function.node_stack_pop]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/level.rs"
+
+[function.node_stack_push]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/level.rs"
+
+[function.node_stack_read]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/level.rs"
+
+[function.normalize_three_dee]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/level.rs"
 
 [function.object_add_scenario_permutation]
 class = "matched"
@@ -2203,6 +3563,11 @@ owed = "the engine cites it, with no check against the original yet"
 class = "matched"
 owed = "checked through the animation trace's overlays"
 
+[function.palette_find_closest_match]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/LoadedLevel.swift"
+
 [function.particle_delete]
 class = "matched"
 engine = "ffi/src/particles.rs"
@@ -2340,6 +3705,16 @@ owed = "the engine cites it, with no check against the original yet"
 class = "matched"
 engine = "ffi/src/particles.rs"
 owed = "the engine's own tests (ffi/src/particles.rs); no check against the original yet"
+
+[function.physical_memory_free]
+class = "replaced"
+because = "xbox"
+stands_in = "import/src/lib.rs"
+
+[function.physical_memory_get_tag_cache_base_address]
+class = "replaced"
+because = "xbox"
+stands_in = "import/src/lib.rs"
 
 [function.physics_compute_biped_collision]
 class = "matched"
@@ -2489,6 +3864,26 @@ class = "matched"
 engine = "ui/src/lib.rs"
 owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
 
+[function.postprocess_bitmap]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.postprocess_bitmap_group]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.predicted_resources_precache]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.predicted_resources_sound_precache]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
 [function.process_looping_sounds]
 class = "matched"
 owed = "sound; reads the object, tag and map world, which the fake worlds do not hold; Phase 15"
@@ -2602,6 +3997,11 @@ engine = "ffi/src/settings.rs"
 leaves_out = ["the original's preferences file: the volumes are kept with the app's settings"]
 owed = "the engine's own tests (ffi/src/settings.rs); no check against the original yet"
 
+[function.real_hsv_color_to_real_rgb_color]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
 [function.real_local_random]
 class = "matched"
 engine = "sim/src/effects.rs"
@@ -2610,6 +4010,16 @@ owed = "the engine's own tests (sim/src/effects.rs); no check against the origin
 [function.real_random_range]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
+
+[function.real_rgb_color_brightness]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.real_rgb_color_to_real_hsv_color]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
 
 [function.refresh_listener]
 class = "matched"
@@ -2684,6 +4094,11 @@ stands_in = "dev/src/draw.rs"
 class = "replaced"
 because = "tools"
 stands_in = "dev/src/draw.rs"
+
+[function.render_debug_leaf_faces]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/level.rs"
 
 [function.render_debug_looping_sound]
 class = "replaced"
@@ -2771,13 +4186,133 @@ class = "matched"
 engine = "ffi/src/hud.rs"
 owed = "the engine's own tests (ffi/tests/hud.rs); no check against the original yet"
 
+[function.rgb_color_to_hsv_color]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.rgb_color_to_real_rgb_color]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.rgb_colors_interpolate]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.row_dither]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.scenario_fog_at_point]
+class = "replaced"
+because = "renderer"
+stands_in = "ffi/src/camera.rs"
+
+[function.scenario_fog_region_get_fog_index]
+class = "replaced"
+because = "renderer"
+stands_in = "ffi/src/camera.rs"
+
+[function.scenario_get_current]
+class = "matched"
+engine = "ffi/src/particles/wind.rs"
+owed = "the engine's own tests (ffi/src/particles/wind.rs); no check against the original yet"
+
+[function.scenario_get_current_from_weather_palette]
+class = "matched"
+engine = "ffi/src/particles/wind.rs"
+owed = "the engine's own tests (ffi/src/particles/wind.rs); no check against the original yet"
+
+[function.scenario_get_fog_region_index]
+class = "replaced"
+because = "renderer"
+stands_in = "ffi/src/camera.rs"
+
+[function.scenario_get_game_globals]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.scenario_get_sound_environment]
+class = "matched"
+engine = "ffi/src/sound_world.rs"
+owed = "the engine's own tests (ffi/tests/sounds.rs); no check against the original yet"
+
+[function.scenario_get_structure_reference_index_from_tag_index]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.scenario_get_wind]
+class = "matched"
+engine = "ffi/src/particles/wind.rs"
+owed = "the engine's own tests (ffi/src/particles/wind.rs); no check against the original yet"
+
+[function.scenario_illumination_at_point]
+class = "replaced"
+because = "renderer"
+stands_in = "ffi/src/camera.rs"
+
+[function.scenario_load]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
 [function.scenario_location_water_depth]
 class = "matched"
 owed = "water; reads the object, tag and map world, which the fake worlds do not hold (the structure's fog planes)"
 
+[function.scenario_material_definition_get]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.scenario_reload_structure_bsp_if_necessary]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.scenario_structure_bsp_load]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.scenario_structure_bsp_unload]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.scenario_switch_structure_bsp]
+class = "matched"
+engine = "sim/src/lib.rs"
+owed = "the engine's own tests (sim/src/lib.rs); no check against the original yet"
+
+[function.scenario_tags_load]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.scenario_tags_unload]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.scenario_trigger_volume_test_object]
+class = "matched"
+engine = "campaign/src/objects.rs"
+owed = "the engine's own tests (campaign/tests/scenarios.rs); no check against the original yet"
+
 [function.scenario_trigger_volume_test_point]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
+
+[function.scenario_unload]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
 
 [function.scenery_animation_start]
 class = "matched"
@@ -3164,6 +4699,201 @@ owed = "the engine's own tests (ui/tests/tree.rs); no check against the original
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
 
+[function.structure_bsp_get_cluster_pvs]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.structure_bsp_header_deregister_vertex_buffers]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.structure_bsp_header_register_vertex_buffers]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.structure_decals_disconnect_from_structure_bsp]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/DecalPass.swift"
+
+[function.structure_decals_dispose]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/DecalPass.swift"
+
+[function.structure_decals_dispose_from_old_map]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/DecalPass.swift"
+
+[function.structure_decals_initialize]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/DecalPass.swift"
+
+[function.structure_decals_initialize_for_new_map]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/DecalPass.swift"
+
+[function.structure_decals_reconnect_to_structure_bsp]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/DecalPass.swift"
+
+[function.structure_decals_update]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/DecalPass.swift"
+
+[function.structure_detail_objects_dispose]
+class = "replaced"
+because = "renderer"
+stands_in = "ffi/src/render_level.rs"
+
+[function.structure_detail_objects_dispose_from_old_map]
+class = "replaced"
+because = "renderer"
+stands_in = "ffi/src/render_level.rs"
+
+[function.structure_detail_objects_flush]
+class = "replaced"
+because = "renderer"
+stands_in = "ffi/src/render_level.rs"
+
+[function.structure_detail_objects_initialize]
+class = "replaced"
+because = "renderer"
+stands_in = "ffi/src/render_level.rs"
+
+[function.structure_detail_objects_initialize_for_new_map]
+class = "replaced"
+because = "renderer"
+stands_in = "ffi/src/render_level.rs"
+
+[function.structure_lens_flares_place]
+class = "replaced"
+because = "renderer"
+stands_in = "ffi/src/lights.rs"
+
+[function.tag_block_add_element]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.tag_block_delete_element]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.tag_block_get_element_fast]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.tag_block_get_element_with_size]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.tag_block_resize]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.tag_data_get_pointer]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.tag_data_resize]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.tag_empty_data]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.tag_file_get_path]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.tag_get]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.tag_get_group_tag]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.tag_get_name]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.tag_index_is_group]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.tag_iterator_new]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.tag_iterator_next]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.tag_load]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.tag_loaded]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.tag_name_strip_path]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.tag_reference_set]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.tag_unload]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.tags_header_deregister_vertex_and_index_buffers]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.tags_header_register_vertex_and_index_buffers]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
+[function.targa_export]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
 [function.terminal_clear]
 class = "replaced"
 because = "tools"
@@ -3228,6 +4958,21 @@ stands_in = "app/Sources/OpenCEEngineKit/Shell/ShellOverlay.swift"
 class = "replaced"
 because = "tools"
 stands_in = "app/Sources/OpenCEEngineKit/Shell/ShellOverlay.swift"
+
+[function.tiff_export]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.tiff_get_bounds]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
+[function.tiff_import]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
 
 [function.track_loop_impulse_sound]
 class = "matched"
@@ -3759,6 +5504,11 @@ owed = "the engine's own tests (ffi/src/sound_world.rs); no check against the or
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
 
+[function.valid_real_rgb_color]
+class = "replaced"
+because = "tools"
+stands_in = "import/src/lib.rs"
+
 [function.vector3d_from_euler_angles2d]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
@@ -3804,6 +5554,11 @@ owed = "the engine's own tests (campaign/src/units.rs); no check against the ori
 class = "matched"
 engine = "sim/src/vehicle.rs"
 owed = "the engine's own tests (sim/src/vehicle.rs); no check against the original yet"
+
+[function.vertex_type_from_shader_tag]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
 
 [function.virtual_keyboard_active]
 class = "replaced"
@@ -4166,6 +5921,31 @@ owed = "the engine's own tests (ui/tests/tree.rs); no check against the original
 class = "matched"
 engine = "ui/src/lib.rs"
 owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+
+[function.wind_dispose_from_old_map]
+class = "matched"
+engine = "ffi/src/particles/wind.rs"
+owed = "the engine's own tests (ffi/src/particles/wind.rs); no check against the original yet"
+
+[function.wind_initialize_for_new_map]
+class = "matched"
+engine = "ffi/src/particles/wind.rs"
+owed = "the engine's own tests (ffi/src/particles/wind.rs); no check against the original yet"
+
+[function.wind_update]
+class = "matched"
+engine = "ffi/src/particles/wind.rs"
+owed = "the engine's own tests (ffi/src/particles/wind.rs); no check against the original yet"
+
+[function.wind_variance_get]
+class = "matched"
+engine = "ffi/src/particles/wind.rs"
+owed = "the engine's own tests (ffi/src/particles/wind.rs); no check against the original yet"
+
+[function.wind_variance_initialize]
+class = "matched"
+engine = "ffi/src/particles/wind.rs"
+owed = "the engine's own tests (ffi/src/particles/wind.rs); no check against the original yet"
 
 [function.write_sound_preferences]
 class = "partial"

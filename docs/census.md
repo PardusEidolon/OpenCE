@@ -9,11 +9,11 @@ docs/engine.md's "The coverage census" says what each class needs.
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | `ai` | | 19 (3408 B) | | 6 (11296 B) | 103 (3744 B) | 951 (277818 B) | 25 |
 | `bink` | | | | | 33 (3968 B) | | 0 |
-| `bitmaps` | | 1 (224 B) | | | 15 (5424 B) | 197 (58480 B) | 1 |
+| `bitmaps` | | 1 (224 B) | | | 209 (62800 B) | 3 (1104 B) | 1 |
 | `bungie_net` | | | | | 109 (18992 B) | | 0 |
-| `cache` | | | | | 102 (9680 B) | 122 (15104 B) | 0 |
+| `cache` | | | | | 187 (18400 B) | 37 (6384 B) | 0 |
 | `camera` | | 19 (6832 B) | | 2 (256 B) | 17 (2448 B) | 108 (27008 B) | 21 |
-| `cseries` | | | | | 34 (7488 B) | 117 (14352 B) | 0 |
+| `cseries` | | | | | 36 (7632 B) | 115 (14208 B) | 0 |
 | `cutscene` | | 8 (288 B) | | 1 (32 B) | | 72 (10208 B) | 9 |
 | `devices` | | 17 (3728 B) | | | | 43 (3456 B) | 17 |
 | `dialogs` | | | | | 5 (1200 B) | 1 (128 B) | 0 |
@@ -25,7 +25,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `interface` | 6 (0 B) | 96 (21808 B) | | 16 (1744 B) | 62 (6784 B) | 734 (126344 B) | 112 |
 | `items` | 7 (4048 B) | 24 (9024 B) | | | | 151 (22976 B) | 24 |
 | `main` | | | | | 15 (768 B) | 141 (15072 B) | 0 |
-| `math` | 36 (4096 B) | 5 (240 B) | | | 18 (3072 B) | 157 (15760 B) | 5 |
+| `math` | 36 (4096 B) | 5 (240 B) | | | 19 (3072 B) | 156 (15760 B) | 5 |
 | `memory` | | 2 (336 B) | | | 61 (9136 B) | 196 (25824 B) | 2 |
 | `models` | 17 (6080 B) | 12 (4880 B) | | 1 (464 B) | 7 (1616 B) | 16 (4528 B) | 13 |
 | `networking` | | | | | 313 (49824 B) | | 0 |
@@ -34,16 +34,16 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `rasterizer` | | 3 (2784 B) | | | 793 (182416 B) | | 3 |
 | `render` | 2 (112 B) | 2 (240 B) | | | 134 (38000 B) | | 2 |
 | `saved games` | | | | 2 (96 B) | 31 (3712 B) | 116 (21184 B) | 2 |
-| `scenario` | | 2 (608 B) | | | 5 (1456 B) | 50 (7520 B) | 2 |
+| `scenario` | | 13 (4320 B) | | | 23 (3136 B) | 21 (2128 B) | 13 |
 | `shaders` | | | | | 21 (2624 B) | | 0 |
 | `shell` | | | | | 10 (528 B) | 3 (0 B) | 0 |
 | `sound` | 5 (672 B) | 63 (6864 B) | | 2 (32 B) | 55 (2624 B) | 93 (16768 B) | 65 |
-| `structures` | | 1 (0 B) | | | 55 (15968 B) | 71 (15744 B) | 1 |
-| `tag_files` | | | | | | 49 (4288 B) | 0 |
+| `structures` | | 1 (0 B) | | | 98 (27920 B) | 28 (3792 B) | 1 |
+| `tag_files` | | | | | 5 (0 B) | 44 (4288 B) | 0 |
 | `text` | | 9 (1936 B) | | | 17 (4496 B) | 86 (10480 B) | 9 |
 | `tool` | | | | | 27 (8752 B) | | 0 |
 | `units` | 8 (1824 B) | 67 (19968 B) | | 14 (1008 B) | | 278 (84720 B) | 81 |
-| **all** | 81 (16832 B) | 570 (142912 B) | | 94 (36000 B) | 2205 (422336 B) | 5551 (993042 B) | 664 |
+| **all** | 81 (16832 B) | 581 (146624 B) | | 94 (36000 B) | 2553 (502208 B) | 5192 (909458 B) | 675 |
 
 ## `ai`
 
@@ -268,42 +268,220 @@ docs/engine.md's "The coverage census" says what each class needs.
 
 | Function | File | Class | Engine | Evidence |
 | --- | --- | --- | --- | --- |
+| `ColorToFcolor` | bitmaps/s3tc/s3tc.c | Replaced | import/src/lib.rs | the editor and tools |
+| `FcolorToColor` | bitmaps/s3tc/s3tc.c | Replaced | import/src/lib.rs | the editor and tools |
+| `ColorToRGB` | bitmaps/s3tc/s3tc.c | Replaced | import/src/lib.rs | the editor and tools |
 | `RGBToColor` | bitmaps/s3tc/s3tc.c | Replaced |  | through its caller `DecodeBlockRGB__single_pixel` |
+| `Square3x3` | bitmaps/s3tc/s3tc.c | Replaced | import/src/lib.rs | the editor and tools |
+| `Quantize` | bitmaps/s3tc/s3tc.c | Replaced | import/src/lib.rs | the editor and tools |
+| `ClipExtrema` | bitmaps/s3tc/s3tc.c | Replaced | import/src/lib.rs | the editor and tools |
+| `AllSame` | bitmaps/s3tc/s3tc.c | Replaced | import/src/lib.rs | the editor and tools |
+| `EncodeBlockRGBColorKey` | bitmaps/s3tc/s3tc.c | Replaced | import/src/lib.rs | the editor and tools |
+| `DecodeBlockRGB` | bitmaps/s3tc/s3tc.c | Replaced | import/src/lib.rs | the editor and tools |
 | `DecodeBlockRGB__single_pixel` | bitmaps/s3tc/s3tc.c | Replaced |  | through its caller `DecodeBlockAlpha3__single_pixel` |
+| `DecodeBlockAlpha4` | bitmaps/s3tc/s3tc.c | Replaced | import/src/lib.rs | the editor and tools |
 | `DecodeBlockAlpha4__single_pixel` | bitmaps/s3tc/s3tc.c | Replaced |  | through its caller `bitmap_2d_get_pixel` |
+| `DecodeBlockAlpha3` | bitmaps/s3tc/s3tc.c | Replaced | import/src/lib.rs | the editor and tools |
 | `DecodeBlockAlpha3__single_pixel` | bitmaps/s3tc/s3tc.c | Replaced |  | through its caller `bitmap_2d_get_pixel` |
+| `EncodeBlockRGB` | bitmaps/s3tc/s3tc.c | Replaced | import/src/lib.rs | the editor and tools |
+| `EncodeBlockAlpha4` | bitmaps/s3tc/s3tc.c | Replaced | import/src/lib.rs | the editor and tools |
+| `EncodeBlockAlpha3` | bitmaps/s3tc/s3tc.c | Replaced | import/src/lib.rs | the editor and tools |
+| `bitmap_initialize_line` | bitmaps/bitmap_drawing.c | Replaced | app/Sources/OpenCEEngineRender/UiPass.swift | the enhanced lighting and Metal renderer |
+| `bitmap_step_line` | bitmaps/bitmap_drawing.c | Replaced | app/Sources/OpenCEEngineRender/UiPass.swift | the enhanced lighting and Metal renderer |
+| `bitmap_fill_rectangle` | bitmaps/bitmap_drawing.c | Replaced | app/Sources/OpenCEEngineRender/UiPass.swift | the enhanced lighting and Metal renderer |
+| `bitmap_copy` | bitmaps/bitmap_drawing.c | Replaced | app/Sources/OpenCEEngineRender/UiPass.swift | the enhanced lighting and Metal renderer |
+| `bitmap_tile_and_bevel_rectangle` | bitmaps/bitmap_drawing.c | Replaced | app/Sources/OpenCEEngineRender/UiPass.swift | the enhanced lighting and Metal renderer |
+| `bitmap_draw_line` | bitmaps/bitmap_drawing.c | Replaced | app/Sources/OpenCEEngineRender/UiPass.swift | the enhanced lighting and Metal renderer |
+| `bitmap_frame_rectangle` | bitmaps/bitmap_drawing.c | Replaced | app/Sources/OpenCEEngineRender/UiPass.swift | the enhanced lighting and Metal renderer |
+| `extract_initialize` | bitmaps/bitmap_extract.c | Replaced | import/src/lib.rs | the editor and tools |
+| `extract_find_sequence_bounds` | bitmaps/bitmap_extract.c | Replaced | import/src/lib.rs | the editor and tools |
+| `extract_warn_about_horizontal_border` | bitmaps/bitmap_extract.c | Replaced | import/src/lib.rs | the editor and tools |
+| `extract_plateless_cube_map` | bitmaps/bitmap_extract.c | Replaced | import/src/lib.rs | the editor and tools |
+| `extract_find_bitmap_bounds` | bitmaps/bitmap_extract.c | Replaced | import/src/lib.rs | the editor and tools |
+| `extract_get_bitmap_format` | bitmaps/bitmap_extract.c | Replaced | import/src/lib.rs | the editor and tools |
+| `extract_pixels_to_mipmap` | bitmaps/bitmap_extract.c | Replaced | import/src/lib.rs | the editor and tools |
+| `extract_pixels_from_mipmap` | bitmaps/bitmap_extract.c | Replaced | import/src/lib.rs | the editor and tools |
+| `extract_build_texture_pages_by_sequence` | bitmaps/bitmap_extract.c | Replaced | import/src/lib.rs | the editor and tools |
+| `extract_build_debug_plate` | bitmaps/bitmap_extract.c | Replaced | import/src/lib.rs | the editor and tools |
+| `extract_mipmaps_to_bitmap` | bitmaps/bitmap_extract.c | Replaced | import/src/lib.rs | the editor and tools |
+| `extract_add_bitmap` | bitmaps/bitmap_extract.c | Replaced | import/src/lib.rs | the editor and tools |
+| `extract_3d_textures` | bitmaps/bitmap_extract.c | Replaced | import/src/lib.rs | the editor and tools |
+| `extract_cube_maps` | bitmaps/bitmap_extract.c | Replaced | import/src/lib.rs | the editor and tools |
+| `extract_sprites` | bitmaps/bitmap_extract.c | Replaced | import/src/lib.rs | the editor and tools |
+| `extract_bitmap` | bitmaps/bitmap_extract.c | Replaced | import/src/lib.rs | the editor and tools |
+| `extract_without_sequences` | bitmaps/bitmap_extract.c | Replaced | import/src/lib.rs | the editor and tools |
+| `extract_sequence` | bitmaps/bitmap_extract.c | Replaced | import/src/lib.rs | the editor and tools |
+| `extract_sequences` | bitmaps/bitmap_extract.c | Replaced | import/src/lib.rs | the editor and tools |
+| `bitmaps_extract` | bitmaps/bitmap_extract.c | Replaced | import/src/lib.rs | the editor and tools |
+| `bitmaps_extract_from_plate` | bitmaps/bitmap_extract.c | Replaced | import/src/lib.rs | the editor and tools |
+| `bitmap_group_try_and_get_bitmap` | bitmaps/bitmap_group.c | Replaced | import/src/lib.rs | maps imported to a typed format |
 | `bitmap_group_get_bitmap_from_sequence` | bitmaps/bitmap_group.c | Matched | ffi/src/hud.rs:657 | owed: the engine cites it, with no check against the original yet |
+| `bitmap_group_add_bitmap` | bitmaps/bitmap_group.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `bitmap_fill` | bitmaps/bitmap_utilities.c | Replaced | import/src/lib.rs | the editor and tools |
+| `bitmap_alpha_to_rgb` | bitmaps/bitmap_utilities.c | Replaced | import/src/lib.rs | the editor and tools |
+| `bitmap_clone` | bitmaps/bitmap_utilities.c | Replaced | import/src/lib.rs | the editor and tools |
+| `bitmap_2d_shrink` | bitmaps/bitmap_utilities.c | Replaced | import/src/lib.rs | the editor and tools |
+| `bitmap_3d_shrink` | bitmaps/bitmap_utilities.c | Replaced | import/src/lib.rs | the editor and tools |
+| `bitmap_cm_shrink` | bitmaps/bitmap_utilities.c | Replaced | import/src/lib.rs | the editor and tools |
+| `bitmap_fade` | bitmaps/bitmap_utilities.c | Replaced | import/src/lib.rs | the editor and tools |
+| `bitmap_2d_smooth` | bitmaps/bitmap_utilities.c | Replaced | import/src/lib.rs | the editor and tools |
+| `bitmap_3d_smooth` | bitmaps/bitmap_utilities.c | Replaced | import/src/lib.rs | the editor and tools |
+| `bitmap_cm_smooth` | bitmaps/bitmap_utilities.c | Replaced | import/src/lib.rs | the editor and tools |
+| `bitmap_2d_sharpen` | bitmaps/bitmap_utilities.c | Replaced | import/src/lib.rs | the editor and tools |
+| `bitmap_3d_sharpen` | bitmaps/bitmap_utilities.c | Replaced | import/src/lib.rs | the editor and tools |
+| `bitmap_cm_sharpen` | bitmaps/bitmap_utilities.c | Replaced | import/src/lib.rs | the editor and tools |
+| `bitmap_2d_alpha_bleed` | bitmaps/bitmap_utilities.c | Replaced | import/src/lib.rs | the editor and tools |
+| `bitmap_3d_alpha_bleed` | bitmaps/bitmap_utilities.c | Replaced | import/src/lib.rs | the editor and tools |
+| `bitmap_cm_alpha_bleed` | bitmaps/bitmap_utilities.c | Replaced | import/src/lib.rs | the editor and tools |
+| `bitmap_cm_height_map` | bitmaps/bitmap_utilities.c | Replaced | import/src/lib.rs | the editor and tools |
+| `bitmap_2d_compress_to_mipmap` | bitmaps/bitmap_utilities.c | Replaced | import/src/lib.rs | the editor and tools |
+| `bitmap_3d_compress_to_mipmap` | bitmaps/bitmap_utilities.c | Replaced | import/src/lib.rs | the editor and tools |
+| `bitmap_cm_compress_to_mipmap` | bitmaps/bitmap_utilities.c | Replaced | import/src/lib.rs | the editor and tools |
+| `bitmap_2d_uncompress_from_mipmap` | bitmaps/bitmap_utilities.c | Replaced | import/src/lib.rs | the editor and tools |
+| `bitmap_3d_uncompress_from_mipmap` | bitmaps/bitmap_utilities.c | Replaced | import/src/lib.rs | the editor and tools |
+| `bitmap_cm_uncompress_from_mipmap` | bitmaps/bitmap_utilities.c | Replaced | import/src/lib.rs | the editor and tools |
+| `real_rgb_color_brightness` | bitmaps/bitmap_utilities.c | Replaced | import/src/lib.rs | the editor and tools |
+| `rgb_color_to_hsv_color` | bitmaps/bitmap_utilities.c | Replaced | import/src/lib.rs | the editor and tools |
+| `hsv_color_to_rgb_color` | bitmaps/bitmap_utilities.c | Replaced | import/src/lib.rs | the editor and tools |
+| `real_rgb_color_to_real_hsv_color` | bitmaps/bitmap_utilities.c | Replaced | import/src/lib.rs | the editor and tools |
+| `real_hsv_color_to_real_rgb_color` | bitmaps/bitmap_utilities.c | Replaced | import/src/lib.rs | the editor and tools |
+| `argb_color_to_real_argb_color` | bitmaps/bitmap_utilities.c | Replaced | import/src/lib.rs | the editor and tools |
+| `rgb_color_to_real_rgb_color` | bitmaps/bitmap_utilities.c | Replaced | import/src/lib.rs | the editor and tools |
 | `pixel32_to_real_argb_color` | bitmaps/bitmap_utilities.c | Replaced |  | through its caller `cinematic_render` |
 | `pixel32_to_real_rgb_color` | bitmaps/bitmap_utilities.c | Replaced |  | through its caller `custom_render_nav_point` |
+| `valid_real_rgb_color` | bitmaps/bitmap_utilities.c | Replaced | import/src/lib.rs | the editor and tools |
+| `bitmap_shrink` | bitmaps/bitmap_utilities.c | Replaced | import/src/lib.rs | the editor and tools |
+| `bitmap_smooth` | bitmaps/bitmap_utilities.c | Replaced | import/src/lib.rs | the editor and tools |
+| `bitmap_sharpen` | bitmaps/bitmap_utilities.c | Replaced | import/src/lib.rs | the editor and tools |
+| `bitmap_alpha_bleed` | bitmaps/bitmap_utilities.c | Replaced | import/src/lib.rs | the editor and tools |
+| `bitmap_2d_height_map` | bitmaps/bitmap_utilities.c | Replaced | import/src/lib.rs | the editor and tools |
+| `bitmap_3d_height_map` | bitmaps/bitmap_utilities.c | Replaced | import/src/lib.rs | the editor and tools |
+| `bitmap_2d_vector_map` | bitmaps/bitmap_utilities.c | Replaced | import/src/lib.rs | the editor and tools |
+| `bitmap_3d_vector_map` | bitmaps/bitmap_utilities.c | Replaced | import/src/lib.rs | the editor and tools |
+| `bitmap_cm_vector_map` | bitmaps/bitmap_utilities.c | Replaced | import/src/lib.rs | the editor and tools |
+| `bitmap_compress_to_mipmap` | bitmaps/bitmap_utilities.c | Replaced | import/src/lib.rs | the editor and tools |
+| `bitmap_uncompress_from_mipmap` | bitmaps/bitmap_utilities.c | Replaced | import/src/lib.rs | the editor and tools |
+| `rgb_colors_interpolate` | bitmaps/bitmap_utilities.c | Replaced | import/src/lib.rs | the editor and tools |
 | `rgb_colors_interpolate_and_scale` | bitmaps/bitmap_utilities.c | Replaced |  | through its caller `lights_preprocess_scene` |
+| `bitmap_height_map` | bitmaps/bitmap_utilities.c | Replaced | import/src/lib.rs | the editor and tools |
+| `bitmap_vector_map` | bitmaps/bitmap_utilities.c | Replaced | import/src/lib.rs | the editor and tools |
 | `bitmap_type_get_string` | bitmaps/bitmaps.c | Replaced |  | through its caller `rasterizer_set_texture` |
+| `bitmap_format_get_string` | bitmaps/bitmaps.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | the enhanced lighting and Metal renderer |
+| `bitmap_format_get_bits_per_pixel` | bitmaps/bitmaps.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | the enhanced lighting and Metal renderer |
+| `bitmap_changed` | bitmaps/bitmaps.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | the enhanced lighting and Metal renderer |
+| `bitmap_delete` | bitmaps/bitmaps.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | the enhanced lighting and Metal renderer |
+| `bitmap_2d_address` | bitmaps/bitmaps.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | the enhanced lighting and Metal renderer |
 | `bitmap_3d_address` | bitmaps/bitmaps.c | Replaced |  | through its caller `bitmap_mipmap_address` |
 | `bitmap_cube_map_address` | bitmaps/bitmaps.c | Replaced |  | through its caller `bitmap_mipmap_address` |
 | `bitmap_mipmap_address` | bitmaps/bitmaps.c | Replaced |  | through its caller `bitmap_2d_get_pixel` |
 | `bitmap_format_to_a8r8g8b8` | bitmaps/bitmaps.c | Replaced |  | through its caller `bitmap_2d_get_pixel` |
+| `bitmap_byte_swap_pixels` | bitmaps/bitmaps.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | the enhanced lighting and Metal renderer |
+| `palette_find_closest_match` | bitmaps/bitmaps.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | the enhanced lighting and Metal renderer |
+| `bitmap_format_type_valid_width` | bitmaps/bitmaps.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | the enhanced lighting and Metal renderer |
+| `bitmap_format_type_valid_height` | bitmaps/bitmaps.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | the enhanced lighting and Metal renderer |
+| `bitmap_format_type_valid_depth` | bitmaps/bitmaps.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | the enhanced lighting and Metal renderer |
+| `bitmap_verify` | bitmaps/bitmaps.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | the enhanced lighting and Metal renderer |
+| `bitmap_rebuild` | bitmaps/bitmaps.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | the enhanced lighting and Metal renderer |
+| `bitmap_get_max_mipmap_count` | bitmaps/bitmaps.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | the enhanced lighting and Metal renderer |
+| `bitmap_mipmap_get_width` | bitmaps/bitmaps.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | the enhanced lighting and Metal renderer |
+| `bitmap_mipmap_get_height` | bitmaps/bitmaps.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | the enhanced lighting and Metal renderer |
+| `bitmap_mipmap_get_depth` | bitmaps/bitmaps.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | the enhanced lighting and Metal renderer |
+| `bitmap_mipmap_get_pixel_count` | bitmaps/bitmaps.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | the enhanced lighting and Metal renderer |
 | `bitmap_mipmap_get_pixel_data_size` | bitmaps/bitmaps.c | Replaced |  | through its caller `rasterizer_bitmap_2d_changed` |
 | `bitmap_mipmap_get_row_pitch` | bitmaps/bitmaps.c | Replaced |  | through its caller `rasterizer_xbox_bitmap_get_pixel_data_size` |
 | `bitmap_2d_get_pixel` | bitmaps/bitmaps.c | Replaced |  | through its caller `sample_diffuse_texture` |
+| `bitmap_get_pixel_count` | bitmaps/bitmaps.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | the enhanced lighting and Metal renderer |
+| `bitmap_get_pixel_data_size` | bitmaps/bitmaps.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | the enhanced lighting and Metal renderer |
+| `bitmap_2d_new` | bitmaps/bitmaps.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | the enhanced lighting and Metal renderer |
+| `bitmap_3d_new` | bitmaps/bitmaps.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | the enhanced lighting and Metal renderer |
+| `bitmap_cube_map_new` | bitmaps/bitmaps.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | the enhanced lighting and Metal renderer |
+| `bitmap_3d_slice_extract` | bitmaps/bitmaps.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | the enhanced lighting and Metal renderer |
+| `bitmap_3d_slice_insert` | bitmaps/bitmaps.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | the enhanced lighting and Metal renderer |
+| `bitmap_cube_map_face_extract` | bitmaps/bitmaps.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | the enhanced lighting and Metal renderer |
+| `bitmap_cube_map_face_insert` | bitmaps/bitmaps.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | the enhanced lighting and Metal renderer |
+| `bitmap_quantitize_read_row` | bitmaps/bitmaps_quantitize.c | Replaced | import/src/lib.rs | the editor and tools |
+| `row_dither` | bitmaps/bitmaps_quantitize.c | Replaced | import/src/lib.rs | the editor and tools |
+| `bitmap_quantitize` | bitmaps/bitmaps_quantitize.c | Replaced | import/src/lib.rs | the editor and tools |
+| `targa_export` | bitmaps/targa_file.c | Replaced | import/src/lib.rs | the editor and tools |
+| `tiff_get_bounds` | bitmaps/tiff_file.c | Replaced | import/src/lib.rs | the editor and tools |
+| `tiff_export` | bitmaps/tiff_file.c | Replaced | import/src/lib.rs | the editor and tools |
+| `tiff_import` | bitmaps/tiff_file.c | Replaced | import/src/lib.rs | the editor and tools |
+| `postprocess_bitmap` | bitmaps/bitmap_group.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `delete_bitmap` | bitmaps/bitmap_group.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `postprocess_bitmap_group` | bitmaps/bitmap_group.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `DECLARE1` | bitmaps/libtiff/mkg3states.c | Replaced | import/src/lib.rs | the editor and tools |
+| `DECLARE3` | bitmaps/libtiff/mkg3states.c | Replaced | import/src/lib.rs | the editor and tools |
+| `DECLARE2` | bitmaps/libtiff/mkg3states.c | Replaced | import/src/lib.rs | the editor and tools |
+| `build_null_mode_tables` | bitmaps/libtiff/mkg3states.c | Replaced | import/src/lib.rs | the editor and tools |
+| `build_horiz_mode_tables` | bitmaps/libtiff/mkg3states.c | Replaced | import/src/lib.rs | the editor and tools |
+| `build_uncomp_mode_tables` | bitmaps/libtiff/mkg3states.c | Replaced | import/src/lib.rs | the editor and tools |
+| `findScheme` | bitmaps/libtiff/tif_compress.c | Replaced | import/src/lib.rs | the editor and tools |
+| `TIFFNoEncode` | bitmaps/libtiff/tif_compress.c | Replaced | import/src/lib.rs | the editor and tools |
+| `TIFFNoRowEncode` | bitmaps/libtiff/tif_compress.c | Replaced | import/src/lib.rs | the editor and tools |
+| `TIFFNoStripEncode` | bitmaps/libtiff/tif_compress.c | Replaced | import/src/lib.rs | the editor and tools |
+| `TIFFNoTileEncode` | bitmaps/libtiff/tif_compress.c | Replaced | import/src/lib.rs | the editor and tools |
+| `TIFFNoDecode` | bitmaps/libtiff/tif_compress.c | Replaced | import/src/lib.rs | the editor and tools |
+| `TIFFNoRowDecode` | bitmaps/libtiff/tif_compress.c | Replaced | import/src/lib.rs | the editor and tools |
+| `TIFFNoStripDecode` | bitmaps/libtiff/tif_compress.c | Replaced | import/src/lib.rs | the editor and tools |
+| `TIFFNoTileDecode` | bitmaps/libtiff/tif_compress.c | Replaced | import/src/lib.rs | the editor and tools |
+| `TIFFSetCompressionScheme` | bitmaps/libtiff/tif_compress.c | Replaced | import/src/lib.rs | the editor and tools |
+| `TIFFWriteDirectory` | bitmaps/libtiff/tif_dirwrite.c | Replaced | import/src/lib.rs | the editor and tools |
+| `TIFFWriteNormalTag` | bitmaps/libtiff/tif_dirwrite.c | Replaced | import/src/lib.rs | the editor and tools |
+| `TIFFSetupShortLong` | bitmaps/libtiff/tif_dirwrite.c | Replaced | import/src/lib.rs | the editor and tools |
+| `TIFFWriteRational` | bitmaps/libtiff/tif_dirwrite.c | Replaced | import/src/lib.rs | the editor and tools |
+| `TIFFWritePerSampleShorts` | bitmaps/libtiff/tif_dirwrite.c | Replaced | import/src/lib.rs | the editor and tools |
+| `TIFFSetupShortPair` | bitmaps/libtiff/tif_dirwrite.c | Replaced | import/src/lib.rs | the editor and tools |
+| `TIFFWriteShortTable` | bitmaps/libtiff/tif_dirwrite.c | Replaced | import/src/lib.rs | the editor and tools |
+| `TIFFWriteString` | bitmaps/libtiff/tif_dirwrite.c | Replaced | import/src/lib.rs | the editor and tools |
+| `TIFFWriteShortArray` | bitmaps/libtiff/tif_dirwrite.c | Replaced | import/src/lib.rs | the editor and tools |
+| `TIFFWriteLongArray` | bitmaps/libtiff/tif_dirwrite.c | Replaced | import/src/lib.rs | the editor and tools |
+| `TIFFWriteRationalArray` | bitmaps/libtiff/tif_dirwrite.c | Replaced | import/src/lib.rs | the editor and tools |
+| `TIFFWriteFloatArray` | bitmaps/libtiff/tif_dirwrite.c | Replaced | import/src/lib.rs | the editor and tools |
+| `TIFFWriteJPEGQTables` | bitmaps/libtiff/tif_dirwrite.c | Replaced | import/src/lib.rs | the editor and tools |
+| `TIFFWriteJPEGCTables` | bitmaps/libtiff/tif_dirwrite.c | Replaced | import/src/lib.rs | the editor and tools |
+| `TIFFWriteTransferFunction` | bitmaps/libtiff/tif_dirwrite.c | Replaced | import/src/lib.rs | the editor and tools |
+| `TIFFWriteData` | bitmaps/libtiff/tif_dirwrite.c | Replaced | import/src/lib.rs | the editor and tools |
+| `TIFFLinkDirectory` | bitmaps/libtiff/tif_dirwrite.c | Replaced | import/src/lib.rs | the editor and tools |
+| `defaultHandler` | bitmaps/libtiff/tif_error.c | Replaced | import/src/lib.rs | the editor and tools |
+| `TIFFSetErrorHandler` | bitmaps/libtiff/tif_error.c | Replaced | import/src/lib.rs | the editor and tools |
+| `TIFFError` | bitmaps/libtiff/tif_error.c | Replaced | import/src/lib.rs | the editor and tools |
+| `TIFFInitOrder` | bitmaps/libtiff/tif_open.c | Replaced | import/src/lib.rs | the editor and tools |
+| `getMode` | bitmaps/libtiff/tif_open.c | Replaced | import/src/lib.rs | the editor and tools |
+| `TIFFOpen` | bitmaps/libtiff/tif_open.c | Replaced | import/src/lib.rs | the editor and tools |
+| `TIFFFdOpen` | bitmaps/libtiff/tif_open.c | Replaced | import/src/lib.rs | the editor and tools |
+| `TIFFScanlineSize` | bitmaps/libtiff/tif_open.c | Replaced | import/src/lib.rs | the editor and tools |
+| `TIFFFileName` | bitmaps/libtiff/tif_open.c | Replaced | import/src/lib.rs | the editor and tools |
+| `TIFFFileno` | bitmaps/libtiff/tif_open.c | Replaced | import/src/lib.rs | the editor and tools |
+| `TIFFGetMode` | bitmaps/libtiff/tif_open.c | Replaced | import/src/lib.rs | the editor and tools |
+| `TIFFIsTiled` | bitmaps/libtiff/tif_open.c | Replaced | import/src/lib.rs | the editor and tools |
+| `TIFFCurrentRow` | bitmaps/libtiff/tif_open.c | Replaced | import/src/lib.rs | the editor and tools |
+| `TIFFCurrentDirectory` | bitmaps/libtiff/tif_open.c | Replaced | import/src/lib.rs | the editor and tools |
+| `TIFFCurrentStrip` | bitmaps/libtiff/tif_open.c | Replaced | import/src/lib.rs | the editor and tools |
+| `TIFFCurrentTile` | bitmaps/libtiff/tif_open.c | Replaced | import/src/lib.rs | the editor and tools |
+| `TIFFReadScanline` | bitmaps/libtiff/tif_read.c | Replaced | import/src/lib.rs | the editor and tools |
+| `TIFFSeek` | bitmaps/libtiff/tif_read.c | Replaced | import/src/lib.rs | the editor and tools |
+| `TIFFReadEncodedStrip` | bitmaps/libtiff/tif_read.c | Replaced | import/src/lib.rs | the editor and tools |
+| `TIFFReadRawStrip` | bitmaps/libtiff/tif_read.c | Replaced | import/src/lib.rs | the editor and tools |
+| `TIFFReadRawStrip1` | bitmaps/libtiff/tif_read.c | Replaced | import/src/lib.rs | the editor and tools |
+| `TIFFFillStrip` | bitmaps/libtiff/tif_read.c | Replaced | import/src/lib.rs | the editor and tools |
+| `TIFFReadTile` | bitmaps/libtiff/tif_read.c | Replaced | import/src/lib.rs | the editor and tools |
+| `TIFFReadEncodedTile` | bitmaps/libtiff/tif_read.c | Replaced | import/src/lib.rs | the editor and tools |
+| `TIFFReadRawTile` | bitmaps/libtiff/tif_read.c | Replaced | import/src/lib.rs | the editor and tools |
+| `TIFFReadRawTile1` | bitmaps/libtiff/tif_read.c | Replaced | import/src/lib.rs | the editor and tools |
+| `TIFFFillTile` | bitmaps/libtiff/tif_read.c | Replaced | import/src/lib.rs | the editor and tools |
+| `TIFFReadBufferSetup` | bitmaps/libtiff/tif_read.c | Replaced | import/src/lib.rs | the editor and tools |
+| `TIFFStartStrip` | bitmaps/libtiff/tif_read.c | Replaced | import/src/lib.rs | the editor and tools |
+| `TIFFStartTile` | bitmaps/libtiff/tif_read.c | Replaced | import/src/lib.rs | the editor and tools |
+| `TIFFCheckRead` | bitmaps/libtiff/tif_read.c | Replaced | import/src/lib.rs | the editor and tools |
+| `ThunderDecode` | bitmaps/libtiff/tif_thunder.c | Replaced | import/src/lib.rs | the editor and tools |
+| `ThunderDecodeRow` | bitmaps/libtiff/tif_thunder.c | Replaced | import/src/lib.rs | the editor and tools |
+| `TIFFInitThunderScan` | bitmaps/libtiff/tif_thunder.c | Replaced | import/src/lib.rs | the editor and tools |
+| `TIFFSetWarningHandler` | bitmaps/libtiff/tif_warning.c | Replaced | import/src/lib.rs | the editor and tools |
+| `TIFFWarning` | bitmaps/libtiff/tif_warning.c | Replaced | import/src/lib.rs | the editor and tools |
 
-197 Missing (29 reached from `main_loop`), by file:
+3 Missing (0 reached from `main_loop`), by file:
 
-- bitmaps/bitmap_drawing.c: `bitmap_initialize_line`, `bitmap_step_line`, `bitmap_fill_rectangle`, `bitmap_copy`, `bitmap_tile_and_bevel_rectangle`, `bitmap_draw_line`, `bitmap_frame_rectangle`
-- bitmaps/bitmap_extract.c: `extract_initialize`, `extract_find_sequence_bounds`, `extract_warn_about_horizontal_border`, `extract_plateless_cube_map`, `extract_find_bitmap_bounds`, `extract_get_bitmap_format`, `extract_pixels_to_mipmap`, `extract_pixels_from_mipmap`, `extract_build_texture_pages_by_sequence`, `extract_build_debug_plate`, `extract_mipmaps_to_bitmap`, `extract_add_bitmap`, `extract_3d_textures`, `extract_cube_maps`, `extract_sprites`, `extract_bitmap`, `extract_without_sequences`, `extract_sequence`, `extract_sequences`, `bitmaps_extract`, `bitmaps_extract_from_plate`
-- bitmaps/bitmap_group.c: `code_00065210`, `code_00065220`, `code_00065240`, `bitmap_group_try_and_get_bitmap`, `bitmap_group_add_bitmap`, `postprocess_bitmap`, `delete_bitmap`, `postprocess_bitmap_group`
-- bitmaps/bitmap_utilities.c: `bitmap_fill`, `bitmap_alpha_to_rgb`, `bitmap_clone`, `bitmap_2d_shrink`, `bitmap_3d_shrink`, `bitmap_cm_shrink`, `bitmap_fade`, `bitmap_2d_smooth`, `bitmap_3d_smooth`, `bitmap_cm_smooth`, `bitmap_2d_sharpen`, `bitmap_3d_sharpen`, `bitmap_cm_sharpen`, `bitmap_2d_alpha_bleed`, `bitmap_3d_alpha_bleed`, `bitmap_cm_alpha_bleed`, `bitmap_cm_height_map`, `bitmap_2d_compress_to_mipmap`, `bitmap_3d_compress_to_mipmap`, `bitmap_cm_compress_to_mipmap`, `bitmap_2d_uncompress_from_mipmap`, `bitmap_3d_uncompress_from_mipmap`, `bitmap_cm_uncompress_from_mipmap`, `real_rgb_color_brightness`, `rgb_color_to_hsv_color`, `hsv_color_to_rgb_color`, `real_rgb_color_to_real_hsv_color`, `real_hsv_color_to_real_rgb_color`, `argb_color_to_real_argb_color`, `rgb_color_to_real_rgb_color`, `valid_real_rgb_color`, `bitmap_shrink`, `bitmap_smooth`, `bitmap_sharpen`, `bitmap_alpha_bleed`, `bitmap_2d_height_map`, `bitmap_3d_height_map`, `bitmap_2d_vector_map`, `bitmap_3d_vector_map`, `bitmap_cm_vector_map`, `bitmap_compress_to_mipmap`, `bitmap_uncompress_from_mipmap`, `rgb_colors_interpolate`, `bitmap_height_map`, `bitmap_vector_map`
-- bitmaps/bitmaps.c: `bitmap_format_get_string`, `bitmap_format_get_bits_per_pixel`, `bitmap_changed`, `bitmap_delete`, `bitmap_2d_address`, `bitmap_byte_swap_pixels`, `palette_find_closest_match`, `bitmap_format_type_valid_width`, `bitmap_format_type_valid_height`, `bitmap_format_type_valid_depth`, `bitmap_verify`, `bitmap_rebuild`, `bitmap_get_max_mipmap_count`, `bitmap_mipmap_get_width`, `bitmap_mipmap_get_height`, `bitmap_mipmap_get_depth`, `bitmap_mipmap_get_pixel_count`, `bitmap_get_pixel_count`, `bitmap_get_pixel_data_size`, `bitmap_2d_new`, `bitmap_3d_new`, `bitmap_cube_map_new`, `bitmap_3d_slice_extract`, `bitmap_3d_slice_insert`, `bitmap_cube_map_face_extract`, `bitmap_cube_map_face_insert`
-- bitmaps/bitmaps_quantitize.c: `bitmap_quantitize_read_row`, `row_dither`, `bitmap_quantitize`
-- bitmaps/libtiff/mkg3states.c: `DECLARE1`, `DECLARE3`, `DECLARE2`, `build_null_mode_tables`, `build_horiz_mode_tables`, `build_uncomp_mode_tables`
-- bitmaps/libtiff/tif_compress.c: `findScheme`, `TIFFNoEncode`, `TIFFNoRowEncode`, `TIFFNoStripEncode`, `TIFFNoTileEncode`, `TIFFNoDecode`, `TIFFNoRowDecode`, `TIFFNoStripDecode`, `TIFFNoTileDecode`, `TIFFSetCompressionScheme`
-- bitmaps/libtiff/tif_dirwrite.c: `TIFFWriteDirectory`, `TIFFWriteNormalTag`, `TIFFSetupShortLong`, `TIFFWriteRational`, `TIFFWritePerSampleShorts`, `TIFFSetupShortPair`, `TIFFWriteShortTable`, `TIFFWriteString`, `TIFFWriteShortArray`, `TIFFWriteLongArray`, `TIFFWriteRationalArray`, `TIFFWriteFloatArray`, `TIFFWriteJPEGQTables`, `TIFFWriteJPEGCTables`, `TIFFWriteTransferFunction`, `TIFFWriteData`, `TIFFLinkDirectory`
-- bitmaps/libtiff/tif_error.c: `defaultHandler`, `TIFFSetErrorHandler`, `TIFFError`
-- bitmaps/libtiff/tif_open.c: `TIFFInitOrder`, `getMode`, `TIFFOpen`, `TIFFFdOpen`, `TIFFScanlineSize`, `TIFFFileName`, `TIFFFileno`, `TIFFGetMode`, `TIFFIsTiled`, `TIFFCurrentRow`, `TIFFCurrentDirectory`, `TIFFCurrentStrip`, `TIFFCurrentTile`
-- bitmaps/libtiff/tif_read.c: `TIFFReadScanline`, `TIFFSeek`, `TIFFReadEncodedStrip`, `TIFFReadRawStrip`, `TIFFReadRawStrip1`, `TIFFFillStrip`, `TIFFReadTile`, `TIFFReadEncodedTile`, `TIFFReadRawTile`, `TIFFReadRawTile1`, `TIFFFillTile`, `TIFFReadBufferSetup`, `TIFFStartStrip`, `TIFFStartTile`, `TIFFCheckRead`
-- bitmaps/libtiff/tif_thunder.c: `ThunderDecode`, `ThunderDecodeRow`, `TIFFInitThunderScan`
-- bitmaps/libtiff/tif_warning.c: `TIFFSetWarningHandler`, `TIFFWarning`
-- bitmaps/s3tc/s3tc.c: `ColorToFcolor`, `FcolorToColor`, `ColorToRGB`, `Square3x3`, `Quantize`, `ClipExtrema`, `AllSame`, `EncodeBlockRGBColorKey`, `DecodeBlockRGB`, `DecodeBlockAlpha4`, `DecodeBlockAlpha3`, `EncodeBlockRGB`, `EncodeBlockAlpha4`, `EncodeBlockAlpha3`
-- bitmaps/targa_file.c: `targa_export`
-- bitmaps/tiff_file.c: `tiff_get_bounds`, `tiff_export`, `tiff_import`
+- bitmaps/bitmap_group.c: `code_00065210`, `code_00065220`, `code_00065240`
 
 ## `bungie_net`
 
@@ -423,27 +601,102 @@ docs/engine.md's "The coverage census" says what each class needs.
 
 | Function | File | Class | Engine | Evidence |
 | --- | --- | --- | --- | --- |
+| `cache_files_map_directory` | cache/cache_files.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `scenario_tags_unload` | cache/cache_files.c | Replaced | import/src/lib.rs | maps imported to a typed format |
 | `tag_files_open` | cache/cache_files.c | Replaced |  | through its caller `shell_initialize` |
 | `tag_files_close` | cache/cache_files.c | Replaced |  | through its caller `shell_dispose` |
 | `tag_groups_checksum` | cache/cache_files.c | Replaced |  | through its caller `network_game_generate_join_game_token` |
+| `cache_files_get_checksum` | cache/cache_files.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `tag_loaded` | cache/cache_files.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `cache_files_enable_writes` | cache/cache_files.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `cache_files_disable_writes` | cache/cache_files.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `tag_block_resize` | cache/cache_files.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `tag_data_resize` | cache/cache_files.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `tag_block_add_element` | cache/cache_files.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `tag_block_delete_element` | cache/cache_files.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `tag_load` | cache/cache_files.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `tag_unload` | cache/cache_files.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `tag_file_get_path` | cache/cache_files.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `tag_reference_set` | cache/cache_files.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `tag_iterator_new` | cache/cache_files.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `tag_iterator_next` | cache/cache_files.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `cache_get_tag_instance` | cache/cache_files.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `cache_file_header_verify` | cache/cache_files.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `cache_files_give_time_to_precache` | cache/cache_files.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `scenario_tags_load` | cache/cache_files.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `scenario_structure_bsp_load` | cache/cache_files.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `scenario_structure_bsp_unload` | cache/cache_files.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `tag_get` | cache/cache_files.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `tag_get_name` | cache/cache_files.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `tag_get_group_tag` | cache/cache_files.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `cache_copy_buffer_size` | cache/cache_files_decompress_windows.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `cache_copy_set_priority` | cache/cache_files_decompress_windows.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `cache_copy_compressed_file_complete` | cache/cache_files_decompress_windows.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `cache_copy_begin` | cache/cache_files_decompress_windows.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `cache_copy_queue_end` | cache/cache_files_decompress_windows.c | Replaced | import/src/lib.rs | maps imported to a typed format |
 | `acquire_read_request` | cache/cache_files_decompress_windows.c | Replaced |  | through its caller `cache_copy_run_decompression` |
+| `cache_copy_get_status` | cache/cache_files_decompress_windows.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `cache_copy_end` | cache/cache_files_decompress_windows.c | Replaced | import/src/lib.rs | maps imported to a typed format |
 | `cache_copy_FileIOCompletionRoutine` | cache/cache_files_decompress_windows.c | Replaced |  | through its caller `cache_copy_issue_read` |
 | `cache_copy_initialize` | cache/cache_files_decompress_windows.c | Replaced |  | through its caller `cache_files_initialize` |
 | `cache_files_dispose` | cache/cache_files_windows.c | Replaced |  | through its caller `tag_files_close` |
+| `cached_map_issue_async_request` | cache/cache_files_windows.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `cached_map_block_on_async_request` | cache/cache_files_windows.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `cache_request_get` | cache/cache_files_windows.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `cache_request_next_free_index` | cache/cache_files_windows.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `cache_requests_flush` | cache/cache_files_windows.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `cache_files_precache_set_priority` | cache/cache_files_windows.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `cache_files_precache_in_progress` | cache/cache_files_windows.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `cache_files_precache_is_copying_map` | cache/cache_files_windows.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `cache_files_precache_map_queue_end` | cache/cache_files_windows.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `cached_map_file_get` | cache/cache_files_windows.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `cached_map_file_invalidate` | cache/cache_files_windows.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `cached_map_file_get_handle` | cache/cache_files_windows.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `cached_map_file_get_size` | cache/cache_files_windows.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `cached_map_file_get_path` | cache/cache_files_windows.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `cache_file_windows_thread_wake` | cache/cache_files_windows.c | Replaced | import/src/lib.rs | maps imported to a typed format |
 | `cache_file_read_io_completion_routine` | cache/cache_files_windows.c | Replaced |  | through its caller `cache_file_windows_thread_proc` |
+| `cache_file_blocking_io_completion_routine` | cache/cache_files_windows.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `cache_file_get_map_path` | cache/cache_files_windows.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `IDirect3DVertexBuffer8_IsBusy` | cache/cache_files_windows.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `IDirect3DVertexBuffer8_BlockUntilNotBusy` | cache/cache_files_windows.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `IDirect3DVertexBuffer8_Register` | cache/cache_files_windows.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `IDirect3DIndexBuffer8_IsBusy` | cache/cache_files_windows.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `IDirect3DIndexBuffer8_BlockUntilNotBusy` | cache/cache_files_windows.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `cache_file_close` | cache/cache_files_windows.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `cache_file_read` | cache/cache_files_windows.c | Replaced | import/src/lib.rs | maps imported to a typed format |
 | `cache_file_promote_read` | cache/cache_files_windows.c | Replaced |  | through its caller `_texture_cache_bitmap_get_hardware_format` |
+| `cache_file_read_header_from_dvd` | cache/cache_files_windows.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `cached_map_issue_async_read` | cache/cache_files_windows.c | Replaced | import/src/lib.rs | maps imported to a typed format |
 | `cached_map_issue_async_write` | cache/cache_files_windows.c | Replaced |  | through its caller `cache_files_open_cache_files` |
+| `cache_file_block_until_not_busy` | cache/cache_files_windows.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `tags_header_register_vertex_and_index_buffers` | cache/cache_files_windows.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `tags_header_deregister_vertex_and_index_buffers` | cache/cache_files_windows.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `structure_bsp_header_register_vertex_buffers` | cache/cache_files_windows.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `structure_bsp_header_deregister_vertex_buffers` | cache/cache_files_windows.c | Replaced | import/src/lib.rs | maps imported to a typed format |
 | `cached_map_files_delete` | cache/cache_files_windows.c | Replaced |  | through its caller `cache_files_open_cache_files` |
 | `cache_files_verify_language` | cache/cache_files_windows.c | Replaced |  | through its caller `cache_files_initialize` |
+| `cache_files_precache_map_status` | cache/cache_files_windows.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `cached_map_file_set_modification_date` | cache/cache_files_windows.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `cached_map_file_read_header` | cache/cache_files_windows.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `cached_map_files_find_map` | cache/cache_files_windows.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `cached_map_files_find_free_map` | cache/cache_files_windows.c | Replaced | import/src/lib.rs | maps imported to a typed format |
 | `cache_file_windows_thread_proc` | cache/cache_files_windows.c | Replaced |  | through its caller `cache_file_windows_thread_create` |
+| `cache_file_open` | cache/cache_files_windows.c | Replaced | import/src/lib.rs | maps imported to a typed format |
 | `cache_files_open_cache_files` | cache/cache_files_windows.c | Replaced |  | through its caller `cache_files_initialize` |
+| `cache_files_precache_map_loaded` | cache/cache_files_windows.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `cache_files_precache_map_begin` | cache/cache_files_windows.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `cache_files_precache_map_end` | cache/cache_files_windows.c | Replaced | import/src/lib.rs | maps imported to a typed format |
 | `cache_file_windows_thread_create` | cache/cache_files_windows.c | Replaced |  | through its caller `cache_files_initialize` |
 | `cache_files_initialize` | cache/cache_files_windows.c | Replaced |  | through its caller `tag_files_open` |
 | `physical_memory_allocate` | cache/physical_memory_map.c | Replaced |  | through its caller `main` |
 | `physical_memory_verify` | cache/physical_memory_map.c | Replaced |  | through its caller `shell_platform_verify` |
+| `physical_memory_free` | cache/physical_memory_map.c | Replaced | import/src/lib.rs | Xbox-only hardware |
 | `physical_memory_get_game_state_base_address` | cache/physical_memory_map.c | Replaced |  | through its caller `game_state_allocate_buffer` |
+| `physical_memory_get_tag_cache_base_address` | cache/physical_memory_map.c | Replaced | import/src/lib.rs | Xbox-only hardware |
 | `physical_memory_get_texture_cache_base_address` | cache/physical_memory_map.c | Replaced |  | through its caller `texture_cache_new` |
 | `physical_memory_get_sound_cache_base_address` | cache/physical_memory_map.c | Replaced |  | through its caller `dsound_channel_queue_packet` |
+| `predicted_resources_precache` | cache/predicted_resources.c | Replaced | import/src/lib.rs | maps imported to a typed format |
 | `sound_cache_delete` | cache/xbox_sound_cache.c | Replaced | audio/src/player.rs | Xbox-only hardware |
 | `sound_cache_open` | cache/xbox_sound_cache.c | Replaced | audio/src/player.rs | Xbox-only hardware |
 | `sound_cache_idle` | cache/xbox_sound_cache.c | Replaced | audio/src/player.rs | Xbox-only hardware |
@@ -487,8 +740,15 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `texture_cache_start_loading_bitmap` | cache/xbox_texture_cache.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | Xbox-only hardware |
 | `texture_cache_debug_render` | cache/xbox_texture_cache.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | Xbox-only hardware |
 | `_texture_cache_bitmap_get_hardware_format` | cache/xbox_texture_cache.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | Xbox-only hardware |
+| `cache_empty_tag_instance` | cache/cache_files.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `cache_files_set_tag_instances` | cache/cache_files.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `cache_files_build_region` | cache/cache_files.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `cache_files_multiplayer_region` | cache/cache_files.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `cache_files_map_plays_multiplayer` | cache/cache_files.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `cache_files_show_multiplayer_unavailable` | cache/cache_files.c | Replaced | import/src/lib.rs | maps imported to a typed format |
 | `cache_files_map_version` | cache/cache_files.c | Replaced |  | through its caller `network_game_server_change_map_name` |
 | `cache_files_map_present` | cache/cache_files.c | Replaced |  | through its caller `network_game_client_game_settings_updated` |
+| `tag_index_is_group` | cache/cache_files.c | Replaced | import/src/lib.rs | maps imported to a typed format |
 | `cache_copy_stop_requested` | cache/cache_files_decompress_windows.c | Replaced |  | through its caller `cache_copy_run_decompression` |
 | `cache_copy_initialize_zlib` | cache/cache_files_decompress_windows.c | Replaced |  | through its caller `simple_cache_copy_thread` |
 | `cache_copy_dispose_zlib` | cache/cache_files_decompress_windows.c | Replaced |  | through its caller `simple_cache_copy_thread` |
@@ -505,9 +765,11 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `any_bit_vector_flag_set` | cache/cache_files_decompress_windows.c | Replaced |  | through its caller `cache_copy_wait_for_async_io` |
 | `cache_copy_wait_for_async_io` | cache/cache_files_decompress_windows.c | Replaced |  | through its caller `simple_cache_copy_thread` |
 | `cache_copy_set_flag` | cache/cache_files_decompress_windows.c | Replaced |  | through its caller `cache_copy_FileIOCompletionRoutine` |
+| `cache_copy_get_flags` | cache/cache_files_decompress_windows.c | Replaced | import/src/lib.rs | maps imported to a typed format |
 | `decompressor_reset_timing` | cache/cache_files_decompress_windows.c | Replaced |  | through its caller `simple_cache_copy_thread` |
 | `decompressor_timer_start` | cache/cache_files_decompress_windows.c | Replaced |  | through its caller `cache_copy_issue_read` |
 | `decompressor_timer_stop` | cache/cache_files_decompress_windows.c | Replaced |  | through its caller `cache_copy_issue_read` |
+| `cache_copy_print_timing` | cache/cache_files_decompress_windows.c | Replaced | import/src/lib.rs | maps imported to a typed format |
 | `cache_copy_yield` | cache/cache_files_decompress_windows.c | Replaced |  | through its caller `cache_copy_run_decompression` |
 | `cache_copy_issue_read` | cache/cache_files_decompress_windows.c | Replaced |  | through its caller `cache_copy_issue_read_internal` |
 | `cache_copy_issue_write` | cache/cache_files_decompress_windows.c | Replaced |  | through its caller `cache_copy_issue_write_internal` |
@@ -523,16 +785,14 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `cache_copy_update_write_buffers` | cache/cache_files_decompress_windows.c | Replaced |  | through its caller `cache_copy_run_decompression` |
 | `cache_copy_run_decompression` | cache/cache_files_decompress_windows.c | Replaced |  | through its caller `simple_cache_copy_thread` |
 | `simple_cache_copy_thread` | cache/cache_files_decompress_windows.c | Replaced |  | through its caller `cache_copy_initialize` |
+| `predicted_resources_sound_precache` | cache/predicted_resources.c | Replaced | import/src/lib.rs | maps imported to a typed format |
 | `sound_cache_sound_get_cache_sound` | cache/xbox_sound_cache.c | Replaced | audio/src/player.rs | Xbox-only hardware |
 | `texture_cache_bitmap_valid` | cache/xbox_texture_cache.c | Replaced | app/Sources/OpenCEEngineRender/LoadedLevel.swift | Xbox-only hardware |
 
-122 Missing (69 reached from `main_loop`), by file:
+37 Missing (0 reached from `main_loop`), by file:
 
-- cache/cache_files.c: `cache_files_map_directory`, `scenario_tags_unload`, `cache_files_get_checksum`, `tag_loaded`, `cache_files_enable_writes`, `cache_files_disable_writes`, `tag_block_resize`, `tag_data_resize`, `tag_block_add_element`, `tag_block_delete_element`, `tag_load`, `tag_unload`, `tag_file_get_path`, `tag_reference_set`, `tag_iterator_new`, `tag_iterator_next`, `cache_get_tag_instance`, `cache_file_header_verify`, `cache_files_give_time_to_precache`, `scenario_tags_load`, `scenario_structure_bsp_load`, `scenario_structure_bsp_unload`, `tag_get`, `tag_get_name`, `tag_get_group_tag`, `cache_empty_tag_instance`, `cache_files_set_tag_instances`, `cache_files_build_region`, `cache_files_multiplayer_region`, `cache_files_map_plays_multiplayer`, `cache_files_show_multiplayer_unavailable`, `tag_index_is_group`
-- cache/cache_files_decompress_windows.c: `code_001a9c10`, `cache_copy_buffer_size`, `cache_copy_set_priority`, `cache_copy_compressed_file_complete`, `cache_copy_begin`, `cache_copy_queue_end`, `code_001a9fe0`, `code_001aa010`, `code_001aa040`, `code_001aa0a0`, `code_001aa0f0`, `code_001aa1a0`, `code_001aa290`, `code_001aa310`, `code_001aa420`, `code_001aa430`, `code_001aa480`, `code_001aa4d0`, `code_001aa510`, `code_001aa540`, `code_001aa5e0`, `code_001aa610`, `code_001aa620`, `code_001aa640`, `code_001aa650`, `code_001aa680`, `code_001aa780`, `cache_copy_get_status`, `cache_copy_end`, `code_001aab70`, `code_001aacb0`, `code_001aadf0`, `code_001aae00`, `code_001aae10`, `code_001aaf10`, `code_001aaf30`, `code_001aaf80`, `code_001ab020`, `code_001ab1b0`, `code_001ab280`, `code_001ab350`, `code_001ab540`, `code_001ab880`, `cache_copy_get_flags`, `cache_copy_print_timing`
-- cache/cache_files_windows.c: `cached_map_issue_async_request`, `cached_map_block_on_async_request`, `cache_request_get`, `cache_request_next_free_index`, `cache_requests_flush`, `cache_files_precache_set_priority`, `cache_files_precache_in_progress`, `cache_files_precache_is_copying_map`, `cache_files_precache_map_queue_end`, `cached_map_file_get`, `cached_map_file_invalidate`, `cached_map_file_get_handle`, `cached_map_file_get_size`, `cached_map_file_get_path`, `cache_file_windows_thread_wake`, `cache_file_blocking_io_completion_routine`, `cache_file_get_map_path`, `IDirect3DVertexBuffer8_IsBusy`, `IDirect3DVertexBuffer8_BlockUntilNotBusy`, `IDirect3DVertexBuffer8_Register`, `IDirect3DIndexBuffer8_IsBusy`, `IDirect3DIndexBuffer8_BlockUntilNotBusy`, `cache_file_close`, `cache_file_read`, `cache_file_read_header_from_dvd`, `cached_map_issue_async_read`, `cache_file_block_until_not_busy`, `tags_header_register_vertex_and_index_buffers`, `tags_header_deregister_vertex_and_index_buffers`, `structure_bsp_header_register_vertex_buffers`, `structure_bsp_header_deregister_vertex_buffers`, `cache_files_precache_map_status`, `cached_map_file_set_modification_date`, `cached_map_file_read_header`, `cached_map_files_find_map`, `cached_map_files_find_free_map`, `cache_file_open`, `cache_files_precache_map_loaded`, `cache_files_precache_map_begin`, `cache_files_precache_map_end`
-- cache/physical_memory_map.c: `physical_memory_free`, `physical_memory_get_tag_cache_base_address`
-- cache/predicted_resources.c: `code_001ad870`, `predicted_resources_precache`, `predicted_resources_sound_precache`
+- cache/cache_files_decompress_windows.c: `code_001a9c10`, `code_001a9fe0`, `code_001aa010`, `code_001aa040`, `code_001aa0a0`, `code_001aa0f0`, `code_001aa1a0`, `code_001aa290`, `code_001aa310`, `code_001aa420`, `code_001aa430`, `code_001aa480`, `code_001aa4d0`, `code_001aa510`, `code_001aa540`, `code_001aa5e0`, `code_001aa610`, `code_001aa620`, `code_001aa640`, `code_001aa650`, `code_001aa680`, `code_001aa780`, `code_001aab70`, `code_001aacb0`, `code_001aadf0`, `code_001aae00`, `code_001aae10`, `code_001aaf10`, `code_001aaf30`, `code_001aaf80`, `code_001ab020`, `code_001ab1b0`, `code_001ab280`, `code_001ab350`, `code_001ab540`, `code_001ab880`
+- cache/predicted_resources.c: `code_001ad870`
 
 ## `camera`
 
@@ -597,12 +857,14 @@ docs/engine.md's "The coverage census" says what each class needs.
 | --- | --- | --- | --- | --- |
 | `cseries_initialize` | cseries/cseries.c | Replaced |  | through its caller `shell_initialize` |
 | `cseries_dispose` | cseries/cseries.c | Replaced |  | through its caller `shell_dispose` |
+| `tag_to_string` | cseries/cseries.c | Replaced |  | through its caller `tag_get` |
 | `strnlen` | cseries/cseries.c | Replaced |  | through its caller `data_encode_string` |
 | `system_seconds` | cseries/cseries_windows.c | Replaced |  | through its caller `get_number_suitable_for_initializing_random_seed` |
 | `system_memory_information_get` | cseries/cseries_windows.c | Replaced |  | through its caller `render_debug_profile` |
 | `exception_code_get_string` | cseries/cseries_windows.c | Replaced |  | through its caller `generic_exception_filter` |
 | `generic_exception_filter` | cseries/cseries_windows.c | Replaced |  | through its caller `main` |
 | `debug_memory_manager_initialize` | cseries/debug_memory.c | Replaced |  | through its caller `cseries_initialize` |
+| `check_memory_status` | cseries/debug_memory.c | Replaced |  | through its caller `scenario_load` |
 | `debug_check_memory` | cseries/debug_memory.c | Replaced |  | through its caller `debug_dump_memory_for_file` |
 | `debug_dump_memory_for_file` | cseries/debug_memory.c | Replaced |  | through its caller `debug_dump_memory` |
 | `debug_dump_memory` | cseries/debug_memory.c | Replaced |  | through its caller `cseries_dispose` |
@@ -630,11 +892,11 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `stack_walk_initialize` | cseries/stack_walk_windows.c | Replaced |  | through its caller `errors_initialize` |
 | `shortsort_2byte` | cseries/sort.c | Replaced |  | through its caller `qsort_2byte` |
 
-117 Missing (73 reached from `main_loop`), by file:
+115 Missing (71 reached from `main_loop`), by file:
 
-- cseries/cseries.c: `string_to_tag`, `tag_to_string`, `strnupr`, `strnlwr`, `strupr`, `strlwr`, `csprintf`, `display_assert`, `csmemcmp`, `csmemmove`, `csmemset`, `csstrcat`, `csstrcmp`, `csstrncat`, `csstrncmp`, `csstrncpy`, `csstrtok`, `csstrlen`, `csstrcpy`, `csmemcpy`, `csstrcasecmp`, `stristr`, `string_hash`
+- cseries/cseries.c: `string_to_tag`, `strnupr`, `strnlwr`, `strupr`, `strlwr`, `csprintf`, `display_assert`, `csmemcmp`, `csmemmove`, `csmemset`, `csstrcat`, `csstrcmp`, `csstrncat`, `csstrncmp`, `csstrncpy`, `csstrtok`, `csstrlen`, `csstrcpy`, `csmemcpy`, `csstrcasecmp`, `stristr`, `string_hash`
 - cseries/cseries_windows.c: `display_debug_string`, `system_exit`, `system_unique_identifier_get`, `system_unique_identifiers_equal`, `system_milliseconds`, `system_get_user_name`, `system_calloc`, `system_malloc`, `system_free`, `system_realloc`, `system_get_used_memory_size`, `system_show_wait_cursor`, `system_alert`, `system_kill_screen_saver`
-- cseries/debug_memory.c: `code_0007ccf0`, `code_0007cd40`, `code_0007cd90`, `code_0007cdc0`, `check_memory_status`, `local_random`, `code_0007ce40`, `code_0007cf50`, `code_0007cfc0`, `code_0007d060`, `debug_dump_memory_by_file`, `debug_malloc`, `debug_free`, `debug_realloc`, `debug_check_memory_globals`, `debug_memory_header_checksum`, `compare_file_pointer_totals`, `debug_check_pointer_header`, `debug_check_pointer_overrun`, `debug_memory_fill_with_random`, `debug_memory_add_pointer`, `debug_memory_remove_pointer`
+- cseries/debug_memory.c: `code_0007ccf0`, `code_0007cd40`, `code_0007cd90`, `code_0007cdc0`, `local_random`, `code_0007ce40`, `code_0007cf50`, `code_0007cfc0`, `code_0007d060`, `debug_dump_memory_by_file`, `debug_malloc`, `debug_free`, `debug_realloc`, `debug_check_memory_globals`, `debug_memory_header_checksum`, `compare_file_pointer_totals`, `debug_check_pointer_header`, `debug_check_pointer_overrun`, `debug_memory_fill_with_random`, `debug_memory_add_pointer`, `debug_memory_remove_pointer`
 - cseries/errors.c: `errors_output_to_debug_file`, `errors_overflow_suppression_enable`, `error_get`, `write_to_error_file`, `code_0007d9d0`, `error`, `errors_handle`, `errors_clear`, `write_to_debug_file`, `reset_error_state`
 - cseries/profile.c: `profile_internal_step`, `profile_timesection_inherit`, `profile_seconds_elapsed`, `profile_lapsed_frames`, `profile_lapsed_msec`, `find_profile_section`, `profile_enter_private`, `profile_exit_private`, `profile_describe_frame`, `profile_timesection_begin`, `profile_timesection_end`, `profile_dump_to_file`, `profile_dump_frame`, `profile_dump_frame_stop`, `string_has_prefix`, `profile_sections_activation`, `profile_sections_activate`, `profile_sections_deactivate`, `profile_find_game_value`, `profile_rasterizer_stalls`, `profile_timesection_begin_now`, `profile_timesection_end_now`, `profile_tick_start`, `profile_tick_end`, `profile_render_start`, `profile_render_end`, `profile_frame_start`, `profile_frame_end`, `profile_idle_start`, `profile_idle_end`, `profile_append`
 - cseries/progress.c: `progress_new`, `progress_update`
@@ -1357,6 +1619,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `set_rectangle2d` | math/integer_math.c | Replaced |  | through its caller `rasterizer_draw_string` |
 | `rectangle2d_width` | math/integer_math.c | Replaced |  | through its caller `draw_string` |
 | `offset_rectangle2d` | math/integer_math.c | Replaced |  | through its caller `bink_draw_frame` |
+| `floor_log2` | math/integer_math.c | Replaced |  | through its caller `bitmap_swizzle_vector2d` |
 | `bit_vector_not` | math/integer_math.c | Replaced |  | through its caller `ai_debug_communication_toggle_bits` |
 | `periodic_function_build_variable_period_x_table` | math/periodic_functions.c | Ported | sim/src/periodic.rs:73 | `tools/engine_periodic_reference.py` |
 | `real_math_initialize` | math/real_math.c | Replaced |  | through its caller `shell_initialize` |
@@ -1380,10 +1643,10 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `vector3d_from_euler_angles2d` | math/real_math.c | Matched | content/src/level.rs:375 | owed: the engine cites it, with no check against the original yet |
 | `accelerate_to_position` | math/real_math.c | Matched | sim/src/device_animation.rs:3 | owed: a first-person weapon's sway; checked through first_person_weapon_update's trace |
 
-157 Missing (65 reached from `main_loop`), by file:
+156 Missing (64 reached from `main_loop`), by file:
 
 - math/geometry.c: `convex_hull3d_verify`, `plane2d_distance_to_point`, `vector_intersect_plane3d`, `code_000f5050`, `build_torus`, `code_000f54a0`, `convex_hull2d`, `convex_hull2d_verify`, `convex_hull2d_test_circle`, `convex_hull2d_test_point`, `convex_hull2d_test_point_indexed`, `convex_hull2d_area`, `convex_hull2d_perimeter`, `convex_hull2d_test_vector`, `convex_polygon2d_verify`, `convex_polygon3d_verify`, `convex_hull3d_begin`, `convex_hull3d_expand`, `convex_hull3d`, `convex_hull3d_test_point`, `convex_hull3d_test_vector`, `code_000f76e0`, `code_000f7a90`, `code_000f7c20`, `points_dimension2d`
-- math/integer_math.c: `set_point2d`, `offset_point2d`, `rectangle2d_height`, `inset_rectangle2d`, `adjust_rectangle2d`, `intersect_rectangles2d`, `rectangle2d_hull_from_rectangles2d`, `point2d_in_rectangle2d`, `interior_rectangle2d`, `equal_rectangle2d`, `equal_point2d`, `floor_log2`, `ceiling_log2`, `floor_power2`, `ceiling_power2`, `integer_square_root`, `bit_vector_and`, `bit_vector_or`, `scale_rectangle2d`
+- math/integer_math.c: `set_point2d`, `offset_point2d`, `rectangle2d_height`, `inset_rectangle2d`, `adjust_rectangle2d`, `intersect_rectangles2d`, `rectangle2d_hull_from_rectangles2d`, `point2d_in_rectangle2d`, `interior_rectangle2d`, `equal_rectangle2d`, `equal_point2d`, `ceiling_log2`, `floor_power2`, `ceiling_power2`, `integer_square_root`, `bit_vector_and`, `bit_vector_or`, `scale_rectangle2d`
 - math/matrix_math.c: `matrix4x3_identity`, `matrix4x3_transpose`, `matrix4x3_inverse`, `matrix4x3_scale`, `matrix4x3_translation`, `matrix4x3_rotation_from_axis_and_angle`, `matrix4x3_from_point_and_quaternion`, `matrix4x3_to_point_and_vectors`, `matrix4x3_transform_point`, `matrix4x3_transform_vector`, `matrix4x3_inverse_transform_point`, `matrix4x3_inverse_transform_vector`, `matrix3x3_determinant`, `matrix3x3_transpose`, `matrix3x3_inverse`, `matrix3x3_from_axis_and_angle`, `matrix3x3_multiply`, `matrix3x3_transform_vector`, `matrix4x3_rotation_to_angles`, `matrix4x3_rotation_to_quaternion`, `vector_from_matrices4x3`, `matrix4x3_transform_plane`, `matrix4x3_inverse_transform_plane`, `matrix3x3_from_forward_and_up`, `matrix3x3_rotation_to_quaternion`, `valid_real_plane3d`, `matrix4x3_from_plane`
 - math/periodic_functions.c: `@periodic_function_build_variable_period_x_table`
 - math/probability.c: `factorial`, `permutations`, `combinations`, `permute`, `combine`
@@ -2196,7 +2459,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `IDirect3DDevice8_SetVertexData4ub` | rasterizer/xbox/rasterizer_xbox_decals.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
 | `D3DVertexBuffer_Unlock` | rasterizer/xbox/rasterizer_xbox_decals.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
 | `IDirect3DVertexBuffer8_Release` | rasterizer/xbox/rasterizer_xbox_decals.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
-| `IDirect3DVertexBuffer8_Register` | rasterizer/xbox/rasterizer_xbox_decals.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
+| `IDirect3DVertexBuffer8_Register` | rasterizer/xbox/rasterizer_xbox_decals.c | Replaced | import/src/lib.rs | maps imported to a typed format |
 | `IDirect3DVertexBuffer8_Lock` | rasterizer/xbox/rasterizer_xbox_decals.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
 | `IDirect3DVertexBuffer8_Unlock` | rasterizer/xbox/rasterizer_xbox_decals.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
 | `_rasterizer_decals_initialize` | rasterizer/xbox/rasterizer_xbox_decals.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
@@ -3058,19 +3321,48 @@ docs/engine.md's "The coverage census" says what each class needs.
 
 | Function | File | Class | Engine | Evidence |
 | --- | --- | --- | --- | --- |
+| `scenario_unload` | scenario/scenario.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `global_scenario_get` | scenario/scenario.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `global_scenario_try_and_get` | scenario/scenario.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `global_structure_bsp_get` | scenario/scenario.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `global_collision_bsp_get` | scenario/scenario.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `global_bsp3d_get` | scenario/scenario.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `scenario_get_game_globals` | scenario/scenario.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `global_structure_bsp_tag_index_get` | scenario/scenario.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `default_material_definition_get` | scenario/scenario.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `scenario_material_definition_get` | scenario/scenario.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `scenario_fog_at_point` | scenario/scenario.c | Replaced | ffi/src/camera.rs | the enhanced lighting and Metal renderer |
+| `scenario_illumination_at_point` | scenario/scenario.c | Replaced | ffi/src/camera.rs | the enhanced lighting and Metal renderer |
 | `scenario_get_sky_definition_index` | scenario/scenario.c | Replaced |  | through its caller `scenario_get_sky` |
 | `scenario_get_sky` | scenario/scenario.c | Replaced |  | through its caller `render_sky` |
+| `scenario_fog_region_get_fog_index` | scenario/scenario.c | Replaced | ffi/src/camera.rs | the enhanced lighting and Metal renderer |
+| `scenario_switch_structure_bsp` | scenario/scenario.c | Matched | sim/src/lib.rs | owed: the engine's own tests (sim/src/lib.rs); no check against the original yet |
+| `scenario_reload_structure_bsp_if_necessary` | scenario/scenario.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `scenario_get_structure_reference_index_from_tag_index` | scenario/scenario.c | Replaced | import/src/lib.rs | maps imported to a typed format |
 | `scenario_trigger_volume_test_point` | scenario/scenario.c | Matched | content/src/campaign.rs:138 | owed: the engine cites it, with no check against the original yet |
+| `scenario_trigger_volume_test_object` | scenario/scenario.c | Matched | campaign/src/objects.rs | owed: the engine's own tests (campaign/tests/scenarios.rs); no check against the original yet |
 | `scenario_debug_to_file` | scenario/scenario.c | Replaced |  | through its caller `_texture_cache_bitmap_get_hardware_format` |
+| `global_structure_bsp_index_get` | scenario/scenario.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `scenario_load` | scenario/scenario.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `scenario_get_fog_region_index` | scenario/scenario.c | Replaced | ffi/src/camera.rs | the enhanced lighting and Metal renderer |
 | `scenario_location_water_depth` | scenario/scenario.c | Matched | content/src/level.rs:741 | owed: water; reads the object, tag and map world, which the fake worlds do not hold (the structure's fog planes) |
+| `scenario_get_sound_environment` | scenario/scenario.c | Matched | ffi/src/sound_world.rs | owed: the engine's own tests (ffi/tests/sounds.rs); no check against the original yet |
 | `interpolate_real_rgb_color` | scenario/scenario.c | Replaced |  | through its caller `object_render_state_refresh` |
 | `scenario_get_atmospheric_fog` | scenario/scenario.c | Replaced |  | through its caller `render_player_frame` |
+| `wind_dispose_from_old_map` | scenario/wind.c | Matched | ffi/src/particles/wind.rs | owed: the engine's own tests (ffi/src/particles/wind.rs); no check against the original yet |
+| `wind_variance_get` | scenario/wind.c | Matched | ffi/src/particles/wind.rs | owed: the engine's own tests (ffi/src/particles/wind.rs); no check against the original yet |
+| `wind_update` | scenario/wind.c | Matched | ffi/src/particles/wind.rs | owed: the engine's own tests (ffi/src/particles/wind.rs); no check against the original yet |
+| `scenario_get_current_from_weather_palette` | scenario/wind.c | Matched | ffi/src/particles/wind.rs | owed: the engine's own tests (ffi/src/particles/wind.rs); no check against the original yet |
+| `wind_variance_initialize` | scenario/wind.c | Matched | ffi/src/particles/wind.rs | owed: the engine's own tests (ffi/src/particles/wind.rs); no check against the original yet |
+| `wind_initialize_for_new_map` | scenario/wind.c | Matched | ffi/src/particles/wind.rs | owed: the engine's own tests (ffi/src/particles/wind.rs); no check against the original yet |
+| `scenario_get_current` | scenario/wind.c | Matched | ffi/src/particles/wind.rs | owed: the engine's own tests (ffi/src/particles/wind.rs); no check against the original yet |
+| `scenario_get_wind` | scenario/wind.c | Matched | ffi/src/particles/wind.rs | owed: the engine's own tests (ffi/src/particles/wind.rs); no check against the original yet |
 
-50 Missing (42 reached from `main_loop`), by file:
+21 Missing (17 reached from `main_loop`), by file:
 
 - scenario/multiplayer_scenario_description.c: `multiplayer_scenario_description_get_list`, `map_name_from_multiplayer_scenario_description_item`
-- scenario/scenario.c: `scenario_call_disconnect_from_structure_bsp_procs`, `scenario_call_reconnect_to_structure_bsp_procs`, `scenario_initialize`, `scenario_initialize_for_new_map`, `scenario_dispose_from_old_map`, `scenario_frame_update`, `scenario_unload`, `global_scenario_get`, `global_scenario_try_and_get`, `global_structure_bsp_get`, `global_collision_bsp_get`, `global_bsp3d_get`, `scenario_get_game_globals`, `global_structure_bsp_tag_index_get`, `scenario_location_award_bonus`, `default_material_definition_get`, `scenario_material_definition_get`, `scenario_location_deafening`, `scenario_fog_at_point`, `scenario_illumination_at_point`, `scenario_leaf_index_from_point`, `scenario_test_pvs`, `scenario_test_pas`, `scenario_location_potentially_visible_local`, `scenario_location_potentially_visible`, `scenario_object_name_index_from_string`, `scenario_fog_region_get_fog_index`, `scenario_switch_structure_bsp`, `scenario_reload_structure_bsp_if_necessary`, `scenario_get_structure_reference_index_from_tag_index`, `scenario_trigger_volume_test_object`, `global_structure_bsp_index_get`, `scenario_load`, `scenario_location_from_point`, `scenario_location_from_line`, `scenario_ensure_point_within_world`, `scenario_get_fog_region_index`, `scenario_location_underwater`, `scenario_get_sound_environment`
-- scenario/wind.c: `wind_dispose_from_old_map`, `wind_variance_get`, `wind_update`, `scenario_get_current_from_weather_palette`, `wind_variance_initialize`, `wind_initialize_for_new_map`, `scenario_get_current`, `scenario_get_wind`, `scenario_get_water_current`
+- scenario/scenario.c: `scenario_call_disconnect_from_structure_bsp_procs`, `scenario_call_reconnect_to_structure_bsp_procs`, `scenario_initialize`, `scenario_initialize_for_new_map`, `scenario_dispose_from_old_map`, `scenario_frame_update`, `scenario_location_award_bonus`, `scenario_location_deafening`, `scenario_leaf_index_from_point`, `scenario_test_pvs`, `scenario_test_pas`, `scenario_location_potentially_visible_local`, `scenario_location_potentially_visible`, `scenario_object_name_index_from_string`, `scenario_location_from_point`, `scenario_location_from_line`, `scenario_ensure_point_within_world`, `scenario_location_underwater`
+- scenario/wind.c: `scenario_get_water_current`
 
 ## `shaders`
 
@@ -3260,16 +3552,50 @@ docs/engine.md's "The coverage census" says what each class needs.
 
 | Function | File | Class | Engine | Evidence |
 | --- | --- | --- | --- | --- |
+| `node_stack_push` | structures/leaf_map.c | Replaced | import/src/level.rs | maps imported to a typed format |
+| `node_stack_pop` | structures/leaf_map.c | Replaced | import/src/level.rs | maps imported to a typed format |
+| `node_stack_read` | structures/leaf_map.c | Replaced | import/src/level.rs | maps imported to a typed format |
+| `leaf_map_delete` | structures/leaf_map.c | Replaced | import/src/level.rs | maps imported to a typed format |
+| `find_like_crossing` | structures/leaf_map.c | Replaced | import/src/level.rs | maps imported to a typed format |
+| `map_leaf_find_face_on_node` | structures/leaf_map.c | Replaced | import/src/level.rs | maps imported to a typed format |
+| `leaf_map_close_portal` | structures/leaf_map.c | Replaced | import/src/level.rs | maps imported to a typed format |
+| `leaf_map_leaf_is_closed` | structures/leaf_map.c | Replaced | import/src/level.rs | maps imported to a typed format |
+| `leaf_map_family_mark` | structures/leaf_map.c | Replaced | import/src/level.rs | maps imported to a typed format |
 | `render_debug_leaf_portal` | structures/leaf_map.c | Replaced |  | through its caller `render_debug_leaf_portals` |
 | `render_debug_leaf_portals` | structures/leaf_map.c | Replaced |  | through its caller `structure_render_preprocess` |
+| `leaf_map_build_portal_from_leaves` | structures/leaf_map.c | Replaced | import/src/level.rs | maps imported to a typed format |
+| `leaf_map_get_leaf_bounds` | structures/leaf_map.c | Replaced | import/src/level.rs | maps imported to a typed format |
+| `leaf_map_closure` | structures/leaf_map.c | Replaced | import/src/level.rs | maps imported to a typed format |
+| `leaf_map_leaf_spans_polygon` | structures/leaf_map.c | Replaced | import/src/level.rs | maps imported to a typed format |
+| `leaf_face_get_vertex3d` | structures/leaf_map.c | Replaced | import/src/level.rs | maps imported to a typed format |
+| `render_debug_leaf_faces` | structures/leaf_map.c | Replaced | import/src/level.rs | maps imported to a typed format |
+| `normalize_three_dee` | structures/leaf_map.c | Replaced | import/src/level.rs | maps imported to a typed format |
+| `intersect_planes3d` | structures/leaf_map.c | Replaced | import/src/level.rs | maps imported to a typed format |
+| `leaf_map_build_portals_from_leaf` | structures/leaf_map.c | Replaced | import/src/level.rs | maps imported to a typed format |
+| `leaf_map_build_leaf_face_for_leaf_on_node` | structures/leaf_map.c | Replaced | import/src/level.rs | maps imported to a typed format |
+| `leaf_map_build_portals` | structures/leaf_map.c | Replaced | import/src/level.rs | maps imported to a typed format |
+| `leaf_map_build_leaf_faces_for_leaf` | structures/leaf_map.c | Replaced | import/src/level.rs | maps imported to a typed format |
+| `leaf_map_build_leaf_faces` | structures/leaf_map.c | Replaced | import/src/level.rs | maps imported to a typed format |
+| `leaf_map_initialize_from_bsp` | structures/leaf_map.c | Replaced | import/src/level.rs | maps imported to a typed format |
 | `calculate_world_from_cell_index_and_offset` | structures/structure_detail_objects.c | Replaced |  | through its caller `render_debug_detail_objects` |
 | `get_local_player_datum` | structures/structure_detail_objects.c | Replaced |  | through its caller `render_debug_detail_objects` |
+| `structure_detail_objects_initialize` | structures/structure_detail_objects.c | Replaced | ffi/src/render_level.rs | the enhanced lighting and Metal renderer |
+| `structure_detail_objects_dispose_from_old_map` | structures/structure_detail_objects.c | Replaced | ffi/src/render_level.rs | the enhanced lighting and Metal renderer |
+| `structure_detail_objects_dispose` | structures/structure_detail_objects.c | Replaced | ffi/src/render_level.rs | the enhanced lighting and Metal renderer |
+| `structure_detail_objects_flush` | structures/structure_detail_objects.c | Replaced | ffi/src/render_level.rs | the enhanced lighting and Metal renderer |
+| `detail_object_offset` | structures/structure_detail_objects.c | Replaced | ffi/src/render_level.rs | the enhanced lighting and Metal renderer |
 | `key_compare_cells_lower_bound` | structures/structure_detail_objects.c | Replaced |  | through its caller `get_lower_bound_cell` |
 | `key_compare_cells_upper_bound` | structures/structure_detail_objects.c | Replaced |  | through its caller `get_upper_bound_cell` |
 | `get_lower_bound_cell` | structures/structure_detail_objects.c | Replaced |  | through its caller `structure_render_detail_objects` |
 | `get_upper_bound_cell` | structures/structure_detail_objects.c | Replaced |  | through its caller `structure_render_detail_objects` |
+| `dot_product4d` | structures/structure_detail_objects.c | Replaced | ffi/src/render_level.rs | the enhanced lighting and Metal renderer |
+| `structure_detail_objects_initialize_for_new_map` | structures/structure_detail_objects.c | Replaced | ffi/src/render_level.rs | the enhanced lighting and Metal renderer |
 | `structure_render_detail_objects` | structures/structure_detail_objects.c | Replaced |  | through its caller `render_window` |
 | `render_debug_detail_objects` | structures/structure_detail_objects.c | Replaced |  | through its caller `render_debug` |
+| `compare_temp_markers` | structures/structure_lens_flares.c | Replaced | ffi/src/lights.rs | the enhanced lighting and Metal renderer |
+| `cluster_index_from_point` | structures/structure_lens_flares.c | Replaced | ffi/src/lights.rs | the enhanced lighting and Metal renderer |
+| `build_structure_lens_flares` | structures/structure_lens_flares.c | Replaced | ffi/src/lights.rs | the enhanced lighting and Metal renderer |
+| `structure_lens_flares_place` | structures/structure_lens_flares.c | Replaced | ffi/src/lights.rs | the enhanced lighting and Metal renderer |
 | `structure_render_set_fog_offset` | structures/structure_render.c | Replaced |  | through its caller `structure_get_planar_fog` |
 | `compare_surface_indices` | structures/structure_render.c | Replaced |  | through its caller `structure_render_sort_surface_indices` |
 | `structure_render_dynamic_triangles_from_bitvector` | structures/structure_render.c | Replaced |  | through its caller `structure_render_build_dynamic_triangles` |
@@ -3289,6 +3615,13 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `structure_render_specular_light` | structures/structure_render.c | Replaced |  | through its caller `lights_render_specular` |
 | `structure_render_diffuse_light` | structures/structure_render.c | Replaced |  | through its caller `lights_render_diffuse` |
 | `structure_render_shadow` | structures/structure_render.c | Replaced |  | through its caller `render_object_shadow_end` |
+| `structure_decals_initialize` | structures/structure_runtime_decals.c | Replaced | app/Sources/OpenCEEngineRender/DecalPass.swift | the enhanced lighting and Metal renderer |
+| `structure_decals_initialize_for_new_map` | structures/structure_runtime_decals.c | Replaced | app/Sources/OpenCEEngineRender/DecalPass.swift | the enhanced lighting and Metal renderer |
+| `structure_decals_reconnect_to_structure_bsp` | structures/structure_runtime_decals.c | Replaced | app/Sources/OpenCEEngineRender/DecalPass.swift | the enhanced lighting and Metal renderer |
+| `structure_decals_disconnect_from_structure_bsp` | structures/structure_runtime_decals.c | Replaced | app/Sources/OpenCEEngineRender/DecalPass.swift | the enhanced lighting and Metal renderer |
+| `structure_decals_dispose_from_old_map` | structures/structure_runtime_decals.c | Replaced | app/Sources/OpenCEEngineRender/DecalPass.swift | the enhanced lighting and Metal renderer |
+| `structure_decals_dispose` | structures/structure_runtime_decals.c | Replaced | app/Sources/OpenCEEngineRender/DecalPass.swift | the enhanced lighting and Metal renderer |
+| `structure_decals_update` | structures/structure_runtime_decals.c | Replaced | app/Sources/OpenCEEngineRender/DecalPass.swift | the enhanced lighting and Metal renderer |
 | `structure_visibility_find_camera` | structures/structure_visibility.c | Replaced |  | through its caller `render_player_frame` |
 | `structure_visibility_traverse_subclusters` | structures/structure_visibility.c | Replaced |  | through its caller `structure_visibility_compute` |
 | `structure_visibility_traverse_surface_lists` | structures/structure_visibility.c | Replaced |  | through its caller `structure_visibility_compute` |
@@ -3314,30 +3647,31 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `structure_test_vector` | structures/structures.c | Replaced |  | through its caller `light_particle` |
 | `structure_get_planar_fog` | structures/structures.c | Replaced |  | through its caller `render_player_frame` |
 | `render_debug_fog_planes` | structures/structures.c | Replaced |  | through its caller `render_debug` |
+| `structure_bsp_get_cluster_pvs` | structures/structure_bsp_definitions.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `vertex_type_from_shader_tag` | structures/structure_bsp_definitions.c | Replaced | import/src/lib.rs | maps imported to a typed format |
 | `structure_bsp_get_cluster_encoded_sound_distance` | structures/structure_bsp_definitions.c | Matched | content/src/level.rs:766 | owed: the engine cites it, with no check against the original yet |
 | `structure_visibility_dequantize_byte_to_real` | structures/structure_visibility.c | Replaced |  | through its caller `dequantize_byte_to_real_rectangle3d` |
 
-71 Missing (36 reached from `main_loop`), by file:
+28 Missing (23 reached from `main_loop`), by file:
 
 - structures/cluster_partitions.c: `reference_list_remove`, `reference_list_copy`, `cluster_partition_new`, `cluster_partition_make_valid`, `cluster_partition_make_invalid`, `cluster_partition_delete`, `cluster_partition_get_next_datum`, `cluster_partition_get_first_cluster`, `cluster_partition_get_next_cluster`, `cluster_partition_copy`, `cluster_partition_get_first_reference`, `cluster_partition_reconnect`, `cluster_partition_disconnect`, `cluster_partition_get_first_datum`
-- structures/leaf_map.c: `node_stack_push`, `node_stack_pop`, `node_stack_read`, `leaf_map_delete`, `find_like_crossing`, `map_leaf_find_face_on_node`, `leaf_map_close_portal`, `leaf_map_leaf_is_closed`, `leaf_map_family_mark`, `leaf_map_build_portal_from_leaves`, `leaf_map_get_leaf_bounds`, `leaf_map_closure`, `leaf_map_leaf_spans_polygon`, `leaf_face_get_vertex3d`, `render_debug_leaf_faces`, `normalize_three_dee`, `intersect_planes3d`, `leaf_map_build_portals_from_leaf`, `leaf_map_build_leaf_face_for_leaf_on_node`, `leaf_map_build_portals`, `leaf_map_build_leaf_faces_for_leaf`, `leaf_map_build_leaf_faces`, `leaf_map_initialize_from_bsp`
-- structures/structure_bsp_definitions.c: `structure_bsp_get_cluster_pvs`, `vertex_type_from_shader_tag`
-- structures/structure_detail_objects.c: `structure_detail_objects_initialize`, `structure_detail_objects_dispose_from_old_map`, `structure_detail_objects_dispose`, `structure_detail_objects_flush`, `detail_object_offset`, `dot_product4d`, `structure_detail_objects_initialize_for_new_map`
-- structures/structure_lens_flares.c: `compare_temp_markers`, `cluster_index_from_point`, `build_structure_lens_flares`, `structure_lens_flares_place`
-- structures/structure_runtime_decals.c: `structure_decals_initialize`, `structure_decals_initialize_for_new_map`, `structure_decals_reconnect_to_structure_bsp`, `structure_decals_disconnect_from_structure_bsp`, `structure_decals_dispose_from_old_map`, `structure_decals_dispose`, `structure_decals_update`
 - structures/structure_visibility.c: `debug_pvs`
 - structures/structures.c: `structures_initialize`, `structures_initialize_for_new_map`, `structures_dispose_from_old_map`, `structures_dispose`, `structure_cluster_marker_begin`, `structure_cluster_unmarked`, `structure_cluster_mark`, `structure_cluster_marker_end`, `sphere_intersects_cluster_portal`, `code_00188200`, `structure_clusters_in_cone`, `structure_clusters_in_sphere`, `structure_clusters_in_sphere_recursive`
 
 ## `tag_files`
 
+| Function | File | Class | Engine | Evidence |
+| --- | --- | --- | --- | --- |
+| `tag_name_strip_path` | tag_files/tag_files.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `tag_empty_data` | tag_files/tag_groups.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `tag_data_get_pointer` | tag_files/tag_groups.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `tag_block_get_element_with_size` | tag_files/tag_groups.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `tag_block_get_element_fast` | tag_files/tag_groups.h | Replaced | import/src/lib.rs | maps imported to a typed format |
 
-49 Missing (35 reached from `main_loop`), by file:
+44 Missing (30 reached from `main_loop`), by file:
 
 - tag_files/files.c: `file_location_set_volume`, `file_reference_create`, `find_files`, `file_read_into_memory`, `file_printf`, `file_reference_get_info`, `file_reference_copy`, `file_reference_add_directory`, `file_reference_set_name`, `file_reference_get_location`, `file_reference_get_name`, `file_references_equal`, `file_reference_create_from_path`, `directory_create_or_delete_contents`, `datastore_read`, `datastore_write`
 - tag_files/files_windows.c: `file_location_is_valid`, `file_compare_last_modification_dates`, `find_files_start`, `file_path_add_name`, `file_path_add_extension`, `file_path_remove_name`, `file_path_split`, `file_location_get_full_path`, `file_read_only`, `code_00189ca0`, `file_create`, `file_delete`, `file_exists`, `file_rename`, `file_open`, `file_close`, `file_get_position`, `file_set_position`, `file_get_eof`, `file_set_eof`, `file_read`, `file_write`, `file_read_from_position`, `file_write_to_position`, `file_get_last_modification_date`, `file_get_size`, `find_files_next`, `file_error`
-- tag_files/tag_files.c: `tag_name_strip_path`
-- tag_files/tag_groups.c: `tag_empty_data`, `tag_data_get_pointer`, `tag_block_get_element_with_size`
-- tag_files/tag_groups.h: `tag_block_get_element_fast`
 
 ## `text`
 
