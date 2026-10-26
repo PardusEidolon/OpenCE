@@ -1,0 +1,6 @@
+Task: Add the "library" reason to the census's fixed list, with a test that it needs a stand-in and a player-visible note.
+Add the library reason to the census, which asks what the player sees
+
+A function whose job a library does (Jolt's collision for the collision BSP) is Replaced, but unlike the renderer or the Xbox hardware its behaviour is still the player's: they walk on the same floors. So the library reason asks for lives_on, the behaviour the player sees and where it lives on, as well as the stand-in every Replaced function names.
+
+Checked: the new census test failed first (unknown variant) and passes now, along with the other 89 census tests.
