@@ -1,0 +1,6 @@
+Task: Class the debug and console functions as "the editor and tools".
+Class the console, the cheats and the debug draws as tools
+
+The original's console (main/console.c), its terminal (interface/terminal.c) and its cheats (game/cheats.c, which the console alone sets) are rules of the tools reason, standing in as the dev panel's script, logbook and controls. Thirty debug functions outside the debug files (the render_debug draws, the debug picks and teleports, the debug script commands, the frame-rate and profile readouts) are entries of their own. recorded_animations_clear_debug_storage stays Missing: it is a game-state reset callback, not a tool. The saved games' player_profile.c is not a tool either.
+
+Checked: the new real-tree test failed first and passes now; census --check passes at 4,582 Missing (64 fewer).
