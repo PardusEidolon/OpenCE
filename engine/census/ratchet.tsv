@@ -12,9 +12,8 @@ interface	452	19	115
 items	103	1	25
 main	91	1	1
 math	73	0	5
-memory	0	0	2
 models	11	1	13
-objects	229	12	59
+objects	227	12	59
 physics	45	26	40
 rasterizer	0	0	3
 render	0	0	2

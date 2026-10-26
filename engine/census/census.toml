@@ -2693,8 +2693,9 @@ primitive = "Vec"
 
 [function.data_next_index]
 class = "matched"
-owed = "the engine cites it, with no check against the original yet"
-
+engine = "sim/src/objects.rs"
+check = "sim/tests/data_reference.rs"
+against = "trace"
 [function.data_packet_groups_get_error]
 class = "replaced"
 because = "network"
@@ -2730,8 +2731,9 @@ primitive = "Vec"
 
 [function.datum_new]
 class = "matched"
-owed = "the engine cites it, with no check against the original yet"
-
+engine = "sim/src/objects.rs"
+check = "sim/tests/data_reference.rs"
+against = "trace"
 [function.datum_new_at_index]
 class = "native"
 primitive = "Vec"
