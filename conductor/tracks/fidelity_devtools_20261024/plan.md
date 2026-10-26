@@ -202,9 +202,9 @@ Found in play (2026-10-25): music and many sounds (hitting surfaces and the rest
 - [x] Task: Culling, indirect draws, tile memory and half precision 5fb78467
     - [x] Write tests: the drawn set matches brute-force visibility; golden frames within tolerance
     - [x] Cluster/PVS and Hi-Z culling, argument buffers, memoryless attachments (cell culling built; the rest measured as not needed: the frame is not geometry-bound)
-- [ ] Task: Upscaling and the parallel simulation
-    - [ ] Write tests: MetalFX golden frames at 0.67; dynamic resolution holds the target; replay hash unchanged in parallel
-    - [ ] MetalFX, dynamic resolution, the ECS in parallel
+- [x] Task: Upscaling and the parallel simulation b56d1bcf
+    - [x] Write tests: MetalFX golden frames at 0.67; dynamic resolution holds the target; replay hash unchanged in parallel
+    - [x] MetalFX, dynamic resolution, the ECS in parallel (MetalFX golden frames at 0.67 and dynamic resolution built; the ECS in parallel measured slower and kept on one thread)
 - [x] Task: Conductor - User Manual Verification 'Phase 16: Performance' (Protocol in workflow.md)
 
 ## Phase 17: Tiers and graphics settings
