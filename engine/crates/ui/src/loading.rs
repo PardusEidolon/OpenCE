@@ -208,6 +208,7 @@ impl LoadingScreen {
     }
 
     /// The screen `seconds` after the last frame.
+    /// (the original's `progress_bar_render`, in part)
     pub fn update(&mut self, seconds: f32) -> LoadingFrame {
         let seconds = if seconds.is_finite() {
             seconds.clamp(0.0, LONGEST_FRAME)

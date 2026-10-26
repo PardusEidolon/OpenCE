@@ -262,6 +262,7 @@ impl Mission {
 
 /// Places the encounters made when the mission begins
 /// (`encounters_create_for_new_map`).
+/// (the original's `encounter_create`, in part)
 pub(crate) fn begin(mission: &mut Mission) {
     let level = Arc::clone(&mission.level);
     for (index, encounter) in level.scenario.campaign.encounters.iter().enumerate() {
@@ -303,6 +304,7 @@ pub(crate) fn place(mission: &mut Mission, reference: AiReference) {
 
 /// Places squad `s` of encounter `e`, an actor at each of its starting
 /// locations its count reaches (`actor_place`).
+/// (the original's `actor_new`, in part)
 fn place_squad(mission: &mut Mission, level: &Level, encounter: &Encounter, (e, s): (u16, u8)) {
     let campaign = &level.scenario.campaign;
     let Some(squad) = encounter.squads.get(usize::from(s)) else {
@@ -598,6 +600,7 @@ fn pick_goal(
 }
 
 /// Actor `index`'s input this tick.
+/// (the original's `actor_update`, in part)
 fn think_one(mission: &mut Mission, level: &Level, others: &[Other], index: usize) -> TickInput {
     let Some(player) = mission.sim.actors().get(index) else {
         return TickInput::default();

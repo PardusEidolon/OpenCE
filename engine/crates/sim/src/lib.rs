@@ -380,6 +380,8 @@ impl Simulation {
     /// player past the inputs stands still): their bipeds move and fire,
     /// the vehicles move, then the world's systems run. The free camera
     /// takes the first input (`game_tick`).
+    /// (the original's `units_update`, in part)
+    /// (the original's `players_update_before_game`, in part)
     pub fn step_all(&mut self, inputs: &[TickInput]) {
         // (the actors move and fire after the players, as more of them)
         let humans = self.players.len();
@@ -401,6 +403,7 @@ impl Simulation {
     }
 
     /// One tick of the players and the actors among them.
+    /// (the original's `unit_update`, in part)
     fn step_everyone(&mut self, first: TickInput, inputs: &[TickInput]) {
         self.world.insert_resource(CurrentInput(first));
         self.world
@@ -747,6 +750,7 @@ impl Simulation {
     /// Makes the player: its biped standing at `level`'s player start
     /// `start`, moving over that start's structure BSP, the camera at its
     /// eyes. The players there were before are removed.
+    /// (the original's `player_new`, in part)
     pub fn spawn_player(
         &mut self,
         level: &Level,
@@ -822,6 +826,7 @@ impl Simulation {
     /// Stands player `index` again at `level`'s player start `start` with
     /// a new biped on `team` and its starting weapons; its old biped stays
     /// where it fell. `None` if there is no such player.
+    /// (the original's `player_spawn`, in part)
     pub fn respawn_player(
         &mut self,
         index: usize,
@@ -1262,6 +1267,7 @@ impl Simulation {
 
     /// One tick of the first-person weapon, posed from the camera: shown
     /// only out of a living player's eyes.
+    /// (the original's `first_person_weapons_update`, in part)
     fn update_first_person(&mut self) {
         let Some(player) = self.players.first() else {
             self.first_person.hide();

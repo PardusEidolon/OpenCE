@@ -50,6 +50,7 @@ enum Custom {
 
 /// The message `prompt` shows and its own pictures, as `hud.c` fills them
 /// (`hud_show_action_response`).
+/// (the original's `hud_messaging_update`, in part)
 fn message(level: &Level, prompt: &ActionPrompt) -> (usize, Vec<Custom>) {
     let icon_text = |tag: &TagRef| {
         level

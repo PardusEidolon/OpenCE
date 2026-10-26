@@ -734,6 +734,7 @@ impl Player {
 
     /// The camera: at its eyes, following behind them, or behind its
     /// vehicle.
+    /// (the original's `observer_update`, in part)
     fn camera(&self) -> Transform {
         let rotation = look_rotation(self.yaw, self.pitch);
         let eyes = self.mover.position + Vec3::Z * self.mover.camera_height();
@@ -1321,6 +1322,7 @@ impl Player {
     /// as `pick_up` would choose it: the nearest within reach that it
     /// does not carry, its hands being full (with a hand free, it takes
     /// one without asking).
+    /// (the original's `player_examine_nearby_item`, in part)
     pub(crate) fn swap_offer(&mut self, world: &mut World) -> Option<TagRef> {
         if self.seat.is_some() || self.inventory.weapons.len() < armory::MAXIMUM_WEAPONS {
             return None;

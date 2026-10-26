@@ -244,6 +244,7 @@ pub fn kind_index(kind: ObjectKind) -> usize {
 }
 
 /// Makes an object in `world`: its components, then its kind's.
+/// (the original's `unit_new`, in part)
 pub(crate) fn spawn(world: &mut World, spawn: ObjectSpawn) -> Result<ObjectHandle, TableFull> {
     let hook = world.get_resource_or_init::<ObjectKinds>().hook(spawn.kind);
     let entity = world.spawn_empty().id();

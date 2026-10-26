@@ -163,6 +163,7 @@ pub(crate) struct Names<'a, W> {
 
 /// A line made into nodes, to go after the scenario's: the nodes, the
 /// root's index among them last.
+/// (the original's `hs_compile_expression`, in part)
 pub(crate) fn compile<W: World>(
     text: &str,
     names: &Names<'_, W>,

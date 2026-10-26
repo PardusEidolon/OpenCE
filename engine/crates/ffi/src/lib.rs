@@ -1130,6 +1130,7 @@ impl Engine {
     /// Adds a displayed frame's time: runs the ticks it covers and
     /// publishes a snapshot with the interpolation factor between the last
     /// two. Returns the ticks run.
+    /// (the original's `main_loop`, in part)
     pub fn advance(&self, frame_seconds: f64) -> Result<u32, EngineError> {
         let mut registry = self.lock_registry();
         let mut state = self.lock();

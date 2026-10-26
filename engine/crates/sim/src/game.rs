@@ -310,6 +310,7 @@ impl Rules {
     /// scores, it drops a flag it carried and waits to respawn.
     /// (`game_engine_player_killed`, `slayer_engine_player_killed_player`,
     /// `ctf_engine_player_killed_player`)
+    /// (the original's `game_statistics_record_kill`, in part)
     pub fn player_killed(&mut self, victim: usize, killer: Option<usize>, at: [f32; 3]) {
         let Some(dead) = self.contestants.get(victim).copied() else {
             return;

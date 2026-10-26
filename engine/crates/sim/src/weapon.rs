@@ -205,6 +205,7 @@ impl WeaponState {
     }
 
     /// Readies it again (drawn after being put away).
+    /// (the original's `weapon_ready`, in part)
     pub fn draw(&mut self, weapon: &Weapon) {
         self.ready = ticks(weapon.ready_time);
         self.cues.ready = true;

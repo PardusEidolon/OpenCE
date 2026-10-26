@@ -673,6 +673,12 @@ class = "matched"
 engine = "campaign/src/actors.rs"
 owed = "the campaign's rewrite of the AI; no check against the original yet"
 
+[function.actor_new]
+class = "partial"
+engine = "campaign/src/actors.rs"
+leaves_out = ["the actor's variants and their weapons", "its perception and memory"]
+owed = "the engine's own version; no check against the original yet"
+
 [function.actor_perception_update]
 class = "partial"
 engine = "campaign/src/actors.rs"
@@ -690,6 +696,12 @@ class = "partial"
 engine = "campaign/src/actors.rs"
 leaves_out = ["the pre- and post-evaluators", "discarded positions", "line of sight from each position", "the firing position groups"]
 owed = "the campaign's rewrite of the AI; no check against the original yet (Phase 11's divergences)"
+
+[function.actor_update]
+class = "partial"
+engine = "campaign/src/actors.rs"
+leaves_out = ["actions and their state machines", "emotions", "swarms", "dormancy"]
+owed = "the engine's own version; no check against the original yet"
 
 [function.actors_update]
 class = "partial"
@@ -709,9 +721,21 @@ owed = "the engine cites it, with no check against the original yet"
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
 
+[function.ai_conversation_begin]
+class = "partial"
+engine = "campaign/src/conversations.rs"
+leaves_out = ["the participants chosen by distance and by sight"]
+owed = "the engine's own version; no check against the original yet"
+
 [function.ai_conversation_line]
 class = "matched"
 owed = "AI; reads the object, tag and map world, which the fake worlds do not hold (the scenario's conversations); campaign/tests/flow.rs"
+
+[function.ai_conversation_line_perform]
+class = "partial"
+engine = "campaign/src/conversations.rs"
+leaves_out = ["the speaker's animation", "the line's subtitle"]
+owed = "the engine's own version; no check against the original yet"
 
 [function.ai_conversation_status]
 class = "matched"
@@ -721,6 +745,12 @@ owed = "AI; reads the object, tag and map world, which the fake worlds do not ho
 class = "matched"
 engine = "campaign/src/conversations.rs"
 owed = "a script function the campaign wires; no check against the original yet"
+
+[function.ai_conversation_update]
+class = "partial"
+engine = "campaign/src/conversations.rs"
+leaves_out = ["the participants' gestures and looking at each other"]
+owed = "the engine's own version; no check against the original yet"
 
 [function.ai_erase]
 class = "matched"
@@ -2865,6 +2895,12 @@ class = "matched"
 engine = "sim/src/effects.rs"
 owed = "the engine's own tests (sim/src/effects.rs); no check against the original yet"
 
+[function.encounter_create]
+class = "partial"
+engine = "campaign/src/actors.rs"
+leaves_out = ["the encounter's firing positions and their states", "the squads placed by delay or by count"]
+owed = "the engine's own version; no check against the original yet"
+
 [function.encounters_create_for_new_map]
 class = "partial"
 engine = "campaign/src/actors.rs"
@@ -3242,6 +3278,12 @@ owed = "the engine cites it, with no check against the original yet"
 class = "matched"
 owed = "reads the object, tag and map world, which the fake worlds do not hold (the weapon tag); its states are first_person_reference's"
 
+[function.first_person_weapons_update]
+class = "partial"
+engine = "sim/src/lib.rs"
+leaves_out = ["the first-person animations' blending", "the weapon's sway"]
+owed = "the engine's own version; no check against the original yet"
+
 [function.floor_power2]
 class = "native"
 primitive = "next_power_of_two"
@@ -3357,6 +3399,12 @@ class = "partial"
 engine = "campaign/src/checkpoint.rs"
 leaves_out = ["the memory image: the saved game holds the inputs, replayed from the mission's start"]
 owed = "the engine's own tests (campaign/src/checkpoint.rs); no check against the original yet"
+
+[function.game_statistics_record_kill]
+class = "partial"
+engine = "sim/src/game.rs"
+leaves_out = ["assists", "multiple kills and kills in a row", "the attackers' damage"]
+owed = "the engine's own version; no check against the original yet"
 
 [function.game_tick]
 class = "matched"
@@ -3514,6 +3562,12 @@ class = "partial"
 engine = "script/src/console.rs"
 leaves_out = ["the scenario's source text: maps carry their scripts compiled, so only the console's line is compiled"]
 owed = "the console's compiler (script/src/console.rs); no check against the original yet"
+
+[function.hs_compile_expression]
+class = "partial"
+engine = "script/src/console.rs"
+leaves_out = ["the scenario's scripts (compiled at import)", "the compiler's errors as the original words them"]
+owed = "the engine's own version; no check against the original yet"
 
 [function.hs_data_to_void]
 class = "matched"
@@ -3789,6 +3843,12 @@ owed = "the engine cites it, with no check against the original yet"
 class = "matched"
 engine = "ffi/src/hud.rs"
 owed = "the engine's own tests (ffi/tests/hud.rs); no check against the original yet"
+
+[function.hud_messaging_update]
+class = "partial"
+engine = "ffi/src/hud_text.rs"
+leaves_out = ["the objective and help messages", "the list of messages and their ageing", "split screen"]
+owed = "the engine's own version; no check against the original yet"
 
 [function.hud_render_unit_interface]
 class = "matched"
@@ -4149,6 +4209,12 @@ owed = "the engine cites it, with no check against the original yet"
 [function.magnitude_squared3d_right_associated]
 class = "native"
 primitive = "glam::Vec3"
+
+[function.main_loop]
+class = "partial"
+engine = "ffi/src/lib.rs"
+leaves_out = ["the menu and the shell", "switching maps", "the network connection", "the console's frame"]
+owed = "the engine's own version; no check against the original yet"
 
 [function.main_menu_initialize]
 class = "matched"
@@ -4740,6 +4806,12 @@ owed = "the engine's own tests (campaign/src/objects.rs); no check against the o
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
 
+[function.observer_update]
+class = "partial"
+engine = "sim/src/player.rs"
+leaves_out = ["the observer's dynamics and its springs", "the cutscenes' cameras"]
+owed = "the engine's own version; no check against the original yet"
+
 [function.observer_update_polynomial]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
@@ -5047,13 +5119,43 @@ class = "matched"
 engine = "sim/src/player.rs"
 owed = "the engine's own tests (sim/tests/player.rs); no check against the original yet"
 
+[function.player_examine_nearby_item]
+class = "partial"
+engine = "sim/src/player.rs"
+leaves_out = ["picking up equipment and powerups", "the grenades' pickup"]
+owed = "the engine's own version; no check against the original yet"
+
 [function.player_examine_nearby_objects]
 class = "matched"
 owed = "the action button; reads the object, tag and map world, which the fake worlds do not hold"
 
+[function.player_handle_action]
+class = "partial"
+engine = "sim/src/seats.rs"
+leaves_out = ["the action's other uses (devices, picking up weapons)"]
+owed = "the engine's own version; no check against the original yet"
+
+[function.player_new]
+class = "partial"
+engine = "sim/src/lib.rs"
+leaves_out = ["the network's player slots", "the player's profile and colours"]
+owed = "the engine's own version; no check against the original yet"
+
+[function.player_spawn]
+class = "partial"
+engine = "sim/src/lib.rs"
+leaves_out = ["the spawn's choice by the game engine's weights", "the starting equipment's profiles"]
+owed = "the engine's own version; no check against the original yet"
+
 [function.players_update_after_game]
 class = "matched"
 owed = "the end of a level; reads the object, tag and map world, which the fake worlds do not hold; campaign/tests/flow.rs"
+
+[function.players_update_before_game]
+class = "partial"
+engine = "sim/src/lib.rs"
+leaves_out = ["the network's prediction", "the players' respawn timers"]
+owed = "the engine's own version; no check against the original yet"
 
 [function.point2d_in_rectangle2d]
 class = "native"
@@ -5275,6 +5377,12 @@ class = "replaced"
 because = "tools"
 stands_in = "dev/src/logbook.rs"
 
+[function.progress_bar_render]
+class = "partial"
+engine = "ui/src/loading.rs"
+leaves_out = ["the original's drawing at its low resolution (the light is drawn at the screen's)"]
+owed = "the engine's own version; no check against the original yet"
+
 [function.progress_new]
 class = "replaced"
 because = "tools"
@@ -5438,6 +5546,12 @@ stands_in = "import/src/lib.rs"
 class = "replaced"
 because = "tools"
 stands_in = "import/src/lib.rs"
+
+[function.recorded_animation_play_internal]
+class = "partial"
+engine = "campaign/src/units.rs"
+leaves_out = ["the recording's version checks", "the units in vehicles"]
+owed = "the engine's own version; no check against the original yet"
 
 [function.rectangle2d_height]
 class = "native"
@@ -7030,6 +7144,12 @@ owed = "the engine cites it, with no check against the original yet"
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
 
+[function.unit_new]
+class = "partial"
+engine = "sim/src/objects.rs"
+leaves_out = ["the unit's seats and its weapons", "its animation graph's state"]
+owed = "the engine's own version; no check against the original yet"
+
 [function.unit_open]
 class = "partial"
 engine = "campaign/src/presented.rs"
@@ -7161,6 +7281,12 @@ owed = "grenades; reads the object, tag and map world, which the fake worlds do 
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
 
+[function.unit_update]
+class = "partial"
+engine = "sim/src/lib.rs"
+leaves_out = ["dialogue", "the aiming bounds and Euler aiming", "shield sapping", "the powerups' timers"]
+owed = "the engine's own version; no check against the original yet"
+
 [function.unit_update_animation]
 class = "matched"
 owed = "checked through the unit state trace's rules"
@@ -7180,6 +7306,12 @@ class = "partial"
 engine = "campaign/src/presented.rs"
 leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
 owed = "the engine's own tests (campaign/src/lib.rs); no check against the original yet"
+
+[function.units_update]
+class = "partial"
+engine = "sim/src/lib.rs"
+leaves_out = ["the units that are not players' (the campaign's actors step apart)"]
+owed = "the engine's own version; no check against the original yet"
 
 [function.unlock_handle]
 class = "native"
@@ -7507,6 +7639,12 @@ owed = "the engine cites it, with no check against the original yet"
 [function.weapon_place]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
+
+[function.weapon_ready]
+class = "partial"
+engine = "sim/src/weapon.rs"
+leaves_out = ["weapon_reset of its triggers and magazines", "the ready time taken from the first-person animation's length"]
+owed = "the engine's own version; no check against the original yet"
 
 [function.weapon_trigger_begin_firing]
 class = "matched"

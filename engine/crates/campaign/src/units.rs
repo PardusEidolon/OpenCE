@@ -130,6 +130,7 @@ impl Mission {
     }
 
     /// Plays recording `recording` on a unit; whether there is one.
+    /// (the original's `recorded_animation_play_internal`, in part)
     fn play_recording(&mut self, handle: ObjectHandle, recording: i32, delete: bool) -> bool {
         let Some(length) =
             element(&self.level.scenario.campaign.recordings, recording).map(|r| r.length_in_ticks)

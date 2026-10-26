@@ -788,6 +788,7 @@ impl Rides {
     /// With the action button pressed, the player starts leaving its seat
     /// (unless its biped is `busy`, entering or leaving one), or enters
     /// the nearest it can; whether it sits or did either.
+    /// (the original's `player_handle_action`, in part)
     pub(crate) fn act(
         &mut self,
         world: &World,

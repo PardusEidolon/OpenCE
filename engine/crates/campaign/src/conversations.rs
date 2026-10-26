@@ -114,6 +114,7 @@ fn variant(participant: &ConversationParticipant, stage: &mut impl Stage) -> Opt
 
 impl Conversations {
     /// Begins `conversation` (number `at`) again from its first line.
+    /// (the original's `ai_conversation_begin`, in part)
     pub(crate) fn begin(&mut self, at: usize, conversation: &Conversation, stage: &mut impl Stage) {
         let variants = conversation
             .participants
@@ -166,6 +167,7 @@ impl Conversations {
 
     /// Moves each conversation on by a game tick: the line it speaks, and
     /// the next once that is done, until one must wait or the last is.
+    /// (the original's `ai_conversation_update`, in part)
     pub(crate) fn update(&mut self, conversations: &[Conversation], stage: &mut impl Stage) {
         let mut done = Vec::new();
         for (&at, conversing) in &mut self.running {
@@ -236,6 +238,7 @@ impl Conversing {
     /// Speaks the line readied once the dialogue before it has ended, waits
     /// out its sound and delay, and, when it says so, a script's word to go
     /// on; true once it is done.
+    /// (the original's `ai_conversation_line_perform`, in part)
     fn perform(&mut self, conversation: &Conversation, stage: &mut impl Stage) -> bool {
         if self.advance {
             return true;
