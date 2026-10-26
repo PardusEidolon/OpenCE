@@ -55,9 +55,9 @@ entries list what they leave out.
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: The walk through the systems' (Protocol in workflow.md) (automated; deferred to the end)
 
 ## Phase 4: Tag fields and load-time fix-ups
-- [ ] Task: The layout from source/
-  - [ ] Tests on a fake *_definitions.h
-  - [ ] clang's offsetof on every tag structure, written to engine/census/tag_layout.tsv; --check regenerates and compares it
+- [x] Task: The layout from source/ 0edcf40e
+  - [x] Tests on a fake *_definitions.h
+  - [x] clang's offsetof on every tag structure, written to engine/census/tag_layout.tsv; --check regenerates and compares it
 - [ ] Task: Fields the original reads
   - [ ] Tests: field accesses through each definition's pointers
   - [ ] Marks for every field
