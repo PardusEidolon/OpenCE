@@ -6,10 +6,10 @@ census check. The phases run to the end without manual stops. The one
 manual check is at the end, with the report.
 
 ## Phase 1: The census crate
-- [ ] Task: The crate and source/'s symbols
-  - [ ] Tests on a fake source/ tree: headers parsed into address, size and name; malformed headers refused, not panicked on
-  - [ ] engine/crates/census, using bounds-checked readers and passing the workspace lints
-  - [ ] On the real tree: 6,962 functions and their bytes
+- [x] Task: The crate and source/'s symbols 10518229
+  - [x] Tests on a fake source/ tree: headers parsed into address, size and name; malformed headers refused, not panicked on
+  - [x] engine/crates/census, using bounds-checked readers and passing the workspace lints
+  - [x] On the real tree: 6,962 functions and their bytes
 - [ ] Task: Citations from Rust and Swift
   - [ ] Tests on fake crates and fake Swift Sources: backtick names in doc comments, excluding tests/
   - [ ] Collected from all crates and engine/app/Sources; today's 177 reproduced as the floor
