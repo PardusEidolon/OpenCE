@@ -5,7 +5,7 @@ check: the whole workspace's tests, clippy, `nix flake check` and the
 census check. The phases run to the end without manual stops. The one
 manual check is at the end, with the report.
 
-## Phase 1: The census crate
+## Phase 1: The census crate [checkpoint: 6f67c558]
 - [x] Task: The crate and source/'s symbols 10518229
   - [x] Tests on a fake source/ tree: headers parsed into address, size and name; malformed headers refused, not panicked on
   - [x] engine/crates/census, using bounds-checked readers and passing the workspace lints
@@ -19,7 +19,7 @@ manual check is at the end, with the report.
 - [x] Task: `opence census` and the flake check 9cec1a32
   - [x] The cli subcommand (summary, --check, --write)
   - [x] source/'s headers and the app's Sources visible to the crate's test in nix flake check
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: The census crate' (Protocol in workflow.md) (automated; deferred to the end)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: The census crate' (Protocol in workflow.md) (automated) 6f67c558
 
 ## Phase 2: The classes and their requirements
 - [ ] Task: engine/census.toml and the six classes
