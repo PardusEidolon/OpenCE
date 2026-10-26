@@ -1,18 +1,18 @@
 system	missing	partial	owed
 ai	796	12	30
 camera	79	3	22
-cutscene	48	2	10
+cutscene	48	2	9
 devices	42	0	17
 effects	87	1	79
 game	565	28	0
 hs	576	8	37
 input	1	0	0
-interface	452	19	113
+interface	452	19	100
 items	102	1	24
 main	91	1	1
 math	66	0	0
 models	11	1	9
-objects	227	12	59
+objects	227	12	50
 physics	45	22	16
 rasterizer	0	0	2
 saved games	104	2	2
@@ -21,4 +21,4 @@ shell	2	0	0
 sound	43	2	59
 structures	26	0	0
 text	21	0	9
-units	224	17	84
+units	224	17	73

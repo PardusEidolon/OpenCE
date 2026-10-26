@@ -14,7 +14,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `cache` | | | | | 187 (24784 B) | | 0 |
 | `camera` | 3 (192 B) | 19 (8208 B) | | 3 (560 B) | 17 (2448 B) | 79 (25136 B) | 22 |
 | `cseries` | | 1 (16 B) | 28 (3168 B) | | 111 (18656 B) | | 0 |
-| `cutscene` | | 8 (288 B) | | 2 (672 B) | 7 (1072 B) | 48 (8496 B) | 10 |
+| `cutscene` | | 8 (288 B) | | 2 (672 B) | 7 (1072 B) | 48 (8496 B) | 9 |
 | `devices` | | 17 (3728 B) | | | 1 (432 B) | 42 (3024 B) | 17 |
 | `dialogs` | | | | | 5 (1328 B) | | 0 |
 | `editor` | | | | | 9 (0 B) | | 0 |
@@ -22,14 +22,14 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `game` | 47 (5264 B) | 15 (1616 B) | | 28 (13936 B) | 61 (4384 B) | 565 (78880 B) | 0 |
 | `hs` | 2 (384 B) | 42 (7984 B) | | 8 (1776 B) | 11 (2880 B) | 576 (53968 B) | 37 |
 | `input` | | | | | 46 (7216 B) | 1 (0 B) | 0 |
-| `interface` | 6 (1408 B) | 96 (33424 B) | | 19 (6112 B) | 104 (21432 B) | 452 (94304 B) | 113 |
+| `interface` | 6 (1408 B) | 96 (33424 B) | | 19 (6112 B) | 104 (21432 B) | 452 (94304 B) | 100 |
 | `items` | 9 (4080 B) | 24 (19328 B) | | 1 (128 B) | 1 (16 B) | 102 (12496 B) | 24 |
 | `main` | | | | 1 (1648 B) | 34 (5440 B) | 91 (8752 B) | 1 |
 | `math` | 42 (5552 B) | 6 (256 B) | 70 (4720 B) | | 25 (4016 B) | 66 (8624 B) | 0 |
 | `memory` | | 2 (336 B) | 128 (19856 B) | | 102 (15104 B) | | 0 |
 | `models` | 17 (8928 B) | 12 (4880 B) | | 1 (464 B) | 7 (1616 B) | 11 (1680 B) | 9 |
 | `networking` | | | | | 288 (49824 B) | | 0 |
-| `objects` | 2 (0 B) | 47 (9776 B) | | 12 (96 B) | 59 (13424 B) | 227 (28288 B) | 59 |
+| `objects` | 2 (0 B) | 47 (9776 B) | | 12 (96 B) | 59 (13424 B) | 227 (28288 B) | 50 |
 | `physics` | | 14 (2672 B) | | 22 (12592 B) | 64 (25040 B) | 45 (6928 B) | 16 |
 | `rasterizer` | | 3 (2784 B) | | | 777 (182416 B) | | 2 |
 | `render` | 2 (592 B) | 2 (240 B) | | | 115 (37520 B) | | 0 |
@@ -42,8 +42,8 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `tag_files` | | | 43 (4288 B) | | 5 (0 B) | | 0 |
 | `text` | | 9 (1936 B) | 63 (6864 B) | | 19 (5744 B) | 21 (2368 B) | 9 |
 | `tool` | | | | | 27 (8752 B) | | 0 |
-| `units` | 12 (2288 B) | 67 (27888 B) | | 17 (17808 B) | 9 (1616 B) | 224 (57920 B) | 84 |
-| **all** | 192 (31712 B) | 568 (183824 B) | 332 (38896 B) | 133 (72848 B) | 2773 (575768 B) | 3629 (708074 B) | 576 |
+| `units` | 12 (2288 B) | 67 (27888 B) | | 17 (17808 B) | 9 (1616 B) | 224 (57920 B) | 73 |
+| **all** | 192 (31712 B) | 568 (183824 B) | 332 (38896 B) | 133 (72848 B) | 2773 (575768 B) | 3629 (708074 B) | 542 |
 
 ## `ai`
 
@@ -1022,7 +1022,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `cinematic_skip_start` | cutscene/cinematics.c | Matched | campaign/src/cinematic.rs | owed: the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet |
 | `cinematic_skip_stop` | cutscene/cinematics.c | Matched | campaign/src/cinematic.rs | owed: the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet |
 | `cinematic_show_letterbox` | cutscene/cinematics.c | Matched | campaign/src/cinematic.rs | owed: the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet |
-| `cinematic_suppress_bsp_object_creation` | cutscene/cinematics.c | Partial | campaign/src/presented.rs | leaves out what it does: the engine keeps it only as an event, which nothing acts on yet; owed: the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet |
+| `cinematic_suppress_bsp_object_creation` | cutscene/cinematics.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
 | `cinematic_stop` | cutscene/cinematics.c | Matched | campaign/src/cinematic.rs | owed: the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet |
 | `cinematic_in_progress` | cutscene/cinematics.c | Matched | campaign/src/cinematic.rs | owed: the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet |
 | `cinematic_set_title` | cutscene/cinematics.c | Matched | campaign/src/cinematic.rs | owed: the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet |
@@ -1419,7 +1419,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `hs_object_create_anew_containing` | hs/hs_library_external.c | Matched | campaign/src/objects.rs | owed: the script function's wrapper, which the campaign wires; no check against the original yet |
 | `hs_object_teleport` | hs/hs_library_external.c | Matched | campaign/src/objects.rs | owed: the script function's wrapper, which the campaign wires; no check against the original yet |
 | `hs_object_set_facing` | hs/hs_library_external.c | Matched | campaign/src/objects.rs | owed: the script function's wrapper, which the campaign wires; no check against the original yet |
-| `hs_wake` | hs/hs_runtime.c | Matched | script/src/lib.rs:462 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
+| `hs_wake` | hs/hs_runtime.c | Matched | script/src/lib.rs:469 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
 | `hs_long_to_boolean` | hs/hs_runtime.c | Partial | script/src/value.rs | script/tests/script_cast_reference.rs (trace); leaves out the decompilation's n==0, which makes zero true; the engine takes zero as false until the user's maps settle it |
 | `hs_short_to_boolean` | hs/hs_runtime.c | Partial | script/src/value.rs | script/tests/script_cast_reference.rs (trace); leaves out the decompilation's n==0, which makes zero true; the engine takes zero as false until the user's maps settle it |
 | `hs_string_to_boolean` | hs/hs_runtime.c | Partial | script/src/value.rs | script/tests/script_cast_reference.rs (trace); leaves out the decompilation's n==0, which makes zero true; the engine takes zero as false until the user's maps settle it |
@@ -1437,26 +1437,26 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `hs_cast` | hs/hs_runtime.c | Partial | script/src/value.rs:88 | script/tests/script_cast_reference.rs (trace); leaves out typecasting_procedures as the decompilation miscounts it: the ai, enum and object rows each a place earlier than the last |
 | `render_debug_scripting` | hs/hs_runtime.c | Replaced | dev/src/draw.rs | the editor and tools |
 | `render_debug_trigger_volumes` | hs/hs_runtime.c | Replaced | dev/src/draw.rs | the editor and tools |
-| `hs_return` | hs/hs_runtime.c | Matched | script/src/lib.rs:220 | owed: the engine cites it, with no check against the original yet |
-| `hs_global_evaluate` | hs/hs_runtime.c | Matched | script/src/lib.rs:972 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
-| `hs_evaluate` | hs/hs_runtime.c | Matched | script/src/lib.rs:602 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
-| `hs_arguments_evaluate` | hs/hs_runtime.c | Matched | script/src/lib.rs:602 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
-| `hs_evaluate_begin` | hs/hs_runtime.c | Matched | script/src/lib.rs:721 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
-| `hs_evaluate_begin_random` | hs/hs_runtime.c | Partial | script/src/lib.rs:721 | leaves out the game's own random numbers: the shuffle draws on the runtime's xorshift; owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
-| `hs_evaluate_if` | hs/hs_runtime.c | Matched | script/src/lib.rs:722 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
-| `hs_evaluate_set` | hs/hs_runtime.c | Matched | script/src/lib.rs:722 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
-| `hs_evaluate_logical` | hs/hs_runtime.c | Matched | script/src/lib.rs:722 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
-| `hs_evaluate_arithmetic` | hs/hs_runtime.c | Matched | script/src/lib.rs:723 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
-| `hs_evaluate_equality` | hs/hs_runtime.c | Matched | script/src/lib.rs:723 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
-| `hs_evaluate_inequality` | hs/hs_runtime.c | Matched | script/src/lib.rs:724 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
-| `hs_evaluate_sleep` | hs/hs_runtime.c | Matched | script/src/lib.rs:883 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
-| `hs_evaluate_sleep_until` | hs/hs_runtime.c | Matched | script/src/lib.rs:920 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
-| `hs_evaluate_inspect` | hs/hs_runtime.c | Matched | script/src/lib.rs:724 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
+| `hs_return` | hs/hs_runtime.c | Matched | script/src/lib.rs:227 | owed: the engine cites it, with no check against the original yet |
+| `hs_global_evaluate` | hs/hs_runtime.c | Matched | script/src/lib.rs:979 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
+| `hs_evaluate` | hs/hs_runtime.c | Matched | script/src/lib.rs:609 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
+| `hs_arguments_evaluate` | hs/hs_runtime.c | Matched | script/src/lib.rs:609 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
+| `hs_evaluate_begin` | hs/hs_runtime.c | Matched | script/src/lib.rs:728 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
+| `hs_evaluate_begin_random` | hs/hs_runtime.c | Partial | script/src/lib.rs:728 | leaves out the game's own random numbers: the shuffle draws on the runtime's xorshift; owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
+| `hs_evaluate_if` | hs/hs_runtime.c | Matched | script/src/lib.rs:729 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
+| `hs_evaluate_set` | hs/hs_runtime.c | Matched | script/src/lib.rs:729 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
+| `hs_evaluate_logical` | hs/hs_runtime.c | Matched | script/src/lib.rs:729 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
+| `hs_evaluate_arithmetic` | hs/hs_runtime.c | Matched | script/src/lib.rs:730 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
+| `hs_evaluate_equality` | hs/hs_runtime.c | Matched | script/src/lib.rs:730 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
+| `hs_evaluate_inequality` | hs/hs_runtime.c | Matched | script/src/lib.rs:731 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
+| `hs_evaluate_sleep` | hs/hs_runtime.c | Matched | script/src/lib.rs:890 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
+| `hs_evaluate_sleep_until` | hs/hs_runtime.c | Matched | script/src/lib.rs:927 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
+| `hs_evaluate_inspect` | hs/hs_runtime.c | Matched | script/src/lib.rs:731 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
 | `hs_evaluate_debug_string` | hs/hs_runtime.c | Replaced | dev/src/script.rs | the editor and tools |
-| `hs_thread_main` | hs/hs_runtime.c | Matched | script/src/lib.rs:564 | owed: scripts; reads the object, tag and map world, which the fake worlds do not hold (the scenario's compiled scripts); script/tests |
-| `hs_runtime_initialize_for_new_map` | hs/hs_runtime.c | Matched | script/src/lib.rs:300 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
-| `hs_runtime_update` | hs/hs_runtime.c | Matched | script/src/lib.rs:388 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
-| `hs_runtime_evaluate` | hs/hs_runtime.c | Matched | script/src/lib.rs:471 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
+| `hs_thread_main` | hs/hs_runtime.c | Matched | script/src/lib.rs:571 | owed: scripts; reads the object, tag and map world, which the fake worlds do not hold (the scenario's compiled scripts); script/tests |
+| `hs_runtime_initialize_for_new_map` | hs/hs_runtime.c | Matched | script/src/lib.rs:307 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
+| `hs_runtime_update` | hs/hs_runtime.c | Matched | script/src/lib.rs:395 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
+| `hs_runtime_evaluate` | hs/hs_runtime.c | Matched | script/src/lib.rs:478 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
 | `hs_syntax_data_byte_swap` | hs/hs_scenario_definitions.c | Replaced | import/src/lib.rs | maps imported to a typed format; byte order is settled when the map is imported |
 | `hs_type_default_value` | hs/hs_runtime.c | Matched | script/src/value.rs:33 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
 
@@ -1543,25 +1543,25 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `hud_draw_static_element` | interface/hud_draw.c | Matched | ffi/src/hud.rs:298 | owed: the engine cites it, with no check against the original yet |
 | `render_state_text` | interface/hud_messaging.c | Matched | ffi/src/hud_text.rs | owed: the engine's own tests (ffi/tests/hud_text.rs); no check against the original yet |
 | `render_state_bitmap` | interface/hud_messaging.c | Matched | ffi/src/hud.rs:257 | owed: the engine cites it, with no check against the original yet |
-| `scripted_hud_set_objective` | interface/hud_messaging.c | Partial | campaign/src/presented.rs | leaves out what it does: the engine keeps it only as an event, which nothing acts on yet; owed: the engine's own tests (campaign/src/presented.rs); no check against the original yet |
+| `scripted_hud_set_objective` | interface/hud_messaging.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
 | `scripted_hud_set_timer_time` | interface/hud_messaging.c | Matched | campaign/src/game.rs | owed: the engine's own tests (campaign/src/game.rs); no check against the original yet |
-| `scripted_hud_set_timer_warning_cutoff` | interface/hud_messaging.c | Partial | campaign/src/presented.rs | leaves out what it does: the engine keeps it only as an event, which nothing acts on yet; owed: the engine's own tests (campaign/src/presented.rs); no check against the original yet |
-| `scripted_hud_set_timer_position` | interface/hud_messaging.c | Partial | campaign/src/presented.rs | leaves out what it does: the engine keeps it only as an event, which nothing acts on yet; owed: the engine's own tests (campaign/src/presented.rs); no check against the original yet |
-| `scripted_hud_show_timer` | interface/hud_messaging.c | Partial | campaign/src/presented.rs | leaves out what it does: the engine keeps it only as an event, which nothing acts on yet; owed: the engine's own tests (campaign/src/presented.rs); no check against the original yet |
+| `scripted_hud_set_timer_warning_cutoff` | interface/hud_messaging.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
+| `scripted_hud_set_timer_position` | interface/hud_messaging.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
+| `scripted_hud_show_timer` | interface/hud_messaging.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
 | `scripted_hud_pause_timer` | interface/hud_messaging.c | Matched | campaign/src/game.rs | owed: the engine's own tests (campaign/src/game.rs); no check against the original yet |
 | `scripted_hud_get_timer_ticks` | interface/hud_messaging.c | Matched | campaign/src/game.rs | owed: the engine's own tests (campaign/src/game.rs); no check against the original yet |
 | `hud_set_state_message` | interface/hud_messaging.c | Matched | ffi/src/hud_text.rs | owed: the engine's own tests (ffi/tests/hud_text.rs); no check against the original yet |
 | `hud_set_state_message_icon` | interface/hud_messaging.c | Matched | ffi/src/hud_text.rs | owed: the engine's own tests (ffi/tests/hud_text.rs); no check against the original yet |
 | `hud_set_state_message_text` | interface/hud_messaging.c | Matched | ffi/src/hud_text.rs | owed: the engine's own tests (ffi/tests/hud_text.rs); no check against the original yet |
 | `hud_messaging_update` | interface/hud_messaging.c | Partial | ffi/src/hud_text.rs:53 | leaves out the objective and help messages, the list of messages and their ageing, split screen; owed: the engine's own version; no check against the original yet |
-| `scripted_hud_show_health` | interface/hud_unit.c | Partial | campaign/src/presented.rs | leaves out what it does: the engine keeps it only as an event, which nothing acts on yet; owed: the engine's own tests (campaign/src/presented.rs); no check against the original yet |
-| `scripted_hud_blink_health` | interface/hud_unit.c | Partial | campaign/src/presented.rs | leaves out what it does: the engine keeps it only as an event, which nothing acts on yet; owed: the engine's own tests (campaign/src/presented.rs); no check against the original yet |
-| `scripted_hud_show_shield` | interface/hud_unit.c | Partial | campaign/src/presented.rs | leaves out what it does: the engine keeps it only as an event, which nothing acts on yet; owed: the engine's own tests (campaign/src/presented.rs); no check against the original yet |
-| `scripted_hud_blink_shield` | interface/hud_unit.c | Partial | campaign/src/presented.rs | leaves out what it does: the engine keeps it only as an event, which nothing acts on yet; owed: the engine's own tests (campaign/src/presented.rs); no check against the original yet |
-| `scripted_hud_show_motion_sensor` | interface/hud_unit.c | Partial | campaign/src/presented.rs | leaves out what it does: the engine keeps it only as an event, which nothing acts on yet; owed: the engine's own tests (campaign/src/presented.rs); no check against the original yet |
-| `scripted_hud_blink_motion_sensor` | interface/hud_unit.c | Partial | campaign/src/presented.rs | leaves out what it does: the engine keeps it only as an event, which nothing acts on yet; owed: the engine's own tests (campaign/src/presented.rs); no check against the original yet |
+| `scripted_hud_show_health` | interface/hud_unit.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
+| `scripted_hud_blink_health` | interface/hud_unit.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
+| `scripted_hud_show_shield` | interface/hud_unit.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
+| `scripted_hud_blink_shield` | interface/hud_unit.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
+| `scripted_hud_show_motion_sensor` | interface/hud_unit.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
+| `scripted_hud_blink_motion_sensor` | interface/hud_unit.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
 | `hud_render_unit_interface` | interface/hud_unit.c | Matched | ffi/src/hud.rs:82 | owed: the engine cites it, with no check against the original yet |
-| `scripted_hud_show_crosshair` | interface/hud_weapon.c | Partial | campaign/src/presented.rs | leaves out what it does: the engine keeps it only as an event, which nothing acts on yet; owed: the engine's own tests (campaign/src/presented.rs); no check against the original yet |
+| `scripted_hud_show_crosshair` | interface/hud_weapon.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
 | `get_crosshair_state` | interface/hud_weapon.c | Matched | ffi/src/hud.rs | owed: the engine's own tests (ffi/tests/hud.rs); no check against the original yet |
 | `render_grenade_hud` | interface/hud_weapon.c | Matched | ffi/src/hud.rs:618 | owed: the engine cites it, with no check against the original yet |
 | `crosshairs_draw` | interface/hud_weapon.c | Matched | ffi/src/hud.rs | owed: the engine's own tests (ffi/tests/hud.rs); no check against the original yet |
@@ -1596,7 +1596,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `overhead_map_post_rasterize` | interface/overhead_map.c | Replaced | app/Sources/OpenCEEngineRender/UiPass.swift | the enhanced lighting and Metal renderer; drawn by the Metal renderer |
 | `player0_look_pitch_is_inverted` | interface/player_ui.c | Partial | campaign/src/game.rs | leaves out the player's profile: it answers a constant, the mouse's own setting standing in; owed: the engine's own tests (campaign/src/game.rs); no check against the original yet |
 | `player0_joystick_set_is_normal` | interface/player_ui.c | Partial | campaign/src/game.rs | leaves out the player's profile: it answers a constant, the mouse's own setting standing in; owed: the engine's own tests (campaign/src/game.rs); no check against the original yet |
-| `player0_look_invert_pitch` | interface/player_ui.c | Partial | campaign/src/presented.rs | leaves out what it does: the engine keeps it only as an event, which nothing acts on yet; owed: the engine's own tests (campaign/src/presented.rs); no check against the original yet |
+| `player0_look_invert_pitch` | interface/player_ui.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
 | `code_000d0ec0` | interface/progress_bar.c | Replaced | app/Sources/OpenCEEngineRender/UiPass.swift | the enhanced lighting and Metal renderer; drawn by the Metal renderer |
 | `code_000d0f10` | interface/progress_bar.c | Replaced | app/Sources/OpenCEEngineRender/UiPass.swift | the enhanced lighting and Metal renderer; drawn by the Metal renderer |
 | `code_000d0f20` | interface/progress_bar.c | Replaced | app/Sources/OpenCEEngineRender/UiPass.swift | the enhanced lighting and Metal renderer; drawn by the Metal renderer |
@@ -1696,7 +1696,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `ui_mouse_note_slot_band` | interface/ui_widget.c | Replaced | ui/src/pointer.rs | keyboard and mouse only |
 | `ui_mouse_note_target` | interface/ui_widget.c | Replaced | ui/src/pointer.rs | keyboard and mouse only |
 | `ui_widget_load_by_name_or_tag` | interface/ui_widget.c | Matched | ui/src/lib.rs | owed: the engine's own tests (ui/tests/tree.rs); no check against the original yet |
-| `display_scenario_help` | interface/ui_widget.c | Partial | campaign/src/presented.rs | leaves out what it does: the engine keeps it only as an event, which nothing acts on yet; owed: the engine's own tests (campaign/src/presented.rs); no check against the original yet |
+| `display_scenario_help` | interface/ui_widget.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
 | `ui_mouse_merge_setting_rows` | interface/ui_widget.c | Replaced | ui/src/pointer.rs | keyboard and mouse only |
 | `ui_mouse_widen_values` | interface/ui_widget.c | Replaced | ui/src/pointer.rs | keyboard and mouse only |
 | `process_ui_widgets` | interface/ui_widget.c | Matched | ui/src/lib.rs | owed: the engine's own tests (ui/tests/tree.rs); no check against the original yet |
@@ -2618,8 +2618,8 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `damage_data_new` | objects/damage.c | Matched | sim/src/damage.rs | owed: the engine's own tests (sim/src/damage.rs); no check against the original yet |
 | `object_can_take_damage` | objects/damage.c | Matched | campaign/src/objects.rs | owed: the engine's own tests (campaign/src/objects.rs); no check against the original yet |
 | `object_cannot_take_damage` | objects/damage.c | Matched | campaign/src/objects.rs | owed: the engine's own tests (campaign/src/objects.rs); no check against the original yet |
-| `object_set_ranged_attack_inhibited` | objects/damage.c | Partial | campaign/src/presented.rs | leaves out what it does: the engine keeps it only as an event, which nothing acts on yet; owed: the engine's own tests (campaign/src/lib.rs); no check against the original yet |
-| `object_set_melee_attack_inhibited` | objects/damage.c | Partial | campaign/src/presented.rs | leaves out what it does: the engine keeps it only as an event, which nothing acts on yet; owed: the engine's own tests (campaign/src/lib.rs); no check against the original yet |
+| `object_set_ranged_attack_inhibited` | objects/damage.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
+| `object_set_melee_attack_inhibited` | objects/damage.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
 | `object_deplete_shield` | objects/damage.c | Matched | sim/src/damage.rs | owed: the engine's own tests (sim/src/damage.rs); no check against the original yet |
 | `object_damage_shield` | objects/damage.c | Matched | sim/src/damage.rs | owed: the engine's own tests (sim/src/damage.rs); no check against the original yet |
 | `object_damage_aftermath` | objects/damage.c | Matched | sim/src/forces.rs:2 | owed: damage; reads the object, tag and map world, which the fake worlds do not hold; Phase 12 |
@@ -2695,20 +2695,20 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `damage_get_network_state` | objects/damage.c | Replaced | net/src/snapshot.rs | networking and Xbox Live; the original's network state and prediction; the engine sends snapshots |
 | `find_point_light_for_object` | objects/object_lights.c | Replaced | app/Sources/OpenCEEngineRender/LightPass.swift | the enhanced lighting and Metal renderer |
 | `object_add_scenario_permutation` | objects/objects.c | Matched | sim/src/objects.rs | owed: the engine's own tests (sim/src/objects.rs); no check against the original yet |
-| `garbage_collect_now` | objects/objects.c | Partial | campaign/src/presented.rs | leaves out what it does: the engine keeps it only as an event, which nothing acts on yet; owed: the engine's own tests (campaign/src/lib.rs); no check against the original yet |
-| `object_pvs_set_object` | objects/objects.c | Partial | campaign/src/presented.rs | leaves out what it does: the engine keeps it only as an event, which nothing acts on yet; owed: the engine's own tests (campaign/src/lib.rs); no check against the original yet |
-| `object_pvs_set_camera_point` | objects/objects.c | Partial | campaign/src/presented.rs | leaves out what it does: the engine keeps it only as an event, which nothing acts on yet; owed: the engine's own tests (campaign/src/lib.rs); no check against the original yet |
-| `object_pvs_clear` | objects/objects.c | Partial | campaign/src/presented.rs | leaves out what it does: the engine keeps it only as an event, which nothing acts on yet; owed: the engine's own tests (campaign/src/lib.rs); no check against the original yet |
-| `object_beautify` | objects/objects.c | Partial | campaign/src/presented.rs | leaves out what it does: the engine keeps it only as an event, which nothing acts on yet; owed: the engine's own tests (campaign/src/lib.rs); no check against the original yet |
+| `garbage_collect_now` | objects/objects.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
+| `object_pvs_set_object` | objects/objects.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
+| `object_pvs_set_camera_point` | objects/objects.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
+| `object_pvs_clear` | objects/objects.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
+| `object_beautify` | objects/objects.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
 | `object_header_new` | objects/objects.c | Ported |  | `tools/engine_data_reference.py` |
 | `object_header_delete` | objects/objects.c | Ported |  | `tools/engine_data_reference.py` |
-| `object_scripting_set_collideable` | objects/objects.c | Partial | campaign/src/presented.rs | leaves out what it does: the engine keeps it only as an event, which nothing acts on yet; owed: the engine's own tests (campaign/src/lib.rs); no check against the original yet |
+| `object_scripting_set_collideable` | objects/objects.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
 | `objects_place` | objects/objects.c | Matched | sim/src/objects.rs | owed: the engine's own tests (sim/src/objects.rs); no check against the original yet |
 | `object_start_interpolation` | objects/objects.c | Matched | campaign/src/units.rs:55 | owed: interpolation; reads the object, tag and map world, which the fake worlds do not hold; Phase 12's impacts |
 | `object_get_function_value` | objects/objects.c | Matched | ffi/src/particles/contrails.rs:56 | owed: the engine cites it, with no check against the original yet |
 | `object_index_from_name_index` | objects/objects.c | Matched | campaign/src/objects.rs | owed: the engine's own tests (campaign/src/objects.rs); no check against the original yet |
 | `objects_disconnect_from_structure_bsp` | objects/objects.c | Matched | sim/src/objects.rs | owed: the engine's own tests (sim/src/objects.rs); no check against the original yet |
-| `object_pvs_activate` | objects/objects.c | Partial | campaign/src/presented.rs | leaves out what it does: the engine keeps it only as an event, which nothing acts on yet; owed: the engine's own tests (campaign/src/lib.rs); no check against the original yet |
+| `object_pvs_activate` | objects/objects.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
 | `objects_scripting_set_scale` | objects/objects.c | Partial | campaign/src/objects.rs | leaves out the frames asked for: the scale is taken at once; owed: the engine's own tests (campaign/src/objects.rs); no check against the original yet |
 | `object_delete` | objects/objects.c | Matched | sim/src/objects.rs | owed: the engine's own tests (sim/src/objects.rs); no check against the original yet |
 | `object_detach` | objects/objects.c | Matched | campaign/src/objects.rs | owed: the engine's own tests (campaign/src/objects.rs); no check against the original yet |
@@ -4375,7 +4375,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `unit_scripting_impervious` | units/unit_scripting_commands.c | Matched | campaign/src/units.rs | owed: the engine's own tests (campaign/src/units.rs); no check against the original yet |
 | `unit_scripting_start_user_animation_list` | units/unit_scripting_commands.c | Matched | campaign/src/units.rs | owed: the engine's own tests (campaign/src/units.rs); no check against the original yet |
 | `unit_scripting_has_weapon_readied` | units/unit_scripting_commands.c | Matched | campaign/src/units.rs | owed: the engine's own tests (campaign/src/units.rs); no check against the original yet |
-| `unit_kill` | units/units.c | Matched | script/src/lib.rs:501 | owed: the engine cites it, with no check against the original yet |
+| `unit_kill` | units/units.c | Matched | script/src/lib.rs:508 | owed: the engine cites it, with no check against the original yet |
 | `units_update` | units/units.c | Partial | sim/src/lib.rs:389 | leaves out the units that are not players' (the campaign's actors step apart); owed: the engine's own version; no check against the original yet |
 | `unit_get_seat_entrance_point` | units/units.c | Matched | sim/src/seats.rs:63 | owed: seats; reads the object, tag and map world, which the fake worlds do not hold (the seat's marker) |
 | `unit_animation_state_interruptable` | units/units.c | Ported | sim/src/unit_states.rs:220 | `tools/engine_unit_state_reference.py` |
@@ -4391,8 +4391,8 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `unit_animation_impulse_get_index` | units/units.c | Matched | sim/src/ai_impulse.rs:3 | owed: AI's impulses; reads the object, tag and map world, which the fake worlds do not hold (the animation graph) |
 | `unit_can_play_animation_impulse` | units/units.c | Matched | sim/src/ai_impulse.rs:3 | owed: AI's impulses; reads the object, tag and map world, which the fake worlds do not hold (the animation graph) |
 | `unit_test_animation_impulse` | units/units.c | Matched | sim/src/ai_impulse.rs:131 | owed: AI's impulses; reads the object, tag and map world, which the fake worlds do not hold (the animation graph) |
-| `unit_scripting_suspended` | units/units.c | Partial | campaign/src/presented.rs | leaves out what it does: the engine keeps it only as an event, which nothing acts on yet; owed: the engine's own tests (campaign/src/lib.rs); no check against the original yet |
-| `unit_scripting_doesnt_drop_items` | units/units.c | Partial | campaign/src/presented.rs | leaves out what it does: the engine keeps it only as an event, which nothing acts on yet; owed: the engine's own tests (campaign/src/lib.rs); no check against the original yet |
+| `unit_scripting_suspended` | units/units.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
+| `unit_scripting_doesnt_drop_items` | units/units.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
 | `unit_scripting_vehicle_test_seat_list` | units/units.c | Matched | campaign/src/units.rs | owed: the engine's own tests (campaign/src/units.rs); no check against the original yet |
 | `units_debug_get_next_unit` | units/units.c | Replaced | dev/src/control.rs | the editor and tools |
 | `units_debug_get_closest_unit` | units/units.c | Replaced | dev/src/control.rs | the editor and tools |
@@ -4404,18 +4404,18 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `unit_seat_update` | units/units.c | Matched | sim/src/vehicle_animation.rs:5 | owed: seats; reads the object, tag and map world, which the fake worlds do not hold; Phase 13 |
 | `unit_animation_update` | units/units.c | Matched | ffi/src/sound_events.rs:71 | owed: the engine cites it, with no check against the original yet |
 | `unit_melee_sound` | units/units.c | Matched | sim/src/player.rs:1162 | owed: the engine cites it, with no check against the original yet |
-| `unit_set_enterable_by_player` | units/units.c | Partial | campaign/src/presented.rs | leaves out what it does: the engine keeps it only as an event, which nothing acts on yet; owed: the engine's own tests (campaign/src/lib.rs); no check against the original yet |
-| `unit_set_emotion` | units/units.c | Partial | campaign/src/presented.rs | leaves out what it does: the engine keeps it only as an event, which nothing acts on yet; owed: the engine's own tests (campaign/src/lib.rs); no check against the original yet |
+| `unit_set_enterable_by_player` | units/units.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
+| `unit_set_emotion` | units/units.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
 | `unit_get_custom_animation_time` | units/units.c | Matched | campaign/src/units.rs | owed: the engine's own tests (campaign/src/units.rs); no check against the original yet |
 | `unit_set_or_test_seat_and_weapon_label` | units/units.c | Matched | sim/src/animation.rs:1396 | owed: checked through the animation trace's labels |
 | `unit_render_debug` | units/units.c | Replaced | dev/src/draw.rs | the editor and tools |
 | `unit_animation_set_state` | units/units.c | Matched | sim/src/unit_states.rs:3 | owed: checked through the unit state trace's rules |
 | `unit_find_nearby_seat` | units/units.c | Matched | sim/src/seats.rs:4 | owed: seats; reads the object, tag and map world, which the fake worlds do not hold; Phase 13's getting in and out |
-| `unit_open` | units/units.c | Partial | campaign/src/presented.rs | leaves out what it does: the engine keeps it only as an event, which nothing acts on yet; owed: the engine's own tests (campaign/src/lib.rs); no check against the original yet |
-| `unit_close` | units/units.c | Partial | campaign/src/presented.rs | leaves out what it does: the engine keeps it only as an event, which nothing acts on yet; owed: the engine's own tests (campaign/src/lib.rs); no check against the original yet |
-| `units_set_desired_flashlight_state` | units/units.c | Partial | campaign/src/presented.rs | leaves out what it does: the engine keeps it only as an event, which nothing acts on yet; owed: the engine's own tests (campaign/src/lib.rs); no check against the original yet |
+| `unit_open` | units/units.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
+| `unit_close` | units/units.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
+| `units_set_desired_flashlight_state` | units/units.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
 | `unit_approve_weapon_swap` | units/units.c | Ported | sim/src/pickup.rs:10 | `tools/engine_pickup_reference.py` |
-| `unit_scripting_set_seat` | units/units.c | Partial | campaign/src/presented.rs | leaves out what it does: the engine keeps it only as an event, which nothing acts on yet; owed: the engine's own tests (campaign/src/lib.rs); no check against the original yet |
+| `unit_scripting_set_seat` | units/units.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
 | `unit_cause_melee_damage` | units/units.c | Matched | sim/src/unit_states.rs:430 | owed: damage; reads the object, tag and map world, which the fake worlds do not hold; Phase 12 |
 | `unit_stop_custom_animation` | units/units.c | Matched | campaign/src/units.rs | owed: the engine's own tests (campaign/src/units.rs); no check against the original yet |
 | `unit_custom_animation_at_frame` | units/units.c | Matched | sim/src/animation.rs:1479 | owed: scripts' custom animations; reads the object, tag and map world, which the fake worlds do not hold |
@@ -4426,14 +4426,14 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `unit_new` | units/units.c | Partial | sim/src/objects.rs:247 | leaves out the unit's seats and its weapons, its animation graph's state; owed: the engine's own version; no check against the original yet |
 | `unit_enter_seat` | units/units.c | Matched | sim/src/unit_states.rs:571 | owed: seats; reads the object, tag and map world, which the fake worlds do not hold; Phase 13's getting in and out |
 | `unit_exit_seat_end` | units/units.c | Matched | sim/src/lib.rs:569 | owed: seats; reads the object, tag and map world, which the fake worlds do not hold; Phase 13's getting in and out |
-| `unit_scripting_enter_vehicle` | units/units.c | Partial | campaign/src/presented.rs | leaves out what it does: the engine keeps it only as an event, which nothing acts on yet; owed: the engine's own tests (campaign/src/lib.rs); no check against the original yet |
+| `unit_scripting_enter_vehicle` | units/units.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
 | `vehicle_scripting_load_magic` | units/units.c | Matched | campaign/src/units.rs | owed: the engine's own tests (campaign/src/units.rs); no check against the original yet |
 | `unit_try_and_exit_seat` | units/units.c | Matched | sim/src/unit_states.rs:603 | owed: the engine cites it, with no check against the original yet |
 | `unit_update` | units/units.c | Partial | sim/src/lib.rs:412 | leaves out dialogue, the aiming bounds and Euler aiming, shield sapping, the powerups' timers; owed: the engine's own version; no check against the original yet |
 | `vehicle_scripting_unload` | units/units.c | Matched | campaign/src/units.rs | owed: the engine's own tests (campaign/src/units.rs); no check against the original yet |
-| `unit_scripting_exit_vehicle` | units/units.c | Partial | campaign/src/presented.rs | leaves out what it does: the engine keeps it only as an event, which nothing acts on yet; owed: the engine's own tests (campaign/src/lib.rs); no check against the original yet |
+| `unit_scripting_exit_vehicle` | units/units.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
 | `vehicle_causes_collision_damage` | units/vehicles.c | Matched | sim/src/damage.rs | owed: the engine's own tests (sim/src/damage.rs); no check against the original yet |
-| `vehicle_hover` | units/vehicles.c | Partial | campaign/src/presented.rs | leaves out what it does: the engine keeps it only as an event, which nothing acts on yet; owed: the engine's own tests (campaign/src/lib.rs); no check against the original yet |
+| `vehicle_hover` | units/vehicles.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
 | `compute_airborne_ticks` | units/vehicles.c | Matched | sim/src/vehicle.rs | owed: the engine's own tests (sim/src/vehicle.rs); no check against the original yet |
 | `vehicle_is_flipped` | units/vehicles.c | Matched | sim/src/vehicle.rs:69 | owed: vehicles; reads the object, tag and map world, which the fake worlds do not hold (the vehicle's physics); Phase 13 |
 | `set_real_quaternion` | units/vehicles.c | Ported |  | `tools/engine_animation_reference.py` |

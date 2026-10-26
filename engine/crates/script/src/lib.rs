@@ -131,6 +131,13 @@ impl<W> Registry<W> {
         self.functions.contains_key(name)
     }
 
+    /// A given function's type and its parameters' types.
+    pub fn signature(&self, name: &str) -> Option<(ValueType, &[ValueType])> {
+        self.functions
+            .get(name)
+            .map(|function| (function.returns, function.parameters.as_slice()))
+    }
+
     /// The given functions' names, in order.
     pub fn function_names(&self) -> impl Iterator<Item = &str> {
         self.functions.keys().map(String::as_str)

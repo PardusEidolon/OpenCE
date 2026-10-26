@@ -1991,7 +1991,8 @@ owed = "the engine's own tests (campaign/tests/cutscenes.rs); no check against t
 class = "partial"
 engine = "campaign/src/presented.rs"
 leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
-owed = "the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet"
+check = "campaign/tests/script_signatures_reference.rs"
+against = "trace"
 
 [function.circle_intersects_cone2d]
 class = "missing"
@@ -3081,7 +3082,8 @@ stands_in = "dev/src/logbook.rs"
 class = "partial"
 engine = "campaign/src/presented.rs"
 leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
-owed = "the engine's own tests (campaign/src/presented.rs); no check against the original yet"
+check = "campaign/tests/script_signatures_reference.rs"
+against = "trace"
 
 [function.dispose_handle]
 class = "native"
@@ -4159,7 +4161,8 @@ note = "pad events are filtered out"
 class = "partial"
 engine = "campaign/src/presented.rs"
 leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
-owed = "the engine's own tests (campaign/src/lib.rs); no check against the original yet"
+check = "campaign/tests/script_signatures_reference.rs"
+against = "trace"
 
 [function.gen_cloud_coord]
 class = "replaced"
@@ -5526,7 +5529,8 @@ owed = "the engine's own tests (campaign/src/objects.rs); no check against the o
 class = "partial"
 engine = "campaign/src/presented.rs"
 leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
-owed = "the engine's own tests (campaign/src/lib.rs); no check against the original yet"
+check = "campaign/tests/script_signatures_reference.rs"
+against = "trace"
 
 [function.object_can_take_damage]
 class = "matched"
@@ -5678,25 +5682,29 @@ owed = "placement; reads the object, tag and map world, which the fake worlds do
 class = "partial"
 engine = "campaign/src/presented.rs"
 leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
-owed = "the engine's own tests (campaign/src/lib.rs); no check against the original yet"
+check = "campaign/tests/script_signatures_reference.rs"
+against = "trace"
 
 [function.object_pvs_clear]
 class = "partial"
 engine = "campaign/src/presented.rs"
 leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
-owed = "the engine's own tests (campaign/src/lib.rs); no check against the original yet"
+check = "campaign/tests/script_signatures_reference.rs"
+against = "trace"
 
 [function.object_pvs_set_camera_point]
 class = "partial"
 engine = "campaign/src/presented.rs"
 leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
-owed = "the engine's own tests (campaign/src/lib.rs); no check against the original yet"
+check = "campaign/tests/script_signatures_reference.rs"
+against = "trace"
 
 [function.object_pvs_set_object]
 class = "partial"
 engine = "campaign/src/presented.rs"
 leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
-owed = "the engine's own tests (campaign/src/lib.rs); no check against the original yet"
+check = "campaign/tests/script_signatures_reference.rs"
+against = "trace"
 
 [function.object_render_debug]
 class = "replaced"
@@ -5707,13 +5715,15 @@ stands_in = "dev/src/draw.rs"
 class = "partial"
 engine = "campaign/src/presented.rs"
 leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
-owed = "the engine's own tests (campaign/src/lib.rs); no check against the original yet"
+check = "campaign/tests/script_signatures_reference.rs"
+against = "trace"
 
 [function.object_set_melee_attack_inhibited]
 class = "partial"
 engine = "campaign/src/presented.rs"
 leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
-owed = "the engine's own tests (campaign/src/lib.rs); no check against the original yet"
+check = "campaign/tests/script_signatures_reference.rs"
+against = "trace"
 
 [function.object_set_position]
 class = "matched"
@@ -5724,7 +5734,8 @@ owed = "the engine's own tests (campaign/src/objects.rs); no check against the o
 class = "partial"
 engine = "campaign/src/presented.rs"
 leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
-owed = "the engine's own tests (campaign/src/lib.rs); no check against the original yet"
+check = "campaign/tests/script_signatures_reference.rs"
+against = "trace"
 
 [function.object_start_interpolation]
 class = "matched"
@@ -6180,7 +6191,8 @@ owed = "the engine's own tests (campaign/src/game.rs); no check against the orig
 class = "partial"
 engine = "campaign/src/presented.rs"
 leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
-owed = "the engine's own tests (campaign/src/presented.rs); no check against the original yet"
+check = "campaign/tests/script_signatures_reference.rs"
+against = "trace"
 
 [function.player0_look_pitch_is_inverted]
 class = "partial"
@@ -7249,19 +7261,22 @@ owed = "cutscene cameras; reads the object, tag and map world, which the fake wo
 class = "partial"
 engine = "campaign/src/presented.rs"
 leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
-owed = "the engine's own tests (campaign/src/presented.rs); no check against the original yet"
+check = "campaign/tests/script_signatures_reference.rs"
+against = "trace"
 
 [function.scripted_hud_blink_motion_sensor]
 class = "partial"
 engine = "campaign/src/presented.rs"
 leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
-owed = "the engine's own tests (campaign/src/presented.rs); no check against the original yet"
+check = "campaign/tests/script_signatures_reference.rs"
+against = "trace"
 
 [function.scripted_hud_blink_shield]
 class = "partial"
 engine = "campaign/src/presented.rs"
 leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
-owed = "the engine's own tests (campaign/src/presented.rs); no check against the original yet"
+check = "campaign/tests/script_signatures_reference.rs"
+against = "trace"
 
 [function.scripted_hud_get_timer_ticks]
 class = "matched"
@@ -7277,13 +7292,15 @@ owed = "the engine's own tests (campaign/src/game.rs); no check against the orig
 class = "partial"
 engine = "campaign/src/presented.rs"
 leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
-owed = "the engine's own tests (campaign/src/presented.rs); no check against the original yet"
+check = "campaign/tests/script_signatures_reference.rs"
+against = "trace"
 
 [function.scripted_hud_set_timer_position]
 class = "partial"
 engine = "campaign/src/presented.rs"
 leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
-owed = "the engine's own tests (campaign/src/presented.rs); no check against the original yet"
+check = "campaign/tests/script_signatures_reference.rs"
+against = "trace"
 
 [function.scripted_hud_set_timer_time]
 class = "matched"
@@ -7294,37 +7311,43 @@ owed = "the engine's own tests (campaign/src/game.rs); no check against the orig
 class = "partial"
 engine = "campaign/src/presented.rs"
 leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
-owed = "the engine's own tests (campaign/src/presented.rs); no check against the original yet"
+check = "campaign/tests/script_signatures_reference.rs"
+against = "trace"
 
 [function.scripted_hud_show_crosshair]
 class = "partial"
 engine = "campaign/src/presented.rs"
 leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
-owed = "the engine's own tests (campaign/src/presented.rs); no check against the original yet"
+check = "campaign/tests/script_signatures_reference.rs"
+against = "trace"
 
 [function.scripted_hud_show_health]
 class = "partial"
 engine = "campaign/src/presented.rs"
 leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
-owed = "the engine's own tests (campaign/src/presented.rs); no check against the original yet"
+check = "campaign/tests/script_signatures_reference.rs"
+against = "trace"
 
 [function.scripted_hud_show_motion_sensor]
 class = "partial"
 engine = "campaign/src/presented.rs"
 leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
-owed = "the engine's own tests (campaign/src/presented.rs); no check against the original yet"
+check = "campaign/tests/script_signatures_reference.rs"
+against = "trace"
 
 [function.scripted_hud_show_shield]
 class = "partial"
 engine = "campaign/src/presented.rs"
 leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
-owed = "the engine's own tests (campaign/src/presented.rs); no check against the original yet"
+check = "campaign/tests/script_signatures_reference.rs"
+against = "trace"
 
 [function.scripted_hud_show_timer]
 class = "partial"
 engine = "campaign/src/presented.rs"
 leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
-owed = "the engine's own tests (campaign/src/presented.rs); no check against the original yet"
+check = "campaign/tests/script_signatures_reference.rs"
+against = "trace"
 
 [function.scripted_looping_sound_set_alternate]
 class = "matched"
@@ -8630,7 +8653,8 @@ owed = "damage; reads the object, tag and map world, which the fake worlds do no
 class = "partial"
 engine = "campaign/src/presented.rs"
 leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
-owed = "the engine's own tests (campaign/src/lib.rs); no check against the original yet"
+check = "campaign/tests/script_signatures_reference.rs"
+against = "trace"
 
 [function.unit_custom_animation_at_frame]
 class = "matched"
@@ -8722,7 +8746,8 @@ owed = "the engine's own version; no check against the original yet"
 class = "partial"
 engine = "campaign/src/presented.rs"
 leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
-owed = "the engine's own tests (campaign/src/lib.rs); no check against the original yet"
+check = "campaign/tests/script_signatures_reference.rs"
+against = "trace"
 
 [function.unit_preprocess_node_orientations]
 class = "matched"
@@ -8737,19 +8762,22 @@ stands_in = "dev/src/draw.rs"
 class = "partial"
 engine = "campaign/src/presented.rs"
 leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
-owed = "the engine's own tests (campaign/src/lib.rs); no check against the original yet"
+check = "campaign/tests/script_signatures_reference.rs"
+against = "trace"
 
 [function.unit_scripting_enter_vehicle]
 class = "partial"
 engine = "campaign/src/presented.rs"
 leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
-owed = "the engine's own tests (campaign/src/lib.rs); no check against the original yet"
+check = "campaign/tests/script_signatures_reference.rs"
+against = "trace"
 
 [function.unit_scripting_exit_vehicle]
 class = "partial"
 engine = "campaign/src/presented.rs"
 leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
-owed = "the engine's own tests (campaign/src/lib.rs); no check against the original yet"
+check = "campaign/tests/script_signatures_reference.rs"
+against = "trace"
 
 [function.unit_scripting_get_grenade_count]
 class = "matched"
@@ -8790,7 +8818,8 @@ owed = "the engine's own tests (campaign/src/units.rs); no check against the ori
 class = "partial"
 engine = "campaign/src/presented.rs"
 leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
-owed = "the engine's own tests (campaign/src/lib.rs); no check against the original yet"
+check = "campaign/tests/script_signatures_reference.rs"
+against = "trace"
 
 [function.unit_scripting_start_user_animation_list]
 class = "matched"
@@ -8801,7 +8830,8 @@ owed = "the engine's own tests (campaign/src/units.rs); no check against the ori
 class = "partial"
 engine = "campaign/src/presented.rs"
 leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
-owed = "the engine's own tests (campaign/src/lib.rs); no check against the original yet"
+check = "campaign/tests/script_signatures_reference.rs"
+against = "trace"
 
 [function.unit_scripting_vehicle_test_seat_list]
 class = "matched"
@@ -8816,13 +8846,15 @@ owed = "seats; reads the object, tag and map world, which the fake worlds do not
 class = "partial"
 engine = "campaign/src/presented.rs"
 leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
-owed = "the engine's own tests (campaign/src/lib.rs); no check against the original yet"
+check = "campaign/tests/script_signatures_reference.rs"
+against = "trace"
 
 [function.unit_set_enterable_by_player]
 class = "partial"
 engine = "campaign/src/presented.rs"
 leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
-owed = "the engine's own tests (campaign/src/lib.rs); no check against the original yet"
+check = "campaign/tests/script_signatures_reference.rs"
+against = "trace"
 
 [function.unit_set_or_test_seat_and_weapon_label]
 class = "matched"
@@ -8904,7 +8936,8 @@ owed = "the engine's own tests (campaign/src/units.rs); no check against the ori
 class = "partial"
 engine = "campaign/src/presented.rs"
 leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
-owed = "the engine's own tests (campaign/src/lib.rs); no check against the original yet"
+check = "campaign/tests/script_signatures_reference.rs"
+against = "trace"
 
 [function.units_update]
 class = "partial"
@@ -9236,7 +9269,8 @@ owed = "the engine's own tests (sim/src/damage.rs); no check against the origina
 class = "partial"
 engine = "campaign/src/presented.rs"
 leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
-owed = "the engine's own tests (campaign/src/lib.rs); no check against the original yet"
+check = "campaign/tests/script_signatures_reference.rs"
+against = "trace"
 
 [function.vehicle_is_flipped]
 class = "matched"
