@@ -56,3 +56,35 @@ This file tracks all major tracks for the project.
 - [x] **Track: Coverage census: every function of the original, every tag field and its fix-ups, the scripts and the sounds, classed against the engine with the evidence each class asks for, kept current by a Rust census check**
   *Link: [./tracks/coverage_census_20261026/](./tracks/coverage_census_20261026/)*
 
+- [ ] **Track: Coverage: classify and cite: cite the engine's existing equivalents, class the small helpers as Native, add the library reason, name the address-only functions, and a ratchet that stops the counts rising**
+  *Link: [./tracks/coverage_classify_20261026/](./tracks/coverage_classify_20261026/)*
+
+- [ ] **Track: Coverage: evidence for the owed: reference traces for the 675 functions the census says owe evidence, starting with the datum allocators, random ranges, the script evaluator and the game tick, and a fake world that holds objects, tags and a map**
+  *Link: [./tracks/coverage_evidence_20261026/](./tracks/coverage_evidence_20261026/)*
+
+- [ ] **Track: Coverage: data fidelity: every tag field, stride and load-time fix-up matched to the original, vehicle_definition and the shader subtypes from a second source, and the kept-but-unused and untraced fields wired or justified**
+  *Link: [./tracks/coverage_data_20261026/](./tracks/coverage_data_20261026/)*
+
+- [ ] **Track: Coverage: AI core: actor update, the decide-action and action-handle families, perception, firing positions, placement, props, knowledge, emotions, swarms and dormancy, ported from source/ and traced**
+  *Link: [./tracks/coverage_ai_20261026/](./tracks/coverage_ai_20261026/)*
+
+- [ ] **Track: Coverage: units, players' effects and the object systems: unit update and damage, biped movement, player effects, objects, items, devices, effects and physics, ported and traced**
+  *Link: [./tracks/coverage_units_20261026/](./tracks/coverage_units_20261026/)*
+
+- [ ] **Track: Coverage: the game loop, flow and saves: the main loop iteration, winning a map and the next level, the game engine's update, players and respawn, saved games and the shell**
+  *Link: [./tracks/coverage_game_loop_20261026/](./tracks/coverage_game_loop_20261026/)*
+
+- [ ] **Track: Coverage: animation and the world's queries: frame info, root motion and inverse kinematics, models, cluster partitions, the PVS and PAS tests, scenario locations, structures and the geometry maths**
+  *Link: [./tracks/coverage_world_animation_20261026/](./tracks/coverage_world_animation_20261026/)*
+
+- [ ] **Track: Coverage: the interface and HUD: interface_draw_screen and hud_draw_screen in full, the HUD's script natives, the UI widgets, text and unicode, input and dialogs**
+  *Link: [./tracks/coverage_interface_20261026/](./tracks/coverage_interface_20261026/)*
+
+- [ ] **Track: Coverage: cameras and cutscenes: the director, the observer, the bored, static, orbiting and flying cameras, recorded animations, the letterbox and the title**
+  *Link: [./tracks/coverage_cameras_20261026/](./tracks/coverage_cameras_20261026/)*
+
+- [ ] **Track: Coverage: scripts and sounds: the script system, every allowed native and global, sound requests that carry their object, per-object limits, the mouth aperture, and play sweeps of each campaign map**
+  *Link: [./tracks/coverage_scripts_sounds_20261026/](./tracks/coverage_scripts_sounds_20261026/)*
+
+- [ ] **Track: Coverage: the 100% gate: the ratchet at zero in every system, a final census and measurement sweep against the stock game, and the report that hands over to features**
+  *Link: [./tracks/coverage_complete_20261026/](./tracks/coverage_complete_20261026/)*
