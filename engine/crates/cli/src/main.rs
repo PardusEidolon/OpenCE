@@ -9,10 +9,14 @@
 //! opence [--socket PATH] watch [--backlog N]    the log, as it is written
 //! opence [--socket PATH] script FILE            a script's lines, stopping at a failure
 //! opence [--socket PATH] shell                  lines typed (completed by the engine), or read
+//! opence census [--check | --write] [--root DIR] the coverage census of the repository
 //! ```
 //!
+//! `census` needs no engine: it reads the repository (the folder holding
+//! `source/` and `engine/`, found upwards from the current folder).
+//!
 //! It exits 0 when everything succeeded, 1 when the engine refused
-//! something, and 2 when the engine could not be reached or the arguments
+//! something (or the census's check failed), and 2 when the engine could not be reached or the arguments
 //! were wrong.
 
 use std::io::{self, BufReader, IsTerminal, Write};
@@ -26,7 +30,7 @@ use rustyline::completion::{Completer, Pair};
 use rustyline::error::ReadlineError;
 use rustyline::{Context, Editor, Helper, Highlighter, Hinter, Validator};
 
-const USAGE: &str = "usage: opence [--socket PATH] (run [--json] LINE... | state | frame PATH [--size WxH] | watch [--backlog N] | script FILE | shell)";
+const USAGE: &str = "usage: opence [--socket PATH] (run [--json] LINE... | state | frame PATH [--size WxH] | watch [--backlog N] | script FILE | shell | census [--check | --write] [--root DIR])";
 
 fn main() -> ExitCode {
     let arguments: Vec<String> = std::env::args().skip(1).collect();
@@ -139,8 +143,53 @@ fn start(arguments: &[String]) -> Result<(), Error> {
                 }
             }
         }
+        "census" => {
+            let mut mode = opence_census::Mode::Summary;
+            let mut root = None;
+            let mut words = rest.iter();
+            while let Some(word) = words.next() {
+                match word.as_str() {
+                    "--check" => mode = opence_census::Mode::Check,
+                    "--write" => mode = opence_census::Mode::Write,
+                    "--root" => {
+                        root =
+                            Some(PathBuf::from(words.next().ok_or_else(|| {
+                                Error::Usage("--root needs a folder".into())
+                            })?));
+                    }
+                    other => return Err(Error::Usage(format!("census does not take {other}"))),
+                }
+            }
+            let root = match root {
+                Some(root) => root,
+                None => repository()?,
+            };
+            match opence_census::census(&root, mode) {
+                Ok(summary) => Ok(write!(out, "{summary}")?),
+                Err(opence_census::Error::Problems(problems)) => {
+                    for problem in &problems {
+                        writeln!(out, "{problem}")?;
+                    }
+                    Err(Error::Refused(format!(
+                        "the census has {} problems",
+                        problems.len()
+                    )))
+                }
+                Err(error) => Err(Error::Io(io::Error::other(error.to_string()))),
+            }
+        }
         other => Err(Error::Usage(format!("no subcommand {other}"))),
     }
+}
+
+/// The repository: the nearest folder upwards from the current one that
+/// holds `source/` and `engine/`.
+fn repository() -> Result<PathBuf, Error> {
+    let here = std::env::current_dir()?;
+    here.ancestors()
+        .find(|folder| folder.join("source").is_dir() && folder.join("engine").is_dir())
+        .map(Into::into)
+        .ok_or_else(|| Error::Usage("not inside the repository; pass --root".into()))
 }
 
 /// The interactive shell: lines edited and remembered (in

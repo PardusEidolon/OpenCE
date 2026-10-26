@@ -34,25 +34,26 @@ rec {
   # reads), and what its builds read outside it: Jolt and the physics
   # wrapper (the physics crate's build.rs), the ragdolls' overrides (the
   # sim's include_str!) and the build script
+  commonFiles = fs.unions [
+    (fs.difference (root + /engine) (
+      fs.unions [
+        (root + /engine/app)
+        (root + /engine/fuzz)
+      ]
+    ))
+    (root + /engine/fuzz/Cargo.toml)
+    (root + /engine/fuzz/fuzz_targets)
+    (root + /port/third_party/jolt)
+    (root + /port/macos/host/physics)
+    (root + /port/assets/ragdolls/ragdolls.txt)
+    (root + /tools/engine_build.py)
+  ];
   commonArgs = {
     pname = "opence-engine-rust";
     inherit version;
     src = fs.toSource {
       inherit root;
-      fileset = fs.unions [
-        (fs.difference (root + /engine) (
-          fs.unions [
-            (root + /engine/app)
-            (root + /engine/fuzz)
-          ]
-        ))
-        (root + /engine/fuzz/Cargo.toml)
-        (root + /engine/fuzz/fuzz_targets)
-        (root + /port/third_party/jolt)
-        (root + /port/macos/host/physics)
-        (root + /port/assets/ragdolls/ragdolls.txt)
-        (root + /tools/engine_build.py)
-      ];
+      fileset = commonFiles;
     };
     cargoLock = root + /engine/Cargo.lock;
     cargoToml = root + /engine/Cargo.toml;
@@ -64,6 +65,22 @@ rec {
     '';
     strictDeps = true;
     buildInputs = [ pkgs.apple-sdk_26 ];
+  };
+
+  # the tests' source: the workspace's, and what the census's tests read
+  # (engine/crates/census): the original's C and headers, the app's Swift
+  # and the docs it writes; only the tests check is built from it, so the
+  # packages do not build again when these change
+  testArgs = commonArgs // {
+    src = fs.toSource {
+      inherit root;
+      fileset = fs.unions [
+        commonFiles
+        (fs.fileFilter (file: file.hasExt "c" || file.hasExt "h") (root + /source))
+        (root + /engine/app/Sources)
+        (root + /docs)
+      ];
+    };
   };
 
   # every dependency, for the library, the bindings' generator (the

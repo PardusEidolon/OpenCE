@@ -4,7 +4,12 @@
 { inputs, cell }:
 let
   inherit (inputs.cells.repo.toolchain) craneLib;
-  inherit (cell.rust) commonArgs cargoArtifacts testArtifacts;
+  inherit (cell.rust)
+    commonArgs
+    testArgs
+    cargoArtifacts
+    testArtifacts
+    ;
 in
 {
   fmt = craneLib.cargoFmt commonArgs;
@@ -17,7 +22,7 @@ in
   );
   # (in test-opt, as tools/engine_build.py tests)
   tests = craneLib.cargoNextest (
-    commonArgs
+    testArgs
     // {
       cargoArtifacts = testArtifacts;
       CARGO_PROFILE = "test-opt";

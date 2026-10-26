@@ -1260,6 +1260,7 @@ dependencies = [
 name = "opence_cli"
 version = "0.1.0"
 dependencies = [
+ "opence_census",
  "opence_dev",
  "opence_ffi",
  "opence_import",

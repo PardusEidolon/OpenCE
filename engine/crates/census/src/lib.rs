@@ -11,10 +11,13 @@
 use std::path::{Path, PathBuf};
 
 pub mod c;
+mod census;
 pub mod citations;
 pub mod graph;
 pub mod original;
 pub mod symbols;
+
+pub use census::{census, Census, Mode, MAIN};
 
 /// What the census could not read.
 #[derive(Debug, thiserror::Error)]
@@ -37,6 +40,9 @@ pub enum Error {
         /// What is wrong with it.
         why: String,
     },
+    /// The census's requirements not met, one line each.
+    #[error("the census has {} problems", .0.len())]
+    Problems(Vec<String>),
     /// A path the walk found outside the tree it walked.
     #[error("{0} is outside the tree")]
     Outside(PathBuf),
