@@ -1146,7 +1146,7 @@ impl Engine {
         let mut frame = None;
         if let Some(running) = state.running.as_mut() {
             running.particles.limit = devtools::particle_limit(&registry);
-            let advanced = running.clock.advance(frame_seconds * scale);
+            let advanced = running.clock.advance(frame_seconds, scale);
             run_ticks(&mut state, advanced.ticks)?;
             frame = Some(advanced);
         }

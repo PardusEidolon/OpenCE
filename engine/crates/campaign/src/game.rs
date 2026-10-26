@@ -88,9 +88,9 @@ pub(crate) const NATIVES: &[(&str, Native<Mission>)] = &[
     ("game_revert", game_revert),
     ("game_reverted", game_reverted),
     ("game_saving", game_saving),
-    ("game_safe_to_save", always),
-    ("game_safe_to_speak", always),
-    ("game_all_quiet", always),
+    ("game_safe_to_save", game_safe_to_save),
+    ("game_safe_to_speak", game_safe_to_speak),
+    ("game_all_quiet", game_all_quiet),
     ("game_difficulty_get", game_difficulty_get),
     ("game_difficulty_get_real", game_difficulty_get),
     ("game_is_cooperative", game_is_cooperative),
@@ -138,6 +138,18 @@ fn always(_: &mut Mission, _: &[Value]) -> Value {
 
 fn never(_: &mut Mission, _: &[Value]) -> Value {
     Value::Boolean(false)
+}
+
+fn game_safe_to_save(mission: &mut Mission, _: &[Value]) -> Value {
+    Value::Boolean(mission.sim.dangers().safe_to_save())
+}
+
+fn game_safe_to_speak(mission: &mut Mission, _: &[Value]) -> Value {
+    Value::Boolean(mission.sim.dangers().safe_to_speak())
+}
+
+fn game_all_quiet(mission: &mut Mission, _: &[Value]) -> Value {
+    Value::Boolean(mission.sim.dangers().all_quiet())
 }
 
 fn game_won(mission: &mut Mission, _: &[Value]) -> Value {
@@ -189,7 +201,9 @@ fn game_difficulty_get(mission: &mut Mission, _: &[Value]) -> Value {
 }
 
 fn game_is_cooperative(mission: &mut Mission, _: &[Value]) -> Value {
-    Value::Boolean(mission.sim.players().len() > 1)
+    Value::Boolean(opence_sim::safety::is_cooperative(
+        mission.sim.players().len(),
+    ))
 }
 
 fn game_time(mission: &mut Mission, _: &[Value]) -> Value {

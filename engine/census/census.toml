@@ -3851,9 +3851,10 @@ owed = "the engine's own tests (sim/src/vehicle.rs); no check against the origin
 
 [function.game_all_quiet]
 class = "partial"
-engine = "campaign/src/game.rs"
-leaves_out = ["the game's own test: the engine's always passes"]
-owed = "the engine's own tests (campaign/src/game.rs); no check against the original yet"
+engine = "sim/src/safety.rs"
+leaves_out = ["the dangers themselves, but for a dead player: enemies that see a player, projectiles, items, effects and vehicles near one, units throwing or dying, a player in the air"]
+check = "sim/tests/safety_reference.rs"
+against = "trace"
 
 [function.game_allegiance_set_teams]
 class = "missing"
@@ -4048,8 +4049,10 @@ note = "the game engine's trace compiles it to add its players; the start it cal
 
 [function.game_is_cooperative]
 class = "matched"
-engine = "campaign/src/game.rs"
-owed = "the engine's own tests (campaign/src/game.rs); no check against the original yet"
+engine = "sim/src/safety.rs"
+check = "sim/tests/safety_reference.rs"
+against = "trace"
+note = "the engine counts its players, the game the players it spawns"
 
 [function.game_looping_sound_delete]
 class = "matched"
@@ -4069,15 +4072,17 @@ note = "the original's network state and prediction; the engine sends snapshots"
 
 [function.game_safe_to_save]
 class = "partial"
-engine = "campaign/src/game.rs"
-leaves_out = ["the game's own test: the engine's always passes"]
-owed = "the engine's own tests (campaign/src/game.rs); no check against the original yet"
+engine = "sim/src/safety.rs"
+leaves_out = ["the dangers themselves, but for a dead player: enemies that see a player, projectiles, items, effects and vehicles near one, units throwing or dying, a player in the air"]
+check = "sim/tests/safety_reference.rs"
+against = "trace"
 
 [function.game_safe_to_speak]
 class = "partial"
-engine = "campaign/src/game.rs"
-leaves_out = ["the game's own test: the engine's always passes"]
-owed = "the engine's own tests (campaign/src/game.rs); no check against the original yet"
+engine = "sim/src/safety.rs"
+leaves_out = ["the dangers themselves, but for a dead player: enemies that see a player, projectiles, items, effects and vehicles near one, units throwing or dying, a player in the air"]
+check = "sim/tests/safety_reference.rs"
+against = "trace"
 
 [function.game_set_game_engine_index]
 class = "missing"
@@ -4136,8 +4141,10 @@ note = "a debug check, statistic or editor hook of the original; the dev tools s
 [function.game_time_update]
 class = "partial"
 engine = "sim/src/clock.rs"
-leaves_out = ["Halo's 30 Hz tick: the engine's simulation runs at 60 Hz"]
-owed = "the engine's own tests (sim/src/clock.rs); no check against the original yet"
+leaves_out = ["Halo's 30 Hz tick: the engine's simulation runs at 60 Hz, with the cap doubled to 14", "a film's and a network game's caps", "the server's time and a client's held clock"]
+check = "sim/tests/game_time_reference.rs"
+against = "trace"
+note = "traced at the game's 30 Hz and cap of seven, tick for tick and the leftover to the bit"
 
 [function.gamepad_button_is_down]
 class = "replaced"

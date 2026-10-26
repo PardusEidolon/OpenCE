@@ -41,6 +41,7 @@ pub mod projectile;
 pub mod ragdoll;
 pub mod random;
 pub mod real_math;
+pub mod safety;
 pub mod scenery;
 pub mod seats;
 pub mod unit_animator;
@@ -993,6 +994,20 @@ impl Simulation {
     /// The players, the local player first.
     pub fn players(&self) -> &[Player] {
         &self.players
+    }
+
+    /// The dangers around the players this tick that the engine weighs:
+    /// whether a player's biped is dead. The others (enemies that see a
+    /// player, projectiles, items, effects and vehicles near one, units
+    /// throwing or dying, a player in the air) are not yet weighed.
+    pub fn dangers(&self) -> safety::Dangers {
+        safety::Dangers {
+            player_dead: self
+                .players
+                .iter()
+                .any(|player| self.is_dead(player.handle())),
+            ..safety::Dangers::default()
+        }
     }
 
     /// A player standing at `level`'s player start `start`, its biped on
