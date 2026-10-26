@@ -344,7 +344,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `delete_bitmap` | bitmaps/bitmap_group.c | Replaced | import/src/lib.rs | maps imported to a typed format |
 | `postprocess_bitmap_group` | bitmaps/bitmap_group.c | Replaced | import/src/lib.rs | maps imported to a typed format |
 | `bitmap_group_try_and_get_bitmap` | bitmaps/bitmap_group.c | Replaced | import/src/lib.rs | maps imported to a typed format |
-| `bitmap_group_get_bitmap_from_sequence` | bitmaps/bitmap_group.c | Matched | ffi/src/hud/sprite_reference.rs:3 | ffi/src/hud/sprite_reference.rs (trace); the HUD's static elements and meters; the UI's widgets draw from their own (ui/src/draw.rs), still owed |
+| `bitmap_group_get_bitmap_from_sequence` | bitmaps/bitmap_group.c | Matched | content/src/bitmap.rs:30 | ffi/src/hud/sprite_reference.rs (trace); one lookup (Bitmap::sequence_image) for the HUD's static elements and meters and the UI's widget backgrounds and list headers; the UI clamped a frame past the last, where the game wraps it |
 | `bitmap_group_add_bitmap` | bitmaps/bitmap_group.c | Replaced | import/src/lib.rs | maps imported to a typed format |
 | `bitmap_fill` | bitmaps/bitmap_utilities.c | Replaced | import/src/lib.rs | the editor and tools |
 | `bitmap_alpha_to_rgb` | bitmaps/bitmap_utilities.c | Replaced | import/src/lib.rs | the editor and tools |
@@ -4188,7 +4188,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `parse_unicode_string` | text/draw_string.c | Replaced |  | through its caller `draw_unicode_string` |
 | `draw_string_partial` | text/draw_string.c | Replaced |  | through its caller `draw_string` |
 | `draw_unicode_string_partial` | text/draw_string.c | Replaced |  | through its caller `draw_unicode_string` |
-| `draw_string` | text/draw_string.c | Matched | ui/src/draw.rs:208 | owed: the engine cites it, with no check against the original yet |
+| `draw_string` | text/draw_string.c | Matched | ui/src/draw.rs:200 | owed: the engine cites it, with no check against the original yet |
 | `draw_unicode_string` | text/draw_string.c | Replaced |  | through its caller `draw_unicode_string_compute_bounds` |
 | `draw_string_compute_bounds` | text/draw_string.c | Matched | ui/src/draw.rs | owed: the engine's own tests (ui/tests/draw.rs); no check against the original yet |
 | `draw_unicode_string_compute_bounds` | text/draw_string.c | Replaced |  | through its caller `draw_unicode_string_capital_middle` |

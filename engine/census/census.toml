@@ -1434,10 +1434,10 @@ stands_in = "import/src/lib.rs"
 
 [function.bitmap_group_get_bitmap_from_sequence]
 class = "matched"
-engine = "ffi/src/hud.rs"
+engine = "content/src/bitmap.rs"
 check = "ffi/src/hud/sprite_reference.rs"
 against = "trace"
-note = "the HUD's static elements and meters; the UI's widgets draw from their own (ui/src/draw.rs), still owed"
+note = "one lookup (Bitmap::sequence_image) for the HUD's static elements and meters and the UI's widget backgrounds and list headers; the UI clamped a frame past the last, where the game wraps it"
 
 [function.bitmap_group_try_and_get_bitmap]
 class = "replaced"

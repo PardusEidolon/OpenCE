@@ -136,19 +136,11 @@ pub enum DrawItem {
     Glyph(GlyphQuad),
 }
 
-/// The image of `bitmap` its first sequence shows at `frame`.
+/// The image of `bitmap` its first sequence shows at `frame`, as a
+/// widget's background asks for it (`bitmap_group_get_bitmap_from_sequence`
+/// at sequence 0: a frame past the last wraps).
 pub fn sequence_image(bitmap: &Bitmap, frame: usize) -> Option<usize> {
-    let image = match bitmap.sequences.first() {
-        Some(sequence) => {
-            let count = usize::from(sequence.image_count);
-            if count == 0 {
-                return None;
-            }
-            usize::from(sequence.first_image?) + frame.min(count - 1)
-        }
-        None => frame,
-    };
-    (image < bitmap.images.len()).then_some(image)
+    bitmap.sequence_image(0, frame).map(usize::from)
 }
 
 /// How many frames the first sequence of `bitmap` has.

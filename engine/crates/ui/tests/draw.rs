@@ -547,11 +547,18 @@ fn a_sequence_names_its_images() {
     let mut picture = bitmap("picture", 8, 8, 2);
     assert_eq!(sequence_image(&picture, 0), Some(1));
     assert_eq!(sequence_image(&picture, 1), Some(2));
+    // a frame past the last wraps, as the game's lookup wraps it
     assert_eq!(sequence_image(&picture, 9), Some(2));
+    assert_eq!(sequence_image(&picture, 10), Some(1));
+    // a run without a first starts at the game's -1: the frame that lands
+    // there is no image, so the frame's own
     picture.sequences[0].first_image = None;
-    assert_eq!(sequence_image(&picture, 0), None);
+    assert_eq!(sequence_image(&picture, 0), Some(0));
+    assert_eq!(sequence_image(&picture, 1), Some(0));
+    assert_eq!(sequence_image(&picture, 2), Some(2));
+    // a sequence of neither images nor sprites is the frame's own
     picture.sequences[0].image_count = 0;
-    assert_eq!(sequence_image(&picture, 0), None);
+    assert_eq!(sequence_image(&picture, 1), Some(1));
     picture.sequences[0].first_image = Some(5);
     picture.sequences[0].image_count = 1;
     assert_eq!(sequence_image(&picture, 0), None);

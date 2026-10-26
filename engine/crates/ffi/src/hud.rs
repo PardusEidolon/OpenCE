@@ -663,32 +663,6 @@ enum Frame {
 /// The part of the image a whole image is drawn from.
 const WHOLE: [f32; 4] = [0.0, 1.0, 0.0, 1.0];
 
-/// The image `bitmap_group_get_bitmap_from_sequence` gives for frame
-/// `frame` of `sequence`: a negative sequence, or a bitmap without
-/// sequences, gives the frame's image; any other sequence wraps to one the
-/// bitmap has, whose run of images the frame wraps through, or whose
-/// sprite's image it is.
-fn sequence_image(bitmap: &Bitmap, sequence: i16, frame: usize) -> Option<u16> {
-    let wrapped = usize::try_from(sequence)
-        .ok()
-        .filter(|_| !bitmap.sequences.is_empty())
-        .and_then(|index| bitmap.sequences.get(index % bitmap.sequences.len()));
-    let image = match wrapped {
-        Some(sequence) if sequence.image_count > 0 => sequence
-            .first_image
-            .map(|first| usize::from(first) + frame % usize::from(sequence.image_count)),
-        Some(sequence) => sequence
-            .sprites
-            .get(frame)
-            .map(|sprite| usize::from(sprite.image)),
-        None => None,
-    }
-    .unwrap_or(frame);
-    (image < bitmap.images.len())
-        .then(|| u16::try_from(image).ok())
-        .flatten()
-}
-
 /// The part of its image frame `frame` of `sequence` is drawn from
 /// (`get_sprite_clip_rect`): its sprite's, for a sequence of sprites the
 /// bitmap has (not wrapped), the frame wrapping through them.
@@ -707,7 +681,7 @@ fn sprite_clip(bitmap: &Bitmap, sequence: i16, frame: usize) -> Option<[f32; 4]>
 fn sprite(bitmap: &Bitmap, frame: Frame) -> Option<Sprite> {
     match frame {
         Frame::Element(sequence) => Some(Sprite {
-            image: sequence_image(bitmap, sequence, 0)?,
+            image: bitmap.sequence_image(sequence, 0)?,
             clip: sprite_clip(bitmap, sequence, 0).unwrap_or(WHOLE),
         }),
         Frame::Sprite(sequence, frame) => {
@@ -723,7 +697,7 @@ fn sprite(bitmap: &Bitmap, frame: Frame) -> Option<Sprite> {
                 .and_then(|index| sprites.get(index))
             else {
                 return Some(Sprite {
-                    image: sequence_image(bitmap, sequence, frame)?,
+                    image: bitmap.sequence_image(sequence, frame)?,
                     clip: WHOLE,
                 });
             };

@@ -12,8 +12,8 @@ draw from) and source/interface/hud_draw.c's
 numbers and crosshairs draw from), compiled for this machine against a
 small fake world: three bitmaps, one without sequences, one whose
 sequences are runs of images, sprites and neither, and one of sprites
-alone, asked for each sequence from below the first to past the last and
-each frame from 0 to past the last. The table is written to
+alone and a run without a first image, asked for each sequence from below
+the first to past the last and each frame from 0 to past the last. The table is written to
 engine/crates/ffi/tests/hud_sprite_reference.txt, which
 ffi/src/hud/sprite_reference.rs reads.
 """
@@ -97,10 +97,11 @@ static struct bitmap_group_sequence sequences_one[4] =
 	{ "neither", NONE, 0, { 0 }, { 0, NULL } },
 	{ "to the last", 7, 5, { 0 }, { 0, NULL } },
 };
-static struct bitmap_group_sequence sequences_two[2] =
+static struct bitmap_group_sequence sequences_two[3] =
 {
 	{ "a sprite", NONE, 0, { 0 }, { 1, sprites_b } },
 	{ "sprites", NONE, 0, { 0 }, { 3, sprites_c } },
+	{ "a run without a first", NONE, 2, { 0 }, { 0, NULL } },
 };
 
 #define GROUPS 3
@@ -108,7 +109,7 @@ static struct bitmap_group groups[GROUPS] =
 {
 	{ { 0, NULL }, { 5, bitmaps } },
 	{ { 4, sequences_one }, { 12, bitmaps } },
-	{ { 2, sequences_two }, { 3, bitmaps } },
+	{ { 3, sequences_two }, { 3, bitmaps } },
 };
 
 static struct bitmap_group *bitmap_group_get(long index) { return &groups[index]; }

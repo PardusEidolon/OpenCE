@@ -25,6 +25,40 @@ pub struct Bitmap {
     pub images: Vec<BitmapImage>,
 }
 
+impl Bitmap {
+    /// The image frame `frame` of sequence `sequence` is drawn from, as
+    /// `bitmap_group_get_bitmap_from_sequence` finds it: the sequence
+    /// wrapping through the bitmap's, a run of images wrapping the frame
+    /// through it and a sequence of sprites taking its sprite's, and the
+    /// frame itself for a bitmap without sequences, a negative sequence or
+    /// a run that lands on no image. `None` past the bitmap's images.
+    pub fn sequence_image(&self, sequence: i16, frame: usize) -> Option<u16> {
+        let wrapped = usize::try_from(sequence)
+            .ok()
+            .filter(|_| !self.sequences.is_empty())
+            .and_then(|index| self.sequences.get(index % self.sequences.len()));
+        let image = match wrapped {
+            Some(sequence) if sequence.image_count > 0 => {
+                // (the game's first is a short: without one it is -1, and a
+                // run from it that lands on -1 is no image)
+                let first = sequence.first_image.map_or(-1, i32::from);
+                let step =
+                    u16::try_from(frame % usize::from(sequence.image_count)).map_or(0, i32::from);
+                usize::try_from(first + step).ok()
+            }
+            Some(sequence) => sequence
+                .sprites
+                .get(frame)
+                .map(|sprite| usize::from(sprite.image)),
+            None => None,
+        }
+        .unwrap_or(frame);
+        (image < self.images.len())
+            .then(|| u16::try_from(image).ok())
+            .flatten()
+    }
+}
+
 /// A sequence of a bitmap's images.
 #[derive(Clone, Debug, PartialEq, Archive, Serialize, Deserialize)]
 pub struct Sequence {

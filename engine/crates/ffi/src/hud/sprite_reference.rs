@@ -153,7 +153,7 @@ fn compare_frame(
     frame: usize,
     fields: &[&str],
 ) -> Result<bool, Failure> {
-    let actual = super::sequence_image(bitmap, sequence, frame).map(|image| Sprite {
+    let actual = bitmap.sequence_image(sequence, frame).map(|image| Sprite {
         image,
         clip: super::sprite_clip(bitmap, sequence, frame).unwrap_or(WHOLE),
     });
@@ -163,7 +163,7 @@ fn compare_frame(
 
 #[test]
 fn a_static_elements_bitmap_is_the_games() -> Result<(), Failure> {
-    assert_eq!(compare("static", &bitmaps()?)?, 340);
+    assert_eq!(compare("static", &bitmaps()?)?, 376);
     Ok(())
 }
 
