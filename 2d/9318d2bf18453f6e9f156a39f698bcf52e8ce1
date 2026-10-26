@@ -1,0 +1,1 @@
+Effects on the move: Blood Gulch drive checks slips only on game ticks, material from the ground under the wheel, effects = the foot tag's slip effect per material at the slip's scale (>100 slips and effects); no fix needed.
