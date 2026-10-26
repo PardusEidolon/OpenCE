@@ -30,7 +30,7 @@ pub enum Value {
 
 impl Value {
     /// The value a type starts as, and what a function that is not there
-    /// returns.
+    /// returns (`hs_type_default_value`).
     pub fn default_of(value_type: ValueType) -> Self {
         match value_type {
             ValueType::Boolean => Self::Boolean(false),

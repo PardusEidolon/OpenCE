@@ -286,7 +286,8 @@ pub struct Runtime<W> {
 impl<W: World> Runtime<W> {
     /// The scripts, with the functions and globals the engine gives them,
     /// their globals given their first values, and a thread for each script
-    /// that runs at the top: none has run yet.
+    /// that runs at the top: none has run yet
+    /// (`hs_runtime_initialize_for_new_map`).
     pub fn new(scripts: Scripts, registry: Registry<W>, world: &mut W) -> Self {
         let mut missing = BTreeSet::new();
         let mut names = BTreeMap::new();
@@ -374,7 +375,7 @@ impl<W: World> Runtime<W> {
     }
 
     /// Runs every thread that is due this tick, in the scenarios' order,
-    /// then moves the time on a tick.
+    /// then moves the time on a tick (`hs_runtime_update`).
     pub fn tick(&mut self, world: &mut W) {
         for thread in 0..self.threads.len() {
             if self.threads[thread].sleep.due(self.time) {
@@ -447,7 +448,8 @@ impl<W: World> Runtime<W> {
             .map(|t| t.sleep)
     }
 
-    /// Wakes a script's thread, as `wake` does: it runs on its next turn.
+    /// Wakes a script's thread, as `wake` does: it runs on its next turn
+    /// (`hs_wake`).
     pub fn wake(&mut self, script: &str) {
         if let Some(index) = self.scripts.scripts.iter().position(|s| s.name == script) {
             self.wake_script(index);
@@ -456,7 +458,7 @@ impl<W: World> Runtime<W> {
 
     /// Evaluates an expression to its end, on a thread of its own that may
     /// not sleep (a global's first value, or the console's); one that tries
-    /// to gives its type's default.
+    /// to gives its type's default (`hs_runtime_evaluate`).
     pub fn evaluate(&mut self, root: u32, world: &mut W) -> Value {
         let thread = self.threads.len();
         self.threads.push(Thread {
@@ -487,7 +489,7 @@ impl<W: World> Runtime<W> {
     /// Evaluates a line typed at the console: the expression, typed by
     /// the functions it calls and its names looked up in the world, run to
     /// its end; its value and type. A bare line is a call (`unit_kill
-    /// marine`). The scripts are left as they were.
+    /// marine`). The scripts are left as they were (`hs_compile`).
     pub fn evaluate_text(
         &mut self,
         text: &str,
@@ -586,7 +588,8 @@ impl<W: World> Runtime<W> {
     }
 
     /// Takes one step of the thread's top frame: it calls for a child's
-    /// value, returns its own, or sleeps. False when the stack overflows.
+    /// value, returns its own, or sleeps. False when the stack overflows
+    /// (`hs_evaluate`, `hs_arguments_evaluate`).
     fn step(&mut self, thread: usize, world: &mut W) -> bool {
         let Some(mut frame) = self.threads[thread].stack.pop() else {
             return true;
@@ -705,7 +708,10 @@ impl<W: World> Runtime<W> {
         x
     }
 
-    /// A special form's step.
+    /// A special form's step (`hs_evaluate_begin`, `hs_evaluate_begin_random`,
+    /// `hs_evaluate_if`, `hs_evaluate_set`, `hs_evaluate_logical`,
+    /// `hs_evaluate_arithmetic`, `hs_evaluate_equality`,
+    /// `hs_evaluate_inequality`, `hs_evaluate_inspect`).
     fn form(
         &mut self,
         thread: usize,
@@ -863,7 +869,8 @@ impl<W: World> Runtime<W> {
     }
 
     /// `(sleep <ticks> [<script>])`: none for 0 ticks, until woken for
-    /// fewer, and otherwise this thread or the script's for that long.
+    /// fewer, and otherwise this thread or the script's for that long
+    /// (`hs_evaluate_sleep`).
     fn sleep(&mut self, thread: usize, values: &[Value]) {
         let ticks = values.first().map_or(0, Value::as_index);
         if ticks == 0 {
@@ -900,7 +907,7 @@ impl<W: World> Runtime<W> {
     /// `(sleep_until <condition> [<ticks> [<timeout>]])`: tests the
     /// condition every so many ticks (30 unless given), until it is true or
     /// the time out has passed. As Halo's does, it sleeps once before it
-    /// first tests.
+    /// first tests (`hs_evaluate_sleep_until`).
     fn sleep_until(
         &mut self,
         thread: usize,
@@ -951,7 +958,8 @@ impl<W: World> Runtime<W> {
         }
     }
 
-    /// A constant's or a global's value, as its node takes it.
+    /// A constant's or a global's value, as its node takes it
+    /// (`hs_global_evaluate`).
     fn value_now(&self, node: u32, world: &mut W) -> Value {
         let value_type = self.node_type(node);
         match self.resolved.get(node as usize) {

@@ -524,17 +524,249 @@ owed = "the engine cites it, with no check against the original yet"
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
 
+[function.hs_arguments_evaluate]
+class = "matched"
+engine = "script/src/lib.rs"
+owed = "the engine's runtime (script/src/lib.rs); no check against the original yet"
+
 [function.hs_cast]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
+
+[function.hs_compile]
+class = "partial"
+engine = "script/src/console.rs"
+leaves_out = ["the scenario's source text: maps carry their scripts compiled, so only the console's line is compiled"]
+owed = "the console's compiler (script/src/console.rs); no check against the original yet"
+
+[function.hs_data_to_void]
+class = "matched"
+engine = "script/src/value.rs"
+owed = "one of hs_cast's conversions, in script/src/value.rs's cast; no check against the original yet"
+
+[function.hs_enum_to_real]
+class = "matched"
+engine = "script/src/value.rs"
+owed = "one of hs_cast's conversions, in script/src/value.rs's cast; no check against the original yet"
+
+[function.hs_evaluate]
+class = "matched"
+engine = "script/src/lib.rs"
+owed = "the engine's runtime (script/src/lib.rs); no check against the original yet"
+
+[function.hs_evaluate_arithmetic]
+class = "matched"
+engine = "script/src/lib.rs"
+owed = "the engine's runtime (script/src/lib.rs); no check against the original yet"
+
+[function.hs_evaluate_begin]
+class = "matched"
+engine = "script/src/lib.rs"
+owed = "the engine's runtime (script/src/lib.rs); no check against the original yet"
+
+[function.hs_evaluate_begin_random]
+class = "partial"
+engine = "script/src/lib.rs"
+leaves_out = ["the game's own random numbers: the shuffle draws on the runtime's xorshift"]
+owed = "the engine's runtime (script/src/lib.rs); no check against the original yet"
+
+[function.hs_evaluate_equality]
+class = "matched"
+engine = "script/src/lib.rs"
+owed = "the engine's runtime (script/src/lib.rs); no check against the original yet"
+
+[function.hs_evaluate_if]
+class = "matched"
+engine = "script/src/lib.rs"
+owed = "the engine's runtime (script/src/lib.rs); no check against the original yet"
+
+[function.hs_evaluate_inequality]
+class = "matched"
+engine = "script/src/lib.rs"
+owed = "the engine's runtime (script/src/lib.rs); no check against the original yet"
+
+[function.hs_evaluate_inspect]
+class = "matched"
+engine = "script/src/lib.rs"
+owed = "the engine's runtime (script/src/lib.rs); no check against the original yet"
+
+[function.hs_evaluate_logical]
+class = "matched"
+engine = "script/src/lib.rs"
+owed = "the engine's runtime (script/src/lib.rs); no check against the original yet"
+
+[function.hs_evaluate_set]
+class = "matched"
+engine = "script/src/lib.rs"
+owed = "the engine's runtime (script/src/lib.rs); no check against the original yet"
+
+[function.hs_evaluate_sleep]
+class = "matched"
+engine = "script/src/lib.rs"
+owed = "the engine's runtime (script/src/lib.rs); no check against the original yet"
+
+[function.hs_evaluate_sleep_until]
+class = "matched"
+engine = "script/src/lib.rs"
+owed = "the engine's runtime (script/src/lib.rs); no check against the original yet"
+
+[function.hs_global_evaluate]
+class = "matched"
+engine = "script/src/lib.rs"
+owed = "the engine's runtime (script/src/lib.rs); no check against the original yet"
+
+[function.hs_long_to_boolean]
+class = "matched"
+engine = "script/src/value.rs"
+owed = "one of hs_cast's conversions, in script/src/value.rs's cast; no check against the original yet"
+
+[function.hs_long_to_real]
+class = "matched"
+engine = "script/src/value.rs"
+owed = "one of hs_cast's conversions, in script/src/value.rs's cast; no check against the original yet"
+
+[function.hs_long_to_short]
+class = "matched"
+engine = "script/src/value.rs"
+owed = "one of hs_cast's conversions, in script/src/value.rs's cast; no check against the original yet"
+
+[function.hs_not]
+class = "matched"
+engine = "campaign/src/game.rs"
+owed = "the script function's wrapper, which the campaign wires; no check against the original yet"
+
+[function.hs_object_create]
+class = "matched"
+engine = "campaign/src/objects.rs"
+owed = "the script function's wrapper, which the campaign wires; no check against the original yet"
+
+[function.hs_object_create_anew]
+class = "matched"
+engine = "campaign/src/objects.rs"
+owed = "the script function's wrapper, which the campaign wires; no check against the original yet"
+
+[function.hs_object_create_anew_containing]
+class = "matched"
+engine = "campaign/src/objects.rs"
+owed = "the script function's wrapper, which the campaign wires; no check against the original yet"
+
+[function.hs_object_create_containing]
+class = "matched"
+engine = "campaign/src/objects.rs"
+owed = "the script function's wrapper, which the campaign wires; no check against the original yet"
+
+[function.hs_object_destroy]
+class = "matched"
+engine = "campaign/src/objects.rs"
+owed = "the script function's wrapper, which the campaign wires; no check against the original yet"
+
+[function.hs_object_destroy_all]
+class = "matched"
+engine = "campaign/src/objects.rs"
+owed = "the script function's wrapper, which the campaign wires; no check against the original yet"
+
+[function.hs_object_destroy_containing]
+class = "matched"
+engine = "campaign/src/objects.rs"
+owed = "the script function's wrapper, which the campaign wires; no check against the original yet"
+
+[function.hs_object_name_to_object_list]
+class = "matched"
+engine = "script/src/value.rs"
+owed = "one of hs_cast's conversions, in script/src/value.rs's cast; no check against the original yet"
+
+[function.hs_object_set_facing]
+class = "matched"
+engine = "campaign/src/objects.rs"
+owed = "the script function's wrapper, which the campaign wires; no check against the original yet"
+
+[function.hs_object_teleport]
+class = "matched"
+engine = "campaign/src/objects.rs"
+owed = "the script function's wrapper, which the campaign wires; no check against the original yet"
+
+[function.hs_object_to_object_list]
+class = "matched"
+engine = "script/src/value.rs"
+owed = "one of hs_cast's conversions, in script/src/value.rs's cast; no check against the original yet"
+
+[function.hs_objects_can_see_flag]
+class = "matched"
+engine = "campaign/src/objects.rs"
+owed = "the script function's wrapper, which the campaign wires; no check against the original yet"
+
+[function.hs_objects_can_see_object]
+class = "matched"
+engine = "campaign/src/objects.rs"
+owed = "the script function's wrapper, which the campaign wires; no check against the original yet"
+
+[function.hs_players]
+class = "matched"
+engine = "campaign/src/objects.rs"
+owed = "the script function's wrapper, which the campaign wires; no check against the original yet"
+
+[function.hs_print]
+class = "matched"
+engine = "campaign/src/game.rs"
+owed = "the script function's wrapper, which the campaign wires; no check against the original yet"
+
+[function.hs_real_to_long]
+class = "matched"
+engine = "script/src/value.rs"
+owed = "one of hs_cast's conversions, in script/src/value.rs's cast; no check against the original yet"
+
+[function.hs_real_to_short]
+class = "matched"
+engine = "script/src/value.rs"
+owed = "one of hs_cast's conversions, in script/src/value.rs's cast; no check against the original yet"
 
 [function.hs_return]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
 
+[function.hs_runtime_evaluate]
+class = "matched"
+engine = "script/src/lib.rs"
+owed = "the engine's runtime (script/src/lib.rs); no check against the original yet"
+
+[function.hs_runtime_initialize_for_new_map]
+class = "matched"
+engine = "script/src/lib.rs"
+owed = "the engine's runtime (script/src/lib.rs); no check against the original yet"
+
+[function.hs_runtime_update]
+class = "matched"
+engine = "script/src/lib.rs"
+owed = "the engine's runtime (script/src/lib.rs); no check against the original yet"
+
+[function.hs_short_to_boolean]
+class = "matched"
+engine = "script/src/value.rs"
+owed = "one of hs_cast's conversions, in script/src/value.rs's cast; no check against the original yet"
+
+[function.hs_short_to_real]
+class = "matched"
+engine = "script/src/value.rs"
+owed = "one of hs_cast's conversions, in script/src/value.rs's cast; no check against the original yet"
+
+[function.hs_string_to_boolean]
+class = "matched"
+engine = "script/src/value.rs"
+owed = "one of hs_cast's conversions, in script/src/value.rs's cast; no check against the original yet"
+
 [function.hs_thread_main]
 class = "matched"
 owed = "scripts; reads the object, tag and map world, which the fake worlds do not hold (the scenario's compiled scripts); script/tests"
+
+[function.hs_type_default_value]
+class = "matched"
+engine = "script/src/value.rs"
+owed = "the engine's runtime (script/src/lib.rs); no check against the original yet"
+
+[function.hs_wake]
+class = "matched"
+engine = "script/src/lib.rs"
+owed = "the engine's runtime (script/src/lib.rs); no check against the original yet"
 
 [function.hud_calculate_bitmap_bounds]
 class = "matched"
@@ -727,6 +959,16 @@ because = "tools"
 stands_in = "dev/src/draw.rs"
 
 [function.render_debug_path]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/draw.rs"
+
+[function.render_debug_scripting]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/draw.rs"
+
+[function.render_debug_trigger_volumes]
 class = "replaced"
 because = "tools"
 stands_in = "dev/src/draw.rs"
