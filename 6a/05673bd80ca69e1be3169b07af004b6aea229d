@@ -1,0 +1,4 @@
+Task: Effects (effects)
+Class the effects: effects, particles, particle systems, contrails, weather and decals Matched, their drawing and decal projection Replaced
+
+The effects walk of the census. The effects' events and parts, the particles, the particle systems, the contrails, the weather and the decals' lifetimes are Matched, each owing a check against the original. Drawing them, and the decals' clipping and projection (done in DecalPass's shader), are the renderer's. The player effects (camera shake, screen flash, damage indicators) stay Missing. Checked: census --check, and the census tests (39/39).
