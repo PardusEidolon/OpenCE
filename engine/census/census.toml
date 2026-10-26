@@ -4040,9 +4040,11 @@ class = "missing"
 note = "not reached from a root of the game; the game loop track owns it"
 
 [function.game_tick]
-class = "matched"
+class = "partial"
 engine = "sim/src/lib.rs"
-owed = "the engine's own tests (sim/tests); no check against the original yet"
+leaves_out = ["the game's order: the scripts run before the actors, units and weapons, the actors think before the units move, and the effects run after the simulation", "the antennas, rumble, the editor, the movement and placement traces and the network client's actors, which the engine's tick does not update"]
+check = "sim/tests/game_tick_reference.rs"
+against = "trace"
 
 [function.game_time_get_tick_fraction]
 class = "missing"

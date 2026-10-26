@@ -19,7 +19,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `dialogs` | | | | | 5 (1328 B) | | 0 |
 | `editor` | | | | | 9 (0 B) | | 0 |
 | `effects` | 1 (48 B) | 89 (35312 B) | | | 13 (7344 B) | 87 (13904 B) | 85 |
-| `game` | 7 (336 B) | 23 (5280 B) | | 16 (8224 B) | 61 (4384 B) | 609 (85856 B) | 39 |
+| `game` | 7 (336 B) | 22 (5008 B) | | 17 (8496 B) | 61 (4384 B) | 609 (85856 B) | 38 |
 | `hs` | 2 (384 B) | 42 (7984 B) | | 8 (1776 B) | 11 (2880 B) | 576 (53968 B) | 37 |
 | `input` | | | | | 46 (7216 B) | 1 (0 B) | 0 |
 | `interface` | 6 (1408 B) | 96 (33424 B) | | 19 (6112 B) | 104 (21432 B) | 452 (94304 B) | 115 |
@@ -43,7 +43,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `text` | | 9 (1936 B) | 63 (6864 B) | | 19 (5744 B) | 21 (2368 B) | 9 |
 | `tool` | | | | | 27 (8752 B) | | 0 |
 | `units` | 9 (1856 B) | 67 (27888 B) | | 17 (17808 B) | 9 (1616 B) | 227 (58352 B) | 84 |
-| **all** | 145 (25968 B) | 578 (188096 B) | 332 (38896 B) | 122 (72320 B) | 2770 (569976 B) | 3680 (715866 B) | 671 |
+| **all** | 145 (25968 B) | 577 (187824 B) | 332 (38896 B) | 123 (72592 B) | 2770 (569976 B) | 3680 (715866 B) | 670 |
 
 ## `ai`
 
@@ -1237,7 +1237,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `cheat_all_weapons` | game/cheats.c | Replaced | dev/src/control.rs | the editor and tools |
 | `cheat_all_powerups` | game/cheats.c | Replaced | dev/src/control.rs | the editor and tools |
 | `cheat_all_vehicles` | game/cheats.c | Replaced | dev/src/control.rs | the editor and tools |
-| `game_tick` | game/game.c | Matched | sim/src/lib.rs:383 | owed: the engine's own tests (sim/tests); no check against the original yet |
+| `game_tick` | game/game.c | Partial | sim/src/lib.rs:383 | sim/tests/game_tick_reference.rs (trace); leaves out the game's order: the scripts run before the actors, units and weapons, the actors think before the units move, and the effects run after the simulation, the antennas, rumble, the editor, the movement and placement traces and the network client's actors, which the engine's tick does not update |
 | `game_all_quiet` | game/game.c | Partial | campaign/src/game.rs | leaves out the game's own test: the engine's always passes; owed: the engine's own tests (campaign/src/game.rs); no check against the original yet |
 | `game_safe_to_save` | game/game.c | Partial | campaign/src/game.rs | leaves out the game's own test: the engine's always passes; owed: the engine's own tests (campaign/src/game.rs); no check against the original yet |
 | `game_safe_to_speak` | game/game.c | Partial | campaign/src/game.rs | leaves out the game's own test: the engine's always passes; owed: the engine's own tests (campaign/src/game.rs); no check against the original yet |
