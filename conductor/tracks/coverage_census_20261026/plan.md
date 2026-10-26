@@ -64,8 +64,8 @@ entries list what they leave out.
 - [x] Task: Fields the importer keeps a5d7e914
   - [x] Tests first: the importer's snapshots and the reference traces unchanged
   - [x] The readers register named offsets in place of bare constants; the census reads the registration
-- [ ] Task: Fields the engine uses
-  - [ ] Typed fields read outside the importer, marked
+- [x] Task: Fields the engine uses b3f1a1b3
+  - [x] Typed fields read outside the importer, marked
 - [ ] Task: Load-time fix-ups
   - [ ] The original's postprocess and defaults listed per tag group
   - [ ] Each compared with the importer, and the ones that differ recorded
