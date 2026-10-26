@@ -177,9 +177,9 @@ Found in play (2026-10-25): when a body dies the ragdoll stretches and splits, t
 - [x] Task: The ragdoll 4553dc49
     - [x] Write tests: a dying biped's ragdoll starts from the death animation's pose, keeps every bone within its length (no stretching or splitting), and the model follows it every frame (the start is the death tick's own pose, which the blast and animation have already moved, so the bones are checked against their lengths as it fell)
     - [x] The fixes
-- [ ] Task: The death camera
-    - [ ] Write tests: the dead player's camera follows the body as the original's does
-    - [ ] The fixes
+- [x] Task: The death camera 96a2f9da
+    - [x] Write tests: the dead player's camera follows the body as the original's does
+    - [x] The fixes
 - [ ] Task: Conductor - User Manual Verification 'Phase 14: Death and ragdolls' (Protocol in workflow.md)
 
 ## Phase 15: Sound
