@@ -202,6 +202,18 @@ class = "replaced"
 because = "tools"
 stands_in = "dev/src/control.rs"
 
+[[rule]]
+file = "objects/object_lights.c"
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/LightPass.swift"
+
+[[rule]]
+file = "objects/object_shadows.c"
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/ShadowPass.swift"
+
 [function.accelerate_to_position]
 class = "matched"
 owed = "a first-person weapon's sway; checked through first_person_weapon_update's trace"
@@ -337,6 +349,11 @@ owed = "draws from the game's random seed; checked through the animation trace's
 class = "matched"
 owed = "reads the object, tag and map world, which the fake worlds do not hold (the animation tag's frames); checked by the animation trace's frame counts"
 
+[function.area_of_effect_cause_damage]
+class = "matched"
+engine = "sim/src/damage.rs"
+owed = "the engine's own tests (sim/src/damage.rs); no check against the original yet"
+
 [function.area_of_effect_cause_damage_to_object]
 class = "matched"
 owed = "damage; reads the object, tag and map world, which the fake worlds do not hold; Phase 12's explosions"
@@ -349,9 +366,24 @@ owed = "the engine cites it, with no check against the original yet"
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
 
+[function.biped_falling_damage]
+class = "matched"
+engine = "sim/src/damage.rs"
+owed = "the engine's own tests (sim/src/damage.rs); no check against the original yet"
+
+[function.biped_jump]
+class = "matched"
+engine = "physics/src/movement.rs"
+owed = "the engine's own tests (physics/src/movement.rs); no check against the original yet"
+
 [function.biped_make_footstep]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
+
+[function.biped_start_landing]
+class = "matched"
+engine = "physics/src/movement.rs"
+owed = "the engine's own tests (physics/src/movement.rs); no check against the original yet"
 
 [function.biped_start_limp_body_physics]
 class = "matched"
@@ -361,9 +393,32 @@ owed = "death; reads the object, tag and map world, which the fake worlds do not
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
 
+[function.biped_update_airborne]
+class = "partial"
+engine = "physics/src/movement.rs"
+leaves_out = ["the original's collision: the pill is moved by the physics library's character controller"]
+owed = "the engine's own tests (physics/src/movement.rs); no check against the original yet"
+
+[function.biped_update_jumping]
+class = "matched"
+engine = "physics/src/movement.rs"
+owed = "the engine's own tests (physics/src/movement.rs); no check against the original yet"
+
 [function.biped_update_landing]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
+
+[function.biped_update_moving]
+class = "partial"
+engine = "physics/src/movement.rs"
+leaves_out = ["the original's collision: the pill is moved by the physics library's character controller"]
+owed = "the engine's own tests (physics/src/movement.rs); no check against the original yet"
+
+[function.biped_update_physics]
+class = "partial"
+engine = "physics/src/movement.rs"
+leaves_out = ["the original's collision: the pill is moved by the physics library's character controller"]
+owed = "the engine's own tests (physics/src/movement.rs); no check against the original yet"
 
 [function.biped_update_turning]
 class = "matched"
@@ -404,6 +459,11 @@ owed = "the engine's own tests (sim/tests/game.rs); no check against the origina
 class = "matched"
 owed = "cutscene cameras; reads the object, tag and map world, which the fake worlds do not hold (the camera track tag); campaign/tests/cutscenes.rs"
 
+[function.compute_airborne_ticks]
+class = "matched"
+engine = "sim/src/vehicle.rs"
+owed = "the engine's own tests (sim/src/vehicle.rs); no check against the original yet"
+
 [function.contrail_add_points]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
@@ -432,9 +492,19 @@ owed = "the engine cites it, with no check against the original yet"
 class = "matched"
 owed = "a vehicle's effects; reads the object, tag and map world, which the fake worlds do not hold; Phase 13's effects on the move"
 
+[function.create_initial_device_groups]
+class = "matched"
+engine = "campaign/src/devices.rs"
+owed = "the engine's own tests (campaign/src/devices.rs); no check against the original yet"
+
 [function.create_pelican_effect]
 class = "matched"
 owed = "a vehicle's effects; reads the object, tag and map world, which the fake worlds do not hold; Phase 13's effects on the move"
+
+[function.create_slipping_effects]
+class = "matched"
+engine = "sim/src/vehicle.rs"
+owed = "the engine's own tests (sim/src/vehicle.rs); no check against the original yet"
 
 [function.ctf_award_capture]
 class = "matched"
@@ -466,6 +536,11 @@ owed = "the engine's own tests (sim/tests/game.rs); no check against the origina
 class = "matched"
 engine = "sim/src/game.rs"
 owed = "the engine's own tests (sim/tests/game.rs); no check against the original yet"
+
+[function.damage_data_new]
+class = "matched"
+engine = "sim/src/damage.rs"
+owed = "the engine's own tests (sim/src/damage.rs); no check against the original yet"
 
 [function.data_next_index]
 class = "matched"
@@ -509,9 +584,69 @@ owed = "a looping sound's details; draws from the game's random seed; Phase 15"
 class = "matched"
 owed = "devices; reads the object, tag and map world, which the fake worlds do not hold"
 
+[function.device_get_position]
+class = "matched"
+engine = "campaign/src/devices.rs"
+owed = "the engine's own tests (campaign/src/devices.rs); no check against the original yet"
+
+[function.device_get_power]
+class = "matched"
+engine = "campaign/src/devices.rs"
+owed = "the engine's own tests (campaign/src/devices.rs); no check against the original yet"
+
+[function.device_group_change]
+class = "matched"
+engine = "campaign/src/devices.rs"
+owed = "the engine's own tests (campaign/src/devices.rs); no check against the original yet"
+
+[function.device_group_change_only_once_more_set]
+class = "matched"
+engine = "campaign/src/devices.rs"
+owed = "the engine's own tests (campaign/src/devices.rs); no check against the original yet"
+
+[function.device_group_get_value]
+class = "matched"
+engine = "campaign/src/devices.rs"
+owed = "the engine's own tests (campaign/src/devices.rs); no check against the original yet"
+
+[function.device_group_set_desired_value]
+class = "matched"
+engine = "campaign/src/devices.rs"
+owed = "the engine's own tests (campaign/src/devices.rs); no check against the original yet"
+
+[function.device_one_sided_set]
+class = "matched"
+engine = "campaign/src/devices.rs"
+owed = "the engine's own tests (campaign/src/devices.rs); no check against the original yet"
+
+[function.device_operates_automatically_set]
+class = "matched"
+engine = "campaign/src/devices.rs"
+owed = "the engine's own tests (campaign/src/devices.rs); no check against the original yet"
+
 [function.device_preprocess_node_orientations]
 class = "matched"
 owed = "devices; reads the object, tag and map world, which the fake worlds do not hold (the device's model)"
+
+[function.device_set_actual_position]
+class = "matched"
+engine = "campaign/src/devices.rs"
+owed = "the engine's own tests (campaign/src/devices.rs); no check against the original yet"
+
+[function.device_set_desired_position]
+class = "matched"
+engine = "campaign/src/devices.rs"
+owed = "the engine's own tests (campaign/src/devices.rs); no check against the original yet"
+
+[function.device_set_never_appears_locked]
+class = "matched"
+engine = "campaign/src/devices.rs"
+owed = "the engine's own tests (campaign/src/devices.rs); no check against the original yet"
+
+[function.device_set_power]
+class = "matched"
+engine = "campaign/src/devices.rs"
+owed = "the engine's own tests (campaign/src/devices.rs); no check against the original yet"
 
 [function.device_update]
 class = "matched"
@@ -660,6 +795,12 @@ class = "partial"
 engine = "sim/src/clock.rs"
 leaves_out = ["Halo's 30 Hz tick: the engine's simulation runs at 60 Hz"]
 owed = "the engine's own tests (sim/src/clock.rs); no check against the original yet"
+
+[function.garbage_collect_now]
+class = "partial"
+engine = "campaign/src/presented.rs"
+leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
+owed = "the engine's own tests (campaign/src/lib.rs); no check against the original yet"
 
 [function.get_flash_color]
 class = "matched"
@@ -986,6 +1127,33 @@ owed = "reads the object, tag and map world, which the fake worlds do not hold (
 class = "matched"
 owed = "the motion sensor; reads the object, tag and map world, which the fake worlds do not hold; sim/tests/hud.rs"
 
+[function.object_add_scenario_permutation]
+class = "matched"
+engine = "sim/src/objects.rs"
+owed = "the engine's own tests (sim/src/objects.rs); no check against the original yet"
+
+[function.object_attach_to_marker]
+class = "partial"
+engine = "campaign/src/objects.rs"
+leaves_out = ["the parent's markers: a child is attached at the parent's origin"]
+owed = "the engine's own tests (campaign/src/objects.rs); no check against the original yet"
+
+[function.object_beautify]
+class = "partial"
+engine = "campaign/src/presented.rs"
+leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
+owed = "the engine's own tests (campaign/src/lib.rs); no check against the original yet"
+
+[function.object_can_take_damage]
+class = "matched"
+engine = "campaign/src/objects.rs"
+owed = "the engine's own tests (campaign/src/objects.rs); no check against the original yet"
+
+[function.object_cannot_take_damage]
+class = "matched"
+engine = "campaign/src/objects.rs"
+owed = "the engine's own tests (campaign/src/objects.rs); no check against the original yet"
+
 [function.object_cause_damage]
 class = "matched"
 owed = "damage; reads the object, tag and map world, which the fake worlds do not hold; Phase 12"
@@ -993,6 +1161,11 @@ owed = "damage; reads the object, tag and map world, which the fake worlds do no
 [function.object_choose_random_change_colors]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
+
+[function.object_choose_random_region_permutations]
+class = "matched"
+engine = "sim/src/objects.rs"
+owed = "the engine's own tests (sim/src/objects.rs); no check against the original yet"
 
 [function.object_compute_function_values]
 class = "matched"
@@ -1006,6 +1179,56 @@ owed = "the engine cites it, with no check against the original yet"
 class = "matched"
 owed = "damage; reads the object, tag and map world, which the fake worlds do not hold; Phase 12"
 
+[function.object_damage_body]
+class = "matched"
+engine = "sim/src/damage.rs"
+owed = "the engine's own tests (sim/src/damage.rs); no check against the original yet"
+
+[function.object_damage_shield]
+class = "matched"
+engine = "sim/src/damage.rs"
+owed = "the engine's own tests (sim/src/damage.rs); no check against the original yet"
+
+[function.object_damage_update]
+class = "matched"
+engine = "sim/src/damage.rs"
+owed = "the engine's own tests (sim/src/damage.rs); no check against the original yet"
+
+[function.object_delete]
+class = "matched"
+engine = "sim/src/objects.rs"
+owed = "the engine's own tests (sim/src/objects.rs); no check against the original yet"
+
+[function.object_delete_immediately]
+class = "matched"
+engine = "sim/src/objects.rs"
+owed = "the engine's own tests (sim/src/objects.rs); no check against the original yet"
+
+[function.object_delete_recursive]
+class = "matched"
+engine = "sim/src/objects.rs"
+owed = "the engine's own tests (sim/src/objects.rs); no check against the original yet"
+
+[function.object_deplete_body]
+class = "matched"
+engine = "sim/src/damage.rs"
+owed = "the engine's own tests (sim/src/damage.rs); no check against the original yet"
+
+[function.object_deplete_shield]
+class = "matched"
+engine = "sim/src/damage.rs"
+owed = "the engine's own tests (sim/src/damage.rs); no check against the original yet"
+
+[function.object_destroy]
+class = "matched"
+engine = "campaign/src/objects.rs"
+owed = "the engine's own tests (campaign/src/objects.rs); no check against the original yet"
+
+[function.object_detach]
+class = "matched"
+engine = "campaign/src/objects.rs"
+owed = "the engine's own tests (campaign/src/objects.rs); no check against the original yet"
+
 [function.object_export_function_values]
 class = "matched"
 owed = "object functions; reads the object, tag and map world, which the fake worlds do not hold; Phase 13's animations driven by their functions"
@@ -1014,13 +1237,90 @@ owed = "object functions; reads the object, tag and map world, which the fake wo
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
 
+[function.object_get_maximum_body_vitality]
+class = "matched"
+engine = "sim/src/damage.rs"
+owed = "the engine's own tests (sim/src/damage.rs); no check against the original yet"
+
+[function.object_get_maximum_shield_vitality]
+class = "matched"
+engine = "sim/src/damage.rs"
+owed = "the engine's own tests (sim/src/damage.rs); no check against the original yet"
+
+[function.object_index_from_name_index]
+class = "matched"
+engine = "campaign/src/objects.rs"
+owed = "the engine's own tests (campaign/src/objects.rs); no check against the original yet"
+
+[function.object_initialize_vitality]
+class = "matched"
+engine = "sim/src/damage.rs"
+owed = "the engine's own tests (sim/src/damage.rs); no check against the original yet"
+
+[function.object_name_list_lookup]
+class = "matched"
+engine = "campaign/src/objects.rs"
+owed = "the engine's own tests (campaign/src/objects.rs); no check against the original yet"
+
 [function.object_new]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
 
+[function.object_new_by_name]
+class = "matched"
+engine = "campaign/src/objects.rs"
+owed = "the engine's own tests (campaign/src/objects.rs); no check against the original yet"
+
 [function.object_new_from_scenario]
 class = "matched"
 owed = "placement; reads the object, tag and map world, which the fake worlds do not hold; tools/engine_placement_traces.py records its results"
+
+[function.object_pvs_activate]
+class = "partial"
+engine = "campaign/src/presented.rs"
+leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
+owed = "the engine's own tests (campaign/src/lib.rs); no check against the original yet"
+
+[function.object_pvs_clear]
+class = "partial"
+engine = "campaign/src/presented.rs"
+leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
+owed = "the engine's own tests (campaign/src/lib.rs); no check against the original yet"
+
+[function.object_pvs_set_camera_point]
+class = "partial"
+engine = "campaign/src/presented.rs"
+leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
+owed = "the engine's own tests (campaign/src/lib.rs); no check against the original yet"
+
+[function.object_pvs_set_object]
+class = "partial"
+engine = "campaign/src/presented.rs"
+leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
+owed = "the engine's own tests (campaign/src/lib.rs); no check against the original yet"
+
+[function.object_scripting_set_collideable]
+class = "partial"
+engine = "campaign/src/presented.rs"
+leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
+owed = "the engine's own tests (campaign/src/lib.rs); no check against the original yet"
+
+[function.object_set_melee_attack_inhibited]
+class = "partial"
+engine = "campaign/src/presented.rs"
+leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
+owed = "the engine's own tests (campaign/src/lib.rs); no check against the original yet"
+
+[function.object_set_position]
+class = "matched"
+engine = "campaign/src/objects.rs"
+owed = "the engine's own tests (campaign/src/objects.rs); no check against the original yet"
+
+[function.object_set_ranged_attack_inhibited]
+class = "partial"
+engine = "campaign/src/presented.rs"
+leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
+owed = "the engine's own tests (campaign/src/lib.rs); no check against the original yet"
 
 [function.object_start_interpolation]
 class = "matched"
@@ -1037,6 +1337,38 @@ owed = "placement; reads the object, tag and map world, which the fake worlds do
 [function.object_types_place_objects]
 class = "matched"
 owed = "placement; reads the object, tag and map world, which the fake worlds do not hold; tools/engine_placement_traces.py records its results"
+
+[function.objects_disconnect_from_structure_bsp]
+class = "matched"
+engine = "sim/src/objects.rs"
+owed = "the engine's own tests (sim/src/objects.rs); no check against the original yet"
+
+[function.objects_place]
+class = "matched"
+engine = "sim/src/objects.rs"
+owed = "the engine's own tests (sim/src/objects.rs); no check against the original yet"
+
+[function.objects_reconnect_to_structure_bsp]
+class = "matched"
+engine = "sim/src/objects.rs"
+owed = "the engine's own tests (sim/src/objects.rs); no check against the original yet"
+
+[function.objects_scripting_attach]
+class = "partial"
+engine = "campaign/src/objects.rs"
+leaves_out = ["the parent's markers: a child is attached at the parent's origin"]
+owed = "the engine's own tests (campaign/src/objects.rs); no check against the original yet"
+
+[function.objects_scripting_detach]
+class = "matched"
+engine = "campaign/src/objects.rs"
+owed = "the engine's own tests (campaign/src/objects.rs); no check against the original yet"
+
+[function.objects_scripting_set_scale]
+class = "partial"
+engine = "campaign/src/objects.rs"
+leaves_out = ["the frames asked for: the scale is taken at once"]
+owed = "the engine's own tests (campaign/src/objects.rs); no check against the original yet"
 
 [function.observer_up_from_forward]
 class = "matched"
@@ -1083,13 +1415,38 @@ owed = "particles; reads the object, tag and map world, which the fake worlds do
 class = "matched"
 owed = "sound; reads the object, tag and map world, which the fake worlds do not hold; Phase 15"
 
+[function.projectile_calculate_deceleration]
+class = "matched"
+engine = "sim/src/projectile.rs"
+owed = "the engine's own tests (sim/src/projectile.rs); no check against the original yet"
+
+[function.projectile_calculate_deceleration_from_distances]
+class = "matched"
+engine = "sim/src/projectile.rs"
+owed = "the engine's own tests (sim/src/projectile.rs); no check against the original yet"
+
 [function.projectile_collision]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
 
+[function.projectile_collision_test_line]
+class = "matched"
+engine = "sim/src/projectile.rs"
+owed = "the engine's own tests (sim/src/projectile.rs); no check against the original yet"
+
 [function.projectile_detonate]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
+
+[function.projectile_distribute]
+class = "matched"
+engine = "sim/src/projectile.rs"
+owed = "the engine's own tests (sim/src/projectile.rs); no check against the original yet"
+
+[function.projectile_new]
+class = "matched"
+engine = "sim/src/projectile.rs"
+owed = "the engine's own tests (sim/src/projectile.rs); no check against the original yet"
 
 [function.projectile_update]
 class = "matched"
@@ -1099,6 +1456,11 @@ owed = "the engine cites it, with no check against the original yet"
 class = "matched"
 engine = "sim/src/game.rs"
 owed = "the engine's own tests (sim/tests/game.rs); no check against the original yet"
+
+[function.random_vector_in_cone3d]
+class = "matched"
+engine = "sim/src/projectile.rs"
+owed = "the engine's own tests (sim/src/projectile.rs); no check against the original yet"
 
 [function.rasterizer_lens_flare_submit_for_cluster]
 class = "matched"
@@ -1165,9 +1527,34 @@ owed = "water; reads the object, tag and map world, which the fake worlds do not
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
 
+[function.scenery_animation_start]
+class = "matched"
+engine = "campaign/src/units.rs"
+owed = "the engine's own tests (campaign/src/units.rs); no check against the original yet"
+
+[function.scenery_animation_start_at_frame]
+class = "matched"
+engine = "campaign/src/units.rs"
+owed = "the engine's own tests (campaign/src/units.rs); no check against the original yet"
+
+[function.scenery_animation_start_private]
+class = "matched"
+engine = "campaign/src/units.rs"
+owed = "the engine's own tests (campaign/src/units.rs); no check against the original yet"
+
 [function.scenery_new]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
+
+[function.scenery_place]
+class = "matched"
+engine = "sim/src/scenery.rs"
+owed = "the engine's own tests (sim/src/scenery.rs); no check against the original yet"
+
+[function.scenery_update]
+class = "matched"
+engine = "sim/src/scenery.rs"
+owed = "the engine's own tests (sim/src/scenery.rs); no check against the original yet"
 
 [function.scripted_camera_update]
 class = "matched"
@@ -1196,6 +1583,11 @@ owed = "the engine's own tests (sim/tests/game.rs); no check against the origina
 class = "matched"
 engine = "sim/src/game.rs"
 owed = "the engine's own tests (sim/tests/game.rs); no check against the original yet"
+
+[function.slowly_stop_vehicle]
+class = "matched"
+engine = "sim/src/vehicle.rs"
+owed = "the engine's own tests (sim/src/vehicle.rs); no check against the original yet"
 
 [function.sound_channel_summary_build]
 class = "matched"
@@ -1228,6 +1620,11 @@ owed = "sound; reads the object, tag and map world, which the fake worlds do not
 [function.structure_bsp_get_cluster_encoded_sound_distance]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
+
+[function.trigger_create_projectiles]
+class = "matched"
+engine = "sim/src/projectile.rs"
+owed = "the engine's own tests (sim/src/projectile.rs); no check against the original yet"
 
 [function.triple_product3d]
 class = "matched"
@@ -1274,6 +1671,12 @@ owed = "AI's impulses; reads the object, tag and map world, which the fake world
 class = "matched"
 owed = "damage; reads the object, tag and map world, which the fake worlds do not hold; Phase 12"
 
+[function.unit_close]
+class = "partial"
+engine = "campaign/src/presented.rs"
+leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
+owed = "the engine's own tests (campaign/src/lib.rs); no check against the original yet"
+
 [function.unit_custom_animation_at_frame]
 class = "matched"
 owed = "scripts' custom animations; reads the object, tag and map world, which the fake worlds do not hold"
@@ -1302,6 +1705,11 @@ owed = "seats; reads the object, tag and map world, which the fake worlds do not
 class = "matched"
 owed = "seats; reads the object, tag and map world, which the fake worlds do not hold (the seat's camera marker)"
 
+[function.unit_get_custom_animation_time]
+class = "matched"
+engine = "campaign/src/units.rs"
+owed = "the engine's own tests (campaign/src/units.rs); no check against the original yet"
+
 [function.unit_get_seat_entrance_point]
 class = "matched"
 owed = "seats; reads the object, tag and map world, which the fake worlds do not hold (the seat's marker)"
@@ -1314,21 +1722,124 @@ owed = "the engine cites it, with no check against the original yet"
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
 
+[function.unit_open]
+class = "partial"
+engine = "campaign/src/presented.rs"
+leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
+owed = "the engine's own tests (campaign/src/lib.rs); no check against the original yet"
+
 [function.unit_preprocess_node_orientations]
 class = "matched"
 owed = "checked through the animation trace's aiming blends"
+
+[function.unit_scripting_doesnt_drop_items]
+class = "partial"
+engine = "campaign/src/presented.rs"
+leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
+owed = "the engine's own tests (campaign/src/lib.rs); no check against the original yet"
+
+[function.unit_scripting_enter_vehicle]
+class = "partial"
+engine = "campaign/src/presented.rs"
+leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
+owed = "the engine's own tests (campaign/src/lib.rs); no check against the original yet"
+
+[function.unit_scripting_exit_vehicle]
+class = "partial"
+engine = "campaign/src/presented.rs"
+leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
+owed = "the engine's own tests (campaign/src/lib.rs); no check against the original yet"
+
+[function.unit_scripting_get_grenade_count]
+class = "matched"
+engine = "campaign/src/units.rs"
+owed = "the engine's own tests (campaign/src/units.rs); no check against the original yet"
+
+[function.unit_scripting_get_health]
+class = "matched"
+engine = "campaign/src/units.rs"
+owed = "the engine's own tests (campaign/src/units.rs); no check against the original yet"
+
+[function.unit_scripting_get_shield]
+class = "matched"
+engine = "campaign/src/units.rs"
+owed = "the engine's own tests (campaign/src/units.rs); no check against the original yet"
+
+[function.unit_scripting_has_weapon_readied]
+class = "matched"
+engine = "campaign/src/units.rs"
+owed = "the engine's own tests (campaign/src/units.rs); no check against the original yet"
+
+[function.unit_scripting_impervious]
+class = "matched"
+engine = "campaign/src/units.rs"
+owed = "the engine's own tests (campaign/src/units.rs); no check against the original yet"
+
+[function.unit_scripting_set_current_vitality]
+class = "matched"
+engine = "campaign/src/units.rs"
+owed = "the engine's own tests (campaign/src/units.rs); no check against the original yet"
+
+[function.unit_scripting_set_maximum_vitality]
+class = "matched"
+engine = "campaign/src/units.rs"
+owed = "the engine's own tests (campaign/src/units.rs); no check against the original yet"
+
+[function.unit_scripting_set_seat]
+class = "partial"
+engine = "campaign/src/presented.rs"
+leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
+owed = "the engine's own tests (campaign/src/lib.rs); no check against the original yet"
+
+[function.unit_scripting_start_user_animation_list]
+class = "matched"
+engine = "campaign/src/units.rs"
+owed = "the engine's own tests (campaign/src/units.rs); no check against the original yet"
+
+[function.unit_scripting_suspended]
+class = "partial"
+engine = "campaign/src/presented.rs"
+leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
+owed = "the engine's own tests (campaign/src/lib.rs); no check against the original yet"
+
+[function.unit_scripting_vehicle_test_seat_list]
+class = "matched"
+engine = "campaign/src/units.rs"
+owed = "the engine's own tests (campaign/src/units.rs); no check against the original yet"
 
 [function.unit_seat_update]
 class = "matched"
 owed = "seats; reads the object, tag and map world, which the fake worlds do not hold; Phase 13"
 
+[function.unit_set_emotion]
+class = "partial"
+engine = "campaign/src/presented.rs"
+leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
+owed = "the engine's own tests (campaign/src/lib.rs); no check against the original yet"
+
+[function.unit_set_enterable_by_player]
+class = "partial"
+engine = "campaign/src/presented.rs"
+leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
+owed = "the engine's own tests (campaign/src/lib.rs); no check against the original yet"
+
 [function.unit_set_or_test_seat_and_weapon_label]
 class = "matched"
 owed = "checked through the animation trace's labels"
 
+[function.unit_solo_player_integrated_night_vision_is_active]
+class = "matched"
+engine = "campaign/src/units.rs"
+owed = "the engine's own tests (campaign/src/units.rs); no check against the original yet"
+
 [function.unit_start_animation_impulse]
 class = "matched"
 owed = "AI's impulses; reads the object, tag and map world, which the fake worlds do not hold (the animation graph)"
+
+[function.unit_stop_custom_animation]
+class = "matched"
+engine = "campaign/src/units.rs"
+owed = "the engine's own tests (campaign/src/units.rs); no check against the original yet"
 
 [function.unit_test_animation_impulse]
 class = "matched"
@@ -1346,9 +1857,50 @@ owed = "the engine cites it, with no check against the original yet"
 class = "matched"
 owed = "checked through the unit state trace's rules"
 
+[function.units_scripting_set_current_vitality]
+class = "matched"
+engine = "campaign/src/units.rs"
+owed = "the engine's own tests (campaign/src/units.rs); no check against the original yet"
+
+[function.units_scripting_set_maximum_vitality]
+class = "matched"
+engine = "campaign/src/units.rs"
+owed = "the engine's own tests (campaign/src/units.rs); no check against the original yet"
+
+[function.units_set_desired_flashlight_state]
+class = "partial"
+engine = "campaign/src/presented.rs"
+leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
+owed = "the engine's own tests (campaign/src/lib.rs); no check against the original yet"
+
 [function.unspatialized_impulse_sound_new]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
+
+[function.update_alien_fighter_physics]
+class = "matched"
+engine = "sim/src/vehicle.rs"
+owed = "the engine's own tests (sim/src/vehicle.rs); no check against the original yet"
+
+[function.update_alien_scout_physics]
+class = "matched"
+engine = "sim/src/vehicle.rs"
+owed = "the engine's own tests (sim/src/vehicle.rs); no check against the original yet"
+
+[function.update_human_boat_physics]
+class = "matched"
+engine = "sim/src/vehicle.rs"
+owed = "the engine's own tests (sim/src/vehicle.rs); no check against the original yet"
+
+[function.update_human_jeep_physics]
+class = "matched"
+engine = "sim/src/vehicle.rs"
+owed = "the engine's own tests (sim/src/vehicle.rs); no check against the original yet"
+
+[function.update_human_tank_physics]
+class = "matched"
+engine = "sim/src/vehicle.rs"
+owed = "the engine's own tests (sim/src/vehicle.rs); no check against the original yet"
 
 [function.update_suspension]
 class = "matched"
@@ -1362,6 +1914,17 @@ owed = "the engine cites it, with no check against the original yet"
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
 
+[function.vehicle_causes_collision_damage]
+class = "matched"
+engine = "sim/src/damage.rs"
+owed = "the engine's own tests (sim/src/damage.rs); no check against the original yet"
+
+[function.vehicle_hover]
+class = "partial"
+engine = "campaign/src/presented.rs"
+leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
+owed = "the engine's own tests (campaign/src/lib.rs); no check against the original yet"
+
 [function.vehicle_is_flipped]
 class = "matched"
 owed = "vehicles; reads the object, tag and map world, which the fake worlds do not hold (the vehicle's physics); Phase 13"
@@ -1373,6 +1936,21 @@ owed = "the engine cites it, with no check against the original yet"
 [function.vehicle_preprocess_node_orientations]
 class = "matched"
 owed = "vehicles; reads the object, tag and map world, which the fake worlds do not hold (the vehicle's model); Phase 13's wheels and tracks"
+
+[function.vehicle_scripting_load_magic]
+class = "matched"
+engine = "campaign/src/units.rs"
+owed = "the engine's own tests (campaign/src/units.rs); no check against the original yet"
+
+[function.vehicle_scripting_unload]
+class = "matched"
+engine = "campaign/src/units.rs"
+owed = "the engine's own tests (campaign/src/units.rs); no check against the original yet"
+
+[function.vehicle_update]
+class = "matched"
+engine = "sim/src/vehicle.rs"
+owed = "the engine's own tests (sim/src/vehicle.rs); no check against the original yet"
 
 [function.weapon_effect_new]
 class = "matched"
