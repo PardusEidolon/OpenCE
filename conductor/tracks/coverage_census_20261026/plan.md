@@ -16,9 +16,9 @@ manual check is at the end, with the report.
 - [x] Task: The call graph and reachability cd7ed869
   - [x] Tests on a fake tree: calls, calls through function tables, and entry points
   - [x] Entry points for a campaign game and a multiplayer game (both run through `main_loop`); the reached set recorded
-- [ ] Task: `opence census` and the flake check
-  - [ ] The cli subcommand (summary, --check, --write)
-  - [ ] source/'s headers and the app's Sources visible to the crate's test in nix flake check
+- [x] Task: `opence census` and the flake check 9cec1a32
+  - [x] The cli subcommand (summary, --check, --write)
+  - [x] source/'s headers and the app's Sources visible to the crate's test in nix flake check
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: The census crate' (Protocol in workflow.md) (automated; deferred to the end)
 
 ## Phase 2: The classes and their requirements
