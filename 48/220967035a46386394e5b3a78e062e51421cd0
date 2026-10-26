@@ -1,0 +1,6 @@
+Task: Animation (models, first_person)
+Class the animation: frame indices, node matrices and markers Matched, model drawing and the tool's compression Replaced
+
+The models/ walk. The frame-index accessors, node interpolation and node matrices are Matched in sim/src/animation.rs, and the marker lookup in sim/src/seats.rs. The marker-by-name lookup is Partial because it takes every instance whatever the permutation. render_model_parts and the default inverse matrix are Replaced (renderer). The tangent matrices and the tool's quaternion compression and frame size are Replaced (imported): the importer reads what the tool made, and nothing in the game calls those three. first_person's functions live under camera/ and units/, and their tasks class them. Root motion, IK and the melee x offsets stay Missing, because the engine reads no frame info.
+
+Checked: opence census --check, and the census's 41 tests.
