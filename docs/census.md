@@ -27,12 +27,12 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `main` | | | | 1 (1648 B) | 34 (5440 B) | 91 (8752 B) | 1 |
 | `math` | 41 (5552 B) | 6 (256 B) | 70 (4720 B) | | 25 (4016 B) | 67 (8624 B) | 0 |
 | `memory` | | 2 (336 B) | 128 (19856 B) | | 102 (15104 B) | | 0 |
-| `models` | 17 (8928 B) | 12 (4880 B) | | 1 (464 B) | 7 (1616 B) | 11 (1680 B) | 13 |
+| `models` | 17 (8928 B) | 12 (4880 B) | | 1 (464 B) | 7 (1616 B) | 11 (1680 B) | 12 |
 | `networking` | | | | | 288 (49824 B) | | 0 |
 | `objects` | 2 (0 B) | 47 (9776 B) | | 12 (96 B) | 59 (13424 B) | 227 (28288 B) | 59 |
 | `physics` | | 14 (2672 B) | | 26 (18384 B) | 60 (19248 B) | 45 (6928 B) | 40 |
 | `rasterizer` | | 3 (2784 B) | | | 777 (182416 B) | | 2 |
-| `render` | 2 (592 B) | 2 (240 B) | | | 115 (37520 B) | | 2 |
+| `render` | 2 (592 B) | 2 (240 B) | | | 115 (37520 B) | | 0 |
 | `saved games` | | | | 2 (96 B) | 31 (3712 B) | 104 (21184 B) | 2 |
 | `scenario` | | 13 (4320 B) | | | 23 (3136 B) | 21 (2128 B) | 7 |
 | `shaders` | | | | | 21 (2624 B) | | 0 |
@@ -43,7 +43,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `text` | | 9 (1936 B) | 63 (6864 B) | | 19 (5744 B) | 21 (2368 B) | 9 |
 | `tool` | | | | | 27 (8752 B) | | 0 |
 | `units` | 9 (1856 B) | 67 (27888 B) | | 17 (17808 B) | 9 (1616 B) | 227 (58352 B) | 84 |
-| **all** | 147 (26112 B) | 577 (187824 B) | 332 (38896 B) | 123 (72592 B) | 2770 (569976 B) | 3678 (715722 B) | 656 |
+| **all** | 147 (26112 B) | 577 (187824 B) | 332 (38896 B) | 123 (72592 B) | 2770 (569976 B) | 3678 (715722 B) | 653 |
 
 ## `ai`
 
@@ -2239,7 +2239,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `animation_graph_node_matrices_from_orientations` | models/model_animations.c | Ported | sim/src/animation.rs:1146 | `tools/engine_animation_reference.py` |
 | `interpolate_node_orientations` | models/model_animations.c | Ported | sim/src/animation.rs:1122 | `tools/engine_animation_reference.py` |
 | `animation_keyframe_search` | models/model_animations.c | Ported | sim/src/animation.rs:522 | `tools/engine_animation_reference.py` |
-| `animation_choose_random_permutation_internal` | models/model_animations.c | Matched | sim/src/animation.rs:1227 | owed: draws from the game's random seed; checked through the animation trace's permutation weights |
+| `animation_choose_random_permutation_internal` | models/model_animations.c | Matched | sim/src/animation.rs:1227 | sim/tests/animation_permutation_reference.rs (trace) |
 | `animation_get_keyframe_rotation` | models/model_animations.c | Ported | sim/src/animation.rs:448 | `tools/engine_animation_reference.py` |
 | `animation_get_keyframe_translation` | models/model_animations.c | Ported |  | `tools/engine_animation_reference.py` |
 | `animation_get_keyframe_scale` | models/model_animations.c | Ported |  | `tools/engine_animation_reference.py` |
@@ -3622,7 +3622,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `render_camera_new` | render/render_cameras.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
 | `render_camera_hack_frustum_z` | render/render_cameras.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
 | `render_camera_build_frustum_bounds` | render/render_cameras.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
-| `render_frustum_sphere_diameter_in_pixels` | render/render_cameras.c | Matched | ffi/src/render_model.rs:84 | owed: the engine cites it, with no check against the original yet |
+| `render_frustum_sphere_diameter_in_pixels` | render/render_cameras.c | Matched | ffi/src/render_model/size_reference.rs:3 | ffi/src/render_model/size_reference.rs (trace); the frustum's vertical scale built in the game's order (a double-precision tangent, then its reciprocal across half the height) |
 | `render_frustum_cube_view_fraction` | render/render_cameras.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
 | `render_frustum_get_projection_bounds` | render/render_cameras.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
 | `render_camera_view_to_screen` | render/render_cameras.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
@@ -3639,7 +3639,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `render_camera_debug_frustum` | render/render_cameras.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
 | `render_camera_mirror` | render/render_cameras.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
 | `render_camera_build_frustum` | render/render_cameras.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
-| `contrail_fade` | render/render_contrails.c | Matched | ffi/src/particles/contrails.rs:481 | owed: the engine cites it, with no check against the original yet |
+| `contrail_fade` | render/render_contrails.c | Matched | ffi/src/particles/contrails/fade_reference.rs:2 | ffi/src/particles/contrails/fade_reference.rs (trace); a camera on the strip's point is not traced: the game divides by zero |
 | `render_contrail` | render/render_contrails.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
 | `render_contrails` | render/render_contrails.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
 | `render_contrails_ground_mapped` | render/render_contrails.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |

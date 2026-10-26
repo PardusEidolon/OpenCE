@@ -745,6 +745,9 @@ impl Contrails {
 }
 
 #[cfg(test)]
+mod fade_reference;
+
+#[cfg(test)]
 mod tests {
     use super::*;
     use opence_content::object::Attachment;

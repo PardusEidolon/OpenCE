@@ -91,7 +91,11 @@ pub fn sphere_diameter_pixels(
     vertical_fov: f32,
     viewport_height: f32,
 ) -> f32 {
-    let projection = viewport_height * 0.5 / libm::tanf(vertical_fov * 0.5);
+    // (the frustum's vertical scale as the game builds it: the tangent in
+    // double precision, then its reciprocal across half the height; in
+    // another order it is an ulp apart)
+    let tangent = libm::tan(f64::from(vertical_fov * 0.5)) as f32;
+    let projection = 1.0 / tangent * viewport_height * 0.5;
     projection / depth.abs().max(0.1) * radius * 2.0
 }
 
@@ -328,6 +332,9 @@ impl Builder<'_> {
         }
     }
 }
+
+#[cfg(test)]
+mod size_reference;
 
 #[cfg(test)]
 mod tests {

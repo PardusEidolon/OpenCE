@@ -999,7 +999,9 @@ primitive = "glam::Vec2"
 
 [function.animation_choose_random_permutation_internal]
 class = "matched"
-owed = "draws from the game's random seed; checked through the animation trace's permutation weights"
+engine = "sim/src/animation.rs"
+check = "sim/tests/animation_permutation_reference.rs"
+against = "trace"
 
 [function.animation_convert_frame_to_pal]
 class = "missing"
@@ -2338,7 +2340,10 @@ owed = "the engine's own tests (ffi/src/particles/contrails.rs); no check agains
 
 [function.contrail_fade]
 class = "matched"
-owed = "the engine cites it, with no check against the original yet"
+engine = "ffi/src/particles/contrails.rs"
+check = "ffi/src/particles/contrails/fade_reference.rs"
+against = "trace"
+note = "a camera on the strip's point is not traced: the game divides by zero"
 
 [function.contrail_new]
 class = "matched"
@@ -6831,7 +6836,10 @@ stands_in = "dev/src/draw.rs"
 
 [function.render_frustum_sphere_diameter_in_pixels]
 class = "matched"
-owed = "the engine cites it, with no check against the original yet"
+engine = "ffi/src/render_model.rs"
+check = "ffi/src/render_model/size_reference.rs"
+against = "trace"
+note = "the frustum's vertical scale built in the game's order (a double-precision tangent, then its reciprocal across half the height)"
 
 [function.render_grenade_hud]
 class = "matched"
