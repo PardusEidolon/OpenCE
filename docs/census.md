@@ -1295,7 +1295,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `hs_object_create_anew_containing` | hs/hs_library_external.c | Matched | campaign/src/objects.rs | owed: the script function's wrapper, which the campaign wires; no check against the original yet |
 | `hs_object_teleport` | hs/hs_library_external.c | Matched | campaign/src/objects.rs | owed: the script function's wrapper, which the campaign wires; no check against the original yet |
 | `hs_object_set_facing` | hs/hs_library_external.c | Matched | campaign/src/objects.rs | owed: the script function's wrapper, which the campaign wires; no check against the original yet |
-| `hs_wake` | hs/hs_runtime.c | Matched | script/src/lib.rs:452 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
+| `hs_wake` | hs/hs_runtime.c | Matched | script/src/lib.rs:462 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
 | `hs_long_to_boolean` | hs/hs_runtime.c | Matched | script/src/value.rs | owed: one of hs_cast's conversions, in script/src/value.rs's cast; no check against the original yet |
 | `hs_short_to_boolean` | hs/hs_runtime.c | Matched | script/src/value.rs | owed: one of hs_cast's conversions, in script/src/value.rs's cast; no check against the original yet |
 | `hs_string_to_boolean` | hs/hs_runtime.c | Matched | script/src/value.rs | owed: one of hs_cast's conversions, in script/src/value.rs's cast; no check against the original yet |
@@ -1311,25 +1311,25 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `hs_cast` | hs/hs_runtime.c | Matched | script/src/value.rs:88 | owed: the engine cites it, with no check against the original yet |
 | `render_debug_scripting` | hs/hs_runtime.c | Replaced | dev/src/draw.rs | the editor and tools |
 | `render_debug_trigger_volumes` | hs/hs_runtime.c | Replaced | dev/src/draw.rs | the editor and tools |
-| `hs_return` | hs/hs_runtime.c | Matched | script/src/lib.rs:210 | owed: the engine cites it, with no check against the original yet |
-| `hs_global_evaluate` | hs/hs_runtime.c | Matched | script/src/lib.rs:962 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
-| `hs_evaluate` | hs/hs_runtime.c | Matched | script/src/lib.rs:592 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
-| `hs_arguments_evaluate` | hs/hs_runtime.c | Matched | script/src/lib.rs:592 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
-| `hs_evaluate_begin` | hs/hs_runtime.c | Matched | script/src/lib.rs:711 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
-| `hs_evaluate_begin_random` | hs/hs_runtime.c | Partial | script/src/lib.rs:711 | leaves out the game's own random numbers: the shuffle draws on the runtime's xorshift; owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
-| `hs_evaluate_if` | hs/hs_runtime.c | Matched | script/src/lib.rs:712 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
-| `hs_evaluate_set` | hs/hs_runtime.c | Matched | script/src/lib.rs:712 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
-| `hs_evaluate_logical` | hs/hs_runtime.c | Matched | script/src/lib.rs:712 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
-| `hs_evaluate_arithmetic` | hs/hs_runtime.c | Matched | script/src/lib.rs:713 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
-| `hs_evaluate_equality` | hs/hs_runtime.c | Matched | script/src/lib.rs:713 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
-| `hs_evaluate_inequality` | hs/hs_runtime.c | Matched | script/src/lib.rs:714 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
-| `hs_evaluate_sleep` | hs/hs_runtime.c | Matched | script/src/lib.rs:873 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
-| `hs_evaluate_sleep_until` | hs/hs_runtime.c | Matched | script/src/lib.rs:910 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
-| `hs_evaluate_inspect` | hs/hs_runtime.c | Matched | script/src/lib.rs:714 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
-| `hs_thread_main` | hs/hs_runtime.c | Matched | script/src/lib.rs:554 | owed: scripts; reads the object, tag and map world, which the fake worlds do not hold (the scenario's compiled scripts); script/tests |
-| `hs_runtime_initialize_for_new_map` | hs/hs_runtime.c | Matched | script/src/lib.rs:290 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
-| `hs_runtime_update` | hs/hs_runtime.c | Matched | script/src/lib.rs:378 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
-| `hs_runtime_evaluate` | hs/hs_runtime.c | Matched | script/src/lib.rs:461 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
+| `hs_return` | hs/hs_runtime.c | Matched | script/src/lib.rs:220 | owed: the engine cites it, with no check against the original yet |
+| `hs_global_evaluate` | hs/hs_runtime.c | Matched | script/src/lib.rs:972 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
+| `hs_evaluate` | hs/hs_runtime.c | Matched | script/src/lib.rs:602 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
+| `hs_arguments_evaluate` | hs/hs_runtime.c | Matched | script/src/lib.rs:602 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
+| `hs_evaluate_begin` | hs/hs_runtime.c | Matched | script/src/lib.rs:721 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
+| `hs_evaluate_begin_random` | hs/hs_runtime.c | Partial | script/src/lib.rs:721 | leaves out the game's own random numbers: the shuffle draws on the runtime's xorshift; owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
+| `hs_evaluate_if` | hs/hs_runtime.c | Matched | script/src/lib.rs:722 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
+| `hs_evaluate_set` | hs/hs_runtime.c | Matched | script/src/lib.rs:722 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
+| `hs_evaluate_logical` | hs/hs_runtime.c | Matched | script/src/lib.rs:722 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
+| `hs_evaluate_arithmetic` | hs/hs_runtime.c | Matched | script/src/lib.rs:723 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
+| `hs_evaluate_equality` | hs/hs_runtime.c | Matched | script/src/lib.rs:723 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
+| `hs_evaluate_inequality` | hs/hs_runtime.c | Matched | script/src/lib.rs:724 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
+| `hs_evaluate_sleep` | hs/hs_runtime.c | Matched | script/src/lib.rs:883 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
+| `hs_evaluate_sleep_until` | hs/hs_runtime.c | Matched | script/src/lib.rs:920 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
+| `hs_evaluate_inspect` | hs/hs_runtime.c | Matched | script/src/lib.rs:724 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
+| `hs_thread_main` | hs/hs_runtime.c | Matched | script/src/lib.rs:564 | owed: scripts; reads the object, tag and map world, which the fake worlds do not hold (the scenario's compiled scripts); script/tests |
+| `hs_runtime_initialize_for_new_map` | hs/hs_runtime.c | Matched | script/src/lib.rs:300 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
+| `hs_runtime_update` | hs/hs_runtime.c | Matched | script/src/lib.rs:388 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
+| `hs_runtime_evaluate` | hs/hs_runtime.c | Matched | script/src/lib.rs:471 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
 | `hs_type_default_value` | hs/hs_runtime.c | Matched | script/src/value.rs:33 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
 
 692 Missing (196 reached from `main_loop`), by file:
@@ -4146,7 +4146,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `unit_scripting_impervious` | units/unit_scripting_commands.c | Matched | campaign/src/units.rs | owed: the engine's own tests (campaign/src/units.rs); no check against the original yet |
 | `unit_scripting_start_user_animation_list` | units/unit_scripting_commands.c | Matched | campaign/src/units.rs | owed: the engine's own tests (campaign/src/units.rs); no check against the original yet |
 | `unit_scripting_has_weapon_readied` | units/unit_scripting_commands.c | Matched | campaign/src/units.rs | owed: the engine's own tests (campaign/src/units.rs); no check against the original yet |
-| `unit_kill` | units/units.c | Matched | script/src/lib.rs:491 | owed: the engine cites it, with no check against the original yet |
+| `unit_kill` | units/units.c | Matched | script/src/lib.rs:501 | owed: the engine cites it, with no check against the original yet |
 | `unit_get_seat_entrance_point` | units/units.c | Matched | sim/src/seats.rs:63 | owed: seats; reads the object, tag and map world, which the fake worlds do not hold (the seat's marker) |
 | `unit_animation_state_interruptable` | units/units.c | Ported | sim/src/unit_states.rs:220 | `tools/engine_unit_state_reference.py` |
 | `unit_animation_busy` | units/units.c | Matched | sim/src/unit_states.rs:242 | owed: the engine cites it, with no check against the original yet |

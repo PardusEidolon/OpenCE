@@ -130,6 +130,16 @@ impl<W> Registry<W> {
     pub fn has_function(&self, name: &str) -> bool {
         self.functions.contains_key(name)
     }
+
+    /// The given functions' names, in order.
+    pub fn function_names(&self) -> impl Iterator<Item = &str> {
+        self.functions.keys().map(String::as_str)
+    }
+
+    /// The given globals' names, in order.
+    pub fn global_names(&self) -> impl Iterator<Item = &str> {
+        self.globals.keys().map(String::as_str)
+    }
 }
 
 /// Something the scenario's scripts name that the engine does not give

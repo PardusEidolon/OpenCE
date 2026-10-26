@@ -9,7 +9,7 @@ use std::path::Path;
 use crate::citations::{self, Citations};
 use crate::classes::{lacking, Class, Engine, From, Manifest, Traced};
 use crate::original::Original;
-use crate::{docs, fields, fixups, layout, read_text, traced, Error};
+use crate::{docs, fields, fixups, layout, read_text, scripts, traced, Error};
 
 /// The classes.
 pub const MANIFEST: &str = "census/census.toml";
@@ -353,6 +353,7 @@ pub fn census(root: &Path, mode: Mode) -> Result<String, Error> {
             problems.extend(docs::stale(root, &census));
             problems.extend(fields::stale(root)?);
             problems.extend(fixups::stale(root)?);
+            problems.extend(scripts::stale(root)?);
             if problems.is_empty() {
                 Ok(census.summary())
             } else {
@@ -379,6 +380,9 @@ pub fn census(root: &Path, mode: Mode) -> Result<String, Error> {
                 fields::write_fields(&fields::generate(root, &records)?),
             )
             .map_err(|source| Error::Io { path, source })?;
+            let path = root.join("engine").join(scripts::SCRIPTS);
+            std::fs::write(&path, scripts::write_rows(&scripts::generate(root)?))
+                .map_err(|source| Error::Io { path, source })?;
             let census = Census::read(root)?;
             docs::write(root, &census)?;
             Ok(census.summary())
