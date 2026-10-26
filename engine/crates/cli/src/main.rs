@@ -9,7 +9,7 @@
 //! opence [--socket PATH] watch [--backlog N]    the log, as it is written
 //! opence [--socket PATH] script FILE            a script's lines, stopping at a failure
 //! opence [--socket PATH] shell                  lines typed (completed by the engine), or read
-//! opence census [--check | --write] [--root DIR] the coverage census of the repository
+//! opence census [--check | --write] [--record-importer] [--root DIR] the coverage census of the repository
 //! ```
 //!
 //! `census` needs no engine: it reads the repository (the folder holding
@@ -30,7 +30,7 @@ use rustyline::completion::{Completer, Pair};
 use rustyline::error::ReadlineError;
 use rustyline::{Context, Editor, Helper, Highlighter, Hinter, Validator};
 
-const USAGE: &str = "usage: opence [--socket PATH] (run [--json] LINE... | state | frame PATH [--size WxH] | watch [--backlog N] | script FILE | shell | census [--check | --write] [--root DIR])";
+const USAGE: &str = "usage: opence [--socket PATH] (run [--json] LINE... | state | frame PATH [--size WxH] | watch [--backlog N] | script FILE | shell | census [--check | --write] [--record-importer] [--root DIR])";
 
 fn main() -> ExitCode {
     let arguments: Vec<String> = std::env::args().skip(1).collect();
@@ -146,11 +146,13 @@ fn start(arguments: &[String]) -> Result<(), Error> {
         "census" => {
             let mut mode = opence_census::Mode::Summary;
             let mut root = None;
+            let mut record = false;
             let mut words = rest.iter();
             while let Some(word) = words.next() {
                 match word.as_str() {
                     "--check" => mode = opence_census::Mode::Check,
                     "--write" => mode = opence_census::Mode::Write,
+                    "--record-importer" => record = true,
                     "--root" => {
                         root =
                             Some(PathBuf::from(words.next().ok_or_else(|| {
@@ -164,6 +166,10 @@ fn start(arguments: &[String]) -> Result<(), Error> {
                 Some(root) => root,
                 None => repository()?,
             };
+            if record {
+                let maps = record_importer(&root)?;
+                writeln!(out, "recorded the importer's reads on {maps} maps")?;
+            }
             let checked = opence_census::census(&root, mode).and_then(|summary| {
                 // (the traces' own checks need Python and clang, so they run
                 // here and not in the crate's cargo test)
@@ -191,6 +197,55 @@ fn start(arguments: &[String]) -> Result<(), Error> {
         }
         other => Err(Error::Usage(format!("no subcommand {other}"))),
     }
+}
+
+/// Runs the importer on every map in `root/assets/maps` with its reads
+/// recorded, and writes them to `engine/census/importer_reads.tsv` (only
+/// the importer's offsets, nothing of the maps). A map the importer
+/// refuses adds the reads it made before refusing. With no maps, nothing
+/// is written.
+fn record_importer(root: &std::path::Path) -> Result<usize, Error> {
+    let folder = root.join("assets").join("maps");
+    let Ok(entries) = std::fs::read_dir(&folder) else {
+        return Ok(0);
+    };
+    let mut maps: Vec<PathBuf> = entries
+        .filter_map(Result::ok)
+        .map(|entry| entry.path())
+        .filter(|path| path.extension().is_some_and(|e| e == "map"))
+        .collect();
+    maps.sort();
+    let mut reads = std::collections::BTreeSet::new();
+    let mut imported = 0;
+    for map in &maps {
+        let file = std::fs::read(map)?;
+        let Ok(cache) = opence_import::Cache::open(file) else {
+            continue;
+        };
+        let (_, recorded) =
+            opence_import::record::recording(|| opence_import::import_level(&cache));
+        imported += 1;
+        reads.extend(recorded.into_iter().map(|read| {
+            opence_census::importer::Read {
+                group: read.group.0,
+                hops: read
+                    .hops
+                    .iter()
+                    .map(|hop| opence_census::importer::Hop {
+                        at: hop.at,
+                        element_size: hop.element_size,
+                    })
+                    .collect(),
+                at: read.at,
+                width: read.width,
+            }
+        }));
+    }
+    if imported > 0 {
+        let path = root.join("engine").join(opence_census::importer::READS);
+        std::fs::write(path, opence_census::importer::write_reads(&reads))?;
+    }
+    Ok(imported)
 }
 
 /// The repository: the nearest folder upwards from the current one that

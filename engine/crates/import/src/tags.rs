@@ -5,6 +5,7 @@ use std::fmt;
 use crate::cache::{Cache, CacheKind};
 use crate::error::ImportError;
 use crate::reader::{self, Fault};
+use crate::record::{self, Hop};
 
 /// A tag group's four-character code (`scnr`), as the game writes it in
 /// source: the first character in the high byte.
@@ -245,6 +246,8 @@ impl Cache {
         let element = Element {
             cache: self,
             tag: index,
+            group,
+            hops: Vec::new(),
             path: String::new(),
             bytes: &[],
             region,
@@ -310,6 +313,10 @@ impl<'a> Region<'a> {
 pub struct Element<'a> {
     cache: &'a Cache,
     tag: usize,
+    // (the group it was asked for as and the blocks it was reached
+    // through, for a recording)
+    group: GroupTag,
+    hops: Vec<Hop>,
     path: String,
     bytes: &'a [u8],
     region: Region<'a>,
@@ -355,38 +362,49 @@ impl<'a> Element<'a> {
         read.map_err(|fault| self.fault(field, fault))
     }
 
+    fn note(&self, at: usize, width: usize) {
+        record::note(self.group, &self.hops, at, width);
+    }
+
     /// A `u8` field.
     pub fn u8(&self, at: usize, field: &str) -> Result<u8, ImportError> {
+        self.note(at, 1);
         self.read(field, reader::array::<1>(self.bytes, at).map(|[byte]| byte))
     }
 
     /// A string field of at most `longest` bytes before its terminator.
     pub fn text(&self, at: usize, field: &str, longest: usize) -> Result<&'a str, ImportError> {
+        self.note(at, 1);
         self.read(field, reader::text(self.bytes, at, longest))
     }
 
     /// A `u16` field.
     pub fn u16(&self, at: usize, field: &str) -> Result<u16, ImportError> {
+        self.note(at, 2);
         self.read(field, reader::u16(self.bytes, at))
     }
 
     /// An `i16` field.
     pub fn i16(&self, at: usize, field: &str) -> Result<i16, ImportError> {
+        self.note(at, 2);
         self.read(field, reader::i16(self.bytes, at))
     }
 
     /// A `u32` field.
     pub fn u32(&self, at: usize, field: &str) -> Result<u32, ImportError> {
+        self.note(at, 4);
         self.read(field, reader::u32(self.bytes, at))
     }
 
     /// An `i32` field.
     pub fn i32(&self, at: usize, field: &str) -> Result<i32, ImportError> {
+        self.note(at, 4);
         self.read(field, reader::i32(self.bytes, at))
     }
 
     /// An `f32` field, which must be finite.
     pub fn f32(&self, at: usize, field: &str) -> Result<f32, ImportError> {
+        self.note(at, 4);
         let value = self.read(field, reader::f32(self.bytes, at))?;
         if value.is_finite() {
             Ok(value)
@@ -397,6 +415,7 @@ impl<'a> Element<'a> {
 
     /// `size` bytes of it.
     pub fn slice(&self, at: usize, size: usize, field: &str) -> Result<&'a [u8], ImportError> {
+        self.note(at, size);
         self.read(field, reader::slice(self.bytes, at, size))
     }
 
@@ -427,6 +446,7 @@ impl<'a> Element<'a> {
         };
         Ok(Block {
             parent: self.clone(),
+            at,
             field: field.to_owned(),
             count,
             bytes,
@@ -522,6 +542,7 @@ impl<'a> Element<'a> {
 #[derive(Clone, Debug)]
 pub struct Block<'a> {
     parent: Element<'a>,
+    at: usize,
     field: String,
     count: usize,
     bytes: &'a [u8],
@@ -548,9 +569,16 @@ impl<'a> Block<'a> {
             } else {
                 format!("{}.{}[{index}]", self.parent.path, self.field)
             };
+            let mut hops = self.parent.hops.clone();
+            hops.push(Hop {
+                at: u32::try_from(self.at).unwrap_or(u32::MAX),
+                element_size: u32::try_from(self.element_size).unwrap_or(u32::MAX),
+            });
             Element {
                 cache: self.parent.cache,
                 tag: self.parent.tag,
+                group: self.parent.group,
+                hops,
                 path,
                 // (Element::block checked the whole block's range)
                 bytes: &self.bytes[at..at + self.element_size],
@@ -631,6 +659,35 @@ mod tests {
             assert_eq!(scenario.reference(32, "bsp", &[SBSP]).ok(), Some(Some(1)));
             assert_eq!(cache.find(SBSP, "LEVELS\\fake\\fake"), Some(1));
         }
+    }
+
+    #[test]
+    fn a_recording_holds_each_field_read_with_the_blocks_it_was_reached_through() {
+        let cache = Cache::open(level(CacheKind::CustomEdition).build());
+        let Ok(cache) = cache else {
+            panic!("{cache:?}")
+        };
+        let (read, reads) = crate::record::recording(|| {
+            let scenario = cache.tag(0, SCNR, 48).ok()?;
+            let block = scenario.block(0, "elements", 8, 4).ok()?;
+            block.get(1)?.f32(4, "b").ok()
+        });
+        assert_eq!(read, Some(2.0));
+        let hop = Hop {
+            at: 0,
+            element_size: 8,
+        };
+        let expected: Vec<crate::record::Read> =
+            [(vec![], 0, 4), (vec![], 4, 4), (vec![hop], 4, 4)]
+                .into_iter()
+                .map(|(hops, at, width)| crate::record::Read {
+                    group: SCNR,
+                    hops,
+                    at,
+                    width,
+                })
+                .collect();
+        assert_eq!(reads.into_iter().collect::<Vec<_>>(), expected);
     }
 
     #[test]

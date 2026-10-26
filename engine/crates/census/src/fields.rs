@@ -43,6 +43,8 @@ pub struct Mark {
     pub kind: String,
     /// Whether the original reads it.
     pub original: bool,
+    /// Whether the importer keeps it (reads it from a map).
+    pub importer: bool,
 }
 
 /// The fields of `record` that hold no smaller ones, once each, in order.
@@ -61,7 +63,7 @@ pub fn leaves(record: &Record) -> Vec<&Field> {
 
 /// A token of the C text.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-enum Token<'a> {
+pub(crate) enum Token<'a> {
     /// An identifier or keyword.
     Name(&'a str),
     /// One character of punctuation.
@@ -70,7 +72,7 @@ enum Token<'a> {
 
 /// The text's names and punctuation, without comments, literals and
 /// preprocessor lines.
-fn tokens(text: &str) -> Vec<Token<'_>> {
+pub(crate) fn tokens(text: &str) -> Vec<Token<'_>> {
     let bytes = text.as_bytes();
     let mut found = Vec::new();
     let mut at = 0;
@@ -199,7 +201,7 @@ fn declaration<'a>(
 
 /// The path read through the pointer at `at` (`name->a[i].b`), if it
 /// is one.
-fn access(tokens: &[Token<'_>], at: usize) -> Option<String> {
+pub(crate) fn access(tokens: &[Token<'_>], at: usize) -> Option<String> {
     if tokens.get(at + 1) != Some(&Token::Punct(b'-'))
         || tokens.get(at + 2) != Some(&Token::Punct(b'>'))
     {
@@ -378,9 +380,9 @@ fn innermost(
     }
 }
 
-/// Every leaf of `records`, in their order, marked with whether `reads`
-/// reach it.
-pub fn marks(records: &[Record], reads: &BTreeSet<(String, String)>) -> Vec<Mark> {
+/// For every leaf of `records`, in their order, whether `reads` reach
+/// it.
+fn reached(records: &[Record], reads: &BTreeSet<(String, String)>) -> Vec<bool> {
     let by_name: BTreeMap<&str, &Record> = records.iter().map(|r| (r.name.as_str(), r)).collect();
     let mut inner = BTreeSet::new();
     for (structure, path) in reads {
@@ -395,15 +397,42 @@ pub fn marks(records: &[Record], reads: &BTreeSet<(String, String)>) -> Vec<Mark
     records
         .iter()
         .flat_map(|record| {
+            leaves(record)
+                .into_iter()
+                .map(|field| is_read(record, &field.path, &by_name, &read, 0))
+                .collect::<Vec<_>>()
+        })
+        .collect()
+}
+
+/// Every leaf of `records`, in their order, marked with whether `reads`
+/// reach it (and none kept by the importer).
+pub fn marks(records: &[Record], reads: &BTreeSet<(String, String)>) -> Vec<Mark> {
+    let reached = reached(records, reads);
+    records
+        .iter()
+        .flat_map(|record| {
             leaves(record).into_iter().map(|field| Mark {
                 structure: record.name.clone(),
                 path: field.path.clone(),
                 offset: field.offset,
                 kind: field.kind.clone(),
-                original: is_read(record, &field.path, &by_name, &read, 0),
+                original: false,
+                importer: false,
             })
         })
+        .zip(reached)
+        .map(|(mark, original)| Mark { original, ..mark })
         .collect()
+}
+
+/// `marks` of `records` with the fields the importer `kept` marked, as
+/// the original's reads are (a field kept in an embedded structure is kept
+/// wherever that structure is embedded).
+pub fn keep(marks: &mut [Mark], records: &[Record], kept: &BTreeSet<(String, String)>) {
+    for (mark, importer) in marks.iter_mut().zip(reached(records, kept)) {
+        mark.importer = importer;
+    }
 }
 
 /// The marks of `records` against `source/`'s C in the repository at
@@ -426,21 +455,29 @@ pub fn generate(root: &Path, records: &[Record]) -> Result<Vec<Mark>, Error> {
     for text in &texts {
         found.extend(reads(text, &structures, &members));
     }
-    Ok(marks(records, &found))
+    let mut marked = marks(records, &found);
+    keep(
+        &mut marked,
+        records,
+        &crate::importer::kept(root, records)?.fields,
+    );
+    Ok(marked)
 }
 
 /// `tag_fields.tsv`'s text: a line for each field.
 pub fn write_fields(marks: &[Mark]) -> String {
-    let mut text =
-        String::from("# structure\tfield\toffset\ttype\toriginal (opence census --write)\n");
+    let mut text = String::from(
+        "# structure\tfield\toffset\ttype\toriginal\timporter (opence census --write)\n",
+    );
     for mark in marks {
         text.push_str(&format!(
-            "{}\t{}\t{}\t{}\t{}\n",
+            "{}\t{}\t{}\t{}\t{}\t{}\n",
             mark.structure,
             mark.path,
             mark.offset,
             mark.kind,
-            if mark.original { "read" } else { "-" }
+            if mark.original { "read" } else { "-" },
+            if mark.importer { "kept" } else { "-" }
         ));
     }
     text
@@ -459,8 +496,8 @@ pub fn read_fields(text: &str) -> Result<Vec<Mark>, Error> {
             why: why.to_owned(),
         };
         let columns: Vec<&str> = line.split('\t').collect();
-        let [structure, path, offset, kind, original] = columns[..] else {
-            return Err(malformed("not five columns"));
+        let [structure, path, offset, kind, original, importer] = columns[..] else {
+            return Err(malformed("not six columns"));
         };
         marks.push(Mark {
             structure: structure.to_owned(),
@@ -471,6 +508,11 @@ pub fn read_fields(text: &str) -> Result<Vec<Mark>, Error> {
                 "read" => true,
                 "-" => false,
                 _ => return Err(malformed("neither read nor -")),
+            },
+            importer: match importer {
+                "kept" => true,
+                "-" => false,
+                _ => return Err(malformed("neither kept nor -")),
             },
         });
     }

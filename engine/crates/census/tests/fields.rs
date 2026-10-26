@@ -189,7 +189,7 @@ fn the_fields_round_trip_through_their_tsv() -> Result<(), Failure> {
     let marked = marks(&records, &reads(C, &names(&records), &BTreeMap::new()));
     assert_eq!(read_fields(&write_fields(&marked))?, marked);
     assert!(read_fields("thing\tflags\tx\tshort\tread\n").is_err());
-    assert!(read_fields("thing\tflags\t0\tshort\tmaybe\n").is_err());
+    assert!(read_fields("thing\tflags\t0\tshort\tmaybe\t-\n").is_err());
     Ok(())
 }
 

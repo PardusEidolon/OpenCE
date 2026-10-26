@@ -17,6 +17,7 @@ pub mod classes;
 pub mod docs;
 pub mod fields;
 pub mod graph;
+pub mod importer;
 pub mod layout;
 pub mod original;
 pub mod symbols;

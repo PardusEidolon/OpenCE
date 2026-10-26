@@ -19,6 +19,7 @@ mod light;
 pub mod object;
 mod particle;
 pub mod reader;
+pub mod record;
 pub mod script;
 pub mod shader;
 pub mod sound;
