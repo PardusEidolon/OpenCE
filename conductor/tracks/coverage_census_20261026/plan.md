@@ -58,9 +58,9 @@ entries list what they leave out.
 - [x] Task: The layout from source/ 0edcf40e
   - [x] Tests on a fake *_definitions.h
   - [x] clang's offsetof on every tag structure, written to engine/census/tag_layout.tsv; --check regenerates and compares it
-- [ ] Task: Fields the original reads
-  - [ ] Tests: field accesses through each definition's pointers
-  - [ ] Marks for every field
+- [x] Task: Fields the original reads 3a2bc162
+  - [x] Tests: field accesses through each definition's pointers
+  - [x] Marks for every field
 - [ ] Task: Fields the importer keeps
   - [ ] Tests first: the importer's snapshots and the reference traces unchanged
   - [ ] The readers register named offsets in place of bare constants; the census reads the registration
