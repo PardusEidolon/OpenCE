@@ -28,9 +28,9 @@ manual check is at the end, with the report.
 - [x] Task: The reference map moved in ffd8b56d
   - [x] Its REASONS moved to census.toml, its table rewritten from the census, tools/engine_reference_map.py removed
   - [x] `--check` runs the trace scripts' own --check; the cargo test checks that each cited trace exists
-- [ ] Task: The docs
-  - [ ] docs/census.md (every function, by system) and the summary table in docs/engine.md
-  - [ ] Staleness test
+- [x] Task: The docs ffd8b56d
+  - [x] docs/census.md (every function, by system) and the summary table in docs/engine.md
+  - [x] Staleness test
 - [ ] Task: Replaced by rule
   - [ ] Directory rules for rasterizer, render, shaders, bink, bungie_net, networking, editor, tool and the Xbox-only files, each with its stand-in named
   - [ ] Replaced through a caller, from reachability
