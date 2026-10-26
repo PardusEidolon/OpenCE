@@ -167,9 +167,9 @@ Found in play (2026-10-25): getting in and out is too quick; vehicles collide on
 - [x] Task: Effects on the move 2d9318d2
     - [x] Write tests: tyre and dust effects spawn at the rate their tags give and change with the ground's material
     - [x] The fixes (none needed: the slips were already the original's)
-- [ ] Task: The vehicle HUDs
-    - [ ] Write tests: each vehicle and seat shows the HUD interface, icons and meters its tags name
-    - [ ] The fixes
+- [x] Task: The vehicle HUDs 084afe99
+    - [x] Write tests: each vehicle and seat shows the HUD interface, icons and meters its tags name
+    - [x] The fixes
 - [ ] Task: Conductor - User Manual Verification 'Phase 13: Vehicles' (Protocol in workflow.md)
 
 ## Phase 14: Death and ragdolls
