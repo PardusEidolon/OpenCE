@@ -1,0 +1,14 @@
+Task: AI (ai)
+Class the AI: the campaign's actor as Partial with what it leaves out, its script functions Matched, the debug and profile code Replaced
+
+The campaign's actor (campaign/src/actors.rs) is a rewrite of the
+original's, so its update, perception, placement and firing positions
+are Partial, each listing what the simplified actor lacks, and owe a check
+against the original (Phase 11's divergences). Its doc comments now cite
+the functions they stand for. The script functions the campaign wires
+(ai_place, ai_erase and the conversations) are Matched, owing a check;
+ai_debug.c, ai_profile.c and the debug drawing are Replaced by the dev
+panel's drawing. The rest of ai stays Missing.
+
+Checked: opence census --check; nextest for opence_census and
+opence_campaign.
