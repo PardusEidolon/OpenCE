@@ -3,7 +3,7 @@
 Every task is test first (`workflow.md`): the trace, measurement or census test is written and seen to fail before the change. Each phase ends with an automated check: the workspace tests, `census --check` with the ratchet, and `nix flake check`. The phases run to the end without manual stops.
 
 ## Phase 1: The fake world
-- [ ] Task: Write a reference test that compiles `object_new` and `object_delete` against the fake world and fails on an empty trace.
+- [x] Task: Write a reference test that compiles `object_new` and `object_delete` against the fake world and fails on an empty trace. 602a3326
 - [ ] Task: Build the shared fake world: object table, tag instances, a small synthetic map.
 - [ ] Task: Port the existing reference scripts that need a world onto it, keeping their traces unchanged.
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: The fake world' (Protocol in workflow.md) (automated)
