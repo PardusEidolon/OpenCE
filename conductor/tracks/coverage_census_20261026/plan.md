@@ -48,7 +48,7 @@ entries list what they leave out.
 - [x] Task: Effects (effects) 6a05673b
 - [x] Task: Sound (sound) 1396d63e
 - [x] Task: Animation (models, first_person) 48220967
-- [ ] Task: Cameras and cutscenes (camera, cutscene)
+- [x] Task: Cameras and cutscenes (camera, cutscene) ef6027b4
 - [ ] Task: The interface, HUD, UI and input (interface, dialogs, text, strings, input)
 - [ ] Task: The world (scenario, structures, bitmaps, cache, tag_files)
 - [ ] Task: Helpers (math, cseries, memory) as Native, checked against the math reference trace and the fixed-order rule
