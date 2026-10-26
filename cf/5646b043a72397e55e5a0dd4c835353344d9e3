@@ -1,0 +1,8 @@
+Task: Class the 226 small helpers as Native with their primitives, checked by the math reference trace where they are numeric.
+Trace real_math.h's one-operation helpers against the engine's primitives
+
+There were not 226 helpers: the real candidates were real_math.h's 86 header inlines. Reading the header made 18 of them Ported, and extending the math reference trace made 31 more Ported. The trace now runs each helper 400 times, special reals and zero vectors included, and compares it with the glam or libm primitive the engine uses, bit for bit.
+
+The trace found two differences. libm's single-precision asinf is one unit in the last place out in 17 of 400 cases, because the original's arcsine, tangent and power call the double functions and round; the primitives the engine checks against are the double functions. glam's clamp_length_max differs from limit2d in 98 of 400 cases, so limit2d and limit3d are ported in sim::real_math. The other inlines (normalize2d, the splines, the valid_* composites and so on) are left to their system tracks.
+
+Checked: the math reference --check, clippy, and 1,297 workspace tests.
