@@ -54,7 +54,7 @@ entries list what they leave out.
 - [x] Task: Helpers (math, cseries, memory) as Native, checked against the math reference trace and the fixed-order rule 98092cf2
 - [x] Task: Conductor - User Manual Verification 'Phase 3: The walk through the systems' (Protocol in workflow.md) (automated) 944beb44
 
-## Phase 4: Tag fields and load-time fix-ups
+## Phase 4: Tag fields and load-time fix-ups [checkpoint: 023a5289]
 - [x] Task: The layout from source/ 0edcf40e
   - [x] Tests on a fake *_definitions.h
   - [x] clang's offsetof on every tag structure, written to engine/census/tag_layout.tsv; --check regenerates and compares it
@@ -69,7 +69,7 @@ entries list what they leave out.
 - [x] Task: Load-time fix-ups 120fce24
   - [x] The original's postprocess and defaults listed per tag group
   - [x] Each compared with the importer, and the ones that differ recorded
-- [ ] Task: Conductor - User Manual Verification 'Phase 4: Tag fields and load-time fix-ups' (Protocol in workflow.md) (automated; deferred to the end)
+- [x] Task: Conductor - User Manual Verification 'Phase 4: Tag fields and load-time fix-ups' (Protocol in workflow.md) (automated) 023a5289
 
 ## Phase 5: Scripts and sounds
 - [x] Task: Script functions and globals c43541d9
