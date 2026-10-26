@@ -1,0 +1,14 @@
+Task: Scripts (hs)
+Class the scripts: the runtime's evaluator Matched, begin_random and the console's compiler Partial, the wired wrappers Matched
+
+The engine's runtime (script/src/lib.rs) is a rewrite of hs_runtime.c:
+its doc comments now cite the update, the evaluator, the special forms,
+sleep, wake and the globals, which are Matched and owe a check, as do
+hs_cast's conversions. begin_random is Partial, since its shuffle draws on
+the runtime's own xorshift rather than the game's random numbers; the
+console's compiler is Partial, since maps carry their scripts compiled.
+The hs.c wrappers the campaign wires are Matched; the 422 unnamed
+function-table thunks stay Missing until Phase 5 maps them.
+
+Checked: opence census --check; nextest for opence_census and
+opence_script.
