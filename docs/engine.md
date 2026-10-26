@@ -350,7 +350,7 @@ writes the frames to `build/engine/golden`.
 
 | Pass | Does | Switch |
 | --- | --- | --- |
-| Sun shadows | Cascaded shadow maps for objects, matched to the baked shadows; spot and cube shadows for the nearest dynamic lights | `render.sun_shadows` |
+| Sun shadows | Cascaded shadow maps for objects, matched to the baked shadows, at 1024, 2048 or 4096 a cascade; spot and cube shadows for the nearest dynamic lights | `render.sun_shadows`, `render.shadow_resolution` |
 | Sky | The first sky, unlit, at the far plane | |
 | Level and objects, opaque | Baked light, or probes and the sun for objects; clustered dynamic lights from weapons, projectiles, effects, the flashlight and scenery | `render.lightmaps`, `render.lights`, `render.objects`, `render.wireframe` |
 | Decals | The scenario's decals and those that shots and explosions lay, deferred onto the level and objects | `render.decals` |
@@ -598,6 +598,53 @@ The window before the game has three choices: **Play**, **Settings** and
 the data folders, the display and the window mode. Every other setting is
 in the game's own menus.
 
+Settings has three sections: **Folders**, **Display** (the display and
+the window mode) and **Graphics**. Graphics picks a quality tier, shows
+each setting with what it does and what it costs, the GPU memory the
+settings take, and runs the benchmark with them.
+
+The tiers are one table (`QualityTier.preset`), and the app picks one for
+the Mac at its first start from the GPU's cores and memory
+(`QualityTier.detect`). Every tier draws with temporal scaling and
+dynamic resolution holding the display's frame rate.
+
+| Tier | Ambient occlusion | Reflections | Contact shadows | Shadows | Upscale height | Render scale |
+| --- | --- | --- | --- | --- | --- | --- |
+| Low | Off | Off | Off | 1024 | 1080 | 0.67 |
+| Medium | Half | Off | On | 2048 | 1440 | 0.67 |
+| High | Half | On | On | 2048 | 1440 | 0.67 |
+| Ultra | Full | On | On | 2048 | 1440 | 1 |
+
+The upscale height is the most the temporal scaler gathers into; MetalFX's
+spatial scaler takes the frame the rest of the way to the display.
+Changing any setting by hand makes the set **Custom**, and **Reset to
+tier** puts the detected tier back. They are saved in `settings.toml`'s
+`[graphics]`.
+
+What each costs, in GPU time a frame on Blood Gulch at 4K on an M1 Max:
+
+| Setting | Cost |
+| --- | --- |
+| Ambient occlusion at full resolution | +1.5 ms |
+| Reflections | +0.17 ms |
+| Contact shadows | under 0.05 ms |
+| Shadows at 4096 | +1.56 ms |
+| Native upscale height | +2.4 ms at scale 0.67, +5.5 ms at 1 |
+
+The memory meter is a fit (`GraphicsMemory.estimate`) to Blood Gulch's
+measured allocation at each tier, and with each setting changed alone, at
+1080p, 1440p and 4K, within 6% of each, against the GPU's recommended
+working set:
+
+| Tier | 1080p | 1440p | 4K |
+| --- | --- | --- | --- |
+| Low | 371 MB | 507 MB | 650 MB |
+| Medium | 458 MB | 681 MB | 985 MB |
+| Ultra | 698 MB | 1096 MB | 1566 MB |
+
+The benchmark button saves the settings and runs the app itself with
+`--benchmark 10 --path bloodgulch --quality saved` at the display's size.
+
 ### The loading screen
 
 `crates/ui/src/loading.rs` is `source/interface/progress_bar.c`: a band of
@@ -665,6 +712,10 @@ the scenario's objects and the sky. No window opens.
 - **Frame time:** the time between the ends of two frames' GPU work. It counts
   whichever of the CPU and the GPU is slower.
 - **The bar:** p99 must be at most 8.33 ms (120 frames a second).
+- **`--quality`:** `saved` draws with the saved graphics settings, and
+  `low`, `medium`, `high` or `ultra` with a tier's, dynamic resolution
+  holding the bar. Without it the run draws with the stock video settings.
+  `--off` turns switches off over either.
 
 | Machine | Date | Frames | p50 | p99 |
 | --- | --- | --- | --- | --- |
@@ -693,6 +744,21 @@ switch off (`--off render.gtao,render.ssr,render.contact_shadows,render.sun_shad
 p99 is still 9.1 ms. With every effect on, a lower render scale (which
 MetalFX brings up to the window's size) comes near the bar: p99 is 10.54 ms
 at `--render-scale 0.75` and 8.34 ms at 0.5 (12-second runs).
+
+The tiers meet the bar with dynamic resolution holding it. Ultra at
+3840×2160 on the M1 Max (2026-10-26, 10-second runs):
+
+| Path | `--benchmark` p99 | Tier test p99 | Settled scale |
+| --- | --- | --- | --- |
+| devgulch | 7.0 ms | 6.78 ms | 0.67 |
+| bloodgulch | 7.0–8.3 ms | 6.75 ms | 0.67 |
+| bloodgulch16 | 7.86–8.29 ms | 6.72 ms | 0.67 |
+
+`QualityTierTests.testEachPathAtUltraMeets120HzAt4K` runs the same
+`LoadedLevel.benchmark` as `--benchmark` and keeps the best of three runs.
+Other work on the Mac (mediaanalysisd, WindowServer) only ever slows a
+frame: with it busy, the same runs measured 8.3–8.7 ms and settled at 0.5.
+bloodgulch16 has the least room.
 
 ### Timings and hitches
 
