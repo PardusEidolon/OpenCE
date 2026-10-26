@@ -1,0 +1,1 @@
+The benchmark paths: devgulch, bloodgulch, bloodgulch16 replay by script (same world hash each second over 10 s, twice); report mean/p50/p99/p99.9/hitches/pacing; --baseline fails >5% or extra hitch. bloodgulch 4K p99 10.7 ms vs 8.33 target with the live world.
