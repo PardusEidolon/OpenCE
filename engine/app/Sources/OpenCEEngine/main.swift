@@ -24,7 +24,9 @@
 // benchmark path (--path devgulch, bloodgulch or bloodgulch16) offscreen
 // at --size (3840x2160 by default), with no window, and prints its report
 // (--baseline with a report kept before, to fail on a regression; --off
-// with the render switches it draws without, e.g. render.gtao,render.ssr). --headless runs
+// with the render switches it draws without, e.g. render.gtao,render.ssr;
+// --quality saved, low, medium, high or ultra for the saved graphics or a
+// tier's, else the stock video settings alone). --headless runs
 // the world with no window, answering the control socket (Control.swift);
 // --control (or --socket PATH) opens the socket beside the window. ~ (the
 // key left of 1) opens the developer shell over the game.
@@ -112,13 +114,13 @@ func cacheFolder() -> String {
     return folder.path
 }
 
-/// The video settings the arguments give, else the saved `options`.
-func videoSettings(_ options: VideoOptions = stockSettings().video) -> VideoSettings {
-    var settings = VideoSettings()
-    settings.antiAliasing = AntiAliasing(rawValue: options.antiAliasing) ?? settings.antiAliasing
-    if VideoSettings.renderScales.contains(options.renderScale) {
-        settings.renderScale = options.renderScale
-    }
+/// The video settings the arguments give, else the saved `settings`
+/// (dynamic resolution holding the main display's rate), else the stock
+/// video settings alone, without the graphics' (the benchmark's baselines).
+func videoSettings(_ saved: OpenCEEngineCore.Settings? = nil) -> VideoSettings {
+    let rate = NSScreen.main?.maximumFramesPerSecond ?? 120
+    let target = 1000 / Double(max(rate, 1))
+    var settings = saved.map { VideoSettings($0, frameTargetMilliseconds: target) } ?? VideoSettings()
     if let mode = argument("--anti-aliasing") {
         guard let antiAliasing = AntiAliasing(rawValue: mode) else {
             fail("--anti-aliasing is temporal or native, not \(mode)")
@@ -133,8 +135,7 @@ func videoSettings(_ options: VideoOptions = stockSettings().video) -> VideoSett
     }
     if launchArguments.contains("--dynamic-resolution") {
         settings.dynamicResolution = true
-        let rate = NSScreen.main?.maximumFramesPerSecond ?? 120
-        settings.frameTargetMilliseconds = 1000 / Double(max(rate, 1))
+        settings.frameTargetMilliseconds = target
     }
     return settings
 }
@@ -228,7 +229,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     lazy var play = playControls(saved.settings.controls)
     var earlierKeys: Set<UInt16> = []
     var thirdPerson = false
-    lazy var settings = videoSettings(saved.settings.video)
+    lazy var settings = videoSettings(saved.settings)
     var controller: EngineWindowController?
     var level: LoadedLevel? {
         didSet {
@@ -302,6 +303,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.mainMenu = mainMenu()
+        // (the first run's graphics: this Mac's tier, saved once the
+        // launcher or the menus save)
+        if saved.settings.graphics.tier.isEmpty, let device = MTLCreateSystemDefaultDevice() {
+            saved.tier = QualityTier.detect(device)
+            settings = videoSettings(saved.settings)
+        }
         let skips = ["--map", "--control", "--socket", "--no-launcher"]
         if skips.contains(where: launchArguments.contains) {
             startGame()
@@ -316,9 +323,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         MenuFonts.register()
         let model = LauncherModel(
             settings: saved, displays: NSScreen.screens.map(\.localizedName), root: root,
-            variables: engine.shellVariables(), tuning: engine.tuneControls())
+            variables: engine.shellVariables(), tuning: engine.tuneControls(), graphics: macGraphics())
+        model.benchmarker = { arguments in await AppDelegate.runBenchmark(arguments) }
         let window = NSWindow(
-            contentRect: NSRect(x: 0, y: 0, width: 620, height: 640),
+            contentRect: NSRect(x: 0, y: 0, width: 760, height: 900),
             styleMask: [.titled, .closable, .miniaturizable, .resizable],
             backing: .buffered, defer: false)
         window.title = "OpenCE"
@@ -342,11 +350,53 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         window.makeKeyAndOrderFront(nil)
     }
 
+    /// This Mac as the launcher's Graphics section shows it: the tier
+    /// picked for it, the GPU's memory budget, and the size and rate of the
+    /// display the game opens on.
+    func macGraphics() -> MacGraphics {
+        let screens = NSScreen.screens
+        let index = Int(saved.settings.video.display)
+        let screen = screens.indices.contains(index) ? screens[index] : NSScreen.main
+        let scale = screen?.backingScaleFactor ?? 2
+        let size = screen?.frame.size ?? NSSize(width: 1280, height: 720)
+        let rate = max(screen?.maximumFramesPerSecond ?? 60, 1)
+        guard let device = MTLCreateSystemDefaultDevice() else { return .unknown }
+        return MacGraphics(
+            detected: QualityTier.detect(device), name: QualityTier.describe(device),
+            memoryBudget: Int(clamping: device.recommendedMaxWorkingSetSize),
+            width: Int(size.width * scale), height: Int(size.height * scale),
+            frameMilliseconds: 1000.0 / Double(rate))
+    }
+
+    /// Runs this app's own executable with `arguments` (the launcher's
+    /// benchmark) off the main thread, giving what it printed.
+    nonisolated static func runBenchmark(_ arguments: [String]) async -> Data {
+        await Task.detached {
+            guard let executable = Bundle.main.executableURL else { return Data("no executable".utf8) }
+            let process = Process()
+            let pipe = Pipe()
+            process.executableURL = executable
+            process.arguments = arguments
+            process.standardOutput = pipe
+            process.standardError = FileHandle.nullDevice
+            process.standardInput = FileHandle.nullDevice
+            do {
+                try process.run()
+            } catch {
+                return Data("\(error)".utf8)
+            }
+            let output = pipe.fileHandleForReading.readDataToEndOfFile()
+            process.waitUntilExit()
+            return output
+        }.value
+    }
+
     /// The game: its window on the display set, on the map --map names or
     /// on the main menu.
     func startGame() {
         NSApp.mainMenu?.addItem(mapMenu())
         engine.startEmptyWorld()
+        applyGraphics()
         menu.actions = self
         menu.onMessage = { [weak self] text in self?.showMessage(text) }
         menu.onClosed = { [weak self] in self?.hideMenu() }
@@ -386,6 +436,19 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         controller.window.engineView.startDisplayLink()
         if level == nil {
             showMenu(nil)
+        }
+    }
+
+    /// The saved graphics into the shell's variables, which the frames'
+    /// switches are read from (so the dev panel and the socket see them
+    /// and may change them for the session).
+    func applyGraphics() {
+        for (name, value) in saved.settings.graphics.variables {
+            do {
+                try engine.setShellVariable(name: name, value: value)
+            } catch {
+                appLog("warn", "\(name) \(value): \(error)")
+            }
         }
     }
 
@@ -502,7 +565,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         inShellScene = false
         controls = flyControls(saved.settings.controls)
         play = playControls(saved.settings.controls)
-        settings = videoSettings(saved.settings.video)
+        settings = videoSettings(saved.settings)
+        applyGraphics()
         controller?.showsFrameTimes =
             launchArguments.contains("--frame-times")
             || saved.settings.video.showFrameTimes
@@ -1165,7 +1229,8 @@ extension AppDelegate: GameActions {
 /// drawn offscreen, its report printed as JSON. --map names the map file
 /// (the path's own in --maps, assets/maps, when none is named); --baseline
 /// names a report kept before, against which each regression is printed
-/// to stderr, and the run fails when there is one.
+/// to stderr, and the run fails when there is one. --quality draws it with
+/// the saved graphics settings or a tier's (the launcher's Benchmark).
 func benchmark(seconds: String) -> Never {
     guard let time = Double(seconds), time.isFinite, time > 0 else { fail("--benchmark is seconds, not \(seconds)") }
     let named = argument("--path") ?? "bloodgulch"
@@ -1181,34 +1246,39 @@ func benchmark(seconds: String) -> Never {
     }
     // (120 frames a second, the target the hitches are counted against)
     let targetMs = 1000.0 / 120
+    // (--quality: the saved graphics, or a tier's; none, the stock video
+    // settings alone, as the baselines were kept)
+    let quality: OpenCEEngineCore.Settings?
+    switch argument("--quality") {
+    case nil: quality = nil
+    case "saved":
+        var saved = loadSettings(path: settingsPath())
+        if saved.graphics.tier.isEmpty {
+            QualityTier.detect(device).preset(into: &saved)
+        }
+        quality = saved
+    case let name?:
+        guard let tier = QualityTier(rawValue: name) else {
+            fail("--quality is saved, low, medium, high or ultra, not \(name)")
+        }
+        quality = tier.settings
+    }
     do {
+        var video = videoSettings(quality)
+        if quality != nil, !launchArguments.contains("--dynamic-resolution") {
+            video.frameTargetMilliseconds = targetMs
+        }
         let level = try LoadedLevel(
             map: map, bsp: argument("--bsp").flatMap { UInt32($0) } ?? 0,
             cacheFolder: argument("--cache") ?? cacheFolder(), device: device,
-            settings: videoSettings())
-        // (the switches named by --off off, the rest as they start)
+            settings: video)
+        // (the switches named by --off off, the rest as --quality's
+        // variables set them, as the game's shell would, or as they start)
         let off = Set((argument("--off") ?? "").split(separator: ",").map(String.init))
-        level.renderer.switches = RenderSwitches(flag: { !off.contains($0) }, value: { _ in "" })
-        let engine = Engine()
-        let snapshots = SnapshotReader(engine: engine)
-        _ = try engine.startLevel(geometry: level.geometry, difficulty: 1)
-        _ = try engine.startBenchmark(path: path)
-        let renderer = level.renderer
-        // (the game runs at the frames' own pace, a tick a frame while
-        // warming up, so that each second counted plays the same second
-        // of the path)
-        var played = 0.0
-        let result = try renderer.benchmark(width: size[0], height: size[1], seconds: time, queue: queue) { elapsed in
-            let now = elapsed ?? 0
-            _ = try engine.advance(frameSeconds: elapsed == nil ? 1.0 / 60 : max(now - played, 0))
-            played = now
-            let frame = snapshots.acquire()
-            renderer.time = Float((Double(frame.tick) + Double(frame.alpha)) / 60)
-            renderer.lights = frame.drawnLights()
-            renderer.laidDecals = Array(frame.decals)
-            renderer.laidParticles = Array(frame.particles)
-            return (ViewCamera(frame.camera, alpha: frame.alpha), frame.drawnObjects())
-        }
+        let set = Dictionary(quality?.graphics.variables.map { ($0.name, $0.value) } ?? [], uniquingKeysWith: { $1 })
+        level.renderer.switches = RenderSwitches(
+            flag: { !off.contains($0) && set[$0] != "false" }, value: { set[$0] ?? "" })
+        let result = try level.benchmark(path: path, width: size[0], height: size[1], seconds: time, queue: queue)
         let name = benchmarkPathName(path: path)
         print(result.json(path: name, targetMs: targetMs))
         if let baseline = argument("--baseline") {

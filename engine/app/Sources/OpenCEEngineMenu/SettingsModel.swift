@@ -3,6 +3,7 @@
 import Foundation
 import OpenCEEngineCore
 import OpenCEEngineKit
+import OpenCEEngineRender
 
 extension KeyBindings {
     /// The bindings the settings keep: the actions they name take their
@@ -34,6 +35,10 @@ public final class SettingsModel {
     public static let mouseSensitivity: ClosedRange<Float> = 0.0002...0.01
     public static let renderScale: ClosedRange<Float> = 0.5...1
     public static let volume: ClosedRange<Float> = 0...1
+    public static let ambientOcclusions = ["off", "half", "full"]
+    public static let shadowResolutions: [UInt32] = [1024, 2048, 4096]
+    /// The upscale heights the screens offer (0: the window's own).
+    public static let upscaleHeights: [UInt32] = [1080, 1440, 0]
 
     public var settings: Settings
     /// Where they are saved.
@@ -110,6 +115,73 @@ public final class SettingsModel {
     public var renderScale: Float {
         get { settings.video.renderScale }
         set { settings.video.renderScale = clamped(newValue, SettingsModel.renderScale) }
+    }
+
+    /// The tier the graphics are the preset of, or nil when they are
+    /// Custom (or not yet picked). Setting one sets all of them.
+    public var tier: QualityTier? {
+        get { QualityTier(rawValue: settings.graphics.tier) }
+        set {
+            if let newValue {
+                newValue.preset(into: &settings)
+            } else {
+                settings.graphics.tier = "custom"
+            }
+        }
+    }
+
+    /// The graphics as `tier`'s preset has them (Custom ones left as they
+    /// are).
+    public func resetGraphics() {
+        tier?.preset(into: &settings)
+    }
+
+    public var ambientOcclusion: String {
+        get { settings.graphics.ambientOcclusion }
+        set {
+            let value = SettingsModel.ambientOcclusions.contains(newValue) ? newValue : "half"
+            changeGraphics { $0.ambientOcclusion = value }
+        }
+    }
+
+    public var reflections: Bool {
+        get { settings.graphics.reflections }
+        set { changeGraphics { $0.reflections = newValue } }
+    }
+
+    public var contactShadows: Bool {
+        get { settings.graphics.contactShadows }
+        set { changeGraphics { $0.contactShadows = newValue } }
+    }
+
+    public var shadowResolution: UInt32 {
+        get { settings.graphics.shadowResolution }
+        set {
+            let value = SettingsModel.shadowResolutions.contains(newValue) ? newValue : 2048
+            changeGraphics { $0.shadowResolution = value }
+        }
+    }
+
+    public var dynamicResolution: Bool {
+        get { settings.graphics.dynamicResolution }
+        set { changeGraphics { $0.dynamicResolution = newValue } }
+    }
+
+    public var upscaleHeight: UInt32 {
+        get { settings.graphics.upscaleHeight }
+        set {
+            let value = SettingsModel.upscaleHeights.contains(newValue) ? newValue : 1440
+            changeGraphics { $0.upscaleHeight = value }
+        }
+    }
+
+    /// Makes `change`; one that changes anything makes the graphics Custom.
+    private func changeGraphics(_ change: (inout GraphicsSettings) -> Void) {
+        var graphics = settings.graphics
+        change(&graphics)
+        guard graphics != settings.graphics else { return }
+        graphics.tier = "custom"
+        settings.graphics = graphics
     }
 
     public var master: Float {

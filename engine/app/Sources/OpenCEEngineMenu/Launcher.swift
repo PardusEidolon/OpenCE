@@ -1,7 +1,8 @@
 // The launcher: the window before the game, with Play, Settings,
 // Developer and Exit only. Its settings are what must be set before the
-// game starts: the data folders, the display and the window mode; the rest
-// is the game's menus. Developer starts a test map (DeveloperTab.swift).
+// game starts: the data folders, the display and the window mode, and the
+// graphics (LauncherGraphics.swift); the rest is the game's menus.
+// Developer starts a test map (DeveloperTab.swift).
 import AppKit
 import Foundation
 import OpenCEEngineCore
@@ -35,8 +36,16 @@ public final class LauncherModel {
     public let displays: [String]
     /// The checkout's folder, whose assets/maps the stock folders are.
     public let root: URL
-    /// Whether the settings show.
+    /// Whether the settings show, and which section of them.
     public var showsSettings = false
+    public var section = LauncherSection.folders
+    /// This Mac, as the Graphics section shows it.
+    public let graphics: MacGraphics
+    /// The benchmark's last run.
+    public var benchmark = BenchmarkRun.none
+    /// Runs the benchmark with these arguments, giving its output (nil: the
+    /// section cannot run it).
+    public var benchmarker: (@MainActor ([String]) async -> Data)?
     /// Whether the Developer tab shows.
     public var showsDeveloper = false
     /// The Developer tab's launch.
@@ -50,9 +59,10 @@ public final class LauncherModel {
     /// tab sets, and `tuning` its lighting controls.
     public init(
         settings: SettingsModel, displays: [String], root: URL, variables: [ShellVariable] = [],
-        tuning: [TuneControl] = []
+        tuning: [TuneControl] = [], graphics: MacGraphics = .unknown
     ) {
         self.settings = settings
+        self.graphics = graphics
         self.displays = displays.isEmpty ? ["Main Display"] : displays
         self.root = root
         developer = DeveloperModel(variables: variables, tuning: tuning, root: root)
@@ -118,8 +128,12 @@ public final class LauncherModel {
     }
 
     /// The stock settings of the launcher's own: the folders, the display
-    /// and the window mode.
+    /// and the window mode; on the Graphics section, the tier's graphics.
     public func reset() {
+        guard section != .graphics else {
+            settings.resetGraphics()
+            return
+        }
         let stock = stockSettings()
         settings.settings.data = stock.data
         settings.settings.video.display = stock.video.display
@@ -170,21 +184,38 @@ struct LauncherSettings: View {
     @Bindable var model: LauncherModel
 
     var body: some View {
-        Form {
-            FolderRow(title: "Maps", path: $model.mapsFolder, stock: "assets/maps")
-            FolderRow(title: "Custom maps", path: $model.customMapsFolder, stock: "assets/custom_maps")
-            Picker("Display", selection: $model.display) {
-                ForEach(model.displays.indices, id: \.self) { index in
-                    Text(model.displays[index]).tag(index)
-                }
+        VStack(spacing: 12) {
+            Picker("Section", selection: $model.section) {
+                ForEach(LauncherSection.allCases, id: \.self) { Text($0.title).tag($0) }
             }
-            Picker("Window", selection: $model.windowMode) {
-                ForEach(WindowMode.allCases, id: \.self) { mode in
-                    Text(mode.title).tag(mode)
+            .pickerStyle(.segmented)
+            .labelsHidden()
+            switch model.section {
+            case .folders:
+                Form {
+                    FolderRow(title: "Maps", path: $model.mapsFolder, stock: "assets/maps")
+                    FolderRow(title: "Custom maps", path: $model.customMapsFolder, stock: "assets/custom_maps")
                 }
+            case .display:
+                Form {
+                    Picker("Display", selection: $model.display) {
+                        ForEach(model.displays.indices, id: \.self) { index in
+                            Text(model.displays[index]).tag(index)
+                        }
+                    }
+                    Picker("Window", selection: $model.windowMode) {
+                        ForEach(WindowMode.allCases, id: \.self) { mode in
+                            Text(mode.title).tag(mode)
+                        }
+                    }
+                }
+            case .graphics:
+                GraphicsSection(model: model)
             }
+            Spacer(minLength: 0)
             HStack {
-                Button("Reset") { model.reset() }
+                Button(model.section == .graphics ? "Reset to tier" : "Reset") { model.reset() }
+                    .disabled(model.section == .graphics && model.tier == nil)
                 Spacer()
                 Button("Done") {
                     model.settings.save()

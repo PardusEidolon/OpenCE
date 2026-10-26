@@ -144,4 +144,35 @@ final class QualityTierTests: XCTestCase {
         print("8 GB budget at Low, 1440p: largest \(largest.map) \(largest.bytes >> 20) MB of \(budget >> 20) MB")
         XCTAssertLessThanOrEqual(largest.bytes, budget, largest.map)
     }
+
+    /// The launcher's memory estimate is within 15% of Blood Gulch's
+    /// measured allocation at each tier, at 1440p and 4K (skipped without
+    /// assets/maps).
+    func testTheMemoryEstimateMatchesTheMeasurement() throws {
+        let map = StockLevel.root.appendingPathComponent("assets/maps/bloodgulch.map")
+        guard FileManager.default.fileExists(atPath: map.path) else { throw XCTSkip("no assets/maps") }
+        let device = try XCTUnwrap(MTLCreateSystemDefaultDevice(), "no Metal device")
+        let cache = StockLevel.root.appendingPathComponent("build/engine/cache")
+        try FileManager.default.createDirectory(at: cache, withIntermediateDirectories: true)
+        for (width, height) in [(2560, 1440), (3840, 2160)] {
+            for tier in QualityTier.allCases {
+                try autoreleasepool {
+                    let settings = tier.settings
+                    let before = device.currentAllocatedSize
+                    let level = try LoadedLevel(
+                        map: map.path, cacheFolder: cache.path, device: device, settings: VideoSettings(settings),
+                        bakeAtLoad: .cachedOnly)
+                    settings.graphics.apply(to: &level.renderer.switches)
+                    try LoadedLevel.prepare(
+                        level.renderer, width: width, height: height, from: level.geometry.startView())
+                    let measured = Double(device.currentAllocatedSize - before)
+                    let estimate = Double(GraphicsMemory.estimate(settings, width: width, height: height))
+                    print(
+                        "memory at \(tier.title), \(width)x\(height): \(Int(measured) >> 20) MB, estimated \(Int(estimate) >> 20) MB"
+                    )
+                    XCTAssertEqual(estimate, measured, accuracy: measured * 0.15, "\(tier.title), \(width)x\(height)")
+                }
+            }
+        }
+    }
 }
