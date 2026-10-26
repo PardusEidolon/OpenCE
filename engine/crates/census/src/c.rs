@@ -33,7 +33,15 @@ pub struct Definition {
     /// Whether the old hosted port added it: a `port:` comment on its
     /// first line or the four before it, or `port` as a word of its name.
     pub port: bool,
+    /// Whether it is a function declared `__inline` (or `inline`), which
+    /// the compiler gives no symbol of its own.
+    pub inline: bool,
 }
+
+/// The prefix of hs.c's evaluator macros (`HS_EVALUATE_NO_ARGUMENTS(
+/// game_all_quiet_evaluate, game_all_quiet)`), each of which defines the
+/// function its first argument names.
+const EVALUATOR_MACRO: &str = "HS_EVALUATE_";
 
 /// How many lines above a definition its `port:` comment may be.
 const PORT_LINES: usize = 4;
@@ -204,6 +212,7 @@ fn define(directive: &str, line: usize) -> Option<Definition> {
         line,
         refers_to: names(&tokens),
         port: false,
+        inline: false,
     })
 }
 
@@ -235,12 +244,16 @@ fn top_level(tokens: &[Placed<'_>]) -> Vec<Definition> {
                 let close = matching(tokens, at, b'{', b'}');
                 let declaration = tokens.get(head..at).unwrap_or(&[]);
                 if let Some((name, line)) = function_name(declaration) {
+                    let inline = declaration.iter().any(|(token, _)| {
+                        matches!(token, Token::Name("__inline" | "inline" | "__forceinline"))
+                    });
                     found.push(Definition {
                         name,
                         kind: Kind::Function,
                         line,
                         refers_to: names(tokens.get(at + 1..close).unwrap_or(&[])),
                         port: false,
+                        inline,
                     });
                     at = close + 1;
                     head = at;
@@ -257,6 +270,7 @@ fn top_level(tokens: &[Placed<'_>]) -> Vec<Definition> {
                         line,
                         refers_to: names(tokens.get(equals..end).unwrap_or(&[])),
                         port: false,
+                        inline: false,
                     });
                     at = end + 1;
                     head = at;
@@ -264,6 +278,28 @@ fn top_level(tokens: &[Placed<'_>]) -> Vec<Definition> {
                     // (a struct, union or enum: its head runs on to the `;`)
                     at = close + 1;
                 }
+            }
+            Token::Name(name)
+                if name.starts_with(EVALUATOR_MACRO)
+                    && tokens.get(at + 1).map(|(token, _)| *token) == Some(Token::Punct(b'(')) =>
+            {
+                let close = matching(tokens, at + 1, b'(', b')');
+                let arguments = names(tokens.get(at + 2..close).unwrap_or(&[]));
+                if let Some((evaluator, rest)) = arguments.split_first() {
+                    let line = tokens.get(at).map_or(0, |(_, line)| *line);
+                    let mut refers_to = vec![name.to_owned()];
+                    refers_to.extend(rest.iter().cloned());
+                    found.push(Definition {
+                        name: evaluator.clone(),
+                        kind: Kind::Function,
+                        line,
+                        refers_to,
+                        port: false,
+                        inline: false,
+                    });
+                }
+                at = close + 1;
+                head = at;
             }
             Token::Punct(b'}') => {
                 // (a stray brace, from an #if branch the reader cannot follow)

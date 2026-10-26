@@ -359,6 +359,7 @@ pub fn census(root: &Path, mode: Mode) -> Result<String, Error> {
             problems.extend(fields::stale(root)?);
             problems.extend(fixups::stale(root)?);
             problems.extend(scripts::stale(root)?);
+            problems.extend(crate::original::stale(root)?);
             if let Some(recorded) = read_recorded(root)? {
                 let (rose, fell) = ratchet::compare(&recorded, &ratchet::counts(&census));
                 problems.extend(rose);
@@ -393,6 +394,13 @@ pub fn census(root: &Path, mode: Mode) -> Result<String, Error> {
             let path = root.join("engine").join(scripts::SCRIPTS);
             std::fs::write(&path, scripts::write_rows(&scripts::generate(root)?))
                 .map_err(|source| Error::Io { path, source })?;
+            let path = root.join("engine").join(crate::original::NAMES);
+            let original = crate::original::Original::read(&root.join("source"))?;
+            std::fs::write(
+                &path,
+                crate::original::write_names(&original.names_by_address),
+            )
+            .map_err(|source| Error::Io { path, source })?;
             let census = Census::read(root)?;
             docs::write(root, &census)?;
             Ok(census.summary())

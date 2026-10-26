@@ -680,6 +680,25 @@ class = "replaced"
 because = "tools"
 stands_in = "import/src/lib.rs"
 
+[function._byte_swap_data]
+class = "native"
+primitive = "from_le_bytes"
+
+[function._data_packet_decode]
+class = "replaced"
+because = "network"
+stands_in = "net/src/wire.rs"
+
+[function._data_packet_encode]
+class = "replaced"
+because = "network"
+stands_in = "net/src/wire.rs"
+
+[function._data_packet_verify]
+class = "replaced"
+because = "network"
+stands_in = "net/src/wire.rs"
+
 [function.accelerate_to_position]
 class = "matched"
 owed = "a first-person weapon's sway; checked through first_person_weapon_update's trace"
@@ -1763,182 +1782,6 @@ class = "replaced"
 because = "renderer"
 stands_in = "ffi/src/lights.rs"
 
-[function.code_0007ccf0]
-class = "replaced"
-because = "tools"
-stands_in = "ffi/src/allocations.rs"
-
-[function.code_0007cd40]
-class = "replaced"
-because = "tools"
-stands_in = "ffi/src/allocations.rs"
-
-[function.code_0007cd90]
-class = "replaced"
-because = "tools"
-stands_in = "ffi/src/allocations.rs"
-
-[function.code_0007cdc0]
-class = "replaced"
-because = "tools"
-stands_in = "ffi/src/allocations.rs"
-
-[function.code_0007ce40]
-class = "replaced"
-because = "tools"
-stands_in = "ffi/src/allocations.rs"
-
-[function.code_0007cf50]
-class = "replaced"
-because = "tools"
-stands_in = "ffi/src/allocations.rs"
-
-[function.code_0007cfc0]
-class = "replaced"
-because = "tools"
-stands_in = "ffi/src/allocations.rs"
-
-[function.code_0007d060]
-class = "replaced"
-because = "tools"
-stands_in = "ffi/src/allocations.rs"
-
-[function.code_0007d9d0]
-class = "replaced"
-because = "tools"
-stands_in = "dev/src/logbook.rs"
-
-[function.code_00080360]
-class = "native"
-primitive = "sort_by"
-
-[function.code_000803c0]
-class = "native"
-primitive = "sort_by"
-
-[function.code_00100040]
-class = "native"
-primitive = "std::collections::BTreeMap"
-
-[function.code_00100080]
-class = "native"
-primitive = "std::collections::BTreeMap"
-
-[function.code_00108010]
-class = "native"
-primitive = "from_le_bytes"
-
-[function.code_0010a5f0]
-class = "replaced"
-because = "network"
-stands_in = "net/src/wire.rs"
-
-[function.code_0010a7c0]
-class = "replaced"
-because = "network"
-stands_in = "net/src/wire.rs"
-
-[function.code_0010aac0]
-class = "replaced"
-because = "network"
-stands_in = "net/src/wire.rs"
-
-[function.code_0010b270]
-class = "native"
-primitive = "std::collections::BTreeMap"
-
-[function.code_0010b630]
-class = "native"
-primitive = "std::collections::BTreeMap"
-
-[function.code_0010e270]
-class = "native"
-primitive = "Vec"
-
-[function.code_0010e2b0]
-class = "native"
-primitive = "Vec"
-
-[function.code_0010e2e0]
-class = "native"
-primitive = "Vec"
-
-[function.code_0010e330]
-class = "native"
-primitive = "Vec"
-
-[function.code_0010e360]
-class = "native"
-primitive = "Vec"
-
-[function.code_0010e3e0]
-class = "native"
-primitive = "Vec"
-
-[function.code_0010e430]
-class = "native"
-primitive = "Vec"
-
-[function.code_0010e510]
-class = "native"
-primitive = "Vec"
-
-[function.code_0010e5b0]
-class = "native"
-primitive = "Vec"
-
-[function.code_0010e5f0]
-class = "native"
-primitive = "Vec"
-
-[function.code_0010e630]
-class = "native"
-primitive = "Vec"
-
-[function.code_0010e670]
-class = "native"
-primitive = "Vec"
-
-[function.code_0010e6a0]
-class = "native"
-primitive = "Vec"
-
-[function.code_0010e770]
-class = "native"
-primitive = "Vec"
-
-[function.code_0010e7f0]
-class = "native"
-primitive = "Vec"
-
-[function.code_0010e890]
-class = "native"
-primitive = "Vec"
-
-[function.code_0010e960]
-class = "native"
-primitive = "Vec"
-
-[function.code_0010ea00]
-class = "native"
-primitive = "Vec"
-
-[function.code_0010eef0]
-class = "native"
-primitive = "Vec"
-
-[function.code_0010ef10]
-class = "native"
-primitive = "Vec"
-
-[function.code_0010ef70]
-class = "native"
-primitive = "Vec"
-
-[function.code_00189ca0]
-class = "native"
-primitive = "std::fs"
-
 [function.collision_debug_render]
 class = "replaced"
 because = "tools"
@@ -2373,6 +2216,11 @@ owed = "the engine cites it, with no check against the original yet"
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
 
+[function.debug_check_memory]
+class = "replaced"
+because = "tools"
+stands_in = "ffi/src/allocations.rs"
+
 [function.debug_check_memory_globals]
 class = "replaced"
 because = "tools"
@@ -2388,7 +2236,17 @@ class = "replaced"
 because = "tools"
 stands_in = "ffi/src/allocations.rs"
 
+[function.debug_dump_memory]
+class = "replaced"
+because = "tools"
+stands_in = "ffi/src/allocations.rs"
+
 [function.debug_dump_memory_by_file]
+class = "replaced"
+because = "tools"
+stands_in = "ffi/src/allocations.rs"
+
+[function.debug_dump_memory_for_file]
 class = "replaced"
 because = "tools"
 stands_in = "ffi/src/allocations.rs"
@@ -3626,6 +3484,12 @@ primitive = "std::collections::BTreeMap"
 [function.hashtable_set_user_data]
 class = "native"
 primitive = "std::collections::BTreeMap"
+
+[function.help]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+
 
 [function.hs_arguments_evaluate]
 class = "matched"
@@ -5401,6 +5265,11 @@ class = "replaced"
 because = "tools"
 stands_in = "dev/src/logbook.rs"
 
+[function.profile_initialize]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+
 [function.profile_internal_step]
 class = "replaced"
 because = "tools"
@@ -6230,6 +6099,10 @@ stands_in = "import/src/lib.rs"
 class = "replaced"
 because = "imported"
 stands_in = "import/src/lib.rs"
+
+[function.shortsort_2byte]
+class = "native"
+primitive = "sort_by"
 
 [function.shortsort_4byte]
 class = "native"
