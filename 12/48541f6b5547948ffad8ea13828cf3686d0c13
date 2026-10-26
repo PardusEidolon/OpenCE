@@ -1,0 +1,6 @@
+Task: Write tests that the named equivalents (`unit_update`, `main_loop`, `weapon_ready` and the others the report lists) are cited.
+Cite the engine's own versions of 23 of the original's functions and class them Partial
+
+The census report named functions the engine has its own version of but never cited (main_loop, unit_update, weapon_ready and others), so they counted as Missing. Each now has a citation at its engine place and a Partial entry in census.toml that says what it leaves out and that it owes a check against the original. The new census test equivalents.rs checks all 23 are cited and no longer Missing.
+
+Missing fell from 4,762 to 4,739 and Partial rose from 94 to 117; the ratchet records it. Checked: census --check, the workspace's 1,293 tests and clippy.
