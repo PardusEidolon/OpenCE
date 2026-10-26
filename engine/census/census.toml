@@ -265,6 +265,10 @@ class = "replaced"
 because = "tools"
 stands_in = "import/src/lib.rs"
 
+[function."@periodic_function_build_variable_period_x_table"]
+class = "missing"
+note = "not reached from a root of the game; the animation and world track owns it"
+
 [function.AllSame]
 class = "replaced"
 because = "tools"
@@ -284,6 +288,12 @@ stands_in = "import/src/lib.rs"
 class = "replaced"
 because = "tools"
 stands_in = "import/src/lib.rs"
+
+[function.D3DXMatrixIdentity]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/UiPass.swift"
+note = "drawn by the Metal renderer"
 
 [function.DECLARE1]
 class = "replaced"
@@ -340,6 +350,18 @@ class = "replaced"
 because = "tools"
 stands_in = "import/src/lib.rs"
 
+[function.HATRawRead]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+note = "a debug check, statistic or editor hook of the original; the dev tools stand in"
+
+[function.HATRawWrite]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+note = "a debug check, statistic or editor hook of the original; the dev tools stand in"
+
 [function.IDirect3DIndexBuffer8_BlockUntilNotBusy]
 class = "replaced"
 because = "imported"
@@ -349,6 +371,12 @@ stands_in = "import/src/lib.rs"
 class = "replaced"
 because = "imported"
 stands_in = "import/src/lib.rs"
+
+[function.IDirect3DTexture8_Release]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/UiPass.swift"
+note = "drawn by the Metal renderer"
 
 [function.IDirect3DVertexBuffer8_BlockUntilNotBusy]
 class = "replaced"
@@ -703,6 +731,42 @@ stands_in = "net/src/wire.rs"
 class = "matched"
 owed = "a first-person weapon's sway; checked through first_person_weapon_update's trace"
 
+[function.accelerate_to_velocity]
+class = "missing"
+note = "not reached from a root of the game; the animation and world track owns it"
+
+[function.accelerate_to_velocity3d]
+class = "missing"
+note = "not reached from a root of the game; the animation and world track owns it"
+
+[function.accerate_to_position3d]
+class = "missing"
+note = "not reached from a root of the game; the animation and world track owns it"
+
+[function.action_obey_flush_command_indices]
+class = "missing"
+note = "not reached from a root of the game; the AI track owns it"
+
+[function.action_obey_flush_structure_indices]
+class = "missing"
+note = "not reached from a root of the game; the AI track owns it"
+
+[function.action_obey_individual_flush_command_indices]
+class = "missing"
+note = "not reached from a root of the game; the AI track owns it"
+
+[function.action_search_flush_structure_indices]
+class = "missing"
+note = "not reached from a root of the game; the AI track owns it"
+
+[function.action_uncover_flush_structure_indices]
+class = "missing"
+note = "not reached from a root of the game; the AI track owns it"
+
+[function.action_vehicle_flush_structure_indices]
+class = "missing"
+note = "not reached from a root of the game; the AI track owns it"
+
 [function.actor_action_debug_color]
 class = "replaced"
 because = "tools"
@@ -721,6 +785,10 @@ class = "replaced"
 because = "tools"
 stands_in = "dev/src/draw.rs"
 
+[function.actor_conversation_end]
+class = "missing"
+note = "not reached from a root of the game; the AI track owns it"
+
 [function.actor_erase]
 class = "matched"
 engine = "campaign/src/actors.rs"
@@ -731,11 +799,29 @@ class = "matched"
 engine = "campaign/src/actors.rs"
 owed = "the campaign's rewrite of the AI; no check against the original yet"
 
+[function.actor_mode_name]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+note = "a debug check, statistic or editor hook of the original; the dev tools stand in"
+
+[function.actor_move_halt_at_firing_position]
+class = "missing"
+note = "not reached from a root of the game; the AI track owns it"
+
 [function.actor_new]
 class = "partial"
 engine = "campaign/src/actors.rs"
 leaves_out = ["the actor's variants and their weapons", "its perception and memory"]
 owed = "the engine's own version; no check against the original yet"
+
+[function.actor_path_get_destination_firing_position_index]
+class = "missing"
+note = "not reached from a root of the game; the AI track owns it"
+
+[function.actor_perception_midpoint3d]
+class = "missing"
+note = "not reached from a root of the game; the AI track owns it"
 
 [function.actor_perception_update]
 class = "partial"
@@ -820,9 +906,23 @@ class = "matched"
 engine = "campaign/src/ai.rs"
 owed = "a script function the campaign wires; no check against the original yet"
 
+[function.ai_handle_editing]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+note = "a debug check, statistic or editor hook of the original; the dev tools stand in"
+
 [function.ai_place]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
+
+[function.ai_scripting_attach_units]
+class = "missing"
+note = "not reached from a root of the game; the AI track owns it"
+
+[function.ai_scripting_attach_units_evaluate]
+class = "missing"
+note = "not reached from a root of the game; the scripts and sounds track owns it"
 
 [function.ai_scripting_conversation]
 class = "matched"
@@ -849,10 +949,26 @@ class = "matched"
 engine = "campaign/src/conversations.rs"
 owed = "a script function the campaign wires; no check against the original yet"
 
+[function.ai_scripting_detach_units]
+class = "missing"
+note = "not reached from a root of the game; the AI track owns it"
+
+[function.ai_scripting_detach_units_evaluate]
+class = "missing"
+note = "not reached from a root of the game; the scripts and sounds track owns it"
+
 [function.ai_scripting_erase]
 class = "matched"
 engine = "campaign/src/ai.rs"
 owed = "a script function the campaign wires; no check against the original yet"
+
+[function.ai_scripting_magically_see_units]
+class = "missing"
+note = "not reached from a root of the game; the AI track owns it"
+
+[function.ai_scripting_magically_see_units_evaluate]
+class = "missing"
+note = "not reached from a root of the game; the scripts and sounds track owns it"
 
 [function.ai_scripting_place]
 class = "matched"
@@ -882,10 +998,30 @@ primitive = "glam::Vec2"
 class = "matched"
 owed = "draws from the game's random seed; checked through the animation trace's permutation weights"
 
+[function.animation_convert_frame_to_pal]
+class = "missing"
+note = "not reached from a root of the game; the units track owns it"
+
+[function.animation_frame_get_xy_translation]
+class = "missing"
+note = "not reached from a root of the game; the animation and world track owns it"
+
+[function.animation_key_frame_index]
+class = "missing"
+note = "not reached from a root of the game; the units track owns it"
+
+[function.animation_left_foot_frame_index]
+class = "missing"
+note = "not reached from a root of the game; the units track owns it"
+
 [function.animation_loop_frame_index]
 class = "matched"
 engine = "sim/src/animation.rs"
 owed = "the engine's own tests (sim/tests/stock_animations.rs); no check against the original yet"
+
+[function.animation_right_foot_frame_index]
+class = "missing"
+note = "not reached from a root of the game; the units track owns it"
 
 [function.animation_second_key_frame_index]
 class = "matched"
@@ -902,6 +1038,10 @@ note = "the tool's, when it builds an animation: nothing in the game calls it, a
 class = "matched"
 engine = "sim/src/animation.rs"
 owed = "the engine's own tests (sim/tests/stock_animations.rs); no check against the original yet"
+
+[function.animation_update]
+class = "missing"
+note = "not reached from a root of the game; the units track owns it"
 
 [function.animation_update_internal]
 class = "matched"
@@ -1205,10 +1345,22 @@ class = "replaced"
 because = "renderer"
 stands_in = "app/Sources/OpenCEEngineRender/LoadedLevel.swift"
 
+[function.bitmap_draw_character]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/UiPass.swift"
+note = "drawn by the Metal renderer"
+
 [function.bitmap_draw_line]
 class = "replaced"
 because = "renderer"
 stands_in = "app/Sources/OpenCEEngineRender/UiPass.swift"
+
+[function.bitmap_draw_string]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/UiPass.swift"
+note = "drawn by the Metal renderer"
 
 [function.bitmap_fade]
 class = "replaced"
@@ -1388,6 +1540,22 @@ class = "matched"
 engine = "sim/src/hud.rs"
 owed = "the engine's own tests (sim/src/hud.rs); no check against the original yet"
 
+[function.bored_camera_new]
+class = "missing"
+note = "not reached from a root of the game; the cameras track owns it"
+
+[function.bored_camera_shot_duration_milliseconds]
+class = "missing"
+note = "not reached from a root of the game; the cameras track owns it"
+
+[function.bored_camera_shot_threshold_milliseconds]
+class = "missing"
+note = "not reached from a root of the game; the cameras track owns it"
+
+[function.bored_camera_update]
+class = "missing"
+note = "not reached from a root of the game; the cameras track owns it"
+
 [function.bsp3d_get_plane_from_designator]
 class = "replaced"
 because = "renderer"
@@ -1436,10 +1604,20 @@ class = "replaced"
 because = "renderer"
 stands_in = "ffi/src/lights.rs"
 
+[function.build_torus]
+class = "missing"
+note = "not reached from a root of the game; the animation and world track owns it"
+
 [function.build_uncomp_mode_tables]
 class = "replaced"
 because = "tools"
 stands_in = "import/src/lib.rs"
+
+[function.byte_swap_bungie_ima_adpcm_header]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+note = "byte order is settled when the map is imported"
 
 [function.byte_swap_codes_size]
 class = "native"
@@ -1448,6 +1626,24 @@ primitive = "from_le_bytes"
 [function.byte_swap_data_explicit]
 class = "native"
 primitive = "from_le_bytes"
+
+[function.byte_swap_recording]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+note = "byte order is settled when the map is imported"
+
+[function.byte_swap_recording_stream]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+note = "byte order is settled when the map is imported"
+
+[function.byte_swap_recording_stream_v1]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+note = "byte order is settled when the map is imported"
 
 [function.cache_copy_begin]
 class = "replaced"
@@ -1736,6 +1932,10 @@ class = "matched"
 engine = "campaign/src/cinematic.rs"
 owed = "the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet"
 
+[function.cinematic_force_title]
+class = "missing"
+note = "not reached from a root of the game; the cameras track owns it"
+
 [function.cinematic_in_progress]
 class = "matched"
 engine = "campaign/src/cinematic.rs"
@@ -1777,10 +1977,214 @@ engine = "campaign/src/presented.rs"
 leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
 owed = "the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet"
 
+[function.circle_intersects_cone2d]
+class = "missing"
+note = "not reached from a root of the game; the animation and world track owns it"
+
+[function.circle_intersects_rectangle2d]
+class = "missing"
+note = "not reached from a root of the game; the animation and world track owns it"
+
+[function.circle_intersects_sector2d]
+class = "missing"
+note = "not reached from a root of the game; the animation and world track owns it"
+
+[function.circle_intersects_triangle2d]
+class = "missing"
+note = "not reached from a root of the game; the animation and world track owns it"
+
+[function.clip_empty_interval_by_solid_interval]
+class = "missing"
+note = "not reached from a root of the game; the AI track owns it"
+
 [function.cluster_index_from_point]
 class = "replaced"
 because = "renderer"
 stands_in = "ffi/src/lights.rs"
+
+[function.cluster_partition_copy]
+class = "missing"
+note = "not reached from a root of the game; the animation and world track owns it"
+
+[function.code_000309a0]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+note = "a debug check, statistic or editor hook of the original; the dev tools stand in"
+
+[function.code_00082c90]
+class = "missing"
+note = "not reached from a root of the game; the cameras track owns it"
+
+[function.code_00082d50]
+class = "missing"
+note = "not reached from a root of the game; the cameras track owns it"
+
+[function.code_00082e10]
+class = "missing"
+note = "not reached from a root of the game; the cameras track owns it"
+
+[function.code_00082ed0]
+class = "missing"
+note = "not reached from a root of the game; the cameras track owns it"
+
+[function.code_00082fe0]
+class = "missing"
+note = "not reached from a root of the game; the cameras track owns it"
+
+[function.code_000d0ec0]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/UiPass.swift"
+note = "drawn by the Metal renderer"
+
+[function.code_000d0f10]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/UiPass.swift"
+note = "drawn by the Metal renderer"
+
+[function.code_000d0f20]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/UiPass.swift"
+note = "drawn by the Metal renderer"
+
+[function.code_000d0f40]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/UiPass.swift"
+note = "drawn by the Metal renderer"
+
+[function.code_000d1020]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/UiPass.swift"
+note = "drawn by the Metal renderer"
+
+[function.code_000d1030]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/UiPass.swift"
+note = "drawn by the Metal renderer"
+
+[function.code_000d10e0]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/UiPass.swift"
+note = "drawn by the Metal renderer"
+
+[function.code_000d10f0]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/UiPass.swift"
+note = "drawn by the Metal renderer"
+
+[function.code_000d1160]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/UiPass.swift"
+note = "drawn by the Metal renderer"
+
+[function.code_000d1380]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/UiPass.swift"
+note = "drawn by the Metal renderer"
+
+[function.code_000d1390]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/UiPass.swift"
+note = "drawn by the Metal renderer"
+
+[function.code_000d14c0]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/UiPass.swift"
+note = "drawn by the Metal renderer"
+
+[function.code_000d1660]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/UiPass.swift"
+note = "drawn by the Metal renderer"
+
+[function.code_000d1670]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/UiPass.swift"
+note = "drawn by the Metal renderer"
+
+[function.code_000d1680]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/UiPass.swift"
+note = "drawn by the Metal renderer"
+
+[function.code_000d16a0]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/UiPass.swift"
+note = "drawn by the Metal renderer"
+
+[function.code_000d16e0]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/UiPass.swift"
+note = "drawn by the Metal renderer"
+
+[function.code_000d16f0]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/UiPass.swift"
+note = "drawn by the Metal renderer"
+
+[function.code_000d1ba0]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/UiPass.swift"
+note = "drawn by the Metal renderer"
+
+[function.code_000d1bc0]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/UiPass.swift"
+note = "drawn by the Metal renderer"
+
+[function.code_000d1bd0]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/UiPass.swift"
+note = "drawn by the Metal renderer"
+
+[function.code_000d1bf0]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/UiPass.swift"
+note = "drawn by the Metal renderer"
+
+[function.code_000d23b0]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/UiPass.swift"
+note = "drawn by the Metal renderer"
+
+[function.code_001be6a0]
+class = "missing"
+note = "not reached from a root of the game; the scripts and sounds track owns it"
+
+[function.code_001be890]
+class = "missing"
+note = "not reached from a root of the game; the scripts and sounds track owns it"
+
+[function.code_001bebf0]
+class = "missing"
+note = "not reached from a root of the game; the scripts and sounds track owns it"
+
+[function.code_001bee50]
+class = "missing"
+note = "not reached from a root of the game; the scripts and sounds track owns it"
 
 [function.collision_debug_render]
 class = "replaced"
@@ -1853,6 +2257,10 @@ engine = "physics/src/lib.rs"
 leaves_out = ["the original's collision BSP walk: Jolt answers the query on a mesh made from the collision BSP, so what is hit at an edge, and in what order, can differ"]
 owed = "the engine's own tests (physics/tests/world.rs); no check against the original yet"
 
+[function.collision_test_pill_new]
+class = "missing"
+note = "not reached from a root of the game; the animation and world track owns it"
+
 [function.collision_test_point]
 class = "partial"
 engine = "physics/src/lib.rs"
@@ -1870,6 +2278,18 @@ class = "partial"
 engine = "physics/src/lib.rs"
 leaves_out = ["the original's collision BSP walk: Jolt answers the query on a mesh made from the collision BSP, so what is hit at an edge, and in what order, can differ"]
 owed = "the engine's own tests (physics/tests/world.rs); no check against the original yet"
+
+[function.collision_test_vector_exit]
+class = "missing"
+note = "not reached from a root of the game; the animation and world track owns it"
+
+[function.combinations]
+class = "missing"
+note = "not reached from a root of the game; the animation and world track owns it"
+
+[function.combine]
+class = "missing"
+note = "not reached from a root of the game; the animation and world track owns it"
 
 [function.compare_file_pointer_totals]
 class = "replaced"
@@ -1939,6 +2359,66 @@ owed = "the engine cites it, with no check against the original yet"
 class = "matched"
 engine = "ffi/src/particles/contrails.rs"
 owed = "the engine's own tests (ffi/src/particles/contrails.rs); no check against the original yet"
+
+[function.control_destroyed]
+class = "missing"
+note = "not reached from a root of the game; the units track owns it"
+
+[function.convex_hull2d_area]
+class = "missing"
+note = "not reached from a root of the game; the animation and world track owns it"
+
+[function.convex_hull2d_perimeter]
+class = "missing"
+note = "not reached from a root of the game; the animation and world track owns it"
+
+[function.convex_hull2d_test_vector]
+class = "missing"
+note = "not reached from a root of the game; the animation and world track owns it"
+
+[function.convex_hull2d_verify]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+note = "a debug check, statistic or editor hook of the original; the dev tools stand in"
+
+[function.convex_hull3d]
+class = "missing"
+note = "not reached from a root of the game; the animation and world track owns it"
+
+[function.convex_hull3d_begin]
+class = "missing"
+note = "not reached from a root of the game; the animation and world track owns it"
+
+[function.convex_hull3d_expand]
+class = "missing"
+note = "not reached from a root of the game; the animation and world track owns it"
+
+[function.convex_hull3d_test_point]
+class = "missing"
+note = "not reached from a root of the game; the animation and world track owns it"
+
+[function.convex_hull3d_test_vector]
+class = "missing"
+note = "not reached from a root of the game; the animation and world track owns it"
+
+[function.convex_hull3d_verify]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+note = "a debug check, statistic or editor hook of the original; the dev tools stand in"
+
+[function.convex_polygon2d_verify]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+note = "a debug check, statistic or editor hook of the original; the dev tools stand in"
+
+[function.convex_polygon3d_verify]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+note = "a debug check, statistic or editor hook of the original; the dev tools stand in"
 
 [function.crc32]
 class = "replaced"
@@ -2069,15 +2549,67 @@ class = "matched"
 engine = "sim/src/game.rs"
 owed = "the engine's own tests (sim/tests/game.rs); no check against the original yet"
 
+[function.ctf_state_message_update_warning]
+class = "missing"
+note = "not reached from a root of the game; the game loop track owns it"
+
+[function.current_platform_definition]
+class = "missing"
+note = "not reached from a root of the game; the scripts and sounds track owns it"
+
 [function.damage_data_new]
 class = "matched"
 engine = "sim/src/damage.rs"
 owed = "the engine's own tests (sim/src/damage.rs); no check against the original yet"
 
+[function.damage_dispose]
+class = "missing"
+note = "not reached from a root of the game; the units track owns it"
+
+[function.damage_get_network_state]
+class = "replaced"
+because = "network"
+stands_in = "net/src/snapshot.rs"
+note = "the original's network state and prediction; the engine sends snapshots"
+
+[function.damage_kill_object_for_player]
+class = "missing"
+note = "not reached from a root of the game; the units track owns it"
+
 [function.damage_render_debug]
 class = "replaced"
 because = "tools"
 stands_in = "dev/src/draw.rs"
+
+[function.damage_replay_aftermath]
+class = "replaced"
+because = "network"
+stands_in = "net/src/snapshot.rs"
+note = "the original's network state and prediction; the engine sends snapshots"
+
+[function.damage_replay_kill]
+class = "replaced"
+because = "network"
+stands_in = "net/src/snapshot.rs"
+note = "the original's network state and prediction; the engine sends snapshots"
+
+[function.damage_replay_player_effect]
+class = "replaced"
+because = "network"
+stands_in = "net/src/snapshot.rs"
+note = "the original's network state and prediction; the engine sends snapshots"
+
+[function.damage_replay_static]
+class = "replaced"
+because = "network"
+stands_in = "net/src/snapshot.rs"
+note = "the original's network state and prediction; the engine sends snapshots"
+
+[function.damage_set_network_state]
+class = "replaced"
+because = "network"
+stands_in = "net/src/snapshot.rs"
+note = "the original's network state and prediction; the engine sends snapshots"
 
 [function.data_allocation_size]
 class = "native"
@@ -2488,6 +3020,10 @@ class = "matched"
 engine = "campaign/src/cinematic.rs"
 owed = "the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet"
 
+[function.director_set_mode]
+class = "missing"
+note = "not reached from a root of the game; the cameras track owns it"
+
 [function.directory_create_or_delete_contents]
 class = "native"
 primitive = "std::fs"
@@ -2521,6 +3057,18 @@ class = "matched"
 engine = "ui/src/lib.rs"
 owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
 
+[function.distributed_action_valid]
+class = "replaced"
+because = "network"
+stands_in = "net/src/snapshot.rs"
+note = "the original's network state and prediction; the engine sends snapshots"
+
+[function.distributed_add_new_ticks]
+class = "replaced"
+because = "network"
+stands_in = "net/src/snapshot.rs"
+note = "the original's network state and prediction; the engine sends snapshots"
+
 [function.dot_product4d]
 class = "replaced"
 because = "renderer"
@@ -2544,6 +3092,10 @@ owed = "the engine's own tests (ui/tests/draw.rs); no check against the original
 class = "matched"
 engine = "ui/src/draw.rs"
 owed = "the engine's own tests (ui/tests/draw.rs); no check against the original yet"
+
+[function.draw_string_pick]
+class = "missing"
+note = "not reached from a root of the game; the interface track owns it"
 
 [function.draw_string_set_color]
 class = "matched"
@@ -2995,6 +3547,16 @@ class = "replaced"
 because = "tools"
 stands_in = "import/src/lib.rs"
 
+[function.factorial]
+class = "missing"
+note = "not reached from a root of the game; the animation and world track owns it"
+
+[function.fast_ftol_C]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/UiPass.swift"
+note = "drawn by the Metal renderer"
+
 [function.fast_normalize2d]
 class = "native"
 primitive = "glam::Vec2"
@@ -3182,6 +3744,10 @@ class = "replaced"
 because = "tools"
 stands_in = "dev/src/logbook.rs"
 
+[function.find_unused_local_player_index]
+class = "missing"
+note = "not reached from a root of the game; the game loop track owns it"
+
 [function.firing_position_store_evaluation_debug]
 class = "replaced"
 because = "tools"
@@ -3250,6 +3816,26 @@ engine = "campaign/src/game.rs"
 leaves_out = ["the game's own test: the engine's always passes"]
 owed = "the engine's own tests (campaign/src/game.rs); no check against the original yet"
 
+[function.game_allegiance_set_teams]
+class = "missing"
+note = "not reached from a root of the game; the game loop track owns it"
+
+[function.game_engine_ctf_read_network_state]
+class = "replaced"
+because = "network"
+stands_in = "net/src/snapshot.rs"
+note = "the original's network state and prediction; the engine sends snapshots"
+
+[function.game_engine_ctf_write_network_state]
+class = "replaced"
+because = "network"
+stands_in = "net/src/snapshot.rs"
+note = "the original's network state and prediction; the engine sends snapshots"
+
+[function.game_engine_game_ending]
+class = "missing"
+note = "not reached from a root of the game; the game loop track owns it"
+
 [function.game_engine_game_starting]
 class = "matched"
 engine = "sim/src/game.rs"
@@ -3266,10 +3852,64 @@ class = "matched"
 engine = "sim/src/game.rs"
 owed = "the engine's own tests (sim/tests/game.rs); no check against the original yet"
 
+[function.game_engine_handle_client_message]
+class = "replaced"
+because = "network"
+stands_in = "net/src/snapshot.rs"
+note = "the original's network state and prediction; the engine sends snapshots"
+
+[function.game_engine_handle_server_message]
+class = "replaced"
+because = "network"
+stands_in = "net/src/snapshot.rs"
+note = "the original's network state and prediction; the engine sends snapshots"
+
+[function.game_engine_king_read_network_state]
+class = "replaced"
+because = "network"
+stands_in = "net/src/snapshot.rs"
+note = "the original's network state and prediction; the engine sends snapshots"
+
+[function.game_engine_king_write_network_state]
+class = "replaced"
+because = "network"
+stands_in = "net/src/snapshot.rs"
+note = "the original's network state and prediction; the engine sends snapshots"
+
+[function.game_engine_load_stage]
+class = "missing"
+note = "not reached from a root of the game; the game loop track owns it"
+
+[function.game_engine_network_player_score]
+class = "replaced"
+because = "network"
+stands_in = "net/src/snapshot.rs"
+note = "the original's network state and prediction; the engine sends snapshots"
+
+[function.game_engine_oddball_read_network_state]
+class = "replaced"
+because = "network"
+stands_in = "net/src/snapshot.rs"
+note = "the original's network state and prediction; the engine sends snapshots"
+
+[function.game_engine_oddball_write_network_state]
+class = "replaced"
+because = "network"
+stands_in = "net/src/snapshot.rs"
+note = "the original's network state and prediction; the engine sends snapshots"
+
+[function.game_engine_override_game_variant]
+class = "missing"
+note = "not reached from a root of the game; the game loop track owns it"
+
 [function.game_engine_player_added]
 class = "matched"
 engine = "sim/src/game.rs"
 owed = "the engine's own tests (sim/tests/game.rs); no check against the original yet"
+
+[function.game_engine_player_get_team_index]
+class = "missing"
+note = "not reached from a root of the game; the game loop track owns it"
 
 [function.game_engine_player_killed]
 class = "partial"
@@ -3277,10 +3917,44 @@ engine = "sim/src/game.rs"
 leaves_out = ["the oddball, king, race and juggernaut variants", "the game's announcer and score messages"]
 owed = "the engine's own tests (sim/tests/game.rs); no check against the original yet"
 
+[function.game_engine_race_read_network_state]
+class = "replaced"
+because = "network"
+stands_in = "net/src/snapshot.rs"
+note = "the original's network state and prediction; the engine sends snapshots"
+
+[function.game_engine_race_write_network_state]
+class = "replaced"
+because = "network"
+stands_in = "net/src/snapshot.rs"
+note = "the original's network state and prediction; the engine sends snapshots"
+
+[function.game_engine_read_network_state]
+class = "replaced"
+because = "network"
+stands_in = "net/src/snapshot.rs"
+note = "the original's network state and prediction; the engine sends snapshots"
+
 [function.game_engine_should_end_game]
 class = "matched"
 engine = "sim/src/game.rs"
 owed = "the engine's own tests (sim/tests/game.rs); no check against the original yet"
+
+[function.game_engine_slayer_read_network_state]
+class = "replaced"
+because = "network"
+stands_in = "net/src/snapshot.rs"
+note = "the original's network state and prediction; the engine sends snapshots"
+
+[function.game_engine_slayer_write_network_state]
+class = "replaced"
+because = "network"
+stands_in = "net/src/snapshot.rs"
+note = "the original's network state and prediction; the engine sends snapshots"
+
+[function.game_engine_statistics_append]
+class = "missing"
+note = "not reached from a root of the game; the game loop track owns it"
 
 [function.game_engine_update]
 class = "partial"
@@ -3292,6 +3966,12 @@ owed = "the engine's own tests (sim/tests/game.rs); no check against the origina
 class = "matched"
 engine = "sim/src/game.rs"
 owed = "the engine's own tests (sim/tests/game.rs); no check against the original yet"
+
+[function.game_engine_write_network_state]
+class = "replaced"
+because = "network"
+stands_in = "net/src/snapshot.rs"
+note = "the original's network state and prediction; the engine sends snapshots"
 
 [function.game_is_cooperative]
 class = "matched"
@@ -3308,6 +3988,12 @@ class = "matched"
 engine = "ffi/src/sound_world.rs"
 owed = "the engine's own tests (ffi/src/sound_world.rs); no check against the original yet"
 
+[function.game_predicting]
+class = "replaced"
+because = "network"
+stands_in = "net/src/snapshot.rs"
+note = "the original's network state and prediction; the engine sends snapshots"
+
 [function.game_safe_to_save]
 class = "partial"
 engine = "campaign/src/game.rs"
@@ -3319,6 +4005,10 @@ class = "partial"
 engine = "campaign/src/game.rs"
 leaves_out = ["the game's own test: the engine's always passes"]
 owed = "the engine's own tests (campaign/src/game.rs); no check against the original yet"
+
+[function.game_set_game_engine_index]
+class = "missing"
+note = "not reached from a root of the game; the game loop track owns it"
 
 [function.game_sound_update]
 class = "matched"
@@ -3343,10 +4033,30 @@ engine = "sim/src/game.rs"
 leaves_out = ["assists", "multiple kills and kills in a row", "the attackers' damage"]
 owed = "the engine's own version; no check against the original yet"
 
+[function.game_statistics_stop]
+class = "missing"
+note = "not reached from a root of the game; the game loop track owns it"
+
 [function.game_tick]
 class = "matched"
 engine = "sim/src/lib.rs"
 owed = "the engine's own tests (sim/tests); no check against the original yet"
+
+[function.game_time_get_tick_fraction]
+class = "missing"
+note = "not reached from a root of the game; the game loop track owns it"
+
+[function.game_time_statistics_frame]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+note = "a debug check, statistic or editor hook of the original; the dev tools stand in"
+
+[function.game_time_statistics_new]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+note = "a debug check, statistic or editor hook of the original; the dev tools stand in"
 
 [function.game_time_update]
 class = "partial"
@@ -3354,11 +4064,29 @@ engine = "sim/src/clock.rs"
 leaves_out = ["Halo's 30 Hz tick: the engine's simulation runs at 60 Hz"]
 owed = "the engine's own tests (sim/src/clock.rs); no check against the original yet"
 
+[function.gamepad_button_is_down]
+class = "replaced"
+because = "keyboard_mouse"
+stands_in = "app/Sources/OpenCEEngineKit/PlayControls.swift"
+note = "pad events are filtered out"
+
 [function.garbage_collect_now]
 class = "partial"
 engine = "campaign/src/presented.rs"
 leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
 owed = "the engine's own tests (campaign/src/lib.rs); no check against the original yet"
+
+[function.gen_cloud_coord]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/UiPass.swift"
+note = "drawn by the Metal renderer"
+
+[function.gen_mask_coord]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/UiPass.swift"
+note = "drawn by the Metal renderer"
 
 [function.gen_trees_header]
 class = "replaced"
@@ -3369,6 +4097,10 @@ stands_in = "import/src/lib.rs"
 class = "replaced"
 because = "tools"
 stands_in = "import/src/lib.rs"
+
+[function.get_blink_alpha]
+class = "missing"
+note = "not reached from a root of the game; the game loop track owns it"
 
 [function.get_crc_table]
 class = "replaced"
@@ -3395,6 +4127,10 @@ primitive = "Vec"
 [function.get_material_type]
 class = "matched"
 owed = "the ground's material; reads the object, tag and map world, which the fake worlds do not hold (the structure's collision)"
+
+[function.get_random_seed]
+class = "missing"
+note = "not reached from a root of the game; the animation and world track owns it"
 
 [function.get_sprite_clip_rect]
 class = "matched"
@@ -3489,7 +4225,6 @@ primitive = "std::collections::BTreeMap"
 class = "replaced"
 because = "imported"
 stands_in = "import/src/lib.rs"
-
 
 [function.hs_arguments_evaluate]
 class = "matched"
@@ -3588,10 +4323,20 @@ class = "matched"
 engine = "script/src/lib.rs"
 owed = "the engine's runtime (script/src/lib.rs); no check against the original yet"
 
+[function.hs_find_tag_reference_by_index]
+class = "missing"
+note = "not reached from a root of the game; the scripts and sounds track owns it"
+
 [function.hs_global_evaluate]
 class = "matched"
 engine = "script/src/lib.rs"
 owed = "the engine's runtime (script/src/lib.rs); no check against the original yet"
+
+[function.hs_hack]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+note = "a debug check, statistic or editor hook of the original; the dev tools stand in"
 
 [function.hs_long_to_boolean]
 class = "matched"
@@ -3703,9 +4448,19 @@ class = "matched"
 engine = "script/src/value.rs"
 owed = "one of hs_cast's conversions, in script/src/value.rs's cast; no check against the original yet"
 
+[function.hs_recompile]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+note = "a debug check, statistic or editor hook of the original; the dev tools stand in"
+
 [function.hs_return]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
+
+[function.hs_runtime_dispose]
+class = "missing"
+note = "not reached from a root of the game; the scripts and sounds track owns it"
 
 [function.hs_runtime_evaluate]
 class = "matched"
@@ -3722,6 +4477,12 @@ class = "matched"
 engine = "script/src/lib.rs"
 owed = "the engine's runtime (script/src/lib.rs); no check against the original yet"
 
+[function.hs_scenario_merge]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+note = "a debug check, statistic or editor hook of the original; the dev tools stand in"
+
 [function.hs_short_to_boolean]
 class = "matched"
 engine = "script/src/value.rs"
@@ -3736,6 +4497,12 @@ owed = "one of hs_cast's conversions, in script/src/value.rs's cast; no check ag
 class = "matched"
 engine = "script/src/value.rs"
 owed = "one of hs_cast's conversions, in script/src/value.rs's cast; no check against the original yet"
+
+[function.hs_syntax_data_byte_swap]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+note = "byte order is settled when the map is imported"
 
 [function.hs_thread_main]
 class = "matched"
@@ -3756,6 +4523,34 @@ class = "replaced"
 because = "tools"
 stands_in = "import/src/lib.rs"
 
+[function.hud_activate_global_nav_point]
+class = "missing"
+note = "not reached from a root of the game; the interface track owns it"
+
+[function.hud_activate_global_nav_point_with_game_engine_flag]
+class = "missing"
+note = "not reached from a root of the game; the interface track owns it"
+
+[function.hud_activate_nav_point_with_flag]
+class = "missing"
+note = "not reached from a root of the game; the interface track owns it"
+
+[function.hud_activate_nav_point_with_game_engine_flag]
+class = "missing"
+note = "not reached from a root of the game; the interface track owns it"
+
+[function.hud_activate_nav_point_with_object]
+class = "missing"
+note = "not reached from a root of the game; the interface track owns it"
+
+[function.hud_activate_team_nav_point_with_game_engine_flag]
+class = "missing"
+note = "not reached from a root of the game; the interface track owns it"
+
+[function.hud_broadcast_team_message]
+class = "missing"
+note = "not reached from a root of the game; the interface track owns it"
+
 [function.hud_calculate_bitmap_bounds]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
@@ -3763,6 +4558,18 @@ owed = "the engine cites it, with no check against the original yet"
 [function.hud_calculate_point]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
+
+[function.hud_deactivate_nav_point_with_flag]
+class = "missing"
+note = "not reached from a root of the game; the interface track owns it"
+
+[function.hud_deactivate_nav_point_with_game_engine_flag]
+class = "missing"
+note = "not reached from a root of the game; the interface track owns it"
+
+[function.hud_deactivate_nav_point_with_object]
+class = "missing"
+note = "not reached from a root of the game; the interface track owns it"
 
 [function.hud_draw_bitmap]
 class = "matched"
@@ -3875,6 +4682,26 @@ stands_in = "app/Sources/OpenCEEngineKit/PlayControls.swift"
 class = "native"
 primitive = "min"
 
+[function.integer_square_root]
+class = "missing"
+note = "not reached from a root of the game; the animation and world track owns it"
+
+[function.interface_draw_bitmap_modulated]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/UiPass.swift"
+note = "drawn by the Metal renderer"
+
+[function.interface_draw_bitmap_modulated_p32]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/UiPass.swift"
+note = "drawn by the Metal renderer"
+
+[function.interface_get_rgb_color]
+class = "missing"
+note = "not reached from a root of the game; the interface track owns it"
+
 [function.interior_rectangle2d]
 class = "native"
 primitive = "min"
@@ -3887,6 +4714,14 @@ stands_in = "import/src/level.rs"
 [function.intersect_rectangles2d]
 class = "native"
 primitive = "min"
+
+[function.is_bored]
+class = "missing"
+note = "not reached from a root of the game; the cameras track owns it"
+
+[function.is_still_bored]
+class = "missing"
+note = "not reached from a root of the game; the cameras track owns it"
 
 [function.is_valid_ebp]
 class = "replaced"
@@ -3902,6 +4737,12 @@ stands_in = "app/Sources/OpenCEEngineKit/PlayControls.swift"
 class = "replaced"
 because = "keyboard_mouse"
 stands_in = "app/Sources/OpenCEEngineKit/PlayControls.swift"
+
+[function.king_client_score_sounds]
+class = "replaced"
+because = "network"
+stands_in = "net/src/snapshot.rs"
+note = "the original's network state and prediction; the engine sends snapshots"
 
 [function.leaf_face_get_vertex3d]
 class = "replaced"
@@ -3978,6 +4819,12 @@ class = "replaced"
 because = "imported"
 stands_in = "import/src/level.rs"
 
+[function.lightning_render]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/UiPass.swift"
+note = "drawn by the Metal renderer"
+
 [function.limit_pitch]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
@@ -4006,6 +4853,10 @@ owed = "the engine's own tests (ffi/src/particles/contrails.rs); no check agains
 class = "matched"
 engine = "ffi/src/particles/contrails.rs"
 owed = "the engine's own tests (ffi/src/particles/contrails.rs); no check against the original yet"
+
+[function.local_time_get_elapsed]
+class = "missing"
+note = "not reached from a root of the game; the game loop track owns it"
 
 [function.location_potentially_audible]
 class = "matched"
@@ -4178,6 +5029,18 @@ owed = "the engine's own version; no check against the original yet"
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
 
+[function.main_movie_start]
+class = "replaced"
+because = "bink"
+stands_in = "ui/src/loading.rs"
+note = "no Bink movies; the loading screen stands in"
+
+[function.main_taking_screenshot]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+note = "a debug check, statistic or editor hook of the original; the dev tools stand in"
+
 [function.make_crc_table]
 class = "replaced"
 because = "imported"
@@ -4187,6 +5050,10 @@ stands_in = "import/src/lib.rs"
 class = "replaced"
 because = "imported"
 stands_in = "import/src/level.rs"
+
+[function.map_name_from_multiplayer_scenario_description_item]
+class = "missing"
+note = "not reached from a root of the game; the game loop track owns it"
 
 [function.match_game_type]
 class = "matched"
@@ -4465,6 +5332,28 @@ owed = "the engine's own tests (sim/src/hud.rs); no check against the original y
 class = "matched"
 owed = "the motion sensor; reads the object, tag and map world, which the fake worlds do not hold; sim/tests/hud.rs"
 
+[function.multiplayer_scenario_description_get_list]
+class = "missing"
+note = "not reached from a root of the game; the game loop track owns it"
+
+[function.network_player_attach_unit]
+class = "replaced"
+because = "network"
+stands_in = "net/src/snapshot.rs"
+note = "the original's network state and prediction; the engine sends snapshots"
+
+[function.network_player_detach_unit]
+class = "replaced"
+because = "network"
+stands_in = "net/src/snapshot.rs"
+note = "the original's network state and prediction; the engine sends snapshots"
+
+[function.network_player_show_pickup]
+class = "replaced"
+because = "network"
+stands_in = "net/src/snapshot.rs"
+note = "the original's network state and prediction; the engine sends snapshots"
+
 [function.new_particle_is_visible]
 class = "matched"
 engine = "ffi/src/particles.rs"
@@ -4640,6 +5529,10 @@ class = "matched"
 engine = "campaign/src/objects.rs"
 owed = "the engine's own tests (campaign/src/objects.rs); no check against the original yet"
 
+[function.object_names_postprocess]
+class = "missing"
+note = "not reached from a root of the game; the units track owns it"
+
 [function.object_new]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
@@ -4721,10 +5614,18 @@ engine = "physics/src/lib.rs"
 leaves_out = ["the original's collision BSP walk: Jolt answers the query on a mesh made from the collision BSP, so what is hit at an edge, and in what order, can differ"]
 owed = "the engine's own tests (physics/tests/world.rs); no check against the original yet"
 
+[function.object_type_get_datum_size]
+class = "missing"
+note = "not reached from a root of the game; the units track owns it"
+
 [function.object_type_render_debug]
 class = "replaced"
 because = "tools"
 stands_in = "dev/src/draw.rs"
+
+[function.object_type_synchronize]
+class = "missing"
+note = "not reached from a root of the game; the units track owns it"
 
 [function.object_types_disconnect_from_structure_bsp]
 class = "matched"
@@ -4742,6 +5643,12 @@ owed = "placement; reads the object, tag and map world, which the fake worlds do
 class = "matched"
 engine = "sim/src/objects.rs"
 owed = "the engine's own tests (sim/src/objects.rs); no check against the original yet"
+
+[function.objects_paparazzi]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+note = "a debug check, statistic or editor hook of the original; the dev tools stand in"
 
 [function.objects_place]
 class = "matched"
@@ -4770,6 +5677,10 @@ engine = "campaign/src/objects.rs"
 leaves_out = ["the frames asked for: the scale is taken at once"]
 owed = "the engine's own tests (campaign/src/objects.rs); no check against the original yet"
 
+[function.observer_command_has_finished]
+class = "missing"
+note = "not reached from a root of the game; the cameras track owns it"
+
 [function.observer_up_from_forward]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
@@ -4784,9 +5695,33 @@ owed = "the engine's own version; no check against the original yet"
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
 
+[function.oddball_client_score_sounds]
+class = "replaced"
+because = "network"
+stands_in = "net/src/snapshot.rs"
+note = "the original's network state and prediction; the engine sends snapshots"
+
 [function.offset_point2d]
 class = "native"
 primitive = "min"
+
+[function.overhead_map_dispose_from_old_map]
+class = "missing"
+note = "not reached from a root of the game; the interface track owns it"
+
+[function.overhead_map_initialize]
+class = "missing"
+note = "not reached from a root of the game; the interface track owns it"
+
+[function.overhead_map_initialize_for_new_map]
+class = "missing"
+note = "not reached from a root of the game; the interface track owns it"
+
+[function.overhead_map_post_rasterize]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/UiPass.swift"
+note = "drawn by the Metal renderer"
 
 [function.overlay_animation_apply_continuous_scaled]
 class = "matched"
@@ -4935,6 +5870,10 @@ class = "matched"
 engine = "ffi/src/particles.rs"
 owed = "the engine's own tests (ffi/src/particles.rs); no check against the original yet"
 
+[function.permute]
+class = "missing"
+note = "not reached from a root of the game; the animation and world track owns it"
+
 [function.perpendicular2d]
 class = "native"
 primitive = "glam::Vec2"
@@ -5050,6 +5989,22 @@ class = "matched"
 engine = "sim/src/vehicle.rs"
 owed = "the engine's own tests (sim/src/vehicle.rs); no check against the original yet"
 
+[function.pill_intersects_rectangle2d]
+class = "missing"
+note = "not reached from a root of the game; the animation and world track owns it"
+
+[function.pill_intersects_rectangle3d]
+class = "missing"
+note = "not reached from a root of the game; the animation and world track owns it"
+
+[function.pill_intersects_triangle2d]
+class = "missing"
+note = "not reached from a root of the game; the animation and world track owns it"
+
+[function.pill_intersects_triangle3d]
+class = "missing"
+note = "not reached from a root of the game; the animation and world track owns it"
+
 [function.pin_fraction]
 class = "matched"
 engine = "sim/src/vehicle.rs"
@@ -5082,6 +6037,18 @@ engine = "campaign/src/game.rs"
 leaves_out = ["the player's profile: it answers a constant, the mouse's own setting standing in"]
 owed = "the engine's own tests (campaign/src/game.rs); no check against the original yet"
 
+[function.player_control_dispose_from_old_map]
+class = "missing"
+note = "not reached from a root of the game; the game loop track owns it"
+
+[function.player_control_get_aiming_unit_index]
+class = "missing"
+note = "not reached from a root of the game; the game loop track owns it"
+
+[function.player_control_get_desired_weapon]
+class = "missing"
+note = "not reached from a root of the game; the game loop track owns it"
+
 [function.player_control_update]
 class = "matched"
 engine = "sim/src/player.rs"
@@ -5109,6 +6076,20 @@ engine = "sim/src/lib.rs"
 leaves_out = ["the network's player slots", "the player's profile and colours"]
 owed = "the engine's own version; no check against the original yet"
 
+[function.player_new_queue]
+class = "replaced"
+because = "network"
+stands_in = "net/src/snapshot.rs"
+note = "the original's network state and prediction; the engine sends snapshots"
+
+[function.player_profile_get_argb_color]
+class = "missing"
+note = "not reached from a root of the game; the game loop track owns it"
+
+[function.player_profile_get_from_path]
+class = "missing"
+note = "not reached from a root of the game; the game loop track owns it"
+
 [function.player_spawn]
 class = "partial"
 engine = "sim/src/lib.rs"
@@ -5130,9 +6111,57 @@ engine = "sim/src/lib.rs"
 leaves_out = ["the network's prediction", "the players' respawn timers"]
 owed = "the engine's own version; no check against the original yet"
 
+[function.playlist_profile_get_display_name]
+class = "missing"
+note = "not reached from a root of the game; the game loop track owns it"
+
+[function.playlist_profile_get_from_path]
+class = "missing"
+note = "not reached from a root of the game; the game loop track owns it"
+
+[function.playlist_profile_save]
+class = "missing"
+note = "not reached from a root of the game; the game loop track owns it"
+
 [function.point2d_in_rectangle2d]
 class = "native"
 primitive = "min"
+
+[function.point_from_parametric_line]
+class = "missing"
+note = "not reached from a root of the game; the units track owns it"
+
+[function.point_in_cone2d]
+class = "missing"
+note = "not reached from a root of the game; the animation and world track owns it"
+
+[function.point_in_cone3d]
+class = "missing"
+note = "not reached from a root of the game; the animation and world track owns it"
+
+[function.point_in_pill2d]
+class = "missing"
+note = "not reached from a root of the game; the animation and world track owns it"
+
+[function.point_in_rectangle2d]
+class = "missing"
+note = "not reached from a root of the game; the animation and world track owns it"
+
+[function.point_in_rectangle3d]
+class = "missing"
+note = "not reached from a root of the game; the animation and world track owns it"
+
+[function.point_in_sector2d]
+class = "missing"
+note = "not reached from a root of the game; the animation and world track owns it"
+
+[function.point_in_sector3d]
+class = "missing"
+note = "not reached from a root of the game; the animation and world track owns it"
+
+[function.point_in_triangle2d]
+class = "missing"
+note = "not reached from a root of the game; the animation and world track owns it"
 
 [function.point_physics_definition_get_mass]
 class = "matched"
@@ -5355,6 +6384,18 @@ class = "replaced"
 because = "tools"
 stands_in = "dev/src/logbook.rs"
 
+[function.progress_bar_enable]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/UiPass.swift"
+note = "drawn by the Metal renderer"
+
+[function.progress_bar_is_stuff_ready]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/UiPass.swift"
+note = "drawn by the Metal renderer"
+
 [function.progress_bar_render]
 class = "partial"
 engine = "ui/src/loading.rs"
@@ -5404,6 +6445,10 @@ class = "matched"
 engine = "sim/src/projectile.rs"
 owed = "the engine's own tests (sim/src/projectile.rs); no check against the original yet"
 
+[function.projectile_make_tracer]
+class = "missing"
+note = "not reached from a root of the game; the units track owns it"
+
 [function.projectile_new]
 class = "matched"
 engine = "sim/src/projectile.rs"
@@ -5443,6 +6488,14 @@ engine = "sim/src/vehicle_animation.rs"
 owed = "the engine's own tests (sim/tests/vehicle_traces.rs); no check against the original yet"
 note = "only from 0 to 1, where the original's step down to the byte below the value is the floor of value * 255"
 
+[function.quantize_real_to_byte_rectangle3d]
+class = "missing"
+note = "not reached from a root of the game; the animation and world track owns it"
+
+[function.quantize_real_to_byte_upper_bound]
+class = "missing"
+note = "not reached from a root of the game; the animation and world track owns it"
+
 [function.quaternion_compress_6byte]
 class = "replaced"
 because = "imported"
@@ -5454,6 +6507,10 @@ class = "replaced"
 because = "imported"
 stands_in = "import/src/object.rs"
 note = "the tool's, when it builds an animation: nothing in the game calls it, and the importer reads what it made"
+
+[function.quaternion_decompress_6byte_renormalized]
+class = "missing"
+note = "not reached from a root of the game; the animation and world track owns it"
 
 [function.quaternion_from_angle_and_vector]
 class = "native"
@@ -5530,11 +6587,33 @@ class = "replaced"
 because = "tools"
 stands_in = "import/src/lib.rs"
 
+[function.recorded_animation_byteswap_unit_control]
+class = "replaced"
+because = "imported"
+stands_in = "import/src/lib.rs"
+note = "byte order is settled when the map is imported"
+
+[function.recorded_animation_initialize_event_stream_with_size]
+class = "missing"
+note = "not reached from a root of the game; the cameras track owns it"
+
 [function.recorded_animation_play_internal]
 class = "partial"
 engine = "campaign/src/units.rs"
 leaves_out = ["the recording's version checks", "the units in vehicles"]
 owed = "the engine's own version; no check against the original yet"
+
+[function.recorded_animation_verify]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+note = "a debug check, statistic or editor hook of the original; the dev tools stand in"
+
+[function.recorded_animation_write_unit_control]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+note = "a debug check, statistic or editor hook of the original; the dev tools stand in"
 
 [function.rectangle2d_height]
 class = "native"
@@ -5544,9 +6623,21 @@ primitive = "min"
 class = "native"
 primitive = "min"
 
+[function.reference_list_copy]
+class = "missing"
+note = "not reached from a root of the game; the animation and world track owns it"
+
+[function.reference_list_remove]
+class = "missing"
+note = "not reached from a root of the game; the animation and world track owns it"
+
 [function.reflect_vector3d]
 class = "native"
 primitive = "glam::Vec3"
+
+[function.refract_vector3d]
+class = "missing"
+note = "not reached from a root of the game; the animation and world track owns it"
 
 [function.refresh_listener]
 class = "matched"
@@ -5802,6 +6893,10 @@ class = "replaced"
 because = "imported"
 stands_in = "import/src/lib.rs"
 
+[function.scenario_get_water_current]
+class = "missing"
+note = "not reached from a root of the game; the game loop track owns it"
+
 [function.scenario_get_wind]
 class = "matched"
 engine = "ffi/src/particles/wind.rs"
@@ -5856,6 +6951,10 @@ class = "replaced"
 because = "imported"
 stands_in = "import/src/lib.rs"
 
+[function.scenario_test_pas]
+class = "missing"
+note = "not reached from a root of the game; the game loop track owns it"
+
 [function.scenario_trigger_volume_test_object]
 class = "matched"
 engine = "campaign/src/objects.rs"
@@ -5904,6 +7003,14 @@ class = "matched"
 engine = "campaign/src/cinematic.rs"
 owed = "the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet"
 
+[function.scripted_camera_next_camera_point]
+class = "missing"
+note = "not reached from a root of the game; the cameras track owns it"
+
+[function.scripted_camera_object_relative_to]
+class = "missing"
+note = "not reached from a root of the game; the cameras track owns it"
+
 [function.scripted_camera_set]
 class = "matched"
 engine = "campaign/src/cinematic.rs"
@@ -5913,6 +7020,10 @@ owed = "the engine's own tests (campaign/tests/cutscenes.rs); no check against t
 class = "matched"
 engine = "campaign/src/cinematic.rs"
 owed = "the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet"
+
+[function.scripted_camera_set_camera_point_absolute]
+class = "missing"
+note = "not reached from a root of the game; the cameras track owns it"
 
 [function.scripted_camera_set_camera_point_relative]
 class = "matched"
@@ -6072,6 +7183,10 @@ owed = "the engine's own tests (ui/tests/tree.rs); no check against the original
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
 
+[function.seed_random_orientation]
+class = "missing"
+note = "not reached from a root of the game; the animation and world track owns it"
+
 [function.send_bits]
 class = "replaced"
 because = "imported"
@@ -6090,6 +7205,10 @@ primitive = "min"
 class = "native"
 primitive = "glam::Vec3"
 
+[function.set_ui_plasma_effect_color]
+class = "missing"
+note = "not reached from a root of the game; the interface track owns it"
+
 [function.setcompressionlevel]
 class = "replaced"
 because = "imported"
@@ -6099,6 +7218,16 @@ stands_in = "import/src/lib.rs"
 class = "replaced"
 because = "imported"
 stands_in = "import/src/lib.rs"
+
+[function.shell_application_pause]
+class = "missing"
+note = "not reached from a root of the game; the game loop track owns it"
+
+[function.shell_running_import_tool]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+note = "a debug check, statistic or editor hook of the original; the dev tools stand in"
 
 [function.shortsort_2byte]
 class = "native"
@@ -6266,6 +7395,10 @@ class = "matched"
 engine = "audio/src/mixer.rs"
 owed = "the engine's own tests (audio/src/mixer.rs); no check against the original yet"
 
+[function.sound_stop_impulse_by_source_and_definition]
+class = "missing"
+note = "not reached from a root of the game; the scripts and sounds track owns it"
+
 [function.sound_travel_milliseconds]
 class = "matched"
 engine = "audio/src/mixer.rs"
@@ -6280,6 +7413,18 @@ owed = "the engine's own tests (audio/src/player.rs); no check against the origi
 class = "matched"
 engine = "audio/src/player.rs"
 owed = "the engine's own tests (audio/src/player.rs); no check against the original yet"
+
+[function.sphere_intersects_rectangle3d]
+class = "missing"
+note = "not reached from a root of the game; the animation and world track owns it"
+
+[function.sphere_intersects_sector3d]
+class = "missing"
+note = "not reached from a root of the game; the animation and world track owns it"
+
+[function.sphere_intersects_triangle3d]
+class = "missing"
+note = "not reached from a root of the game; the animation and world track owns it"
 
 [function.spinner_list_update]
 class = "matched"
@@ -6381,6 +7526,14 @@ primitive = "Vec"
 [function.static_array_resize]
 class = "native"
 primitive = "Vec"
+
+[function.static_camera_new]
+class = "missing"
+note = "not reached from a root of the game; the cameras track owns it"
+
+[function.static_camera_update]
+class = "missing"
+note = "not reached from a root of the game; the cameras track owns it"
 
 [function.string_has_prefix]
 class = "replaced"
@@ -6745,6 +7898,10 @@ class = "replaced"
 because = "tools"
 stands_in = "app/Sources/OpenCEEngineKit/Shell/ShellOverlay.swift"
 
+[function.text_pick_draw_character]
+class = "missing"
+note = "not reached from a root of the game; the interface track owns it"
+
 [function.texture_page_delete]
 class = "replaced"
 because = "renderer"
@@ -6810,6 +7967,12 @@ class = "replaced"
 because = "renderer"
 stands_in = "app/Sources/OpenCEEngineRender/LoadedLevel.swift"
 
+[function.tgaLoad]
+class = "replaced"
+because = "renderer"
+stands_in = "app/Sources/OpenCEEngineRender/UiPass.swift"
+note = "drawn by the Metal renderer"
+
 [function.tiff_export]
 class = "replaced"
 because = "tools"
@@ -6854,6 +8017,58 @@ owed = "the engine's own tests (sim/src/projectile.rs); no check against the ori
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
 
+[function.uasctime]
+class = "native"
+primitive = "String"
+
+[function.uatoi]
+class = "native"
+primitive = "String"
+
+[function.uctime]
+class = "native"
+primitive = "String"
+
+[function.ufclose]
+class = "native"
+primitive = "String"
+
+[function.ufdopen]
+class = "native"
+primitive = "String"
+
+[function.ufgetc]
+class = "native"
+primitive = "String"
+
+[function.ufgets]
+class = "native"
+primitive = "String"
+
+[function.ufopen]
+class = "native"
+primitive = "String"
+
+[function.ufprintf]
+class = "native"
+primitive = "String"
+
+[function.ufputc]
+class = "native"
+primitive = "String"
+
+[function.ufputs]
+class = "native"
+primitive = "String"
+
+[function.ufreopen]
+class = "native"
+primitive = "String"
+
+[function.ugets]
+class = "native"
+primitive = "String"
+
 [function.ui_debug_draw_mark]
 class = "replaced"
 because = "tools"
@@ -6888,6 +8103,10 @@ stands_in = "dev/src/draw.rs"
 class = "replaced"
 because = "tools"
 stands_in = "dev/src/draw.rs"
+
+[function.ui_load_tags_for_scenario]
+class = "missing"
+note = "not reached from a root of the game; the interface track owns it"
 
 [function.ui_mouse_child_index]
 class = "replaced"
@@ -7078,6 +8297,70 @@ class = "replaced"
 because = "keyboard_mouse"
 stands_in = "ui/src/pointer.rs"
 
+[function.uisalnum]
+class = "native"
+primitive = "String"
+
+[function.uisalpha]
+class = "native"
+primitive = "String"
+
+[function.uiscntrl]
+class = "native"
+primitive = "String"
+
+[function.uisdigit]
+class = "native"
+primitive = "String"
+
+[function.uisgraph]
+class = "native"
+primitive = "String"
+
+[function.uislower]
+class = "native"
+primitive = "String"
+
+[function.uisprint]
+class = "native"
+primitive = "String"
+
+[function.uispunct]
+class = "native"
+primitive = "String"
+
+[function.uisspace]
+class = "native"
+primitive = "String"
+
+[function.uisupper]
+class = "native"
+primitive = "String"
+
+[function.uisxdigit]
+class = "native"
+primitive = "String"
+
+[function.umemchr]
+class = "native"
+primitive = "String"
+
+[function.umemcmp]
+class = "native"
+primitive = "String"
+
+[function.umemcpy]
+class = "native"
+primitive = "String"
+
+[function.umemmove]
+class = "native"
+primitive = "String"
+
+[function.umemset]
+class = "native"
+primitive = "String"
+
 [function.unattached_impulse_sound_new]
 class = "matched"
 engine = "ffi/src/sound_events.rs"
@@ -7178,6 +8461,18 @@ owed = "the engine's own tests (campaign/src/units.rs); no check against the ori
 class = "matched"
 owed = "seats; reads the object, tag and map world, which the fake worlds do not hold (the seat's marker)"
 
+[function.unit_gunned_by_ai]
+class = "missing"
+note = "not reached from a root of the game; the units track owns it"
+
+[function.unit_hud_shield_meter_mapper_init]
+class = "missing"
+note = "not reached from a root of the game; the interface track owns it"
+
+[function.unit_impulse]
+class = "missing"
+note = "not reached from a root of the game; the units track owns it"
+
 [function.unit_kill]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
@@ -7185,6 +8480,24 @@ owed = "the engine cites it, with no check against the original yet"
 [function.unit_melee_sound]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
+
+[function.unit_network_add_weapon]
+class = "replaced"
+because = "network"
+stands_in = "net/src/snapshot.rs"
+note = "the original's network state and prediction; the engine sends snapshots"
+
+[function.unit_network_drop_weapon]
+class = "replaced"
+because = "network"
+stands_in = "net/src/snapshot.rs"
+note = "the original's network state and prediction; the engine sends snapshots"
+
+[function.unit_network_forget_weapon]
+class = "replaced"
+because = "network"
+stands_in = "net/src/snapshot.rs"
+note = "the original's network state and prediction; the engine sends snapshots"
 
 [function.unit_new]
 class = "partial"
@@ -7302,6 +8615,18 @@ owed = "the engine's own tests (campaign/src/lib.rs); no check against the origi
 class = "matched"
 owed = "checked through the animation trace's labels"
 
+[function.unit_set_seat]
+class = "missing"
+note = "not reached from a root of the game; the units track owns it"
+
+[function.unit_set_user_animation]
+class = "missing"
+note = "not reached from a root of the game; the units track owns it"
+
+[function.unit_shield_sapping_update]
+class = "missing"
+note = "not reached from a root of the game; the units track owns it"
+
 [function.unit_solo_player_integrated_night_vision_is_active]
 class = "matched"
 engine = "campaign/src/units.rs"
@@ -7310,6 +8635,10 @@ owed = "the engine's own tests (campaign/src/units.rs); no check against the ori
 [function.unit_start_animation_impulse]
 class = "matched"
 owed = "AI's impulses; reads the object, tag and map world, which the fake worlds do not hold (the animation graph)"
+
+[function.unit_start_flaming_to_death]
+class = "missing"
+note = "not reached from a root of the game; the units track owns it"
 
 [function.unit_stop_custom_animation]
 class = "matched"
@@ -7403,6 +8732,30 @@ class = "matched"
 engine = "audio/src/mixer.rs"
 owed = "the engine's own tests (audio/src/mixer.rs); no check against the original yet"
 
+[function.update_client_delete]
+class = "replaced"
+because = "network"
+stands_in = "net/src/snapshot.rs"
+note = "the original's network state and prediction; the engine sends snapshots"
+
+[function.update_client_distributed_input]
+class = "replaced"
+because = "network"
+stands_in = "net/src/snapshot.rs"
+note = "the original's network state and prediction; the engine sends snapshots"
+
+[function.update_client_get_maximum_actions]
+class = "replaced"
+because = "network"
+stands_in = "net/src/snapshot.rs"
+note = "the original's network state and prediction; the engine sends snapshots"
+
+[function.update_client_handle_relayed_action]
+class = "replaced"
+because = "network"
+stands_in = "net/src/snapshot.rs"
+note = "the original's network state and prediction; the engine sends snapshots"
+
 [function.update_human_boat_physics]
 class = "matched"
 engine = "sim/src/vehicle.rs"
@@ -7428,9 +8781,163 @@ class = "matched"
 engine = "ffi/src/sound_world.rs"
 owed = "the engine's own tests (ffi/src/sound_world.rs); no check against the original yet"
 
+[function.update_server_handle_distributed_input]
+class = "replaced"
+because = "network"
+stands_in = "net/src/snapshot.rs"
+note = "the original's network state and prediction; the engine sends snapshots"
+
+[function.update_server_ticked_update_number]
+class = "replaced"
+because = "network"
+stands_in = "net/src/snapshot.rs"
+note = "the original's network state and prediction; the engine sends snapshots"
+
+[function.update_server_update_actions]
+class = "replaced"
+because = "network"
+stands_in = "net/src/snapshot.rs"
+note = "the original's network state and prediction; the engine sends snapshots"
+
 [function.update_suspension]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
+
+[function.uperror]
+class = "native"
+primitive = "String"
+
+[function.upopen]
+class = "native"
+primitive = "String"
+
+[function.uprintf]
+class = "native"
+primitive = "String"
+
+[function.uputs]
+class = "native"
+primitive = "String"
+
+[function.uremove]
+class = "native"
+primitive = "String"
+
+[function.ustrcasecmp]
+class = "native"
+primitive = "String"
+
+[function.ustrcat]
+class = "native"
+primitive = "String"
+
+[function.ustrchr]
+class = "native"
+primitive = "String"
+
+[function.ustrcoll]
+class = "native"
+primitive = "String"
+
+[function.ustrcspn]
+class = "native"
+primitive = "String"
+
+[function.ustrerror]
+class = "native"
+primitive = "String"
+
+[function.ustrlwr]
+class = "native"
+primitive = "String"
+
+[function.ustrncasecmp]
+class = "native"
+primitive = "String"
+
+[function.ustrncat]
+class = "native"
+primitive = "String"
+
+[function.ustrnlen]
+class = "native"
+primitive = "String"
+
+[function.ustrnlwr]
+class = "native"
+primitive = "String"
+
+[function.ustrnupr]
+class = "native"
+primitive = "String"
+
+[function.ustrpbrk]
+class = "native"
+primitive = "String"
+
+[function.ustrrchr]
+class = "native"
+primitive = "String"
+
+[function.ustrspn]
+class = "native"
+primitive = "String"
+
+[function.ustrtod]
+class = "native"
+primitive = "String"
+
+[function.ustrtok]
+class = "native"
+primitive = "String"
+
+[function.ustrtol]
+class = "native"
+primitive = "String"
+
+[function.ustrtoul]
+class = "native"
+primitive = "String"
+
+[function.ustrupr]
+class = "native"
+primitive = "String"
+
+[function.ustrxfrm]
+class = "native"
+primitive = "String"
+
+[function.utmpnam]
+class = "native"
+primitive = "String"
+
+[function.utolower]
+class = "native"
+primitive = "String"
+
+[function.utoupper]
+class = "native"
+primitive = "String"
+
+[function.uungetc]
+class = "native"
+primitive = "String"
+
+[function.uvfprintf]
+class = "native"
+primitive = "String"
+
+[function.uvprintf]
+class = "native"
+primitive = "String"
+
+[function.uvsnprintf]
+class = "native"
+primitive = "String"
+
+[function.uvsprintf]
+class = "native"
+primitive = "String"
 
 [function.valid_real_rgb_color]
 class = "replaced"
@@ -7452,6 +8959,26 @@ owed = "the engine cites it, with no check against the original yet"
 [function.vector_from_matrices4x3]
 class = "native"
 primitive = "glam::Affine3A"
+
+[function.vector_intersects_pill2d]
+class = "missing"
+note = "not reached from a root of the game; the animation and world track owns it"
+
+[function.vector_intersects_rectangle2d]
+class = "missing"
+note = "not reached from a root of the game; the animation and world track owns it"
+
+[function.vector_intersects_rectangle3d]
+class = "missing"
+note = "not reached from a root of the game; the animation and world track owns it"
+
+[function.vector_intersects_triangle2d]
+class = "missing"
+note = "not reached from a root of the game; the animation and world track owns it"
+
+[function.vector_intersects_triangle3d]
+class = "missing"
+note = "not reached from a root of the game; the animation and world track owns it"
 
 [function.vector_to_line_distance_squared3d]
 class = "native"
@@ -7481,6 +9008,10 @@ primitive = "std::collections::BTreeMap"
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
 
+[function.vehicle_build_update]
+class = "missing"
+note = "not reached from a root of the game; the units track owns it"
+
 [function.vehicle_causes_collision_damage]
 class = "matched"
 engine = "sim/src/damage.rs"
@@ -7499,6 +9030,10 @@ owed = "vehicles; reads the object, tag and map world, which the fake worlds do 
 [function.vehicle_new]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
+
+[function.vehicle_parse_update]
+class = "missing"
+note = "not reached from a root of the game; the units track owns it"
 
 [function.vehicle_preprocess_node_orientations]
 class = "matched"
@@ -7523,6 +9058,12 @@ owed = "the engine's own tests (campaign/src/units.rs); no check against the ori
 class = "matched"
 engine = "sim/src/vehicle.rs"
 owed = "the engine's own tests (sim/src/vehicle.rs); no check against the original yet"
+
+[function.verify_item_location]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+note = "a debug check, statistic or editor hook of the original; the dev tools stand in"
 
 [function.verify_lra_cache]
 class = "native"
@@ -7678,6 +9219,10 @@ class = "replaced"
 because = "tools"
 stands_in = "dev/src/logbook.rs"
 
+[function.weapon_compute_movement_penalty]
+class = "missing"
+note = "not reached from a root of the game; the units track owns it"
+
 [function.weapon_effect_new]
 class = "matched"
 owed = "weapons; reads the object, tag and map world, which the fake worlds do not hold; Phase 12's effects"
@@ -7693,6 +9238,10 @@ owed = "weapons; reads the object, tag and map world, which the fake worlds do n
 [function.weapon_magazine_start_reload]
 class = "matched"
 owed = "weapons; reads the object, tag and map world, which the fake worlds do not hold (the weapon tag)"
+
+[function.weapon_melee_attack]
+class = "missing"
+note = "not reached from a root of the game; the units track owns it"
 
 [function.weapon_new]
 class = "matched"
@@ -7731,6 +9280,10 @@ owed = "weapons; reads the object, tag and map world, which the fake worlds do n
 [function.weapon_update]
 class = "matched"
 owed = "the engine cites it, with no check against the original yet"
+
+[function.weapon_useful]
+class = "missing"
+note = "not reached from a root of the game; the units track owns it"
 
 [function.weather_particle_system_box_offset_from_point3d]
 class = "matched"

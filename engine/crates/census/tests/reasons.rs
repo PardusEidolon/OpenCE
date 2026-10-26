@@ -97,3 +97,44 @@ fn the_console_and_the_debug_functions_are_the_tools() -> Result<(), Failure> {
     assert!(left.is_empty(), "{left:#?}");
     Ok(())
 }
+
+/// The tracks that own what is left Missing, as a note names them.
+const OWNERS: &[&str] = &[
+    "the AI track",
+    "the units track",
+    "the game loop track",
+    "the animation and world track",
+    "the interface track",
+    "the cameras track",
+    "the scripts and sounds track",
+    "the gate track",
+];
+
+#[test]
+fn every_unreached_missing_function_names_the_track_that_owns_it() -> Result<(), Failure> {
+    let Some(root) = common::repository() else {
+        eprintln!("skipped: no source/");
+        return Ok(());
+    };
+    let census = Census::read(&root)?;
+    let unowned: Vec<String> = census
+        .functions
+        .iter()
+        .filter(|f| f.class == Some(Class::Missing) && !f.reached)
+        .filter(|f| {
+            census
+                .manifest
+                .function
+                .get(&f.name)
+                .and_then(|entry| entry.note.as_deref())
+                .is_none_or(|note| !OWNERS.iter().any(|owner| note.contains(owner)))
+        })
+        .map(|f| format!("{} ({})", f.name, f.file))
+        .collect();
+    assert!(
+        unowned.is_empty(),
+        "{} unowned: {unowned:#?}",
+        unowned.len()
+    );
+    Ok(())
+}
