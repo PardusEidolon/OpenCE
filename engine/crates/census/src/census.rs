@@ -123,10 +123,12 @@ impl Census {
         for function in &self.original.functions {
             let (entry, mut from) = self.manifest.lookup(&function.name, &function.file);
             let traced_by = self.traced.get(&function.name).cloned();
-            // (a trace makes a function Ported, unless its own entry says
-            // otherwise)
+            // (a trace makes a function Ported, unless its own entry, or a
+            // rule over traces, says otherwise)
+            let over = entry.and_then(|e| e.over_traces) == Some(true);
             let class = match (from.clone(), &traced_by) {
                 (From::Entry, _) | (_, None) => entry.and_then(|e| e.class),
+                (From::Rule(_), Some(_)) if over => entry.and_then(|e| e.class),
                 (_, Some(_)) => {
                     from = From::Trace;
                     Some(Class::Ported)

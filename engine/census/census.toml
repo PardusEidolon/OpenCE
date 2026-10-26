@@ -218,6 +218,7 @@ stands_in = "app/Sources/OpenCEEngineRender/ShadowPass.swift"
 file = "physics/bsp2d.c"
 class = "replaced"
 because = "library"
+over_traces = true
 stands_in = "physics/src/lib.rs"
 lives_on = "the same floors, walls and line of sight: Jolt answers the queries (physics/src/lib.rs) on a mesh of the same collision BSP surfaces (physics/src/mesh.rs); the Partial entries of collision_fix_pill and the queries say where an edge can differ"
 
@@ -225,6 +226,7 @@ lives_on = "the same floors, walls and line of sight: Jolt answers the queries (
 file = "physics/bsp3d.c"
 class = "replaced"
 because = "library"
+over_traces = true
 stands_in = "physics/src/lib.rs"
 lives_on = "the same floors, walls and line of sight: Jolt answers the queries (physics/src/lib.rs) on a mesh of the same collision BSP surfaces (physics/src/mesh.rs); the Partial entries of collision_fix_pill and the queries say where an edge can differ"
 
@@ -232,6 +234,7 @@ lives_on = "the same floors, walls and line of sight: Jolt answers the queries (
 file = "physics/collision_bsp.c"
 class = "replaced"
 because = "library"
+over_traces = true
 stands_in = "physics/src/lib.rs"
 lives_on = "the same floors, walls and line of sight: Jolt answers the queries (physics/src/lib.rs) on a mesh of the same collision BSP surfaces (physics/src/mesh.rs); the Partial entries of collision_fix_pill and the queries say where an edge can differ"
 
@@ -1571,7 +1574,9 @@ stands_in = "app/Sources/OpenCEEngineRender/DecalPass.swift"
 
 [function.bsp3d_test_point]
 class = "matched"
-owed = "the engine cites it, with no check against the original yet"
+engine = "content/src/level.rs"
+check = "physics/tests/collision_reference.rs"
+against = "trace"
 
 [function.build_crc_table]
 class = "replaced"
@@ -2214,32 +2219,37 @@ owed = "the engine's own tests (physics/tests/world.rs); no check against the or
 [function.collision_get_features_in_sphere]
 class = "partial"
 engine = "physics/src/lib.rs"
-leaves_out = ["the original's collision BSP walk: Jolt answers the query on a mesh made from the collision BSP, so what is hit at an edge, and in what order, can differ"]
-owed = "the engine's own tests (physics/tests/world.rs); no check against the original yet"
+check = "physics/tests/collision_reference.rs"
+against = "trace"
+leaves_out = ["the original's collision BSP walk: Jolt answers the query on a mesh made from the collision BSP, so what is hit at an edge, and in what order, can differ", "which surfaces, edges and vertices are listed: the trace checks only whether a sphere touches"]
 
 [function.collision_model_test_pill]
 class = "partial"
 engine = "physics/src/lib.rs"
-leaves_out = ["the original's collision BSP walk: Jolt answers the query on a mesh made from the collision BSP, so what is hit at an edge, and in what order, can differ"]
-owed = "the engine's own tests (physics/tests/world.rs); no check against the original yet"
+check = "physics/tests/collision_reference.rs"
+against = "trace"
+leaves_out = ["the original's collision BSP walk: Jolt answers the query on a mesh made from the collision BSP, so what is hit at an edge, and in what order, can differ", "an object's model BSP: the trace walks a level's collision BSP, which is the same walk"]
 
 [function.collision_model_test_point]
 class = "partial"
 engine = "physics/src/lib.rs"
-leaves_out = ["the original's collision BSP walk: Jolt answers the query on a mesh made from the collision BSP, so what is hit at an edge, and in what order, can differ"]
-owed = "the engine's own tests (physics/tests/world.rs); no check against the original yet"
+check = "physics/tests/collision_reference.rs"
+against = "trace"
+leaves_out = ["the original's collision BSP walk: Jolt answers the query on a mesh made from the collision BSP, so what is hit at an edge, and in what order, can differ", "an object's model BSP: the trace walks a level's collision BSP, which is the same walk"]
 
 [function.collision_model_test_sphere]
 class = "partial"
 engine = "physics/src/lib.rs"
-leaves_out = ["the original's collision BSP walk: Jolt answers the query on a mesh made from the collision BSP, so what is hit at an edge, and in what order, can differ"]
-owed = "the engine's own tests (physics/tests/world.rs); no check against the original yet"
+check = "physics/tests/collision_reference.rs"
+against = "trace"
+leaves_out = ["the original's collision BSP walk: Jolt answers the query on a mesh made from the collision BSP, so what is hit at an edge, and in what order, can differ", "an object's model BSP: the trace walks a level's collision BSP, which is the same walk"]
 
 [function.collision_model_test_vector]
 class = "partial"
 engine = "physics/src/lib.rs"
-leaves_out = ["the original's collision BSP walk: Jolt answers the query on a mesh made from the collision BSP, so what is hit at an edge, and in what order, can differ"]
-owed = "the engine's own tests (physics/tests/world.rs); no check against the original yet"
+check = "physics/tests/collision_reference.rs"
+against = "trace"
+leaves_out = ["the original's collision BSP walk: Jolt answers the query on a mesh made from the collision BSP, so what is hit at an edge, and in what order, can differ", "an object's model BSP: the trace walks a level's collision BSP, which is the same walk"]
 
 [function.collision_move_pill]
 class = "partial"
@@ -2262,8 +2272,9 @@ owed = "the engine's own tests (physics/tests/world.rs); no check against the or
 [function.collision_test_pill]
 class = "partial"
 engine = "physics/src/lib.rs"
-leaves_out = ["the original's collision BSP walk: Jolt answers the query on a mesh made from the collision BSP, so what is hit at an edge, and in what order, can differ"]
-owed = "the engine's own tests (physics/tests/world.rs); no check against the original yet"
+check = "physics/tests/collision_reference.rs"
+against = "trace"
+leaves_out = ["the original's collision BSP walk: Jolt answers the query on a mesh made from the collision BSP, so what is hit at an edge, and in what order, can differ", "the original's pill_test_vector (collision_bsp.c) takes the negative of the half-b term, so its roots are for moving backward; the trace keeps the original's answers and the engine agrees away from edges, to be checked against the xbe"]
 
 [function.collision_test_pill_new]
 class = "missing"
@@ -2272,20 +2283,23 @@ note = "not reached from a root of the game; the animation and world track owns 
 [function.collision_test_point]
 class = "partial"
 engine = "physics/src/lib.rs"
+check = "physics/tests/collision_reference.rs"
+against = "trace"
 leaves_out = ["the original's collision BSP walk: Jolt answers the query on a mesh made from the collision BSP, so what is hit at an edge, and in what order, can differ"]
-owed = "the engine's own tests (physics/tests/world.rs); no check against the original yet"
 
 [function.collision_test_sphere]
 class = "partial"
 engine = "physics/src/lib.rs"
+check = "physics/tests/collision_reference.rs"
+against = "trace"
 leaves_out = ["the original's collision BSP walk: Jolt answers the query on a mesh made from the collision BSP, so what is hit at an edge, and in what order, can differ"]
-owed = "the engine's own tests (physics/tests/world.rs); no check against the original yet"
 
 [function.collision_test_vector]
 class = "partial"
 engine = "physics/src/lib.rs"
+check = "physics/tests/collision_reference.rs"
+against = "trace"
 leaves_out = ["the original's collision BSP walk: Jolt answers the query on a mesh made from the collision BSP, so what is hit at an edge, and in what order, can differ"]
-owed = "the engine's own tests (physics/tests/world.rs); no check against the original yet"
 
 [function.collision_test_vector_exit]
 class = "missing"
@@ -5956,10 +5970,10 @@ class = "matched"
 owed = "physics; Jolt stands for the original's collision; tools/engine_movement_traces.py"
 
 [function.physics_compute_new]
-class = "partial"
-engine = "physics/src/lib.rs"
-leaves_out = ["the original's rigid-body integrator: Jolt moves the dynamic bodies"]
-owed = "the engine's own tests (physics/tests/world.rs); no check against the original yet"
+class = "replaced"
+because = "library"
+stands_in = "physics/src/lib.rs"
+lives_on = "the same rigid bodies falling, rolling and coming to rest: Jolt integrates the dynamic bodies (physics/src/lib.rs) with the masses and shapes of the game's physics tags"
 
 [function.physics_compute_unit_collisions]
 class = "partial"
@@ -5976,38 +5990,41 @@ owed = "the engine's own tests (physics/tests/world.rs); no check against the or
 [function.physics_get_features_in_sphere]
 class = "partial"
 engine = "physics/src/lib.rs"
-leaves_out = ["the original's collision BSP walk: Jolt answers the query on a mesh made from the collision BSP, so what is hit at an edge, and in what order, can differ"]
-owed = "the engine's own tests (physics/tests/world.rs); no check against the original yet"
+check = "physics/tests/collision_reference.rs"
+against = "trace"
+leaves_out = ["the original's collision BSP walk: Jolt answers the query on a mesh made from the collision BSP, so what is hit at an edge, and in what order, can differ", "which surfaces, edges and vertices are listed: the trace checks only whether a sphere touches"]
 
 [function.physics_instance_new]
-class = "partial"
-engine = "physics/src/lib.rs"
-leaves_out = ["the original's rigid-body integrator: Jolt moves the dynamic bodies"]
-owed = "the engine's own tests (physics/tests/world.rs); no check against the original yet"
+class = "replaced"
+because = "library"
+stands_in = "physics/src/lib.rs"
+lives_on = "the same rigid bodies falling, rolling and coming to rest: Jolt integrates the dynamic bodies (physics/src/lib.rs) with the masses and shapes of the game's physics tags"
 
 [function.physics_test_point]
 class = "partial"
 engine = "physics/src/lib.rs"
+check = "physics/tests/collision_reference.rs"
+against = "trace"
 leaves_out = ["the original's collision BSP walk: Jolt answers the query on a mesh made from the collision BSP, so what is hit at an edge, and in what order, can differ"]
-owed = "the engine's own tests (physics/tests/world.rs); no check against the original yet"
 
 [function.physics_test_vector]
 class = "partial"
 engine = "physics/src/lib.rs"
+check = "physics/tests/collision_reference.rs"
+against = "trace"
 leaves_out = ["the original's collision BSP walk: Jolt answers the query on a mesh made from the collision BSP, so what is hit at an edge, and in what order, can differ"]
-owed = "the engine's own tests (physics/tests/world.rs); no check against the original yet"
 
 [function.physics_update]
-class = "partial"
-engine = "physics/src/lib.rs"
-leaves_out = ["the original's rigid-body integrator: Jolt moves the dynamic bodies"]
-owed = "the engine's own tests (physics/tests/world.rs); no check against the original yet"
+class = "replaced"
+because = "library"
+stands_in = "physics/src/lib.rs"
+lives_on = "the same rigid bodies falling, rolling and coming to rest: Jolt integrates the dynamic bodies (physics/src/lib.rs) with the masses and shapes of the game's physics tags"
 
 [function.physics_update_new]
-class = "partial"
-engine = "physics/src/lib.rs"
-leaves_out = ["the original's rigid-body integrator: Jolt moves the dynamic bodies"]
-owed = "the engine's own tests (physics/tests/world.rs); no check against the original yet"
+class = "replaced"
+because = "library"
+stands_in = "physics/src/lib.rs"
+lives_on = "the same rigid bodies falling, rolling and coming to rest: Jolt integrates the dynamic bodies (physics/src/lib.rs) with the masses and shapes of the game's physics tags"
 
 [function.physics_variable_position_get_seek_direction]
 class = "matched"

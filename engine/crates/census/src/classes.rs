@@ -174,6 +174,10 @@ pub struct Entry {
     /// still needs (the original's renderer drives its weather, decals and
     /// score screens).
     pub through_callers: Option<bool>,
+    /// Rules: `true` keeps the rule's class for the functions a reference
+    /// trace compiles only as the original's oracle, to check a library
+    /// against it (the collision BSP walk, which Jolt does).
+    pub over_traces: Option<bool>,
 }
 
 impl Entry {

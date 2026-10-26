@@ -10,10 +10,10 @@ input	1	0	0
 interface	452	19	113
 items	102	1	24
 main	91	1	1
-math	67	0	0
+math	66	0	0
 models	11	1	9
 objects	227	12	59
-physics	45	26	40
+physics	45	22	23
 rasterizer	0	0	2
 saved games	104	2	2
 scenario	21	0	6

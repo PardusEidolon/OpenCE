@@ -405,6 +405,28 @@ fn a_rule_can_keep_its_functions_from_their_replaced_callers() -> Result<(), Fai
 }
 
 #[test]
+fn a_rule_can_keep_its_class_over_an_oracles_trace() -> Result<(), Failure> {
+    // (a trace that compiles the original only to check a library against
+    // it does not make the original's functions Ported)
+    let rule = "\n[[rule]]\nfile = \"units/units.c\"\nprefix = \"unit_kill\"\n\
+                class = \"replaced\"\nbecause = \"renderer\"\n\
+                stands_in = \"app/Sources/Render/Frame.swift\"\n";
+    let kept = tree("oracle", &(GOOD.to_owned() + rule + "over_traces = true\n"));
+    let census = Census::read(kept.root())?;
+    let kill = census.function("unit_kill");
+    assert_eq!(kill.and_then(|f| f.class), Some(Class::Replaced));
+    assert!(census.problems().is_empty(), "{:#?}", census.problems());
+    // (without it, the trace wins over the rule)
+    let ported = tree("oracle-not", &(GOOD.to_owned() + rule));
+    let census = Census::read(ported.root())?;
+    assert_eq!(
+        census.function("unit_kill").and_then(|f| f.class),
+        Some(Class::Ported)
+    );
+    Ok(())
+}
+
+#[test]
 fn rules_are_chosen_by_how_specific_they_are() -> Result<(), Failure> {
     let manifest = Manifest::parse(
         "census.toml",
