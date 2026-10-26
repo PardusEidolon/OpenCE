@@ -31,9 +31,9 @@ manual check is at the end, with the report.
 - [x] Task: The docs ffd8b56d
   - [x] docs/census.md (every function, by system) and the summary table in docs/engine.md
   - [x] Staleness test
-- [ ] Task: Replaced by rule
-  - [ ] Directory rules for rasterizer, render, shaders, bink, bungie_net, networking, editor, tool and the Xbox-only files, each with its stand-in named
-  - [ ] Replaced through a caller, from reachability
+- [x] Task: Replaced by rule f28dc8db
+  - [x] Directory rules for rasterizer, render, shaders, bink, bungie_net, networking, editor, tool and the Xbox-only files, each with its stand-in named
+  - [x] Replaced through a caller, from reachability
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: The classes and their requirements' (Protocol in workflow.md) (automated; deferred to the end)
 
 ## Phase 3: The walk through the systems
