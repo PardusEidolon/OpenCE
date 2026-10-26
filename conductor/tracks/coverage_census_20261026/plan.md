@@ -46,7 +46,7 @@ entries list what they leave out.
 - [x] Task: Objects (objects, units, items, devices) 4e032e6a
 - [x] Task: Physics (physics) 862c7d77
 - [x] Task: Effects (effects) 6a05673b
-- [ ] Task: Sound (sound)
+- [x] Task: Sound (sound) 1396d63e
 - [ ] Task: Animation (models, first_person)
 - [ ] Task: Cameras and cutscenes (camera, cutscene)
 - [ ] Task: The interface, HUD, UI and input (interface, dialogs, text, strings, input)
