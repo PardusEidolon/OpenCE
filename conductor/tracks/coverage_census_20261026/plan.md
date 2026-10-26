@@ -47,7 +47,7 @@ entries list what they leave out.
 - [x] Task: Physics (physics) 862c7d77
 - [x] Task: Effects (effects) 6a05673b
 - [x] Task: Sound (sound) 1396d63e
-- [ ] Task: Animation (models, first_person)
+- [x] Task: Animation (models, first_person) 48220967
 - [ ] Task: Cameras and cutscenes (camera, cutscene)
 - [ ] Task: The interface, HUD, UI and input (interface, dialogs, text, strings, input)
 - [ ] Task: The world (scenario, structures, bitmaps, cache, tag_files)
