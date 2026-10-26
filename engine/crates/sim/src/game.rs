@@ -417,11 +417,9 @@ impl Rules {
             }
             self.step_flags(positions);
             self.check_score();
-            if let Some(limit) = self.variant.time_limit_ticks {
-                if self.ticks >= limit && !self.over {
-                    self.over = true;
-                    self.events.push(GameEvent::GameOver);
-                }
+            if !self.over && self.should_end() {
+                self.over = true;
+                self.events.push(GameEvent::GameOver);
             }
         }
         std::mem::take(&mut self.events)
@@ -544,6 +542,24 @@ impl Rules {
         self.flags
             .iter()
             .position(|flag| flag.state == FlagState::Carried(index))
+    }
+
+    /// Whether the game should end: fewer than two teams have a player
+    /// in it, or its time limit is up (`game_engine_should_end_game`).
+    /// A game of one player or none goes on. Every player counts as in
+    /// the game: the engine has no lives, no odd man out and no quitting
+    /// (`multiple_teams_alive`).
+    pub fn should_end(&self) -> bool {
+        let mut teams = self.contestants.iter().map(|contestant| contestant.team);
+        let multiple_teams = self.contestants.len() <= 1
+            || teams
+                .next()
+                .is_some_and(|first| teams.any(|team| team != first));
+        let time_up = self
+            .variant
+            .time_limit_ticks
+            .is_some_and(|limit| limit > 0 && self.ticks >= limit);
+        !multiple_teams || time_up
     }
 
     fn check_score(&mut self) {

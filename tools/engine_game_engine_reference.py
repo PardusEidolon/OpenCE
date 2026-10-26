@@ -196,7 +196,9 @@ static void play(long teams, long respawn_time, long growth, long suicide_penalt
 	printf("game %d %d %d %d %d\n", teams, respawn_time, growth, suicide_penalty, count);
 	for (index = 0; index < count; index++)
 	{
-		players[index].team_index = teams ? next_random(2) : index;
+		/* (the teams alternate, as game_engine_player_added gives them: one
+		team alone would end the game) */
+		players[index].team_index = teams ? index % 2 : index;
 		printf("join %d %d\n", index, players[index].team_index);
 	}
 	for (kill = 0; kill < kills; kill++)

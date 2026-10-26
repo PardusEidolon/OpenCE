@@ -3976,9 +3976,11 @@ stands_in = "net/src/snapshot.rs"
 note = "the original's network state and prediction; the engine sends snapshots"
 
 [function.game_engine_should_end_game]
-class = "matched"
+class = "partial"
 engine = "sim/src/game.rs"
-owed = "the engine's own tests (sim/tests/game.rs); no check against the original yet"
+leaves_out = ["lives", "the odd man out", "players who quit"]
+check = "sim/tests/game_end_reference.rs"
+against = "trace"
 
 [function.game_engine_slayer_read_network_state]
 class = "replaced"
