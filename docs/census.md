@@ -34,7 +34,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `rasterizer` | | 3 (2784 B) | | | 777 (182416 B) | | 2 |
 | `render` | 2 (592 B) | 2 (240 B) | | | 115 (37520 B) | | 0 |
 | `saved games` | | | | 2 (96 B) | 31 (3712 B) | 104 (21184 B) | 2 |
-| `scenario` | | 13 (4320 B) | | | 23 (3136 B) | 21 (2128 B) | 6 |
+| `scenario` | | 11 (4000 B) | | 2 (320 B) | 23 (3136 B) | 21 (2128 B) | 3 |
 | `shaders` | | | | | 21 (2624 B) | | 0 |
 | `shell` | | | | | 11 (528 B) | 2 (0 B) | 0 |
 | `sound` | 8 (1312 B) | 63 (15808 B) | | 2 (32 B) | 56 (2832 B) | 43 (6976 B) | 59 |
@@ -43,7 +43,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `text` | | 9 (1936 B) | 63 (6864 B) | | 19 (5744 B) | 21 (2368 B) | 9 |
 | `tool` | | | | | 27 (8752 B) | | 0 |
 | `units` | 9 (1856 B) | 67 (27888 B) | | 17 (17808 B) | 9 (1616 B) | 227 (58352 B) | 84 |
-| **all** | 151 (26432 B) | 577 (187536 B) | 332 (38896 B) | 120 (67088 B) | 2773 (575768 B) | 3674 (715402 B) | 613 |
+| **all** | 151 (26432 B) | 575 (187216 B) | 332 (38896 B) | 122 (67408 B) | 2773 (575768 B) | 3674 (715402 B) | 610 |
 
 ## `ai`
 
@@ -3489,7 +3489,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `rasterizer_frame_statistics_dispose` | rasterizer/rasterizer_frame_statistics.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
 | `uncompress_int8_to_real` | rasterizer/rasterizer_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
 | `uncompress_int16_to_real` | rasterizer/rasterizer_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
-| `uncompress_int32_to_real_vector3d` | rasterizer/rasterizer_geometry.c | Matched | import/src/level.rs:1818 | sim/tests/math_extra_reference.rs (trace) |
+| `uncompress_int32_to_real_vector3d` | rasterizer/rasterizer_geometry.c | Matched | import/src/level.rs:1878 | sim/tests/math_extra_reference.rs (trace) |
 | `rasterizer_geometry_get_vertex_size` | rasterizer/rasterizer_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
 | `rasterizer_geometry_byte_swap_vertices` | rasterizer/rasterizer_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
 | `rasterizer_geometry_uncompress_vertices` | rasterizer/rasterizer_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
@@ -3516,7 +3516,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `rasterizer_lights_end` | rasterizer/rasterizer_lights.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
 | `lens_flare_evaluate_corona_rotation_function` | rasterizer/rasterizer_lights.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
 | `rasterizer_lens_flare_submit` | rasterizer/rasterizer_lights.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
-| `rasterizer_lens_flare_submit_for_cluster` | rasterizer/rasterizer_lights.c | Matched | import/src/level.rs:1554 | owed: the engine cites it, with no check against the original yet |
+| `rasterizer_lens_flare_submit_for_cluster` | rasterizer/rasterizer_lights.c | Matched | import/src/level.rs:1614 | owed: the engine cites it, with no check against the original yet |
 | `rasterizer_lens_flares_submit_occlusion_tests` | rasterizer/rasterizer_lights.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
 | `rasterizer_lens_flares_draw` | rasterizer/rasterizer_lights.c | Matched | ffi/src/camera.rs:3 | owed: the engine cites it, with no check against the original yet |
 | `lock_rasterizer_text_data` | rasterizer/rasterizer_text.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
@@ -3805,14 +3805,14 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `scenario_get_sound_environment` | scenario/scenario.c | Matched | ffi/src/sound_world/sound_environment_reference.rs:5 | ffi/src/sound_world/sound_environment_reference.rs (trace); one local player; the scenario's fog regions and water boundary are not in the engine, and the game glides once a frame where the engine glides once a tick (the same at 30 frames a second) |
 | `interpolate_real_rgb_color` | scenario/scenario.c | Replaced |  | through its caller `object_render_state_refresh` |
 | `scenario_get_atmospheric_fog` | scenario/scenario.c | Replaced |  | through its caller `render_player_frame` |
-| `wind_dispose_from_old_map` | scenario/wind.c | Matched | ffi/src/particles/wind.rs | owed: the engine's own tests (ffi/src/particles/wind.rs); no check against the original yet |
+| `wind_dispose_from_old_map` | scenario/wind.c | Matched | ffi/src/particles/wind/wind_reference.rs:7 | ffi/src/particles/wind/wind_reference.rs (trace) |
 | `wind_variance_get` | scenario/wind.c | Matched | ffi/src/particles/wind/wind_reference.rs:2 | ffi/src/particles/wind/wind_reference.rs (trace) |
 | `wind_update` | scenario/wind.c | Matched | ffi/src/particles/wind/wind_reference.rs:2 | ffi/src/particles/wind/wind_reference.rs (trace) |
 | `scenario_get_current_from_weather_palette` | scenario/wind.c | Matched | ffi/src/particles/wind/wind_reference.rs:3 | ffi/src/particles/wind/wind_reference.rs (trace) |
 | `wind_variance_initialize` | scenario/wind.c | Matched | ffi/src/particles/wind/wind_reference.rs:2 | ffi/src/particles/wind/wind_reference.rs (trace) |
-| `wind_initialize_for_new_map` | scenario/wind.c | Matched | ffi/src/particles/wind.rs | ffi/src/particles/wind/wind_reference.rs (trace); its zeroed globals and its noise are the trace's start |
-| `scenario_get_current` | scenario/wind.c | Matched | ffi/src/particles/wind.rs | owed: the engine's own tests (ffi/src/particles/wind.rs); no check against the original yet |
-| `scenario_get_wind` | scenario/wind.c | Matched | ffi/src/particles/wind.rs | owed: the engine's own tests (ffi/src/particles/wind.rs); no check against the original yet |
+| `wind_initialize_for_new_map` | scenario/wind.c | Matched | ffi/src/particles/wind/wind_reference.rs:8 | ffi/src/particles/wind/wind_reference.rs (trace); its zeroed globals and its noise are the trace's start |
+| `scenario_get_current` | scenario/wind.c | Partial | import/src/level/wind_weather_reference.rs:2 | import/src/level/wind_weather_reference.rs (trace); leaves out the water's current (the force-water flag, or no flags in water), which nothing in the engine asks for, a fog plane's region's weather below a plane of mist: the engine keeps the cluster's |
+| `scenario_get_wind` | scenario/wind.c | Partial | import/src/level/wind_weather_reference.rs:2 | import/src/level/wind_weather_reference.rs (trace); leaves out a fog plane's region's weather below a plane of mist: the engine keeps the cluster's |
 
 21 Missing (17 reached from `main_loop`), by file:
 

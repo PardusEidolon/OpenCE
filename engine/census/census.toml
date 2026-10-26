@@ -6965,9 +6965,11 @@ because = "renderer"
 stands_in = "ffi/src/camera.rs"
 
 [function.scenario_get_current]
-class = "matched"
-engine = "ffi/src/particles/wind.rs"
-owed = "the engine's own tests (ffi/src/particles/wind.rs); no check against the original yet"
+class = "partial"
+engine = "import/src/level.rs"
+check = "import/src/level/wind_weather_reference.rs"
+against = "trace"
+leaves_out = ["the water's current (the force-water flag, or no flags in water), which nothing in the engine asks for", "a fog plane's region's weather below a plane of mist: the engine keeps the cluster's"]
 
 [function.scenario_get_current_from_weather_palette]
 class = "matched"
@@ -7002,9 +7004,11 @@ class = "missing"
 note = "not reached from a root of the game; the game loop track owns it"
 
 [function.scenario_get_wind]
-class = "matched"
-engine = "ffi/src/particles/wind.rs"
-owed = "the engine's own tests (ffi/src/particles/wind.rs); no check against the original yet"
+class = "partial"
+engine = "import/src/level.rs"
+check = "import/src/level/wind_weather_reference.rs"
+against = "trace"
+leaves_out = ["a fog plane's region's weather below a plane of mist: the engine keeps the cluster's"]
 
 [function.scenario_illumination_at_point]
 class = "replaced"
@@ -9616,7 +9620,8 @@ owed = "the engine's own tests (ui/tests/tree.rs); no check against the original
 [function.wind_dispose_from_old_map]
 class = "matched"
 engine = "ffi/src/particles/wind.rs"
-owed = "the engine's own tests (ffi/src/particles/wind.rs); no check against the original yet"
+check = "ffi/src/particles/wind/wind_reference.rs"
+against = "trace"
 
 [function.wind_initialize_for_new_map]
 class = "matched"

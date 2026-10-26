@@ -5836,7 +5836,7 @@ structure_fog_plane	plane.n.k	12	real	read	kept	untraced
 structure_fog_plane	plane.d	16	real	read	kept	untraced
 structure_fog_plane	unused14	20	byte[12]	-	-	-
 structure_fog_region	unused	0	byte[36]	-	-	-
-structure_fog_region	fog_palette_index	36	short	read	kept	untraced
+structure_fog_region	fog_palette_index	36	short	read	kept	unused
 structure_fog_region	weather_palette_index	38	short	read	kept	used
 structure_leaf	bounds.n	0	byte[6]	read	kept	used
 structure_leaf	bounds.x0	0	byte	read	kept	used

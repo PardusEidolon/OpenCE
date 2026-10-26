@@ -3,7 +3,10 @@
 //! `scenario_get_current_from_weather_palette` over a palette of three
 //! entries for 200 ticks, handing them a recorded run of random directions
 //! and coins, and the engine's winds are handed the same draws and
-//! compared with it to the bit.
+//! compared with it to the bit. It then lets the map's winds go
+//! (`wind_dispose_from_old_map`) and sets up the next map's
+//! (`wind_initialize_for_new_map`), whose noise is drawn afresh and whose
+//! air is still, as the engine's are when a new map's winds are made.
 
 use std::collections::VecDeque;
 
@@ -99,15 +102,22 @@ fn lines(kind: &str) -> impl Iterator<Item = Vec<&str>> + '_ {
         .map(|fields| fields[1..].to_vec())
 }
 
-/// The noise the trace's directions make.
-fn winds() -> Result<Winds, Failure> {
-    let mut directions = lines("direction")
+/// The noise a map's 24 directions make: the first map's (0) or the
+/// next's (1).
+fn winds_of(map: usize) -> Result<Winds, Failure> {
+    let all = lines("direction")
         .map(|fields| vector(&fields))
-        .collect::<Result<VecDeque<_>, _>>()?;
-    assert_eq!(directions.len(), 24);
+        .collect::<Result<Vec<_>, _>>()?;
+    assert_eq!(all.len(), 48);
+    let mut directions: VecDeque<Vec3> = all.into_iter().skip(map * 24).take(24).collect();
     Ok(Winds::from_directions(|| {
         directions.pop_front().unwrap_or(Vec3::ZERO)
     }))
+}
+
+/// The noise the first map's directions make.
+fn winds() -> Result<Winds, Failure> {
+    winds_of(0)
 }
 
 #[test]
@@ -189,5 +199,30 @@ fn the_winds_wander_and_blow_as_the_games() -> Result<(), Failure> {
     assert!(coins.is_empty(), "{} coins left", coins.len());
     assert_eq!(compared_states, 600);
     assert_eq!(compared_currents, 20 * 5 * 5 * 4);
+    Ok(())
+}
+
+#[test]
+fn the_next_maps_winds_are_drawn_afresh_and_still() -> Result<(), Failure> {
+    let disposed: Vec<Vec<&str>> = lines("disposed").collect();
+    assert_eq!(disposed, [vec!["0"]]);
+    let renewed: Vec<Vec<&str>> = lines("renewed").collect();
+    assert_eq!(renewed, [vec!["1", "0", "0"]]);
+    let winds = winds_of(1)?;
+    assert!(winds.states.is_empty());
+    assert_eq!(winds.time, 0);
+    let mut compared = 0;
+    for fields in lines("renewed_variance") {
+        let axis: usize = fields.first().ok_or("a short line")?.parse()?;
+        let sample: usize = fields.get(1).ok_or("a short line")?.parse()?;
+        let expected = vector(fields.get(2..5).ok_or("a short line")?)?;
+        assert_eq!(
+            winds.variance[axis][sample], expected,
+            "axis {axis} sample {sample}"
+        );
+        compared += 1;
+    }
+    assert_eq!(compared, 192);
+    assert_ne!(winds.variance, winds_of(0)?.variance);
     Ok(())
 }

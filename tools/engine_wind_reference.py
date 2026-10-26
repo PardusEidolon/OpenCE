@@ -6,8 +6,9 @@ each pair of flags, recorded for the engine's particle wind to match.
     python3 tools/engine_wind_reference.py --check  # fails if it is stale
 
 The functions are source/scenario/wind.c's `wind_variance_initialize`,
-`wind_variance_get`, `wind_update` and
-`scenario_get_current_from_weather_palette`, with real_math.h's uniform
+`wind_variance_get`, `wind_update`,
+`scenario_get_current_from_weather_palette`, `wind_initialize_for_new_map` and
+`wind_dispose_from_old_map` (a second map's winds started after the first's), with real_math.h's uniform
 cubic spline and real_math.c's euler angle helpers, compiled for this
 machine against a small fake world: a BSP whose weather palette has three
 entries (two winds and one without), and the random draws the game takes
@@ -46,6 +47,8 @@ WIND_FUNCTIONS = [
     "wind_update",
     "scenario_get_current_from_weather_palette",
     "wind_variance_initialize",
+    "wind_initialize_for_new_map",
+    "wind_dispose_from_old_map",
 ]
 
 FAKE_WORLD = r"""
@@ -199,9 +202,7 @@ int main(void)
 	};
 	int tick, axis, sample;
 
-	memset(&wind_globals, 0, sizeof(wind_globals));
-	wind_globals.initialized = TRUE;
-	wind_variance_initialize();
+	wind_initialize_for_new_map();
 	for (axis = 0; axis<3; axis++)
 		for (sample = 0; sample<64; sample++)
 			printf("variance %d %d %.9g %.9g %.9g\n", axis, sample, wind_globals.variance[axis][sample].i,
@@ -236,6 +237,15 @@ int main(void)
 				}
 		}
 	}
+	/* the next map: the old one's winds are let go, and the new one's start still, with noise of their own */
+	wind_dispose_from_old_map();
+	printf("disposed %d\n", wind_globals.initialized);
+	wind_initialize_for_new_map();
+	printf("renewed %d %d %d\n", wind_globals.initialized, wind_globals.count, wind_globals.time);
+	for (axis = 0; axis<3; axis++)
+		for (sample = 0; sample<64; sample++)
+			printf("renewed_variance %d %d %.9g %.9g %.9g\n", axis, sample, wind_globals.variance[axis][sample].i,
+				wind_globals.variance[axis][sample].j, wind_globals.variance[axis][sample].k);
 	return 0;
 }
 """
@@ -275,7 +285,10 @@ def reference():
         "# coin <0 or 1>: a recorded random coin, in the order drawn\n"
         "# variance <axis> <sample> <vector>\n"
         "# state <tick> <entry> <valid> <velocity variance> <pitch variance> <yaw variance> <velocity> <velocity3d>\n"
-        "# current <tick> <entry> <point> <flags> <current>\n" + output
+        "# current <tick> <entry> <point> <flags> <current>\n"
+        "# disposed <initialized>: after the map's winds are let go\n"
+        "# renewed <initialized> <entries> <time>: the next map's winds\n"
+        "# renewed_variance <axis> <sample> <vector>: the next map's noise\n" + output
     )
 
 
