@@ -1,0 +1,1 @@
+Wheels and tracks: vehicle function exports matched to vehicle_export_function_values (600 values, 1e-6; NaN parts taken as 0); a driven Warthog's wheel follows the original's roll each tick and turns at most 0.25 of a turn per tick.
