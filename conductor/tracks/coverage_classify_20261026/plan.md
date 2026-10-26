@@ -8,11 +8,11 @@ Every task is test first (`workflow.md`): the trace, measurement or census test 
 - [x] Task: Wire the ratchet into `census --check` and the flake's census test. 530eef73
 - [x] Task: Conductor - User Manual Verification 'Phase 1: The ratchet' (Protocol in workflow.md) (automated)
 
-## Phase 2: Citations and Native
+## Phase 2: Citations and Native [checkpoint: 08019fa9]
 - [x] Task: Write tests that the named equivalents (`unit_update`, `main_loop`, `weapon_ready` and the others the report lists) are cited. 1248541f
 - [x] Task: Add the citations in the engine crates and the Swift app, each with its class and evidence or its owed entry. 1248541f
 - [x] Task: Class the 226 small helpers as Native with their primitives, checked by the math reference trace where they are numeric. cf5646b0
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Citations and Native' (Protocol in workflow.md) (automated)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Citations and Native' (Protocol in workflow.md) (automated)
 
 ## Phase 3: Reasons
 - [ ] Task: Add the "library" reason to the census's fixed list, with a test that it needs a stand-in and a player-visible note.
