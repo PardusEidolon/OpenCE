@@ -60,6 +60,12 @@ final class FakeMenu: MenuProtocol, @unchecked Sendable {
         open = widgets.contains(widget)
         return open
     }
+    func openPause(network: Bool) -> PauseMenu? {
+        if !network && self.open(widget: pauseMenuWidget(multiplayer: false)) {
+            return .holdsWorld
+        }
+        return self.open(widget: pauseMenuWidget(multiplayer: true)) ? .worldRuns : nil
+    }
     func pointerMoved(x: Float, y: Float, width: UInt32, height: UInt32) {}
     func screen() -> String? { open ? opened.last : nil }
     func setLevels(levels: [MenuEntry]) { self.levels = levels }
