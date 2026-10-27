@@ -52,6 +52,7 @@ pub mod unit_control;
 pub mod unit_definition;
 pub mod unit_dialogue;
 pub mod unit_inventory;
+pub mod unit_items;
 pub mod unit_life;
 pub mod unit_questions;
 pub mod unit_scripting;
