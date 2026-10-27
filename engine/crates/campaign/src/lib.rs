@@ -129,15 +129,10 @@ impl Mission {
     /// that is made when the mission begins, made.
     pub fn new(mut sim: Simulation, level: Arc<Level>, difficulty: Difficulty) -> Self {
         let campaign = &level.scenario.campaign;
-        let placements: Vec<Option<usize>> = campaign
-            .object_names
-            .iter()
+        let placements: Vec<Option<usize>> = (0..campaign.object_names.len())
             .map(|name| {
-                level
-                    .scenario
-                    .placements
-                    .iter()
-                    .position(|p| p.name.as_deref() == Some(name.as_str()))
+                let index = campaign.object_placements.get(name).copied().flatten()?;
+                usize::try_from(index).ok()
             })
             .collect();
         let mut named = vec![None; placements.len()];

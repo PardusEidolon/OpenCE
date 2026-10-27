@@ -6028,8 +6028,10 @@ check = "campaign/tests/objects.rs"
 against = "measure"
 
 [function.object_names_postprocess]
-class = "missing"
-note = "not reached from a root of the game; the units track owns it"
+class = "ported"
+engine = "import/src/level.rs"
+check = "import/tests/object_names_reference.rs"
+against = "trace"
 
 [function.object_new]
 class = "matched"

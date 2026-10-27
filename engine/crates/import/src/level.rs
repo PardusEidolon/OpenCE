@@ -224,9 +224,10 @@ pub fn import_level(cache: &Cache) -> Result<Level, ImportError> {
         structure_bsps.push(import_structure_bsp(cache, &element, index, &mut reached)?);
     }
 
-    let placements = import_placements(&scenario)?;
+    let (placements, object_placements) = import_placements(&scenario)?;
     let scripts = crate::script::scenario_scripts(&scenario)?;
-    let campaign = crate::campaign::scenario_campaign(&scenario)?;
+    let mut campaign = crate::campaign::scenario_campaign(&scenario)?;
+    campaign.object_placements = object_placements;
     let netgame_flags = import_netgame_flags(&scenario)?;
     let netgame_equipment = import_netgame_equipment(cache, &scenario)?;
     let globals = crate::globals::import_globals(cache)?;
@@ -1028,6 +1029,8 @@ const PLACEMENT_BLOCKS: [(ObjectKind, usize, usize, usize, bool); 9] = [
 ];
 pub(crate) const SCENARIO_OBJECT_NAMES_OFFSET: usize = 0x204;
 pub(crate) const OBJECT_NAME_SIZE: usize = 0x24;
+/// Where an object name holds its placement's kind, and after it its index.
+const OBJECT_NAME_TYPE_OFFSET: usize = 0x20;
 const MAX_OBJECT_NAMES: usize = 1024;
 pub(crate) const PALETTE_ENTRY_SIZE: usize = 0x30;
 const MAX_PALETTE_ENTRIES: usize = 256;
@@ -1044,10 +1047,45 @@ const WEAPON_FLAGS_OFFSET: usize = 0x4C;
 /// falls to the ground.
 const ITEM_RAISED: f32 = 0.05;
 
+/// For each of `names` object names, the placement the tool gives it as it
+/// builds the map (`object_names_postprocess`): `placements` holds each kind's
+/// placements' name indices, in the scenario's order, and each name is
+/// given the kind and index of the last placement that names it, the kinds
+/// in the game's order (`ObjectKind::ALL`). A name index that is none or
+/// past the names names nothing.
+pub fn object_names(
+    names: usize,
+    placements: &[(ObjectKind, Vec<i16>)],
+) -> Vec<Option<(ObjectKind, usize)>> {
+    let mut given = vec![None; names];
+    for kind in ObjectKind::ALL {
+        for (_, indices) in placements.iter().filter(|(k, _)| *k == kind) {
+            // (no more than the game's short counter reaches)
+            for (index, &name) in indices.iter().enumerate().take(i16::MAX as usize) {
+                if let Some(slot) = usize::try_from(name).ok().and_then(|n| given.get_mut(n)) {
+                    *slot = Some((kind, index));
+                }
+            }
+        }
+    }
+    given
+}
+
 /// The objects the scenario places. A placement whose palette entry is
 /// none, past the palette or empty is not placed, as the game skips it; a
 /// name past the names is no name, as the game ignores it.
-fn import_placements(scenario: &Element<'_>) -> Result<Vec<ObjectPlacement>, ImportError> {
+///
+/// With them, for each object name the placement the map gives it, by its
+/// index in them. The tool gave each name its
+/// placement as it built the map (`object_names_postprocess`, which
+/// [`object_names`] ports) and the game reads what it stored, so the
+/// importer does too: a name that no placement names was stored as the
+/// first biped placement, and `object_create` of it makes that biped, as
+/// the game's does. A kind or placement past the scenario's, or one not
+/// placed, names none.
+fn import_placements(
+    scenario: &Element<'_>,
+) -> Result<(Vec<ObjectPlacement>, Vec<Option<u32>>), ImportError> {
     let cache = scenario.cache();
     let names = scenario.block(
         SCENARIO_OBJECT_NAMES_OFFSET,
@@ -1055,12 +1093,26 @@ fn import_placements(scenario: &Element<'_>) -> Result<Vec<ObjectPlacement>, Imp
         OBJECT_NAME_SIZE,
         MAX_OBJECT_NAMES,
     )?;
+    // each name's placement as the tool stored it: its kind and its index
+    // in that kind's placements, which `object_new_by_name` reads
+    let stored = names
+        .iter()
+        .map(|name| {
+            Ok((
+                name.i16(OBJECT_NAME_TYPE_OFFSET, "object name type")?,
+                name.i16(OBJECT_NAME_TYPE_OFFSET + 2, "object name placement")?,
+            ))
+        })
+        .collect::<Result<Vec<_>, ImportError>>()?;
     let names = names
         .iter()
         .map(|name| name.text(0, "object name", 32).map(str::to_owned))
         .collect::<Result<Vec<_>, _>>()?;
     let mut placements = Vec::new();
+    // each kind's placements' index among those imported
+    let mut placed: Vec<(ObjectKind, Vec<Option<u32>>)> = Vec::new();
     for (kind, at, size, longest, has_permutation) in PLACEMENT_BLOCKS {
+        let mut at_index = Vec::new();
         let group = GroupTag::new(&kind.group());
         let palette =
             scenario.block(at + 12, "palette", PALETTE_ENTRY_SIZE, MAX_PALETTE_ENTRIES)?;
@@ -1077,8 +1129,10 @@ fn import_placements(scenario: &Element<'_>) -> Result<Vec<ObjectPlacement>, Imp
                 .ok()
                 .and_then(|index| palette.get(index).cloned().flatten());
             let Some(tag) = tag else {
+                at_index.push(None);
                 continue;
             };
+            at_index.push(u32::try_from(placements.len()).ok());
             let name = usize::try_from(element.i16(2, "name index")?)
                 .ok()
                 .and_then(|index| names.get(index).cloned());
@@ -1137,8 +1191,17 @@ fn import_placements(scenario: &Element<'_>) -> Result<Vec<ObjectPlacement>, Imp
                 device,
             });
         }
+        placed.push((kind, at_index));
     }
-    Ok(placements)
+    let given = stored
+        .into_iter()
+        .map(|(kind, index)| {
+            let kind = ObjectKind::ALL.get(usize::try_from(kind).ok()?)?;
+            let (_, at) = placed.iter().find(|(k, _)| k == kind)?;
+            at.get(usize::try_from(index).ok()?).copied().flatten()
+        })
+        .collect();
+    Ok((placements, given))
 }
 
 /// Each lightmap's page must be in its BSP's lightmap bitmap (when the

@@ -93,6 +93,8 @@ pub(crate) fn scenario_campaign(scenario: &Element<'_>) -> Result<Campaign, Impo
     let cache = scenario.cache();
     Ok(Campaign {
         object_names: each(scenario, OBJECT_NAMES, "object names", |e| name(e, 0))?,
+        // (which placement each names is the level's to say)
+        object_placements: Vec::new(),
         trigger_volumes: each(scenario, TRIGGER_VOLUMES, "trigger volumes", |e| {
             Ok(TriggerVolume {
                 name: name(e, 4)?,

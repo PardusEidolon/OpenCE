@@ -12,6 +12,11 @@ use crate::TagRef;
 pub struct Campaign {
     /// The names its objects are given, in the scenario's order.
     pub object_names: Vec<String>,
+    /// For each name, the placement (in the scenario's `placements`) that
+    /// the game gives it (`object_names_postprocess`): the last to name
+    /// it, the kinds in the game's order. None when no placement names it
+    /// or the one that does is not placed (its palette entry is empty).
+    pub object_placements: Vec<Option<u32>>,
     /// Its trigger volumes.
     pub trigger_volumes: Vec<TriggerVolume>,
     /// Its cutscene flags.

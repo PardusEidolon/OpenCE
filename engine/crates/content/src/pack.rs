@@ -27,7 +27,7 @@ use rkyv::util::AlignedVec;
 use crate::Level;
 
 /// The version of this format; a pack of another is not read.
-pub const FORMAT_VERSION: u32 = 56;
+pub const FORMAT_VERSION: u32 = 57;
 
 const MAGIC: [u8; 4] = *b"OCPK";
 /// The header's size; the compressed archive follows it.

@@ -29,7 +29,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `memory` | | 2 (336 B) | 128 (19856 B) | | 102 (15104 B) | | 0 |
 | `models` | 17 (8928 B) | 12 (4880 B) | | 1 (464 B) | 7 (1616 B) | 11 (1680 B) | 0 |
 | `networking` | | | | | 288 (49824 B) | | 0 |
-| `objects` | 2 (0 B) | 42 (5536 B) | | 17 (4336 B) | 59 (13424 B) | 227 (28288 B) | 0 |
+| `objects` | 3 (160 B) | 42 (5536 B) | | 17 (4336 B) | 59 (13424 B) | 226 (28128 B) | 0 |
 | `physics` | | 14 (2672 B) | | 22 (12592 B) | 64 (25040 B) | 45 (6928 B) | 0 |
 | `rasterizer` | | 3 (2784 B) | | | 777 (182416 B) | | 0 |
 | `render` | 2 (592 B) | 2 (240 B) | | | 115 (37520 B) | | 0 |
@@ -43,7 +43,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `text` | | 5 (1536 B) | 63 (6864 B) | 4 (400 B) | 19 (5744 B) | 21 (2368 B) | 0 |
 | `tool` | | | | | 27 (8752 B) | | 0 |
 | `units` | 18 (6432 B) | 52 (21248 B) | | 29 (23728 B) | 9 (1616 B) | 221 (54496 B) | 0 |
-| **all** | 208 (36880 B) | 538 (170672 B) | 332 (38896 B) | 161 (85408 B) | 2773 (575768 B) | 3615 (703498 B) | 0 |
+| **all** | 209 (37040 B) | 538 (170672 B) | 332 (38896 B) | 161 (85408 B) | 2773 (575768 B) | 3614 (703338 B) | 0 |
 
 ## `ai`
 
@@ -109,11 +109,11 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `code_000309a0` | ai/ai.c | Replaced | dev/src/logbook.rs | the editor and tools; a debug check, statistic or editor hook of the original; the dev tools stand in |
 | `ai_conversation_status` | ai/ai_communication.c | Partial | campaign/src/conversations.rs:19 | campaign/tests/natives.rs (measure); leaves out status 1, made but not yet begun, status 5, unable to begin |
 | `ai_conversation_line` | ai/ai_communication.c | Matched | campaign/src/conversations.rs:36 | campaign/tests/natives.rs (measure) |
-| `ai_conversation_advance` | ai/ai_communication.c | Matched | content/src/campaign.rs:98 | campaign/src/conversations.rs (measure) |
+| `ai_conversation_advance` | ai/ai_communication.c | Matched | content/src/campaign.rs:103 | campaign/src/conversations.rs (measure) |
 | `ai_conversation_line_perform` | ai/ai_communication.c | Partial | campaign/src/conversations.rs:241 | campaign/src/conversations.rs (measure); leaves out the speaker's animation, the line's subtitle |
 | `ai_conversation_stop` | ai/ai_communication.c | Matched | campaign/src/conversations.rs:349 | campaign/tests/natives.rs (measure) |
 | `ai_conversation_begin` | ai/ai_communication.c | Partial | campaign/src/conversations.rs:117 | campaign/src/conversations.rs (measure); leaves out the participants chosen by distance and by sight |
-| `ai_conversation` | ai/ai_communication.c | Matched | content/src/campaign.rs:58 | campaign/tests/natives.rs (measure) |
+| `ai_conversation` | ai/ai_communication.c | Matched | content/src/campaign.rs:63 | campaign/tests/natives.rs (measure) |
 | `ai_conversation_update` | ai/ai_communication.c | Partial | campaign/src/conversations.rs:170 | campaign/src/conversations.rs (measure); leaves out the participants' gestures and looking at each other |
 | `ai_profile_initialize` | ai/ai_profile.c | Replaced | dev/src/draw.rs | the editor and tools |
 | `ai_profile_dispose` | ai/ai_profile.c | Replaced | dev/src/draw.rs | the editor and tools |
@@ -1355,7 +1355,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `players_update_before_game` | game/players.c | Partial | sim/src/lib.rs:390 | sim/tests/game_tick_reference.rs (trace); leaves out the network's prediction, the players' respawn timers, co-op's stranded players rescued, the actions' checks (its asserts); only its place in the tick is traced (game_tick); its body is the game loop track's |
 | `player_examine_nearby_item` | game/players.c | Partial | sim/src/pickup.rs:2 | sim/tests/pickup_reference.rs (trace); leaves out picking up equipment and powerups, the grenades' pickup, the action's priority among the objects nearby (player_set_action_result); taken, swapped or left as the game chooses (unit_should_autopick_weapon, unit_approve_weapon_swap), 4000 cases; the engine carries two weapons where the game's places are four |
 | `player_examine_nearby_objects` | game/players.c | Partial | sim/src/hud.rs:318 | sim/tests/pickup_reference.rs (trace); leaves out the objects found by objects_in_sphere (the engine looks within the pickup radius), the nearby bipeds and devices; the weapons examined as the game examines them (player_examine_nearby_item's trace); the vehicles' seats are offered by sim/src/seats.rs |
-| `players_update_after_game` | game/players.c | Partial | campaign/src/lib.rs:480 | sim/tests/game_tick_reference.rs (trace); leaves out the telefrag, the powerups' timers, double speed, co-op's wait for the host; only its place in the tick is traced (game_tick); the BSP switch and the end of a level are checked by campaign/tests/flow.rs; its body is the game loop track's |
+| `players_update_after_game` | game/players.c | Partial | campaign/src/lib.rs:475 | sim/tests/game_tick_reference.rs (trace); leaves out the telefrag, the powerups' timers, double speed, co-op's wait for the host; only its place in the tick is traced (game_tick); the BSP switch and the end of a level are checked by campaign/tests/flow.rs; its body is the game loop track's |
 | `game_engine_network_player_score` | game/game_engine.c | Replaced | net/src/snapshot.rs | networking and Xbox Live; the original's network state and prediction; the engine sends snapshots |
 | `game_engine_write_network_state` | game/game_engine.c | Replaced | net/src/snapshot.rs | networking and Xbox Live; the original's network state and prediction; the engine sends snapshots |
 | `game_engine_read_network_state` | game/game_engine.c | Replaced | net/src/snapshot.rs | networking and Xbox Live; the original's network state and prediction; the engine sends snapshots |
@@ -1790,7 +1790,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 
 | Function | File | Class | Engine | Evidence |
 | --- | --- | --- | --- | --- |
-| `equipment_place` | items/equipment.c | Matched | import/src/level.rs:1043 | sim/tests/item_spawn_reference.rs (trace) |
+| `equipment_place` | items/equipment.c | Matched | import/src/level.rs:1046 | sim/tests/item_spawn_reference.rs (trace) |
 | `equipment_handle_pickup` | items/equipment.c | Matched | sim/src/player.rs:1253 | sim/tests/weapons.rs (measure) |
 | `verify_item_location` | items/items.c | Replaced | dev/src/logbook.rs | the editor and tools; a debug check, statistic or editor hook of the original; the dev tools stand in |
 | `item_adjust_for_angular_velocity_change` | items/items.c | Ported | sim/src/item_physics.rs:393 | `tools/engine_item_reference.py` |
@@ -1805,7 +1805,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `projectile_new` | items/projectiles.c | Matched | sim/src/projectile.rs | sim/src/projectile.rs (measure) |
 | `projectile_collision` | items/projectiles.c | Matched | sim/src/effects.rs:177 | sim/src/effects.rs (measure) |
 | `projectile_update` | items/projectiles.c | Matched | sim/src/projectile.rs:71 | sim/tests/projectile_deceleration_reference.rs (trace) |
-| `weapon_place` | items/weapons.c | Matched | import/src/level.rs:1043 | sim/tests/item_spawn_reference.rs (trace) |
+| `weapon_place` | items/weapons.c | Matched | import/src/level.rs:1046 | sim/tests/item_spawn_reference.rs (trace) |
 | `weapon_magazine_finish_reload` | items/weapons.c | Matched | sim/src/weapon.rs:584 | sim/src/weapon.rs (measure) |
 | `weapon_trigger_recover` | items/weapons.c | Matched | sim/src/weapon.rs:489 | sim/src/weapon.rs (measure) |
 | `weapon_magazine_start_reload` | items/weapons.c | Matched | sim/src/weapon.rs:224 | sim/src/weapon.rs (measure) |
@@ -2692,6 +2692,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `object_types_disconnect_from_structure_bsp` | objects/object_types.c | Matched | sim/src/objects.rs:469 | sim/src/objects.rs (measure) |
 | `object_types_place_objects` | objects/object_types.c | Matched | sim/src/objects.rs:314 | sim/src/objects.rs (measure) |
 | `object_types_place_all` | objects/object_types.c | Matched | sim/src/objects.rs:381 | sim/src/objects.rs (measure) |
+| `object_names_postprocess` | objects/object_types.c | Ported | content/src/campaign.rs:16 | `tools/engine_object_names_reference.py` |
 | `scenery_place` | objects/scenery.c | Matched | sim/src/scenery.rs | sim/src/objects.rs (measure) |
 | `scenery_new` | objects/scenery.c | Matched | sim/src/animation.rs:1368 | sim/src/animation.rs (measure) |
 | `scenery_update` | objects/scenery.c | Matched | sim/src/scenery.rs | sim/src/animation.rs (measure) |
@@ -2721,7 +2722,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `objects_disconnect_from_structure_bsp` | objects/objects.c | Matched | sim/src/objects.rs | sim/src/objects.rs (measure) |
 | `object_pvs_activate` | objects/objects.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
 | `objects_scripting_set_scale` | objects/objects.c | Partial | campaign/src/objects.rs | campaign/tests/objects.rs (measure); leaves out the frames asked for: the scale is taken at once |
-| `object_delete` | objects/objects.c | Matched | campaign/src/lib.rs:270 | campaign/tests/objects.rs (measure) |
+| `object_delete` | objects/objects.c | Matched | campaign/src/lib.rs:265 | campaign/tests/objects.rs (measure) |
 | `object_detach` | objects/objects.c | Matched | campaign/src/objects.rs | campaign/tests/objects.rs (measure) |
 | `objects_reconnect_to_structure_bsp` | objects/objects.c | Matched | sim/src/objects.rs | sim/src/objects.rs (measure) |
 | `objects_paparazzi` | objects/objects.c | Replaced | dev/src/logbook.rs | the editor and tools; a debug check, statistic or editor hook of the original; the dev tools stand in |
@@ -2734,7 +2735,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `object_new` | objects/objects.c | Matched | sim/src/animation.rs:1362 | sim/src/animation.rs (measure) |
 | `object_new_from_scenario` | objects/objects.c | Matched | sim/src/objects.rs:362 | sim/src/objects.rs (measure) |
 | `object_attach_to_marker` | objects/objects.c | Partial | campaign/src/objects.rs | campaign/tests/objects.rs (measure); leaves out the parent's markers: a child is carried at its parent's origin |
-| `object_new_by_name` | objects/objects.c | Matched | campaign/src/objects.rs | campaign/tests/objects.rs (measure) |
+| `object_new_by_name` | objects/objects.c | Matched | import/src/level.rs:1097 | campaign/tests/objects.rs (measure) |
 | `objects_scripting_attach` | objects/objects.c | Partial | campaign/src/objects.rs | campaign/tests/objects.rs (measure); leaves out the parent's and child's markers: a child is carried at its parent's origin |
 | `object_delete_immediately` | objects/objects.c | Matched | sim/src/objects.rs | sim/src/objects.rs (measure) |
 | `object_name_list_lookup` | objects/objects.c | Matched | campaign/src/objects.rs | campaign/tests/objects.rs (measure) |
@@ -2742,11 +2743,11 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `object_delete_recursive` | objects/objects.c | Partial | sim/src/objects.rs | sim/src/objects.rs (measure); leaves out its children's deletion: the engine's attached objects are kept by the campaign, which drops them when either goes |
 | `object_compute_function_values` | objects/objects.c | Matched | sim/src/functions.rs:1 | sim/src/functions.rs (measure) |
 
-227 Missing (221 reached from `main_loop`), by file:
+226 Missing (221 reached from `main_loop`), by file:
 
 - objects/damage.c: `damage_initialize`, `damage_dispose`, `damage_initialize_for_new_map`, `damage_dispose_from_old_map`, `object_restore_body`, `object_double_charge_shield`, `object_destroy_notify_children`, `get_player_index_from_object_or_parents`, `damage_effect_new_on_object`, `object_permutation_shield_regions`, `object_get_actual_body_vitality`, `object_get_actual_shield_vitality`, `damage_effect_new_at_location`, `object_destroy_region`, `damage_kill_object_for_player`
 - objects/object_deleted_procs.c: `object_deleted_procs_call`
-- objects/object_types.c: `object_type_definition_get`, `object_type_get_datum_size`, `object_type_get_name`, `object_types_initialize`, `object_types_dispose`, `object_types_initialize_for_new_map`, `object_types_dispose_from_old_map`, `object_type_adjust_placement`, `object_type_new`, `object_type_place`, `object_type_delete`, `object_type_update`, `object_type_export_function_values`, `object_type_handle_deleted_object`, `object_type_handle_region_destroyed`, `object_type_handle_parent_destroyed`, `object_type_preprocess_node_orientations`, `object_type_postprocess_node_matrices`, `object_type_reset`, `object_type_disconnect_from_structure_bsp`, `object_type_notify_impulse_sound`, `object_definition_index_to_object_type`, `scenario_get_object_type_scenario_datums`, `scenario_get_object_type_scenario_palette`, `object_names_postprocess`, `object_types_reconnect_to_structure_bsp`, `object_type_synchronize`
+- objects/object_types.c: `object_type_definition_get`, `object_type_get_datum_size`, `object_type_get_name`, `object_types_initialize`, `object_types_dispose`, `object_types_initialize_for_new_map`, `object_types_dispose_from_old_map`, `object_type_adjust_placement`, `object_type_new`, `object_type_place`, `object_type_delete`, `object_type_update`, `object_type_export_function_values`, `object_type_handle_deleted_object`, `object_type_handle_region_destroyed`, `object_type_handle_parent_destroyed`, `object_type_preprocess_node_orientations`, `object_type_postprocess_node_matrices`, `object_type_reset`, `object_type_disconnect_from_structure_bsp`, `object_type_notify_impulse_sound`, `object_definition_index_to_object_type`, `scenario_get_object_type_scenario_datums`, `scenario_get_object_type_scenario_palette`, `object_types_reconnect_to_structure_bsp`, `object_type_synchronize`
 - objects/objects.c: `cluster_get_first_noncollideable_object`, `cluster_get_next_noncollideable_object`, `cluster_get_first_collideable_object`, `cluster_get_next_collideable_object`, `object_get_next_cluster`, `object_try_and_get_and_verify_type`, `object_get_and_verify_type`, `object_iterator_new`, `object_iterator_next`, `object_get_ultimate_parent`, `object_set_object_index_for_name_index`, `objects_fix_for_deleted_object`, `object_set_garbage`, `objects_information_get`, `objects_get_activating_cluster_index`, `object_definition_predict`, `object_predict`, `object_header_block_get`, `object_header_block_allocate`, `object_marker_begin`, `object_marker_end`, `object_unmarked_function`, `object_mark_function`, `find_objects_from_point_vector`, `objects_dump_memory`, `objects_initialize`, `objects_initialize_for_new_map`, `objects_dispose_from_old_map`, `objects_dispose`, `object_activate`, `object_deactivate`, `object_reset`, `object_placement_data_new`, `object_disconnect_from_map`, `object_get_first_cluster`, `object_get_node_matrices`, `object_get_attachment_marker_name`, `object_has_node`, `object_set_automatic_deactivation`, `object_set_visibility`, `object_get_velocities`, `object_get_location`, `object_offset_interpolation`, `object_permute_region`, `objects_in_clusters_by_indices`, `object_visible_to_any_player`, `object_delete_initial_recursive`, `object_reconnect_to_map`, `object_get_node_matrix`, `object_get_marker_by_name`, `object_align_marker_to_matrix`, `object_get_origin`, `object_get_orientation`, `object_get_world_matrix`, `object_inverse_kinematics`, `objects_in_sphere`, `object_postprocess_node_matrices`, `attachments_new`, `object_translate`, `object_attach_to_node`, `object_force_inside_bsp`, `object_update`, `object_compute_node_matrices_recursive`, `active_garbage_limit`, `objects_garbage_collection`, `objects_update`, `objects_memory_compact`, `object_connect_lights`, `object_name_list_allocate`, `object_name_list_free`, `object_name_list_clear`, `object_name_list_new`, `object_claim_scenario_name`, `object_name_list_delete`, `recursive_object_adder`, `sort_dumps`, `object_add_to_dump`, `object_dump_write`, `object_find_region_permutations_available_with_variant`, `object_select_random_region_permutations_by_variant`, `object_determine_variant_number`, `object_add_to_list`, `object_remove_from_list`, `attachments_delete`, `object_create_attachments`, `object_delete_attachments`, `object_compute_change_colors`
 - objects/placeholder_definitions.c: `placeholder_initialize`, `placeholder_initialize_for_new_map`, `placeholder_dispose_from_old_map`, `placeholder_dispose`, `placeholder_place`, `placeholder_new`, `placeholder_delete`
 - objects/scenery.c: `scenery_initialize`, `scenery_initialize_for_new_map`, `scenery_dispose_from_old_map`, `scenery_dispose`, `scenery_delete`, `scenery_get_animation_time`
@@ -3541,7 +3542,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `rasterizer_frame_statistics_dispose` | rasterizer/rasterizer_frame_statistics.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
 | `uncompress_int8_to_real` | rasterizer/rasterizer_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
 | `uncompress_int16_to_real` | rasterizer/rasterizer_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
-| `uncompress_int32_to_real_vector3d` | rasterizer/rasterizer_geometry.c | Matched | import/src/level.rs:1880 | sim/tests/math_extra_reference.rs (trace) |
+| `uncompress_int32_to_real_vector3d` | rasterizer/rasterizer_geometry.c | Matched | import/src/level.rs:1943 | sim/tests/math_extra_reference.rs (trace) |
 | `rasterizer_geometry_get_vertex_size` | rasterizer/rasterizer_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
 | `rasterizer_geometry_byte_swap_vertices` | rasterizer/rasterizer_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
 | `rasterizer_geometry_uncompress_vertices` | rasterizer/rasterizer_geometry.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
@@ -3568,7 +3569,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `rasterizer_lights_end` | rasterizer/rasterizer_lights.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
 | `lens_flare_evaluate_corona_rotation_function` | rasterizer/rasterizer_lights.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
 | `rasterizer_lens_flare_submit` | rasterizer/rasterizer_lights.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
-| `rasterizer_lens_flare_submit_for_cluster` | rasterizer/rasterizer_lights.c | Matched | import/src/level.rs:1616 | ffi/src/camera.rs (measure) |
+| `rasterizer_lens_flare_submit_for_cluster` | rasterizer/rasterizer_lights.c | Matched | import/src/level.rs:1679 | ffi/src/camera.rs (measure) |
 | `rasterizer_lens_flares_submit_occlusion_tests` | rasterizer/rasterizer_lights.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
 | `rasterizer_lens_flares_draw` | rasterizer/rasterizer_lights.c | Matched | ffi/src/camera.rs:3 | ffi/src/camera.rs (measure) |
 | `lock_rasterizer_text_data` | rasterizer/rasterizer_text.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
@@ -3847,7 +3848,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `scenario_switch_structure_bsp` | scenario/scenario.c | Matched | sim/src/lib.rs | sim/src/objects.rs (measure) |
 | `scenario_reload_structure_bsp_if_necessary` | scenario/scenario.c | Replaced | import/src/lib.rs | maps imported to a typed format |
 | `scenario_get_structure_reference_index_from_tag_index` | scenario/scenario.c | Replaced | import/src/lib.rs | maps imported to a typed format |
-| `scenario_trigger_volume_test_point` | scenario/scenario.c | Matched | content/src/campaign.rs:138 | content/tests/scenario_reference.rs (trace) |
+| `scenario_trigger_volume_test_point` | scenario/scenario.c | Matched | content/src/campaign.rs:143 | content/tests/scenario_reference.rs (trace) |
 | `scenario_trigger_volume_test_object` | scenario/scenario.c | Matched | campaign/src/objects.rs | campaign/tests/objects.rs (measure) |
 | `scenario_debug_to_file` | scenario/scenario.c | Replaced |  | through its caller `_texture_cache_bitmap_get_hardware_format` |
 | `global_structure_bsp_index_get` | scenario/scenario.c | Replaced | import/src/lib.rs | maps imported to a typed format |

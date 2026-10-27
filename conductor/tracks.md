@@ -62,7 +62,7 @@ This file tracks all major tracks for the project.
 - [x] **Track: Coverage: evidence for the owed: reference traces for the 675 functions the census says owe evidence, starting with the datum allocators, random ranges, the script evaluator and the game tick, and a fake world that holds objects, tags and a map**
   *Link: [./tracks/coverage_evidence_20261026/](./tracks/coverage_evidence_20261026/)*
 
-- [ ] **Track: Coverage: data fidelity: every tag field, stride and load-time fix-up matched to the original, vehicle_definition and the shader subtypes from a second source, and the kept-but-unused and untraced fields wired or justified**
+- [~] **Track: Coverage: data fidelity: every tag field, stride and load-time fix-up matched to the original, vehicle_definition and the shader subtypes from a second source, and the kept-but-unused and untraced fields wired or justified**
   *Link: [./tracks/coverage_data_20261026/](./tracks/coverage_data_20261026/)*
 
 - [ ] **Track: Coverage: units, players' effects and the object systems: unit update and damage, biped movement, player effects, objects, items, devices, effects and physics, ported and traced**
