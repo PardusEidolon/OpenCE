@@ -1,7 +1,8 @@
 //! Projectiles in flight: launched along a trigger's error cone, slowed
-//! from their initial speed to their final one over their range, pulled
-//! down by their share of gravity, and stopped by the first thing a tick's
-//! path crosses (`projectiles.c`'s flight, without its guidance or water).
+//! from their initial speed to their final one over their damage range (as
+//! `projectile_calculate_deceleration` sets them to), pulled down by their
+//! share of gravity, and stopped by the first thing a tick's path crosses
+//! (`projectiles.c`'s flight, without its guidance or water).
 //!
 //! A thrown grenade has a fuse: it arms, bounces off what it strikes by the
 //! response to that material (with the response's noise), passes through
@@ -193,10 +194,19 @@ pub struct Flight {
     pub travelled: f32,
     /// The ticks it has flown.
     pub age: u32,
-    /// Its speed at the muzzle, in world units per second.
-    pub initial_speed: f32,
-    /// Its speed at the end of its range.
+    /// The speed it slows to, in world units per second.
     pub final_speed: f32,
+    /// How fast it slows, in world units per second per second.
+    pub deceleration: f32,
+    /// It slows once this reaches 1.
+    pub deceleration_timer: f32,
+    /// What its deceleration timer gains a tick.
+    pub deceleration_timer_delta: f32,
+    /// How far its damage reaches (as the game's, the water's even in the
+    /// air).
+    pub maximum_damage_distance: f32,
+    /// Whether it vanishes once slowed, having neither a range nor a timer.
+    pub vanishes_when_slowed: bool,
     /// How far it flies (0: until it hits something).
     pub range: f32,
     /// Its fall, in world units per second per second.
@@ -257,6 +267,17 @@ impl Flight {
         direction: Vec3,
         gravity: f32,
     ) -> Flight {
+        // (in the air: the water it may fly into is not yet followed)
+        let slowing = Deceleration::of(
+            definition.initial_velocity,
+            definition.final_velocity,
+            definition.air_damage_range,
+            definition.water_damage_range,
+            false,
+        );
+        // (the game's timer gains its delta each game tick; ours, each of
+        // our ticks, the same in time)
+        let per_tick = GAME_TICKS_PER_SECOND as f32 / TICKS_PER_GAME_TICK as f32;
         Flight {
             handle,
             tag,
@@ -265,8 +286,14 @@ impl Flight {
             velocity: direction * definition.initial_velocity,
             travelled: 0.0,
             age: 0,
-            initial_speed: definition.initial_velocity,
             final_speed: definition.final_velocity,
+            deceleration: slowing.deceleration,
+            deceleration_timer: slowing.timer.unwrap_or(0.0),
+            deceleration_timer_delta: slowing.timer_delta * per_tick,
+            maximum_damage_distance: slowing.maximum_damage_distance,
+            vanishes_when_slowed: definition.maximum_range == 0.0
+                && definition.timer[1] == 0.0
+                && definition.minimum_velocity <= definition.final_velocity,
             range: definition.maximum_range.max(0.0),
             gravity: definition.air_gravity_scale * gravity,
             damage: definition.impact_damage.clone(),
@@ -298,8 +325,8 @@ impl Flight {
         let draws = RandomSeed(u32::from(seed.next_u16()) << 16 | u32::from(seed.next_u16()));
         Flight {
             velocity,
-            initial_speed: 0.0,
             final_speed: 0.0,
+            deceleration: 0.0,
             range: 0.0,
             damage: None,
             fuse: Some(Fuse {
@@ -353,16 +380,6 @@ impl Flight {
         }
     }
 
-    /// Its speed now: from its initial to its final over its range.
-    fn speed(&self) -> f32 {
-        if self.range > 0.0 {
-            let along = (self.travelled / self.range).min(1.0);
-            self.initial_speed + (self.final_speed - self.initial_speed) * along
-        } else {
-            self.initial_speed
-        }
-    }
-
     /// One tick of flight; `cast` finds the first thing along a path (from
     /// a point, the path's whole length) but the object it is given.
     pub fn step(
@@ -373,13 +390,36 @@ impl Flight {
             return self.step_fused(cast);
         }
         let dt = clock::TICK.0;
-        // (its speed is its range's; gravity bends its path)
-        let speed = self.speed();
-        if speed > 0.0 {
-            self.velocity = self.velocity.normalize_or_zero() * speed;
+        self.deceleration_timer += self.deceleration_timer_delta;
+        // (as projectile_update: it slows towards its final speed, its path
+        // the average of its velocities over the tick; once slowed, with
+        // neither a range nor a timer, it vanishes)
+        let start = self.velocity;
+        let speed = start.length();
+        let mut average = start;
+        if self.deceleration_timer >= 1.0 {
+            if speed > self.final_speed && self.deceleration != 0.0 {
+                let slowed = speed - self.deceleration * dt;
+                if slowed <= self.final_speed {
+                    let fraction = (speed - self.final_speed) / (self.deceleration * dt);
+                    self.velocity *= self.final_speed * 0.99 / speed;
+                    average =
+                        (self.velocity + start) * fraction * 0.5 + self.velocity * (1.0 - fraction);
+                } else {
+                    self.velocity *= slowed / speed;
+                    average = (self.velocity + start) * 0.5;
+                }
+            } else if self.vanishes_when_slowed
+                && (self.deceleration != 0.0 || self.travelled >= self.maximum_damage_distance)
+            {
+                return Flew::Spent;
+            } else if speed < self.final_speed && speed > 0.0 {
+                self.velocity *= self.final_speed / speed * 0.99;
+            }
         }
         self.velocity.z -= self.gravity * dt;
-        let mut path = self.velocity * dt;
+        average.z -= self.gravity * dt * 0.5;
+        let mut path = average * dt;
         let mut spent = false;
         if self.range > 0.0 {
             let left = self.range - self.travelled;
@@ -643,7 +683,7 @@ impl Flight {
             .to_array()
             .into_iter()
             .chain(self.velocity.to_array())
-            .chain([self.travelled])
+            .chain([self.travelled, self.deceleration_timer])
         {
             hasher.f32(value);
         }
@@ -651,6 +691,57 @@ impl Flight {
         if let Some(fuse) = &self.fuse {
             fuse.hash(hasher);
         }
+    }
+}
+
+/// How a projectile slows, as `projectile_calculate_deceleration` sets it,
+/// in the units of the speeds and distances it is given.
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct Deceleration {
+    /// How fast it slows.
+    pub deceleration: f32,
+    /// How far its damage reaches.
+    pub maximum_damage_distance: f32,
+    /// What its deceleration timer is set to, if it is (it slows at once
+    /// when its damage range starts where it is fired).
+    pub timer: Option<f32>,
+    /// What its deceleration timer gains each game tick.
+    pub timer_delta: f32,
+}
+
+impl Deceleration {
+    /// The slowing of a projectile fired at `initial` that slows to
+    /// `last`, over its `air` damage range, or its `water` one when
+    /// `underwater`.
+    pub fn of(initial: f32, last: f32, air: [f32; 2], water: [f32; 2], underwater: bool) -> Self {
+        let [lower, upper] = if underwater { water } else { air };
+        let mut slowing = Deceleration {
+            deceleration: deceleration_from_distances(initial, last, lower, upper),
+            // (BUG (original, preserved): in the air too, the water's)
+            maximum_damage_distance: water[1],
+            timer: Some(1.0),
+            timer_delta: 0.0,
+        };
+        if lower > 0.0 {
+            // (BUG (original, preserved): the time to the range's start,
+            // gained each tick, so the further it starts the sooner it
+            // slows)
+            slowing.timer = None;
+            slowing.timer_delta = lower / initial;
+        }
+        slowing
+    }
+}
+
+/// The deceleration that slows `initial` to `last` between the distances
+/// `lower` and `upper` (`projectile_calculate_deceleration_from_distances`):
+/// none when the speeds are one or the distances are.
+pub fn deceleration_from_distances(initial: f32, last: f32, lower: f32, upper: f32) -> f32 {
+    let delta = upper - lower;
+    if initial != last && delta != 0.0 {
+        (initial * initial - last * last) / (2.0 * delta)
+    } else {
+        0.0
     }
 }
 
@@ -738,6 +829,7 @@ mod tests {
             initial_velocity: 300.0,
             final_velocity: 150.0,
             maximum_range: 40.0,
+            air_damage_range: [0.0, 40.0],
             air_gravity_scale: 1.0,
             impact_damage: Some(tag()),
             ..Projectile::default()
@@ -761,8 +853,11 @@ mod tests {
         let mut flight = flight(&bullet());
         let first = flight.step(|_, _, _| None);
         assert_eq!(first, Flew::On);
+        // (at its average speed over the tick: 300 slowing by 843.75 a
+        // second for a 60th of one)
+        let average = 300.0 - 843.75 / 60.0 * 0.5;
         assert!(
-            (flight.position.x - 5.0).abs() < 0.01,
+            (flight.position.x - average / 60.0).abs() < 1e-4,
             "{}",
             flight.position
         );
@@ -815,6 +910,23 @@ mod tests {
 
     #[test]
     fn without_a_range_it_flies_until_its_time_is_up() {
+        // (it would vanish once slowed, but for its least speed)
+        let definition = Projectile {
+            maximum_range: 0.0,
+            air_damage_range: [0.0, 0.0],
+            minimum_velocity: 200.0,
+            air_gravity_scale: 0.0,
+            ..bullet()
+        };
+        let mut flight = flight(&definition);
+        let ticks = (1..).find(|_| flight.step(|_, _, _| None) != Flew::On);
+        assert_eq!(ticks, Some(MAXIMUM_FLIGHT_TICKS));
+        // (no slowing without a damage range)
+        assert!((flight.velocity.length() - 300.0).abs() < 1e-3);
+    }
+
+    #[test]
+    fn without_a_range_it_vanishes_once_slowed() {
         let definition = Projectile {
             maximum_range: 0.0,
             air_gravity_scale: 0.0,
@@ -822,9 +934,55 @@ mod tests {
         };
         let mut flight = flight(&definition);
         let ticks = (1..).find(|_| flight.step(|_, _, _| None) != Flew::On);
-        assert_eq!(ticks, Some(MAXIMUM_FLIGHT_TICKS));
-        // (no slowing without a range)
-        assert!((flight.velocity.length() - 300.0).abs() < 1e-3);
+        // (slowed over its 40 units of damage range, as with a range, and
+        // gone the tick after)
+        assert!(matches!(ticks, Some(10..=13)), "{ticks:?}");
+        assert!((flight.velocity.length() - 148.5).abs() < 1e-3);
+    }
+
+    #[test]
+    fn its_damage_range_starting_further_out_holds_off_its_slowing() {
+        // (300 a second is 10 a game tick; a range from 2 units gains its
+        // timer 2 / 10 a game tick, a tenth each of ours: ten ticks)
+        let definition = Projectile {
+            air_damage_range: [2.0, 42.0],
+            maximum_range: 0.0,
+            air_gravity_scale: 0.0,
+            ..bullet()
+        };
+        let mut flight = flight(&definition);
+        for _ in 0..8 {
+            assert_eq!(flight.step(|_, _, _| None), Flew::On);
+            assert_eq!(flight.velocity.length(), 300.0);
+        }
+        for _ in 0..3 {
+            assert_eq!(flight.step(|_, _, _| None), Flew::On);
+        }
+        assert!(flight.velocity.length() < 300.0);
+        // (BUG (original, preserved): the gain is the time to the range's
+        // start, so a start further out than a tick's flight slows it at
+        // once)
+        let further = Projectile {
+            air_damage_range: [60.0, 100.0],
+            ..definition
+        };
+        let mut flight = super::tests::flight(&further);
+        assert_eq!(flight.step(|_, _, _| None), Flew::On);
+        assert!(flight.velocity.length() < 300.0);
+    }
+
+    #[test]
+    fn its_deceleration_is_the_games() {
+        // (300 to 150 over 40 units: (300² - 150²) / 80)
+        let slowing = Deceleration::of(300.0, 150.0, [0.0, 40.0], [5.0, 9.0], false);
+        assert_eq!(slowing.deceleration, 843.75);
+        assert_eq!(slowing.maximum_damage_distance, 9.0);
+        assert_eq!(slowing.timer, Some(1.0));
+        let underwater = Deceleration::of(300.0, 150.0, [0.0, 40.0], [5.0, 9.0], true);
+        assert_eq!(underwater.timer, None);
+        assert_eq!(underwater.timer_delta, 5.0 / 300.0);
+        assert_eq!(deceleration_from_distances(300.0, 300.0, 0.0, 40.0), 0.0);
+        assert_eq!(deceleration_from_distances(300.0, 150.0, 7.0, 7.0), 0.0);
     }
 
     #[test]

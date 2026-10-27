@@ -23,7 +23,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `hs` | 2 (384 B) | 42 (7984 B) | | 8 (1776 B) | 11 (2880 B) | 576 (53968 B) | 37 |
 | `input` | | | | | 46 (7216 B) | 1 (0 B) | 0 |
 | `interface` | 6 (1408 B) | 96 (33424 B) | | 19 (6112 B) | 104 (21432 B) | 452 (94304 B) | 100 |
-| `items` | 9 (4080 B) | 24 (19328 B) | | 1 (128 B) | 1 (16 B) | 102 (12496 B) | 24 |
+| `items` | 9 (4080 B) | 24 (19328 B) | | 1 (128 B) | 1 (16 B) | 102 (12496 B) | 22 |
 | `main` | | | | 1 (1648 B) | 34 (5440 B) | 91 (8752 B) | 1 |
 | `math` | 42 (5552 B) | 6 (256 B) | 70 (4720 B) | | 25 (4016 B) | 66 (8624 B) | 0 |
 | `memory` | | 2 (336 B) | 128 (19856 B) | | 102 (15104 B) | | 0 |
@@ -43,7 +43,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `text` | | 9 (1936 B) | 63 (6864 B) | | 19 (5744 B) | 21 (2368 B) | 9 |
 | `tool` | | | | | 27 (8752 B) | | 0 |
 | `units` | 12 (2288 B) | 67 (27888 B) | | 17 (17808 B) | 9 (1616 B) | 224 (57920 B) | 73 |
-| **all** | 199 (32656 B) | 569 (183952 B) | 332 (38896 B) | 133 (72848 B) | 2773 (575768 B) | 3621 (707002 B) | 529 |
+| **all** | 199 (32656 B) | 569 (183952 B) | 332 (38896 B) | 133 (72848 B) | 2773 (575768 B) | 3621 (707002 B) | 527 |
 
 ## `ai`
 
@@ -1796,14 +1796,14 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `item_accelerate` | items/items.c | Ported | sim/src/forces.rs:211 | `tools/engine_item_reference.py` |
 | `item_align_to_normal_and_point` | items/items.c | Ported | sim/src/item_physics.rs:376 | `tools/engine_item_reference.py` |
 | `item_update` | items/items.c | Ported | sim/src/game.rs:229 | `tools/engine_item_reference.py` |
-| `projectile_calculate_deceleration_from_distances` | items/projectiles.c | Matched | sim/src/projectile.rs | owed: the engine's own tests (sim/src/projectile.rs); no check against the original yet |
-| `projectile_calculate_deceleration` | items/projectiles.c | Matched | sim/src/projectile.rs | owed: the engine's own tests (sim/src/projectile.rs); no check against the original yet |
+| `projectile_calculate_deceleration_from_distances` | items/projectiles.c | Matched | sim/src/projectile.rs:737 | sim/tests/projectile_deceleration_reference.rs (trace) |
+| `projectile_calculate_deceleration` | items/projectiles.c | Matched | sim/src/projectile.rs:3 | sim/tests/projectile_deceleration_reference.rs (trace) |
 | `random_vector_in_cone3d` | items/projectiles.c | Matched | sim/src/random.rs | sim/tests/random_reference.rs (trace) |
 | `projectile_collision_test_line` | items/projectiles.c | Matched | sim/src/projectile.rs | owed: the engine's own tests (sim/src/projectile.rs); no check against the original yet |
 | `projectile_detonate` | items/projectiles.c | Matched | sim/src/effects.rs:178 | owed: the engine cites it, with no check against the original yet |
 | `projectile_new` | items/projectiles.c | Matched | sim/src/projectile.rs | owed: the engine's own tests (sim/src/projectile.rs); no check against the original yet |
 | `projectile_collision` | items/projectiles.c | Matched | sim/src/effects.rs:177 | owed: the engine cites it, with no check against the original yet |
-| `projectile_update` | items/projectiles.c | Matched | sim/src/projectile.rs:70 | owed: the engine cites it, with no check against the original yet |
+| `projectile_update` | items/projectiles.c | Matched | sim/src/projectile.rs:71 | owed: the engine cites it, with no check against the original yet |
 | `weapon_place` | items/weapons.c | Matched | import/src/level.rs:1043 | owed: the engine cites it, with no check against the original yet |
 | `weapon_magazine_finish_reload` | items/weapons.c | Matched | sim/src/weapon.rs:584 | owed: weapons; reads the object, tag and map world, which the fake worlds do not hold (the weapon tag) |
 | `weapon_trigger_recover` | items/weapons.c | Matched | sim/src/weapon.rs:489 | owed: weapons; reads the object, tag and map world, which the fake worlds do not hold (the weapon tag) |

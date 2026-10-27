@@ -6630,12 +6630,14 @@ stands_in = "app/Sources/OpenCEEngineRender/DecalPass.swift"
 [function.projectile_calculate_deceleration]
 class = "matched"
 engine = "sim/src/projectile.rs"
-owed = "the engine's own tests (sim/src/projectile.rs); no check against the original yet"
+check = "sim/tests/projectile_deceleration_reference.rs"
+against = "trace"
 
 [function.projectile_calculate_deceleration_from_distances]
 class = "matched"
 engine = "sim/src/projectile.rs"
-owed = "the engine's own tests (sim/src/projectile.rs); no check against the original yet"
+check = "sim/tests/projectile_deceleration_reference.rs"
+against = "trace"
 
 [function.projectile_collision]
 class = "matched"
