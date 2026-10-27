@@ -14,6 +14,8 @@ impl UnitFlags {
     pub const ACTIVELY_CONTROLLED: u32 = 1 << 0;
     /// Its controls move it (`_unit_controllable_bit`).
     pub const CONTROLLABLE: u32 = 1 << 6;
+    /// It aims without turning to face its aim (`_unit_aim_without_turning_bit`).
+    pub const AIM_WITHOUT_TURNING: u32 = 1 << 14;
     /// It does not blink (`_unit_cannot_blink_bit`).
     pub const CANNOT_BLINK: u32 = 1 << 22;
     /// Its integrated light is on (`_unit_integrated_light_on_bit`).
@@ -103,6 +105,14 @@ pub struct Crew<U> {
     pub driver: Option<U>,
     /// Its gunner (`gunner_object_index`).
     pub gunner: Option<U>,
+}
+
+/// Sets whether a unit aims without turning to face its aim
+/// (`unit_aim_without_turning`); no unit is left as it is.
+pub fn aim_without_turning(unit: Option<&mut UnitFlags>, on: bool) {
+    if let Some(flags) = unit {
+        flags.set(UnitFlags::AIM_WITHOUT_TURNING, on);
+    }
 }
 
 /// A script's question of a unit's driver and gunner: none of no unit

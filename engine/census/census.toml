@@ -9504,6 +9504,12 @@ check = "campaign/tests/unit_commands_reference.rs"
 against = "trace"
 leaves_out = ["the unit's return to its idle animation (coverage_units)"]
 
+[function.unit_verify_vectors]
+class = "replaced"
+because = "tools"
+stands_in = "dev/src/logbook.rs"
+note = "a debug check, statistic or editor hook of the original; the dev tools stand in"
+
 [function.unit_test_animation_impulse]
 class = "matched"
 engine = "sim/src/ai_impulse.rs"

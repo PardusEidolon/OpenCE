@@ -854,12 +854,12 @@ with the reason in the commit. The data track raised it once, for the
 <!-- coverage census: opence census --write writes this table -->
 | System | Ported | Matched | Native | Partial | Replaced | Missing | Owed |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| `ai` | 42 (1744 B) | 14 (1600 B) | | 17 (18128 B) | 91 (5616 B) | 795 (269178 B) | 0 |
+| `ai` | 44 (1904 B) | 14 (1600 B) | | 17 (18128 B) | 91 (5616 B) | 793 (269018 B) | 0 |
 | `bink` | | | | | 24 (3968 B) | | 0 |
 | `bitmaps` | | 1 (224 B) | | | 209 (63904 B) | | 0 |
 | `bungie_net` | | | | | 105 (18992 B) | | 0 |
 | `cache` | | | | | 187 (24784 B) | | 0 |
-| `camera` | 3 (192 B) | 18 (8144 B) | | 4 (624 B) | 17 (2448 B) | 79 (25136 B) | 0 |
+| `camera` | 4 (304 B) | 18 (8144 B) | | 4 (624 B) | 17 (2448 B) | 78 (25024 B) | 0 |
 | `cseries` | | 1 (16 B) | 28 (3168 B) | | 111 (18656 B) | | 0 |
 | `cutscene` | | 8 (288 B) | | 2 (672 B) | 7 (1072 B) | 48 (8496 B) | 0 |
 | `devices` | 7 (944 B) | 18 (3856 B) | | | 1 (432 B) | 34 (1952 B) | 0 |
@@ -889,8 +889,8 @@ with the reason in the commit. The data track raised it once, for the
 | `tag_files` | | | 43 (4288 B) | | 5 (0 B) | | 0 |
 | `text` | | 5 (1536 B) | 63 (6864 B) | 4 (400 B) | 19 (5744 B) | 21 (2368 B) | 0 |
 | `tool` | | | | | 27 (8752 B) | | 0 |
-| `units` | 74 (13536 B) | 50 (19024 B) | | 31 (25952 B) | 9 (1616 B) | 165 (47392 B) | 0 |
-| **all** | 265 (44144 B) | 525 (149456 B) | 332 (38896 B) | 174 (106624 B) | 2773 (575768 B) | 3558 (696234 B) | 0 |
+| `units` | 82 (15264 B) | 50 (19024 B) | | 31 (25952 B) | 10 (2352 B) | 156 (44928 B) | 0 |
+| **all** | 276 (46144 B) | 525 (149456 B) | 332 (38896 B) | 174 (106624 B) | 2774 (576504 B) | 3546 (693498 B) | 0 |
 <!-- end of the coverage census -->
 
 ### The divergences

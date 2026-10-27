@@ -5,9 +5,16 @@
 //! axes' plans are coupled so that they end together, and each tick the
 //! plan is followed for a tick.
 //!
+//! With them are the unit's aiming and looking vectors: the questions of
+//! them, the check that they are all unit normals, and their clip to the
+//! screens an animation lets the unit aim and look in.
+//!
 //! Each is checked against the game's code by
-//! tests/unit_aiming_plan_reference.rs. The arithmetic is the game's, in
+//! tests/unit_aiming_plan_reference.rs and
+//! tests/unit_aiming_bounds_reference.rs. The arithmetic is the game's, in
 //! its order and in floats, so that a plan is the same float as the game's.
+
+use crate::animation_blend;
 
 /// An axis's plan (`struct unit_acceleration_plan`): from its error and
 /// speed, an acceleration for a time, a coast and a deceleration for a time.
@@ -239,4 +246,143 @@ pub fn couple(
     plan.deceleration_time -= adjustment;
     plan.coast_time = (peak_velocity + peak_velocity + adjustment * plan.acceleration) * adjustment
         / peak_velocity;
+}
+
+/// A unit's frame and the vectors it faces, aims and looks along, as
+/// `struct unit_datum` holds them.
+#[derive(Clone, Copy, Debug, Default, PartialEq)]
+pub struct UnitAim {
+    /// Its object's forward (`object.forward`).
+    pub forward: [f32; 3],
+    /// Its object's up (`object.up`).
+    pub up: [f32; 3],
+    /// Where it wishes to face (`desired_facing_vector`).
+    pub desired_facing: [f32; 3],
+    /// Where it wishes to aim (`desired_aiming_vector`).
+    pub desired_aiming: [f32; 3],
+    /// Where it wishes to look (`desired_looking_vector`).
+    pub desired_looking: [f32; 3],
+    /// Where it aims (`aiming_vector`).
+    pub aiming: [f32; 3],
+    /// Where it looks (`looking_vector`).
+    pub looking: [f32; 3],
+}
+
+impl UnitAim {
+    /// Where it faces: its forward (`unit_get_facing_vector`).
+    pub fn facing(&self) -> [f32; 3] {
+        self.forward
+    }
+
+    /// Where it aims (`unit_get_aiming_vector`).
+    pub fn aiming(&self) -> [f32; 3] {
+        self.aiming
+    }
+
+    /// Where it looks (`unit_get_looking_vector`).
+    pub fn looking(&self) -> [f32; 3] {
+        self.looking
+    }
+
+    /// Whether its wishes, its aim and its look are unit normals and its
+    /// forward and up a frame (`unit_vectors_are_valid`).
+    pub fn vectors_are_valid(&self) -> bool {
+        valid_normal(self.desired_facing)
+            && valid_normal(self.desired_aiming)
+            && valid_normal(self.desired_looking)
+            && valid_axes(self.forward, self.up)
+            && valid_normal(self.aiming)
+            && valid_normal(self.looking)
+    }
+
+    /// Faces it along `alignment` on the level, with the world's up, unless
+    /// it is attached to a parent (`unit_align_facing`).
+    pub fn align_facing(&mut self, attached: bool, alignment: [f32; 2]) {
+        if !attached {
+            self.forward = [alignment[0], alignment[1], 0.0];
+            self.up = [0.0, 0.0, 1.0];
+        }
+    }
+}
+
+/// Whether `a` is within a thousandth of `b` (`valid_realcmp`).
+fn valid_compare(a: f32, b: f32) -> bool {
+    let difference = a - b;
+    difference.is_finite() && difference.abs() < 0.001
+}
+
+/// Whether `n` is a unit normal (`valid_real_normal3d`).
+fn valid_normal(n: [f32; 3]) -> bool {
+    valid_compare(n[0] * n[0] + n[1] * n[1] + n[2] * n[2], 1.0)
+}
+
+/// Whether `forward` and `up` are unit normals at right angles
+/// (`valid_real_vector3d_axes2`).
+fn valid_axes(forward: [f32; 3], up: [f32; 3]) -> bool {
+    valid_normal(forward)
+        && valid_normal(up)
+        && valid_compare(
+            forward[0] * up[0] + forward[1] * up[1] + forward[2] * up[2],
+            0.0,
+        )
+}
+
+/// `vector` clipped to a screen of yaw and pitch in the unit's frame,
+/// `[x0, x1, y0, y1]` (`unit_clip_to_aiming_bounds`): none when there is no
+/// screen or the vector is within it, else the vector at the screen's edge.
+/// The yaw is clamped before the pitch, and the clipped vector is rebuilt
+/// from its angles, as the game's is.
+pub fn clip_to_aiming_bounds(
+    forward: [f32; 3],
+    up: [f32; 3],
+    screen: Option<[f32; 4]>,
+    vector: [f32; 3],
+) -> Option<[f32; 3]> {
+    let [x0, x1, y0, y1] = screen?;
+    let (mut yaw, mut pitch) = animation_blend::relative_angles(forward, up, vector);
+    let mut clipped = false;
+    if yaw < x0 {
+        yaw = x0;
+        clipped = true;
+    } else if yaw > x1 {
+        yaw = x1;
+        clipped = true;
+    }
+    if pitch < y0 {
+        pitch = y0;
+        clipped = true;
+    } else if pitch > y1 {
+        pitch = y1;
+        clipped = true;
+    }
+    if !clipped {
+        return None;
+    }
+    // (the game's `sine` and `cosine` take the double's and round it)
+    let sine = |angle: f32| libm::sin(f64::from(angle)) as f32;
+    let cosine = |angle: f32| libm::cos(f64::from(angle)) as f32;
+    let cosine_pitch = cosine(pitch);
+    let (i, j, k) = (
+        cosine(yaw) * cosine_pitch,
+        sine(yaw) * cosine_pitch,
+        sine(pitch),
+    );
+    let left = [
+        up[1] * forward[2] - up[2] * forward[1],
+        up[2] * forward[0] - up[0] * forward[2],
+        up[0] * forward[1] - up[1] * forward[0],
+    ];
+    Some(std::array::from_fn(|axis| {
+        i * forward[axis] + j * left[axis] + k * up[axis]
+    }))
+}
+
+/// The unit state a script's custom animation plays in
+/// (`_unit_state_user_animation`).
+pub const STATE_USER_ANIMATION: i16 = 28;
+
+/// Whether a unit plays a script's custom animation: its state, none of no
+/// unit (`unit_is_playing_custom_animation`).
+pub fn is_playing_custom_animation(state: Option<i16>) -> bool {
+    state == Some(STATE_USER_ANIMATION)
 }
