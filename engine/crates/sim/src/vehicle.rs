@@ -707,8 +707,9 @@ fn sign(v: f32) -> f32 {
     }
 }
 
-/// How far `v` is from `begin` to `end`, 0 to 1, either way round.
-fn pin_fraction(v: f32, begin: f32, end: f32) -> f32 {
+/// How far `v` is from `begin` to `end`, 0 to 1, either way round (as
+/// physics.c's `pin_fraction`).
+pub fn pin_fraction(v: f32, begin: f32, end: f32) -> f32 {
     if begin < end {
         if v <= begin {
             0.0
@@ -1102,8 +1103,10 @@ fn spun(forward: Vec3, up: Vec3, spin: Vec3) -> (Vec3, Vec3) {
     (forward, up)
 }
 
-/// The friction along or across a mass point's axis, scaled by type.
-fn friction_evaluate(
+/// The friction along or across a mass point's axis, scaled by type (as
+/// physics.c's `friction_evaluate`): `parallel` scales the part along the
+/// type's axis of the frame (`forward`, `up`) and `perpendicular` the rest.
+pub fn friction_evaluate(
     friction: Vec3,
     kind: FrictionType,
     parallel: f32,

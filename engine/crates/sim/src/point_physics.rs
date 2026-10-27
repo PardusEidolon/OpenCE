@@ -40,7 +40,14 @@ impl Moved {
     }
 }
 
-/// A point of `physics`'s mass for `radius`, in air or water.
+/// A point of `physics`'s own mass for `radius` (as point_physics.c's
+/// `point_physics_definition_get_mass`).
+pub fn definition_mass(physics: &PointPhysics, radius: f32) -> f32 {
+    physics.mass_over_radius_cubed * radius * radius * radius
+}
+
+/// A point of `physics`'s mass for `radius` with the air or water it
+/// carries, as `point_physics_update` weighs it.
 pub fn mass(physics: &PointPhysics, radius: f32, in_water: bool) -> f32 {
     let medium = if in_water { WATER_DENSITY } else { AIR_DENSITY };
     let cubed = radius * radius * radius;
@@ -127,7 +134,7 @@ pub fn update(
 pub fn damped(physics: &PointPhysics, radius: f32, velocity: Vec3, dt: f32) -> Vec3 {
     let radius = radius.max(0.0);
     let friction = physics.air_friction * radius * radius;
-    let mass = physics.mass_over_radius_cubed * radius * radius * radius;
+    let mass = definition_mass(physics, radius);
     let scale = if mass == 0.0 {
         if friction == 0.0 {
             1.0

@@ -30,7 +30,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `models` | 17 (8928 B) | 12 (4880 B) | | 1 (464 B) | 7 (1616 B) | 11 (1680 B) | 9 |
 | `networking` | | | | | 288 (49824 B) | | 0 |
 | `objects` | 2 (0 B) | 47 (9776 B) | | 12 (96 B) | 59 (13424 B) | 227 (28288 B) | 50 |
-| `physics` | | 14 (2672 B) | | 22 (12592 B) | 64 (25040 B) | 45 (6928 B) | 16 |
+| `physics` | | 14 (2672 B) | | 22 (12592 B) | 64 (25040 B) | 45 (6928 B) | 13 |
 | `rasterizer` | | 3 (2784 B) | | | 777 (182416 B) | | 2 |
 | `render` | 2 (592 B) | 2 (240 B) | | | 115 (37520 B) | | 0 |
 | `saved games` | | | | 2 (96 B) | 31 (3712 B) | 104 (21184 B) | 2 |
@@ -43,7 +43,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `text` | | 9 (1936 B) | 63 (6864 B) | | 19 (5744 B) | 21 (2368 B) | 9 |
 | `tool` | | | | | 27 (8752 B) | | 0 |
 | `units` | 12 (2288 B) | 67 (27888 B) | | 17 (17808 B) | 9 (1616 B) | 224 (57920 B) | 73 |
-| **all** | 199 (32656 B) | 569 (183952 B) | 332 (38896 B) | 133 (72848 B) | 2773 (575768 B) | 3621 (707002 B) | 527 |
+| **all** | 199 (32656 B) | 569 (183952 B) | 332 (38896 B) | 133 (72848 B) | 2773 (575768 B) | 3621 (707002 B) | 524 |
 
 ## `ai`
 
@@ -63,7 +63,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `magnitude3d` | ai/action_charge.c | Ported |  | `tools/engine_item_reference.py` |
 | `normalize3d` | ai/action_charge.c | Ported |  | `tools/engine_item_reference.py` |
 | `dot_product3d` | ai/action_charge.c | Ported |  | `tools/engine_handle_action_reference.py` |
-| `subtract_vectors3d` | ai/action_charge.c | Ported |  | `tools/engine_vehicle_function_reference.py` |
+| `subtract_vectors3d` | ai/action_charge.c | Ported |  | `tools/engine_physics_math_reference.py` |
 | `real_random` | ai/action_charge.c | Ported |  | `tools/engine_periodic_reference.py` |
 | `vector_from_points2d` | ai/action_obey.c | Ported |  | `tools/engine_math_reference.py` |
 | `cross_product3d` | ai/action_obey.c | Ported |  | `tools/engine_animation_reference.py` |
@@ -1994,7 +1994,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `points_interpolate` | math/real_math.c | Ported |  | `tools/engine_animation_reference.py` |
 | `scalars_interpolate` | math/real_math.c | Ported |  | `tools/engine_animation_reference.py` |
 | `scalars_interpolate_and_clamp_0_to_1` | math/real_math.c | Replaced |  | through its caller `rasterizer_screen_effect_get_cinematic_parameters` |
-| `component_vectors_from_normal3d` | math/real_math.c | Ported |  | `tools/engine_vehicle_function_reference.py` |
+| `component_vectors_from_normal3d` | math/real_math.c | Ported |  | `tools/engine_physics_math_reference.py` |
 | `quaternions_multiply` | math/real_math.c | Ported | sim/src/animation.rs:221 | `tools/engine_animation_reference.py` |
 | `quaternions_interpolate` | math/real_math.c | Ported | sim/src/animation.rs:208 | `tools/engine_animation_reference.py` |
 | `quaternion_transform_point` | math/real_math.c | Ported |  | `tools/engine_item_reference.py` |
@@ -2007,7 +2007,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `quantize_real_to_byte_lower_bound` | math/real_math.c | Matched | sim/src/vehicle_animation.rs:171 | sim/tests/math_extra_reference.rs (trace) |
 | `signed_angle_between_vectors2d` | math/real_math.c | Native |  | `glam::Vec2` |
 | `angle_between_vectors2d` | math/real_math.c | Native |  | `glam::Vec2` |
-| `angle_between_vectors3d` | math/real_math.c | Ported | sim/src/vehicle.rs:830 | `tools/engine_math_reference.py` |
+| `angle_between_vectors3d` | math/real_math.c | Ported | sim/src/vehicle.rs:831 | `tools/engine_math_reference.py` |
 | `angle_between_normals3d` | math/real_math.c | Native |  | `glam::Vec3` |
 | `fast_normals_interpolate` | math/real_math.c | Native |  | `glam::Vec3` |
 | `normals_interpolate` | math/real_math.c | Native |  | `glam::Vec3` |
@@ -2821,14 +2821,14 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `collision_move_point` | physics/collisions.c | Partial | physics/src/lib.rs | leaves out the original's collision BSP walk: Jolt answers the query on a mesh made from the collision BSP, so what is hit at an edge, and in what order, can differ; owed: the engine's own tests (physics/tests/world.rs); no check against the original yet |
 | `collision_move_pill` | physics/collisions.c | Partial | physics/src/lib.rs | leaves out the original's collision BSP walk: Jolt answers the query on a mesh made from the collision BSP, so what is hit at an edge, and in what order, can differ; owed: the engine's own tests (physics/tests/world.rs); no check against the original yet |
 | `collision_move_sphere` | physics/collisions.c | Partial | physics/src/lib.rs | leaves out the original's collision BSP walk: Jolt answers the query on a mesh made from the collision BSP, so what is hit at an edge, and in what order, can differ; owed: the engine's own tests (physics/tests/world.rs); no check against the original yet |
-| `pin_fraction` | physics/physics.c | Matched | sim/src/vehicle.rs | owed: the engine's own tests (sim/src/vehicle.rs); no check against the original yet |
+| `pin_fraction` | physics/physics.c | Matched | sim/src/vehicle.rs:711 | sim/tests/physics_math_reference.rs (trace) |
 | `physics_get_features_in_sphere` | physics/physics.c | Partial | physics/src/lib.rs | physics/tests/collision_reference.rs (trace); leaves out the original's collision BSP walk: Jolt answers the query on a mesh made from the collision BSP, so what is hit at an edge, and in what order, can differ, which surfaces, edges and vertices are listed: the trace checks only whether a sphere touches |
 | `get_material_type` | physics/physics.c | Matched | physics/src/ground.rs:3 | owed: the ground's material; reads the object, tag and map world, which the fake worlds do not hold (the structure's collision) |
 | `render_debug_physics` | physics/physics.c | Replaced | dev/src/draw.rs | the editor and tools |
 | `physics_instance_new` | physics/physics.c | Replaced | physics/src/lib.rs | a library does the job; the same rigid bodies falling, rolling and coming to rest: Jolt integrates the dynamic bodies (physics/src/lib.rs) with the masses and shapes of the game's physics tags |
 | `physics_test_point` | physics/physics.c | Partial | physics/src/lib.rs | physics/tests/collision_reference.rs (trace); leaves out the original's collision BSP walk: Jolt answers the query on a mesh made from the collision BSP, so what is hit at an edge, and in what order, can differ |
 | `physics_test_vector` | physics/physics.c | Partial | physics/src/lib.rs | physics/tests/collision_reference.rs (trace); leaves out the original's collision BSP walk: Jolt answers the query on a mesh made from the collision BSP, so what is hit at an edge, and in what order, can differ |
-| `friction_evaluate` | physics/physics.c | Matched | sim/src/vehicle.rs | owed: the engine's own tests (sim/src/vehicle.rs); no check against the original yet |
+| `friction_evaluate` | physics/physics.c | Matched | sim/src/vehicle.rs:1107 | sim/tests/physics_math_reference.rs (trace) |
 | `physics_compute_new` | physics/physics.c | Replaced | physics/src/lib.rs | a library does the job; the same rigid bodies falling, rolling and coming to rest: Jolt integrates the dynamic bodies (physics/src/lib.rs) with the masses and shapes of the game's physics tags |
 | `physics_compute_biped_collision` | physics/physics.c | Matched | sim/src/seats.rs:344 | owed: physics; Jolt stands for the original's collision; tools/engine_movement_traces.py |
 | `physics_compute_vehicle_collision` | physics/physics.c | Partial | physics/src/lib.rs | leaves out the original's rigid-body integrator: Jolt moves the dynamic bodies; owed: the engine's own tests (physics/tests/world.rs); no check against the original yet |
@@ -2855,7 +2855,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `collision_model_test_vector` | physics/collision_models.c | Partial | physics/src/lib.rs | physics/tests/collision_reference.rs (trace); leaves out the original's collision BSP walk: Jolt answers the query on a mesh made from the collision BSP, so what is hit at an edge, and in what order, can differ, an object's model BSP: the trace walks a level's collision BSP, which is the same walk |
 | `collision_model_test_pill` | physics/collision_models.c | Partial | physics/src/lib.rs | physics/tests/collision_reference.rs (trace); leaves out the original's collision BSP walk: Jolt answers the query on a mesh made from the collision BSP, so what is hit at an edge, and in what order, can differ, an object's model BSP: the trace walks a level's collision BSP, which is the same walk |
 | `render_debug_collision_model` | physics/collision_models.c | Replaced | dev/src/draw.rs | the editor and tools |
-| `point_physics_definition_get_mass` | physics/point_physics.c | Matched | sim/src/point_physics.rs | owed: the engine's own tests (sim/src/point_physics.rs); no check against the original yet |
+| `point_physics_definition_get_mass` | physics/point_physics.c | Matched | sim/src/point_physics.rs:44 | sim/tests/physics_math_reference.rs (trace) |
 | `point_physics_update` | physics/point_physics.c | Matched | sim/src/point_physics.rs:1 | owed: particles; reads the object, tag and map world, which the fake worlds do not hold (the point physics tag); Phase 12's particles |
 | `render_debug_point_physics` | physics/point_physics.c | Replaced | dev/src/draw.rs | the editor and tools |
 

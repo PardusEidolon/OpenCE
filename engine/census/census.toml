@@ -3862,7 +3862,8 @@ owed = "the camera; reads the object, tag and map world, which the fake worlds d
 [function.friction_evaluate]
 class = "matched"
 engine = "sim/src/vehicle.rs"
-owed = "the engine's own tests (sim/src/vehicle.rs); no check against the original yet"
+check = "sim/tests/physics_math_reference.rs"
+against = "trace"
 
 [function.game_all_quiet]
 class = "partial"
@@ -6189,7 +6190,8 @@ note = "not reached from a root of the game; the animation and world track owns 
 [function.pin_fraction]
 class = "matched"
 engine = "sim/src/vehicle.rs"
-owed = "the engine's own tests (sim/src/vehicle.rs); no check against the original yet"
+check = "sim/tests/physics_math_reference.rs"
+against = "trace"
 
 [function.plane2d_distance_to_point]
 class = "native"
@@ -6376,7 +6378,8 @@ note = "not reached from a root of the game; the animation and world track owns 
 [function.point_physics_definition_get_mass]
 class = "matched"
 engine = "sim/src/point_physics.rs"
-owed = "the engine's own tests (sim/src/point_physics.rs); no check against the original yet"
+check = "sim/tests/physics_math_reference.rs"
+against = "trace"
 
 [function.point_physics_update]
 class = "matched"
