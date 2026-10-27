@@ -110,10 +110,11 @@ pub fn read_ratchet(text: &str) -> Result<Ratchet, Error> {
 /// system either does not name counts zero.
 ///
 /// The counts are stages a function moves through, so a function that
-/// moves forward is not a rise: Missing never rises, Missing and Partial
-/// together rise by no more than owed fell (an owed function its check
-/// finds short becomes Partial), and owed rises by no more than Missing
-/// fell (a Missing function becomes Matched or Partial and owes its check).
+/// moves forward is not a rise: Missing and Partial together rise by no
+/// more than owed fell (an owed function its check finds short becomes
+/// Partial, and one it finds a stub becomes Missing), and owed rises by no
+/// more than Missing fell (a Missing function becomes Matched or Partial
+/// and owes its check).
 pub fn compare(recorded: &Ratchet, current: &Ratchet) -> (Vec<String>, Vec<String>) {
     let mut rose = Vec::new();
     let mut fell = Vec::new();
@@ -124,10 +125,10 @@ pub fn compare(recorded: &Ratchet, current: &Ratchet) -> (Vec<String>, Vec<Strin
         let now = current.get(system).copied().unwrap_or_default();
         let freed = was.missing.saturating_sub(now.missing);
         let checked = was.owed.saturating_sub(now.owed);
+        let found = now.missing + now.partial > was.missing + was.partial + checked;
         let rises = [
-            now.missing > was.missing,
-            now.partial > was.partial
-                && now.missing + now.partial > was.missing + was.partial + checked,
+            now.missing > was.missing && found,
+            now.partial > was.partial && found,
             now.owed > was.owed + freed,
         ];
         for (((name, was), (_, now)), rises) in was.named().into_iter().zip(now.named()).zip(rises)

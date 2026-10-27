@@ -646,6 +646,20 @@ impl Rides {
         Some(place.label.as_str()).filter(|label| !label.is_empty())
     }
 
+    /// The labels of every seat of `handle`, in the definition's order,
+    /// the empty ones too.
+    pub fn seat_labels(&self, handle: ObjectHandle) -> Vec<&str> {
+        self.ride(handle)
+            .and_then(|ride| self.kinds.get(ride.kind))
+            .map(|kind| {
+                kind.seats
+                    .iter()
+                    .map(|place| place.label.as_str())
+                    .collect()
+            })
+            .unwrap_or_default()
+    }
+
     /// The unit HUD of `handle` (`unhi`), and the HUD each of its seats'
     /// riders shows its driver.
     pub fn huds(&self, handle: ObjectHandle) -> Option<(Option<&TagRef>, Vec<Option<&TagRef>>)> {

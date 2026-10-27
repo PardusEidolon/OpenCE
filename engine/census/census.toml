@@ -5563,8 +5563,11 @@ engine = "campaign/src/objects.rs"
 owed = "the engine's own tests (campaign/src/objects.rs); no check against the original yet"
 
 [function.object_cause_damage]
-class = "matched"
-owed = "damage; reads the object, tag and map world, which the fake worlds do not hold; Phase 12"
+class = "partial"
+engine = "sim/src/damage.rs"
+check = "sim/tests/cause_damage_reference.rs"
+against = "trace"
+leaves_out = ["shield over-charge, the friendly difficulty divide and the player team's falling ignore-difficulty (coverage_units)", "negligible damage, the current and recent damage and the region byte damage: the engine keeps body points (coverage_units)", "damage to the dead: the engine stops where the game goes on (coverage_units)", "effects, deathless players, the body destroyed threshold and only-hurt-while-occupied (coverage_units)", "vehicles, children, the umbrella shield, AI adjustment, game-engine multipliers, network and player effects (coverage_units)"]
 
 [function.object_choose_random_change_colors]
 class = "matched"
@@ -5588,14 +5591,18 @@ class = "matched"
 owed = "damage; reads the object, tag and map world, which the fake worlds do not hold; Phase 12"
 
 [function.object_damage_body]
-class = "matched"
+class = "partial"
 engine = "sim/src/damage.rs"
-owed = "the engine's own tests (sim/src/damage.rs); no check against the original yet"
+check = "sim/tests/cause_damage_reference.rs"
+against = "trace"
+leaves_out = ["region byte damage and the current and recent body damage (coverage_units)", "the friendly difficulty divide, game-engine multipliers and deathless players (coverage_units)"]
 
 [function.object_damage_shield]
-class = "matched"
+class = "partial"
 engine = "sim/src/damage.rs"
-owed = "the engine's own tests (sim/src/damage.rs); no check against the original yet"
+check = "sim/tests/cause_damage_reference.rs"
+against = "trace"
+leaves_out = ["shield over-charge and the current and recent shield damage (coverage_units)", "the umbrella shield and the network (coverage_units)"]
 
 [function.object_damage_update]
 class = "matched"
@@ -5620,12 +5627,14 @@ owed = "the engine's own tests (sim/src/objects.rs); no check against the origin
 [function.object_deplete_body]
 class = "matched"
 engine = "sim/src/damage.rs"
-owed = "the engine's own tests (sim/src/damage.rs); no check against the original yet"
+check = "campaign/tests/unit_vitality_reference.rs"
+against = "trace"
 
 [function.object_deplete_shield]
 class = "matched"
 engine = "sim/src/damage.rs"
-owed = "the engine's own tests (sim/src/damage.rs); no check against the original yet"
+check = "campaign/tests/unit_vitality_reference.rs"
+against = "trace"
 
 [function.object_destroy]
 class = "matched"
@@ -5674,7 +5683,8 @@ owed = "the engine's own tests (campaign/src/objects.rs); no check against the o
 [function.object_initialize_vitality]
 class = "matched"
 engine = "sim/src/damage.rs"
-owed = "the engine's own tests (sim/src/damage.rs); no check against the original yet"
+check = "campaign/tests/unit_vitality_reference.rs"
+against = "trace"
 
 [function.object_name_list_lookup]
 class = "matched"
@@ -8716,7 +8726,8 @@ owed = "seats; reads the object, tag and map world, which the fake worlds do not
 [function.unit_get_custom_animation_time]
 class = "matched"
 engine = "campaign/src/units.rs"
-owed = "the engine's own tests (campaign/src/units.rs); no check against the original yet"
+check = "campaign/tests/unit_commands_reference.rs"
+against = "trace"
 
 [function.unit_get_seat_entrance_point]
 class = "matched"
@@ -8804,39 +8815,49 @@ check = "campaign/tests/script_signatures_reference.rs"
 against = "trace"
 
 [function.unit_scripting_get_grenade_count]
-class = "matched"
+class = "partial"
 engine = "campaign/src/units.rs"
-owed = "the engine's own tests (campaign/src/units.rs); no check against the original yet"
+check = "campaign/tests/unit_commands_reference.rs"
+against = "trace"
+leaves_out = ["units that are not players: the engine's AI carries no inventory (coverage_units)"]
 
 [function.unit_scripting_get_health]
 class = "matched"
 engine = "campaign/src/units.rs"
-owed = "the engine's own tests (campaign/src/units.rs); no check against the original yet"
+check = "campaign/tests/unit_vitality_reference.rs"
+against = "trace"
 
 [function.unit_scripting_get_shield]
 class = "matched"
 engine = "campaign/src/units.rs"
-owed = "the engine's own tests (campaign/src/units.rs); no check against the original yet"
+check = "campaign/tests/unit_vitality_reference.rs"
+against = "trace"
 
 [function.unit_scripting_has_weapon_readied]
-class = "matched"
+class = "partial"
 engine = "campaign/src/units.rs"
-owed = "the engine's own tests (campaign/src/units.rs); no check against the original yet"
+check = "campaign/tests/unit_commands_reference.rs"
+against = "trace"
+leaves_out = ["units that are not players: the engine's AI carries no inventory (coverage_units)"]
 
 [function.unit_scripting_impervious]
-class = "matched"
+class = "partial"
 engine = "campaign/src/units.rs"
-owed = "the engine's own tests (campaign/src/units.rs); no check against the original yet"
+check = "campaign/tests/unit_commands_reference.rs"
+against = "trace"
+leaves_out = ["the damage push and the flinch it stops: the engine's damage has neither yet (coverage_units)"]
 
 [function.unit_scripting_set_current_vitality]
 class = "matched"
 engine = "campaign/src/units.rs"
-owed = "the engine's own tests (campaign/src/units.rs); no check against the original yet"
+check = "campaign/tests/unit_vitality_reference.rs"
+against = "trace"
 
 [function.unit_scripting_set_maximum_vitality]
 class = "matched"
 engine = "campaign/src/units.rs"
-owed = "the engine's own tests (campaign/src/units.rs); no check against the original yet"
+check = "campaign/tests/unit_vitality_reference.rs"
+against = "trace"
 
 [function.unit_scripting_set_seat]
 class = "partial"
@@ -8848,7 +8869,8 @@ against = "trace"
 [function.unit_scripting_start_user_animation_list]
 class = "matched"
 engine = "campaign/src/units.rs"
-owed = "the engine's own tests (campaign/src/units.rs); no check against the original yet"
+check = "campaign/tests/unit_vitality_reference.rs"
+against = "trace"
 
 [function.unit_scripting_suspended]
 class = "partial"
@@ -8860,7 +8882,8 @@ against = "trace"
 [function.unit_scripting_vehicle_test_seat_list]
 class = "matched"
 engine = "campaign/src/units.rs"
-owed = "the engine's own tests (campaign/src/units.rs); no check against the original yet"
+check = "campaign/tests/unit_commands_reference.rs"
+against = "trace"
 
 [function.unit_seat_update]
 class = "matched"
@@ -8897,9 +8920,8 @@ class = "missing"
 note = "not reached from a root of the game; the units track owns it"
 
 [function.unit_solo_player_integrated_night_vision_is_active]
-class = "matched"
-engine = "campaign/src/units.rs"
-owed = "the engine's own tests (campaign/src/units.rs); no check against the original yet"
+class = "missing"
+note = "a stub in campaign/src/units.rs; the units track (coverage_units) owns it"
 
 [function.unit_start_animation_impulse]
 class = "matched"
@@ -8910,9 +8932,11 @@ class = "missing"
 note = "not reached from a root of the game; the units track owns it"
 
 [function.unit_stop_custom_animation]
-class = "matched"
+class = "partial"
 engine = "campaign/src/units.rs"
-owed = "the engine's own tests (campaign/src/units.rs); no check against the original yet"
+check = "campaign/tests/unit_commands_reference.rs"
+against = "trace"
+leaves_out = ["the unit's return to its idle animation (coverage_units)"]
 
 [function.unit_test_animation_impulse]
 class = "matched"
@@ -8949,12 +8973,14 @@ stands_in = "dev/src/control.rs"
 [function.units_scripting_set_current_vitality]
 class = "matched"
 engine = "campaign/src/units.rs"
-owed = "the engine's own tests (campaign/src/units.rs); no check against the original yet"
+check = "campaign/tests/unit_vitality_reference.rs"
+against = "trace"
 
 [function.units_scripting_set_maximum_vitality]
 class = "matched"
 engine = "campaign/src/units.rs"
-owed = "the engine's own tests (campaign/src/units.rs); no check against the original yet"
+check = "campaign/tests/unit_vitality_reference.rs"
+against = "trace"
 
 [function.units_set_desired_flashlight_state]
 class = "partial"
@@ -9318,14 +9344,12 @@ because = "tools"
 stands_in = "dev/src/draw.rs"
 
 [function.vehicle_scripting_load_magic]
-class = "matched"
-engine = "campaign/src/units.rs"
-owed = "the engine's own tests (campaign/src/units.rs); no check against the original yet"
+class = "missing"
+note = "a stub in campaign/src/units.rs; the units track (coverage_units) owns it"
 
 [function.vehicle_scripting_unload]
-class = "matched"
-engine = "campaign/src/units.rs"
-owed = "the engine's own tests (campaign/src/units.rs); no check against the original yet"
+class = "missing"
+note = "a stub in campaign/src/units.rs; the units track (coverage_units) owns it"
 
 [function.vehicle_update]
 class = "matched"

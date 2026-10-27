@@ -254,3 +254,25 @@ fn an_owed_function_its_check_finds_partial_is_no_rise() -> Result<(), Failure> 
     );
     Ok(())
 }
+
+#[test]
+fn an_owed_function_its_check_finds_a_stub_is_no_rise() -> Result<(), Failure> {
+    let header = "system\tmissing\tpartial\towed\n";
+    let was = ratchet::read_ratchet(&format!("{header}units\t3\t0\t3\n"))?;
+    // (an owed function found to be a stub, and so Missing)
+    let found = ratchet::read_ratchet(&format!("{header}units\t4\t0\t2\n"))?;
+    let (rose, _) = ratchet::compare(&was, &found);
+    assert!(rose.is_empty(), "{rose:?}");
+    // (a Missing function that came from nowhere)
+    let new = ratchet::read_ratchet(&format!("{header}units\t4\t0\t3\n"))?;
+    let (rose, _) = ratchet::compare(&was, &new);
+    assert!(
+        rose.iter().any(|r| r.contains("Missing rose from 3 to 4")),
+        "{rose:?}"
+    );
+    // (one stub and one short, with only one owed function checked)
+    let both = ratchet::read_ratchet(&format!("{header}units\t4\t1\t2\n"))?;
+    let (rose, _) = ratchet::compare(&was, &both);
+    assert!(!rose.is_empty(), "{rose:?}");
+    Ok(())
+}

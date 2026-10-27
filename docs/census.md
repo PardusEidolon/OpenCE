@@ -29,7 +29,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `memory` | | 2 (336 B) | 128 (19856 B) | | 102 (15104 B) | | 0 |
 | `models` | 17 (8928 B) | 12 (4880 B) | | 1 (464 B) | 7 (1616 B) | 11 (1680 B) | 9 |
 | `networking` | | | | | 288 (49824 B) | | 0 |
-| `objects` | 2 (0 B) | 47 (9776 B) | | 12 (96 B) | 59 (13424 B) | 227 (28288 B) | 50 |
+| `objects` | 2 (0 B) | 44 (5536 B) | | 15 (4336 B) | 59 (13424 B) | 227 (28288 B) | 44 |
 | `physics` | | 14 (2672 B) | | 22 (12592 B) | 64 (25040 B) | 45 (6928 B) | 13 |
 | `rasterizer` | | 3 (2784 B) | | | 777 (182416 B) | | 2 |
 | `render` | 2 (592 B) | 2 (240 B) | | | 115 (37520 B) | | 0 |
@@ -42,8 +42,8 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `tag_files` | | | 43 (4288 B) | | 5 (0 B) | | 0 |
 | `text` | | 9 (1936 B) | 63 (6864 B) | | 19 (5744 B) | 21 (2368 B) | 9 |
 | `tool` | | | | | 27 (8752 B) | | 0 |
-| `units` | 12 (2288 B) | 67 (27888 B) | | 17 (17808 B) | 9 (1616 B) | 224 (57920 B) | 73 |
-| **all** | 199 (32656 B) | 569 (183952 B) | 332 (38896 B) | 133 (72848 B) | 2773 (575768 B) | 3621 (707002 B) | 524 |
+| `units` | 12 (2288 B) | 60 (26848 B) | | 21 (18128 B) | 9 (1616 B) | 227 (58640 B) | 57 |
+| **all** | 199 (32656 B) | 559 (178672 B) | 332 (38896 B) | 140 (77408 B) | 2773 (575768 B) | 3624 (707722 B) | 502 |
 
 ## `ai`
 
@@ -64,7 +64,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `normalize3d` | ai/action_charge.c | Ported |  | `tools/engine_item_reference.py` |
 | `dot_product3d` | ai/action_charge.c | Ported |  | `tools/engine_handle_action_reference.py` |
 | `subtract_vectors3d` | ai/action_charge.c | Ported |  | `tools/engine_physics_math_reference.py` |
-| `real_random` | ai/action_charge.c | Ported |  | `tools/engine_periodic_reference.py` |
+| `real_random` | ai/action_charge.c | Ported |  | `tools/engine_cause_damage_reference.py` |
 | `vector_from_points2d` | ai/action_obey.c | Ported |  | `tools/engine_math_reference.py` |
 | `cross_product3d` | ai/action_obey.c | Ported |  | `tools/engine_animation_reference.py` |
 | `negate_vector3d` | ai/action_obey.c | Ported |  | `tools/engine_math_reference.py` |
@@ -80,7 +80,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `set_real_vector3d` | ai/actions.c | Ported |  | `tools/engine_math_reference.py` |
 | `actor_action_handle_surprise` | ai/actions.c | Matched | sim/src/ai_impulse.rs:6 | owed: AI; reads the object, tag and map world, which the fake worlds do not hold (the actor and its prop); Phase 11's divergences |
 | `actor_action_try_to_dive` | ai/actions.c | Matched | sim/src/ai_impulse.rs:5 | owed: AI; reads the object, tag and map world, which the fake worlds do not hold (the actor and its prop); Phase 11's divergences |
-| `fast_ftol` | ai/actor_combat.c | Ported |  | `tools/engine_periodic_reference.py` |
+| `fast_ftol` | ai/actor_combat.c | Ported |  | `tools/engine_cause_damage_reference.py` |
 | `sine` | ai/actor_combat.c | Ported |  | `tools/engine_math_extra_reference.py` |
 | `cosine` | ai/actor_combat.c | Ported |  | `tools/engine_math_extra_reference.py` |
 | `tangent` | ai/actor_combat.c | Ported |  | `tools/engine_math_reference.py` |
@@ -822,7 +822,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `scripted_camera_update` | camera/camera_scripting.c | Matched | campaign/src/cinematic.rs:122 | owed: cutscene cameras; reads the object, tag and map world, which the fake worlds do not hold; campaign/tests/cutscenes.rs |
 | `dead_camera_new` | camera/dead_camera.c | Matched | sim/src/dead_camera.rs:46 | owed: the engine cites it, with no check against the original yet |
 | `dead_camera_update` | camera/dead_camera.c | Matched | sim/src/lib.rs:1425 | owed: the engine cites it, with no check against the original yet |
-| `director_desired_perspective` | camera/director.c | Matched | sim/src/seats.rs:1224 | owed: the camera; reads the object, tag and map world, which the fake worlds do not hold (the unit's seat); Phase 14's death camera |
+| `director_desired_perspective` | camera/director.c | Matched | sim/src/seats.rs:1238 | owed: the camera; reads the object, tag and map world, which the fake worlds do not hold (the unit's seat); Phase 14's death camera |
 | `director_script_camera` | camera/director.c | Matched | campaign/src/cinematic.rs | owed: the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet |
 | `editor_camera_new` | camera/editor_flying_camera.c | Replaced | app/Sources/OpenCEEngineKit/FlyControls.swift | the editor and tools |
 | `editor_camera_get_focus` | camera/editor_flying_camera.c | Replaced | app/Sources/OpenCEEngineKit/FlyControls.swift | the editor and tools |
@@ -1033,7 +1033,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `byte_swap_recording_stream_v1` | cutscene/recorded_animation_playback_v1.c | Replaced | import/src/lib.rs | maps imported to a typed format; byte order is settled when the map is imported |
 | `recorded_animation_verify` | cutscene/recorded_animations.c | Replaced | dev/src/logbook.rs | the editor and tools; a debug check, statistic or editor hook of the original; the dev tools stand in |
 | `render_debug_recording` | cutscene/recorded_animations.c | Replaced | dev/src/draw.rs | the editor and tools |
-| `recorded_animation_play_internal` | cutscene/recorded_animations.c | Partial | campaign/src/units.rs:133 | leaves out the recording's version checks, the units in vehicles; owed: the engine's own version; no check against the original yet |
+| `recorded_animation_play_internal` | cutscene/recorded_animations.c | Partial | campaign/src/units.rs:156 | leaves out the recording's version checks, the units in vehicles; owed: the engine's own version; no check against the original yet |
 
 48 Missing (41 reached from `main_loop`), by file:
 
@@ -1252,7 +1252,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `game_safe_to_save` | game/game.c | Partial | sim/src/safety.rs:2 | sim/tests/safety_reference.rs (trace); leaves out the dangers themselves, but for a dead player: enemies that see a player, projectiles, items, effects and vehicles near one, units throwing or dying, a player in the air |
 | `game_safe_to_speak` | game/game.c | Partial | sim/src/safety.rs:2 | sim/tests/safety_reference.rs (trace); leaves out the dangers themselves, but for a dead player: enemies that see a player, projectiles, items, effects and vehicles near one, units throwing or dying, a player in the air |
 | `game_is_cooperative` | game/game.c | Matched | sim/src/safety.rs:54 | sim/tests/safety_reference.rs (trace); the engine counts its players, the game the players it spawns |
-| `set_random_seed` | game/game.c | Ported |  | `tools/engine_periodic_reference.py` |
+| `set_random_seed` | game/game.c | Ported |  | `tools/engine_cause_damage_reference.py` |
 | `game_engine_get_team_score` | game/game_engine.c | Matched | sim/src/game.rs:348 | sim/tests/game_engine_reference.rs (trace) |
 | `initialize_player_multiplayer_data` | game/game_engine.c | Ported |  | `tools/engine_game_engine_reference.py` |
 | `game_engine_game_starting` | game/game_engine.c | Partial | sim/src/game.rs:863 | sim/tests/announcer_reference.rs (trace); leaves out importing the globals' multiplayer sounds (the data track), playing the sound (the scripts and sounds track), game_engine_build_lighting (replaced by the engine's lighting); the announcer's queue (game_engine_multiplayer_sounds.c) and the game types' starts are traced with it in sim/src/announcer.rs; Race's start is not in the sources |
@@ -1348,13 +1348,13 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `player_new` | game/players.c | Partial | sim/src/lib.rs:759 | sim/tests/game_engine_reference.rs (trace); leaves out the network's player slots, the player's profile and colours, its name, the squad, cluster and aim assist it starts without; a new player has no unit and is added to the game as game_engine_player_added adds it (the game engine trace); the rest of its datum the engine does not hold |
 | `find_best_starting_location_index` | game/players.c | Ported | sim/src/game.rs:771 | `tools/engine_spawn_reference.py` |
 | `player_spawn` | game/players.c | Partial | sim/src/game.rs:317 | sim/tests/spawn_reference.rs (trace); leaves out the starting equipment's profiles, a campaign respawn's saved unit, a co-op respawn behind its teammate, the unit's colours; its start chosen as the game chooses it (find_best_starting_location_index's trace); the unit placed there and armed from the globals |
-| `player_handle_action` | game/players.c | Partial | sim/src/seats.rs:791 | sim/tests/handle_action_reference.rs (trace); leaves out the action's other uses (devices, powerups), the eviction of an AI from a seat, unit_can_enter_seat's own checks; a vehicle turned back over from the side or end the game chooses (vehicle::Approach::of), 3000 flips |
+| `player_handle_action` | game/players.c | Partial | sim/src/seats.rs:805 | sim/tests/handle_action_reference.rs (trace); leaves out the action's other uses (devices, powerups), the eviction of an AI from a seat, unit_can_enter_seat's own checks; a vehicle turned back over from the side or end the game chooses (vehicle::Approach::of), 3000 flips |
 | `players_debug_render` | game/players.c | Replaced | dev/src/draw.rs | the editor and tools |
 | `debug_player_teleport` | game/players.c | Replaced | dev/src/control.rs | the editor and tools |
 | `players_update_before_game` | game/players.c | Partial | sim/src/lib.rs:390 | sim/tests/game_tick_reference.rs (trace); leaves out the network's prediction, the players' respawn timers, co-op's stranded players rescued, the actions' checks (its asserts); only its place in the tick is traced (game_tick); its body is the game loop track's |
 | `player_examine_nearby_item` | game/players.c | Partial | sim/src/pickup.rs:2 | sim/tests/pickup_reference.rs (trace); leaves out picking up equipment and powerups, the grenades' pickup, the action's priority among the objects nearby (player_set_action_result); taken, swapped or left as the game chooses (unit_should_autopick_weapon, unit_approve_weapon_swap), 4000 cases; the engine carries two weapons where the game's places are four |
 | `player_examine_nearby_objects` | game/players.c | Partial | sim/src/hud.rs:318 | sim/tests/pickup_reference.rs (trace); leaves out the objects found by objects_in_sphere (the engine looks within the pickup radius), the nearby bipeds and devices; the weapons examined as the game examines them (player_examine_nearby_item's trace); the vehicles' seats are offered by sim/src/seats.rs |
-| `players_update_after_game` | game/players.c | Partial | campaign/src/lib.rs:472 | sim/tests/game_tick_reference.rs (trace); leaves out the telefrag, the powerups' timers, double speed, co-op's wait for the host; only its place in the tick is traced (game_tick); the BSP switch and the end of a level are checked by campaign/tests/flow.rs; its body is the game loop track's |
+| `players_update_after_game` | game/players.c | Partial | campaign/src/lib.rs:480 | sim/tests/game_tick_reference.rs (trace); leaves out the telefrag, the powerups' timers, double speed, co-op's wait for the host; only its place in the tick is traced (game_tick); the BSP switch and the end of a level are checked by campaign/tests/flow.rs; its body is the game loop track's |
 | `game_engine_network_player_score` | game/game_engine.c | Replaced | net/src/snapshot.rs | networking and Xbox Live; the original's network state and prediction; the engine sends snapshots |
 | `game_engine_write_network_state` | game/game_engine.c | Replaced | net/src/snapshot.rs | networking and Xbox Live; the original's network state and prediction; the engine sends snapshots |
 | `game_engine_read_network_state` | game/game_engine.c | Replaced | net/src/snapshot.rs | networking and Xbox Live; the original's network state and prediction; the engine sends snapshots |
@@ -1933,11 +1933,11 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `matrix3x3_rotation_to_quaternion` | math/matrix_math.c | Native |  | `glam::Quat` |
 | `matrix4x3_from_plane` | math/matrix_math.c | Native |  | `glam::Affine3A` |
 | `periodic_functions_dispose` | math/periodic_functions.c | Replaced |  | through its caller `real_math_dispose` |
-| `periodic_function_evaluate` | math/periodic_functions.c | Ported | sim/src/periodic.rs:165 | `tools/engine_periodic_reference.py` |
-| `transition_function_evaluate` | math/periodic_functions.c | Ported | sim/src/damage.rs:37 | `tools/engine_periodic_reference.py` |
-| `transition_function_build_table` | math/periodic_functions.c | Ported | sim/src/periodic.rs:199 | `tools/engine_periodic_reference.py` |
-| `periodic_function_build_table` | math/periodic_functions.c | Ported | sim/src/periodic.rs:93 | `tools/engine_periodic_reference.py` |
-| `periodic_functions_initialize` | math/periodic_functions.c | Ported | sim/src/periodic.rs:45 | `tools/engine_periodic_reference.py` |
+| `periodic_function_evaluate` | math/periodic_functions.c | Ported | sim/src/periodic.rs:165 | `tools/engine_cause_damage_reference.py` |
+| `transition_function_evaluate` | math/periodic_functions.c | Ported | sim/src/damage.rs:37 | `tools/engine_cause_damage_reference.py` |
+| `transition_function_build_table` | math/periodic_functions.c | Ported | sim/src/periodic.rs:199 | `tools/engine_cause_damage_reference.py` |
+| `periodic_function_build_table` | math/periodic_functions.c | Ported | sim/src/periodic.rs:93 | `tools/engine_cause_damage_reference.py` |
+| `periodic_functions_initialize` | math/periodic_functions.c | Ported | sim/src/periodic.rs:45 | `tools/engine_cause_damage_reference.py` |
 | `lock_global_random_seed` | math/random_math.c | Ported |  | `tools/engine_random_reference.py` |
 | `unlock_global_random_seed` | math/random_math.c | Ported |  | `tools/engine_random_reference.py` |
 | `get_global_random_seed_address` | math/random_math.c | Ported |  | `tools/engine_random_reference.py` |
@@ -1947,10 +1947,10 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `get_number_suitable_for_initializing_random_seed` | math/random_math.c | Replaced |  | through its caller `random_math_initialize` |
 | `random_math_initialize` | math/random_math.c | Replaced |  | through its caller `real_math_initialize` |
 | `random_math_dispose` | math/random_math.c | Replaced |  | through its caller `real_math_dispose` |
-| `real_seed_random` | math/random_math.c | Ported | audio/src/choice.rs:30 | `tools/engine_item_reference.py` |
+| `real_seed_random` | math/random_math.c | Ported | audio/src/choice.rs:30 | `tools/engine_cause_damage_reference.py` |
 | `real_seed_random_range` | math/random_math.c | Ported | ffi/src/decals.rs:126 | `tools/engine_math_reference.py` |
-| `seed_random` | math/random_math.c | Ported | audio/src/choice.rs:24 | `tools/engine_item_spawn_reference.py` |
-| `seed_random_range` | math/random_math.c | Ported | audio/src/choice.rs:36 | `tools/engine_item_spawn_reference.py` |
+| `seed_random` | math/random_math.c | Ported | audio/src/choice.rs:24 | `tools/engine_cause_damage_reference.py` |
+| `seed_random_range` | math/random_math.c | Ported | audio/src/choice.rs:36 | `tools/engine_cause_damage_reference.py` |
 | `direction3d_from_table` | math/random_math.c | Ported |  | `tools/engine_math_reference.py` |
 | `seed_random_direction3d` | math/random_math.c | Matched | sim/src/random.rs:55 | sim/tests/random_reference.rs (trace) |
 | `seed_random_vector_in_cone3d` | math/random_math.c | Ported | sim/src/random.rs:66 | `tools/engine_math_reference.py` |
@@ -1981,7 +1981,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `bit_vector_or` | math/integer_math.c | Native |  | `u32` |
 | `bit_vector_not` | math/integer_math.c | Replaced |  | through its caller `ai_debug_communication_toggle_bits` |
 | `scale_rectangle2d` | math/integer_math.c | Native |  | `min` |
-| `periodic_function_build_variable_period_x_table` | math/periodic_functions.c | Ported | sim/src/periodic.rs:73 | `tools/engine_periodic_reference.py` |
+| `periodic_function_build_variable_period_x_table` | math/periodic_functions.c | Ported | sim/src/periodic.rs:73 | `tools/engine_cause_damage_reference.py` |
 | `magnitude_squared3d_right_associated` | math/real_math.c | Native |  | `glam::Vec3` |
 | `real_math_initialize` | math/real_math.c | Replaced |  | through its caller `shell_initialize` |
 | `real_math_dispose` | math/real_math.c | Replaced |  | through its caller `shell_dispose` |
@@ -2620,7 +2620,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | --- | --- | --- | --- | --- |
 | `lightning_render` | objects/widgets/lightning.c | Replaced | app/Sources/OpenCEEngineRender/UiPass.swift | the enhanced lighting and Metal renderer; drawn by the Metal renderer |
 | `damage_render_debug` | objects/damage.c | Replaced | dev/src/draw.rs | the editor and tools |
-| `object_initialize_vitality` | objects/damage.c | Matched | sim/src/damage.rs | owed: the engine's own tests (sim/src/damage.rs); no check against the original yet |
+| `object_initialize_vitality` | objects/damage.c | Matched | sim/src/damage.rs:113 | campaign/tests/unit_vitality_reference.rs (trace) |
 | `object_get_maximum_body_vitality` | objects/damage.c | Matched | sim/src/damage.rs | owed: the engine's own tests (sim/src/damage.rs); no check against the original yet |
 | `object_get_maximum_shield_vitality` | objects/damage.c | Matched | sim/src/damage.rs | owed: the engine's own tests (sim/src/damage.rs); no check against the original yet |
 | `damage_data_new` | objects/damage.c | Matched | sim/src/damage.rs | owed: the engine's own tests (sim/src/damage.rs); no check against the original yet |
@@ -2628,14 +2628,14 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `object_cannot_take_damage` | objects/damage.c | Matched | campaign/src/objects.rs | owed: the engine's own tests (campaign/src/objects.rs); no check against the original yet |
 | `object_set_ranged_attack_inhibited` | objects/damage.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
 | `object_set_melee_attack_inhibited` | objects/damage.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
-| `object_deplete_shield` | objects/damage.c | Matched | sim/src/damage.rs | owed: the engine's own tests (sim/src/damage.rs); no check against the original yet |
-| `object_damage_shield` | objects/damage.c | Matched | sim/src/damage.rs | owed: the engine's own tests (sim/src/damage.rs); no check against the original yet |
+| `object_deplete_shield` | objects/damage.c | Matched | sim/src/damage.rs:94 | campaign/tests/unit_vitality_reference.rs (trace) |
+| `object_damage_shield` | objects/damage.c | Partial | sim/src/damage.rs:259 | sim/tests/cause_damage_reference.rs (trace); leaves out shield over-charge and the current and recent shield damage (coverage_units), the umbrella shield and the network (coverage_units) |
 | `object_damage_aftermath` | objects/damage.c | Matched | sim/src/forces.rs:2 | owed: damage; reads the object, tag and map world, which the fake worlds do not hold; Phase 12 |
 | `render_debug_object_damage` | objects/damage.c | Replaced | dev/src/draw.rs | the editor and tools |
-| `object_deplete_body` | objects/damage.c | Matched | sim/src/damage.rs | owed: the engine's own tests (sim/src/damage.rs); no check against the original yet |
+| `object_deplete_body` | objects/damage.c | Matched | sim/src/damage.rs:101 | campaign/tests/unit_vitality_reference.rs (trace) |
 | `object_destroy` | objects/damage.c | Matched | campaign/src/objects.rs | owed: the engine's own tests (campaign/src/objects.rs); no check against the original yet |
-| `object_damage_body` | objects/damage.c | Matched | sim/src/damage.rs | owed: the engine's own tests (sim/src/damage.rs); no check against the original yet |
-| `object_cause_damage` | objects/damage.c | Matched | sim/src/damage.rs:179 | owed: damage; reads the object, tag and map world, which the fake worlds do not hold; Phase 12 |
+| `object_damage_body` | objects/damage.c | Partial | sim/src/damage.rs:259 | sim/tests/cause_damage_reference.rs (trace); leaves out region byte damage and the current and recent body damage (coverage_units), the friendly difficulty divide, game-engine multipliers and deathless players (coverage_units) |
+| `object_cause_damage` | objects/damage.c | Partial | sim/src/damage.rs:258 | sim/tests/cause_damage_reference.rs (trace); leaves out shield over-charge, the friendly difficulty divide and the player team's falling ignore-difficulty (coverage_units), negligible damage, the current and recent damage and the region byte damage: the engine keeps body points (coverage_units), damage to the dead: the engine stops where the game goes on (coverage_units), effects, deathless players, the body destroyed threshold and only-hurt-while-occupied (coverage_units), vehicles, children, the umbrella shield, AI adjustment, game-engine multipliers, network and player effects (coverage_units) |
 | `object_damage_update` | objects/damage.c | Matched | sim/src/damage.rs | owed: the engine's own tests (sim/src/damage.rs); no check against the original yet |
 | `area_of_effect_cause_damage_to_object` | objects/damage.c | Matched | sim/src/damage.rs:5 | owed: damage; reads the object, tag and map world, which the fake worlds do not hold; Phase 12's explosions |
 | `area_of_effect_cause_damage` | objects/damage.c | Matched | sim/src/damage.rs | owed: the engine's own tests (sim/src/damage.rs); no check against the original yet |
@@ -2712,13 +2712,13 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `object_header_delete` | objects/objects.c | Ported |  | `tools/engine_data_reference.py` |
 | `object_scripting_set_collideable` | objects/objects.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
 | `objects_place` | objects/objects.c | Matched | sim/src/objects.rs | owed: the engine's own tests (sim/src/objects.rs); no check against the original yet |
-| `object_start_interpolation` | objects/objects.c | Matched | campaign/src/units.rs:55 | owed: interpolation; reads the object, tag and map world, which the fake worlds do not hold; Phase 12's impacts |
+| `object_start_interpolation` | objects/objects.c | Matched | campaign/src/units.rs:56 | owed: interpolation; reads the object, tag and map world, which the fake worlds do not hold; Phase 12's impacts |
 | `object_get_function_value` | objects/objects.c | Matched | ffi/src/particles/contrails.rs:56 | owed: the engine cites it, with no check against the original yet |
 | `object_index_from_name_index` | objects/objects.c | Matched | campaign/src/objects.rs | owed: the engine's own tests (campaign/src/objects.rs); no check against the original yet |
 | `objects_disconnect_from_structure_bsp` | objects/objects.c | Matched | sim/src/objects.rs | owed: the engine's own tests (sim/src/objects.rs); no check against the original yet |
 | `object_pvs_activate` | objects/objects.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
 | `objects_scripting_set_scale` | objects/objects.c | Partial | campaign/src/objects.rs | leaves out the frames asked for: the scale is taken at once; owed: the engine's own tests (campaign/src/objects.rs); no check against the original yet |
-| `object_delete` | objects/objects.c | Matched | campaign/src/lib.rs:262 | owed: the engine's own tests (sim/src/objects.rs); no check against the original yet |
+| `object_delete` | objects/objects.c | Matched | campaign/src/lib.rs:270 | owed: the engine's own tests (sim/src/objects.rs); no check against the original yet |
 | `object_detach` | objects/objects.c | Matched | campaign/src/objects.rs | owed: the engine's own tests (campaign/src/objects.rs); no check against the original yet |
 | `objects_reconnect_to_structure_bsp` | objects/objects.c | Matched | sim/src/objects.rs | owed: the engine's own tests (sim/src/objects.rs); no check against the original yet |
 | `objects_paparazzi` | objects/objects.c | Replaced | dev/src/logbook.rs | the editor and tools; a debug check, statistic or editor hook of the original; the dev tools stand in |
@@ -4373,16 +4373,16 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `biped_update_turning` | units/bipeds.c | Matched | sim/src/unit_states.rs:769 | owed: a biped's turning; reads the object, tag and map world, which the fake worlds do not hold; Phase 11's divergences |
 | `biped_update_moving` | units/bipeds.c | Partial | physics/src/movement.rs | leaves out the original's collision: the pill is moved by the physics library's character controller; owed: the engine's own tests (physics/src/movement.rs); no check against the original yet |
 | `biped_update` | units/bipeds.c | Matched | sim/src/unit_animator.rs:1 | owed: the engine cites it, with no check against the original yet |
-| `unit_scripting_set_maximum_vitality` | units/unit_scripting_commands.c | Matched | campaign/src/units.rs | owed: the engine's own tests (campaign/src/units.rs); no check against the original yet |
-| `units_scripting_set_maximum_vitality` | units/unit_scripting_commands.c | Matched | campaign/src/units.rs | owed: the engine's own tests (campaign/src/units.rs); no check against the original yet |
-| `unit_scripting_set_current_vitality` | units/unit_scripting_commands.c | Matched | campaign/src/units.rs | owed: the engine's own tests (campaign/src/units.rs); no check against the original yet |
-| `units_scripting_set_current_vitality` | units/unit_scripting_commands.c | Matched | campaign/src/units.rs | owed: the engine's own tests (campaign/src/units.rs); no check against the original yet |
-| `unit_scripting_get_health` | units/unit_scripting_commands.c | Matched | campaign/src/units.rs | owed: the engine's own tests (campaign/src/units.rs); no check against the original yet |
-| `unit_scripting_get_shield` | units/unit_scripting_commands.c | Matched | campaign/src/units.rs | owed: the engine's own tests (campaign/src/units.rs); no check against the original yet |
-| `unit_scripting_get_grenade_count` | units/unit_scripting_commands.c | Matched | campaign/src/units.rs | owed: the engine's own tests (campaign/src/units.rs); no check against the original yet |
-| `unit_scripting_impervious` | units/unit_scripting_commands.c | Matched | campaign/src/units.rs | owed: the engine's own tests (campaign/src/units.rs); no check against the original yet |
-| `unit_scripting_start_user_animation_list` | units/unit_scripting_commands.c | Matched | campaign/src/units.rs | owed: the engine's own tests (campaign/src/units.rs); no check against the original yet |
-| `unit_scripting_has_weapon_readied` | units/unit_scripting_commands.c | Matched | campaign/src/units.rs | owed: the engine's own tests (campaign/src/units.rs); no check against the original yet |
+| `unit_scripting_set_maximum_vitality` | units/unit_scripting_commands.c | Matched | campaign/src/units.rs:135 | campaign/tests/unit_vitality_reference.rs (trace) |
+| `units_scripting_set_maximum_vitality` | units/unit_scripting_commands.c | Matched | campaign/src/units.rs | campaign/tests/unit_vitality_reference.rs (trace) |
+| `unit_scripting_set_current_vitality` | units/unit_scripting_commands.c | Matched | campaign/src/units.rs | campaign/tests/unit_vitality_reference.rs (trace) |
+| `units_scripting_set_current_vitality` | units/unit_scripting_commands.c | Matched | campaign/src/units.rs | campaign/tests/unit_vitality_reference.rs (trace) |
+| `unit_scripting_get_health` | units/unit_scripting_commands.c | Matched | sim/src/damage.rs:153 | campaign/tests/unit_vitality_reference.rs (trace) |
+| `unit_scripting_get_shield` | units/unit_scripting_commands.c | Matched | sim/src/damage.rs:163 | campaign/tests/unit_vitality_reference.rs (trace) |
+| `unit_scripting_get_grenade_count` | units/unit_scripting_commands.c | Partial | campaign/src/units.rs:270 | campaign/tests/unit_commands_reference.rs (trace); leaves out units that are not players: the engine's AI carries no inventory (coverage_units) |
+| `unit_scripting_impervious` | units/unit_scripting_commands.c | Partial | campaign/src/units.rs:231 | campaign/tests/unit_commands_reference.rs (trace); leaves out the damage push and the flinch it stops: the engine's damage has neither yet (coverage_units) |
+| `unit_scripting_start_user_animation_list` | units/unit_scripting_commands.c | Matched | campaign/src/units.rs:309 | campaign/tests/unit_vitality_reference.rs (trace) |
+| `unit_scripting_has_weapon_readied` | units/unit_scripting_commands.c | Partial | campaign/src/units.rs:256 | campaign/tests/unit_commands_reference.rs (trace); leaves out units that are not players: the engine's AI carries no inventory (coverage_units) |
 | `unit_kill` | units/units.c | Matched | script/src/lib.rs:508 | owed: the engine cites it, with no check against the original yet |
 | `units_update` | units/units.c | Partial | sim/src/lib.rs:389 | leaves out the units that are not players' (the campaign's actors step apart); owed: the engine's own version; no check against the original yet |
 | `unit_get_seat_entrance_point` | units/units.c | Matched | sim/src/seats.rs:63 | owed: seats; reads the object, tag and map world, which the fake worlds do not hold (the seat's marker) |
@@ -4401,7 +4401,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `unit_test_animation_impulse` | units/units.c | Matched | sim/src/ai_impulse.rs:131 | owed: AI's impulses; reads the object, tag and map world, which the fake worlds do not hold (the animation graph) |
 | `unit_scripting_suspended` | units/units.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
 | `unit_scripting_doesnt_drop_items` | units/units.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
-| `unit_scripting_vehicle_test_seat_list` | units/units.c | Matched | campaign/src/units.rs | owed: the engine's own tests (campaign/src/units.rs); no check against the original yet |
+| `unit_scripting_vehicle_test_seat_list` | units/units.c | Matched | campaign/src/units.rs:448 | campaign/tests/unit_commands_reference.rs (trace) |
 | `units_debug_get_next_unit` | units/units.c | Replaced | dev/src/control.rs | the editor and tools |
 | `units_debug_get_closest_unit` | units/units.c | Replaced | dev/src/control.rs | the editor and tools |
 | `unit_debug_ninja_rope` | units/units.c | Replaced | dev/src/control.rs | the editor and tools |
@@ -4414,7 +4414,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `unit_melee_sound` | units/units.c | Matched | sim/src/player.rs:1162 | owed: the engine cites it, with no check against the original yet |
 | `unit_set_enterable_by_player` | units/units.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
 | `unit_set_emotion` | units/units.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
-| `unit_get_custom_animation_time` | units/units.c | Matched | campaign/src/units.rs | owed: the engine's own tests (campaign/src/units.rs); no check against the original yet |
+| `unit_get_custom_animation_time` | units/units.c | Matched | campaign/src/units.rs:353 | campaign/tests/unit_commands_reference.rs (trace) |
 | `unit_set_or_test_seat_and_weapon_label` | units/units.c | Matched | sim/src/animation.rs:1396 | owed: checked through the animation trace's labels |
 | `unit_render_debug` | units/units.c | Replaced | dev/src/draw.rs | the editor and tools |
 | `unit_animation_set_state` | units/units.c | Matched | sim/src/unit_states.rs:3 | owed: checked through the unit state trace's rules |
@@ -4425,20 +4425,17 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `unit_approve_weapon_swap` | units/units.c | Ported | sim/src/pickup.rs:10 | `tools/engine_pickup_reference.py` |
 | `unit_scripting_set_seat` | units/units.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
 | `unit_cause_melee_damage` | units/units.c | Matched | sim/src/unit_states.rs:430 | owed: damage; reads the object, tag and map world, which the fake worlds do not hold; Phase 12 |
-| `unit_stop_custom_animation` | units/units.c | Matched | campaign/src/units.rs | owed: the engine's own tests (campaign/src/units.rs); no check against the original yet |
+| `unit_stop_custom_animation` | units/units.c | Partial | campaign/src/units.rs | campaign/tests/unit_commands_reference.rs (trace); leaves out the unit's return to its idle animation (coverage_units) |
 | `unit_custom_animation_at_frame` | units/units.c | Matched | sim/src/animation.rs:1479 | owed: scripts' custom animations; reads the object, tag and map world, which the fake worlds do not hold |
 | `unit_preprocess_node_orientations` | units/units.c | Matched | sim/src/animation_blend.rs:5 | owed: checked through the animation trace's aiming blends |
 | `unit_update_animation` | units/units.c | Matched | sim/src/unit_animator.rs:1 | owed: checked through the unit state trace's rules |
 | `unit_start_animation_impulse` | units/units.c | Matched | sim/src/ai_impulse.rs:4 | owed: AI's impulses; reads the object, tag and map world, which the fake worlds do not hold (the animation graph) |
-| `unit_solo_player_integrated_night_vision_is_active` | units/units.c | Matched | campaign/src/units.rs | owed: the engine's own tests (campaign/src/units.rs); no check against the original yet |
 | `unit_new` | units/units.c | Partial | sim/src/objects.rs:247 | leaves out the unit's seats and its weapons, its animation graph's state; owed: the engine's own version; no check against the original yet |
 | `unit_enter_seat` | units/units.c | Matched | sim/src/unit_states.rs:571 | owed: seats; reads the object, tag and map world, which the fake worlds do not hold; Phase 13's getting in and out |
 | `unit_exit_seat_end` | units/units.c | Matched | sim/src/lib.rs:569 | owed: seats; reads the object, tag and map world, which the fake worlds do not hold; Phase 13's getting in and out |
 | `unit_scripting_enter_vehicle` | units/units.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
-| `vehicle_scripting_load_magic` | units/units.c | Matched | campaign/src/units.rs | owed: the engine's own tests (campaign/src/units.rs); no check against the original yet |
 | `unit_try_and_exit_seat` | units/units.c | Matched | sim/src/unit_states.rs:603 | owed: the engine cites it, with no check against the original yet |
 | `unit_update` | units/units.c | Partial | sim/src/lib.rs:412 | leaves out dialogue, the aiming bounds and Euler aiming, shield sapping, the powerups' timers; owed: the engine's own version; no check against the original yet |
-| `vehicle_scripting_unload` | units/units.c | Matched | campaign/src/units.rs | owed: the engine's own tests (campaign/src/units.rs); no check against the original yet |
 | `unit_scripting_exit_vehicle` | units/units.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
 | `vehicle_causes_collision_damage` | units/vehicles.c | Matched | sim/src/damage.rs | owed: the engine's own tests (sim/src/damage.rs); no check against the original yet |
 | `vehicle_hover` | units/vehicles.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
@@ -4450,8 +4447,8 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `vehicle_accelerate` | units/vehicles.c | Matched | sim/src/forces.rs:212 | owed: the engine cites it, with no check against the original yet |
 | `vehicle_render_debug` | units/vehicles.c | Replaced | dev/src/draw.rs | the editor and tools |
 | `slowly_stop_vehicle` | units/vehicles.c | Matched | sim/src/vehicle.rs | owed: the engine's own tests (sim/src/vehicle.rs); no check against the original yet |
-| `create_ghost_effect` | units/vehicles.c | Matched | sim/src/seats.rs:1267 | owed: a vehicle's effects; reads the object, tag and map world, which the fake worlds do not hold; Phase 13's effects on the move |
-| `create_pelican_effect` | units/vehicles.c | Matched | sim/src/seats.rs:1268 | owed: a vehicle's effects; reads the object, tag and map world, which the fake worlds do not hold; Phase 13's effects on the move |
+| `create_ghost_effect` | units/vehicles.c | Matched | sim/src/seats.rs:1281 | owed: a vehicle's effects; reads the object, tag and map world, which the fake worlds do not hold; Phase 13's effects on the move |
+| `create_pelican_effect` | units/vehicles.c | Matched | sim/src/seats.rs:1282 | owed: a vehicle's effects; reads the object, tag and map world, which the fake worlds do not hold; Phase 13's effects on the move |
 | `update_suspension` | units/vehicles.c | Matched | sim/src/vehicle_animation.rs:4 | owed: the engine cites it, with no check against the original yet |
 | `create_slipping_effects` | units/vehicles.c | Matched | sim/src/vehicle.rs | owed: the engine's own tests (sim/src/vehicle.rs); no check against the original yet |
 | `update_human_tank_physics` | units/vehicles.c | Matched | sim/src/vehicle.rs | owed: the engine's own tests (sim/src/vehicle.rs); no check against the original yet |
@@ -4465,7 +4462,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `update_alien_scout_physics` | units/vehicles.c | Matched | sim/src/vehicle.rs | owed: the engine's own tests (sim/src/vehicle.rs); no check against the original yet |
 | `update_alien_fighter_physics` | units/vehicles.c | Matched | sim/src/vehicle.rs | owed: the engine's own tests (sim/src/vehicle.rs); no check against the original yet |
 
-224 Missing (214 reached from `main_loop`), by file:
+227 Missing (217 reached from `main_loop`), by file:
 
 - units/biped_limp_noodle.c: `biped_limp_noodle_get_max_relaxation_iterations`, `biped_limp_noodle_valid_joint_rotation`, `biped_limp_noodle_move_relax_and_constrain_positions`, `validate_real_vector3d_axes3`, `biped_limp_noodle_adjust_orientations`, `biped_limp_noodle_relax_nodes_onto_environment`
 - units/bipeds.c: `animation_left_foot_frame_index`, `animation_right_foot_frame_index`, `bipeds_initialize`, `bipeds_initialize_for_new_map`, `bipeds_dispose_from_old_map`, `bipeds_dispose`, `biped_place`, `biped_delete`, `biped_reset`, `biped_disconnect_from_structure_bsp`, `biped_get_physics_pill`, `biped_stop_melee_attack`, `biped_stop_limp_body_physics`, `biped_bumped_object`, `biped_flying_through_air`, `biped_apply_rotation`, `biped_falling_danger`, `biped_adjust_placement`, `biped_export_function_values`, `biped_get_sight_position`, `biped_get_autoaim_pill`, `biped_fix_position`, `biped_find_ground_surface`, `biped_approximate_surface_index`, `biped_find_pathfinding_surface_index`, `biped_exit_seat_end`, `biped_vehicle_speech`, `biped_update_dead`, `biped_try_to_make_footsteps`, `biped_find_nearby_support_surface`, `biped_verify_object_vectors`, `biped_update_slipping`, `biped_build_flying_axes`, `biped_snap_facing`, `biped_new`, `biped_preprocess_node_orientations`, `biped_check_discard`
@@ -4473,5 +4470,5 @@ docs/engine.md's "The coverage census" says what each class needs.
 - units/unit_definitions.c: `unit_definition_get_active_hud_index`, `unit_definition_get_seat_active_hud_index`
 - units/unit_dialogue.c: `unit_test_speech`, `unit_is_speaking`, `unit_dialogue_determine_variant`, `unit_get_speech_priority_name`, `unit_get_speech_priority_by_name`, `unit_describe_speech`, `unit_lose_speech`, `unit_speak`, `unit_notify_impulse_sound`, `unit_make_damage_sound`, `unit_scream`, `unit_find_dialogue_variant`, `unit_dialogue_setup`, `unit_dialogue_update`
 - units/unit_scripting_commands.c: `unit_scripting_has_weapon`
-- units/units.c: `units_initialize`, `units_initialize_for_new_map`, `units_dispose_from_old_map`, `units_dispose`, `unit_kill_silent`, `unit_kill_no_statistics`, `unit_delete`, `unit_export_function_values`, `unit_persistent_control`, `unit_get_melee_range_and_ticks`, `unit_get_animation_frames_remaining`, `unit_euler_axis_doplan`, `unit_get_zoom_level`, `unit_animation_weapon_ik`, `unit_animation_vehicle_ik`, `unit_animation_start_action`, `unit_animation_start_overlay_action`, `unit_can_enter_seat`, `unit_impulse`, `unit_handle_weapon_state_change`, `unit_record_damage`, `unit_test_spawning`, `unit_get_head_position`, `unit_estimate_position`, `unit_get_center_of_mass`, `unit_get_aiming_unit_index`, `unit_get_aiming_vector`, `unit_get_looking_vector`, `unit_get_facing_vector`, `unit_inventory_next_grenade`, `unit_controllable`, `unit_set_controllable`, `unit_set_possessed`, `unit_is_busy`, `unit_scripting_set_emotion_animation`, `unit_scripting_can_blink`, `unit_scripting_vehicle_test_seat`, `unit_scripting_unit_riders`, `unit_scripting_unit_driver`, `unit_scripting_unit_gunner`, `unit_shield_sapping_update`, `unit_set_user_animation`, `any_unit_is_dangerous`, `unit_can_see_point`, `unit_driven_by_ai`, `unit_gunned_by_ai`, `unit_set_desired_flashlight_state`, `unit_get_current_flashlight_state`, `unit_seat_filled`, `unit_seat_is_driver`, `unit_seat_is_gunner`, `unit_seat_allow_noncombatants`, `unit_update_driver_and_gunner`, `unit_get_current_equipment`, `unit_add_grenade_to_inventory`, `unit_add_grenade_type_to_inventory`, `unit_add_equipment_to_inventory`, `unit_delete_current_equipment`, `unit_delete_all_weapons`, `unit_has_weapon_definition_index`, `unit_first_free_weapon_index`, `unit_get_grenade_count`, `unit_get_current_grenade_type`, `unit_throw_grenade_move_to_hand`, `base_seat_label_get`, `seat_label_to_base_seat_index`, `base_weapon_label_get`, `unit_set_animation`, `unit_refresh_illumination`, `unit_get_weapon`, `unit_drop_item`, `unit_drop_grenades`, `unit_drop_inventory_weapons`, `unit_handle_region_destroyed`, `unit_cause_continuous_melee_damage`, `unit_aim_without_turning`, `unit_is_playing_custom_animation`, `unit_start_user_animation`, `unit_set_mouth_aperture`, `unit_inventory_get_must_be_readied_weapon`, `unit_has_weapon`, `unit_has_weapon_with_flag`, `unit_start_running_blindly`, `unit_stop_running_blindly`, `unit_flame_to_death`, `unit_flying_through_air`, `unit_euler_axis_buildplan`, `unit_euler_axis_couple`, `unit_adjust_projectile_ray`, `unit_abort_animation`, `unit_clip_to_aiming_bounds`, `unit_inventory_get_weapon`, `unit_set_actively_controlled`, `vehicle_scripting_find_available_seats`, `unit_overcharged`, `unit_set_seat`, `unit_get_seat_label`, `unit_drop_current_equipment`, `unit_can_use_weapon`, `unit_weapon_next_index`, `unit_drop_current_weapon`, `unit_get_current_weapon_label`, `scripting_set_magic_base_seat`, `unit_handle_deleted_object`, `unit_cause_player_melee_damage`, `unit_align_facing`, `unit_start_flaming_to_death`, `unit_running_blind`, `unit_vectors_are_valid`, `unit_verify_vectors`, `unit_control`, `unit_postprocess_node_matrices`, `unit_euler_aiming_update`, `unit_has_animation_to_enter_seat`, `unit_unzoom`, `unit_get_zoom_magnification`, `unit_integrated_night_vision_is_active`, `unit_ping_animation`, `unit_inventory_next_weapon`, `unit_melee_attack_begin`, `unit_leap_begin`, `unit_unsuspecting`, `unit_add_weapon_to_inventory`, `unit_ready_desired_weapon`, `unit_throw_grenade_begin`, `scripting_magic_melee_attack`, `unit_impact_melee_damage`, `unit_place`, `unit_add_initial_weapons`, `unit_adjust_for_seat_change`, `unit_died`, `unit_damage_aftermath`, `unit_animation_enhanced`, `unarmed_melee_weapon_definition_index`, `unit_grenade_throw_ease`, `unit_weapon_class_base_animation`, `unit_animation_pose_at_phase`, `unit_node_orientations_blend`, `unit_grenade_throw_keep_legs_moving`
+- units/units.c: `units_initialize`, `units_initialize_for_new_map`, `units_dispose_from_old_map`, `units_dispose`, `unit_kill_silent`, `unit_kill_no_statistics`, `unit_delete`, `unit_export_function_values`, `unit_persistent_control`, `unit_get_melee_range_and_ticks`, `unit_get_animation_frames_remaining`, `unit_euler_axis_doplan`, `unit_get_zoom_level`, `unit_animation_weapon_ik`, `unit_animation_vehicle_ik`, `unit_animation_start_action`, `unit_animation_start_overlay_action`, `unit_can_enter_seat`, `unit_impulse`, `unit_handle_weapon_state_change`, `unit_record_damage`, `unit_test_spawning`, `unit_get_head_position`, `unit_estimate_position`, `unit_get_center_of_mass`, `unit_get_aiming_unit_index`, `unit_get_aiming_vector`, `unit_get_looking_vector`, `unit_get_facing_vector`, `unit_inventory_next_grenade`, `unit_controllable`, `unit_set_controllable`, `unit_set_possessed`, `unit_is_busy`, `unit_scripting_set_emotion_animation`, `unit_scripting_can_blink`, `unit_scripting_vehicle_test_seat`, `unit_scripting_unit_riders`, `unit_scripting_unit_driver`, `unit_scripting_unit_gunner`, `unit_shield_sapping_update`, `unit_set_user_animation`, `any_unit_is_dangerous`, `unit_can_see_point`, `unit_driven_by_ai`, `unit_gunned_by_ai`, `unit_set_desired_flashlight_state`, `unit_get_current_flashlight_state`, `unit_seat_filled`, `unit_seat_is_driver`, `unit_seat_is_gunner`, `unit_seat_allow_noncombatants`, `unit_update_driver_and_gunner`, `unit_get_current_equipment`, `unit_add_grenade_to_inventory`, `unit_add_grenade_type_to_inventory`, `unit_add_equipment_to_inventory`, `unit_delete_current_equipment`, `unit_delete_all_weapons`, `unit_has_weapon_definition_index`, `unit_first_free_weapon_index`, `unit_get_grenade_count`, `unit_get_current_grenade_type`, `unit_throw_grenade_move_to_hand`, `base_seat_label_get`, `seat_label_to_base_seat_index`, `base_weapon_label_get`, `unit_set_animation`, `unit_refresh_illumination`, `unit_get_weapon`, `unit_drop_item`, `unit_drop_grenades`, `unit_drop_inventory_weapons`, `unit_handle_region_destroyed`, `unit_cause_continuous_melee_damage`, `unit_aim_without_turning`, `unit_is_playing_custom_animation`, `unit_start_user_animation`, `unit_set_mouth_aperture`, `unit_inventory_get_must_be_readied_weapon`, `unit_has_weapon`, `unit_has_weapon_with_flag`, `unit_start_running_blindly`, `unit_stop_running_blindly`, `unit_flame_to_death`, `unit_flying_through_air`, `unit_euler_axis_buildplan`, `unit_euler_axis_couple`, `unit_adjust_projectile_ray`, `unit_abort_animation`, `unit_clip_to_aiming_bounds`, `unit_inventory_get_weapon`, `unit_set_actively_controlled`, `vehicle_scripting_find_available_seats`, `unit_overcharged`, `unit_set_seat`, `unit_get_seat_label`, `unit_drop_current_equipment`, `unit_can_use_weapon`, `unit_weapon_next_index`, `unit_drop_current_weapon`, `unit_get_current_weapon_label`, `scripting_set_magic_base_seat`, `unit_handle_deleted_object`, `unit_cause_player_melee_damage`, `unit_align_facing`, `unit_start_flaming_to_death`, `unit_running_blind`, `unit_vectors_are_valid`, `unit_verify_vectors`, `unit_control`, `unit_postprocess_node_matrices`, `unit_euler_aiming_update`, `unit_has_animation_to_enter_seat`, `unit_unzoom`, `unit_get_zoom_magnification`, `unit_integrated_night_vision_is_active`, `unit_ping_animation`, `unit_inventory_next_weapon`, `unit_melee_attack_begin`, `unit_leap_begin`, `unit_unsuspecting`, `unit_add_weapon_to_inventory`, `unit_ready_desired_weapon`, `unit_throw_grenade_begin`, `scripting_magic_melee_attack`, `unit_impact_melee_damage`, `unit_place`, `unit_solo_player_integrated_night_vision_is_active`, `unit_add_initial_weapons`, `unit_adjust_for_seat_change`, `unit_died`, `vehicle_scripting_load_magic`, `unit_damage_aftermath`, `vehicle_scripting_unload`, `unit_animation_enhanced`, `unarmed_melee_weapon_definition_index`, `unit_grenade_throw_ease`, `unit_weapon_class_base_animation`, `unit_animation_pose_at_phase`, `unit_node_orientations_blend`, `unit_grenade_throw_keep_legs_moving`
 - units/vehicles.c: `vehicles_initialize`, `vehicles_initialize_for_new_map`, `vehicles_dispose_from_old_map`, `vehicles_dispose`, `vehicle_place`, `vehicle_delete`, `vehicle_build_update`, `vehicle_parse_update`, `update_alien_fighter_physics_new`, `vehicle_reset`, `vehicle_find_pathfinding_surface_index`, `update_alien_fighter_physics_old`, `compute_acceleration`, `vehicle_dot_product3d_test`, `update_human_plane_physics`, `create_crashing_effects`, `update_turret_physics`, `vehicle_moving_near_any_player`, `vehicle_stuck`, `vehicle_cross_product3d_target`, `vehicle_dot_product3d_target`, `vehicle_triple_product3d_target`, `vehicle_mass_points_fit`

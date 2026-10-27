@@ -41,6 +41,10 @@ pub use conversations::ConversationStatus;
 pub use devices::{DeviceGroup, DeviceState, Devices, MAXIMUM_DEVICE_GROUPS};
 pub use game::Flow;
 pub use sounds::{ClassGain, ScriptedLoop, ScriptedSound, SoundOrders, DIALOGUE_CLASSES};
+pub use units::{
+    custom_animation_time, grenade_total, seat_rider_listed, set_impervious, start_in_turn,
+    weapon_readied,
+};
 
 /// The object lists a mission keeps at once: a list's index is reused once
 /// this many more are made (as Halo's object list table is).
@@ -87,6 +91,9 @@ pub struct Mission {
     animations: BTreeMap<ObjectHandle, Playing>,
     maximums: BTreeMap<ObjectHandle, [f32; 2]>,
     invulnerable: BTreeSet<ObjectHandle>,
+    // (the units made impervious: damage neither pushes nor pings them,
+    // though it still hurts them)
+    impervious: BTreeSet<ObjectHandle>,
     attachments: Vec<(ObjectHandle, ObjectHandle)>,
     ai: AiOrders,
     actors: Vec<Actor>,
@@ -165,6 +172,7 @@ impl Mission {
             animations: BTreeMap::new(),
             maximums: BTreeMap::new(),
             invulnerable: BTreeSet::new(),
+            impervious: BTreeSet::new(),
             attachments: Vec::new(),
             ai: AiOrders::default(),
             actors: Vec::new(),

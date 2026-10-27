@@ -90,6 +90,85 @@ impl Vitality {
         }
     }
 
+    /// Empties its shield's standing: it is depleted until it recharges.
+    /// (damage.c's `object_deplete_shield`, without the effect and the
+    /// shield regions, which the object's caller starts)
+    pub fn deplete_shield(&mut self) {
+        self.shield_depleted = true;
+    }
+
+    /// Kills it, and depletes its shield, once. (damage.c's
+    /// `object_deplete_body`, without the effect and the riders, which the
+    /// object's caller handles)
+    pub fn deplete_body(&mut self) {
+        if !self.dead {
+            self.dead = true;
+            self.deplete_shield();
+        }
+    }
+
+    /// Full of whatever has a maximum above 0, as a script's new
+    /// maximums leave it; the dead are left alone.
+    /// (unit_scripting_commands.c's `unit_scripting_set_maximum_vitality`,
+    /// with damage.c's `object_initialize_vitality`)
+    pub fn set_maximums(&mut self, maximums: [f32; 2]) {
+        if self.dead {
+            return;
+        }
+        let full = |maximum: f32| if maximum > 0.0 { 1.0 } else { 0.0 };
+        self.body = full(maximums[0]);
+        self.shield = full(maximums[1]);
+    }
+
+    /// So much body and shield, in points of `maximums`, as a script sets
+    /// them: at most full, nothing where there is no maximum, and a shield
+    /// or body that empties is depleted; the dead are left alone.
+    /// (unit_scripting_commands.c's `unit_scripting_set_current_vitality_of`)
+    pub fn set_current(&mut self, body: f32, shield: f32, maximums: [f32; 2]) {
+        if self.dead {
+            return;
+        }
+        let fraction = |amount: f32, maximum: f32| {
+            if maximum <= 0.0 {
+                0.0
+            } else if amount >= maximum {
+                1.0
+            } else {
+                amount / maximum
+            }
+        };
+        let shield = fraction(shield, maximums[1]);
+        if self.shield > 0.0 && shield <= 0.0 {
+            self.deplete_shield();
+        }
+        self.shield = shield;
+        let body = fraction(body, maximums[0]);
+        if self.body > 0.0 && body <= 0.0 {
+            self.deplete_body();
+        }
+        self.body = body;
+    }
+
+    /// Its body as a script reads it: none once dead.
+    /// (unit_scripting_commands.c's `unit_scripting_get_health`)
+    pub fn script_health(&self) -> f32 {
+        if self.dead {
+            0.0
+        } else {
+            self.body
+        }
+    }
+
+    /// Its shield as a script reads it: none once dead.
+    /// (unit_scripting_commands.c's `unit_scripting_get_shield`)
+    pub fn script_shield(&self) -> f32 {
+        if self.dead {
+            0.0
+        } else {
+            self.shield
+        }
+    }
+
     pub(crate) fn hash(&self, hasher: &mut WorldHasher) {
         hasher.f32(self.body);
         hasher.f32(self.shield);
@@ -176,26 +255,37 @@ fn hit_material(model: &CollisionModel, material: Option<u16>) -> Option<&Collis
         .and_then(|material| model.materials.get(usize::from(material)))
 }
 
-/// `effect` done to an object of `model` at `vitality` (`object_cause_damage`).
+/// `effect` done to an object of `model` at `vitality` (`object_cause_damage`,
+/// with `object_damage_shield` and `object_damage_body`, for an object
+/// struck directly). Damage of nothing does nothing; a hit that kills the
+/// unsuspecting empties the body and still deals its damage.
 pub fn cause_damage(
     vitality: &mut Vitality,
     model: &CollisionModel,
     effect: &DamageEffect,
     hit: &DamageHit,
 ) -> Outcome {
-    let material = hit_material(model, hit.material);
     let mut outcome = Outcome {
-        material_type: material.map_or(-1, |material| material.material_type),
+        material_type: -1,
         ..Outcome::default()
     };
-    if vitality.dead {
-        return outcome;
-    }
     let flags = effect.damage_flags;
     let [lower, upper] = effect.damage;
     let ranged = lower + (upper - lower) * hit.random.clamp(0.0, 1.0);
     let scale = hit.scale.clamp(0.0, 1.0);
     let mut total = (1.0 - scale) * effect.damage_minimum + ranged * scale;
+    if total <= 0.0 {
+        return outcome;
+    }
+    // (with no material, the game's default one: a type of 0, and no
+    // multipliers)
+    let material = hit_material(model, hit.material);
+    let material_type = material.map_or(0, |material| material.material_type);
+    outcome.material_type = material_type;
+    // (the dead take no more, though what was struck is still known)
+    if vitality.dead {
+        return outcome;
+    }
     let modifier = |kind: i16| {
         usize::try_from(kind)
             .ok()
@@ -203,36 +293,38 @@ pub fn cause_damage(
             .copied()
             .unwrap_or(1.0)
     };
+    // (the inverse of a maximum, by which the game multiplies)
+    let inverse = |maximum: f32| if maximum > 0.0 { 1.0 / maximum } else { 0.0 };
     if effect.side_effect == LETHAL_TO_THE_UNSUSPECTING && hit.unsuspecting {
-        outcome.body = vitality.body.max(0.0);
         vitality.body = 0.0;
-        vitality.dead = true;
+        vitality.deplete_body();
         outcome.killed = true;
-        return outcome;
     }
 
     // (the shield first, leaking a share of the damage through, and less
     // of it the lower it is below its failure threshold)
     let maximum_shield = model.maximum_shield_vitality * hit.shield;
     let maximum_body = model.maximum_body_vitality * hit.vitality;
-    let (mut shielded, mut bodily) = (0.0, 0.0);
-    if flags & DamageEffect::SKIPS_SHIELDS == 0 && maximum_shield > 0.0 {
-        let mut shield_damage = 0.0;
+    let mut shielded = 0.0;
+    if flags & DamageEffect::SKIPS_SHIELDS == 0 && model.maximum_shield_vitality > 0.0 {
         if vitality.shield > 0.0 {
             let leak = material.map_or(0.0, |material| material.shield_leak_percentage);
-            shield_damage = (1.0 - leak) * total;
-            let threshold = model.shield_failure_threshold;
-            if threshold > 0.0 && vitality.shield <= threshold {
-                let failing = model.failing_shield_leak_fraction;
-                shield_damage *= (1.0 - failing)
-                    * transition(model.shield_failure_function, vitality.shield / threshold)
-                    + failing;
+            shielded = total;
+            if !hit.friendly || model.flags & CollisionModel::ALWAYS_SHIELDS_FRIENDLY_DAMAGE == 0 {
+                shielded = (1.0 - leak) * total;
+                let threshold = model.shield_failure_threshold;
+                if vitality.shield <= threshold && threshold > 0.0 {
+                    let failing = model.failing_shield_leak_fraction;
+                    shielded *= (1.0 - failing)
+                        * transition(model.shield_failure_function, vitality.shield / threshold)
+                        + failing;
+                }
             }
-            shield_damage = shield_damage.max(0.0);
-            total -= shield_damage;
+            shielded = shielded.max(0.0);
+            total -= shielded;
             let multiplier = material.map_or(0.0, |material| material.shield_damage_multiplier);
-            let actual = multiplier * shield_damage * modifier(model.shield_material_type);
-            let normalized = actual / maximum_shield;
+            let actual = multiplier * shielded * modifier(model.shield_material_type);
+            let normalized = actual * inverse(maximum_shield);
             if normalized > vitality.shield || effect.side_effect == EMP {
                 // (what the shield could not hold goes on to the body)
                 let excess = actual - maximum_shield * vitality.shield;
@@ -240,67 +332,71 @@ pub fn cause_damage(
                     total += excess;
                 }
                 outcome.shield = vitality.shield;
-                outcome.shield_depleted = true;
                 vitality.shield = 0.0;
-                vitality.shield_depleted = true;
+                if !vitality.shield_depleted {
+                    outcome.shield_depleted = true;
+                    vitality.deplete_shield();
+                }
             } else {
                 outcome.shield = normalized;
                 vitality.shield -= normalized;
             }
+        } else {
+            vitality.shield = 0.0;
         }
-        if total + shield_damage > 0.0
-            && (shield_damage >= model.minimum_stun_damage || vitality.shield <= 0.0)
-        {
+        if shielded >= model.minimum_stun_damage || vitality.shield == 0.0 {
             vitality.stun_ticks = (model.stun_time * clock::TICKS_PER_SECOND as f32) as u32;
         }
-        shielded = shield_damage;
     }
 
     // (then the body)
-    if flags & DamageEffect::ONLY_HURTS_SHIELDS == 0 && maximum_body > 0.0 {
+    let mut bodily = 0.0;
+    if flags & DamageEffect::ONLY_HURTS_SHIELDS == 0 {
         if model.flags & CollisionModel::ONLY_HURT_BY_EXPLOSIVES != 0
             && flags & DamageEffect::DETONATES_EXPLOSIVES == 0
         {
             total = 0.0;
         }
         let multiplier = material.map_or(0.0, |material| material.body_damage_multiplier);
-        let mut amount = multiplier * total;
+        bodily = multiplier * total;
+        let mut actual = bodily;
         if hit.friendly {
-            amount *= 1.0 - model.friendly_damage_resistance;
+            actual = (1.0 - model.friendly_damage_resistance) * bodily;
         }
-        bodily = amount;
-        let kind = material.map_or(-1, |material| material.material_type);
-        let mut actual = amount / maximum_body * modifier(kind);
+        actual *= inverse(maximum_body);
+        actual *= modifier(material_type);
         let head =
             material.is_some_and(|material| material.flags & CollisionModelMaterial::HEAD != 0);
-        if actual > 0.0 && head {
-            if flags & DamageEffect::CAN_CAUSE_HEADSHOTS != 0 && hit.headshot_kills {
-                outcome.headshot = true;
-                actual = actual.max(vitality.body);
-                outcome.killed = true;
+        if bodily > 0.0 && head {
+            if flags & DamageEffect::CAN_CAUSE_HEADSHOTS != 0 {
+                if hit.headshot_kills {
+                    outcome.headshot = true;
+                    vitality.body = 0.0;
+                }
             } else if flags & DamageEffect::CAN_CAUSE_MULTIPLAYER_HEADSHOTS != 0 && hit.multiplayer
             {
                 outcome.headshot = true;
                 actual *= 2.0;
             }
         }
+        vitality.body -= actual;
+        outcome.body = actual;
         if actual > 0.0 {
-            vitality.body -= actual;
-            outcome.body = actual;
             if let Some(region) = hit.region.map(usize::from) {
                 damage_region(vitality, model, region, actual, &mut outcome);
             }
-            if vitality.body <= 0.0 {
-                outcome.killed = true;
-            }
+        }
+        if vitality.body * maximum_body < 0.0 {
+            outcome.killed = true;
         }
     }
     if outcome.killed {
-        vitality.body = vitality.body.min(0.0);
-        vitality.dead = true;
+        // (the dead's shield is depleted with them, as damage.c's
+        // `object_deplete_body` depletes it)
+        vitality.deplete_body();
     }
     // (`_real_epsilon`)
-    if shielded > bodily && shielded > 0.0001 {
+    if (shielded > 0.0001 || bodily > 0.0001) && shielded > bodily {
         outcome.material_type = model.shield_material_type;
     }
     outcome
