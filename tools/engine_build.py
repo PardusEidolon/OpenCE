@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Builds OpenCE Engine.app, the new engine (conductor/tracks/native_engine_20261021).
+"""Builds OpenCE Engine.app, the new engine (conductor/archive/native_engine_20261021).
 
   engine_build.py [--out build/engine] [--codesign codesign] [--rust folder]
   engine_build.py --rust-only folder

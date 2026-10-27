@@ -1,5 +1,5 @@
 /* movement_trace.c: the reference traces of the native engine's movement
-(conductor/tracks/native_engine_20261021, engine/tests/traces).
+(conductor/archive/native_engine_20261021, engine/tests/traces).
 
 debug.movement_trace names a script of inputs that the first local player
 plays in place of the keyboard and mouse, tick by tick, once their biped has

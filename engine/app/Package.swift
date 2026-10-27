@@ -1,5 +1,5 @@
 // swift-tools-version: 6.2
-// OpenCE Engine.app: the new engine's app (conductor/tracks/native_engine_20261021).
+// OpenCE Engine.app: the new engine's app (conductor/archive/native_engine_20261021).
 // tools/engine_build.py builds the Rust library (engine/crates/ffi) first,
 // writes its UniFFI bindings and the snapshot's header into the two
 // generated folders, and links the library by passing its path.

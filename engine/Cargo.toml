@@ -1,4 +1,4 @@
-# The new engine (conductor/tracks/native_engine_20261021): Rust owns the
+# The new engine (conductor/archive/native_engine_20261021): Rust owns the
 # content, the simulation, the scripts, the physics and the network; the
 # Swift app (engine/app) reaches it only through the ffi crate.
 [workspace]

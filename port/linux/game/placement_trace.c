@@ -1,5 +1,5 @@
 /* placement_trace.c: the reference traces of the native engine's placements
-(conductor/tracks/dev_tooling_20261021, tools/engine_placement_traces.py).
+(conductor/archive/dev_tooling_20261021, tools/engine_placement_traces.py).
 
 With debug.placement_trace on, each object the scenario places is logged
 as it is made (object_new_from_scenario, after its type has placed it),

@@ -1,4 +1,4 @@
-//! The shell's widgets (conductor/tracks/halo_ui_20261021): the tree of
+//! The shell's widgets (conductor/archive/halo_ui_20261021): the tree of
 //! widgets loaded from a map's widget definitions (`ui.map`'s, and the
 //! pause menu every map carries), which of them has the focus, what each
 //! does with an event, and the text each shows.
