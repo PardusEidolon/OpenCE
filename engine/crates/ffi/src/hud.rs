@@ -354,9 +354,17 @@ impl Painter<'_> {
         );
     }
 
-    /// A number (`hud_draw_numbers`): its digits from the least, leftward
-    /// from where its corner puts the last.
-    fn draw_number(&mut self, anchor: HudAnchor, number: &HudNumber, value: i16, flags: DrawFlags) {
+    /// A number (`hud_draw_numbers`): `value`, and `decimal` (its fraction
+    /// in ten-thousandths) for a number with fractional digits, laid out by
+    /// [`number_sprites`].
+    fn draw_number(
+        &mut self,
+        anchor: HudAnchor,
+        number: &HudNumber,
+        value: i16,
+        decimal: Option<i16>,
+        flags: DrawFlags,
+    ) {
         let Some(digits) = &self.level.hud_digits else {
             return;
         };
@@ -369,34 +377,22 @@ impl Painter<'_> {
         let half = number.placement.flags & HIGH_RESOLUTION_SCALE != 0
             || bitmap.flags & HALF_HUD_SCALE != 0;
         let digit_scale = if half { 0.5 } else { 1.0 };
-        let count = f32::from(number.digits);
-        let spacing = f32::from(digits.screen_width);
-        let origin = self.point(anchor, &number.placement);
-        let mut cursor = match anchor {
-            HudAnchor::TopLeft | HudAnchor::BottomLeft => {
-                libm::truncf((count - 2.0) * spacing + origin[0])
-            }
-            HudAnchor::Center => libm::truncf((count - 1.0) * spacing * 0.5 + origin[0]),
-            HudAnchor::TopRight | HudAnchor::BottomRight => origin[0],
+        let widths = NumberDigits {
+            screen_width: digits.screen_width,
+            decimal_point_width: digits.decimal_point_width,
         };
+        let origin = self.point(anchor, &number.placement);
         let color = self.color(number.color, number.color, flags);
-        let mut value = value.unsigned_abs();
-        for _ in 0..number.digits.max(0) {
-            if value == 0 && number.flags & SHOW_LEADING_ZEROS == 0 {
-                break;
-            }
-            let digit = usize::from(value % 10);
+        for (x, sprite) in number_sprites(number, widths, anchor, origin[0], value, decimal) {
             self.bitmap(
                 &tag,
                 anchor,
-                [cursor, origin[1]],
-                Frame::Sprite(0, digit),
+                [x, origin[1]],
+                Frame::Sprite(0, sprite),
                 [digit_scale; 2],
                 color,
                 None,
             );
-            cursor = libm::truncf(cursor - spacing);
-            value /= 10;
         }
     }
 
@@ -584,8 +580,17 @@ impl Painter<'_> {
             if element.weapon_flags & DIVIDE_BY_MAGAZINE != 0 && magazine_size > 0 {
                 value /= magazine_size;
             }
+            // (a number with fractional digits shows the state's real value,
+            // which only the distance and elevation to a target have: the
+            // rest are 0)
+            let decimal = if element.draw.fractional_digits != 0 {
+                value = 0;
+                Some(0)
+            } else {
+                None
+            };
             let flags = weapon_flags(weapon, element.element.state);
-            self.draw_number(anchor, &element.draw, value, flags);
+            self.draw_number(anchor, &element.draw, value, decimal, flags);
         }
         let reloading = weapon.magazines.iter().any(|magazine| magazine.reloading);
         for crosshair in &hud.crosshairs {
@@ -633,13 +638,119 @@ impl Painter<'_> {
         self.draw_static(hud.anchor, &hud.background, flags);
         self.draw_static(hud.anchor, &hud.count_background, flags);
         if hud.count.digits > 0 {
-            self.draw_number(hud.anchor, &hud.count, count, flags);
+            self.draw_number(hud.anchor, &hud.count, count, None, flags);
         }
     }
 }
 
 /// A meter's flag: its colour switches with its state.
 const SWITCH_COLOR_ON_STATE_CHANGE: u8 = 1 << 3;
+
+/// A number's flag: a trailing m, or km and the tenths for a thousand or more.
+const SHOW_TRAILING_M: u8 = 1 << 2;
+/// The digits' sprites after the ten digits: the point, the minus sign, m
+/// and km (the colon, 11, is a timer's).
+const DECIMAL_POINT: usize = 10;
+const NEGATIVE_SIGN: usize = 12;
+const METERS: usize = 13;
+const KILOMETERS: usize = 14;
+/// A fraction's `decimal` when it has none (`NONE`).
+const NO_FRACTION: i16 = -1;
+
+/// The HUD digits' widths: a digit's, and the point's.
+#[derive(Clone, Copy, Debug)]
+struct NumberDigits {
+    screen_width: i8,
+    decimal_point_width: i8,
+}
+
+/// Where a number's sprites go (`hud_draw_numbers`): each one's x and its
+/// sprite, from the right. The cursor starts where the number's room, a
+/// digit for each digit, the fraction's digits and point and the m, puts
+/// the last, and walks left: the m or km, the fraction's digits from the
+/// least and its point, the digits from the least (stopping at the
+/// leading zeros, unless they are shown) and the minus sign. A
+/// thousand metres or more is shown in km to a tenth.
+fn number_sprites(
+    number: &HudNumber,
+    digits: NumberDigits,
+    anchor: HudAnchor,
+    origin: f32,
+    value: i16,
+    decimal: Option<i16>,
+) -> Vec<(f32, usize)> {
+    let fractional = number.fractional_digits != 0;
+    let fraction_digits = i16::from(number.fractional_digits.min(4));
+    let mut decimal = decimal.unwrap_or(NO_FRACTION);
+    let negative = value < 0;
+    let kilometers = value > 999;
+    let mut room = f32::from(number.digits);
+    if fractional && decimal != NO_FRACTION {
+        room += f32::from(fraction_digits + 1);
+    }
+    let point_width = if fractional {
+        f32::from(digits.decimal_point_width)
+    } else {
+        0.0
+    };
+    let spacing = f32::from(digits.screen_width);
+    let mut value = value;
+    let trailing_m = number.flags & SHOW_TRAILING_M != 0;
+    if trailing_m {
+        room += 1.0;
+        if kilometers {
+            decimal = value.wrapping_mul(10);
+            value /= 1000;
+        }
+    }
+    let mut value = value.unsigned_abs();
+    let mut cursor = match anchor {
+        HudAnchor::TopLeft | HudAnchor::BottomLeft => {
+            libm::truncf((room - 2.0) * spacing + point_width + origin)
+        }
+        HudAnchor::Center => libm::truncf(((room - 1.0) * spacing + point_width) * 0.5 + origin),
+        HudAnchor::TopRight | HudAnchor::BottomRight => libm::truncf(origin),
+    };
+    let mut sprites = Vec::new();
+    let mut put = |cursor: &mut f32, sprite: usize, step: f32| {
+        sprites.push((*cursor, sprite));
+        *cursor = libm::truncf(*cursor - step);
+    };
+    if trailing_m {
+        put(
+            &mut cursor,
+            if kilometers { KILOMETERS } else { METERS },
+            spacing,
+        );
+    }
+    if fractional && decimal >= 0 {
+        for _ in fraction_digits..4 {
+            decimal /= 10;
+        }
+        for _ in 0..fraction_digits {
+            put(
+                &mut cursor,
+                usize::from(decimal.unsigned_abs() % 10),
+                spacing,
+            );
+            decimal /= 10;
+        }
+        cursor = libm::truncf(cursor + spacing);
+        cursor = libm::truncf(cursor - f32::from(digits.decimal_point_width));
+        put(&mut cursor, DECIMAL_POINT, spacing);
+    }
+    for _ in 0..number.digits.max(0) {
+        if value == 0 && number.flags & SHOW_LEADING_ZEROS == 0 {
+            break;
+        }
+        put(&mut cursor, usize::from(value % 10), spacing);
+        value /= 10;
+    }
+    if negative {
+        put(&mut cursor, NEGATIVE_SIGN, 0.0);
+    }
+    sprites
+}
 
 /// A frame of a sequence: its image and its part of it (`[left, right,
 /// top, bottom]`, 0 to 1).
@@ -784,6 +895,70 @@ mod tests {
     fn colours_lerp_by_channel() {
         assert_eq!(lerp_color(0xFF00_0000, 0xFFFF_FFFF, 0.5), 0xFF80_8080);
         assert_eq!(lerp_color(0x1020_3040, 0x5060_7080, 0.0), 0x1020_3040);
+    }
+
+    /// The sprites of `value` (and `decimal`, a fraction's ten-thousandths)
+    /// with `number`'s flags, `digits` of room and `fractional` digits, laid
+    /// out from x = 100 in the top left, 10 apart with a point 4 wide.
+    fn laid_out(
+        flags: u8,
+        digits: i8,
+        fractional: i8,
+        value: i16,
+        decimal: Option<i16>,
+    ) -> Vec<(f32, usize)> {
+        let number = HudNumber {
+            digits,
+            flags,
+            fractional_digits: fractional,
+            ..HudNumber::default()
+        };
+        let digits = NumberDigits {
+            screen_width: 10,
+            decimal_point_width: 4,
+        };
+        number_sprites(&number, digits, HudAnchor::TopLeft, 100.0, value, decimal)
+    }
+
+    #[test]
+    fn a_number_is_its_digits_from_the_least_then_its_sign() {
+        // (three digits of room put the last at 100 + (3 - 2) * 10)
+        assert_eq!(laid_out(0, 3, 0, 42, None), [(110.0, 2), (100.0, 4)]);
+        assert_eq!(
+            laid_out(SHOW_LEADING_ZEROS, 3, 0, -7, None),
+            [(110.0, 7), (100.0, 0), (90.0, 0), (80.0, NEGATIVE_SIGN)]
+        );
+    }
+
+    #[test]
+    fn a_fraction_is_its_digits_a_point_and_the_whole_number() {
+        // 3.25 to two places: room for 2 + 2 + 1, and the point's width
+        // added to the start
+        assert_eq!(
+            laid_out(0, 2, 2, 3, Some(2500)),
+            [(134.0, 5), (124.0, 2), (120.0, DECIMAL_POINT), (110.0, 3)]
+        );
+        // a number with fractional digits but no fraction keeps the point's
+        // width and draws no point
+        assert_eq!(laid_out(0, 2, 2, 3, None), [(104.0, 3)]);
+    }
+
+    #[test]
+    fn a_distance_has_its_m_or_its_km_and_a_tenth() {
+        assert_eq!(
+            laid_out(SHOW_TRAILING_M, 3, 0, 250, None),
+            [(120.0, METERS), (110.0, 0), (100.0, 5), (90.0, 2)]
+        );
+        // 1234 m is 1.2 km
+        assert_eq!(
+            laid_out(SHOW_TRAILING_M, 3, 1, 1234, Some(0)),
+            [
+                (144.0, KILOMETERS),
+                (134.0, 2),
+                (130.0, DECIMAL_POINT),
+                (120.0, 1)
+            ]
+        );
     }
 
     #[test]
