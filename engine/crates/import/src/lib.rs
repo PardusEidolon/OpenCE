@@ -21,6 +21,8 @@ mod particle;
 pub mod reader;
 pub mod record;
 pub mod script;
+pub mod script_fixup;
+mod script_tables;
 pub mod shader;
 pub mod sound;
 pub mod tags;

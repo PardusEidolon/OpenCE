@@ -225,7 +225,7 @@ pub fn import_level(cache: &Cache) -> Result<Level, ImportError> {
     }
 
     let (placements, object_placements) = import_placements(&scenario)?;
-    let scripts = crate::script::scenario_scripts(&scenario)?;
+    let scripts = crate::script::scenario_scripts(&scenario);
     let mut campaign = crate::campaign::scenario_campaign(&scenario)?;
     campaign.object_placements = object_placements;
     let netgame_flags = import_netgame_flags(&scenario)?;

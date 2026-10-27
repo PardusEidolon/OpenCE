@@ -1442,7 +1442,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `hs_object_name_to_object_list` | hs/hs_runtime.c | Matched | script/src/value.rs | script/tests/script_cast_reference.rs (trace) |
 | `hs_object_to_object_list` | hs/hs_runtime.c | Matched | script/src/value.rs | script/tests/script_cast_reference.rs (trace) |
 | `hs_object_type_can_cast` | hs/hs_runtime.c | Ported |  | `tools/engine_script_cast_reference.py` |
-| `hs_can_cast` | hs/hs_runtime.c | Ported |  | `tools/engine_script_cast_reference.py` |
+| `hs_can_cast` | hs/hs_runtime.c | Ported | import/src/script_tables.rs:878 | `tools/engine_script_cast_reference.py` |
 | `hs_cast` | hs/hs_runtime.c | Partial | script/src/value.rs:88 | script/tests/script_cast_reference.rs (trace); leaves out typecasting_procedures as the decompilation miscounts it: the ai, enum and object rows each a place earlier than the last |
 | `render_debug_scripting` | hs/hs_runtime.c | Replaced | dev/src/draw.rs | the editor and tools |
 | `render_debug_trigger_volumes` | hs/hs_runtime.c | Replaced | dev/src/draw.rs | the editor and tools |

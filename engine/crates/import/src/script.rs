@@ -3,9 +3,12 @@
 //!
 //! A node's children are linked as a list: a call's data is its first
 //! child, the node naming its function, and the arguments follow it by
-//! their `next` links. Every link is checked, and an expression that
-//! reaches a node twice (a loop among them) is refused, as the original's
-//! port refuses it (`hs_expression_refusal`).
+//! their `next` links. The nodes are first fixed up as the game fixes them
+//! up as it loads the scenario ([`crate::script_fixup`]). Every link is
+//! checked, and an expression that reaches a node twice (a loop among
+//! them) is refused, as the original's port refuses it
+//! (`hs_expression_refusal`). A scenario whose scripts the game would not
+//! run, or that are refused, loads with none ([`Scripts::disabled`]).
 
 use std::collections::BTreeMap;
 
@@ -18,12 +21,50 @@ use crate::cache::Cache;
 use crate::error::ImportError;
 use crate::level::{tag_ref, SCENARIO_SIZE, SCNR};
 use crate::reader;
-use crate::tags::Element;
+pub use crate::script_fixup::Node;
+use crate::script_fixup::{postprocess, Encounter, Names, DYNAMIC_SOURCE_BYTES};
+use crate::script_tables::{EXTERNAL_GLOBALS, FUNCTIONS};
+use crate::tags::{Element, GroupTag};
 
 const SYNTAX_DATA_OFFSET: usize = 0x474;
 const STRING_CONSTANTS_OFFSET: usize = 0x488;
 const SCRIPTS_OFFSET: usize = 0x49C;
 const GLOBALS_OFFSET: usize = 0x4A8;
+const REFERENCES_OFFSET: usize = 0x4B4;
+const SOURCE_FILES_OFFSET: usize = 0x4C0;
+const REFERENCE_SIZE: usize = 0x28;
+const OBJECT_NAMES: (usize, usize) = (0x204, 0x24);
+const ENCOUNTERS: (usize, usize) = (0x42C, 0xB0);
+const SQUADS: (usize, usize) = (0x80, 0xE8);
+const PLATOONS: (usize, usize) = (0x8C, 0xAC);
+const HUD_MESSAGES_OFFSET: usize = 0x594;
+/// [`crate::script_fixup::DATUM_TYPES`]' blocks: where each is, its elements' size and where in
+/// them the name is.
+const DATUM_BLOCKS: [(usize, usize, usize); 9] = [
+    (0x360, 0x60, 4),
+    (0x4E4, 0x5C, 4),
+    (0x4F0, 0x68, 4),
+    (0x4FC, 0x60, 4),
+    (0x36C, 0x40, 0),
+    (0x288, 0x34, 0),
+    (0x438, 0x60, 0),
+    (0x348, 0x68, 0),
+    (0x468, 0x74, 0),
+];
+/// The most elements a block the names are read from is taken to have.
+const MAX_ELEMENTS: usize = 0x8000;
+const NAME_SIZE: usize = 32;
+
+const MATG: GroupTag = GroupTag::new(b"matg");
+const GLOBALS_PATH: &str = "globals\\globals";
+const GLOBALS_SIZE: usize = 0x1AC;
+const INTERFACE: (usize, usize) = (0x140, 0x130);
+const HUDG: GroupTag = GroupTag::new(b"hudg");
+const HUD_GLOBALS_SIZE: usize = 0x2DC;
+const WAYPOINT_ARROWS: (usize, usize) = (0x160, 0x68);
+const HMT: GroupTag = GroupTag::new(b"hmt ");
+const HUD_MESSAGE_TEXT_SIZE: usize = 0x80;
+const HMT_MESSAGES: (usize, usize) = (0x20, 0x40);
 
 /// The nodes a scenario has room for.
 const MAX_NODES: usize = 19001;
@@ -36,6 +77,7 @@ const MAX_STRING_BYTES: usize = 0x40000;
 /// The longest string a node names.
 const MAX_STRING: usize = 0x1000;
 const MAX_SCRIPTS: usize = 512;
+/// The globals the game's array of them holds, the external ones first.
 const MAX_GLOBALS: usize = 0x400;
 const SCRIPT_SIZE: usize = 0x5C;
 const GLOBAL_SIZE: usize = 0x5C;
@@ -47,21 +89,9 @@ const VARIABLE: i16 = 1 << 2;
 const EXTERNAL_GLOBAL: i32 = 0x8000;
 const NONE: i32 = -1;
 
-/// A node as the map holds it.
-#[derive(Clone, Copy)]
-struct Raw {
-    salt: i16,
-    index: i16,
-    value_type: i16,
-    flags: i16,
-    next: i32,
-    string: i32,
-    data: i32,
-}
-
 struct Reader<'a, 'e> {
     scenario: &'e Element<'a>,
-    nodes: &'a [u8],
+    nodes: &'e [Node],
     count: usize,
     strings: &'a [u8],
     globals: usize,
@@ -87,25 +117,12 @@ impl<'a> Reader<'a, '_> {
         Ok(index)
     }
 
-    fn raw(&self, index: usize) -> Result<Raw, ImportError> {
-        if index >= self.count {
-            return Err(self.fault(format!("node {index} of {}", self.count)));
-        }
-        let at = index * NODE_SIZE;
-        let read = |offset: usize| reader::i16(self.nodes, at + offset);
-        let long = |offset: usize| reader::i32(self.nodes, at + offset);
-        let raw = (|| {
-            Ok::<_, reader::Fault>(Raw {
-                salt: read(0)?,
-                index: read(2)?,
-                value_type: read(4)?,
-                flags: read(6)?,
-                next: long(8)?,
-                string: long(0xC)?,
-                data: long(0x10)?,
-            })
-        })();
-        raw.map_err(|fault| self.fault(fault))
+    fn raw(&self, index: usize) -> Result<Node, ImportError> {
+        self.nodes
+            .get(index)
+            .filter(|_| index < self.count)
+            .copied()
+            .ok_or_else(|| self.fault(format!("node {index} of {}", self.count)))
     }
 
     /// A string the nodes name, read as Latin-1 (c10's has bytes that are
@@ -151,10 +168,9 @@ impl<'a> Reader<'a, '_> {
                     children.push(child);
                     link = self.raw(child)?.next;
                 }
-                let Some((&name, arguments)) = children.split_first() else {
+                let Some((_, arguments)) = children.split_first() else {
                     return Err(self.fault(format!("call {index} names no function")));
                 };
-                let name = self.raw(name)?;
                 let kind = if raw.flags & SCRIPT_CALL != 0 {
                     let script = u32::try_from(raw.index)
                         .ok()
@@ -170,8 +186,13 @@ impl<'a> Reader<'a, '_> {
                         placed.push(self.place(argument));
                         stack.push(argument);
                     }
+                    // (the fix-up found the function by its name)
+                    let (function, _) = usize::try_from(raw.index)
+                        .ok()
+                        .and_then(|function| FUNCTIONS.get(function))
+                        .ok_or_else(|| self.fault(format!("calls function {}", raw.index)))?;
                     NodeKind::Call(Call {
-                        function: self.string(name.string)?,
+                        function: (*function).to_owned(),
                         arguments: placed,
                     })
                 };
@@ -202,7 +223,7 @@ impl<'a> Reader<'a, '_> {
         ValueType::from_index(index).ok_or_else(|| self.fault(format!("a value of type {index}")))
     }
 
-    fn primitive(&self, raw: &Raw) -> Result<ScriptNode, ImportError> {
+    fn primitive(&self, raw: &Node) -> Result<ScriptNode, ImportError> {
         let value_type = self.value_type(raw.value_type)?;
         let bytes = raw.data.to_le_bytes();
         let short = i16::from_le_bytes([bytes[0], bytes[1]]);
@@ -274,43 +295,254 @@ impl<'a> Reader<'a, '_> {
 /// their expressions.
 pub fn import_scripts(cache: &Cache) -> Result<Scripts, ImportError> {
     let scenario = cache.tag(cache.scenario_index(), SCNR, SCENARIO_SIZE)?;
-    scenario_scripts(&scenario)
+    Ok(scenario_scripts(&scenario))
 }
 
-/// Imports a scenario's scripts and globals and the nodes of their
-/// expressions.
-pub(crate) fn scenario_scripts(scenario: &Element<'_>) -> Result<Scripts, ImportError> {
+/// The cache's scenario's script nodes (all the array has room for) as the
+/// map stores them, and as the game's fix-up leaves them.
+pub fn fixed_up_nodes(cache: &Cache) -> Result<(Vec<Node>, Vec<Node>), ImportError> {
+    let scenario = cache.tag(cache.scenario_index(), SCNR, SCENARIO_SIZE)?;
+    let fault = |reason: &str| scenario.fault("script syntax data", reason);
     let syntax = scenario.data(
         SYNTAX_DATA_OFFSET,
         "script syntax data",
         DATA_ARRAY_SIZE + MAX_NODES * NODE_SIZE,
     )?;
-    let script_block = scenario.block(SCRIPTS_OFFSET, "scripts", SCRIPT_SIZE, MAX_SCRIPTS)?;
-    let global_block = scenario.block(GLOBALS_OFFSET, "globals", GLOBAL_SIZE, MAX_GLOBALS)?;
-    if syntax.is_empty() {
-        if !script_block.is_empty() || !global_block.is_empty() {
-            return Err(scenario.fault("script syntax data", "is empty"));
+    let count = reader::i16(syntax, 0x2E).map_err(|f| scenario.fault("script syntax data", f))?;
+    let stored = syntax_nodes(&scenario, syntax.get(DATA_ARRAY_SIZE..).unwrap_or_default())?;
+    let strings = scenario.data(STRING_CONSTANTS_OFFSET, "script strings", MAX_STRING_BYTES)?;
+    let scripts = scenario.block(SCRIPTS_OFFSET, "scripts", SCRIPT_SIZE, MAX_SCRIPTS)?;
+    let globals = scenario.block(GLOBALS_OFFSET, "globals", GLOBAL_SIZE, MAX_GLOBALS)?;
+    let mut fixed = stored.clone();
+    let count = usize::try_from(count).unwrap_or_default();
+    postprocess(
+        &mut fixed,
+        count,
+        strings,
+        &names(&scenario, &scripts, &globals)?,
+    )
+    .map_err(fault)?;
+    Ok((stored, fixed))
+}
+
+/// Imports a scenario's scripts and globals and the nodes of their
+/// expressions; or none, with the reason, when the game would not run them
+/// or they are refused.
+pub(crate) fn scenario_scripts(scenario: &Element<'_>) -> Scripts {
+    compile(scenario).unwrap_or_else(|fault| Scripts {
+        disabled: Some(fault.to_string()),
+        ..Scripts::default()
+    })
+}
+
+/// A block's count as the scenario holds it.
+fn count(scenario: &Element<'_>, at: usize, field: &str) -> Result<usize, ImportError> {
+    let count = scenario.i32(at, field)?;
+    usize::try_from(count).map_err(|_| scenario.fault(field, format!("has {count} elements")))
+}
+
+/// A name of at most `size` bytes, to its end.
+fn name(element: &Element<'_>, at: usize, size: usize) -> Result<Vec<u8>, ImportError> {
+    let bytes = element.slice(at, size, "name")?;
+    let end = bytes
+        .iter()
+        .position(|&byte| byte == 0)
+        .unwrap_or(bytes.len());
+    Ok(bytes[..end].to_vec())
+}
+
+/// The names of a block's elements.
+fn names_of(
+    element: &Element<'_>,
+    (at, size): (usize, usize),
+    name_at: usize,
+    field: &str,
+) -> Result<Vec<Vec<u8>>, ImportError> {
+    element
+        .block(at, field, size, MAX_ELEMENTS)?
+        .iter()
+        .map(|element| name(&element, name_at, NAME_SIZE))
+        .collect()
+}
+
+/// The HUD globals' waypoint arrows' names, if the game's globals name HUD
+/// globals.
+fn navpoints(cache: &Cache) -> Result<Option<Vec<Vec<u8>>>, ImportError> {
+    let Some(index) = cache
+        .find(MATG, GLOBALS_PATH)
+        .or_else(|| cache.tags().iter().position(|instance| instance.is(MATG)))
+    else {
+        return Ok(None);
+    };
+    let globals = cache.tag(index, MATG, GLOBALS_SIZE)?;
+    let interface = globals.block(INTERFACE.0, "interface bitmaps", INTERFACE.1, 1)?;
+    let Some(hud_globals) = interface
+        .get(0)
+        .map(|interface| interface.reference(0x60, "hud globals", &[HUDG]))
+        .transpose()?
+        .flatten()
+    else {
+        return Ok(None);
+    };
+    let hud_globals = cache.tag(hud_globals, HUDG, HUD_GLOBALS_SIZE)?;
+    Ok(Some(names_of(
+        &hud_globals,
+        WAYPOINT_ARROWS,
+        0,
+        "waypoint arrows",
+    )?))
+}
+
+/// The names the fix-up looks the nodes' text up in.
+fn names(
+    scenario: &Element<'_>,
+    scripts: &crate::tags::Block<'_>,
+    globals: &crate::tags::Block<'_>,
+) -> Result<Names, ImportError> {
+    let cache = scenario.cache();
+    let mut names = Names::default();
+    for script in scripts.iter() {
+        names.scripts.push((
+            name(&script, 0, NAME_SIZE)?,
+            script.i16(0x20, "type")?,
+            script.i16(0x22, "return type")?,
+        ));
+    }
+    for global in globals.iter() {
+        names
+            .globals
+            .push((name(&global, 0, NAME_SIZE)?, global.i16(0x20, "type")?));
+    }
+    for (list, &(at, size, name_at)) in names.datums.iter_mut().zip(&DATUM_BLOCKS) {
+        *list = names_of(scenario, (at, size), name_at, "named elements")?;
+    }
+    for encounter in scenario
+        .block(ENCOUNTERS.0, "encounters", ENCOUNTERS.1, MAX_ELEMENTS)?
+        .iter()
+    {
+        names.encounters.push(Encounter {
+            name: name(&encounter, 0, NAME_SIZE)?,
+            squads: names_of(&encounter, SQUADS, 0, "squads")?,
+            platoons: names_of(&encounter, PLATOONS, 0, "platoons")?,
+        });
+    }
+    names.navpoints = navpoints(cache)?;
+    if let Some(index) = scenario.reference(HUD_MESSAGES_OFFSET, "hud messages", &[HMT])? {
+        let messages = cache.tag(index, HMT, HUD_MESSAGE_TEXT_SIZE)?;
+        names.hud_messages = Some(names_of(&messages, HMT_MESSAGES, 0, "messages")?);
+    }
+    for object_name in scenario
+        .block(OBJECT_NAMES.0, "object names", OBJECT_NAMES.1, MAX_ELEMENTS)?
+        .iter()
+    {
+        names.object_names.push((
+            name(&object_name, 0, NAME_SIZE)?,
+            object_name.i16(0x20, "type")?,
+        ));
+    }
+    for reference in scenario
+        .block(
+            REFERENCES_OFFSET,
+            "script references",
+            REFERENCE_SIZE,
+            MAX_ELEMENTS,
+        )?
+        .iter()
+    {
+        // (the name is the path of the tag the handle names)
+        let group = reference.u32(0x18, "reference")?;
+        let handle = reference.i32(0x18 + 0xC, "reference")?;
+        if let Some(index) = cache.handle_index(handle as u32) {
+            let path = cache.tags()[index].name.bytes().collect();
+            names.references.push((path, group, handle));
         }
+    }
+    Ok(names)
+}
+
+/// The nodes of the syntax data's array, all it has room for.
+fn syntax_nodes(scenario: &Element<'_>, nodes: &[u8]) -> Result<Vec<Node>, ImportError> {
+    let read = |at: usize| -> Result<Node, reader::Fault> {
+        Ok(Node {
+            salt: reader::i16(nodes, at)?,
+            index: reader::i16(nodes, at + 2)?,
+            value_type: reader::i16(nodes, at + 4)?,
+            flags: reader::i16(nodes, at + 6)?,
+            next: reader::i32(nodes, at + 8)?,
+            string: reader::i32(nodes, at + 0xC)?,
+            data: reader::i32(nodes, at + 0x10)?,
+        })
+    };
+    (0..MAX_NODES)
+        .map(|index| read(index * NODE_SIZE).map_err(|f| scenario.fault("script syntax data", f)))
+        .collect()
+}
+
+/// The scenario's scripts, or the fault for which the game would not run
+/// them (hs_scenario_postprocess) or they are refused.
+fn compile(scenario: &Element<'_>) -> Result<Scripts, ImportError> {
+    let syntax = scenario.data(
+        SYNTAX_DATA_OFFSET,
+        "script syntax data",
+        DATA_ARRAY_SIZE + MAX_NODES * NODE_SIZE,
+    )?;
+    let script_count = count(scenario, SCRIPTS_OFFSET, "scripts")?;
+    let global_count = count(scenario, GLOBALS_OFFSET, "globals")?;
+    if syntax.is_empty() && script_count == 0 && global_count == 0 {
         return Ok(Scripts::default());
     }
+    let fault = |reason: &str| scenario.fault("script syntax data", reason);
     let header =
         |at: usize| reader::i16(syntax, at).map_err(|f| scenario.fault("script syntax data", f));
+    let strings = scenario.data(STRING_CONSTANTS_OFFSET, "script strings", MAX_STRING_BYTES)?;
     let signature =
         reader::u32(syntax, 0x28).map_err(|f| scenario.fault("script syntax data", f))?;
-    let (max, size, count) = (header(0x20)?, header(0x22)?, header(0x2E)?);
-    let count = usize::try_from(count).unwrap_or(usize::MAX);
-    if signature != DATA_ARRAY_SIGNATURE
+    let valid = *syntax.get(0x24).ok_or_else(|| fault("has no header"))?;
+    let (max, size) = (header(0x20)?, header(0x22)?);
+    let (first_free, count, actual) = (header(0x2C)?, header(0x2E)?, header(0x30)?);
+    if syntax.len() != DATA_ARRAY_SIZE + MAX_NODES * NODE_SIZE
+        || signature != DATA_ARRAY_SIGNATURE
+        || usize::try_from(max).ok() != Some(MAX_NODES)
         || usize::try_from(size).ok() != Some(NODE_SIZE)
-        || usize::try_from(max)
-            .ok()
-            .is_none_or(|max| count > max || max > MAX_NODES)
+        || valid == 0
+        || !(0..=max).contains(&count)
+        || !(0..=count).contains(&actual)
+        || !(0..=max).contains(&first_free)
+        || strings.len() < DYNAMIC_SOURCE_BYTES
     {
-        return Err(scenario.fault("script syntax data", "is not an array of script nodes"));
+        return Err(fault("is not an array of script nodes"));
     }
-    let strings = scenario.data(STRING_CONSTANTS_OFFSET, "script strings", MAX_STRING_BYTES)?;
+    if global_count > MAX_GLOBALS - EXTERNAL_GLOBALS.len() {
+        return Err(scenario.fault(
+            "globals",
+            format!("has {global_count}, more than there is room for"),
+        ));
+    }
+    if script_count > MAX_SCRIPTS {
+        return Err(scenario.fault(
+            "scripts",
+            format!("has {script_count}, more than there is room for"),
+        ));
+    }
+    let script_block = scenario.block(SCRIPTS_OFFSET, "scripts", SCRIPT_SIZE, MAX_SCRIPTS)?;
+    let global_block = scenario.block(GLOBALS_OFFSET, "globals", GLOBAL_SIZE, MAX_GLOBALS)?;
+    for global in global_block.iter() {
+        let kind = global.i16(0x20, "type")?;
+        // (hs_type_valid: a value's type, past the special forms' and void)
+        if !(4..ValueType::ALL.len() as i16).contains(&kind) {
+            return Err(global.fault("type", format!("is {kind}, no value's type")));
+        }
+    }
+    if script_count == 0 && scenario.i32(SOURCE_FILES_OFFSET, "source files")? > 0 {
+        return Err(scenario.fault("scripts", "are to be compiled again from their source"));
+    }
+    let count = usize::try_from(count).unwrap_or_default();
+    let mut nodes = syntax_nodes(scenario, &syntax[DATA_ARRAY_SIZE..])?;
+    let names = names(scenario, &script_block, &global_block)?;
+    postprocess(&mut nodes, count, strings, &names).map_err(fault)?;
     let mut reader = Reader {
         scenario,
-        nodes: &syntax[DATA_ARRAY_SIZE..],
+        nodes: &nodes,
         count,
         strings,
         globals: global_block.len(),
@@ -350,15 +582,16 @@ pub(crate) fn scenario_scripts(scenario: &Element<'_>) -> Result<Scripts, Import
             initial,
         });
     }
-    let nodes = reader
+    let made = reader
         .made
         .into_iter()
         .collect::<Option<Vec<_>>>()
         .ok_or_else(|| scenario.fault("script syntax data", "a node was not made"))?;
     Ok(Scripts {
-        nodes,
+        nodes: made,
         scripts,
         globals,
+        disabled: None,
     })
 }
 
@@ -387,8 +620,10 @@ mod tests {
         let mut syntax = vec![0u8; DATA_ARRAY_SIZE + MAX_NODES * NODE_SIZE];
         put(&mut syntax, 0x20, &(MAX_NODES as i16).to_le_bytes());
         put(&mut syntax, 0x22, &(NODE_SIZE as i16).to_le_bytes());
+        put(&mut syntax, 0x24, &[1]);
         put(&mut syntax, 0x28, &DATA_ARRAY_SIGNATURE.to_le_bytes());
         put(&mut syntax, 0x2E, &(nodes.len() as i16).to_le_bytes());
+        put(&mut syntax, 0x30, &(nodes.len() as i16).to_le_bytes());
         for (index, Node(value_type, function, flags, next, string, data)) in
             nodes.iter().enumerate()
         {
@@ -430,6 +665,7 @@ mod tests {
         );
         block(&mut data, SCRIPTS_OFFSET, 1, script);
         block(&mut data, GLOBALS_OFFSET, 1, global);
+        put(&mut data, HUD_MESSAGES_OFFSET + 12, &NONE.to_le_bytes());
         fake.set_scenario_data(&data);
         Ok(import_scripts(&Cache::open(fake.build())?)?)
     }
@@ -449,9 +685,32 @@ mod tests {
 
     const STRINGS: &[u8] = b"begin\0set\0count\0";
 
+    /// `text` and the room after it for the console's expressions.
+    fn strings(text: &[u8]) -> Vec<u8> {
+        let mut strings = text.to_vec();
+        strings.resize(text.len() + DYNAMIC_SOURCE_BYTES, 0);
+        strings
+    }
+
+    /// Why the scripts of a scenario of `nodes` and `text` do not run.
+    fn disabled(nodes: &[Node], text: &[u8]) -> Result<Option<String>> {
+        let scripts = scenario(nodes, &strings(text))?;
+        if scripts.disabled.is_some() {
+            assert_eq!(
+                scripts,
+                Scripts {
+                    disabled: scripts.disabled.clone(),
+                    ..Scripts::default()
+                }
+            );
+        }
+        Ok(scripts.disabled)
+    }
+
     #[test]
     fn a_script_imports_as_a_tree() -> Result {
-        let scripts = scenario(&nodes(), STRINGS)?;
+        let scripts = scenario(&nodes(), &strings(STRINGS))?;
+        assert_eq!(scripts.disabled, None);
         assert_eq!(scripts.scripts[0].name, "main");
         assert_eq!(scripts.scripts[0].kind, ScriptKind::Startup);
         assert_eq!(scripts.scripts[0].return_type, ValueType::Void);
@@ -479,31 +738,49 @@ mod tests {
     }
 
     #[test]
-    fn a_loop_among_the_nodes_is_refused() {
+    fn a_loop_among_the_nodes_disables_the_scripts() -> Result {
         // (3 links back to the call it is in)
         let mut looped = nodes();
         looped[5].3 = handle(2);
-        assert!(scenario(&looped, STRINGS).is_err());
+        assert!(disabled(&looped, STRINGS)?.is_some());
+        Ok(())
     }
 
     #[test]
-    fn a_link_to_a_free_node_or_past_the_nodes_is_refused() {
+    fn a_link_to_a_free_node_or_past_the_nodes_disables_the_scripts() -> Result {
         let mut past = nodes();
         past[5].3 = handle(40);
-        assert!(scenario(&past, STRINGS).is_err());
+        assert!(disabled(&past, STRINGS)?.is_some());
         let mut salted = nodes();
         salted[1].3 = handle(2) ^ 0x0100_0000;
-        assert!(scenario(&salted, STRINGS).is_err());
+        assert!(disabled(&salted, STRINGS)?.is_some());
+        Ok(())
     }
 
     #[test]
-    fn a_missing_global_or_string_is_refused() {
-        let mut global = nodes();
-        global[4].5 = 1;
-        assert!(scenario(&global, STRINGS).is_err());
-        let mut string = nodes();
-        string[3].4 = 0x1000;
-        assert!(scenario(&string, STRINGS).is_err());
-        assert!(scenario(&nodes(), b"begin\0set\0count").is_err());
+    fn a_variable_is_found_by_its_name() -> Result {
+        // (its stored index is the fix-up's to set)
+        let mut stale = nodes();
+        stale[4].5 = 1;
+        assert_eq!(disabled(&stale, STRINGS)?, None);
+        // ("set" names no global)
+        let mut missing = nodes();
+        missing[4].4 = 6;
+        assert!(disabled(&missing, STRINGS)?.is_some());
+        Ok(())
+    }
+
+    #[test]
+    fn a_bad_string_type_or_function_disables_the_scripts() -> Result {
+        let mut past = nodes();
+        past[3].4 = 0x1000;
+        assert!(disabled(&past, STRINGS)?.is_some());
+        let mut written = nodes();
+        written[5].1 = 6;
+        assert!(disabled(&written, STRINGS)?.is_some());
+        assert!(disabled(&nodes(), b"begin\0sex\0count\0")?.is_some());
+        // (without the console's room after them)
+        assert!(scenario(&nodes(), STRINGS)?.disabled.is_some());
+        Ok(())
     }
 }

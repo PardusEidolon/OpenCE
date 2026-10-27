@@ -5082,11 +5082,11 @@ scenario	hs_string_constants.pad	1164	unsigned long	read	-	-
 scenario	hs_string_constants.file_offset	1168	long	read	-	-
 scenario	hs_string_constants.address	1172	void *	read	kept	used
 scenario	hs_string_constants.definition	1176	struct tag_data_definition *	read	-	-
-scenario	hs_scripts.count	1180	long	read	kept	unused
-scenario	hs_scripts.address	1184	void *	read	kept	unused
+scenario	hs_scripts.count	1180	long	read	kept	used
+scenario	hs_scripts.address	1184	void *	read	kept	used
 scenario	hs_scripts.definition	1188	struct tag_block_definition *	read	-	-
-scenario	hs_globals.count	1192	long	read	kept	unused
-scenario	hs_globals.address	1196	void *	read	kept	unused
+scenario	hs_globals.count	1192	long	read	kept	used
+scenario	hs_globals.address	1196	void *	read	kept	used
 scenario	hs_globals.definition	1200	struct tag_block_definition *	read	-	-
 scenario	hs_references.count	1204	long	read	-	-
 scenario	hs_references.address	1208	void *	read	-	-
@@ -5149,10 +5149,10 @@ scenario_cutscene_flag	facing.n	48	real[2]	read	kept	used
 scenario_cutscene_flag	facing.yaw	48	real	read	kept	used
 scenario_cutscene_flag	facing.pitch	52	real	read	kept	used
 scenario_cutscene_flag	unused	56	byte[36]	-	-	-
-scenario_decal_palette_entry	reference.group_tag	0	unsigned long	-	kept	untraced
+scenario_decal_palette_entry	reference.group_tag	0	unsigned long	-	kept	used
 scenario_decal_palette_entry	reference.name	4	char *	-	-	-
 scenario_decal_palette_entry	reference.name_length	8	long	-	-	-
-scenario_decal_palette_entry	reference.index	12	long	read	kept	untraced
+scenario_decal_palette_entry	reference.index	12	long	read	kept	used
 scenario_light_fixture_datum	object.palette_entry_index	0	short	read	kept	used
 scenario_light_fixture_datum	object.name_index	2	short	read	kept	used
 scenario_light_fixture_datum	object.placement_flags	4	word	read	kept	used

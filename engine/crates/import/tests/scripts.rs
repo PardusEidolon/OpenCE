@@ -5,6 +5,7 @@ use std::error::Error;
 use std::path::Path;
 
 use opence_content::{NodeKind, ScriptKind, Scripts};
+use opence_import::script::fixed_up_nodes;
 use opence_import::{import_scripts, Cache};
 
 type Result<T = ()> = std::result::Result<T, Box<dyn Error>>;
@@ -69,6 +70,7 @@ fn every_scenarios_scripts_import() -> Result {
         let Some(scripts) = scripts(map)? else {
             continue;
         };
+        assert_eq!(scripts.disabled, None, "{map}'s scripts run");
         assert!(linked(&scripts), "{map}'s links");
         eprintln!(
             "{map}: {} scripts, {} globals, {} nodes",
@@ -99,5 +101,31 @@ fn the_pillar_of_autumns_scripts_are_its_own() -> Result {
         NodeKind::Call(call) => !call.function.is_empty(),
         _ => true,
     }));
+    Ok(())
+}
+
+/// The tool fixed up each map's nodes as the game does as it builds it, so
+/// the game's fix-up of them changes nothing.
+#[test]
+fn every_scenarios_stored_nodes_are_the_fix_ups() -> Result {
+    for map in MAPS {
+        let path = Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("../../../assets/maps")
+            .join(format!("{map}.map"));
+        let Ok(file) = std::fs::read(&path) else {
+            continue; // (no game data here)
+        };
+        let (stored, fixed) = fixed_up_nodes(&Cache::open(file)?)?;
+        let differ: Vec<_> = stored
+            .iter()
+            .zip(&fixed)
+            .enumerate()
+            .filter(|(_, (stored, fixed))| stored != fixed)
+            .collect();
+        for (index, (stored, fixed)) in differ.iter().take(8) {
+            eprintln!("{map} node {index}: stored {stored:?}, fixed {fixed:?}");
+        }
+        assert!(differ.is_empty(), "{map}: {} nodes differ", differ.len());
+    }
     Ok(())
 }

@@ -15,6 +15,10 @@ pub struct Scripts {
     pub scripts: Vec<Script>,
     /// The scenario's globals, in its order.
     pub globals: Vec<ScriptGlobal>,
+    /// Why the scenario's scripts do not run, if they do not: the game
+    /// disables a scenario's scripts (and still loads it) when they do not
+    /// fit its tables or its fix-up of them fails, and these are then empty.
+    pub disabled: Option<String>,
 }
 
 /// A script.
