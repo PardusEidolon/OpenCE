@@ -94,25 +94,13 @@ final class DevStateTests: XCTestCase {
         XCTAssertEqual(try capture(state.switches).bytes, try capture(nil).bytes)
     }
 
-    @MainActor
-    func testTheDeveloperTabLaunchesTheLightingControls() throws {
+    func testADeveloperLaunchSetsTheLightingControls() throws {
         let engine = Engine()
-        let model = DeveloperModel(
-            variables: engine.shellVariables(), tuning: engine.tuneControls(),
-            root: FileManager.default.temporaryDirectory)
-        XCTAssertEqual(model.tuning.map(\.name), engine.tuneControls().map(\.name))
-        let sun = try XCTUnwrap(model.tuning.first { $0.name == "tune.sun" })
-        let exposure = try XCTUnwrap(model.tuning.first { $0.name == "tune.exposure" })
-        XCTAssertEqual(model.value(sun), 1)
-        model.set(sun, to: 2.5)
-        model.set(exposure, to: -99)
-        XCTAssertEqual(model.value(exposure), exposure.minimum, "held to its range")
-        XCTAssertEqual(model.launch.variables, ["tune.exposure": "-4.0", "tune.sun": "2.5"])
-        model.set(sun, to: sun.defaultValue)
-        XCTAssertNil(model.launch.variables["tune.sun"], "at its default: the map's tuning keeps it")
+        var launch = DeveloperLaunch()
+        launch.variables = ["tune.exposure": "-4.0", "tune.sun": "2.5"]
 
         // (the game reads the launch back and the shell takes each value)
-        let launched = try XCTUnwrap(DeveloperLaunch(arguments: model.arguments()))
+        let launched = try XCTUnwrap(DeveloperLaunch(arguments: launch.arguments))
         for (name, value) in launched.settings {
             try engine.setShellVariable(name: name, value: value)
         }

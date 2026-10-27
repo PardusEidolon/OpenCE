@@ -76,7 +76,7 @@ public enum MapLibrary {
     /// definition of its other maps, and devmap's galleries of them.
     public static let testMaps = ["devgulch", "devmap"]
 
-    /// The test maps the launcher's Developer tab offers: devgulch. devmap,
+    /// The test map a developer launch starts on: devgulch. devmap,
     /// made with no game data, is the tests' (and `--map devmap`'s).
     public static let developerMaps = ["devgulch"]
 

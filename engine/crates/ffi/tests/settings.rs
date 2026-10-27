@@ -85,7 +85,7 @@ fn settings_are_saved_and_loaded() -> Result {
 }
 
 #[test]
-fn the_launchers_settings_are_kept() -> Result {
+fn the_saved_settings_are_kept() -> Result {
     let stock = stock_settings();
     assert_eq!(stock.data.maps_folder, "", "the checkout's assets/maps");
     assert_eq!(stock.video.display, 0);

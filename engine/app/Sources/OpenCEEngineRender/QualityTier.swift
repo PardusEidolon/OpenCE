@@ -61,7 +61,7 @@ public enum QualityTier: String, CaseIterable, Sendable {
 }
 
 extension QualityTier {
-    /// This Mac as the launcher names it: the GPU, its cores and the memory
+    /// This Mac as the logs name it: the GPU, its cores and the memory
     /// ("Apple M1 Max, 32 GPU cores, 32 GB").
     public static func describe(_ device: MTLDevice) -> String {
         let cores = cores(name: device.name, registry: registryCores())

@@ -110,7 +110,7 @@ stands_in = "app/Sources/OpenCEEngineRender/ShaderSources.swift"
 directory = "bink"
 class = "replaced"
 because = "bink"
-stands_in = "app/Sources/OpenCEEngineMenu/Launcher.swift"
+stands_in = "ui/src/loading.rs"
 
 [[rule]]
 directory = "bungie_net"

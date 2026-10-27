@@ -73,7 +73,7 @@ pub fn engine_version() -> String {
     env!("CARGO_PKG_VERSION").to_owned()
 }
 
-/// A station of a test map, as the launcher's Developer tab lists it.
+/// A station of a test map, as `--station` names it.
 #[derive(Clone, Debug, PartialEq, Eq, uniffi::Record)]
 pub struct TestStation {
     /// Its name: `station <name>`.

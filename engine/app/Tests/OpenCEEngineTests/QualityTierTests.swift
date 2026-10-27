@@ -145,7 +145,7 @@ final class QualityTierTests: XCTestCase {
         XCTAssertLessThanOrEqual(largest.bytes, budget, largest.map)
     }
 
-    /// The launcher's memory estimate is within 15% of Blood Gulch's
+    /// The memory estimate is within 15% of Blood Gulch's
     /// measured allocation at each tier, at 1440p and 4K (skipped without
     /// assets/maps).
     func testTheMemoryEstimateMatchesTheMeasurement() throws {

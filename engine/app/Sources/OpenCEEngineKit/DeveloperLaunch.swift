@@ -1,4 +1,4 @@
-// What the launcher's Developer tab starts: a test map, the station to
+// A developer launch from the command line: a test map, the station to
 // start at, the buffer to view, the drawing switches as they start and a
 // frame to capture, as the arguments the game reads (--map, --station,
 // --view, --set, --capture), so that the same launch can be typed.
@@ -47,8 +47,7 @@ public struct DeveloperLaunch: Equatable, Sendable {
     }
 
     /// The launch `arguments` ask for; none without --map. (The last of
-    /// an argument given twice wins, as the launcher's are added after the
-    /// command line's.)
+    /// an argument given twice wins.)
     public init?(arguments: [String]) {
         var level: String?
         self.init()

@@ -1,6 +1,5 @@
 // A benchmark path played through a loaded level and drawn offscreen: the
-// one run the --benchmark command, the launcher's Benchmark and the tier
-// tests all measure.
+// one the --benchmark command and the tier tests both measure.
 import Metal
 import OpenCEEngineCore
 import OpenCEEngineRender

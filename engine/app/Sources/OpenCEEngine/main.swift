@@ -1,7 +1,5 @@
-// The app's entry: the launcher (Play, Settings and Exit; its settings the
-// data folders, the display and the window mode), skipped with --map,
-// --control, --socket or --no-launcher; then the engine's window, full
-// screen with --full-screen or the setting,
+// The app's entry: the engine's window, full screen with --full-screen or
+// the setting,
 // stepping the world on the display's frames, and drawing the map --map
 // PATH names (and --bsp N), or the one chosen from Halo's menus (ui.map's
 // main menu over its scene: the campaign, which plays a mission at a
@@ -93,9 +91,8 @@ func hudPass(device: MTLDevice) -> HudPass? {
     }
 }
 
-/// The game's arguments: the command line's, then the launcher's
-/// Developer tab's.
-nonisolated(unsafe) var launchArguments = CommandLine.arguments
+/// The game's arguments: the command line's.
+let launchArguments = CommandLine.arguments
 
 /// The value after `name` among the arguments, or nil.
 func argument(_ name: String) -> String? {
@@ -256,8 +253,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         return support.flatMap { PerfLog(url: $0.appendingPathComponent("OpenCE Engine/perf.log")) }
     }()
     let root = MapLibrary.dataRoot
-    /// The data folders: --maps's, else the settings' (read once the
-    /// launcher has closed).
+    /// The data folders: --maps's, else the settings'.
     lazy var folders =
         argument("--maps") != nil
         ? MapLibrary.folders(named: argument("--maps"), root: root)
@@ -284,8 +280,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     let shaders = ShaderReloader()
     var lastShaderPoll: CFTimeInterval = 0
 
-    /// The launcher's window, while it shows.
-    var launcher: NSWindow?
     /// The loading screen between missions, while it shows, its pass and
     /// its chant (made with the first).
     var loadingScreen: LoadingScreenModel?
@@ -304,91 +298,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.mainMenu = mainMenu()
         // (the first run's graphics: this Mac's tier, saved once the
-        // launcher or the menus save)
+        // menus save)
         if saved.settings.graphics.tier.isEmpty, let device = MTLCreateSystemDefaultDevice() {
             saved.tier = QualityTier.detect(device)
             settings = videoSettings(saved.settings)
         }
-        let skips = ["--map", "--control", "--socket", "--no-launcher"]
-        if skips.contains(where: launchArguments.contains) {
-            startGame()
-        } else {
-            showLauncher()
-        }
+        startGame()
         NSApp.activate()
-    }
-
-    /// The launcher: Play starts the game on its main menu, Exit quits.
-    func showLauncher() {
-        MenuFonts.register()
-        let model = LauncherModel(
-            settings: saved, displays: NSScreen.screens.map(\.localizedName), root: root,
-            variables: engine.shellVariables(), tuning: engine.tuneControls(), graphics: macGraphics())
-        model.benchmarker = { arguments in await AppDelegate.runBenchmark(arguments) }
-        let window = NSWindow(
-            contentRect: NSRect(x: 0, y: 0, width: 760, height: 900),
-            styleMask: [.titled, .closable, .miniaturizable, .resizable],
-            backing: .buffered, defer: false)
-        window.title = "OpenCE"
-        window.contentMinSize = NSSize(width: 460, height: 380)
-        window.isReleasedWhenClosed = false
-        window.contentView = NSHostingView(rootView: LauncherView(model: model))
-        model.onPlay = { [weak self] in
-            self?.launcher?.orderOut(nil)
-            self?.launcher = nil
-            self?.startGame()
-        }
-        model.onLaunch = { [weak self] arguments in
-            launchArguments += arguments
-            self?.launcher?.orderOut(nil)
-            self?.launcher = nil
-            self?.startGame()
-        }
-        model.onExit = { NSApp.terminate(nil) }
-        launcher = window
-        window.center()
-        window.makeKeyAndOrderFront(nil)
-    }
-
-    /// This Mac as the launcher's Graphics section shows it: the tier
-    /// picked for it, the GPU's memory budget, and the size and rate of the
-    /// display the game opens on.
-    func macGraphics() -> MacGraphics {
-        let screens = NSScreen.screens
-        let index = Int(saved.settings.video.display)
-        let screen = screens.indices.contains(index) ? screens[index] : NSScreen.main
-        let scale = screen?.backingScaleFactor ?? 2
-        let size = screen?.frame.size ?? NSSize(width: 1280, height: 720)
-        let rate = max(screen?.maximumFramesPerSecond ?? 60, 1)
-        guard let device = MTLCreateSystemDefaultDevice() else { return .unknown }
-        return MacGraphics(
-            detected: QualityTier.detect(device), name: QualityTier.describe(device),
-            memoryBudget: Int(clamping: device.recommendedMaxWorkingSetSize),
-            width: Int(size.width * scale), height: Int(size.height * scale),
-            frameMilliseconds: 1000.0 / Double(rate))
-    }
-
-    /// Runs this app's own executable with `arguments` (the launcher's
-    /// benchmark) off the main thread, giving what it printed.
-    nonisolated static func runBenchmark(_ arguments: [String]) async -> Data {
-        await Task.detached {
-            guard let executable = Bundle.main.executableURL else { return Data("no executable".utf8) }
-            let process = Process()
-            let pipe = Pipe()
-            process.executableURL = executable
-            process.arguments = arguments
-            process.standardOutput = pipe
-            process.standardError = FileHandle.nullDevice
-            process.standardInput = FileHandle.nullDevice
-            do {
-                try process.run()
-            } catch {
-                return Data("\(error)".utf8)
-            }
-            let output = pipe.fileHandleForReading.readDataToEndOfFile()
-            process.waitUntilExit()
-            return output
-        }.value
     }
 
     /// The game: its window on the display set, on the map --map names or
@@ -1250,7 +1166,7 @@ extension AppDelegate: GameActions {
 /// (the path's own in --maps, assets/maps, when none is named); --baseline
 /// names a report kept before, against which each regression is printed
 /// to stderr, and the run fails when there is one. --quality draws it with
-/// the saved graphics settings or a tier's (the launcher's Benchmark).
+/// the saved graphics settings or a tier's.
 func benchmark(seconds: String) -> Never {
     guard let time = Double(seconds), time.isFinite, time > 0 else { fail("--benchmark is seconds, not \(seconds)") }
     let named = argument("--path") ?? "bloodgulch"

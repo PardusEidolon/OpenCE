@@ -1,5 +1,5 @@
-//! The developer state the dev panel, the shell, the control socket and the
-//! launcher's Developer tab share: the shell's variables, with the lighting
+//! The developer state the dev panel, the shell and the control socket
+//! share: the shell's variables, with the lighting
 //! controls (`tune.*`) among them. The controls are tuned per map and kept
 //! in a file of the map's in the tuning folder (`<map>.toml`), read again
 //! as each map loads; the rest are the shell's own. Each change of a

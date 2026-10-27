@@ -1,7 +1,6 @@
-// The developer state the dev panel, the shell, the control socket and the
-// launcher's Developer tab share, as the renderer reads it: the drawing
-// switches (`render.*`), the lighting controls (`tune.*`) and the panel's
-// switch (`dev.panel`). The engine counts each change of its variables;
+// The developer state the dev panel, the shell and the control socket
+// share, as the renderer reads it: the drawing switches (`render.*`), the
+// lighting controls (`tune.*`) and the panel's switch (`dev.panel`). The engine counts each change of its variables;
 // the state is read again only when the count moves, so a frame whose
 // state nobody touched reads nothing.
 import Foundation

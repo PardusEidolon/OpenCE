@@ -268,30 +268,30 @@ docs/engine.md's "The coverage census" says what each class needs.
 
 | Function | File | Class | Engine | Evidence |
 | --- | --- | --- | --- | --- |
-| `bink_draw_frame` | bink/bink_playback.c | Replaced | app/Sources/OpenCEEngineMenu/Launcher.swift | Bink |
-| `bink_playback_active` | bink/bink_playback.c | Replaced | app/Sources/OpenCEEngineMenu/Launcher.swift | Bink |
-| `bink_playback_ui_rendering_inhibited` | bink/bink_playback.c | Replaced | app/Sources/OpenCEEngineMenu/Launcher.swift | Bink |
-| `bink_playback_in_progress` | bink/bink_playback.c | Replaced | app/Sources/OpenCEEngineMenu/Launcher.swift | Bink |
-| `bink_free_texture_cache` | bink/bink_playback.c | Replaced | app/Sources/OpenCEEngineMenu/Launcher.swift | Bink |
-| `bink_get_memory_available` | bink/bink_playback.c | Replaced | app/Sources/OpenCEEngineMenu/Launcher.swift | Bink |
-| `bink_alloc_permanent` | bink/bink_playback.c | Replaced | app/Sources/OpenCEEngineMenu/Launcher.swift | Bink |
-| `bink_alloc` | bink/bink_playback.c | Replaced | app/Sources/OpenCEEngineMenu/Launcher.swift | Bink |
-| `bink_decompress_audio_frame` | bink/bink_playback.c | Replaced | app/Sources/OpenCEEngineMenu/Launcher.swift | Bink |
-| `bink_free` | bink/bink_playback.c | Replaced | app/Sources/OpenCEEngineMenu/Launcher.swift | Bink |
-| `is_all_bink_memory_free` | bink/bink_playback.c | Replaced | app/Sources/OpenCEEngineMenu/Launcher.swift | Bink |
-| `bink_decompress_video_frame` | bink/bink_playback.c | Replaced | app/Sources/OpenCEEngineMenu/Launcher.swift | Bink |
-| `bink_query_analog_controller_buttons` | bink/bink_playback.c | Replaced | app/Sources/OpenCEEngineMenu/Launcher.swift | Bink |
-| `code_001b5c60` | bink/bink_playback.c | Replaced | app/Sources/OpenCEEngineMenu/Launcher.swift | Bink |
-| `code_001b5c80` | bink/bink_playback.c | Replaced | app/Sources/OpenCEEngineMenu/Launcher.swift | Bink |
-| `bink_playback_initialize` | bink/bink_playback.c | Replaced | app/Sources/OpenCEEngineMenu/Launcher.swift | Bink |
-| `code_001b5cc0` | bink/bink_playback.c | Replaced | app/Sources/OpenCEEngineMenu/Launcher.swift | Bink |
-| `code_001b5d20` | bink/bink_playback.c | Replaced | app/Sources/OpenCEEngineMenu/Launcher.swift | Bink |
-| `bink_playback_stop` | bink/bink_playback.c | Replaced | app/Sources/OpenCEEngineMenu/Launcher.swift | Bink |
-| `bink_playback_dispose` | bink/bink_playback.c | Replaced | app/Sources/OpenCEEngineMenu/Launcher.swift | Bink |
-| `bink_playback_update__internal` | bink/bink_playback.c | Replaced | app/Sources/OpenCEEngineMenu/Launcher.swift | Bink |
-| `bink_playback_render` | bink/bink_playback.c | Replaced | app/Sources/OpenCEEngineMenu/Launcher.swift | Bink |
-| `bink_playback_start` | bink/bink_playback.c | Replaced | app/Sources/OpenCEEngineMenu/Launcher.swift | Bink |
-| `bink_playback_update` | bink/bink_playback.c | Replaced | app/Sources/OpenCEEngineMenu/Launcher.swift | Bink |
+| `bink_draw_frame` | bink/bink_playback.c | Replaced | ui/src/loading.rs | Bink |
+| `bink_playback_active` | bink/bink_playback.c | Replaced | ui/src/loading.rs | Bink |
+| `bink_playback_ui_rendering_inhibited` | bink/bink_playback.c | Replaced | ui/src/loading.rs | Bink |
+| `bink_playback_in_progress` | bink/bink_playback.c | Replaced | ui/src/loading.rs | Bink |
+| `bink_free_texture_cache` | bink/bink_playback.c | Replaced | ui/src/loading.rs | Bink |
+| `bink_get_memory_available` | bink/bink_playback.c | Replaced | ui/src/loading.rs | Bink |
+| `bink_alloc_permanent` | bink/bink_playback.c | Replaced | ui/src/loading.rs | Bink |
+| `bink_alloc` | bink/bink_playback.c | Replaced | ui/src/loading.rs | Bink |
+| `bink_decompress_audio_frame` | bink/bink_playback.c | Replaced | ui/src/loading.rs | Bink |
+| `bink_free` | bink/bink_playback.c | Replaced | ui/src/loading.rs | Bink |
+| `is_all_bink_memory_free` | bink/bink_playback.c | Replaced | ui/src/loading.rs | Bink |
+| `bink_decompress_video_frame` | bink/bink_playback.c | Replaced | ui/src/loading.rs | Bink |
+| `bink_query_analog_controller_buttons` | bink/bink_playback.c | Replaced | ui/src/loading.rs | Bink |
+| `code_001b5c60` | bink/bink_playback.c | Replaced | ui/src/loading.rs | Bink |
+| `code_001b5c80` | bink/bink_playback.c | Replaced | ui/src/loading.rs | Bink |
+| `bink_playback_initialize` | bink/bink_playback.c | Replaced | ui/src/loading.rs | Bink |
+| `code_001b5cc0` | bink/bink_playback.c | Replaced | ui/src/loading.rs | Bink |
+| `code_001b5d20` | bink/bink_playback.c | Replaced | ui/src/loading.rs | Bink |
+| `bink_playback_stop` | bink/bink_playback.c | Replaced | ui/src/loading.rs | Bink |
+| `bink_playback_dispose` | bink/bink_playback.c | Replaced | ui/src/loading.rs | Bink |
+| `bink_playback_update__internal` | bink/bink_playback.c | Replaced | ui/src/loading.rs | Bink |
+| `bink_playback_render` | bink/bink_playback.c | Replaced | ui/src/loading.rs | Bink |
+| `bink_playback_start` | bink/bink_playback.c | Replaced | ui/src/loading.rs | Bink |
+| `bink_playback_update` | bink/bink_playback.c | Replaced | ui/src/loading.rs | Bink |
 
 ## `bitmaps`
 

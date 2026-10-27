@@ -9,7 +9,7 @@ of its code is compiled into the engine.
 
 ```sh
 nix build .#engine             # OpenCE Engine.app
-nix run .#engine               # build it and open the launcher, from the folder holding assets/maps
+nix run .#engine               # build it and start the game on its main menu, from the folder holding assets/maps
 nix run .#engine -- --map devgulch --station vehicles   # or start a test map at a station
 python3 tools/engine_build.py --out build/engine --test   # the app and its Swift tests
 cd engine && cargo test --release --workspace             # the Rust tests
@@ -591,17 +591,11 @@ sharp at any window size.
 widgets run, and the next mission after each), the settings, the fonts and
 the server list.
 
-### The launcher
+### The graphics tiers
 
-The window before the game has three choices: **Play**, **Settings** and
-**Exit**. Its settings are only what must be set before the game starts:
-the data folders, the display and the window mode. Every other setting is
-in the game's own menus.
-
-Settings has three sections: **Folders**, **Display** (the display and
-the window mode) and **Graphics**. Graphics picks a quality tier, shows
-each setting with what it does and what it costs, the GPU memory the
-settings take, and runs the benchmark with them.
+The app starts the game directly, on its main menu, or on the map `--map`
+names. The data folders come from `--maps` or `settings.toml`, and the
+display and window mode from `settings.toml` or `--full-screen`.
 
 The tiers are one table (`QualityTier.preset`), and the app picks one for
 the Mac at its first start from the GPU's cores and memory
@@ -617,9 +611,9 @@ dynamic resolution holding the display's frame rate.
 
 The upscale height is the most the temporal scaler gathers into; MetalFX's
 spatial scaler takes the frame the rest of the way to the display.
-Changing any setting by hand makes the set **Custom**, and **Reset to
-tier** puts the detected tier back. They are saved in `settings.toml`'s
-`[graphics]`.
+A setting changed by hand makes the set custom. They are saved in
+`settings.toml`'s `[graphics]`; the benchmark's `--quality` measures a
+tier, or the saved settings.
 
 What each costs, in GPU time a frame on Blood Gulch at 4K on an M1 Max:
 
@@ -642,8 +636,8 @@ working set:
 | Medium | 458 MB | 681 MB | 985 MB |
 | Ultra | 698 MB | 1096 MB | 1566 MB |
 
-The benchmark button saves the settings and runs the app itself with
-`--benchmark 10 --path bloodgulch --quality saved` at the display's size.
+`--benchmark 10 --path bloodgulch --quality saved` measures the saved
+settings at the display's size.
 
 ### The loading screen
 
@@ -1003,7 +997,7 @@ when one is asked for.
 ### The dev state and the lighting controls
 
 The shell's variables are the one developer state that the dev panel,
-the shell, the socket, scripts and the launcher's Developer tab share
+the shell, the socket and scripts share
 (`dev_state.rs`, `DevState.swift`). The engine counts each change of a
 variable, and the app reads the state again only when the count moves:
 a frame nobody tuned reads nothing and draws the stock frame. `dev.panel`
