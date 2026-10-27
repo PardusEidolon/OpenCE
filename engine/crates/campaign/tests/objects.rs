@@ -140,3 +140,56 @@ fn an_object_that_cannot_take_damage_survives_a_fall() -> Result {
     assert!(fall(&mut mission)? < 1.0, "hurt by the fall");
     Ok(())
 }
+
+#[test]
+fn a_player_is_inside_a_trigger_volume_only_while_standing_in_it() -> Result {
+    let Some(mut mission) = mission("a10")? else {
+        return Ok(()); // (no game data here)
+    };
+    // The middle of the first volume tall and wide enough to stand in.
+    let volumes = mission.level().scenario.campaign.trigger_volumes.clone();
+    let (index, middle) = volumes
+        .iter()
+        .enumerate()
+        .find_map(|(index, volume)| {
+            let [x, y, z] = volume.extents;
+            let forward = Vec3::from(volume.forward);
+            let up = Vec3::from(volume.up);
+            let left = up.cross(forward);
+            let middle = Vec3::from(volume.position)
+                + forward * (x / 2.0)
+                + left * (y / 2.0)
+                + up * (z / 2.0);
+            (x > 2.0 && y > 2.0 && z > 3.0 && volume.contains(middle.to_array()))
+                .then_some((index, middle))
+        })
+        .ok_or("no volume to stand in")?;
+    let player = mission.sim().player().ok_or("no player")?.handle();
+    let held = Value::Index(mission.index_of(player));
+    let volume = Value::Index(i32::try_from(index)?);
+    let test = |mission: &mut Mission, at: Vec3| {
+        mission
+            .sim_mut()
+            .teleport_player(0, at - Vec3::new(0.0, 0.0, 0.5));
+        mission.step(TickInput::default());
+        mission.call("volume_test_object", &[volume.clone(), held.clone()])
+    };
+    assert_eq!(
+        test(&mut mission, middle),
+        Some(Value::Boolean(true)),
+        "inside"
+    );
+    let away = middle + Vec3::new(0.0, 0.0, 200.0);
+    assert_eq!(
+        test(&mut mission, away),
+        Some(Value::Boolean(false)),
+        "outside"
+    );
+    let missing = Value::Index(i32::try_from(volumes.len())?);
+    assert_eq!(
+        mission.call("volume_test_object", &[missing, held.clone()]),
+        Some(Value::Boolean(false)),
+        "a volume the scenario does not have"
+    );
+    Ok(())
+}

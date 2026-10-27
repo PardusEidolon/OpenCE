@@ -1025,7 +1025,8 @@ note = "not reached from a root of the game; the units track owns it"
 [function.animation_loop_frame_index]
 class = "matched"
 engine = "sim/src/animation.rs"
-owed = "the engine's own tests (sim/tests/stock_animations.rs); no check against the original yet"
+check = "sim/src/animation.rs"
+against = "measure"
 
 [function.animation_right_foot_frame_index]
 class = "missing"
@@ -1034,7 +1035,8 @@ note = "not reached from a root of the game; the units track owns it"
 [function.animation_second_key_frame_index]
 class = "matched"
 engine = "sim/src/animation.rs"
-owed = "the engine's own tests (sim/tests/stock_animations.rs); no check against the original yet"
+check = "sim/src/animation.rs"
+against = "measure"
 
 [function.animation_set_frame_size]
 class = "replaced"
@@ -1045,7 +1047,8 @@ note = "the tool's, when it builds an animation: nothing in the game calls it, a
 [function.animation_sound_frame_index]
 class = "matched"
 engine = "sim/src/animation.rs"
-owed = "the engine's own tests (sim/tests/stock_animations.rs); no check against the original yet"
+check = "sim/src/animation.rs"
+against = "measure"
 
 [function.animation_update]
 class = "missing"
@@ -1053,7 +1056,9 @@ note = "not reached from a root of the game; the units track owns it"
 
 [function.animation_update_internal]
 class = "matched"
-owed = "reads the object, tag and map world, which the fake worlds do not hold (the animation tag's frames); checked by the animation trace's frame counts"
+engine = "sim/src/animation.rs"
+check = "sim/src/animation.rs"
+against = "measure"
 
 [function.area_of_effect_cause_damage]
 class = "matched"
@@ -1079,7 +1084,9 @@ stands_in = "dev/src/logbook.rs"
 
 [function.begin_music_fade_out]
 class = "matched"
-owed = "the engine cites it, with no check against the original yet"
+engine = "ffi/src/ui_host.rs"
+check = "ffi/tests/menu_music.rs"
+against = "measure"
 
 [function.biped_accelerate]
 class = "partial"
@@ -1573,12 +1580,15 @@ stands_in = "import/src/lib.rs"
 
 [function.blip_size_get]
 class = "matched"
-owed = "the motion sensor's blips; checked by sim/tests/hud.rs"
+engine = "sim/src/hud.rs"
+check = "sim/src/hud.rs"
+against = "measure"
 
 [function.blip_type_get]
 class = "matched"
 engine = "sim/src/hud.rs"
-owed = "the engine's own tests (sim/src/hud.rs); no check against the original yet"
+check = "sim/src/hud.rs"
+against = "measure"
 
 [function.bored_camera_new]
 class = "missing"
@@ -1614,7 +1624,9 @@ stands_in = "import/src/lib.rs"
 
 [function.build_damage_animation_index]
 class = "matched"
-owed = "the damage animations; reads the object, tag and map world, which the fake worlds do not hold (the animation graph)"
+engine = "content/src/object.rs"
+check = "sim/src/animation_graph.rs"
+against = "measure"
 
 [function.build_game_variant_ctf]
 class = "matched"
@@ -1957,7 +1969,9 @@ stands_in = "import/src/lib.rs"
 
 [function.camera_track_splut]
 class = "matched"
-owed = "cutscene cameras; reads the object, tag and map world, which the fake worlds do not hold (the camera track tag); campaign/tests/cutscenes.rs"
+engine = "sim/src/player.rs"
+check = "sim/src/player.rs"
+against = "measure"
 
 [function.ceiling_log2]
 class = "native"
@@ -1968,14 +1982,17 @@ class = "native"
 primitive = "next_power_of_two"
 
 [function.channel_set_properties_hardware]
-class = "matched"
+class = "partial"
 engine = "audio/src/mixer.rs"
-owed = "the engine's own tests (audio/src/mixer.rs); no check against the original yet"
+check = "audio/src/mixer.rs"
+against = "measure"
+leaves_out = ["the sound card's hardware voices: the engine mixes every channel itself"]
 
 [function.cinematic_can_be_skipped]
 class = "matched"
 engine = "campaign/src/cinematic.rs"
-owed = "the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet"
+check = "campaign/tests/natives.rs"
+against = "measure"
 
 [function.cinematic_force_title]
 class = "missing"
@@ -1984,37 +2001,44 @@ note = "not reached from a root of the game; the cameras track owns it"
 [function.cinematic_in_progress]
 class = "matched"
 engine = "campaign/src/cinematic.rs"
-owed = "the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet"
+check = "campaign/tests/natives.rs"
+against = "measure"
 
 [function.cinematic_set_title]
 class = "matched"
 engine = "campaign/src/cinematic.rs"
-owed = "the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet"
+check = "campaign/tests/natives.rs"
+against = "measure"
 
 [function.cinematic_show_letterbox]
 class = "matched"
 engine = "campaign/src/cinematic.rs"
-owed = "the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet"
+check = "campaign/tests/natives.rs"
+against = "measure"
 
 [function.cinematic_skip_start]
 class = "matched"
 engine = "campaign/src/cinematic.rs"
-owed = "the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet"
+check = "campaign/tests/natives.rs"
+against = "measure"
 
 [function.cinematic_skip_stop]
 class = "matched"
 engine = "campaign/src/cinematic.rs"
-owed = "the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet"
+check = "campaign/tests/natives.rs"
+against = "measure"
 
 [function.cinematic_start]
 class = "matched"
 engine = "campaign/src/cinematic.rs"
-owed = "the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet"
+check = "campaign/tests/natives.rs"
+against = "measure"
 
 [function.cinematic_stop]
 class = "matched"
 engine = "campaign/src/cinematic.rs"
-owed = "the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet"
+check = "campaign/tests/natives.rs"
+against = "measure"
 
 [function.cinematic_suppress_bsp_object_creation]
 class = "partial"
@@ -2381,17 +2405,21 @@ note = "the obstruction cache is the old port's and has nothing to match; a sour
 
 [function.contrail_add_points]
 class = "matched"
-owed = "the engine cites it, with no check against the original yet"
+engine = "ffi/src/particles/contrails.rs"
+check = "ffi/src/particles/contrails.rs"
+against = "measure"
 
 [function.contrail_compute_new_point_count]
 class = "matched"
 engine = "ffi/src/particles/contrails.rs"
-owed = "the engine's own tests (ffi/src/particles/contrails.rs); no check against the original yet"
+check = "ffi/src/particles/contrails.rs"
+against = "measure"
 
 [function.contrail_delete]
 class = "matched"
 engine = "ffi/src/particles/contrails.rs"
-owed = "the engine's own tests (ffi/src/particles/contrails.rs); no check against the original yet"
+check = "ffi/src/particles/contrails.rs"
+against = "measure"
 
 [function.contrail_fade]
 class = "matched"
@@ -2403,28 +2431,38 @@ note = "a camera on the strip's point is not traced: the game divides by zero"
 [function.contrail_new]
 class = "matched"
 engine = "ffi/src/particles/contrails.rs"
-owed = "the engine's own tests (ffi/src/particles/contrails.rs); no check against the original yet"
+check = "ffi/src/particles/contrails.rs"
+against = "measure"
 
 [function.contrail_next_frame]
 class = "matched"
-owed = "the engine cites it, with no check against the original yet"
+engine = "ffi/src/particles/contrails.rs"
+check = "ffi/src/particles/contrails.rs"
+against = "measure"
 
 [function.contrail_scale_random_value]
 class = "matched"
-owed = "the engine cites it, with no check against the original yet"
+engine = "ffi/src/particles/contrails.rs"
+check = "ffi/src/particles/contrails.rs"
+against = "measure"
 
 [function.contrail_scale_value]
 class = "matched"
-owed = "the engine cites it, with no check against the original yet"
+engine = "ffi/src/particles/contrails.rs"
+check = "ffi/src/particles/contrails.rs"
+against = "measure"
 
 [function.contrail_update_points]
 class = "matched"
-owed = "the engine cites it, with no check against the original yet"
+engine = "ffi/src/particles/contrails.rs"
+check = "ffi/src/particles/contrails.rs"
+against = "measure"
 
 [function.contrails_update]
 class = "matched"
 engine = "ffi/src/particles/contrails.rs"
-owed = "the engine's own tests (ffi/src/particles/contrails.rs); no check against the original yet"
+check = "ffi/src/particles/contrails.rs"
+against = "measure"
 
 [function.control_destroyed]
 class = "missing"
@@ -2532,7 +2570,8 @@ primitive = "glam::Vec3"
 [function.crosshairs_draw]
 class = "matched"
 engine = "ffi/src/hud.rs"
-owed = "the engine's own tests (ffi/tests/hud.rs); no check against the original yet"
+check = "ffi/tests/hud.rs"
+against = "measure"
 
 [function.csmemcmp]
 class = "native"
@@ -2823,11 +2862,15 @@ primitive = "Vec"
 
 [function.dead_camera_new]
 class = "matched"
-owed = "the engine cites it, with no check against the original yet"
+engine = "sim/src/dead_camera.rs"
+check = "sim/tests/death_camera.rs"
+against = "measure"
 
 [function.dead_camera_update]
 class = "matched"
-owed = "the engine cites it, with no check against the original yet"
+engine = "sim/src/lib.rs"
+check = "sim/tests/death_camera.rs"
+against = "measure"
 
 [function.debug_check_memory]
 class = "replaced"
@@ -2942,20 +2985,26 @@ stands_in = "app/Sources/OpenCEEngineRender/DecalPass.swift"
 [function.decal_delete]
 class = "matched"
 engine = "ffi/src/dynamic_decals.rs"
-owed = "the engine's own tests (ffi/src/dynamic_decals.rs); no check against the original yet"
+check = "ffi/src/dynamic_decals.rs"
+against = "measure"
 
 [function.decal_insert]
 class = "matched"
 engine = "ffi/src/dynamic_decals.rs"
-owed = "the engine's own tests (ffi/src/dynamic_decals.rs); no check against the original yet"
+check = "ffi/src/dynamic_decals.rs"
+against = "measure"
 
 [function.decal_new]
 class = "matched"
-owed = "the engine cites it, with no check against the original yet"
+engine = "ffi/src/decals.rs"
+check = "ffi/src/decals.rs"
+against = "measure"
 
 [function.decal_new_from_collision]
 class = "matched"
-owed = "the engine cites it, with no check against the original yet"
+engine = "ffi/src/decals.rs"
+check = "ffi/src/decals.rs"
+against = "measure"
 
 [function.decal_projection_create]
 class = "replaced"
@@ -2970,16 +3019,20 @@ stands_in = "app/Sources/OpenCEEngineRender/DecalPass.swift"
 [function.decal_update]
 class = "matched"
 engine = "ffi/src/dynamic_decals.rs"
-owed = "the engine's own tests (ffi/src/dynamic_decals.rs); no check against the original yet"
+check = "ffi/src/dynamic_decals.rs"
+against = "measure"
 
 [function.decals_update]
 class = "matched"
-owed = "the engine cites it, with no check against the original yet"
+engine = "ffi/src/dynamic_decals.rs"
+check = "ffi/src/dynamic_decals.rs"
+against = "measure"
 
 [function.decompress_ima_adpcm_audio_data]
 class = "matched"
 engine = "audio/src/decode.rs"
-owed = "the engine's own tests (audio/src/decode.rs); no check against the original yet"
+check = "audio/src/decode.rs"
+against = "measure"
 
 [function.defaultHandler]
 class = "replaced"
@@ -3014,7 +3067,9 @@ stands_in = "ffi/src/render_level.rs"
 
 [function.detail_sound_random_offset]
 class = "matched"
-owed = "a looping sound's details; draws from the game's random seed; Phase 15"
+engine = "audio/src/player/looping.rs"
+check = "audio/src/player/looping.rs"
+against = "measure"
 
 [function.device_export_function_values]
 class = "matched"
@@ -3113,12 +3168,15 @@ against = "trace"
 
 [function.director_desired_perspective]
 class = "matched"
-owed = "the camera; reads the object, tag and map world, which the fake worlds do not hold (the unit's seat); Phase 14's death camera"
+engine = "sim/src/seats.rs"
+check = "sim/tests/seats.rs"
+against = "measure"
 
 [function.director_script_camera]
 class = "matched"
 engine = "campaign/src/cinematic.rs"
-owed = "the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet"
+check = "campaign/tests/natives.rs"
+against = "measure"
 
 [function.director_set_mode]
 class = "missing"
@@ -3156,7 +3214,8 @@ primitive = "Vec"
 [function.dispose_widget_stack]
 class = "matched"
 engine = "ui/src/lib.rs"
-owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+check = "ui/tests/tree.rs"
+against = "measure"
 
 [function.distributed_action_valid]
 class = "replaced"
@@ -3178,21 +3237,27 @@ stands_in = "ffi/src/render_level.rs"
 [function.draw_bitmap_in_rect]
 class = "matched"
 engine = "ui/src/draw.rs"
-owed = "the engine's own tests (ui/tests/draw.rs); no check against the original yet"
+check = "ui/tests/draw.rs"
+against = "measure"
 
 [function.draw_string]
 class = "matched"
-owed = "the engine cites it, with no check against the original yet"
+engine = "ui/src/draw.rs"
+check = "ui/tests/draw.rs"
+against = "measure"
 
 [function.draw_string_compute_bounds]
-class = "matched"
+class = "partial"
 engine = "ui/src/draw.rs"
-owed = "the engine's own tests (ui/tests/draw.rs); no check against the original yet"
+check = "ui/tests/draw.rs"
+against = "measure"
+leaves_out = ["the bounds of a string measured on its own: the engine lays text out within its widget's bounds"]
 
 [function.draw_string_get_string]
 class = "matched"
 engine = "ui/src/draw.rs"
-owed = "the engine's own tests (ui/tests/draw.rs); no check against the original yet"
+check = "ui/tests/draw.rs"
+against = "measure"
 
 [function.draw_string_pick]
 class = "missing"
@@ -3201,32 +3266,41 @@ note = "not reached from a root of the game; the interface track owns it"
 [function.draw_string_set_color]
 class = "matched"
 engine = "ui/src/draw.rs"
-owed = "the engine's own tests (ui/tests/draw.rs); no check against the original yet"
+check = "ui/tests/draw.rs"
+against = "measure"
 
 [function.draw_string_set_draw_mode]
-class = "matched"
+class = "partial"
 engine = "ui/src/draw.rs"
-owed = "the engine's own tests (ui/tests/draw.rs); no check against the original yet"
+check = "ui/tests/draw.rs"
+against = "measure"
+leaves_out = ["the draw modes other than plain text"]
 
 [function.draw_string_set_font]
 class = "matched"
 engine = "ui/src/draw.rs"
-owed = "the engine's own tests (ui/tests/draw.rs); no check against the original yet"
+check = "ui/tests/draw.rs"
+against = "measure"
 
 [function.draw_string_set_format]
 class = "matched"
 engine = "ui/src/draw.rs"
-owed = "the engine's own tests (ui/tests/draw.rs); no check against the original yet"
+check = "ui/tests/draw.rs"
+against = "measure"
 
 [function.draw_string_set_highlight]
-class = "matched"
+class = "partial"
 engine = "ui/src/draw.rs"
-owed = "the engine's own tests (ui/tests/draw.rs); no check against the original yet"
+check = "ui/tests/draw.rs"
+against = "measure"
+leaves_out = ["the highlighted run of characters"]
 
 [function.draw_string_set_tab_stops]
-class = "matched"
+class = "partial"
 engine = "ui/src/draw.rs"
-owed = "the engine's own tests (ui/tests/draw.rs); no check against the original yet"
+check = "ui/tests/draw.rs"
+against = "measure"
+leaves_out = ["tab stops: the interface's strings are laid out without them"]
 
 [function.dynamic_array_add_element]
 class = "native"
@@ -3365,125 +3439,152 @@ stands_in = "app/Sources/OpenCEEngineKit/FlyControls.swift"
 [function.effect_allocate]
 class = "matched"
 engine = "sim/src/effects.rs"
-owed = "the engine's own tests (sim/src/effects.rs); no check against the original yet"
+check = "sim/src/effects.rs"
+against = "measure"
 
 [function.effect_allowed_by_environment]
 class = "matched"
 engine = "sim/src/effects.rs"
-owed = "the engine's own tests (sim/src/effects.rs); no check against the original yet"
+check = "sim/src/effects.rs"
+against = "measure"
 
 [function.effect_build_location]
 class = "matched"
 engine = "sim/src/effects.rs"
-owed = "the engine's own tests (sim/src/effects.rs); no check against the original yet"
+check = "sim/src/effects.rs"
+against = "measure"
 
 [function.effect_build_locations]
 class = "matched"
 engine = "sim/src/effects.rs"
-owed = "the engine's own tests (sim/src/effects.rs); no check against the original yet"
+check = "sim/src/effects.rs"
+against = "measure"
 
 [function.effect_delete]
 class = "matched"
 engine = "sim/src/effects.rs"
-owed = "the engine's own tests (sim/src/effects.rs); no check against the original yet"
+check = "sim/src/effects.rs"
+against = "measure"
 
 [function.effect_generate_part]
 class = "matched"
 engine = "sim/src/effects.rs"
-owed = "the engine's own tests (sim/src/effects.rs); no check against the original yet"
+check = "sim/src/effects.rs"
+against = "measure"
 
 [function.effect_generate_particles]
 class = "matched"
 engine = "ffi/src/particles.rs"
-owed = "the engine's own tests (ffi/src/particles.rs); no check against the original yet"
+check = "ffi/src/particles.rs"
+against = "measure"
 
 [function.effect_generate_parts]
 class = "matched"
 engine = "sim/src/effects.rs"
-owed = "the engine's own tests (sim/src/effects.rs); no check against the original yet"
+check = "sim/src/effects.rs"
+against = "measure"
 
 [function.effect_get_random_seed]
 class = "matched"
 engine = "sim/src/effects.rs"
-owed = "the engine's own tests (sim/src/effects.rs); no check against the original yet"
+check = "sim/src/effects.rs"
+against = "measure"
 
 [function.effect_location_get_next_instance]
 class = "matched"
 engine = "sim/src/effects.rs"
-owed = "the engine's own tests (sim/src/effects.rs); no check against the original yet"
+check = "sim/src/effects.rs"
+against = "measure"
 
 [function.effect_marker_list_get_marker]
 class = "matched"
 engine = "sim/src/effects.rs"
-owed = "the engine's own tests (sim/src/effects.rs); no check against the original yet"
+check = "sim/src/effects.rs"
+against = "measure"
 
 [function.effect_marker_list_get_markers_by_name]
 class = "matched"
 engine = "sim/src/effects.rs"
-owed = "the engine's own tests (sim/src/effects.rs); no check against the original yet"
+check = "sim/src/effects.rs"
+against = "measure"
 
 [function.effect_new_attached_from_markers]
 class = "matched"
 engine = "sim/src/effects.rs"
-owed = "the engine's own tests (sim/src/effects.rs); no check against the original yet"
+check = "sim/src/effects.rs"
+against = "measure"
 
 [function.effect_new_from_object]
 class = "matched"
 engine = "sim/src/effects.rs"
-owed = "the engine's own tests (sim/src/effects.rs); no check against the original yet"
+check = "sim/src/effects.rs"
+against = "measure"
 
 [function.effect_new_looping]
 class = "matched"
 engine = "sim/src/effects.rs"
-owed = "the engine's own tests (sim/src/effects.rs); no check against the original yet"
+check = "sim/src/effects.rs"
+against = "measure"
 
 [function.effect_new_unattached_from_markers]
 class = "matched"
-owed = "particles; reads the object, tag and map world, which the fake worlds do not hold (the effect tag); Phase 12's explosions"
+engine = "sim/src/effects.rs"
+check = "sim/src/effects.rs"
+against = "measure"
 
 [function.effect_part_allowed_by_disposition]
 class = "matched"
 engine = "sim/src/effects.rs"
-owed = "the engine's own tests (sim/src/effects.rs); no check against the original yet"
+check = "sim/src/effects.rs"
+against = "measure"
 
 [function.effect_random_angular_velocity]
 class = "matched"
 engine = "sim/src/effects.rs"
-owed = "the engine's own tests (sim/src/effects.rs); no check against the original yet"
+check = "sim/src/effects.rs"
+against = "measure"
 
 [function.effect_random_translational_velocity]
 class = "matched"
 engine = "sim/src/effects.rs"
-owed = "the engine's own tests (sim/src/effects.rs); no check against the original yet"
+check = "sim/src/effects.rs"
+against = "measure"
 
 [function.effect_real_random_range]
 class = "matched"
 engine = "sim/src/effects.rs"
-owed = "the engine's own tests (sim/src/effects.rs); no check against the original yet"
+check = "sim/src/effects.rs"
+against = "measure"
 
 [function.effect_scale]
 class = "matched"
-owed = "the engine cites it, with no check against the original yet"
+engine = "content/src/weapon.rs"
+check = "sim/src/effects.rs"
+against = "measure"
 
 [function.effect_set_event]
 class = "matched"
 engine = "sim/src/effects.rs"
-owed = "the engine's own tests (sim/src/effects.rs); no check against the original yet"
+check = "sim/src/effects.rs"
+against = "measure"
 
 [function.effect_stop]
 class = "matched"
 engine = "sim/src/effects.rs"
-owed = "the engine's own tests (sim/src/effects.rs); no check against the original yet"
+check = "sim/src/effects.rs"
+against = "measure"
 
 [function.effect_update]
 class = "matched"
 engine = "sim/src/effects.rs"
-owed = "the engine's own tests (sim/src/effects.rs); no check against the original yet"
+check = "sim/src/effects.rs"
+against = "measure"
 
 [function.effects_update]
 class = "matched"
 engine = "sim/src/effects.rs"
-owed = "the engine's own tests (sim/src/effects.rs); no check against the original yet"
+check = "sim/src/effects.rs"
+against = "measure"
 
 [function.encounter_create]
 class = "partial"
@@ -3550,12 +3651,14 @@ stands_in = "dev/src/logbook.rs"
 [function.event_controller_index_compatible_with_widget]
 class = "matched"
 engine = "ui/src/lib.rs"
-owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+check = "ui/tests/tree.rs"
+against = "measure"
 
 [function.event_handler_dispatch]
 class = "matched"
 engine = "ui/src/lib.rs"
-owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+check = "ui/tests/tree.rs"
+against = "measure"
 
 [function.extract_3d_textures]
 class = "replaced"
@@ -3862,35 +3965,46 @@ stands_in = "dev/src/draw.rs"
 class = "partial"
 engine = "sim/src/player.rs"
 leaves_out = ["the camera's own smoothing: the engine puts the camera at the eyes each tick"]
-owed = "the engine's own tests (sim/src/player.rs); no check against the original yet"
+check = "sim/tests/player.rs"
+against = "measure"
 
 [function.first_person_camera_update]
 class = "partial"
 engine = "sim/src/player.rs"
 leaves_out = ["the camera's own smoothing: the engine puts the camera at the eyes each tick"]
-owed = "the engine's own tests (sim/src/player.rs); no check against the original yet"
+check = "sim/tests/player.rs"
+against = "measure"
 
 [function.first_person_weapon_animation_fits]
 class = "matched"
-owed = "reads the object, tag and map world, which the fake worlds do not hold (the first-person model's nodes); sim/tests/first_person.rs"
+engine = "sim/src/first_person.rs"
+check = "sim/tests/first_person.rs"
+against = "measure"
 
 [function.first_person_weapon_build_node_matrices]
 class = "matched"
-owed = "reads the object, tag and map world, which the fake worlds do not hold (the first-person model's nodes); sim/tests/first_person.rs"
+engine = "sim/src/first_person.rs"
+check = "sim/tests/first_person.rs"
+against = "measure"
 
 [function.first_person_weapon_switch_weapons]
 class = "matched"
-owed = "the engine cites it, with no check against the original yet"
+engine = "sim/src/first_person_states.rs"
+check = "sim/src/first_person_states.rs"
+against = "measure"
 
 [function.first_person_weapon_update]
 class = "matched"
-owed = "reads the object, tag and map world, which the fake worlds do not hold (the weapon tag); its states are first_person_reference's"
+engine = "sim/src/first_person_states.rs"
+check = "sim/src/first_person_states.rs"
+against = "measure"
 
 [function.first_person_weapons_update]
 class = "partial"
 engine = "sim/src/lib.rs"
 leaves_out = ["the first-person animations' blending", "the weapon's sway"]
-owed = "the engine's own version; no check against the original yet"
+check = "sim/tests/first_person.rs"
+against = "measure"
 
 [function.floor_power2]
 class = "native"
@@ -3899,16 +4013,20 @@ primitive = "next_power_of_two"
 [function.following_camera_deterministic]
 class = "matched"
 engine = "sim/src/player.rs"
-owed = "the engine's own tests (sim/src/player.rs); no check against the original yet"
+check = "sim/tests/seats.rs"
+against = "measure"
 
 [function.following_camera_new]
 class = "matched"
 engine = "sim/src/player.rs"
-owed = "the engine's own tests (sim/src/player.rs); no check against the original yet"
+check = "sim/tests/seats.rs"
+against = "measure"
 
 [function.following_camera_update]
 class = "matched"
-owed = "the camera; reads the object, tag and map world, which the fake worlds do not hold; Phase 14's death camera"
+engine = "sim/src/player.rs"
+check = "sim/tests/seats.rs"
+against = "measure"
 
 [function.friction_evaluate]
 class = "matched"
@@ -4126,12 +4244,14 @@ note = "the engine counts its players, the game the players it spawns"
 [function.game_looping_sound_delete]
 class = "matched"
 engine = "ffi/src/sound_world.rs"
-owed = "the engine's own tests (ffi/src/sound_world.rs); no check against the original yet"
+check = "ffi/src/sound_world.rs"
+against = "measure"
 
 [function.game_looping_sound_new]
 class = "matched"
 engine = "ffi/src/sound_world.rs"
-owed = "the engine's own tests (ffi/src/sound_world.rs); no check against the original yet"
+check = "ffi/src/sound_world.rs"
+against = "measure"
 
 [function.game_predicting]
 class = "replaced"
@@ -4160,19 +4280,22 @@ note = "not reached from a root of the game; the game loop track owns it"
 [function.game_sound_update]
 class = "matched"
 engine = "ffi/src/sound_world.rs"
-owed = "the engine's own tests (ffi/src/sound_world.rs); no check against the original yet"
+check = "ffi/src/sound_world.rs"
+against = "measure"
 
 [function.game_state_revert]
 class = "partial"
 engine = "campaign/src/checkpoint.rs"
 leaves_out = ["the memory image: the saved game holds the inputs, replayed from the mission's start"]
-owed = "the engine's own tests (campaign/src/checkpoint.rs); no check against the original yet"
+check = "campaign/tests/flow.rs"
+against = "measure"
 
 [function.game_state_save]
 class = "partial"
 engine = "campaign/src/checkpoint.rs"
 leaves_out = ["the memory image: the saved game holds the inputs, replayed from the mission's start"]
-owed = "the engine's own tests (campaign/src/checkpoint.rs); no check against the original yet"
+check = "campaign/tests/flow.rs"
+against = "measure"
 
 [function.game_statistics_record_kill]
 class = "partial"
@@ -4263,11 +4386,14 @@ stands_in = "import/src/lib.rs"
 [function.get_crosshair_state]
 class = "matched"
 engine = "ffi/src/hud.rs"
-owed = "the engine's own tests (ffi/tests/hud.rs); no check against the original yet"
+check = "ffi/tests/hud.rs"
+against = "measure"
 
 [function.get_flash_color]
 class = "matched"
-owed = "the engine cites it, with no check against the original yet"
+engine = "ffi/src/hud.rs"
+check = "ffi/tests/hud.rs"
+against = "measure"
 
 [function.get_lrar_cache_block]
 class = "native"
@@ -4298,11 +4424,14 @@ against = "trace"
 [function.get_ui_argb_white]
 class = "matched"
 engine = "ui/src/draw.rs"
-owed = "the engine's own tests (ui/tests/draw.rs); no check against the original yet"
+check = "ui/tests/draw.rs"
+against = "measure"
 
 [function.get_ui_rgb_white]
 class = "matched"
-owed = "the engine cites it, with no check against the original yet"
+engine = "ui/src/draw.rs"
+check = "ui/tests/draw.rs"
+against = "measure"
 
 [function.global_bsp3d_get]
 class = "replaced"
@@ -4391,7 +4520,8 @@ stands_in = "import/src/lib.rs"
 [function.hs_arguments_evaluate]
 class = "matched"
 engine = "script/src/lib.rs"
-owed = "the engine's runtime (script/src/lib.rs); no check against the original yet"
+check = "script/tests/runtime.rs"
+against = "measure"
 
 [function.hs_cast]
 class = "partial"
@@ -4404,13 +4534,15 @@ against = "trace"
 class = "partial"
 engine = "script/src/console.rs"
 leaves_out = ["the scenario's source text: maps carry their scripts compiled, so only the console's line is compiled"]
-owed = "the console's compiler (script/src/console.rs); no check against the original yet"
+check = "script/tests/console.rs"
+against = "measure"
 
 [function.hs_compile_expression]
 class = "partial"
 engine = "script/src/console.rs"
 leaves_out = ["the scenario's scripts (compiled at import)", "the compiler's errors as the original words them"]
-owed = "the engine's own version; no check against the original yet"
+check = "script/tests/console.rs"
+against = "measure"
 
 [function.hs_data_to_void]
 class = "matched"
@@ -4428,23 +4560,27 @@ against = "trace"
 [function.hs_evaluate]
 class = "matched"
 engine = "script/src/lib.rs"
-owed = "the engine's runtime (script/src/lib.rs); no check against the original yet"
+check = "script/tests/runtime.rs"
+against = "measure"
 
 [function.hs_evaluate_arithmetic]
 class = "matched"
 engine = "script/src/lib.rs"
-owed = "the engine's runtime (script/src/lib.rs); no check against the original yet"
+check = "script/tests/runtime.rs"
+against = "measure"
 
 [function.hs_evaluate_begin]
 class = "matched"
 engine = "script/src/lib.rs"
-owed = "the engine's runtime (script/src/lib.rs); no check against the original yet"
+check = "script/tests/runtime.rs"
+against = "measure"
 
 [function.hs_evaluate_begin_random]
 class = "partial"
 engine = "script/src/lib.rs"
 leaves_out = ["the game's own random numbers: the shuffle draws on the runtime's xorshift"]
-owed = "the engine's runtime (script/src/lib.rs); no check against the original yet"
+check = "script/tests/runtime.rs"
+against = "measure"
 
 [function.hs_evaluate_debug_string]
 class = "replaced"
@@ -4454,42 +4590,50 @@ stands_in = "dev/src/script.rs"
 [function.hs_evaluate_equality]
 class = "matched"
 engine = "script/src/lib.rs"
-owed = "the engine's runtime (script/src/lib.rs); no check against the original yet"
+check = "script/tests/runtime.rs"
+against = "measure"
 
 [function.hs_evaluate_if]
 class = "matched"
 engine = "script/src/lib.rs"
-owed = "the engine's runtime (script/src/lib.rs); no check against the original yet"
+check = "script/tests/runtime.rs"
+against = "measure"
 
 [function.hs_evaluate_inequality]
 class = "matched"
 engine = "script/src/lib.rs"
-owed = "the engine's runtime (script/src/lib.rs); no check against the original yet"
+check = "script/tests/runtime.rs"
+against = "measure"
 
 [function.hs_evaluate_inspect]
 class = "matched"
 engine = "script/src/lib.rs"
-owed = "the engine's runtime (script/src/lib.rs); no check against the original yet"
+check = "script/tests/runtime.rs"
+against = "measure"
 
 [function.hs_evaluate_logical]
 class = "matched"
 engine = "script/src/lib.rs"
-owed = "the engine's runtime (script/src/lib.rs); no check against the original yet"
+check = "script/tests/runtime.rs"
+against = "measure"
 
 [function.hs_evaluate_set]
 class = "matched"
 engine = "script/src/lib.rs"
-owed = "the engine's runtime (script/src/lib.rs); no check against the original yet"
+check = "script/tests/runtime.rs"
+against = "measure"
 
 [function.hs_evaluate_sleep]
 class = "matched"
 engine = "script/src/lib.rs"
-owed = "the engine's runtime (script/src/lib.rs); no check against the original yet"
+check = "script/tests/runtime.rs"
+against = "measure"
 
 [function.hs_evaluate_sleep_until]
 class = "matched"
 engine = "script/src/lib.rs"
-owed = "the engine's runtime (script/src/lib.rs); no check against the original yet"
+check = "script/tests/runtime.rs"
+against = "measure"
 
 [function.hs_find_tag_reference_by_index]
 class = "missing"
@@ -4498,7 +4642,8 @@ note = "not reached from a root of the game; the scripts and sounds track owns i
 [function.hs_global_evaluate]
 class = "matched"
 engine = "script/src/lib.rs"
-owed = "the engine's runtime (script/src/lib.rs); no check against the original yet"
+check = "script/tests/runtime.rs"
+against = "measure"
 
 [function.hs_hack]
 class = "replaced"
@@ -4528,42 +4673,50 @@ against = "trace"
 [function.hs_not]
 class = "matched"
 engine = "campaign/src/game.rs"
-owed = "the script function's wrapper, which the campaign wires; no check against the original yet"
+check = "campaign/tests/natives.rs"
+against = "measure"
 
 [function.hs_object_create]
 class = "matched"
 engine = "campaign/src/objects.rs"
-owed = "the script function's wrapper, which the campaign wires; no check against the original yet"
+check = "campaign/tests/objects.rs"
+against = "measure"
 
 [function.hs_object_create_anew]
 class = "matched"
 engine = "campaign/src/objects.rs"
-owed = "the script function's wrapper, which the campaign wires; no check against the original yet"
+check = "campaign/tests/objects.rs"
+against = "measure"
 
 [function.hs_object_create_anew_containing]
 class = "matched"
 engine = "campaign/src/objects.rs"
-owed = "the script function's wrapper, which the campaign wires; no check against the original yet"
+check = "campaign/tests/natives.rs"
+against = "measure"
 
 [function.hs_object_create_containing]
 class = "matched"
 engine = "campaign/src/objects.rs"
-owed = "the script function's wrapper, which the campaign wires; no check against the original yet"
+check = "campaign/tests/natives.rs"
+against = "measure"
 
 [function.hs_object_destroy]
 class = "matched"
 engine = "campaign/src/objects.rs"
-owed = "the script function's wrapper, which the campaign wires; no check against the original yet"
+check = "campaign/tests/objects.rs"
+against = "measure"
 
 [function.hs_object_destroy_all]
 class = "matched"
 engine = "campaign/src/objects.rs"
-owed = "the script function's wrapper, which the campaign wires; no check against the original yet"
+check = "campaign/tests/natives.rs"
+against = "measure"
 
 [function.hs_object_destroy_containing]
 class = "matched"
 engine = "campaign/src/objects.rs"
-owed = "the script function's wrapper, which the campaign wires; no check against the original yet"
+check = "campaign/tests/natives.rs"
+against = "measure"
 
 [function.hs_object_name_to_object_list]
 class = "matched"
@@ -4574,12 +4727,14 @@ against = "trace"
 [function.hs_object_set_facing]
 class = "matched"
 engine = "campaign/src/objects.rs"
-owed = "the script function's wrapper, which the campaign wires; no check against the original yet"
+check = "campaign/tests/natives.rs"
+against = "measure"
 
 [function.hs_object_teleport]
 class = "matched"
 engine = "campaign/src/objects.rs"
-owed = "the script function's wrapper, which the campaign wires; no check against the original yet"
+check = "campaign/tests/natives.rs"
+against = "measure"
 
 [function.hs_object_to_object_list]
 class = "matched"
@@ -4590,12 +4745,14 @@ against = "trace"
 [function.hs_objects_can_see_flag]
 class = "matched"
 engine = "campaign/src/objects.rs"
-owed = "the script function's wrapper, which the campaign wires; no check against the original yet"
+check = "campaign/tests/natives.rs"
+against = "measure"
 
 [function.hs_objects_can_see_object]
 class = "matched"
 engine = "campaign/src/objects.rs"
-owed = "the script function's wrapper, which the campaign wires; no check against the original yet"
+check = "campaign/tests/natives.rs"
+against = "measure"
 
 [function.hs_parse_debug_string]
 class = "replaced"
@@ -4605,12 +4762,14 @@ stands_in = "dev/src/script.rs"
 [function.hs_players]
 class = "matched"
 engine = "campaign/src/objects.rs"
-owed = "the script function's wrapper, which the campaign wires; no check against the original yet"
+check = "campaign/tests/natives.rs"
+against = "measure"
 
 [function.hs_print]
 class = "matched"
 engine = "campaign/src/game.rs"
-owed = "the script function's wrapper, which the campaign wires; no check against the original yet"
+check = "campaign/tests/natives.rs"
+against = "measure"
 
 [function.hs_real_to_long]
 class = "matched"
@@ -4632,7 +4791,9 @@ note = "a debug check, statistic or editor hook of the original; the dev tools s
 
 [function.hs_return]
 class = "matched"
-owed = "the engine cites it, with no check against the original yet"
+engine = "script/src/lib.rs"
+check = "script/tests/runtime.rs"
+against = "measure"
 
 [function.hs_runtime_dispose]
 class = "missing"
@@ -4641,17 +4802,20 @@ note = "not reached from a root of the game; the scripts and sounds track owns i
 [function.hs_runtime_evaluate]
 class = "matched"
 engine = "script/src/lib.rs"
-owed = "the engine's runtime (script/src/lib.rs); no check against the original yet"
+check = "script/tests/runtime.rs"
+against = "measure"
 
 [function.hs_runtime_initialize_for_new_map]
 class = "matched"
 engine = "script/src/lib.rs"
-owed = "the engine's runtime (script/src/lib.rs); no check against the original yet"
+check = "script/tests/runtime.rs"
+against = "measure"
 
 [function.hs_runtime_update]
 class = "matched"
 engine = "script/src/lib.rs"
-owed = "the engine's runtime (script/src/lib.rs); no check against the original yet"
+check = "script/tests/runtime.rs"
+against = "measure"
 
 [function.hs_scenario_merge]
 class = "replaced"
@@ -4687,17 +4851,21 @@ note = "byte order is settled when the map is imported"
 
 [function.hs_thread_main]
 class = "matched"
-owed = "scripts; reads the object, tag and map world, which the fake worlds do not hold (the scenario's compiled scripts); script/tests"
+engine = "script/src/lib.rs"
+check = "script/tests/runtime.rs"
+against = "measure"
 
 [function.hs_type_default_value]
 class = "matched"
 engine = "script/src/value.rs"
-owed = "the engine's runtime (script/src/lib.rs); no check against the original yet"
+check = "script/tests/values.rs"
+against = "measure"
 
 [function.hs_wake]
 class = "matched"
 engine = "script/src/lib.rs"
-owed = "the engine's runtime (script/src/lib.rs); no check against the original yet"
+check = "script/tests/runtime.rs"
+against = "measure"
 
 [function.hsv_color_to_rgb_color]
 class = "replaced"
@@ -4734,11 +4902,15 @@ note = "not reached from a root of the game; the interface track owns it"
 
 [function.hud_calculate_bitmap_bounds]
 class = "matched"
-owed = "the engine cites it, with no check against the original yet"
+engine = "ffi/src/hud.rs"
+check = "ffi/tests/hud.rs"
+against = "measure"
 
 [function.hud_calculate_point]
 class = "matched"
-owed = "the engine cites it, with no check against the original yet"
+engine = "ffi/src/hud.rs"
+check = "ffi/tests/hud.rs"
+against = "measure"
 
 [function.hud_deactivate_nav_point_with_flag]
 class = "missing"
@@ -4755,50 +4927,64 @@ note = "not reached from a root of the game; the interface track owns it"
 [function.hud_draw_bitmap]
 class = "matched"
 engine = "ffi/src/hud.rs"
-owed = "the engine's own tests (ffi/tests/hud.rs); no check against the original yet"
+check = "ffi/tests/hud.rs"
+against = "measure"
 
 [function.hud_draw_bitmap_direct]
 class = "matched"
 engine = "ffi/src/hud.rs"
-owed = "the engine's own tests (ffi/tests/hud.rs); no check against the original yet"
+check = "ffi/tests/hud.rs"
+against = "measure"
 
 [function.hud_draw_meter]
 class = "matched"
-owed = "the engine cites it, with no check against the original yet"
+engine = "ffi/src/hud.rs"
+check = "ffi/tests/hud.rs"
+against = "measure"
 
 [function.hud_draw_numbers]
 class = "matched"
-owed = "the engine cites it, with no check against the original yet"
+engine = "ffi/src/hud.rs"
+check = "ffi/tests/hud.rs"
+against = "measure"
 
 [function.hud_draw_screen]
 class = "partial"
 engine = "ffi/src/hud.rs"
 leaves_out = ["the damage indicators, nav points, player names, timer, weapon overlays and messages: the engine draws the unit's and weapon's interfaces, the grenades and the motion sensor"]
-owed = "the engine's own tests (ffi/tests/hud.rs); no check against the original yet"
+check = "ffi/tests/hud.rs"
+against = "measure"
 
 [function.hud_draw_static_element]
 class = "matched"
-owed = "the engine cites it, with no check against the original yet"
+engine = "ffi/src/hud.rs"
+check = "ffi/tests/hud.rs"
+against = "measure"
 
 [function.hud_globals_get_scale]
 class = "matched"
 engine = "ffi/src/hud.rs"
-owed = "the engine's own tests (ffi/tests/hud.rs); no check against the original yet"
+check = "ffi/tests/hud.rs"
+against = "measure"
 
 [function.hud_messaging_update]
 class = "partial"
 engine = "ffi/src/hud_text.rs"
 leaves_out = ["the objective and help messages", "the list of messages and their ageing", "split screen"]
-owed = "the engine's own version; no check against the original yet"
+check = "ffi/tests/hud_text.rs"
+against = "measure"
 
 [function.hud_render_unit_interface]
 class = "matched"
-owed = "the engine cites it, with no check against the original yet"
+engine = "ffi/src/hud.rs"
+check = "ffi/tests/hud.rs"
+against = "measure"
 
 [function.hud_render_weapon_interface]
 class = "matched"
 engine = "ffi/src/hud.rs"
-owed = "the engine's own tests (ffi/tests/hud.rs); no check against the original yet"
+check = "ffi/tests/hud.rs"
+against = "measure"
 
 [function.hud_retrieve_bitmap_and_bounding_rect]
 class = "matched"
@@ -4809,21 +4995,26 @@ against = "trace"
 [function.hud_set_state_message]
 class = "matched"
 engine = "ffi/src/hud_text.rs"
-owed = "the engine's own tests (ffi/tests/hud_text.rs); no check against the original yet"
+check = "ffi/tests/hud_text.rs"
+against = "measure"
 
 [function.hud_set_state_message_icon]
 class = "matched"
 engine = "ffi/src/hud_text.rs"
-owed = "the engine's own tests (ffi/tests/hud_text.rs); no check against the original yet"
+check = "ffi/tests/hud_text.rs"
+against = "measure"
 
 [function.hud_set_state_message_text]
 class = "matched"
 engine = "ffi/src/hud_text.rs"
-owed = "the engine's own tests (ffi/tests/hud_text.rs); no check against the original yet"
+check = "ffi/tests/hud_text.rs"
+against = "measure"
 
 [function.hud_show_action_response]
 class = "matched"
-owed = "the HUD's messages; reads the object, tag and map world, which the fake worlds do not hold"
+engine = "ffi/src/hud_text.rs"
+check = "ffi/tests/hud_text.rs"
+against = "measure"
 
 [function.initialize_stack_walk]
 class = "replaced"
@@ -5009,12 +5200,15 @@ note = "drawn by the Metal renderer"
 
 [function.limit_pitch]
 class = "matched"
-owed = "the engine cites it, with no check against the original yet"
+engine = "audio/src/choice.rs"
+check = "audio/tests/sound_choice_reference.rs"
+against = "trace"
 
 [function.listener_get]
 class = "matched"
 engine = "audio/src/player.rs"
-owed = "the engine's own tests (audio/src/player.rs); no check against the original yet"
+check = "audio/src/player.rs"
+against = "measure"
 
 [function.local_random]
 class = "matched"
@@ -5049,7 +5243,8 @@ note = "not reached from a root of the game; the game loop track owns it"
 [function.location_potentially_audible]
 class = "matched"
 engine = "ffi/src/sound_world.rs"
-owed = "the engine's own tests (ffi/src/sound_world.rs); no check against the original yet"
+check = "ffi/src/sound_world.rs"
+against = "measure"
 
 [function.lock_handle]
 class = "native"
@@ -5063,12 +5258,14 @@ stands_in = "import/src/lib.rs"
 [function.looping_sound_find]
 class = "matched"
 engine = "audio/src/player/looping.rs"
-owed = "the engine's own tests (audio/src/player/looping.rs); no check against the original yet"
+check = "audio/src/player/looping.rs"
+against = "measure"
 
 [function.looping_sound_new]
 class = "matched"
 engine = "audio/src/player/looping.rs"
-owed = "the engine's own tests (audio/src/player/looping.rs); no check against the original yet"
+check = "audio/src/player/looping.rs"
+against = "measure"
 
 [function.lra_allocate]
 class = "native"
@@ -5219,11 +5416,14 @@ stands_in = "dev/src/profile.rs"
 class = "partial"
 engine = "ffi/src/lib.rs"
 leaves_out = ["the menu and the shell", "switching maps", "the network connection", "the console's frame"]
-owed = "the engine's own version; no check against the original yet"
+check = "ffi/src/lib.rs"
+against = "measure"
 
 [function.main_menu_initialize]
 class = "matched"
-owed = "the engine cites it, with no check against the original yet"
+engine = "ffi/src/ui_host.rs"
+check = "ffi/tests/menu_music.rs"
+against = "measure"
 
 [function.main_movie_start]
 class = "replaced"
@@ -5264,12 +5464,15 @@ stands_in = "import/src/lib.rs"
 
 [function.material_effect_new]
 class = "matched"
-owed = "the engine cites it, with no check against the original yet"
+engine = "ffi/src/sound_events.rs"
+check = "ffi/src/sound_events.rs"
+against = "measure"
 
 [function.material_effect_new_from_point]
 class = "matched"
 engine = "sim/src/effects.rs"
-owed = "the engine's own tests (sim/src/effects.rs); no check against the original yet"
+check = "sim/src/effects.rs"
+against = "measure"
 
 [function.matrix3x3_determinant]
 class = "native"
@@ -5475,7 +5678,9 @@ primitive = "Vec"
 
 [function.model_build_remapping_table_for_animation_graph]
 class = "matched"
-owed = "reads the object, tag and map world, which the fake worlds do not hold (the model's and graph's node names)"
+engine = "sim/src/first_person.rs"
+check = "sim/tests/first_person.rs"
+against = "measure"
 
 [function.model_build_tangent_matrices]
 class = "replaced"
@@ -5510,12 +5715,14 @@ note = "asked without permutations and unmirrored, the markers' matrices match t
 [function.model_get_node_matrices]
 class = "matched"
 engine = "sim/src/animation.rs"
-owed = "the engine's own tests (sim/tests/stock_animations.rs); no check against the original yet"
+check = "sim/tests/animation_reference.rs"
+against = "trace"
 
 [function.model_interpolate_node_orientations]
 class = "matched"
 engine = "sim/src/animation.rs"
-owed = "the engine's own tests (sim/tests/stock_animations.rs); no check against the original yet"
+check = "sim/tests/animation_reference.rs"
+against = "trace"
 
 [function.model_node_matrices_from_orientations]
 class = "matched"
@@ -5527,16 +5734,20 @@ note = "the nodes' matrices match the game's bit for bit over six trees at sixty
 [function.motion_sensor_blip_set_type_and_size]
 class = "matched"
 engine = "sim/src/hud.rs"
-owed = "the engine's own tests (sim/src/hud.rs); no check against the original yet"
+check = "sim/src/hud.rs"
+against = "measure"
 
 [function.motion_sensor_tick]
 class = "matched"
 engine = "sim/src/hud.rs"
-owed = "the engine's own tests (sim/src/hud.rs); no check against the original yet"
+check = "sim/src/hud.rs"
+against = "measure"
 
 [function.motion_sensor_update]
 class = "matched"
-owed = "the motion sensor; reads the object, tag and map world, which the fake worlds do not hold; sim/tests/hud.rs"
+engine = "sim/src/hud.rs"
+check = "sim/src/hud.rs"
+against = "measure"
 
 [function.multiplayer_scenario_description_get_list]
 class = "missing"
@@ -5563,7 +5774,8 @@ note = "the original's network state and prediction; the engine sends snapshots"
 [function.new_particle_is_visible]
 class = "matched"
 engine = "ffi/src/particles.rs"
-owed = "the engine's own tests (ffi/src/particles.rs); no check against the original yet"
+check = "ffi/src/particles.rs"
+against = "measure"
 
 [function.node_stack_pop]
 class = "replaced"
@@ -5756,7 +5968,8 @@ against = "measure"
 [function.object_impulse_sound_new]
 class = "matched"
 engine = "ffi/src/sound_events.rs"
-owed = "the engine's own tests (ffi/src/sound_events.rs); no check against the original yet"
+check = "ffi/src/sound_events.rs"
+against = "measure"
 
 [function.object_index_from_name_index]
 class = "matched"
@@ -5947,7 +6160,7 @@ check = "campaign/tests/objects.rs"
 against = "measure"
 
 [function.objects_scripting_set_scale]
-class = "matched"
+class = "partial"
 engine = "campaign/src/objects.rs"
 leaves_out = ["the frames asked for: the scale is taken at once"]
 check = "campaign/tests/objects.rs"
@@ -5959,17 +6172,22 @@ note = "not reached from a root of the game; the cameras track owns it"
 
 [function.observer_up_from_forward]
 class = "matched"
-owed = "the engine cites it, with no check against the original yet"
+engine = "sim/src/dead_camera.rs"
+check = "sim/src/dead_camera.rs"
+against = "measure"
 
 [function.observer_update]
 class = "partial"
 engine = "sim/src/player.rs"
 leaves_out = ["the observer's dynamics and its springs", "the cutscenes' cameras"]
-owed = "the engine's own version; no check against the original yet"
+check = "sim/tests/player.rs"
+against = "measure"
 
 [function.observer_update_polynomial]
 class = "matched"
-owed = "the engine cites it, with no check against the original yet"
+engine = "sim/src/dead_camera.rs"
+check = "sim/src/dead_camera.rs"
+against = "measure"
 
 [function.oddball_client_score_sounds]
 class = "replaced"
@@ -6001,7 +6219,9 @@ note = "drawn by the Metal renderer"
 
 [function.overlay_animation_apply_continuous_scaled]
 class = "matched"
-owed = "checked through the animation trace's overlays"
+engine = "sim/src/animation.rs"
+check = "sim/src/animation.rs"
+against = "measure"
 
 [function.palette_find_closest_match]
 class = "replaced"
@@ -6011,17 +6231,20 @@ stands_in = "app/Sources/OpenCEEngineRender/LoadedLevel.swift"
 [function.particle_delete]
 class = "matched"
 engine = "ffi/src/particles.rs"
-owed = "the engine's own tests (ffi/src/particles.rs); no check against the original yet"
+check = "ffi/src/particles.rs"
+against = "measure"
 
 [function.particle_die]
 class = "matched"
 engine = "ffi/src/particles.rs"
-owed = "the engine's own tests (ffi/src/particles.rs); no check against the original yet"
+check = "ffi/src/particles.rs"
+against = "measure"
 
 [function.particle_effect_new]
 class = "matched"
 engine = "ffi/src/particles.rs"
-owed = "the engine's own tests (ffi/src/particles.rs); no check against the original yet"
+check = "ffi/src/particles.rs"
+against = "measure"
 
 [function.particle_get_radius]
 class = "matched"
@@ -6052,57 +6275,68 @@ against = "trace"
 [function.particle_system_delete]
 class = "matched"
 engine = "ffi/src/particles/systems.rs"
-owed = "the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet"
+check = "ffi/src/particles/systems.rs"
+against = "measure"
 
 [function.particle_system_initialize]
 class = "matched"
 engine = "ffi/src/particles/systems.rs"
-owed = "the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet"
+check = "ffi/src/particles/systems.rs"
+against = "measure"
 
 [function.particle_system_new_attached]
 class = "matched"
 engine = "ffi/src/particles/systems.rs"
-owed = "the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet"
+check = "ffi/src/particles/systems.rs"
+against = "measure"
 
 [function.particle_system_new_particle_default]
 class = "matched"
 engine = "ffi/src/particles/systems.rs"
-owed = "the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet"
+check = "ffi/src/particles/systems.rs"
+against = "measure"
 
 [function.particle_system_new_particle_explosion]
 class = "matched"
 engine = "ffi/src/particles/systems.rs"
-owed = "the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet"
+check = "ffi/src/particles/systems.rs"
+against = "measure"
 
 [function.particle_system_new_particle_jet]
 class = "matched"
 engine = "ffi/src/particles/systems.rs"
-owed = "the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet"
+check = "ffi/src/particles/systems.rs"
+against = "measure"
 
 [function.particle_system_new_particles]
 class = "matched"
 engine = "ffi/src/particles/systems.rs"
-owed = "the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet"
+check = "ffi/src/particles/systems.rs"
+against = "measure"
 
 [function.particle_system_new_unattached]
 class = "matched"
 engine = "ffi/src/particles/systems.rs"
-owed = "the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet"
+check = "ffi/src/particles/systems.rs"
+against = "measure"
 
 [function.particle_system_next_particle_state_index]
 class = "matched"
 engine = "ffi/src/particles/systems.rs"
-owed = "the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet"
+check = "ffi/src/particles/systems.rs"
+against = "measure"
 
 [function.particle_system_next_type_state_index]
 class = "matched"
 engine = "ffi/src/particles/systems.rs"
-owed = "the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet"
+check = "ffi/src/particles/systems.rs"
+against = "measure"
 
 [function.particle_system_orphan]
 class = "matched"
 engine = "ffi/src/particles/systems.rs"
-owed = "the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet"
+check = "ffi/src/particles/systems.rs"
+against = "measure"
 
 [function.particle_system_render]
 class = "replaced"
@@ -6112,22 +6346,26 @@ stands_in = "app/Sources/OpenCEEngineRender/ParticlePass.swift"
 [function.particle_system_update]
 class = "matched"
 engine = "ffi/src/particles/systems.rs"
-owed = "the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet"
+check = "ffi/src/particles/systems.rs"
+against = "measure"
 
 [function.particle_system_update_default]
 class = "matched"
 engine = "ffi/src/particles/systems.rs"
-owed = "the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet"
+check = "ffi/src/particles/systems.rs"
+against = "measure"
 
 [function.particle_system_update_explosion]
 class = "matched"
 engine = "ffi/src/particles/systems.rs"
-owed = "the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet"
+check = "ffi/src/particles/systems.rs"
+against = "measure"
 
 [function.particle_system_update_particle_default]
 class = "matched"
 engine = "ffi/src/particles/systems.rs"
-owed = "the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet"
+check = "ffi/src/particles/systems.rs"
+against = "measure"
 
 [function.particle_systems_render]
 class = "replaced"
@@ -6137,7 +6375,8 @@ stands_in = "app/Sources/OpenCEEngineRender/ParticlePass.swift"
 [function.particle_systems_update]
 class = "matched"
 engine = "ffi/src/particles/systems.rs"
-owed = "the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet"
+check = "ffi/src/particles/systems.rs"
+against = "measure"
 
 [function.particle_update_frame_time]
 class = "matched"
@@ -6148,7 +6387,9 @@ note = "steps at most 4096 frames an update, where the game's loop has no bound 
 
 [function.particle_update_physics]
 class = "matched"
-owed = "the engine cites it, with no check against the original yet"
+engine = "ffi/src/particles.rs"
+check = "ffi/src/particles.rs"
+against = "measure"
 
 [function.particles_update]
 class = "partial"
@@ -6327,7 +6568,8 @@ stands_in = "app/Sources/OpenCEEngineRender/DecalPass.swift"
 class = "partial"
 engine = "campaign/src/game.rs"
 leaves_out = ["the player's profile: it answers a constant, the mouse's own setting standing in"]
-owed = "the engine's own tests (campaign/src/game.rs); no check against the original yet"
+check = "campaign/tests/natives.rs"
+against = "measure"
 
 [function.player0_look_invert_pitch]
 class = "partial"
@@ -6340,7 +6582,8 @@ against = "trace"
 class = "partial"
 engine = "campaign/src/game.rs"
 leaves_out = ["the player's profile: it answers a constant, the mouse's own setting standing in"]
-owed = "the engine's own tests (campaign/src/game.rs); no check against the original yet"
+check = "campaign/tests/natives.rs"
+against = "measure"
 
 [function.player_control_dispose_from_old_map]
 class = "missing"
@@ -6539,7 +6782,8 @@ primitive = "Vec"
 [function.pop_widget]
 class = "matched"
 engine = "ui/src/lib.rs"
-owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+check = "ui/tests/tree.rs"
+against = "measure"
 
 [function.postprocess_bitmap]
 class = "replaced"
@@ -6563,12 +6807,15 @@ stands_in = "import/src/lib.rs"
 
 [function.process_looping_sounds]
 class = "matched"
-owed = "sound; reads the object, tag and map world, which the fake worlds do not hold; Phase 15"
+engine = "audio/src/player/looping.rs"
+check = "audio/src/player/looping.rs"
+against = "measure"
 
 [function.process_ui_widgets]
 class = "matched"
 engine = "ui/src/lib.rs"
-owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+check = "ui/tests/tree.rs"
+against = "measure"
 
 [function.profile_append]
 class = "replaced"
@@ -6736,7 +6983,8 @@ note = "drawn by the Metal renderer"
 class = "partial"
 engine = "ui/src/loading.rs"
 leaves_out = ["the original's drawing at its low resolution (the light is drawn at the screen's)"]
-owed = "the engine's own version; no check against the original yet"
+check = "ui/tests/loading.rs"
+against = "measure"
 
 [function.progress_new]
 class = "replaced"
@@ -6818,7 +7066,8 @@ stands_in = "app/Sources/OpenCEEngineRender/DecalPass.swift"
 [function.push_widget]
 class = "matched"
 engine = "ui/src/lib.rs"
-owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+check = "ui/tests/tree.rs"
+against = "measure"
 
 [function.qsort_4byte]
 class = "native"
@@ -6887,15 +7136,20 @@ against = "trace"
 [function.randomize_particle_variables]
 class = "matched"
 engine = "ffi/src/particles/systems.rs"
-owed = "the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet"
+check = "ffi/src/particles/systems.rs"
+against = "measure"
 
 [function.rasterizer_lens_flare_submit_for_cluster]
 class = "matched"
-owed = "the engine cites it, with no check against the original yet"
+engine = "import/src/level.rs"
+check = "ffi/src/camera.rs"
+against = "measure"
 
 [function.rasterizer_lens_flares_draw]
 class = "matched"
-owed = "the engine cites it, with no check against the original yet"
+engine = "ffi/src/camera.rs"
+check = "ffi/src/camera.rs"
+against = "measure"
 
 [function.read]
 class = "replaced"
@@ -6906,7 +7160,8 @@ stands_in = "import/src/lib.rs"
 class = "partial"
 engine = "ffi/src/settings.rs"
 leaves_out = ["the original's preferences file: the volumes are kept with the app's settings"]
-owed = "the engine's own tests (ffi/src/settings.rs); no check against the original yet"
+check = "ffi/tests/settings.rs"
+against = "measure"
 
 [function.real_hsv_color_to_real_rgb_color]
 class = "replaced"
@@ -6952,8 +7207,9 @@ note = "not reached from a root of the game; the cameras track owns it"
 [function.recorded_animation_play_internal]
 class = "partial"
 engine = "campaign/src/units.rs"
-leaves_out = ["the recording's version checks", "the units in vehicles"]
-owed = "the engine's own version; no check against the original yet"
+leaves_out = ["the recorded controls played back: the engine waits out the recording's length", "the recording's version checks", "the units in vehicles"]
+check = "campaign/tests/natives.rs"
+against = "measure"
 
 [function.recorded_animation_verify]
 class = "replaced"
@@ -6994,17 +7250,20 @@ note = "not reached from a root of the game; the animation and world track owns 
 [function.refresh_listener]
 class = "matched"
 engine = "audio/src/player.rs"
-owed = "the engine's own tests (audio/src/player.rs); no check against the original yet"
+check = "audio/src/player.rs"
+against = "measure"
 
 [function.refresh_sound]
 class = "matched"
 engine = "audio/src/mixer.rs"
-owed = "the engine's own tests (audio/src/mixer.rs); no check against the original yet"
+check = "audio/src/mixer.rs"
+against = "measure"
 
 [function.refresh_sounds]
 class = "matched"
 engine = "audio/src/mixer.rs"
-owed = "the engine's own tests (audio/src/mixer.rs); no check against the original yet"
+check = "audio/src/mixer.rs"
+against = "measure"
 
 [function.remap_sticks_for_local_player]
 class = "replaced"
@@ -7013,7 +7272,9 @@ stands_in = "ui/src/pointer.rs"
 
 [function.render_blip]
 class = "matched"
-owed = "the engine cites it, with no check against the original yet"
+engine = "sim/src/hud.rs"
+check = "sim/src/hud.rs"
+against = "measure"
 
 [function.render_debug_collision_bsp]
 class = "replaced"
@@ -7144,11 +7405,15 @@ note = "the frustum's vertical scale built in the game's order (a double-precisi
 
 [function.render_grenade_hud]
 class = "matched"
-owed = "the engine cites it, with no check against the original yet"
+engine = "ffi/src/hud.rs"
+check = "ffi/tests/hud.rs"
+against = "measure"
 
 [function.render_model]
 class = "matched"
-owed = "the engine cites it, with no check against the original yet"
+engine = "ffi/src/render_model.rs"
+check = "ffi/src/render_model.rs"
+against = "measure"
 
 [function.render_model_parts]
 class = "replaced"
@@ -7158,26 +7423,32 @@ stands_in = "app/Sources/OpenCEEngineRender/ModelPass.swift"
 [function.render_motion_sensor]
 class = "matched"
 engine = "sim/src/hud.rs"
-owed = "the engine's own tests (sim/src/hud.rs); no check against the original yet"
+check = "sim/src/hud.rs"
+against = "measure"
 
 [function.render_state_bitmap]
 class = "matched"
-owed = "the engine cites it, with no check against the original yet"
+engine = "ffi/src/hud.rs"
+check = "ffi/tests/hud.rs"
+against = "measure"
 
 [function.render_state_text]
 class = "matched"
 engine = "ffi/src/hud_text.rs"
-owed = "the engine's own tests (ffi/tests/hud_text.rs); no check against the original yet"
+check = "ffi/tests/hud_text.rs"
+against = "measure"
 
 [function.render_ui_widgets]
 class = "matched"
 engine = "ui/src/draw.rs"
-owed = "the engine's own tests (ui/tests/draw.rs); no check against the original yet"
+check = "ui/tests/draw.rs"
+against = "measure"
 
 [function.render_weapon_hud]
 class = "matched"
 engine = "ffi/src/hud.rs"
-owed = "the engine's own tests (ffi/tests/hud.rs); no check against the original yet"
+check = "ffi/tests/hud.rs"
+against = "measure"
 
 [function.reset_error_state]
 class = "replaced"
@@ -7276,7 +7547,9 @@ stands_in = "import/src/lib.rs"
 
 [function.scenario_location_water_depth]
 class = "matched"
-owed = "water; reads the object, tag and map world, which the fake worlds do not hold (the structure's fog planes)"
+engine = "content/src/level.rs"
+check = "content/src/level.rs"
+against = "measure"
 
 [function.scenario_material_definition_get]
 class = "replaced"
@@ -7301,7 +7574,8 @@ stands_in = "import/src/lib.rs"
 [function.scenario_switch_structure_bsp]
 class = "matched"
 engine = "sim/src/lib.rs"
-owed = "the engine's own tests (sim/src/lib.rs); no check against the original yet"
+check = "sim/src/objects.rs"
+against = "measure"
 
 [function.scenario_tags_load]
 class = "replaced"
@@ -7320,7 +7594,8 @@ note = "not reached from a root of the game; the game loop track owns it"
 [function.scenario_trigger_volume_test_object]
 class = "matched"
 engine = "campaign/src/objects.rs"
-owed = "its test is test_point's, traced (content/tests/scenario_reference.rs); the object's bounding-sphere centre it hands it is the units track's"
+check = "campaign/tests/objects.rs"
+against = "measure"
 
 [function.scenario_trigger_volume_test_point]
 class = "matched"
@@ -7372,7 +7647,8 @@ against = "measure"
 [function.scripted_camera_enable]
 class = "matched"
 engine = "campaign/src/cinematic.rs"
-owed = "the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet"
+check = "campaign/tests/natives.rs"
+against = "measure"
 
 [function.scripted_camera_next_camera_point]
 class = "missing"
@@ -7385,12 +7661,14 @@ note = "not reached from a root of the game; the cameras track owns it"
 [function.scripted_camera_set]
 class = "matched"
 engine = "campaign/src/cinematic.rs"
-owed = "the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet"
+check = "campaign/tests/natives.rs"
+against = "measure"
 
 [function.scripted_camera_set_animation]
 class = "matched"
 engine = "campaign/src/cinematic.rs"
-owed = "the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet"
+check = "campaign/tests/cutscenes.rs"
+against = "measure"
 
 [function.scripted_camera_set_camera_point_absolute]
 class = "missing"
@@ -7399,26 +7677,33 @@ note = "not reached from a root of the game; the cameras track owns it"
 [function.scripted_camera_set_camera_point_relative]
 class = "matched"
 engine = "campaign/src/cinematic.rs"
-owed = "the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet"
+check = "campaign/tests/natives.rs"
+against = "measure"
 
 [function.scripted_camera_set_dead]
-class = "matched"
+class = "partial"
 engine = "campaign/src/cinematic.rs"
-owed = "the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet"
+check = "campaign/tests/natives.rs"
+against = "measure"
+leaves_out = ["the dead camera's own path: the scripts hand the camera back to the player"]
 
 [function.scripted_camera_set_first_person]
 class = "matched"
 engine = "campaign/src/cinematic.rs"
-owed = "the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet"
+check = "campaign/tests/natives.rs"
+against = "measure"
 
 [function.scripted_camera_time]
 class = "matched"
 engine = "campaign/src/cinematic.rs"
-owed = "the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet"
+check = "campaign/tests/natives.rs"
+against = "measure"
 
 [function.scripted_camera_update]
 class = "matched"
-owed = "cutscene cameras; reads the object, tag and map world, which the fake worlds do not hold; campaign/tests/cutscenes.rs"
+engine = "campaign/src/cinematic.rs"
+check = "campaign/tests/natives.rs"
+against = "measure"
 
 [function.scripted_hud_blink_health]
 class = "partial"
@@ -7444,12 +7729,14 @@ against = "trace"
 [function.scripted_hud_get_timer_ticks]
 class = "matched"
 engine = "campaign/src/game.rs"
-owed = "the engine's own tests (campaign/src/game.rs); no check against the original yet"
+check = "campaign/tests/natives.rs"
+against = "measure"
 
 [function.scripted_hud_pause_timer]
 class = "matched"
 engine = "campaign/src/game.rs"
-owed = "the engine's own tests (campaign/src/game.rs); no check against the original yet"
+check = "campaign/tests/natives.rs"
+against = "measure"
 
 [function.scripted_hud_set_objective]
 class = "partial"
@@ -7468,7 +7755,8 @@ against = "trace"
 [function.scripted_hud_set_timer_time]
 class = "matched"
 engine = "campaign/src/game.rs"
-owed = "the engine's own tests (campaign/src/game.rs); no check against the original yet"
+check = "campaign/tests/natives.rs"
+against = "measure"
 
 [function.scripted_hud_set_timer_warning_cutoff]
 class = "partial"
@@ -7515,51 +7803,62 @@ against = "trace"
 [function.scripted_looping_sound_set_alternate]
 class = "matched"
 engine = "campaign/src/sounds.rs"
-owed = "the engine's own tests (campaign/src/sounds.rs); no check against the original yet"
+check = "campaign/tests/sounds.rs"
+against = "measure"
 
 [function.scripted_looping_sound_start]
 class = "matched"
 engine = "campaign/src/sounds.rs"
-owed = "the engine's own tests (campaign/src/sounds.rs); no check against the original yet"
+check = "campaign/tests/sounds.rs"
+against = "measure"
 
 [function.scripted_looping_sound_stop]
 class = "matched"
 engine = "campaign/src/sounds.rs"
-owed = "the engine's own tests (campaign/src/sounds.rs); no check against the original yet"
+check = "campaign/tests/sounds.rs"
+against = "measure"
 
 [function.scripted_looping_sound_stop_internal]
 class = "matched"
 engine = "campaign/src/sounds.rs"
-owed = "the engine's own tests (campaign/src/sounds.rs); no check against the original yet"
+check = "campaign/tests/sounds.rs"
+against = "measure"
 
 [function.scripted_show_hud]
 class = "matched"
 engine = "campaign/src/game.rs"
-owed = "the engine's own tests (campaign/src/game.rs); no check against the original yet"
+check = "campaign/tests/natives.rs"
+against = "measure"
 
 [function.scripted_show_hud_help_text]
 class = "matched"
 engine = "campaign/src/game.rs"
-owed = "the engine's own tests (campaign/src/game.rs); no check against the original yet"
+check = "campaign/tests/natives.rs"
+against = "measure"
 
 [function.scripted_sound_new]
 class = "matched"
 engine = "campaign/src/sounds.rs"
-owed = "the engine's own tests (campaign/src/sounds.rs); no check against the original yet"
+check = "campaign/tests/sounds.rs"
+against = "measure"
 
 [function.scripted_sound_stop]
 class = "matched"
 engine = "campaign/src/sounds.rs"
-owed = "the engine's own tests (campaign/src/sounds.rs); no check against the original yet"
+check = "campaign/tests/sounds.rs"
+against = "measure"
 
 [function.scripted_sound_time]
 class = "matched"
-owed = "sound; reads the object, tag and map world, which the fake worlds do not hold (the sound tag); campaign/tests/sounds.rs"
+engine = "campaign/src/sounds.rs"
+check = "campaign/tests/sounds.rs"
+against = "measure"
 
 [function.search_and_replace]
 class = "matched"
 engine = "ui/src/lib.rs"
-owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+check = "ui/tests/tree.rs"
+against = "measure"
 
 [function.seed_random_direction3d]
 class = "matched"
@@ -7624,7 +7923,8 @@ primitive = "sort_by"
 [function.should_draw_object]
 class = "matched"
 engine = "sim/src/hud.rs"
-owed = "the engine's own tests (sim/src/hud.rs); no check against the original yet"
+check = "sim/src/hud.rs"
+against = "measure"
 
 [function.should_flip_sticks_for_local_player]
 class = "replaced"
@@ -7634,7 +7934,8 @@ stands_in = "ui/src/pointer.rs"
 [function.should_track_object]
 class = "matched"
 engine = "sim/src/hud.rs"
-owed = "the engine's own tests (sim/src/hud.rs); no check against the original yet"
+check = "sim/src/hud.rs"
+against = "measure"
 
 [function.signed_angle_between_vectors2d]
 class = "native"
@@ -7668,11 +7969,14 @@ against = "trace"
 [function.sound_calculate_fade]
 class = "matched"
 engine = "audio/src/player/looping.rs"
-owed = "the engine's own tests (audio/src/player/looping.rs); no check against the original yet"
+check = "audio/src/player/looping.rs"
+against = "measure"
 
 [function.sound_channel_summary_build]
 class = "matched"
-owed = "the mixer's channels; reads the object, tag and map world, which the fake worlds do not hold (the sound manager); Phase 15"
+engine = "audio/src/player.rs"
+check = "audio/src/player.rs"
+against = "measure"
 
 [function.sound_class_datum_get]
 class = "matched"
@@ -7707,88 +8011,110 @@ against = "trace"
 [function.sound_definition_get_maximum_distance]
 class = "matched"
 engine = "audio/src/player.rs"
-owed = "the engine's own tests (audio/src/player.rs); no check against the original yet"
+check = "audio/src/player.rs"
+against = "measure"
 
 [function.sound_definition_get_minimum_distance]
 class = "matched"
 engine = "audio/src/player.rs"
-owed = "the engine's own tests (audio/src/player.rs); no check against the original yet"
+check = "audio/src/player.rs"
+against = "measure"
 
 [function.sound_definition_is_playable]
 class = "matched"
 engine = "audio/src/player.rs"
-owed = "the engine's own tests (audio/src/player.rs); no check against the original yet"
+check = "audio/src/player.rs"
+against = "measure"
 
 [function.sound_definition_promote]
 class = "matched"
 engine = "audio/src/choice.rs"
-owed = "the engine's own tests (audio/src/choice.rs); no check against the original yet"
+check = "audio/tests/sound_choice_reference.rs"
+against = "trace"
 
 [function.sound_find_best_channel]
 class = "matched"
 engine = "audio/src/player.rs"
-owed = "the engine's own tests (audio/src/player.rs); no check against the original yet"
+check = "audio/src/player.rs"
+against = "measure"
 
 [function.sound_find_channel]
 class = "matched"
 engine = "audio/src/player.rs"
-owed = "the engine's own tests (audio/src/player.rs); no check against the original yet"
+check = "audio/src/player.rs"
+against = "measure"
 
 [function.sound_find_like_channel]
 class = "matched"
-owed = "the mixer's channels; reads the object, tag and map world, which the fake worlds do not hold (the sound manager); Phase 15"
+engine = "audio/src/player.rs"
+check = "audio/src/player.rs"
+against = "measure"
 
 [function.sound_is_active]
 class = "matched"
 engine = "audio/src/mixer.rs"
-owed = "the engine's own tests (audio/src/mixer.rs); no check against the original yet"
+check = "audio/src/mixer.rs"
+against = "measure"
 
 [function.sound_manager_master_gain]
 class = "matched"
-owed = "the sound manager's gain; reads the object, tag and map world, which the fake worlds do not hold; Phase 15"
+engine = "audio/src/player.rs"
+check = "audio/src/player.rs"
+against = "measure"
 
 [function.sound_manager_set_sound_environment]
 class = "matched"
 engine = "audio/src/mixer.rs"
-owed = "the engine's own tests (audio/src/mixer.rs); no check against the original yet"
+check = "ffi/src/sound_world/sound_environment_reference.rs"
+against = "trace"
 
 [function.sound_new_impulse]
 class = "matched"
-owed = "sound; reads the object, tag and map world, which the fake worlds do not hold; Phase 15"
+engine = "audio/src/player.rs"
+check = "audio/src/player.rs"
+against = "measure"
 
 [function.sound_preempts_sound]
 class = "matched"
 engine = "audio/src/player.rs"
-owed = "the engine's own tests (audio/src/player.rs); no check against the original yet"
+check = "audio/src/player.rs"
+against = "measure"
 
 [function.sound_refresh_looping]
 class = "matched"
-owed = "sound; reads the object, tag and map world, which the fake worlds do not hold; Phase 15"
+engine = "audio/src/player/looping.rs"
+check = "audio/src/player/looping.rs"
+against = "measure"
 
 [function.sound_render]
 class = "matched"
 engine = "audio/src/mixer.rs"
-owed = "the engine's own tests (audio/src/mixer.rs); no check against the original yet"
+check = "audio/src/mixer.rs"
+against = "measure"
 
 [function.sound_scripted_dialog_is_playing]
 class = "matched"
 engine = "audio/src/player.rs"
-owed = "the engine's own tests (audio/src/player.rs); no check against the original yet"
+check = "audio/src/player.rs"
+against = "measure"
 
 [function.sound_start_fade]
 class = "matched"
 engine = "audio/src/player/looping.rs"
-owed = "the engine's own tests (audio/src/player/looping.rs); no check against the original yet"
+check = "audio/src/player/looping.rs"
+against = "measure"
 
 [function.sound_stop]
 class = "matched"
 engine = "audio/src/mixer.rs"
-owed = "the engine's own tests (audio/src/mixer.rs); no check against the original yet"
+check = "audio/src/mixer.rs"
+against = "measure"
 
 [function.sound_stop_all]
 class = "matched"
 engine = "audio/src/mixer.rs"
-owed = "the engine's own tests (audio/src/mixer.rs); no check against the original yet"
+check = "audio/src/mixer.rs"
+against = "measure"
 
 [function.sound_stop_impulse_by_source_and_definition]
 class = "missing"
@@ -7797,17 +8123,20 @@ note = "not reached from a root of the game; the scripts and sounds track owns i
 [function.sound_travel_milliseconds]
 class = "matched"
 engine = "audio/src/mixer.rs"
-owed = "the engine's own tests (audio/src/mixer.rs); no check against the original yet"
+check = "audio/src/mixer.rs"
+against = "measure"
 
 [function.source_distance]
 class = "matched"
 engine = "audio/src/player.rs"
-owed = "the engine's own tests (audio/src/player.rs); no check against the original yet"
+check = "audio/src/player.rs"
+against = "measure"
 
 [function.source_distance_squared]
 class = "matched"
 engine = "audio/src/player.rs"
-owed = "the engine's own tests (audio/src/player.rs); no check against the original yet"
+check = "audio/src/player.rs"
+against = "measure"
 
 [function.sphere_intersects_rectangle3d]
 class = "missing"
@@ -7824,7 +8153,8 @@ note = "not reached from a root of the game; the animation and world track owns 
 [function.spinner_list_update]
 class = "matched"
 engine = "ui/src/lib.rs"
-owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+check = "ui/tests/tree.rs"
+against = "measure"
 
 [function.stack_memory_pool_allocate]
 class = "native"
@@ -8394,17 +8724,20 @@ stands_in = "import/src/lib.rs"
 [function.track_loop_impulse_sound]
 class = "matched"
 engine = "audio/src/player/looping.rs"
-owed = "the engine's own tests (audio/src/player/looping.rs); no check against the original yet"
+check = "audio/src/player/looping.rs"
+against = "measure"
 
 [function.track_loop_track_sound]
 class = "matched"
 engine = "audio/src/player/looping.rs"
-owed = "the engine's own tests (audio/src/player/looping.rs); no check against the original yet"
+check = "audio/src/player/looping.rs"
+against = "measure"
 
 [function.track_object_impulse_sound]
 class = "matched"
 engine = "ffi/src/sound_events.rs"
-owed = "the engine's own tests (ffi/src/sound_events.rs); no check against the original yet"
+check = "ffi/src/sound_events.rs"
+against = "measure"
 
 [function.trigger_create_projectiles]
 class = "matched"
@@ -8414,7 +8747,9 @@ against = "measure"
 
 [function.triple_product3d]
 class = "matched"
-owed = "the engine cites it, with no check against the original yet"
+engine = "sim/src/vehicle_animation.rs"
+check = "sim/src/vehicle_animation.rs"
+against = "measure"
 
 [function.uasctime]
 class = "native"
@@ -8620,16 +8955,20 @@ stands_in = "ui/src/pointer.rs"
 [function.ui_play_audio_feedback_sound]
 class = "matched"
 engine = "ui/src/lib.rs"
-owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+check = "ui/tests/tree.rs"
+against = "measure"
 
 [function.ui_start_main_menu_music]
 class = "matched"
-owed = "the engine cites it, with no check against the original yet"
+engine = "ffi/src/ui_host.rs"
+check = "ffi/tests/menu_music.rs"
+against = "measure"
 
 [function.ui_widget_add_child]
 class = "matched"
 engine = "ui/src/lib.rs"
-owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+check = "ui/tests/tree.rs"
+against = "measure"
 
 [function.ui_widget_debug_show_path]
 class = "replaced"
@@ -8639,57 +8978,68 @@ stands_in = "dev/src/draw.rs"
 [function.ui_widget_delete]
 class = "matched"
 engine = "ui/src/lib.rs"
-owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+check = "ui/tests/tree.rs"
+against = "measure"
 
 [function.ui_widget_delete_children_recursive]
 class = "matched"
 engine = "ui/src/lib.rs"
-owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+check = "ui/tests/tree.rs"
+against = "measure"
 
 [function.ui_widget_launch_widget]
 class = "matched"
 engine = "ui/src/lib.rs"
-owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+check = "ui/tests/tree.rs"
+against = "measure"
 
 [function.ui_widget_load_by_name_or_tag]
 class = "matched"
 engine = "ui/src/lib.rs"
-owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+check = "ui/tests/tree.rs"
+against = "measure"
 
 [function.ui_widget_load_children_recursive]
 class = "matched"
 engine = "ui/src/lib.rs"
-owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+check = "ui/tests/tree.rs"
+against = "measure"
 
 [function.ui_widgets_active]
 class = "matched"
 engine = "ui/src/lib.rs"
-owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+check = "ui/tests/tree.rs"
+against = "measure"
 
 [function.ui_widgets_active_for_local_player]
 class = "matched"
 engine = "ui/src/lib.rs"
-owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+check = "ui/tests/tree.rs"
+against = "measure"
 
 [function.ui_widgets_close_all]
 class = "matched"
 engine = "ui/src/lib.rs"
-owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+check = "ui/tests/tree.rs"
+against = "measure"
 
 [function.ui_widgets_close_all_for_local_player]
 class = "matched"
 engine = "ui/src/lib.rs"
-owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+check = "ui/tests/tree.rs"
+against = "measure"
 
 [function.ui_widgets_delete_history]
 class = "matched"
 engine = "ui/src/lib.rs"
-owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+check = "ui/tests/tree.rs"
+against = "measure"
 
 [function.ui_widgets_pop_stack]
 class = "matched"
 engine = "ui/src/lib.rs"
-owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+check = "ui/tests/tree.rs"
+against = "measure"
 
 [function.ui_widgets_process_mouse]
 class = "replaced"
@@ -8763,17 +9113,20 @@ primitive = "String"
 [function.unattached_impulse_sound_new]
 class = "matched"
 engine = "ffi/src/sound_events.rs"
-owed = "the engine's own tests (ffi/src/sound_events.rs); no check against the original yet"
+check = "ffi/src/sound_events.rs"
+against = "measure"
 
 [function.unattached_looping_sound_start]
 class = "matched"
 engine = "ffi/src/sound_world.rs"
-owed = "the engine's own tests (ffi/src/sound_world.rs); no check against the original yet"
+check = "ffi/src/sound_world.rs"
+against = "measure"
 
 [function.unattached_looping_sound_stop]
 class = "matched"
 engine = "ffi/src/sound_world.rs"
-owed = "the engine's own tests (ffi/src/sound_world.rs); no check against the original yet"
+check = "ffi/src/sound_world.rs"
+against = "measure"
 
 [function.uncompress_int32_to_real_vector3d]
 class = "matched"
@@ -8783,7 +9136,9 @@ against = "trace"
 
 [function.uniform_cubic_spline]
 class = "matched"
-owed = "the engine cites it, with no check against the original yet"
+engine = "sim/src/player.rs"
+check = "sim/src/player.rs"
+against = "measure"
 
 [function.unit_animation_aiming_screen]
 class = "ported"
@@ -9183,7 +9538,9 @@ primitive = "Vec"
 
 [function.unspatialized_impulse_sound_new]
 class = "matched"
-owed = "the engine cites it, with no check against the original yet"
+engine = "sim/src/player.rs"
+check = "ffi/tests/every_sound.rs"
+against = "measure"
 
 [function.update_alien_fighter_physics]
 class = "matched"
@@ -9200,17 +9557,20 @@ against = "trace"
 [function.update_channel_for_impulse_sound]
 class = "matched"
 engine = "audio/src/mixer.rs"
-owed = "the engine's own tests (audio/src/mixer.rs); no check against the original yet"
+check = "audio/src/mixer.rs"
+against = "measure"
 
 [function.update_channel_for_looping_sound]
 class = "matched"
 engine = "audio/src/mixer.rs"
-owed = "the engine's own tests (audio/src/mixer.rs); no check against the original yet"
+check = "audio/src/mixer.rs"
+against = "measure"
 
 [function.update_channels]
 class = "matched"
 engine = "audio/src/mixer.rs"
-owed = "the engine's own tests (audio/src/mixer.rs); no check against the original yet"
+check = "audio/src/mixer.rs"
+against = "measure"
 
 [function.update_client_delete]
 class = "replaced"
@@ -9257,12 +9617,14 @@ against = "trace"
 [function.update_motion_sensor]
 class = "matched"
 engine = "sim/src/hud.rs"
-owed = "the engine's own tests (sim/src/hud.rs); no check against the original yet"
+check = "sim/src/hud.rs"
+against = "measure"
 
 [function.update_potentially_audible_looping_sound]
 class = "matched"
 engine = "ffi/src/sound_world.rs"
-owed = "the engine's own tests (ffi/src/sound_world.rs); no check against the original yet"
+check = "ffi/src/sound_world.rs"
+against = "measure"
 
 [function.update_server_handle_distributed_input]
 class = "replaced"
@@ -9761,7 +10123,7 @@ check = "sim/tests/item_spawn_reference.rs"
 against = "trace"
 
 [function.weapon_ready]
-class = "matched"
+class = "partial"
 engine = "sim/src/weapon.rs"
 leaves_out = ["weapon_reset of its triggers and magazines", "the ready time taken from the first-person animation's length"]
 check = "sim/src/weapon.rs"
@@ -9810,37 +10172,44 @@ note = "not reached from a root of the game; the units track owns it"
 [function.weather_particle_system_box_offset_from_point3d]
 class = "matched"
 engine = "ffi/src/particles/weather.rs"
-owed = "the engine's own tests (ffi/src/particles/weather.rs); no check against the original yet"
+check = "ffi/src/particles/weather.rs"
+against = "measure"
 
 [function.weather_particle_system_build_clipping_planes]
 class = "matched"
 engine = "ffi/src/particles/weather.rs"
-owed = "the engine's own tests (ffi/src/particles/weather.rs); no check against the original yet"
+check = "ffi/src/particles/weather.rs"
+against = "measure"
 
 [function.weather_particle_system_delete]
 class = "matched"
 engine = "ffi/src/particles/weather.rs"
-owed = "the engine's own tests (ffi/src/particles/weather.rs); no check against the original yet"
+check = "ffi/src/particles/weather.rs"
+against = "measure"
 
 [function.weather_particle_system_get]
 class = "matched"
 engine = "ffi/src/particles/weather.rs"
-owed = "the engine's own tests (ffi/src/particles/weather.rs); no check against the original yet"
+check = "ffi/src/particles/weather.rs"
+against = "measure"
 
 [function.weather_particle_system_get_type]
 class = "matched"
 engine = "ffi/src/particles/weather.rs"
-owed = "the engine's own tests (ffi/src/particles/weather.rs); no check against the original yet"
+check = "ffi/src/particles/weather.rs"
+against = "measure"
 
 [function.weather_particle_system_new]
 class = "matched"
 engine = "ffi/src/particles/weather.rs"
-owed = "the engine's own tests (ffi/src/particles/weather.rs); no check against the original yet"
+check = "ffi/src/particles/weather.rs"
+against = "measure"
 
 [function.weather_particle_system_new_particle]
 class = "matched"
 engine = "ffi/src/particles/weather.rs"
-owed = "the engine's own tests (ffi/src/particles/weather.rs); no check against the original yet"
+check = "ffi/src/particles/weather.rs"
+against = "measure"
 
 [function.weather_particle_system_render]
 class = "replaced"
@@ -9850,27 +10219,32 @@ stands_in = "app/Sources/OpenCEEngineRender/ParticlePass.swift"
 [function.weather_particle_system_transform_clip_planes_to_box]
 class = "matched"
 engine = "ffi/src/particles/weather.rs"
-owed = "the engine's own tests (ffi/src/particles/weather.rs); no check against the original yet"
+check = "ffi/src/particles/weather.rs"
+against = "measure"
 
 [function.weather_particle_system_type_delete_particle]
 class = "matched"
 engine = "ffi/src/particles/weather.rs"
-owed = "the engine's own tests (ffi/src/particles/weather.rs); no check against the original yet"
+check = "ffi/src/particles/weather.rs"
+against = "measure"
 
 [function.weather_particle_system_update]
 class = "matched"
 engine = "ffi/src/particles/weather.rs"
-owed = "the engine's own tests (ffi/src/particles/weather.rs); no check against the original yet"
+check = "ffi/src/particles/weather.rs"
+against = "measure"
 
 [function.weather_particle_system_update_particle_count]
 class = "matched"
 engine = "ffi/src/particles/weather.rs"
-owed = "the engine's own tests (ffi/src/particles/weather.rs); no check against the original yet"
+check = "ffi/src/particles/weather.rs"
+against = "measure"
 
 [function.weather_particle_system_wrap_point]
 class = "matched"
 engine = "ffi/src/particles/weather.rs"
-owed = "the engine's own tests (ffi/src/particles/weather.rs); no check against the original yet"
+check = "ffi/src/particles/weather.rs"
+against = "measure"
 
 [function.weather_particle_systems_render]
 class = "replaced"
@@ -9880,136 +10254,164 @@ stands_in = "app/Sources/OpenCEEngineRender/ParticlePass.swift"
 [function.weather_particle_update_physics]
 class = "matched"
 engine = "ffi/src/particles/weather.rs"
-owed = "the engine's own tests (ffi/src/particles/weather.rs); no check against the original yet"
+check = "ffi/src/particles/weather.rs"
+against = "measure"
 
 [function.weather_polyhedra_find]
 class = "matched"
 engine = "ffi/src/particles/weather.rs"
-owed = "the engine's own tests (ffi/src/particles/weather.rs); no check against the original yet"
+check = "ffi/src/particles/weather.rs"
+against = "measure"
 
 [function.widget_event_function_list_widget_goto_next_item]
 class = "matched"
 engine = "ui/src/lib.rs"
-owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+check = "ui/tests/tree.rs"
+against = "measure"
 
 [function.widget_event_function_list_widget_goto_previous_item]
 class = "matched"
 engine = "ui/src/lib.rs"
-owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+check = "ui/tests/tree.rs"
+against = "measure"
 
 [function.widget_instance_can_handle_events]
 class = "matched"
 engine = "ui/src/lib.rs"
-owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+check = "ui/tests/tree.rs"
+against = "measure"
 
 [function.widget_instance_can_receive_events]
 class = "matched"
 engine = "ui/src/lib.rs"
-owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+check = "ui/tests/tree.rs"
+against = "measure"
 
 [function.widget_instance_count_children]
 class = "matched"
 engine = "ui/src/lib.rs"
-owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+check = "ui/tests/tree.rs"
+against = "measure"
 
 [function.widget_instance_find_by_tag_index]
 class = "matched"
 engine = "ui/src/lib.rs"
-owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+check = "ui/tests/tree.rs"
+against = "measure"
 
 [function.widget_instance_find_by_tag_index_recursive]
 class = "matched"
 engine = "ui/src/lib.rs"
-owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+check = "ui/tests/tree.rs"
+against = "measure"
 
 [function.widget_instance_get_child_index_from_parent]
 class = "matched"
 engine = "ui/src/lib.rs"
-owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+check = "ui/tests/tree.rs"
+against = "measure"
 
 [function.widget_instance_get_cumulative_alpha_modifier]
 class = "matched"
 engine = "ui/src/draw.rs"
-owed = "the engine's own tests (ui/tests/draw.rs); no check against the original yet"
+check = "ui/tests/draw.rs"
+against = "measure"
 
 [function.widget_instance_get_nth_child]
 class = "matched"
 engine = "ui/src/lib.rs"
-owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+check = "ui/tests/tree.rs"
+against = "measure"
 
 [function.widget_instance_get_tail_child_widget]
 class = "matched"
 engine = "ui/src/lib.rs"
-owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+check = "ui/tests/tree.rs"
+against = "measure"
 
 [function.widget_instance_get_topmost_parent]
 class = "matched"
 engine = "ui/src/lib.rs"
-owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+check = "ui/tests/tree.rs"
+against = "measure"
 
 [function.widget_instance_give_focus_by_tag]
 class = "matched"
 engine = "ui/src/lib.rs"
-owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+check = "ui/tests/tree.rs"
+against = "measure"
 
 [function.widget_instance_give_focus_directly]
 class = "matched"
 engine = "ui/src/lib.rs"
-owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+check = "ui/tests/tree.rs"
+against = "measure"
 
 [function.widget_instance_go_back_to_previous]
 class = "matched"
 engine = "ui/src/lib.rs"
-owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+check = "ui/tests/tree.rs"
+against = "measure"
 
 [function.widget_instance_initialize]
 class = "matched"
 engine = "ui/src/lib.rs"
-owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+check = "ui/tests/tree.rs"
+against = "measure"
 
 [function.widget_instance_process_one_event_recursive]
 class = "matched"
 engine = "ui/src/lib.rs"
-owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+check = "ui/tests/tree.rs"
+against = "measure"
 
 [function.widget_instance_render_recursive]
 class = "matched"
-owed = "the engine cites it, with no check against the original yet"
+engine = "ui/src/draw.rs"
+check = "ui/tests/draw.rs"
+against = "measure"
 
 [function.widget_instance_render_spinner_list]
 class = "matched"
 engine = "ui/src/draw.rs"
-owed = "the engine's own tests (ui/tests/draw.rs); no check against the original yet"
+check = "ui/tests/draw.rs"
+against = "measure"
 
 [function.widget_instance_render_text_box]
 class = "matched"
 engine = "ui/src/draw.rs"
-owed = "the engine's own tests (ui/tests/draw.rs); no check against the original yet"
+check = "ui/tests/draw.rs"
+against = "measure"
 
 [function.widget_instance_set_focused_child_by_index]
 class = "matched"
 engine = "ui/src/lib.rs"
-owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+check = "ui/tests/tree.rs"
+against = "measure"
 
 [function.widget_instance_tab_to_next_valid_widget]
 class = "matched"
 engine = "ui/src/lib.rs"
-owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+check = "ui/tests/pointer.rs"
+against = "measure"
 
 [function.widget_instance_tab_to_previous_valid_widget]
 class = "matched"
 engine = "ui/src/lib.rs"
-owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+check = "ui/tests/pointer.rs"
+against = "measure"
 
 [function.widget_takes_any_controller]
 class = "matched"
 engine = "ui/src/lib.rs"
-owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+check = "ui/tests/tree.rs"
+against = "measure"
 
 [function.widget_takes_events_of_controller]
 class = "matched"
 engine = "ui/src/lib.rs"
-owed = "the engine's own tests (ui/tests/tree.rs); no check against the original yet"
+check = "ui/tests/tree.rs"
+against = "measure"
 
 [function.wind_dispose_from_old_map]
 class = "matched"
@@ -10051,7 +10453,8 @@ stands_in = "import/src/lib.rs"
 class = "partial"
 engine = "ffi/src/settings.rs"
 leaves_out = ["the original's preferences file: the volumes are kept with the app's settings"]
-owed = "the engine's own tests (ffi/src/settings.rs); no check against the original yet"
+check = "ffi/tests/settings.rs"
+against = "measure"
 
 [function.write_to_debug_file]
 class = "replaced"

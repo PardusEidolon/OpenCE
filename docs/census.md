@@ -12,38 +12,38 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `bitmaps` | | 1 (224 B) | | | 209 (63904 B) | | 0 |
 | `bungie_net` | | | | | 105 (18992 B) | | 0 |
 | `cache` | | | | | 187 (24784 B) | | 0 |
-| `camera` | 3 (192 B) | 19 (8208 B) | | 3 (560 B) | 17 (2448 B) | 79 (25136 B) | 22 |
+| `camera` | 3 (192 B) | 18 (8144 B) | | 4 (624 B) | 17 (2448 B) | 79 (25136 B) | 0 |
 | `cseries` | | 1 (16 B) | 28 (3168 B) | | 111 (18656 B) | | 0 |
-| `cutscene` | | 8 (288 B) | | 2 (672 B) | 7 (1072 B) | 48 (8496 B) | 9 |
+| `cutscene` | | 8 (288 B) | | 2 (672 B) | 7 (1072 B) | 48 (8496 B) | 0 |
 | `devices` | 7 (944 B) | 18 (3856 B) | | | 1 (432 B) | 34 (1952 B) | 0 |
 | `dialogs` | | | | | 5 (1328 B) | | 0 |
 | `editor` | | | | | 9 (0 B) | | 0 |
-| `effects` | 1 (48 B) | 88 (35024 B) | | 1 (288 B) | 13 (7344 B) | 87 (13904 B) | 79 |
+| `effects` | 1 (48 B) | 88 (35024 B) | | 1 (288 B) | 13 (7344 B) | 87 (13904 B) | 0 |
 | `game` | 47 (5264 B) | 15 (1616 B) | | 28 (13936 B) | 61 (4384 B) | 565 (78880 B) | 0 |
-| `hs` | 2 (384 B) | 42 (7984 B) | | 8 (1776 B) | 11 (2880 B) | 576 (53968 B) | 37 |
+| `hs` | 2 (384 B) | 42 (7984 B) | | 8 (1776 B) | 11 (2880 B) | 576 (53968 B) | 0 |
 | `input` | | | | | 46 (7216 B) | 1 (0 B) | 0 |
-| `interface` | 6 (1408 B) | 96 (33424 B) | | 19 (6112 B) | 104 (21432 B) | 452 (94304 B) | 100 |
-| `items` | 9 (4080 B) | 25 (19456 B) | | | 1 (16 B) | 102 (12496 B) | 0 |
-| `main` | | | | 1 (1648 B) | 34 (5440 B) | 91 (8752 B) | 1 |
+| `interface` | 6 (1408 B) | 96 (33424 B) | | 19 (6112 B) | 104 (21432 B) | 452 (94304 B) | 0 |
+| `items` | 9 (4080 B) | 24 (19328 B) | | 1 (128 B) | 1 (16 B) | 102 (12496 B) | 0 |
+| `main` | | | | 1 (1648 B) | 34 (5440 B) | 91 (8752 B) | 0 |
 | `math` | 44 (5552 B) | 6 (256 B) | 70 (4720 B) | | 25 (4016 B) | 64 (8624 B) | 0 |
 | `memory` | | 2 (336 B) | 128 (19856 B) | | 102 (15104 B) | | 0 |
-| `models` | 17 (8928 B) | 12 (4880 B) | | 1 (464 B) | 7 (1616 B) | 11 (1680 B) | 9 |
+| `models` | 17 (8928 B) | 12 (4880 B) | | 1 (464 B) | 7 (1616 B) | 11 (1680 B) | 0 |
 | `networking` | | | | | 288 (49824 B) | | 0 |
-| `objects` | 2 (0 B) | 43 (5536 B) | | 16 (4336 B) | 59 (13424 B) | 227 (28288 B) | 0 |
+| `objects` | 2 (0 B) | 42 (5536 B) | | 17 (4336 B) | 59 (13424 B) | 227 (28288 B) | 0 |
 | `physics` | | 14 (2672 B) | | 22 (12592 B) | 64 (25040 B) | 45 (6928 B) | 0 |
-| `rasterizer` | | 3 (2784 B) | | | 777 (182416 B) | | 2 |
+| `rasterizer` | | 3 (2784 B) | | | 777 (182416 B) | | 0 |
 | `render` | 2 (592 B) | 2 (240 B) | | | 115 (37520 B) | | 0 |
-| `saved games` | | | | 2 (96 B) | 31 (3712 B) | 104 (21184 B) | 2 |
-| `scenario` | | 11 (4000 B) | | 2 (320 B) | 23 (3136 B) | 21 (2128 B) | 3 |
+| `saved games` | | | | 2 (96 B) | 31 (3712 B) | 104 (21184 B) | 0 |
+| `scenario` | | 11 (4000 B) | | 2 (320 B) | 23 (3136 B) | 21 (2128 B) | 0 |
 | `shaders` | | | | | 21 (2624 B) | | 0 |
 | `shell` | | | | | 11 (528 B) | 2 (0 B) | 0 |
-| `sound` | 8 (1312 B) | 63 (15808 B) | | 2 (32 B) | 56 (2832 B) | 43 (6976 B) | 59 |
+| `sound` | 8 (1312 B) | 62 (15680 B) | | 3 (160 B) | 56 (2832 B) | 43 (6976 B) | 0 |
 | `structures` | | 2 (0 B) | | | 98 (27952 B) | 26 (3760 B) | 0 |
 | `tag_files` | | | 43 (4288 B) | | 5 (0 B) | | 0 |
-| `text` | | 9 (1936 B) | 63 (6864 B) | | 19 (5744 B) | 21 (2368 B) | 9 |
+| `text` | | 5 (1536 B) | 63 (6864 B) | 4 (400 B) | 19 (5744 B) | 21 (2368 B) | 0 |
 | `tool` | | | | | 27 (8752 B) | | 0 |
 | `units` | 18 (6432 B) | 52 (21248 B) | | 29 (23728 B) | 9 (1616 B) | 221 (54496 B) | 0 |
-| **all** | 208 (36880 B) | 551 (173200 B) | 332 (38896 B) | 148 (82880 B) | 2773 (575768 B) | 3615 (703498 B) | 362 |
+| **all** | 208 (36880 B) | 543 (172480 B) | 332 (38896 B) | 156 (83600 B) | 2773 (575768 B) | 3615 (703498 B) | 30 |
 
 ## `ai`
 
@@ -813,18 +813,18 @@ docs/engine.md's "The coverage census" says what each class needs.
 | Function | File | Class | Engine | Evidence |
 | --- | --- | --- | --- | --- |
 | `real_local_random_range` | camera/bored_camera.c | Ported |  | `tools/engine_particle_reference.py` |
-| `scripted_camera_enable` | camera/camera_scripting.c | Matched | campaign/src/cinematic.rs | owed: the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet |
-| `scripted_camera_set_animation` | camera/camera_scripting.c | Matched | campaign/src/cinematic.rs | owed: the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet |
-| `scripted_camera_set_first_person` | camera/camera_scripting.c | Matched | campaign/src/cinematic.rs | owed: the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet |
-| `scripted_camera_set_dead` | camera/camera_scripting.c | Matched | campaign/src/cinematic.rs | owed: the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet |
-| `scripted_camera_set` | camera/camera_scripting.c | Matched | campaign/src/cinematic.rs | owed: the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet |
-| `scripted_camera_set_camera_point_relative` | camera/camera_scripting.c | Matched | campaign/src/cinematic.rs | owed: the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet |
-| `scripted_camera_time` | camera/camera_scripting.c | Matched | campaign/src/cinematic.rs | owed: the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet |
-| `scripted_camera_update` | camera/camera_scripting.c | Matched | campaign/src/cinematic.rs:122 | owed: cutscene cameras; reads the object, tag and map world, which the fake worlds do not hold; campaign/tests/cutscenes.rs |
-| `dead_camera_new` | camera/dead_camera.c | Matched | sim/src/dead_camera.rs:46 | owed: the engine cites it, with no check against the original yet |
-| `dead_camera_update` | camera/dead_camera.c | Matched | sim/src/lib.rs:1443 | owed: the engine cites it, with no check against the original yet |
-| `director_desired_perspective` | camera/director.c | Matched | sim/src/seats.rs:1238 | owed: the camera; reads the object, tag and map world, which the fake worlds do not hold (the unit's seat); Phase 14's death camera |
-| `director_script_camera` | camera/director.c | Matched | campaign/src/cinematic.rs | owed: the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet |
+| `scripted_camera_enable` | camera/camera_scripting.c | Matched | campaign/src/cinematic.rs | campaign/tests/natives.rs (measure) |
+| `scripted_camera_set_animation` | camera/camera_scripting.c | Matched | campaign/src/cinematic.rs | campaign/tests/cutscenes.rs (measure) |
+| `scripted_camera_set_first_person` | camera/camera_scripting.c | Matched | campaign/src/cinematic.rs | campaign/tests/natives.rs (measure) |
+| `scripted_camera_set_dead` | camera/camera_scripting.c | Partial | campaign/src/cinematic.rs | campaign/tests/natives.rs (measure); leaves out the dead camera's own path: the scripts hand the camera back to the player |
+| `scripted_camera_set` | camera/camera_scripting.c | Matched | campaign/src/cinematic.rs | campaign/tests/natives.rs (measure) |
+| `scripted_camera_set_camera_point_relative` | camera/camera_scripting.c | Matched | campaign/src/cinematic.rs | campaign/tests/natives.rs (measure) |
+| `scripted_camera_time` | camera/camera_scripting.c | Matched | campaign/src/cinematic.rs | campaign/tests/natives.rs (measure) |
+| `scripted_camera_update` | camera/camera_scripting.c | Matched | campaign/src/cinematic.rs:122 | campaign/tests/natives.rs (measure) |
+| `dead_camera_new` | camera/dead_camera.c | Matched | sim/src/dead_camera.rs:46 | sim/tests/death_camera.rs (measure) |
+| `dead_camera_update` | camera/dead_camera.c | Matched | sim/src/lib.rs:1443 | sim/tests/death_camera.rs (measure) |
+| `director_desired_perspective` | camera/director.c | Matched | sim/src/seats.rs:1238 | sim/tests/seats.rs (measure) |
+| `director_script_camera` | camera/director.c | Matched | campaign/src/cinematic.rs | campaign/tests/natives.rs (measure) |
 | `editor_camera_new` | camera/editor_flying_camera.c | Replaced | app/Sources/OpenCEEngineKit/FlyControls.swift | the editor and tools |
 | `editor_camera_get_focus` | camera/editor_flying_camera.c | Replaced | app/Sources/OpenCEEngineKit/FlyControls.swift | the editor and tools |
 | `editor_camera_set_focus` | camera/editor_flying_camera.c | Replaced | app/Sources/OpenCEEngineKit/FlyControls.swift | the editor and tools |
@@ -842,18 +842,18 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `editor_camera_set_unit_focus` | camera/editor_flying_camera.c | Replaced | app/Sources/OpenCEEngineKit/FlyControls.swift | the editor and tools |
 | `editor_camera_update` | camera/editor_flying_camera.c | Replaced | app/Sources/OpenCEEngineKit/FlyControls.swift | the editor and tools |
 | `editor_camera_set_scripted` | camera/editor_flying_camera.c | Replaced | app/Sources/OpenCEEngineKit/FlyControls.swift | the editor and tools |
-| `first_person_camera_new` | camera/first_person_camera.c | Partial | sim/src/player.rs | leaves out the camera's own smoothing: the engine puts the camera at the eyes each tick; owed: the engine's own tests (sim/src/player.rs); no check against the original yet |
-| `first_person_camera_update` | camera/first_person_camera.c | Partial | sim/src/player.rs | leaves out the camera's own smoothing: the engine puts the camera at the eyes each tick; owed: the engine's own tests (sim/src/player.rs); no check against the original yet |
-| `following_camera_new` | camera/following_camera.c | Matched | sim/src/player.rs | owed: the engine's own tests (sim/src/player.rs); no check against the original yet |
+| `first_person_camera_new` | camera/first_person_camera.c | Partial | sim/src/player.rs | sim/tests/player.rs (measure); leaves out the camera's own smoothing: the engine puts the camera at the eyes each tick |
+| `first_person_camera_update` | camera/first_person_camera.c | Partial | sim/src/player.rs | sim/tests/player.rs (measure); leaves out the camera's own smoothing: the engine puts the camera at the eyes each tick |
+| `following_camera_new` | camera/following_camera.c | Matched | sim/src/player.rs | sim/tests/seats.rs (measure) |
 | `arcsine` | camera/following_camera.c | Ported |  | `tools/engine_math_reference.py` |
-| `uniform_cubic_spline` | camera/following_camera.c | Matched | sim/src/player.rs:1696 | owed: the engine cites it, with no check against the original yet |
+| `uniform_cubic_spline` | camera/following_camera.c | Matched | sim/src/player.rs:1696 | sim/src/player.rs (measure) |
 | `uniform_cubic_spline_vector3d` | camera/following_camera.c | Ported |  | `tools/engine_wind_reference.py` |
-| `camera_track_splut` | camera/following_camera.c | Matched | sim/src/player.rs:1662 | owed: cutscene cameras; reads the object, tag and map world, which the fake worlds do not hold (the camera track tag); campaign/tests/cutscenes.rs |
-| `following_camera_deterministic` | camera/following_camera.c | Matched | sim/src/player.rs | owed: the engine's own tests (sim/src/player.rs); no check against the original yet |
-| `following_camera_update` | camera/following_camera.c | Matched | sim/src/player.rs:788 | owed: the camera; reads the object, tag and map world, which the fake worlds do not hold; Phase 14's death camera |
-| `observer_up_from_forward` | camera/observer.c | Matched | sim/src/dead_camera.rs:95 | owed: the engine cites it, with no check against the original yet |
-| `observer_update_polynomial` | camera/observer.c | Matched | sim/src/dead_camera.rs:9 | owed: the engine cites it, with no check against the original yet |
-| `observer_update` | camera/observer.c | Partial | sim/src/player.rs:759 | leaves out the observer's dynamics and its springs, the cutscenes' cameras; owed: the engine's own version; no check against the original yet |
+| `camera_track_splut` | camera/following_camera.c | Matched | sim/src/player.rs:1662 | sim/src/player.rs (measure) |
+| `following_camera_deterministic` | camera/following_camera.c | Matched | sim/src/player.rs | sim/tests/seats.rs (measure) |
+| `following_camera_update` | camera/following_camera.c | Matched | sim/src/player.rs:788 | sim/tests/seats.rs (measure) |
+| `observer_up_from_forward` | camera/observer.c | Matched | sim/src/dead_camera.rs:95 | sim/src/dead_camera.rs (measure) |
+| `observer_update_polynomial` | camera/observer.c | Matched | sim/src/dead_camera.rs:9 | sim/src/dead_camera.rs (measure) |
+| `observer_update` | camera/observer.c | Partial | sim/src/player.rs:759 | sim/tests/player.rs (measure); leaves out the observer's dynamics and its springs, the cutscenes' cameras |
 
 79 Missing (66 reached from `main_loop`), by file:
 
@@ -1018,15 +1018,15 @@ docs/engine.md's "The coverage census" says what each class needs.
 
 | Function | File | Class | Engine | Evidence |
 | --- | --- | --- | --- | --- |
-| `cinematic_start` | cutscene/cinematics.c | Matched | campaign/src/cinematic.rs | owed: the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet |
-| `cinematic_can_be_skipped` | cutscene/cinematics.c | Matched | campaign/src/cinematic.rs | owed: the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet |
-| `cinematic_skip_start` | cutscene/cinematics.c | Matched | campaign/src/cinematic.rs | owed: the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet |
-| `cinematic_skip_stop` | cutscene/cinematics.c | Matched | campaign/src/cinematic.rs | owed: the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet |
-| `cinematic_show_letterbox` | cutscene/cinematics.c | Matched | campaign/src/cinematic.rs | owed: the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet |
+| `cinematic_start` | cutscene/cinematics.c | Matched | campaign/src/cinematic.rs | campaign/tests/natives.rs (measure) |
+| `cinematic_can_be_skipped` | cutscene/cinematics.c | Matched | campaign/src/cinematic.rs | campaign/tests/natives.rs (measure) |
+| `cinematic_skip_start` | cutscene/cinematics.c | Matched | campaign/src/cinematic.rs | campaign/tests/natives.rs (measure) |
+| `cinematic_skip_stop` | cutscene/cinematics.c | Matched | campaign/src/cinematic.rs | campaign/tests/natives.rs (measure) |
+| `cinematic_show_letterbox` | cutscene/cinematics.c | Matched | campaign/src/cinematic.rs | campaign/tests/natives.rs (measure) |
 | `cinematic_suppress_bsp_object_creation` | cutscene/cinematics.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
-| `cinematic_stop` | cutscene/cinematics.c | Matched | campaign/src/cinematic.rs | owed: the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet |
-| `cinematic_in_progress` | cutscene/cinematics.c | Matched | campaign/src/cinematic.rs | owed: the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet |
-| `cinematic_set_title` | cutscene/cinematics.c | Matched | campaign/src/cinematic.rs | owed: the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet |
+| `cinematic_stop` | cutscene/cinematics.c | Matched | campaign/src/cinematic.rs | campaign/tests/natives.rs (measure) |
+| `cinematic_in_progress` | cutscene/cinematics.c | Matched | campaign/src/cinematic.rs | campaign/tests/natives.rs (measure) |
+| `cinematic_set_title` | cutscene/cinematics.c | Matched | campaign/src/cinematic.rs | campaign/tests/natives.rs (measure) |
 | `byte_swap_recording` | cutscene/recorded_animation_definitions.c | Replaced | import/src/lib.rs | maps imported to a typed format; byte order is settled when the map is imported |
 | `recorded_animation_byteswap_unit_control` | cutscene/recorded_animation_initialize.c | Replaced | import/src/lib.rs | maps imported to a typed format; byte order is settled when the map is imported |
 | `recorded_animation_write_unit_control` | cutscene/recorded_animation_initialize.c | Replaced | dev/src/logbook.rs | the editor and tools; a debug check, statistic or editor hook of the original; the dev tools stand in |
@@ -1034,7 +1034,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `byte_swap_recording_stream_v1` | cutscene/recorded_animation_playback_v1.c | Replaced | import/src/lib.rs | maps imported to a typed format; byte order is settled when the map is imported |
 | `recorded_animation_verify` | cutscene/recorded_animations.c | Replaced | dev/src/logbook.rs | the editor and tools; a debug check, statistic or editor hook of the original; the dev tools stand in |
 | `render_debug_recording` | cutscene/recorded_animations.c | Replaced | dev/src/draw.rs | the editor and tools |
-| `recorded_animation_play_internal` | cutscene/recorded_animations.c | Partial | campaign/src/units.rs:157 | leaves out the recording's version checks, the units in vehicles; owed: the engine's own version; no check against the original yet |
+| `recorded_animation_play_internal` | cutscene/recorded_animations.c | Partial | campaign/src/units.rs:157 | campaign/tests/natives.rs (measure); leaves out the recorded controls played back: the engine waits out the recording's length, the recording's version checks, the units in vehicles |
 
 48 Missing (41 reached from `main_loop`), by file:
 
@@ -1111,107 +1111,107 @@ docs/engine.md's "The coverage census" says what each class needs.
 
 | Function | File | Class | Engine | Evidence |
 | --- | --- | --- | --- | --- |
-| `contrail_scale_value` | effects/contrails.c | Matched | ffi/src/particles/contrails.rs:32 | owed: the engine cites it, with no check against the original yet |
-| `contrail_delete` | effects/contrails.c | Matched | ffi/src/particles/contrails.rs | owed: the engine's own tests (ffi/src/particles/contrails.rs); no check against the original yet |
-| `contrail_compute_new_point_count` | effects/contrails.c | Matched | ffi/src/particles/contrails.rs | owed: the engine's own tests (ffi/src/particles/contrails.rs); no check against the original yet |
+| `contrail_scale_value` | effects/contrails.c | Matched | ffi/src/particles/contrails.rs:32 | ffi/src/particles/contrails.rs (measure) |
+| `contrail_delete` | effects/contrails.c | Matched | ffi/src/particles/contrails.rs | ffi/src/particles/contrails.rs (measure) |
+| `contrail_compute_new_point_count` | effects/contrails.c | Matched | ffi/src/particles/contrails.rs | ffi/src/particles/contrails.rs (measure) |
 | `local_random_range` | effects/contrails.c | Matched | sim/src/random.rs | sim/tests/random_reference.rs (trace); the particles draw on a xorshift of their own (ffi/src/particles.rs), not the game's local seed; the animation and world track owns that |
 | `local_random_vector_in_cone3d` | effects/contrails.c | Matched | sim/src/random.rs | sim/tests/random_reference.rs (trace); the particles draw on a xorshift of their own (ffi/src/particles.rs), not the game's local seed; the animation and world track owns that |
-| `contrail_scale_random_value` | effects/contrails.c | Matched | ffi/src/particles/contrails.rs:42 | owed: the engine cites it, with no check against the original yet |
-| `contrail_next_frame` | effects/contrails.c | Matched | ffi/src/particles/contrails.rs:252 | owed: the engine cites it, with no check against the original yet |
-| `contrail_add_points` | effects/contrails.c | Matched | ffi/src/particles/contrails.rs:298 | owed: the engine cites it, with no check against the original yet |
-| `contrail_update_points` | effects/contrails.c | Matched | ffi/src/particles/contrails.rs:122 | owed: the engine cites it, with no check against the original yet |
-| `contrail_new` | effects/contrails.c | Matched | ffi/src/particles/contrails.rs | owed: the engine's own tests (ffi/src/particles/contrails.rs); no check against the original yet |
-| `contrails_update` | effects/contrails.c | Matched | ffi/src/particles/contrails.rs | owed: the engine's own tests (ffi/src/particles/contrails.rs); no check against the original yet |
+| `contrail_scale_random_value` | effects/contrails.c | Matched | ffi/src/particles/contrails.rs:42 | ffi/src/particles/contrails.rs (measure) |
+| `contrail_next_frame` | effects/contrails.c | Matched | ffi/src/particles/contrails.rs:252 | ffi/src/particles/contrails.rs (measure) |
+| `contrail_add_points` | effects/contrails.c | Matched | ffi/src/particles/contrails.rs:298 | ffi/src/particles/contrails.rs (measure) |
+| `contrail_update_points` | effects/contrails.c | Matched | ffi/src/particles/contrails.rs:122 | ffi/src/particles/contrails.rs (measure) |
+| `contrail_new` | effects/contrails.c | Matched | ffi/src/particles/contrails.rs | ffi/src/particles/contrails.rs (measure) |
+| `contrails_update` | effects/contrails.c | Matched | ffi/src/particles/contrails.rs | ffi/src/particles/contrails.rs (measure) |
 | `decal_sprite_get_bounds` | effects/decals.c | Replaced | app/Sources/OpenCEEngineRender/DecalPass.swift | the enhanced lighting and Metal renderer |
 | `render_debug_decals` | effects/decals.c | Replaced | dev/src/draw.rs | the editor and tools |
 | `projection_from_vector3d` | effects/decals.c | Replaced | app/Sources/OpenCEEngineRender/DecalPass.swift | the enhanced lighting and Metal renderer |
 | `projection_sign_from_vector3d` | effects/decals.c | Replaced | app/Sources/OpenCEEngineRender/DecalPass.swift | the enhanced lighting and Metal renderer |
 | `project_point2d` | effects/decals.c | Replaced | app/Sources/OpenCEEngineRender/DecalPass.swift | the enhanced lighting and Metal renderer |
-| `triple_product3d` | effects/decals.c | Matched | sim/src/vehicle_animation.rs:73 | owed: the engine cites it, with no check against the original yet |
+| `triple_product3d` | effects/decals.c | Matched | sim/src/vehicle_animation.rs:73 | sim/src/vehicle_animation.rs (measure) |
 | `plane2d_from_points` | effects/decals.c | Replaced | app/Sources/OpenCEEngineRender/DecalPass.swift | the enhanced lighting and Metal renderer |
 | `plane3d_distance_to_point` | effects/decals.c | Ported |  | `tools/engine_math_reference.py` |
 | `bsp3d_get_plane_from_designator` | effects/decals.c | Replaced | app/Sources/OpenCEEngineRender/DecalPass.swift | the enhanced lighting and Metal renderer |
-| `decal_update` | effects/decals.c | Matched | ffi/src/dynamic_decals.rs | owed: the engine's own tests (ffi/src/dynamic_decals.rs); no check against the original yet |
-| `decal_insert` | effects/decals.c | Matched | ffi/src/dynamic_decals.rs | owed: the engine's own tests (ffi/src/dynamic_decals.rs); no check against the original yet |
-| `decals_update` | effects/decals.c | Matched | ffi/src/dynamic_decals.rs:4 | owed: the engine cites it, with no check against the original yet |
-| `decal_delete` | effects/decals.c | Matched | ffi/src/dynamic_decals.rs | owed: the engine's own tests (ffi/src/dynamic_decals.rs); no check against the original yet |
+| `decal_update` | effects/decals.c | Matched | ffi/src/dynamic_decals.rs | ffi/src/dynamic_decals.rs (measure) |
+| `decal_insert` | effects/decals.c | Matched | ffi/src/dynamic_decals.rs | ffi/src/dynamic_decals.rs (measure) |
+| `decals_update` | effects/decals.c | Matched | ffi/src/dynamic_decals.rs:4 | ffi/src/dynamic_decals.rs (measure) |
+| `decal_delete` | effects/decals.c | Matched | ffi/src/dynamic_decals.rs | ffi/src/dynamic_decals.rs (measure) |
 | `decal_projection_create` | effects/decals.c | Replaced | app/Sources/OpenCEEngineRender/DecalPass.swift | the enhanced lighting and Metal renderer |
 | `decal_clip_to_surface` | effects/decals.c | Replaced | app/Sources/OpenCEEngineRender/DecalPass.swift | the enhanced lighting and Metal renderer |
-| `decal_new_from_collision` | effects/decals.c | Matched | ffi/src/decals.rs:179 | owed: the engine cites it, with no check against the original yet |
-| `decal_new` | effects/decals.c | Matched | ffi/src/decals.rs:144 | owed: the engine cites it, with no check against the original yet |
-| `effect_delete` | effects/effects.c | Matched | sim/src/effects.rs | owed: the engine's own tests (sim/src/effects.rs); no check against the original yet |
-| `effect_scale` | effects/effects.c | Matched | content/src/weapon.rs:602 | owed: the engine cites it, with no check against the original yet |
-| `effect_get_random_seed` | effects/effects.c | Matched | sim/src/effects.rs | owed: the engine's own tests (sim/src/effects.rs); no check against the original yet |
-| `effect_real_random_range` | effects/effects.c | Matched | sim/src/effects.rs | owed: the engine's own tests (sim/src/effects.rs); no check against the original yet |
-| `effect_random_angular_velocity` | effects/effects.c | Matched | sim/src/effects.rs | owed: the engine's own tests (sim/src/effects.rs); no check against the original yet |
-| `effect_allowed_by_environment` | effects/effects.c | Matched | sim/src/effects.rs | owed: the engine's own tests (sim/src/effects.rs); no check against the original yet |
-| `effect_part_allowed_by_disposition` | effects/effects.c | Matched | sim/src/effects.rs | owed: the engine's own tests (sim/src/effects.rs); no check against the original yet |
-| `effect_set_event` | effects/effects.c | Matched | sim/src/effects.rs | owed: the engine's own tests (sim/src/effects.rs); no check against the original yet |
-| `effect_build_location` | effects/effects.c | Matched | sim/src/effects.rs | owed: the engine's own tests (sim/src/effects.rs); no check against the original yet |
-| `effect_location_get_next_instance` | effects/effects.c | Matched | sim/src/effects.rs | owed: the engine's own tests (sim/src/effects.rs); no check against the original yet |
+| `decal_new_from_collision` | effects/decals.c | Matched | ffi/src/decals.rs:179 | ffi/src/decals.rs (measure) |
+| `decal_new` | effects/decals.c | Matched | ffi/src/decals.rs:144 | ffi/src/decals.rs (measure) |
+| `effect_delete` | effects/effects.c | Matched | sim/src/effects.rs | sim/src/effects.rs (measure) |
+| `effect_scale` | effects/effects.c | Matched | content/src/weapon.rs:602 | sim/src/effects.rs (measure) |
+| `effect_get_random_seed` | effects/effects.c | Matched | sim/src/effects.rs | sim/src/effects.rs (measure) |
+| `effect_real_random_range` | effects/effects.c | Matched | sim/src/effects.rs | sim/src/effects.rs (measure) |
+| `effect_random_angular_velocity` | effects/effects.c | Matched | sim/src/effects.rs | sim/src/effects.rs (measure) |
+| `effect_allowed_by_environment` | effects/effects.c | Matched | sim/src/effects.rs | sim/src/effects.rs (measure) |
+| `effect_part_allowed_by_disposition` | effects/effects.c | Matched | sim/src/effects.rs | sim/src/effects.rs (measure) |
+| `effect_set_event` | effects/effects.c | Matched | sim/src/effects.rs | sim/src/effects.rs (measure) |
+| `effect_build_location` | effects/effects.c | Matched | sim/src/effects.rs | sim/src/effects.rs (measure) |
+| `effect_location_get_next_instance` | effects/effects.c | Matched | sim/src/effects.rs | sim/src/effects.rs (measure) |
 | `real_local_random` | effects/effects.c | Matched | sim/src/random.rs | sim/tests/random_reference.rs (trace) |
 | `local_random_direction3d` | effects/effects.c | Matched | sim/src/random.rs | sim/tests/random_reference.rs (trace) |
-| `effect_stop` | effects/effects.c | Matched | sim/src/effects.rs | owed: the engine's own tests (sim/src/effects.rs); no check against the original yet |
-| `effect_random_translational_velocity` | effects/effects.c | Matched | sim/src/effects.rs | owed: the engine's own tests (sim/src/effects.rs); no check against the original yet |
-| `effect_allocate` | effects/effects.c | Matched | sim/src/effects.rs | owed: the engine's own tests (sim/src/effects.rs); no check against the original yet |
-| `effect_build_locations` | effects/effects.c | Matched | sim/src/effects.rs | owed: the engine's own tests (sim/src/effects.rs); no check against the original yet |
-| `effect_generate_particles` | effects/effects.c | Matched | ffi/src/particles.rs | owed: the engine's own tests (ffi/src/particles.rs); no check against the original yet |
-| `effect_generate_part` | effects/effects.c | Matched | sim/src/effects.rs | owed: the engine's own tests (sim/src/effects.rs); no check against the original yet |
-| `effect_marker_list_get_marker` | effects/effects.c | Matched | sim/src/effects.rs | owed: the engine's own tests (sim/src/effects.rs); no check against the original yet |
-| `effect_generate_parts` | effects/effects.c | Matched | sim/src/effects.rs | owed: the engine's own tests (sim/src/effects.rs); no check against the original yet |
-| `effect_marker_list_get_markers_by_name` | effects/effects.c | Matched | sim/src/effects.rs | owed: the engine's own tests (sim/src/effects.rs); no check against the original yet |
-| `effect_update` | effects/effects.c | Matched | sim/src/effects.rs | owed: the engine's own tests (sim/src/effects.rs); no check against the original yet |
-| `effect_new_looping` | effects/effects.c | Matched | sim/src/effects.rs | owed: the engine's own tests (sim/src/effects.rs); no check against the original yet |
-| `effect_new_from_object` | effects/effects.c | Matched | sim/src/effects.rs | owed: the engine's own tests (sim/src/effects.rs); no check against the original yet |
-| `effect_new_attached_from_markers` | effects/effects.c | Matched | sim/src/effects.rs | owed: the engine's own tests (sim/src/effects.rs); no check against the original yet |
-| `effect_new_unattached_from_markers` | effects/effects.c | Matched | sim/src/effects.rs:64 | owed: particles; reads the object, tag and map world, which the fake worlds do not hold (the effect tag); Phase 12's explosions |
-| `effects_update` | effects/effects.c | Matched | sim/src/effects.rs | owed: the engine's own tests (sim/src/effects.rs); no check against the original yet |
-| `material_effect_new` | effects/material_effects.c | Matched | ffi/src/sound_events.rs:210 | owed: the engine cites it, with no check against the original yet |
-| `material_effect_new_from_point` | effects/material_effects.c | Matched | sim/src/effects.rs | owed: the engine's own tests (sim/src/effects.rs); no check against the original yet |
-| `particle_system_orphan` | effects/particle_systems.c | Matched | ffi/src/particles/systems.rs | owed: the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet |
-| `particle_system_delete` | effects/particle_systems.c | Matched | ffi/src/particles/systems.rs | owed: the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet |
-| `particle_system_next_type_state_index` | effects/particle_systems.c | Matched | ffi/src/particles/systems.rs | owed: the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet |
-| `particle_system_next_particle_state_index` | effects/particle_systems.c | Matched | ffi/src/particles/systems.rs | owed: the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet |
-| `particle_system_update_default` | effects/particle_systems.c | Matched | ffi/src/particles/systems.rs | owed: the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet |
-| `particle_system_new_particle_default` | effects/particle_systems.c | Matched | ffi/src/particles/systems.rs | owed: the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet |
-| `particle_system_update_particle_default` | effects/particle_systems.c | Matched | ffi/src/particles/systems.rs | owed: the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet |
-| `particle_system_update_explosion` | effects/particle_systems.c | Matched | ffi/src/particles/systems.rs | owed: the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet |
-| `particle_system_new_particles` | effects/particle_systems.c | Matched | ffi/src/particles/systems.rs | owed: the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet |
-| `randomize_particle_variables` | effects/particle_systems.c | Matched | ffi/src/particles/systems.rs | owed: the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet |
-| `particle_system_update` | effects/particle_systems.c | Matched | ffi/src/particles/systems.rs | owed: the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet |
+| `effect_stop` | effects/effects.c | Matched | sim/src/effects.rs | sim/src/effects.rs (measure) |
+| `effect_random_translational_velocity` | effects/effects.c | Matched | sim/src/effects.rs | sim/src/effects.rs (measure) |
+| `effect_allocate` | effects/effects.c | Matched | sim/src/effects.rs | sim/src/effects.rs (measure) |
+| `effect_build_locations` | effects/effects.c | Matched | sim/src/effects.rs | sim/src/effects.rs (measure) |
+| `effect_generate_particles` | effects/effects.c | Matched | ffi/src/particles.rs | ffi/src/particles.rs (measure) |
+| `effect_generate_part` | effects/effects.c | Matched | sim/src/effects.rs | sim/src/effects.rs (measure) |
+| `effect_marker_list_get_marker` | effects/effects.c | Matched | sim/src/effects.rs | sim/src/effects.rs (measure) |
+| `effect_generate_parts` | effects/effects.c | Matched | sim/src/effects.rs | sim/src/effects.rs (measure) |
+| `effect_marker_list_get_markers_by_name` | effects/effects.c | Matched | sim/src/effects.rs | sim/src/effects.rs (measure) |
+| `effect_update` | effects/effects.c | Matched | sim/src/effects.rs | sim/src/effects.rs (measure) |
+| `effect_new_looping` | effects/effects.c | Matched | sim/src/effects.rs | sim/src/effects.rs (measure) |
+| `effect_new_from_object` | effects/effects.c | Matched | sim/src/effects.rs | sim/src/effects.rs (measure) |
+| `effect_new_attached_from_markers` | effects/effects.c | Matched | sim/src/effects.rs | sim/src/effects.rs (measure) |
+| `effect_new_unattached_from_markers` | effects/effects.c | Matched | sim/src/effects.rs:64 | sim/src/effects.rs (measure) |
+| `effects_update` | effects/effects.c | Matched | sim/src/effects.rs | sim/src/effects.rs (measure) |
+| `material_effect_new` | effects/material_effects.c | Matched | ffi/src/sound_events.rs:210 | ffi/src/sound_events.rs (measure) |
+| `material_effect_new_from_point` | effects/material_effects.c | Matched | sim/src/effects.rs | sim/src/effects.rs (measure) |
+| `particle_system_orphan` | effects/particle_systems.c | Matched | ffi/src/particles/systems.rs | ffi/src/particles/systems.rs (measure) |
+| `particle_system_delete` | effects/particle_systems.c | Matched | ffi/src/particles/systems.rs | ffi/src/particles/systems.rs (measure) |
+| `particle_system_next_type_state_index` | effects/particle_systems.c | Matched | ffi/src/particles/systems.rs | ffi/src/particles/systems.rs (measure) |
+| `particle_system_next_particle_state_index` | effects/particle_systems.c | Matched | ffi/src/particles/systems.rs | ffi/src/particles/systems.rs (measure) |
+| `particle_system_update_default` | effects/particle_systems.c | Matched | ffi/src/particles/systems.rs | ffi/src/particles/systems.rs (measure) |
+| `particle_system_new_particle_default` | effects/particle_systems.c | Matched | ffi/src/particles/systems.rs | ffi/src/particles/systems.rs (measure) |
+| `particle_system_update_particle_default` | effects/particle_systems.c | Matched | ffi/src/particles/systems.rs | ffi/src/particles/systems.rs (measure) |
+| `particle_system_update_explosion` | effects/particle_systems.c | Matched | ffi/src/particles/systems.rs | ffi/src/particles/systems.rs (measure) |
+| `particle_system_new_particles` | effects/particle_systems.c | Matched | ffi/src/particles/systems.rs | ffi/src/particles/systems.rs (measure) |
+| `randomize_particle_variables` | effects/particle_systems.c | Matched | ffi/src/particles/systems.rs | ffi/src/particles/systems.rs (measure) |
+| `particle_system_update` | effects/particle_systems.c | Matched | ffi/src/particles/systems.rs | ffi/src/particles/systems.rs (measure) |
 | `particle_system_render` | effects/particle_systems.c | Replaced | app/Sources/OpenCEEngineRender/ParticlePass.swift | the enhanced lighting and Metal renderer |
-| `particle_system_new_particle_explosion` | effects/particle_systems.c | Matched | ffi/src/particles/systems.rs | owed: the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet |
-| `particle_system_new_particle_jet` | effects/particle_systems.c | Matched | ffi/src/particles/systems.rs | owed: the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet |
-| `particle_system_initialize` | effects/particle_systems.c | Matched | ffi/src/particles/systems.rs | owed: the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet |
-| `particle_systems_update` | effects/particle_systems.c | Matched | ffi/src/particles/systems.rs | owed: the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet |
+| `particle_system_new_particle_explosion` | effects/particle_systems.c | Matched | ffi/src/particles/systems.rs | ffi/src/particles/systems.rs (measure) |
+| `particle_system_new_particle_jet` | effects/particle_systems.c | Matched | ffi/src/particles/systems.rs | ffi/src/particles/systems.rs (measure) |
+| `particle_system_initialize` | effects/particle_systems.c | Matched | ffi/src/particles/systems.rs | ffi/src/particles/systems.rs (measure) |
+| `particle_systems_update` | effects/particle_systems.c | Matched | ffi/src/particles/systems.rs | ffi/src/particles/systems.rs (measure) |
 | `particle_systems_render` | effects/particle_systems.c | Replaced | app/Sources/OpenCEEngineRender/ParticlePass.swift | the enhanced lighting and Metal renderer |
-| `particle_system_new_unattached` | effects/particle_systems.c | Matched | ffi/src/particles/systems.rs | owed: the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet |
-| `particle_system_new_attached` | effects/particle_systems.c | Matched | ffi/src/particles/systems.rs | owed: the engine's own tests (ffi/src/particles/systems.rs); no check against the original yet |
-| `particle_delete` | effects/particles.c | Matched | ffi/src/particles.rs | owed: the engine's own tests (ffi/src/particles.rs); no check against the original yet |
-| `new_particle_is_visible` | effects/particles.c | Matched | ffi/src/particles.rs | owed: the engine's own tests (ffi/src/particles.rs); no check against the original yet |
+| `particle_system_new_unattached` | effects/particle_systems.c | Matched | ffi/src/particles/systems.rs | ffi/src/particles/systems.rs (measure) |
+| `particle_system_new_attached` | effects/particle_systems.c | Matched | ffi/src/particles/systems.rs | ffi/src/particles/systems.rs (measure) |
+| `particle_delete` | effects/particles.c | Matched | ffi/src/particles.rs | ffi/src/particles.rs (measure) |
+| `new_particle_is_visible` | effects/particles.c | Matched | ffi/src/particles.rs | ffi/src/particles.rs (measure) |
 | `particle_get_radius` | effects/particles.c | Matched | content/src/particle.rs:155 | ffi/tests/particle_reference.rs (trace); its radius through a particle's life, unclamped as the game's; the engine falls back to the definition's first radius where the game's would not be a number |
-| `particle_effect_new` | effects/particles.c | Matched | ffi/src/particles.rs | owed: the engine's own tests (ffi/src/particles.rs); no check against the original yet |
-| `particle_die` | effects/particles.c | Matched | ffi/src/particles.rs | owed: the engine's own tests (ffi/src/particles.rs); no check against the original yet |
+| `particle_effect_new` | effects/particles.c | Matched | ffi/src/particles.rs | ffi/src/particles.rs (measure) |
+| `particle_die` | effects/particles.c | Matched | ffi/src/particles.rs | ffi/src/particles.rs (measure) |
 | `particle_next_sequence` | effects/particles.c | Matched | ffi/src/particle_life.rs:5 | ffi/tests/particle_reference.rs (trace) |
 | `particle_next_frame` | effects/particles.c | Matched | ffi/src/particle_life.rs:6 | ffi/tests/particle_reference.rs (trace); a bitmap sequence with images but no sprites counts its images (the game's sprite count would be none, and its particles would die at once) |
 | `particle_update_frame_time` | effects/particles.c | Matched | ffi/src/particle_life.rs:6 | ffi/tests/particle_reference.rs (trace); steps at most 4096 frames an update, where the game's loop has no bound and would hold forever on a frame shown no time |
-| `particle_update_physics` | effects/particles.c | Matched | ffi/src/particles.rs:502 | owed: the engine cites it, with no check against the original yet |
+| `particle_update_physics` | effects/particles.c | Matched | ffi/src/particles.rs:502 | ffi/src/particles.rs (measure) |
 | `particle_new` | effects/particles.c | Matched | ffi/src/particle_life.rs:2 | ffi/tests/particle_reference.rs (trace) |
 | `particles_update` | effects/particles.c | Partial | ffi/src/particle_life.rs:7 | ffi/tests/particle_reference.rs (trace); leaves out the deletion of particles left undrawn for a few frames (the engine draws every live particle), the physics, which particle_update_physics owes; a particle's age, death past its life and its frames, as particle_life::Life::update; the engine ticks particles at 30 Hz |
-| `weather_particle_system_get` | effects/weather_particle_systems.c | Matched | ffi/src/particles/weather.rs | owed: the engine's own tests (ffi/src/particles/weather.rs); no check against the original yet |
-| `weather_particle_system_get_type` | effects/weather_particle_systems.c | Matched | ffi/src/particles/weather.rs | owed: the engine's own tests (ffi/src/particles/weather.rs); no check against the original yet |
-| `weather_particle_system_type_delete_particle` | effects/weather_particle_systems.c | Matched | ffi/src/particles/weather.rs | owed: the engine's own tests (ffi/src/particles/weather.rs); no check against the original yet |
-| `weather_particle_system_wrap_point` | effects/weather_particle_systems.c | Matched | ffi/src/particles/weather.rs | owed: the engine's own tests (ffi/src/particles/weather.rs); no check against the original yet |
-| `weather_particle_system_new` | effects/weather_particle_systems.c | Matched | ffi/src/particles/weather.rs | owed: the engine's own tests (ffi/src/particles/weather.rs); no check against the original yet |
-| `weather_particle_system_delete` | effects/weather_particle_systems.c | Matched | ffi/src/particles/weather.rs | owed: the engine's own tests (ffi/src/particles/weather.rs); no check against the original yet |
-| `weather_particle_system_new_particle` | effects/weather_particle_systems.c | Matched | ffi/src/particles/weather.rs | owed: the engine's own tests (ffi/src/particles/weather.rs); no check against the original yet |
-| `weather_particle_system_box_offset_from_point3d` | effects/weather_particle_systems.c | Matched | ffi/src/particles/weather.rs | owed: the engine's own tests (ffi/src/particles/weather.rs); no check against the original yet |
-| `weather_particle_update_physics` | effects/weather_particle_systems.c | Matched | ffi/src/particles/weather.rs | owed: the engine's own tests (ffi/src/particles/weather.rs); no check against the original yet |
-| `weather_particle_system_build_clipping_planes` | effects/weather_particle_systems.c | Matched | ffi/src/particles/weather.rs | owed: the engine's own tests (ffi/src/particles/weather.rs); no check against the original yet |
-| `weather_particle_system_transform_clip_planes_to_box` | effects/weather_particle_systems.c | Matched | ffi/src/particles/weather.rs | owed: the engine's own tests (ffi/src/particles/weather.rs); no check against the original yet |
-| `weather_polyhedra_find` | effects/weather_particle_systems.c | Matched | ffi/src/particles/weather.rs | owed: the engine's own tests (ffi/src/particles/weather.rs); no check against the original yet |
-| `weather_particle_system_update_particle_count` | effects/weather_particle_systems.c | Matched | ffi/src/particles/weather.rs | owed: the engine's own tests (ffi/src/particles/weather.rs); no check against the original yet |
-| `weather_particle_system_update` | effects/weather_particle_systems.c | Matched | ffi/src/particles/weather.rs | owed: the engine's own tests (ffi/src/particles/weather.rs); no check against the original yet |
+| `weather_particle_system_get` | effects/weather_particle_systems.c | Matched | ffi/src/particles/weather.rs | ffi/src/particles/weather.rs (measure) |
+| `weather_particle_system_get_type` | effects/weather_particle_systems.c | Matched | ffi/src/particles/weather.rs | ffi/src/particles/weather.rs (measure) |
+| `weather_particle_system_type_delete_particle` | effects/weather_particle_systems.c | Matched | ffi/src/particles/weather.rs | ffi/src/particles/weather.rs (measure) |
+| `weather_particle_system_wrap_point` | effects/weather_particle_systems.c | Matched | ffi/src/particles/weather.rs | ffi/src/particles/weather.rs (measure) |
+| `weather_particle_system_new` | effects/weather_particle_systems.c | Matched | ffi/src/particles/weather.rs | ffi/src/particles/weather.rs (measure) |
+| `weather_particle_system_delete` | effects/weather_particle_systems.c | Matched | ffi/src/particles/weather.rs | ffi/src/particles/weather.rs (measure) |
+| `weather_particle_system_new_particle` | effects/weather_particle_systems.c | Matched | ffi/src/particles/weather.rs | ffi/src/particles/weather.rs (measure) |
+| `weather_particle_system_box_offset_from_point3d` | effects/weather_particle_systems.c | Matched | ffi/src/particles/weather.rs | ffi/src/particles/weather.rs (measure) |
+| `weather_particle_update_physics` | effects/weather_particle_systems.c | Matched | ffi/src/particles/weather.rs | ffi/src/particles/weather.rs (measure) |
+| `weather_particle_system_build_clipping_planes` | effects/weather_particle_systems.c | Matched | ffi/src/particles/weather.rs | ffi/src/particles/weather.rs (measure) |
+| `weather_particle_system_transform_clip_planes_to_box` | effects/weather_particle_systems.c | Matched | ffi/src/particles/weather.rs | ffi/src/particles/weather.rs (measure) |
+| `weather_polyhedra_find` | effects/weather_particle_systems.c | Matched | ffi/src/particles/weather.rs | ffi/src/particles/weather.rs (measure) |
+| `weather_particle_system_update_particle_count` | effects/weather_particle_systems.c | Matched | ffi/src/particles/weather.rs | ffi/src/particles/weather.rs (measure) |
+| `weather_particle_system_update` | effects/weather_particle_systems.c | Matched | ffi/src/particles/weather.rs | ffi/src/particles/weather.rs (measure) |
 | `weather_particle_system_render` | effects/weather_particle_systems.c | Replaced | app/Sources/OpenCEEngineRender/ParticlePass.swift | the enhanced lighting and Metal renderer |
 | `weather_particle_systems_render` | effects/weather_particle_systems.c | Replaced | app/Sources/OpenCEEngineRender/ParticlePass.swift | the enhanced lighting and Metal renderer |
 
@@ -1412,23 +1412,23 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `hs_recompile` | hs/hs.c | Replaced | dev/src/logbook.rs | the editor and tools; a debug check, statistic or editor hook of the original; the dev tools stand in |
 | `hs_hack` | hs/hs.c | Replaced | dev/src/logbook.rs | the editor and tools; a debug check, statistic or editor hook of the original; the dev tools stand in |
 | `hs_parse_debug_string` | hs/hs_compile.c | Replaced | dev/src/script.rs | the editor and tools |
-| `hs_compile_expression` | hs/hs_compile.c | Partial | script/src/console.rs:166 | leaves out the scenario's scripts (compiled at import), the compiler's errors as the original words them; owed: the engine's own version; no check against the original yet |
-| `hs_compile` | hs/hs_compile.c | Partial | script/src/console.rs | leaves out the scenario's source text: maps carry their scripts compiled, so only the console's line is compiled; owed: the console's compiler (script/src/console.rs); no check against the original yet |
-| `hs_not` | hs/hs_library_external.c | Matched | campaign/src/game.rs | owed: the script function's wrapper, which the campaign wires; no check against the original yet |
-| `hs_print` | hs/hs_library_external.c | Matched | campaign/src/game.rs | owed: the script function's wrapper, which the campaign wires; no check against the original yet |
-| `hs_players` | hs/hs_library_external.c | Matched | campaign/src/objects.rs | owed: the script function's wrapper, which the campaign wires; no check against the original yet |
-| `hs_objects_can_see_object` | hs/hs_library_external.c | Matched | campaign/src/objects.rs | owed: the script function's wrapper, which the campaign wires; no check against the original yet |
-| `hs_objects_can_see_flag` | hs/hs_library_external.c | Matched | campaign/src/objects.rs | owed: the script function's wrapper, which the campaign wires; no check against the original yet |
-| `hs_object_create` | hs/hs_library_external.c | Matched | campaign/src/objects.rs | owed: the script function's wrapper, which the campaign wires; no check against the original yet |
-| `hs_object_destroy` | hs/hs_library_external.c | Matched | campaign/src/objects.rs | owed: the script function's wrapper, which the campaign wires; no check against the original yet |
-| `hs_object_destroy_all` | hs/hs_library_external.c | Matched | campaign/src/objects.rs | owed: the script function's wrapper, which the campaign wires; no check against the original yet |
-| `hs_object_create_containing` | hs/hs_library_external.c | Matched | campaign/src/objects.rs | owed: the script function's wrapper, which the campaign wires; no check against the original yet |
-| `hs_object_destroy_containing` | hs/hs_library_external.c | Matched | campaign/src/objects.rs | owed: the script function's wrapper, which the campaign wires; no check against the original yet |
-| `hs_object_create_anew` | hs/hs_library_external.c | Matched | campaign/src/objects.rs | owed: the script function's wrapper, which the campaign wires; no check against the original yet |
-| `hs_object_create_anew_containing` | hs/hs_library_external.c | Matched | campaign/src/objects.rs | owed: the script function's wrapper, which the campaign wires; no check against the original yet |
-| `hs_object_teleport` | hs/hs_library_external.c | Matched | campaign/src/objects.rs | owed: the script function's wrapper, which the campaign wires; no check against the original yet |
-| `hs_object_set_facing` | hs/hs_library_external.c | Matched | campaign/src/objects.rs | owed: the script function's wrapper, which the campaign wires; no check against the original yet |
-| `hs_wake` | hs/hs_runtime.c | Matched | script/src/lib.rs:469 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
+| `hs_compile_expression` | hs/hs_compile.c | Partial | script/src/console.rs:166 | script/tests/console.rs (measure); leaves out the scenario's scripts (compiled at import), the compiler's errors as the original words them |
+| `hs_compile` | hs/hs_compile.c | Partial | script/src/console.rs | script/tests/console.rs (measure); leaves out the scenario's source text: maps carry their scripts compiled, so only the console's line is compiled |
+| `hs_not` | hs/hs_library_external.c | Matched | campaign/src/game.rs | campaign/tests/natives.rs (measure) |
+| `hs_print` | hs/hs_library_external.c | Matched | campaign/src/game.rs | campaign/tests/natives.rs (measure) |
+| `hs_players` | hs/hs_library_external.c | Matched | campaign/src/objects.rs | campaign/tests/natives.rs (measure) |
+| `hs_objects_can_see_object` | hs/hs_library_external.c | Matched | campaign/src/objects.rs | campaign/tests/natives.rs (measure) |
+| `hs_objects_can_see_flag` | hs/hs_library_external.c | Matched | campaign/src/objects.rs | campaign/tests/natives.rs (measure) |
+| `hs_object_create` | hs/hs_library_external.c | Matched | campaign/src/objects.rs | campaign/tests/objects.rs (measure) |
+| `hs_object_destroy` | hs/hs_library_external.c | Matched | campaign/src/objects.rs | campaign/tests/objects.rs (measure) |
+| `hs_object_destroy_all` | hs/hs_library_external.c | Matched | campaign/src/objects.rs | campaign/tests/natives.rs (measure) |
+| `hs_object_create_containing` | hs/hs_library_external.c | Matched | campaign/src/objects.rs | campaign/tests/natives.rs (measure) |
+| `hs_object_destroy_containing` | hs/hs_library_external.c | Matched | campaign/src/objects.rs | campaign/tests/natives.rs (measure) |
+| `hs_object_create_anew` | hs/hs_library_external.c | Matched | campaign/src/objects.rs | campaign/tests/objects.rs (measure) |
+| `hs_object_create_anew_containing` | hs/hs_library_external.c | Matched | campaign/src/objects.rs | campaign/tests/natives.rs (measure) |
+| `hs_object_teleport` | hs/hs_library_external.c | Matched | campaign/src/objects.rs | campaign/tests/natives.rs (measure) |
+| `hs_object_set_facing` | hs/hs_library_external.c | Matched | campaign/src/objects.rs | campaign/tests/natives.rs (measure) |
+| `hs_wake` | hs/hs_runtime.c | Matched | script/src/lib.rs:469 | script/tests/runtime.rs (measure) |
 | `hs_long_to_boolean` | hs/hs_runtime.c | Partial | script/src/value.rs | script/tests/script_cast_reference.rs (trace); leaves out the decompilation's n==0, which makes zero true; the engine takes zero as false until the user's maps settle it |
 | `hs_short_to_boolean` | hs/hs_runtime.c | Partial | script/src/value.rs | script/tests/script_cast_reference.rs (trace); leaves out the decompilation's n==0, which makes zero true; the engine takes zero as false until the user's maps settle it |
 | `hs_string_to_boolean` | hs/hs_runtime.c | Partial | script/src/value.rs | script/tests/script_cast_reference.rs (trace); leaves out the decompilation's n==0, which makes zero true; the engine takes zero as false until the user's maps settle it |
@@ -1446,28 +1446,28 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `hs_cast` | hs/hs_runtime.c | Partial | script/src/value.rs:88 | script/tests/script_cast_reference.rs (trace); leaves out typecasting_procedures as the decompilation miscounts it: the ai, enum and object rows each a place earlier than the last |
 | `render_debug_scripting` | hs/hs_runtime.c | Replaced | dev/src/draw.rs | the editor and tools |
 | `render_debug_trigger_volumes` | hs/hs_runtime.c | Replaced | dev/src/draw.rs | the editor and tools |
-| `hs_return` | hs/hs_runtime.c | Matched | script/src/lib.rs:227 | owed: the engine cites it, with no check against the original yet |
-| `hs_global_evaluate` | hs/hs_runtime.c | Matched | script/src/lib.rs:979 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
-| `hs_evaluate` | hs/hs_runtime.c | Matched | script/src/lib.rs:609 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
-| `hs_arguments_evaluate` | hs/hs_runtime.c | Matched | script/src/lib.rs:609 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
-| `hs_evaluate_begin` | hs/hs_runtime.c | Matched | script/src/lib.rs:728 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
-| `hs_evaluate_begin_random` | hs/hs_runtime.c | Partial | script/src/lib.rs:728 | leaves out the game's own random numbers: the shuffle draws on the runtime's xorshift; owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
-| `hs_evaluate_if` | hs/hs_runtime.c | Matched | script/src/lib.rs:729 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
-| `hs_evaluate_set` | hs/hs_runtime.c | Matched | script/src/lib.rs:729 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
-| `hs_evaluate_logical` | hs/hs_runtime.c | Matched | script/src/lib.rs:729 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
-| `hs_evaluate_arithmetic` | hs/hs_runtime.c | Matched | script/src/lib.rs:730 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
-| `hs_evaluate_equality` | hs/hs_runtime.c | Matched | script/src/lib.rs:730 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
-| `hs_evaluate_inequality` | hs/hs_runtime.c | Matched | script/src/lib.rs:731 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
-| `hs_evaluate_sleep` | hs/hs_runtime.c | Matched | script/src/lib.rs:890 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
-| `hs_evaluate_sleep_until` | hs/hs_runtime.c | Matched | script/src/lib.rs:927 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
-| `hs_evaluate_inspect` | hs/hs_runtime.c | Matched | script/src/lib.rs:731 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
+| `hs_return` | hs/hs_runtime.c | Matched | script/src/lib.rs:227 | script/tests/runtime.rs (measure) |
+| `hs_global_evaluate` | hs/hs_runtime.c | Matched | script/src/lib.rs:979 | script/tests/runtime.rs (measure) |
+| `hs_evaluate` | hs/hs_runtime.c | Matched | script/src/lib.rs:609 | script/tests/runtime.rs (measure) |
+| `hs_arguments_evaluate` | hs/hs_runtime.c | Matched | script/src/lib.rs:609 | script/tests/runtime.rs (measure) |
+| `hs_evaluate_begin` | hs/hs_runtime.c | Matched | script/src/lib.rs:728 | script/tests/runtime.rs (measure) |
+| `hs_evaluate_begin_random` | hs/hs_runtime.c | Partial | script/src/lib.rs:728 | script/tests/runtime.rs (measure); leaves out the game's own random numbers: the shuffle draws on the runtime's xorshift |
+| `hs_evaluate_if` | hs/hs_runtime.c | Matched | script/src/lib.rs:729 | script/tests/runtime.rs (measure) |
+| `hs_evaluate_set` | hs/hs_runtime.c | Matched | script/src/lib.rs:729 | script/tests/runtime.rs (measure) |
+| `hs_evaluate_logical` | hs/hs_runtime.c | Matched | script/src/lib.rs:729 | script/tests/runtime.rs (measure) |
+| `hs_evaluate_arithmetic` | hs/hs_runtime.c | Matched | script/src/lib.rs:730 | script/tests/runtime.rs (measure) |
+| `hs_evaluate_equality` | hs/hs_runtime.c | Matched | script/src/lib.rs:730 | script/tests/runtime.rs (measure) |
+| `hs_evaluate_inequality` | hs/hs_runtime.c | Matched | script/src/lib.rs:731 | script/tests/runtime.rs (measure) |
+| `hs_evaluate_sleep` | hs/hs_runtime.c | Matched | script/src/lib.rs:890 | script/tests/runtime.rs (measure) |
+| `hs_evaluate_sleep_until` | hs/hs_runtime.c | Matched | script/src/lib.rs:927 | script/tests/runtime.rs (measure) |
+| `hs_evaluate_inspect` | hs/hs_runtime.c | Matched | script/src/lib.rs:731 | script/tests/runtime.rs (measure) |
 | `hs_evaluate_debug_string` | hs/hs_runtime.c | Replaced | dev/src/script.rs | the editor and tools |
-| `hs_thread_main` | hs/hs_runtime.c | Matched | script/src/lib.rs:571 | owed: scripts; reads the object, tag and map world, which the fake worlds do not hold (the scenario's compiled scripts); script/tests |
-| `hs_runtime_initialize_for_new_map` | hs/hs_runtime.c | Matched | script/src/lib.rs:307 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
-| `hs_runtime_update` | hs/hs_runtime.c | Matched | script/src/lib.rs:395 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
-| `hs_runtime_evaluate` | hs/hs_runtime.c | Matched | script/src/lib.rs:478 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
+| `hs_thread_main` | hs/hs_runtime.c | Matched | script/src/lib.rs:571 | script/tests/runtime.rs (measure) |
+| `hs_runtime_initialize_for_new_map` | hs/hs_runtime.c | Matched | script/src/lib.rs:307 | script/tests/runtime.rs (measure) |
+| `hs_runtime_update` | hs/hs_runtime.c | Matched | script/src/lib.rs:395 | script/tests/runtime.rs (measure) |
+| `hs_runtime_evaluate` | hs/hs_runtime.c | Matched | script/src/lib.rs:478 | script/tests/runtime.rs (measure) |
 | `hs_syntax_data_byte_swap` | hs/hs_scenario_definitions.c | Replaced | import/src/lib.rs | maps imported to a typed format; byte order is settled when the map is imported |
-| `hs_type_default_value` | hs/hs_runtime.c | Matched | script/src/value.rs:33 | owed: the engine's runtime (script/src/lib.rs); no check against the original yet |
+| `hs_type_default_value` | hs/hs_runtime.c | Matched | script/src/value.rs:33 | script/tests/values.rs (measure) |
 
 576 Missing (571 reached from `main_loop`), by file:
 
@@ -1536,75 +1536,75 @@ docs/engine.md's "The coverage census" says what each class needs.
 
 | Function | File | Class | Engine | Evidence |
 | --- | --- | --- | --- | --- |
-| `scripted_show_hud` | interface/hud.c | Matched | campaign/src/game.rs | owed: the engine's own tests (campaign/src/game.rs); no check against the original yet |
-| `scripted_show_hud_help_text` | interface/hud.c | Matched | campaign/src/game.rs | owed: the engine's own tests (campaign/src/game.rs); no check against the original yet |
-| `hud_show_action_response` | interface/hud.c | Matched | ffi/src/hud_text.rs:52 | owed: the HUD's messages; reads the object, tag and map world, which the fake worlds do not hold |
-| `hud_draw_screen` | interface/hud.c | Partial | ffi/src/hud.rs | leaves out the damage indicators, nav points, player names, timer, weapon overlays and messages: the engine draws the unit's and weapon's interfaces, the grenades and the motion sensor; owed: the engine's own tests (ffi/tests/hud.rs); no check against the original yet |
-| `hud_globals_get_scale` | interface/hud_draw.c | Matched | ffi/src/hud.rs | owed: the engine's own tests (ffi/tests/hud.rs); no check against the original yet |
+| `scripted_show_hud` | interface/hud.c | Matched | campaign/src/game.rs | campaign/tests/natives.rs (measure) |
+| `scripted_show_hud_help_text` | interface/hud.c | Matched | campaign/src/game.rs | campaign/tests/natives.rs (measure) |
+| `hud_show_action_response` | interface/hud.c | Matched | ffi/src/hud_text.rs:52 | ffi/tests/hud_text.rs (measure) |
+| `hud_draw_screen` | interface/hud.c | Partial | ffi/src/hud.rs | ffi/tests/hud.rs (measure); leaves out the damage indicators, nav points, player names, timer, weapon overlays and messages: the engine draws the unit's and weapon's interfaces, the grenades and the motion sensor |
+| `hud_globals_get_scale` | interface/hud_draw.c | Matched | ffi/src/hud.rs | ffi/tests/hud.rs (measure) |
 | `hud_retrieve_bitmap_and_bounding_rect` | interface/hud_draw.c | Matched | ffi/src/hud/sprite_reference.rs:4 | ffi/src/hud/sprite_reference.rs (trace) |
 | `fast_ftol_C` | interface/hud_draw.c | Replaced | app/Sources/OpenCEEngineRender/UiPass.swift | the enhanced lighting and Metal renderer; drawn by the Metal renderer |
-| `hud_calculate_point` | interface/hud_draw.c | Matched | ffi/src/hud.rs:168 | owed: the engine cites it, with no check against the original yet |
-| `get_flash_color` | interface/hud_draw.c | Matched | ffi/src/hud.rs:180 | owed: the engine cites it, with no check against the original yet |
-| `hud_draw_bitmap_direct` | interface/hud_draw.c | Matched | ffi/src/hud.rs | owed: the engine's own tests (ffi/tests/hud.rs); no check against the original yet |
-| `hud_draw_meter` | interface/hud_draw.c | Matched | ffi/src/hud.rs:316 | owed: the engine cites it, with no check against the original yet |
-| `hud_draw_numbers` | interface/hud_draw.c | Matched | ffi/src/hud.rs:357 | owed: the engine cites it, with no check against the original yet |
-| `hud_draw_bitmap` | interface/hud_draw.c | Matched | ffi/src/hud.rs | owed: the engine's own tests (ffi/tests/hud.rs); no check against the original yet |
-| `hud_draw_static_element` | interface/hud_draw.c | Matched | ffi/src/hud.rs:298 | owed: the engine cites it, with no check against the original yet |
-| `render_state_text` | interface/hud_messaging.c | Matched | ffi/src/hud_text.rs | owed: the engine's own tests (ffi/tests/hud_text.rs); no check against the original yet |
-| `render_state_bitmap` | interface/hud_messaging.c | Matched | ffi/src/hud.rs:257 | owed: the engine cites it, with no check against the original yet |
+| `hud_calculate_point` | interface/hud_draw.c | Matched | ffi/src/hud.rs:168 | ffi/tests/hud.rs (measure) |
+| `get_flash_color` | interface/hud_draw.c | Matched | ffi/src/hud.rs:180 | ffi/tests/hud.rs (measure) |
+| `hud_draw_bitmap_direct` | interface/hud_draw.c | Matched | ffi/src/hud.rs | ffi/tests/hud.rs (measure) |
+| `hud_draw_meter` | interface/hud_draw.c | Matched | ffi/src/hud.rs:316 | ffi/tests/hud.rs (measure) |
+| `hud_draw_numbers` | interface/hud_draw.c | Matched | ffi/src/hud.rs:357 | ffi/tests/hud.rs (measure) |
+| `hud_draw_bitmap` | interface/hud_draw.c | Matched | ffi/src/hud.rs | ffi/tests/hud.rs (measure) |
+| `hud_draw_static_element` | interface/hud_draw.c | Matched | ffi/src/hud.rs:298 | ffi/tests/hud.rs (measure) |
+| `render_state_text` | interface/hud_messaging.c | Matched | ffi/src/hud_text.rs | ffi/tests/hud_text.rs (measure) |
+| `render_state_bitmap` | interface/hud_messaging.c | Matched | ffi/src/hud.rs:257 | ffi/tests/hud.rs (measure) |
 | `scripted_hud_set_objective` | interface/hud_messaging.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
-| `scripted_hud_set_timer_time` | interface/hud_messaging.c | Matched | campaign/src/game.rs | owed: the engine's own tests (campaign/src/game.rs); no check against the original yet |
+| `scripted_hud_set_timer_time` | interface/hud_messaging.c | Matched | campaign/src/game.rs | campaign/tests/natives.rs (measure) |
 | `scripted_hud_set_timer_warning_cutoff` | interface/hud_messaging.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
 | `scripted_hud_set_timer_position` | interface/hud_messaging.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
 | `scripted_hud_show_timer` | interface/hud_messaging.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
-| `scripted_hud_pause_timer` | interface/hud_messaging.c | Matched | campaign/src/game.rs | owed: the engine's own tests (campaign/src/game.rs); no check against the original yet |
-| `scripted_hud_get_timer_ticks` | interface/hud_messaging.c | Matched | campaign/src/game.rs | owed: the engine's own tests (campaign/src/game.rs); no check against the original yet |
-| `hud_set_state_message` | interface/hud_messaging.c | Matched | ffi/src/hud_text.rs | owed: the engine's own tests (ffi/tests/hud_text.rs); no check against the original yet |
-| `hud_set_state_message_icon` | interface/hud_messaging.c | Matched | ffi/src/hud_text.rs | owed: the engine's own tests (ffi/tests/hud_text.rs); no check against the original yet |
-| `hud_set_state_message_text` | interface/hud_messaging.c | Matched | ffi/src/hud_text.rs | owed: the engine's own tests (ffi/tests/hud_text.rs); no check against the original yet |
-| `hud_messaging_update` | interface/hud_messaging.c | Partial | ffi/src/hud_text.rs:53 | leaves out the objective and help messages, the list of messages and their ageing, split screen; owed: the engine's own version; no check against the original yet |
+| `scripted_hud_pause_timer` | interface/hud_messaging.c | Matched | campaign/src/game.rs | campaign/tests/natives.rs (measure) |
+| `scripted_hud_get_timer_ticks` | interface/hud_messaging.c | Matched | campaign/src/game.rs | campaign/tests/natives.rs (measure) |
+| `hud_set_state_message` | interface/hud_messaging.c | Matched | ffi/src/hud_text.rs | ffi/tests/hud_text.rs (measure) |
+| `hud_set_state_message_icon` | interface/hud_messaging.c | Matched | ffi/src/hud_text.rs | ffi/tests/hud_text.rs (measure) |
+| `hud_set_state_message_text` | interface/hud_messaging.c | Matched | ffi/src/hud_text.rs | ffi/tests/hud_text.rs (measure) |
+| `hud_messaging_update` | interface/hud_messaging.c | Partial | ffi/src/hud_text.rs:53 | ffi/tests/hud_text.rs (measure); leaves out the objective and help messages, the list of messages and their ageing, split screen |
 | `scripted_hud_show_health` | interface/hud_unit.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
 | `scripted_hud_blink_health` | interface/hud_unit.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
 | `scripted_hud_show_shield` | interface/hud_unit.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
 | `scripted_hud_blink_shield` | interface/hud_unit.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
 | `scripted_hud_show_motion_sensor` | interface/hud_unit.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
 | `scripted_hud_blink_motion_sensor` | interface/hud_unit.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
-| `hud_render_unit_interface` | interface/hud_unit.c | Matched | ffi/src/hud.rs:82 | owed: the engine cites it, with no check against the original yet |
+| `hud_render_unit_interface` | interface/hud_unit.c | Matched | ffi/src/hud.rs:82 | ffi/tests/hud.rs (measure) |
 | `scripted_hud_show_crosshair` | interface/hud_weapon.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
-| `get_crosshair_state` | interface/hud_weapon.c | Matched | ffi/src/hud.rs | owed: the engine's own tests (ffi/tests/hud.rs); no check against the original yet |
-| `render_grenade_hud` | interface/hud_weapon.c | Matched | ffi/src/hud.rs:618 | owed: the engine cites it, with no check against the original yet |
-| `crosshairs_draw` | interface/hud_weapon.c | Matched | ffi/src/hud.rs | owed: the engine's own tests (ffi/tests/hud.rs); no check against the original yet |
-| `render_weapon_hud` | interface/hud_weapon.c | Matched | ffi/src/hud.rs | owed: the engine's own tests (ffi/tests/hud.rs); no check against the original yet |
-| `hud_render_weapon_interface` | interface/hud_weapon.c | Matched | ffi/src/hud.rs | owed: the engine's own tests (ffi/tests/hud.rs); no check against the original yet |
-| `blip_type_get` | interface/motion_sensor.c | Matched | sim/src/hud.rs | owed: the engine's own tests (sim/src/hud.rs); no check against the original yet |
-| `motion_sensor_blip_set_type_and_size` | interface/motion_sensor.c | Matched | sim/src/hud.rs | owed: the engine's own tests (sim/src/hud.rs); no check against the original yet |
-| `blip_size_get` | interface/motion_sensor.c | Matched | sim/src/hud.rs:67 | owed: the motion sensor's blips; checked by sim/tests/hud.rs |
-| `should_track_object` | interface/motion_sensor.c | Matched | sim/src/hud.rs | owed: the engine's own tests (sim/src/hud.rs); no check against the original yet |
-| `should_draw_object` | interface/motion_sensor.c | Matched | sim/src/hud.rs | owed: the engine's own tests (sim/src/hud.rs); no check against the original yet |
-| `render_blip` | interface/motion_sensor.c | Matched | sim/src/hud.rs:171 | owed: the engine cites it, with no check against the original yet |
-| `motion_sensor_update` | interface/motion_sensor.c | Matched | sim/src/hud.rs:122 | owed: the motion sensor; reads the object, tag and map world, which the fake worlds do not hold; sim/tests/hud.rs |
-| `update_motion_sensor` | interface/motion_sensor.c | Matched | sim/src/hud.rs | owed: the engine's own tests (sim/src/hud.rs); no check against the original yet |
-| `render_motion_sensor` | interface/motion_sensor.c | Matched | sim/src/hud.rs | owed: the engine's own tests (sim/src/hud.rs); no check against the original yet |
-| `motion_sensor_tick` | interface/motion_sensor.c | Matched | sim/src/hud.rs | owed: the engine's own tests (sim/src/hud.rs); no check against the original yet |
+| `get_crosshair_state` | interface/hud_weapon.c | Matched | ffi/src/hud.rs | ffi/tests/hud.rs (measure) |
+| `render_grenade_hud` | interface/hud_weapon.c | Matched | ffi/src/hud.rs:618 | ffi/tests/hud.rs (measure) |
+| `crosshairs_draw` | interface/hud_weapon.c | Matched | ffi/src/hud.rs | ffi/tests/hud.rs (measure) |
+| `render_weapon_hud` | interface/hud_weapon.c | Matched | ffi/src/hud.rs | ffi/tests/hud.rs (measure) |
+| `hud_render_weapon_interface` | interface/hud_weapon.c | Matched | ffi/src/hud.rs | ffi/tests/hud.rs (measure) |
+| `blip_type_get` | interface/motion_sensor.c | Matched | sim/src/hud.rs | sim/src/hud.rs (measure) |
+| `motion_sensor_blip_set_type_and_size` | interface/motion_sensor.c | Matched | sim/src/hud.rs | sim/src/hud.rs (measure) |
+| `blip_size_get` | interface/motion_sensor.c | Matched | sim/src/hud.rs:67 | sim/src/hud.rs (measure) |
+| `should_track_object` | interface/motion_sensor.c | Matched | sim/src/hud.rs | sim/src/hud.rs (measure) |
+| `should_draw_object` | interface/motion_sensor.c | Matched | sim/src/hud.rs | sim/src/hud.rs (measure) |
+| `render_blip` | interface/motion_sensor.c | Matched | sim/src/hud.rs:171 | sim/src/hud.rs (measure) |
+| `motion_sensor_update` | interface/motion_sensor.c | Matched | sim/src/hud.rs:122 | sim/src/hud.rs (measure) |
+| `update_motion_sensor` | interface/motion_sensor.c | Matched | sim/src/hud.rs | sim/src/hud.rs (measure) |
+| `render_motion_sensor` | interface/motion_sensor.c | Matched | sim/src/hud.rs | sim/src/hud.rs (measure) |
+| `motion_sensor_tick` | interface/motion_sensor.c | Matched | sim/src/hud.rs | sim/src/hud.rs (measure) |
 | `first_person_weapon_start_interpolation` | interface/first_person_weapons.c | Ported | sim/src/first_person_states.rs:543 | `tools/engine_first_person_reference.py` |
 | `first_person_weapon_set_state` | interface/first_person_weapons.c | Ported | sim/src/first_person_states.rs:197 | `tools/engine_first_person_reference.py` |
-| `first_person_weapon_animation_fits` | interface/first_person_weapons.c | Matched | sim/src/first_person.rs:88 | owed: reads the object, tag and map world, which the fake worlds do not hold (the first-person model's nodes); sim/tests/first_person.rs |
-| `first_person_weapon_build_node_matrices` | interface/first_person_weapons.c | Matched | sim/src/first_person.rs:160 | owed: reads the object, tag and map world, which the fake worlds do not hold (the first-person model's nodes); sim/tests/first_person.rs |
+| `first_person_weapon_animation_fits` | interface/first_person_weapons.c | Matched | sim/src/first_person.rs:88 | sim/tests/first_person.rs (measure) |
+| `first_person_weapon_build_node_matrices` | interface/first_person_weapons.c | Matched | sim/src/first_person.rs:160 | sim/tests/first_person.rs (measure) |
 | `first_person_weapon_message` | interface/first_person_weapons.c | Ported | sim/src/first_person_states.rs:633 | `tools/engine_first_person_reference.py` |
-| `first_person_weapon_switch_weapons` | interface/first_person_weapons.c | Matched | sim/src/first_person_states.rs:616 | owed: the engine cites it, with no check against the original yet |
+| `first_person_weapon_switch_weapons` | interface/first_person_weapons.c | Matched | sim/src/first_person_states.rs:616 | sim/src/first_person_states.rs (measure) |
 | `first_person_weapon_next_state` | interface/first_person_weapons.c | Ported | sim/src/first_person_states.rs:686 | `tools/engine_first_person_reference.py` |
-| `first_person_weapon_update` | interface/first_person_weapons.c | Matched | sim/src/first_person_states.rs:751 | owed: reads the object, tag and map world, which the fake worlds do not hold (the weapon tag); its states are first_person_reference's |
-| `model_build_remapping_table_for_animation_graph` | interface/first_person_weapons.c | Matched | sim/src/first_person.rs:75 | owed: reads the object, tag and map world, which the fake worlds do not hold (the model's and graph's node names) |
+| `first_person_weapon_update` | interface/first_person_weapons.c | Matched | sim/src/first_person_states.rs:751 | sim/src/first_person_states.rs (measure) |
+| `model_build_remapping_table_for_animation_graph` | interface/first_person_weapons.c | Matched | sim/src/first_person.rs:75 | sim/tests/first_person.rs (measure) |
 | `first_person_weapon_state_from_weapon_message` | interface/first_person_weapons.c | Ported | sim/src/first_person_states.rs:315 | `tools/engine_first_person_reference.py` |
 | `first_person_animation_type_from_weapon_state` | interface/first_person_weapons.c | Ported | sim/src/first_person_states.rs:166 | `tools/engine_first_person_reference.py` |
-| `first_person_weapons_update` | interface/first_person_weapons.c | Partial | sim/src/lib.rs:1308 | leaves out the first-person animations' blending, the weapon's sway; owed: the engine's own version; no check against the original yet |
+| `first_person_weapons_update` | interface/first_person_weapons.c | Partial | sim/src/lib.rs:1308 | sim/tests/first_person.rs (measure); leaves out the first-person animations' blending, the weapon's sway |
 | `render_debug_profile_stall_tick` | interface/interface.c | Replaced | dev/src/profile.rs | the editor and tools |
 | `render_debug_profile` | interface/interface.c | Replaced | dev/src/profile.rs | the editor and tools |
 | `interface_draw_bitmap_modulated` | interface/interface.c | Replaced | app/Sources/OpenCEEngineRender/UiPass.swift | the enhanced lighting and Metal renderer; drawn by the Metal renderer |
 | `interface_draw_bitmap_modulated_p32` | interface/interface.c | Replaced | app/Sources/OpenCEEngineRender/UiPass.swift | the enhanced lighting and Metal renderer; drawn by the Metal renderer |
 | `overhead_map_post_rasterize` | interface/overhead_map.c | Replaced | app/Sources/OpenCEEngineRender/UiPass.swift | the enhanced lighting and Metal renderer; drawn by the Metal renderer |
-| `player0_look_pitch_is_inverted` | interface/player_ui.c | Partial | campaign/src/game.rs | leaves out the player's profile: it answers a constant, the mouse's own setting standing in; owed: the engine's own tests (campaign/src/game.rs); no check against the original yet |
-| `player0_joystick_set_is_normal` | interface/player_ui.c | Partial | campaign/src/game.rs | leaves out the player's profile: it answers a constant, the mouse's own setting standing in; owed: the engine's own tests (campaign/src/game.rs); no check against the original yet |
+| `player0_look_pitch_is_inverted` | interface/player_ui.c | Partial | campaign/src/game.rs | campaign/tests/natives.rs (measure); leaves out the player's profile: it answers a constant, the mouse's own setting standing in |
+| `player0_joystick_set_is_normal` | interface/player_ui.c | Partial | campaign/src/game.rs | campaign/tests/natives.rs (measure); leaves out the player's profile: it answers a constant, the mouse's own setting standing in |
 | `player0_look_invert_pitch` | interface/player_ui.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
 | `code_000d0ec0` | interface/progress_bar.c | Replaced | app/Sources/OpenCEEngineRender/UiPass.swift | the enhanced lighting and Metal renderer; drawn by the Metal renderer |
 | `code_000d0f10` | interface/progress_bar.c | Replaced | app/Sources/OpenCEEngineRender/UiPass.swift | the enhanced lighting and Metal renderer; drawn by the Metal renderer |
@@ -1635,7 +1635,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `code_000d1bd0` | interface/progress_bar.c | Replaced | app/Sources/OpenCEEngineRender/UiPass.swift | the enhanced lighting and Metal renderer; drawn by the Metal renderer |
 | `code_000d1bf0` | interface/progress_bar.c | Replaced | app/Sources/OpenCEEngineRender/UiPass.swift | the enhanced lighting and Metal renderer; drawn by the Metal renderer |
 | `D3DXMatrixIdentity` | interface/progress_bar.c | Replaced | app/Sources/OpenCEEngineRender/UiPass.swift | the enhanced lighting and Metal renderer; drawn by the Metal renderer |
-| `progress_bar_render` | interface/progress_bar.c | Partial | ui/src/loading.rs:211 | leaves out the original's drawing at its low resolution (the light is drawn at the screen's); owed: the engine's own version; no check against the original yet |
+| `progress_bar_render` | interface/progress_bar.c | Partial | ui/src/loading.rs:211 | ui/tests/loading.rs (measure); leaves out the original's drawing at its low resolution (the light is drawn at the screen's) |
 | `code_000d23b0` | interface/progress_bar.c | Replaced | app/Sources/OpenCEEngineRender/UiPass.swift | the enhanced lighting and Metal renderer; drawn by the Metal renderer |
 | `terminal_initialize` | interface/terminal.c | Replaced | app/Sources/OpenCEEngineKit/Shell/ShellOverlay.swift | the editor and tools |
 | `terminal_dispose` | interface/terminal.c | Replaced | app/Sources/OpenCEEngineKit/Shell/ShellOverlay.swift | the editor and tools |
@@ -1650,45 +1650,45 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `terminal_new_line` | interface/terminal.c | Replaced | app/Sources/OpenCEEngineKit/Shell/ShellOverlay.swift | the editor and tools |
 | `terminal_update` | interface/terminal.c | Replaced | app/Sources/OpenCEEngineKit/Shell/ShellOverlay.swift | the editor and tools |
 | `terminal_printf` | interface/terminal.c | Replaced | app/Sources/OpenCEEngineKit/Shell/ShellOverlay.swift | the editor and tools |
-| `event_controller_index_compatible_with_widget` | interface/ui_widget.c | Matched | ui/src/lib.rs | owed: the engine's own tests (ui/tests/tree.rs); no check against the original yet |
+| `event_controller_index_compatible_with_widget` | interface/ui_widget.c | Matched | ui/src/lib.rs | ui/tests/tree.rs (measure) |
 | `ui_widget_debug_show_path` | interface/ui_widget.c | Replaced | dev/src/draw.rs | the editor and tools |
-| `widget_instance_count_children` | interface/ui_widget.c | Matched | ui/src/lib.rs | owed: the engine's own tests (ui/tests/tree.rs); no check against the original yet |
-| `widget_instance_get_nth_child` | interface/ui_widget.c | Matched | ui/src/lib.rs | owed: the engine's own tests (ui/tests/tree.rs); no check against the original yet |
-| `ui_widgets_active` | interface/ui_widget.c | Matched | ui/src/lib.rs | owed: the engine's own tests (ui/tests/tree.rs); no check against the original yet |
-| `ui_widgets_active_for_local_player` | interface/ui_widget.c | Matched | ui/src/lib.rs | owed: the engine's own tests (ui/tests/tree.rs); no check against the original yet |
-| `draw_bitmap_in_rect` | interface/ui_widget.c | Matched | ui/src/draw.rs | owed: the engine's own tests (ui/tests/draw.rs); no check against the original yet |
-| `widget_instance_get_topmost_parent` | interface/ui_widget.c | Matched | ui/src/lib.rs | owed: the engine's own tests (ui/tests/tree.rs); no check against the original yet |
-| `widget_instance_get_child_index_from_parent` | interface/ui_widget.c | Matched | ui/src/lib.rs | owed: the engine's own tests (ui/tests/tree.rs); no check against the original yet |
-| `pop_widget` | interface/ui_widget.c | Matched | ui/src/lib.rs | owed: the engine's own tests (ui/tests/tree.rs); no check against the original yet |
-| `ui_start_main_menu_music` | interface/ui_widget.c | Matched | ffi/src/ui_host.rs:62 | owed: the engine cites it, with no check against the original yet |
-| `dispose_widget_stack` | interface/ui_widget.c | Matched | ui/src/lib.rs | owed: the engine's own tests (ui/tests/tree.rs); no check against the original yet |
-| `ui_widget_delete_children_recursive` | interface/ui_widget.c | Matched | ui/src/lib.rs | owed: the engine's own tests (ui/tests/tree.rs); no check against the original yet |
-| `ui_widget_launch_widget` | interface/ui_widget.c | Matched | ui/src/lib.rs | owed: the engine's own tests (ui/tests/tree.rs); no check against the original yet |
-| `widget_instance_find_by_tag_index_recursive` | interface/ui_widget.c | Matched | ui/src/lib.rs | owed: the engine's own tests (ui/tests/tree.rs); no check against the original yet |
-| `widget_instance_give_focus_directly` | interface/ui_widget.c | Matched | ui/src/lib.rs | owed: the engine's own tests (ui/tests/tree.rs); no check against the original yet |
-| `widget_instance_give_focus_by_tag` | interface/ui_widget.c | Matched | ui/src/lib.rs | owed: the engine's own tests (ui/tests/tree.rs); no check against the original yet |
-| `ui_widget_add_child` | interface/ui_widget.c | Matched | ui/src/lib.rs | owed: the engine's own tests (ui/tests/tree.rs); no check against the original yet |
-| `push_widget` | interface/ui_widget.c | Matched | ui/src/lib.rs | owed: the engine's own tests (ui/tests/tree.rs); no check against the original yet |
-| `widget_instance_can_receive_events` | interface/ui_widget.c | Matched | ui/src/lib.rs | owed: the engine's own tests (ui/tests/tree.rs); no check against the original yet |
-| `widget_instance_set_focused_child_by_index` | interface/ui_widget.c | Matched | ui/src/lib.rs | owed: the engine's own tests (ui/tests/tree.rs); no check against the original yet |
-| `widget_instance_go_back_to_previous` | interface/ui_widget.c | Matched | ui/src/lib.rs | owed: the engine's own tests (ui/tests/tree.rs); no check against the original yet |
-| `event_handler_dispatch` | interface/ui_widget.c | Matched | ui/src/lib.rs | owed: the engine's own tests (ui/tests/tree.rs); no check against the original yet |
-| `ui_widget_load_children_recursive` | interface/ui_widget.c | Matched | ui/src/lib.rs | owed: the engine's own tests (ui/tests/tree.rs); no check against the original yet |
-| `widget_instance_initialize` | interface/ui_widget.c | Matched | ui/src/lib.rs | owed: the engine's own tests (ui/tests/tree.rs); no check against the original yet |
+| `widget_instance_count_children` | interface/ui_widget.c | Matched | ui/src/lib.rs | ui/tests/tree.rs (measure) |
+| `widget_instance_get_nth_child` | interface/ui_widget.c | Matched | ui/src/lib.rs | ui/tests/tree.rs (measure) |
+| `ui_widgets_active` | interface/ui_widget.c | Matched | ui/src/lib.rs | ui/tests/tree.rs (measure) |
+| `ui_widgets_active_for_local_player` | interface/ui_widget.c | Matched | ui/src/lib.rs | ui/tests/tree.rs (measure) |
+| `draw_bitmap_in_rect` | interface/ui_widget.c | Matched | ui/src/draw.rs | ui/tests/draw.rs (measure) |
+| `widget_instance_get_topmost_parent` | interface/ui_widget.c | Matched | ui/src/lib.rs | ui/tests/tree.rs (measure) |
+| `widget_instance_get_child_index_from_parent` | interface/ui_widget.c | Matched | ui/src/lib.rs | ui/tests/tree.rs (measure) |
+| `pop_widget` | interface/ui_widget.c | Matched | ui/src/lib.rs | ui/tests/tree.rs (measure) |
+| `ui_start_main_menu_music` | interface/ui_widget.c | Matched | ffi/src/ui_host.rs:62 | ffi/tests/menu_music.rs (measure) |
+| `dispose_widget_stack` | interface/ui_widget.c | Matched | ui/src/lib.rs | ui/tests/tree.rs (measure) |
+| `ui_widget_delete_children_recursive` | interface/ui_widget.c | Matched | ui/src/lib.rs | ui/tests/tree.rs (measure) |
+| `ui_widget_launch_widget` | interface/ui_widget.c | Matched | ui/src/lib.rs | ui/tests/tree.rs (measure) |
+| `widget_instance_find_by_tag_index_recursive` | interface/ui_widget.c | Matched | ui/src/lib.rs | ui/tests/tree.rs (measure) |
+| `widget_instance_give_focus_directly` | interface/ui_widget.c | Matched | ui/src/lib.rs | ui/tests/tree.rs (measure) |
+| `widget_instance_give_focus_by_tag` | interface/ui_widget.c | Matched | ui/src/lib.rs | ui/tests/tree.rs (measure) |
+| `ui_widget_add_child` | interface/ui_widget.c | Matched | ui/src/lib.rs | ui/tests/tree.rs (measure) |
+| `push_widget` | interface/ui_widget.c | Matched | ui/src/lib.rs | ui/tests/tree.rs (measure) |
+| `widget_instance_can_receive_events` | interface/ui_widget.c | Matched | ui/src/lib.rs | ui/tests/tree.rs (measure) |
+| `widget_instance_set_focused_child_by_index` | interface/ui_widget.c | Matched | ui/src/lib.rs | ui/tests/tree.rs (measure) |
+| `widget_instance_go_back_to_previous` | interface/ui_widget.c | Matched | ui/src/lib.rs | ui/tests/tree.rs (measure) |
+| `event_handler_dispatch` | interface/ui_widget.c | Matched | ui/src/lib.rs | ui/tests/tree.rs (measure) |
+| `ui_widget_load_children_recursive` | interface/ui_widget.c | Matched | ui/src/lib.rs | ui/tests/tree.rs (measure) |
+| `widget_instance_initialize` | interface/ui_widget.c | Matched | ui/src/lib.rs | ui/tests/tree.rs (measure) |
 | `remap_sticks_for_local_player` | interface/ui_widget.c | Replaced | ui/src/pointer.rs | keyboard and mouse only |
 | `should_flip_sticks_for_local_player` | interface/ui_widget.c | Replaced | ui/src/pointer.rs | keyboard and mouse only |
-| `search_and_replace` | interface/ui_widget.c | Matched | ui/src/lib.rs | owed: the engine's own tests (ui/tests/tree.rs); no check against the original yet |
-| `widget_instance_render_text_box` | interface/ui_widget.c | Matched | ui/src/draw.rs | owed: the engine's own tests (ui/tests/draw.rs); no check against the original yet |
-| `widget_instance_render_spinner_list` | interface/ui_widget.c | Matched | ui/src/draw.rs | owed: the engine's own tests (ui/tests/draw.rs); no check against the original yet |
-| `get_ui_rgb_white` | interface/ui_widget.c | Matched | ui/src/draw.rs:16 | owed: the engine cites it, with no check against the original yet |
-| `get_ui_argb_white` | interface/ui_widget.c | Matched | ui/src/draw.rs | owed: the engine's own tests (ui/tests/draw.rs); no check against the original yet |
+| `search_and_replace` | interface/ui_widget.c | Matched | ui/src/lib.rs | ui/tests/tree.rs (measure) |
+| `widget_instance_render_text_box` | interface/ui_widget.c | Matched | ui/src/draw.rs | ui/tests/draw.rs (measure) |
+| `widget_instance_render_spinner_list` | interface/ui_widget.c | Matched | ui/src/draw.rs | ui/tests/draw.rs (measure) |
+| `get_ui_rgb_white` | interface/ui_widget.c | Matched | ui/src/draw.rs:16 | ui/tests/draw.rs (measure) |
+| `get_ui_argb_white` | interface/ui_widget.c | Matched | ui/src/draw.rs | ui/tests/draw.rs (measure) |
 | `ui_debug_targets_enabled` | interface/ui_widget.c | Replaced | dev/src/draw.rs | the editor and tools |
-| `ui_widget_delete` | interface/ui_widget.c | Matched | ui/src/lib.rs | owed: the engine's own tests (ui/tests/tree.rs); no check against the original yet |
-| `ui_widgets_close_all` | interface/ui_widget.c | Matched | ui/src/lib.rs | owed: the engine's own tests (ui/tests/tree.rs); no check against the original yet |
-| `ui_widgets_close_all_for_local_player` | interface/ui_widget.c | Matched | ui/src/lib.rs | owed: the engine's own tests (ui/tests/tree.rs); no check against the original yet |
-| `ui_widgets_delete_history` | interface/ui_widget.c | Matched | ui/src/lib.rs | owed: the engine's own tests (ui/tests/tree.rs); no check against the original yet |
-| `ui_widgets_pop_stack` | interface/ui_widget.c | Matched | ui/src/lib.rs | owed: the engine's own tests (ui/tests/tree.rs); no check against the original yet |
-| `ui_play_audio_feedback_sound` | interface/ui_widget.c | Matched | ui/src/lib.rs | owed: the engine's own tests (ui/tests/tree.rs); no check against the original yet |
+| `ui_widget_delete` | interface/ui_widget.c | Matched | ui/src/lib.rs | ui/tests/tree.rs (measure) |
+| `ui_widgets_close_all` | interface/ui_widget.c | Matched | ui/src/lib.rs | ui/tests/tree.rs (measure) |
+| `ui_widgets_close_all_for_local_player` | interface/ui_widget.c | Matched | ui/src/lib.rs | ui/tests/tree.rs (measure) |
+| `ui_widgets_delete_history` | interface/ui_widget.c | Matched | ui/src/lib.rs | ui/tests/tree.rs (measure) |
+| `ui_widgets_pop_stack` | interface/ui_widget.c | Matched | ui/src/lib.rs | ui/tests/tree.rs (measure) |
+| `ui_play_audio_feedback_sound` | interface/ui_widget.c | Matched | ui/src/lib.rs | ui/tests/tree.rs (measure) |
 | `ui_debug_draw_outline` | interface/ui_widget.c | Replaced | dev/src/draw.rs | the editor and tools |
 | `ui_debug_draw_mark` | interface/ui_widget.c | Replaced | dev/src/draw.rs | the editor and tools |
 | `ui_debug_draw_targets` | interface/ui_widget.c | Replaced | dev/src/draw.rs | the editor and tools |
@@ -1696,21 +1696,21 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `ui_mouse_press` | interface/ui_widget.c | Replaced | ui/src/pointer.rs | keyboard and mouse only |
 | `ui_mouse_child_index` | interface/ui_widget.c | Replaced | ui/src/pointer.rs | keyboard and mouse only |
 | `ui_mouse_list_shows_several` | interface/ui_widget.c | Replaced | ui/src/pointer.rs | keyboard and mouse only |
-| `widget_event_function_list_widget_goto_next_item` | interface/ui_widget.c | Matched | ui/src/lib.rs | owed: the engine's own tests (ui/tests/tree.rs); no check against the original yet |
-| `widget_event_function_list_widget_goto_previous_item` | interface/ui_widget.c | Matched | ui/src/lib.rs | owed: the engine's own tests (ui/tests/tree.rs); no check against the original yet |
+| `widget_event_function_list_widget_goto_next_item` | interface/ui_widget.c | Matched | ui/src/lib.rs | ui/tests/tree.rs (measure) |
+| `widget_event_function_list_widget_goto_previous_item` | interface/ui_widget.c | Matched | ui/src/lib.rs | ui/tests/tree.rs (measure) |
 | `ui_mouse_key_button` | interface/ui_widget.c | Replaced | ui/src/pointer.rs | keyboard and mouse only |
 | `ui_mouse_widget_is_item` | interface/ui_widget.c | Replaced | ui/src/pointer.rs | keyboard and mouse only |
 | `ui_mouse_note_list_step` | interface/ui_widget.c | Replaced | ui/src/pointer.rs | keyboard and mouse only |
-| `render_ui_widgets` | interface/ui_widget.c | Matched | ui/src/draw.rs | owed: the engine's own tests (ui/tests/draw.rs); no check against the original yet |
+| `render_ui_widgets` | interface/ui_widget.c | Matched | ui/src/draw.rs | ui/tests/draw.rs (measure) |
 | `ui_mouse_note_slot_band` | interface/ui_widget.c | Replaced | ui/src/pointer.rs | keyboard and mouse only |
 | `ui_mouse_note_target` | interface/ui_widget.c | Replaced | ui/src/pointer.rs | keyboard and mouse only |
-| `ui_widget_load_by_name_or_tag` | interface/ui_widget.c | Matched | ui/src/lib.rs | owed: the engine's own tests (ui/tests/tree.rs); no check against the original yet |
+| `ui_widget_load_by_name_or_tag` | interface/ui_widget.c | Matched | ui/src/lib.rs | ui/tests/tree.rs (measure) |
 | `display_scenario_help` | interface/ui_widget.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
 | `ui_mouse_merge_setting_rows` | interface/ui_widget.c | Replaced | ui/src/pointer.rs | keyboard and mouse only |
 | `ui_mouse_widen_values` | interface/ui_widget.c | Replaced | ui/src/pointer.rs | keyboard and mouse only |
-| `process_ui_widgets` | interface/ui_widget.c | Matched | ui/src/lib.rs | owed: the engine's own tests (ui/tests/tree.rs); no check against the original yet |
-| `begin_music_fade_out` | interface/ui_widget_event_handler_functions.c | Matched | ffi/src/ui_host.rs:651 | owed: the engine cites it, with no check against the original yet |
-| `main_menu_initialize` | interface/ui_widget_event_handler_functions.c | Matched | ffi/src/ui_host.rs:651 | owed: the engine cites it, with no check against the original yet |
+| `process_ui_widgets` | interface/ui_widget.c | Matched | ui/src/lib.rs | ui/tests/tree.rs (measure) |
+| `begin_music_fade_out` | interface/ui_widget_event_handler_functions.c | Matched | ffi/src/ui_host.rs:651 | ffi/tests/menu_music.rs (measure) |
+| `main_menu_initialize` | interface/ui_widget_event_handler_functions.c | Matched | ffi/src/ui_host.rs:651 | ffi/tests/menu_music.rs (measure) |
 | `virtual_keyboard_initialize` | interface/virtual_keyboard.c | Replaced | ui/src/pointer.rs | keyboard and mouse only |
 | `virtual_keyboard_dispose` | interface/virtual_keyboard.c | Replaced | ui/src/pointer.rs | keyboard and mouse only |
 | `virtual_keyboard_launch` | interface/virtual_keyboard.c | Replaced | ui/src/pointer.rs | keyboard and mouse only |
@@ -1732,11 +1732,11 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `virtual_keyboard_process_internal` | interface/virtual_keyboard.c | Replaced | ui/src/pointer.rs | keyboard and mouse only |
 | `virtual_keyboard_process` | interface/virtual_keyboard.c | Replaced | ui/src/pointer.rs | keyboard and mouse only |
 | `get_sprite_clip_rect` | interface/hud_draw.c | Matched | ffi/src/hud/sprite_reference.rs:4 | ffi/src/hud/sprite_reference.rs (trace) |
-| `hud_calculate_bitmap_bounds` | interface/hud_draw.c | Matched | ffi/src/hud.rs:206 | owed: the engine cites it, with no check against the original yet |
-| `widget_instance_can_handle_events` | interface/ui_widget.c | Matched | ui/src/lib.rs | owed: the engine's own tests (ui/tests/tree.rs); no check against the original yet |
-| `widget_instance_get_tail_child_widget` | interface/ui_widget.c | Matched | ui/src/lib.rs | owed: the engine's own tests (ui/tests/tree.rs); no check against the original yet |
-| `widget_instance_find_by_tag_index` | interface/ui_widget.c | Matched | ui/src/lib.rs | owed: the engine's own tests (ui/tests/tree.rs); no check against the original yet |
-| `widget_instance_get_cumulative_alpha_modifier` | interface/ui_widget.c | Matched | ui/src/draw.rs | owed: the engine's own tests (ui/tests/draw.rs); no check against the original yet |
+| `hud_calculate_bitmap_bounds` | interface/hud_draw.c | Matched | ffi/src/hud.rs:206 | ffi/tests/hud.rs (measure) |
+| `widget_instance_can_handle_events` | interface/ui_widget.c | Matched | ui/src/lib.rs | ui/tests/tree.rs (measure) |
+| `widget_instance_get_tail_child_widget` | interface/ui_widget.c | Matched | ui/src/lib.rs | ui/tests/tree.rs (measure) |
+| `widget_instance_find_by_tag_index` | interface/ui_widget.c | Matched | ui/src/lib.rs | ui/tests/tree.rs (measure) |
+| `widget_instance_get_cumulative_alpha_modifier` | interface/ui_widget.c | Matched | ui/src/draw.rs | ui/tests/draw.rs (measure) |
 | `ui_mouse_label_text_right` | interface/ui_widget.c | Replaced | ui/src/pointer.rs | keyboard and mouse only |
 | `ui_mouse_fit_button_targets` | interface/ui_widget.c | Replaced | ui/src/pointer.rs | keyboard and mouse only |
 | `ui_mouse_target_at` | interface/ui_widget.c | Replaced | ui/src/pointer.rs | keyboard and mouse only |
@@ -1752,13 +1752,13 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `ui_debug_log_click` | interface/ui_widget.c | Replaced | ui/src/pointer.rs | keyboard and mouse only |
 | `ui_debug_log_keyboard_tap` | interface/ui_widget.c | Replaced | ui/src/pointer.rs | keyboard and mouse only |
 | `ui_widgets_process_mouse` | interface/ui_widget.c | Replaced | ui/src/pointer.rs | keyboard and mouse only |
-| `widget_instance_render_recursive` | interface/ui_widget.c | Matched | ui/src/draw.rs:3 | owed: the engine cites it, with no check against the original yet |
-| `spinner_list_update` | interface/ui_widget.c | Matched | ui/src/lib.rs | owed: the engine's own tests (ui/tests/tree.rs); no check against the original yet |
-| `widget_instance_tab_to_next_valid_widget` | interface/ui_widget.c | Matched | ui/src/lib.rs | owed: the engine's own tests (ui/tests/tree.rs); no check against the original yet |
-| `widget_instance_tab_to_previous_valid_widget` | interface/ui_widget.c | Matched | ui/src/lib.rs | owed: the engine's own tests (ui/tests/tree.rs); no check against the original yet |
-| `widget_takes_any_controller` | interface/ui_widget.c | Matched | ui/src/lib.rs | owed: the engine's own tests (ui/tests/tree.rs); no check against the original yet |
-| `widget_takes_events_of_controller` | interface/ui_widget.c | Matched | ui/src/lib.rs | owed: the engine's own tests (ui/tests/tree.rs); no check against the original yet |
-| `widget_instance_process_one_event_recursive` | interface/ui_widget.c | Matched | ui/src/lib.rs | owed: the engine's own tests (ui/tests/tree.rs); no check against the original yet |
+| `widget_instance_render_recursive` | interface/ui_widget.c | Matched | ui/src/draw.rs:3 | ui/tests/draw.rs (measure) |
+| `spinner_list_update` | interface/ui_widget.c | Matched | ui/src/lib.rs | ui/tests/tree.rs (measure) |
+| `widget_instance_tab_to_next_valid_widget` | interface/ui_widget.c | Matched | ui/src/lib.rs | ui/tests/pointer.rs (measure) |
+| `widget_instance_tab_to_previous_valid_widget` | interface/ui_widget.c | Matched | ui/src/lib.rs | ui/tests/pointer.rs (measure) |
+| `widget_takes_any_controller` | interface/ui_widget.c | Matched | ui/src/lib.rs | ui/tests/tree.rs (measure) |
+| `widget_takes_events_of_controller` | interface/ui_widget.c | Matched | ui/src/lib.rs | ui/tests/tree.rs (measure) |
+| `widget_instance_process_one_event_recursive` | interface/ui_widget.c | Matched | ui/src/lib.rs | ui/tests/tree.rs (measure) |
 | `virtual_keyboard_target_rectangles` | interface/virtual_keyboard.c | Replaced | ui/src/pointer.rs | keyboard and mouse only |
 | `virtual_keyboard_click` | interface/virtual_keyboard.c | Replaced | ui/src/pointer.rs | keyboard and mouse only |
 
@@ -1815,7 +1815,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `weapon_export_function_values` | items/weapons.c | Matched | sim/src/functions.rs:156 | sim/src/functions.rs (measure) |
 | `weapon_trigger_can_fire_again` | items/weapons.c | Matched | sim/src/weapon.rs:424 | sim/src/weapon.rs (measure) |
 | `weapon_effect_new` | items/weapons.c | Matched | sim/src/lib.rs:590 | sim/tests/weapons.rs (measure) |
-| `weapon_ready` | items/weapons.c | Matched | sim/src/weapon.rs:208 | sim/src/weapon.rs (measure); leaves out weapon_reset of its triggers and magazines, the ready time taken from the first-person animation's length |
+| `weapon_ready` | items/weapons.c | Partial | sim/src/weapon.rs:208 | sim/src/weapon.rs (measure); leaves out weapon_reset of its triggers and magazines, the ready time taken from the first-person animation's length |
 | `projectile_distribute` | items/weapons.c | Matched | sim/src/projectile.rs | sim/src/projectile.rs (measure) |
 | `trigger_create_projectiles` | items/weapons.c | Matched | sim/src/projectile.rs | sim/src/projectile.rs (measure) |
 | `weapon_trigger_fire` | items/weapons.c | Matched | sim/src/weapon.rs:496 | sim/src/weapon.rs (measure) |
@@ -1861,7 +1861,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `main_movie_start` | main/main.c | Replaced | ui/src/loading.rs | Bink; no Bink movies; the loading screen stands in |
 | `main_framerate_render` | main/main.c | Replaced |  | through its caller `interface_draw_fullscreen_overlays` |
 | `halt_and_catch_fire` | main/main.c | Replaced |  | through its caller `main` |
-| `main_loop` | main/main.c | Partial | ffi/src/lib.rs:1133 | leaves out the menu and the shell, switching maps, the network connection, the console's frame; owed: the engine's own version; no check against the original yet |
+| `main_loop` | main/main.c | Partial | ffi/src/lib.rs:1133 | ffi/src/lib.rs (measure); leaves out the menu and the shell, switching maps, the network connection, the console's frame |
 | `debug_keys_initialize` | main/debug_keys.c | Replaced | dev/src/control.rs | the editor and tools |
 | `debug_keys_dispose` | main/debug_keys.c | Replaced | dev/src/control.rs | the editor and tools |
 | `debug_keys_update` | main/debug_keys.c | Replaced | dev/src/control.rs | the editor and tools |
@@ -2281,11 +2281,11 @@ docs/engine.md's "The coverage census" says what each class needs.
 | Function | File | Class | Engine | Evidence |
 | --- | --- | --- | --- | --- |
 | `animation_get_frame_data` | models/model_animation_definitions.c | Ported |  | `tools/engine_animation_reference.py` |
-| `animation_loop_frame_index` | models/model_animations.c | Matched | sim/src/animation.rs | owed: the engine's own tests (sim/tests/stock_animations.rs); no check against the original yet |
-| `animation_second_key_frame_index` | models/model_animations.c | Matched | sim/src/animation.rs | owed: the engine's own tests (sim/tests/stock_animations.rs); no check against the original yet |
-| `animation_sound_frame_index` | models/model_animations.c | Matched | sim/src/animation.rs | owed: the engine's own tests (sim/tests/stock_animations.rs); no check against the original yet |
+| `animation_loop_frame_index` | models/model_animations.c | Matched | sim/src/animation.rs | sim/src/animation.rs (measure) |
+| `animation_second_key_frame_index` | models/model_animations.c | Matched | sim/src/animation.rs | sim/src/animation.rs (measure) |
+| `animation_sound_frame_index` | models/model_animations.c | Matched | sim/src/animation.rs | sim/src/animation.rs (measure) |
 | `animation_is_compressed` | models/model_animations.c | Ported |  | `tools/engine_animation_reference.py` |
-| `build_damage_animation_index` | models/model_animations.c | Matched | content/src/object.rs:522 | owed: the damage animations; reads the object, tag and map world, which the fake worlds do not hold (the animation graph) |
+| `build_damage_animation_index` | models/model_animations.c | Matched | content/src/object.rs:522 | sim/src/animation_graph.rs (measure) |
 | `animation_set_frame_size` | models/model_animations.c | Replaced | import/src/object.rs | maps imported to a typed format; the tool's, when it builds an animation: nothing in the game calls it, and the importer reads what it made |
 | `quaternion_decompress_8byte` | models/model_animations.c | Ported | sim/src/animation.rs:260 | `tools/engine_animation_reference.py` |
 | `quaternion_decompress_6byte` | models/model_animations.c | Ported | sim/src/animation.rs:272 | `tools/engine_animation_reference.py` |
@@ -2298,23 +2298,23 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `animation_get_keyframe_rotation` | models/model_animations.c | Ported | sim/src/animation.rs:448 | `tools/engine_animation_reference.py` |
 | `animation_get_keyframe_translation` | models/model_animations.c | Ported |  | `tools/engine_animation_reference.py` |
 | `animation_get_keyframe_scale` | models/model_animations.c | Ported |  | `tools/engine_animation_reference.py` |
-| `animation_update_internal` | models/model_animations.c | Matched | sim/src/animation.rs:1252 | owed: reads the object, tag and map world, which the fake worlds do not hold (the animation tag's frames); checked by the animation trace's frame counts |
+| `animation_update_internal` | models/model_animations.c | Matched | sim/src/animation.rs:1252 | sim/src/animation.rs (measure) |
 | `animation_get_node_orientations` | models/model_animations.c | Ported | sim/src/animation.rs:694 | `tools/engine_animation_reference.py` |
 | `replacement_animation_apply` | models/model_animations.c | Ported | sim/src/animation.rs:726 | `tools/engine_animation_reference.py` |
 | `overlay_animation_apply` | models/model_animations.c | Ported | sim/src/animation.rs:739 | `tools/engine_animation_reference.py` |
 | `overlay_animation_apply_scaled` | models/model_animations.c | Ported | sim/src/animation.rs:844 | `tools/engine_animation_reference.py` |
 | `overlay_animation_apply_continuous` | models/model_animations.c | Ported | sim/src/animation.rs:880 | `tools/engine_animation_reference.py` |
-| `overlay_animation_apply_continuous_scaled` | models/model_animations.c | Matched | sim/src/animation.rs:893 | owed: checked through the animation trace's overlays |
+| `overlay_animation_apply_continuous_scaled` | models/model_animations.c | Matched | sim/src/animation.rs:893 | sim/src/animation.rs (measure) |
 | `aiming_screen_apply` | models/model_animations.c | Ported | sim/src/animation.rs:762 | `tools/engine_animation_reference.py` |
 | `render_model_parts` | models/models.c | Replaced | app/Sources/OpenCEEngineRender/ModelPass.swift | the enhanced lighting and Metal renderer |
-| `model_interpolate_node_orientations` | models/models.c | Matched | sim/src/animation.rs | owed: the engine's own tests (sim/tests/stock_animations.rs); no check against the original yet |
+| `model_interpolate_node_orientations` | models/models.c | Matched | sim/src/animation.rs | sim/tests/animation_reference.rs (trace) |
 | `model_get_node_orientations` | models/models.c | Ported | sim/src/animation.rs:683 | `tools/engine_animation_reference.py` |
-| `model_get_node_matrices` | models/models.c | Matched | sim/src/animation.rs | owed: the engine's own tests (sim/tests/stock_animations.rs); no check against the original yet |
+| `model_get_node_matrices` | models/models.c | Matched | sim/src/animation.rs | sim/tests/animation_reference.rs (trace) |
 | `model_node_matrices_from_orientations` | models/models.c | Matched | sim/src/seats/model_reference.rs:2 | sim/src/seats/model_reference.rs (trace); the nodes' matrices match the game's bit for bit over six trees at sixty poses, with bad links and a loop; a node the walk never reaches keeps what its matrix had in the game and is the identity in the engine |
 | `model_find_marker` | models/models.c | Matched | sim/src/seats/model_reference.rs:3 | sim/src/seats/model_reference.rs (trace); the engine finds a marker by its name in any case, searching in turn where the game halves the sorted list: the same marker for the tools' sorted, unique names (traced through model_get_marker_by_name); a list out of order could find differently |
 | `model_get_default_inverse_matrix` | models/models.c | Replaced | ffi/src/render_model.rs | the enhanced lighting and Metal renderer |
 | `model_geometry_part_build_tangent_matrices` | models/models.c | Replaced | import/src/object.rs | maps imported to a typed format |
-| `render_model` | models/models.c | Matched | ffi/src/render_model.rs:67 | owed: the engine cites it, with no check against the original yet |
+| `render_model` | models/models.c | Matched | ffi/src/render_model.rs:67 | ffi/src/render_model.rs (measure) |
 | `model_get_marker_by_name` | models/models.c | Partial | sim/src/seats/model_reference.rs:3 | sim/src/seats/model_reference.rs (trace); leaves out the marker's region and permutation: every instance of the marker is taken, whichever permutation is drawn, the mirrored flag, which turns the marker's left the other way, the most markers the caller has room for: every instance is taken; asked without permutations and unmirrored, the markers' matrices match the game's bit for bit over 960 lookups, markers on nodes the model does not have skipped as the game skips them |
 | `model_build_tangent_matrices` | models/models.c | Replaced | import/src/object.rs | maps imported to a typed format |
 
@@ -2720,7 +2720,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `object_index_from_name_index` | objects/objects.c | Matched | campaign/src/objects.rs | campaign/tests/objects.rs (measure) |
 | `objects_disconnect_from_structure_bsp` | objects/objects.c | Matched | sim/src/objects.rs | sim/src/objects.rs (measure) |
 | `object_pvs_activate` | objects/objects.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
-| `objects_scripting_set_scale` | objects/objects.c | Matched | campaign/src/objects.rs | campaign/tests/objects.rs (measure); leaves out the frames asked for: the scale is taken at once |
+| `objects_scripting_set_scale` | objects/objects.c | Partial | campaign/src/objects.rs | campaign/tests/objects.rs (measure); leaves out the frames asked for: the scale is taken at once |
 | `object_delete` | objects/objects.c | Matched | campaign/src/lib.rs:270 | campaign/tests/objects.rs (measure) |
 | `object_detach` | objects/objects.c | Matched | campaign/src/objects.rs | campaign/tests/objects.rs (measure) |
 | `objects_reconnect_to_structure_bsp` | objects/objects.c | Matched | sim/src/objects.rs | sim/src/objects.rs (measure) |
@@ -3568,9 +3568,9 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `rasterizer_lights_end` | rasterizer/rasterizer_lights.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
 | `lens_flare_evaluate_corona_rotation_function` | rasterizer/rasterizer_lights.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
 | `rasterizer_lens_flare_submit` | rasterizer/rasterizer_lights.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
-| `rasterizer_lens_flare_submit_for_cluster` | rasterizer/rasterizer_lights.c | Matched | import/src/level.rs:1616 | owed: the engine cites it, with no check against the original yet |
+| `rasterizer_lens_flare_submit_for_cluster` | rasterizer/rasterizer_lights.c | Matched | import/src/level.rs:1616 | ffi/src/camera.rs (measure) |
 | `rasterizer_lens_flares_submit_occlusion_tests` | rasterizer/rasterizer_lights.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
-| `rasterizer_lens_flares_draw` | rasterizer/rasterizer_lights.c | Matched | ffi/src/camera.rs:3 | owed: the engine cites it, with no check against the original yet |
+| `rasterizer_lens_flares_draw` | rasterizer/rasterizer_lights.c | Matched | ffi/src/camera.rs:3 | ffi/src/camera.rs (measure) |
 | `lock_rasterizer_text_data` | rasterizer/rasterizer_text.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
 | `unlock_rasterizer_text_data` | rasterizer/rasterizer_text.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
 | `rasterizer_text_cache_initialize` | rasterizer/rasterizer_text.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
@@ -3784,8 +3784,8 @@ docs/engine.md's "The coverage census" says what each class needs.
 
 | Function | File | Class | Engine | Evidence |
 | --- | --- | --- | --- | --- |
-| `game_state_save` | saved games/game_state.c | Partial | campaign/src/checkpoint.rs:61 | leaves out the memory image: the saved game holds the inputs, replayed from the mission's start; owed: the engine's own tests (campaign/src/checkpoint.rs); no check against the original yet |
-| `game_state_revert` | saved games/game_state.c | Partial | campaign/src/checkpoint.rs:87 | leaves out the memory image: the saved game holds the inputs, replayed from the mission's start; owed: the engine's own tests (campaign/src/checkpoint.rs); no check against the original yet |
+| `game_state_save` | saved games/game_state.c | Partial | campaign/src/checkpoint.rs:61 | campaign/tests/flow.rs (measure); leaves out the memory image: the saved game holds the inputs, replayed from the mission's start |
+| `game_state_revert` | saved games/game_state.c | Partial | campaign/src/checkpoint.rs:87 | campaign/tests/flow.rs (measure); leaves out the memory image: the saved game holds the inputs, replayed from the mission's start |
 | `game_state_gpu_malloc` | saved games/game_state.c | Replaced |  | through its caller `_rasterizer_decals_initialize` |
 | `game_state_lruv_cache_new` | saved games/game_state.c | Replaced |  | through its caller `_rasterizer_decals_initialize` |
 | `game_state_initialize` | saved games/game_state.c | Replaced |  | through its caller `shell_initialize` |
@@ -3844,16 +3844,16 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `scenario_get_sky_definition_index` | scenario/scenario.c | Replaced |  | through its caller `scenario_get_sky` |
 | `scenario_get_sky` | scenario/scenario.c | Replaced |  | through its caller `render_sky` |
 | `scenario_fog_region_get_fog_index` | scenario/scenario.c | Replaced | ffi/src/camera.rs | the enhanced lighting and Metal renderer |
-| `scenario_switch_structure_bsp` | scenario/scenario.c | Matched | sim/src/lib.rs | owed: the engine's own tests (sim/src/lib.rs); no check against the original yet |
+| `scenario_switch_structure_bsp` | scenario/scenario.c | Matched | sim/src/lib.rs | sim/src/objects.rs (measure) |
 | `scenario_reload_structure_bsp_if_necessary` | scenario/scenario.c | Replaced | import/src/lib.rs | maps imported to a typed format |
 | `scenario_get_structure_reference_index_from_tag_index` | scenario/scenario.c | Replaced | import/src/lib.rs | maps imported to a typed format |
 | `scenario_trigger_volume_test_point` | scenario/scenario.c | Matched | content/src/campaign.rs:138 | content/tests/scenario_reference.rs (trace) |
-| `scenario_trigger_volume_test_object` | scenario/scenario.c | Matched | campaign/src/objects.rs | owed: its test is test_point's, traced (content/tests/scenario_reference.rs); the object's bounding-sphere centre it hands it is the units track's |
+| `scenario_trigger_volume_test_object` | scenario/scenario.c | Matched | campaign/src/objects.rs | campaign/tests/objects.rs (measure) |
 | `scenario_debug_to_file` | scenario/scenario.c | Replaced |  | through its caller `_texture_cache_bitmap_get_hardware_format` |
 | `global_structure_bsp_index_get` | scenario/scenario.c | Replaced | import/src/lib.rs | maps imported to a typed format |
 | `scenario_load` | scenario/scenario.c | Replaced | import/src/lib.rs | maps imported to a typed format |
 | `scenario_get_fog_region_index` | scenario/scenario.c | Replaced | ffi/src/camera.rs | the enhanced lighting and Metal renderer |
-| `scenario_location_water_depth` | scenario/scenario.c | Matched | content/src/level.rs:752 | owed: water; reads the object, tag and map world, which the fake worlds do not hold (the structure's fog planes) |
+| `scenario_location_water_depth` | scenario/scenario.c | Matched | content/src/level.rs:752 | content/src/level.rs (measure) |
 | `scenario_get_sound_environment` | scenario/scenario.c | Matched | ffi/src/sound_world/sound_environment_reference.rs:5 | ffi/src/sound_world/sound_environment_reference.rs (trace); one local player; the scenario's fog regions and water boundary are not in the engine, and the game glides once a frame where the engine glides once a tick (the same at 30 frames a second) |
 | `interpolate_real_rgb_color` | scenario/scenario.c | Replaced |  | through its caller `object_render_state_refresh` |
 | `scenario_get_atmospheric_fog` | scenario/scenario.c | Replaced |  | through its caller `render_player_frame` |
@@ -3932,28 +3932,28 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `sound_file_wave_info_get` | sound/sound_import/sound_wave.c | Replaced | import/src/lib.rs | the editor and tools |
 | `sound_file_wave_raw_data_get` | sound/sound_import/sound_wave.c | Replaced | import/src/lib.rs | the editor and tools |
 | `sound_file_wave_format` | sound/sound_import/sound_wave.c | Replaced | import/src/lib.rs | the editor and tools |
-| `game_looping_sound_new` | sound/game_sound.c | Matched | ffi/src/sound_world.rs | owed: the engine's own tests (ffi/src/sound_world.rs); no check against the original yet |
-| `game_looping_sound_delete` | sound/game_sound.c | Matched | ffi/src/sound_world.rs | owed: the engine's own tests (ffi/src/sound_world.rs); no check against the original yet |
-| `unattached_impulse_sound_new` | sound/game_sound.c | Matched | ffi/src/sound_events.rs | owed: the engine's own tests (ffi/src/sound_events.rs); no check against the original yet |
-| `unspatialized_impulse_sound_new` | sound/game_sound.c | Matched | sim/src/player.rs:1305 | owed: the engine cites it, with no check against the original yet |
-| `scripted_sound_time` | sound/game_sound.c | Matched | campaign/src/sounds.rs:181 | owed: sound; reads the object, tag and map world, which the fake worlds do not hold (the sound tag); campaign/tests/sounds.rs |
-| `scripted_sound_stop` | sound/game_sound.c | Matched | campaign/src/sounds.rs | owed: the engine's own tests (campaign/src/sounds.rs); no check against the original yet |
-| `scripted_looping_sound_set_alternate` | sound/game_sound.c | Matched | campaign/src/sounds.rs | owed: the engine's own tests (campaign/src/sounds.rs); no check against the original yet |
-| `unattached_looping_sound_start` | sound/game_sound.c | Matched | ffi/src/sound_world.rs | owed: the engine's own tests (ffi/src/sound_world.rs); no check against the original yet |
-| `unattached_looping_sound_stop` | sound/game_sound.c | Matched | ffi/src/sound_world.rs | owed: the engine's own tests (ffi/src/sound_world.rs); no check against the original yet |
-| `scripted_looping_sound_stop_internal` | sound/game_sound.c | Matched | campaign/src/sounds.rs | owed: the engine's own tests (campaign/src/sounds.rs); no check against the original yet |
-| `track_object_impulse_sound` | sound/game_sound.c | Matched | ffi/src/sound_events.rs | owed: the engine's own tests (ffi/src/sound_events.rs); no check against the original yet |
+| `game_looping_sound_new` | sound/game_sound.c | Matched | ffi/src/sound_world.rs | ffi/src/sound_world.rs (measure) |
+| `game_looping_sound_delete` | sound/game_sound.c | Matched | ffi/src/sound_world.rs | ffi/src/sound_world.rs (measure) |
+| `unattached_impulse_sound_new` | sound/game_sound.c | Matched | ffi/src/sound_events.rs | ffi/src/sound_events.rs (measure) |
+| `unspatialized_impulse_sound_new` | sound/game_sound.c | Matched | sim/src/player.rs:1305 | ffi/tests/every_sound.rs (measure) |
+| `scripted_sound_time` | sound/game_sound.c | Matched | campaign/src/sounds.rs:181 | campaign/tests/sounds.rs (measure) |
+| `scripted_sound_stop` | sound/game_sound.c | Matched | campaign/src/sounds.rs | campaign/tests/sounds.rs (measure) |
+| `scripted_looping_sound_set_alternate` | sound/game_sound.c | Matched | campaign/src/sounds.rs | campaign/tests/sounds.rs (measure) |
+| `unattached_looping_sound_start` | sound/game_sound.c | Matched | ffi/src/sound_world.rs | ffi/src/sound_world.rs (measure) |
+| `unattached_looping_sound_stop` | sound/game_sound.c | Matched | ffi/src/sound_world.rs | ffi/src/sound_world.rs (measure) |
+| `scripted_looping_sound_stop_internal` | sound/game_sound.c | Matched | campaign/src/sounds.rs | campaign/tests/sounds.rs (measure) |
+| `track_object_impulse_sound` | sound/game_sound.c | Matched | ffi/src/sound_events.rs | ffi/src/sound_events.rs (measure) |
 | `obstruction_cache_slot` | sound/game_sound.c | Ported |  | `tools/engine_sound_obstruction_reference.py` |
-| `location_potentially_audible` | sound/game_sound.c | Matched | ffi/src/sound_world.rs | owed: the engine's own tests (ffi/src/sound_world.rs); no check against the original yet |
-| `update_potentially_audible_looping_sound` | sound/game_sound.c | Matched | ffi/src/sound_world.rs | owed: the engine's own tests (ffi/src/sound_world.rs); no check against the original yet |
-| `object_impulse_sound_new` | sound/game_sound.c | Matched | ffi/src/sound_events.rs | owed: the engine's own tests (ffi/src/sound_events.rs); no check against the original yet |
-| `scripted_sound_new` | sound/game_sound.c | Matched | campaign/src/sounds.rs | owed: the engine's own tests (campaign/src/sounds.rs); no check against the original yet |
-| `scripted_looping_sound_stop` | sound/game_sound.c | Matched | campaign/src/sounds.rs | owed: the engine's own tests (campaign/src/sounds.rs); no check against the original yet |
-| `game_sound_update` | sound/game_sound.c | Matched | ffi/src/sound_world.rs | owed: the engine's own tests (ffi/src/sound_world.rs); no check against the original yet |
+| `location_potentially_audible` | sound/game_sound.c | Matched | ffi/src/sound_world.rs | ffi/src/sound_world.rs (measure) |
+| `update_potentially_audible_looping_sound` | sound/game_sound.c | Matched | ffi/src/sound_world.rs | ffi/src/sound_world.rs (measure) |
+| `object_impulse_sound_new` | sound/game_sound.c | Matched | ffi/src/sound_events.rs | ffi/src/sound_events.rs (measure) |
+| `scripted_sound_new` | sound/game_sound.c | Matched | campaign/src/sounds.rs | campaign/tests/sounds.rs (measure) |
+| `scripted_looping_sound_stop` | sound/game_sound.c | Matched | campaign/src/sounds.rs | campaign/tests/sounds.rs (measure) |
+| `game_sound_update` | sound/game_sound.c | Matched | ffi/src/sound_world.rs | ffi/src/sound_world.rs (measure) |
 | `compute_sound_obstruction` | sound/game_sound.c | Matched | ffi/src/sound_world/sound_obstruction_reference.rs:3 | ffi/src/sound_world/sound_obstruction_reference.rs (trace); the obstruction cache is the old port's and has nothing to match; a source at the listener in its own cluster is shut away where the game's occlusion is not a number |
-| `scripted_looping_sound_start` | sound/game_sound.c | Matched | campaign/src/sounds.rs | owed: the engine's own tests (campaign/src/sounds.rs); no check against the original yet |
+| `scripted_looping_sound_start` | sound/game_sound.c | Matched | campaign/src/sounds.rs | campaign/tests/sounds.rs (measure) |
 | `compress_ima_adpcm_audio_data` | sound/ima_adpcm.c | Replaced | dev/src/control.rs | the editor and tools |
-| `decompress_ima_adpcm_audio_data` | sound/ima_adpcm.c | Matched | audio/src/decode.rs | owed: the engine's own tests (audio/src/decode.rs); no check against the original yet |
+| `decompress_ima_adpcm_audio_data` | sound/ima_adpcm.c | Matched | audio/src/decode.rs | audio/src/decode.rs (measure) |
 | `byte_swap_bungie_ima_adpcm_header` | sound/ima_adpcm.c | Replaced | import/src/lib.rs | maps imported to a typed format; byte order is settled when the map is imported |
 | `sound_class_get` | sound/sound_classes.c | Matched | audio/src/classes.rs | audio/tests/sound_class_reference.rs (trace) |
 | `sound_classes_initialize` | sound/sound_classes.c | Ported |  | `tools/engine_sound_class_reference.py` |
@@ -3965,53 +3965,53 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `sound_classes_update` | sound/sound_classes.c | Matched | audio/src/classes.rs:579 | audio/tests/sound_class_reference.rs (trace) |
 | `sound_class_get_gain` | sound/sound_classes.c | Matched | audio/src/classes.rs | audio/tests/sound_class_reference.rs (trace) |
 | `sound_class_set_gain` | sound/sound_classes.c | Matched | audio/src/classes.rs:4 | audio/tests/sound_class_reference.rs (trace) |
-| `sound_definition_get_maximum_distance` | sound/sound_definitions.c | Matched | audio/src/player.rs | owed: the engine's own tests (audio/src/player.rs); no check against the original yet |
-| `sound_definition_get_minimum_distance` | sound/sound_definitions.c | Matched | audio/src/player.rs | owed: the engine's own tests (audio/src/player.rs); no check against the original yet |
+| `sound_definition_get_maximum_distance` | sound/sound_definitions.c | Matched | audio/src/player.rs | audio/src/player.rs (measure) |
+| `sound_definition_get_minimum_distance` | sound/sound_definitions.c | Matched | audio/src/player.rs | audio/src/player.rs (measure) |
 | `sound_definition_find_pitch_range_by_pitch` | sound/sound_definitions.c | Ported | audio/src/choice.rs:80 | `tools/engine_sound_choice_reference.py` |
 | `try_to_reset_permutations` | sound/sound_definitions.c | Ported | audio/src/choice.rs:134 | `tools/engine_sound_choice_reference.py` |
 | `sound_definition_next_permutation` | sound/sound_definitions.c | Ported | audio/src/choice.rs:163 | `tools/engine_sound_choice_reference.py` |
-| `sound_is_active` | sound/sound_manager.c | Matched | audio/src/mixer.rs | owed: the engine's own tests (audio/src/mixer.rs); no check against the original yet |
-| `sound_scripted_dialog_is_playing` | sound/sound_manager.c | Matched | audio/src/player.rs | owed: the engine's own tests (audio/src/player.rs); no check against the original yet |
-| `sound_manager_set_sound_environment` | sound/sound_manager.c | Matched | audio/src/mixer.rs | owed: the engine's own tests (audio/src/mixer.rs); no check against the original yet |
+| `sound_is_active` | sound/sound_manager.c | Matched | audio/src/mixer.rs | audio/src/mixer.rs (measure) |
+| `sound_scripted_dialog_is_playing` | sound/sound_manager.c | Matched | audio/src/player.rs | audio/src/player.rs (measure) |
+| `sound_manager_set_sound_environment` | sound/sound_manager.c | Matched | audio/src/mixer.rs | ffi/src/sound_world/sound_environment_reference.rs (trace) |
 | `sound_scale_value` | sound/sound_manager.c | Ported | audio/src/choice.rs:50 | `tools/engine_sound_choice_reference.py` |
-| `sound_definition_is_playable` | sound/sound_manager.c | Matched | audio/src/player.rs | owed: the engine's own tests (audio/src/player.rs); no check against the original yet |
-| `listener_get` | sound/sound_manager.c | Matched | audio/src/player.rs | owed: the engine's own tests (audio/src/player.rs); no check against the original yet |
-| `sound_definition_promote` | sound/sound_manager.c | Matched | audio/src/choice.rs | owed: the engine's own tests (audio/src/choice.rs); no check against the original yet |
-| `sound_manager_master_gain` | sound/sound_manager.c | Matched | audio/src/player.rs:236 | owed: the sound manager's gain; reads the object, tag and map world, which the fake worlds do not hold; Phase 15 |
-| `sound_travel_milliseconds` | sound/sound_manager.c | Matched | audio/src/mixer.rs | owed: the engine's own tests (audio/src/mixer.rs); no check against the original yet |
-| `refresh_sound` | sound/sound_manager.c | Matched | audio/src/mixer.rs | owed: the engine's own tests (audio/src/mixer.rs); no check against the original yet |
-| `sound_channel_summary_build` | sound/sound_manager.c | Matched | audio/src/player.rs:299 | owed: the mixer's channels; reads the object, tag and map world, which the fake worlds do not hold (the sound manager); Phase 15 |
-| `channel_set_properties_hardware` | sound/sound_manager.c | Matched | audio/src/mixer.rs | owed: the engine's own tests (audio/src/mixer.rs); no check against the original yet |
-| `track_loop_track_sound` | sound/sound_manager.c | Matched | audio/src/player/looping.rs | owed: the engine's own tests (audio/src/player/looping.rs); no check against the original yet |
-| `track_loop_impulse_sound` | sound/sound_manager.c | Matched | audio/src/player/looping.rs | owed: the engine's own tests (audio/src/player/looping.rs); no check against the original yet |
-| `looping_sound_find` | sound/sound_manager.c | Matched | audio/src/player/looping.rs | owed: the engine's own tests (audio/src/player/looping.rs); no check against the original yet |
-| `looping_sound_new` | sound/sound_manager.c | Matched | audio/src/player/looping.rs | owed: the engine's own tests (audio/src/player/looping.rs); no check against the original yet |
-| `limit_pitch` | sound/sound_manager.c | Matched | audio/src/choice.rs:68 | owed: the engine cites it, with no check against the original yet |
+| `sound_definition_is_playable` | sound/sound_manager.c | Matched | audio/src/player.rs | audio/src/player.rs (measure) |
+| `listener_get` | sound/sound_manager.c | Matched | audio/src/player.rs | audio/src/player.rs (measure) |
+| `sound_definition_promote` | sound/sound_manager.c | Matched | audio/src/choice.rs | audio/tests/sound_choice_reference.rs (trace) |
+| `sound_manager_master_gain` | sound/sound_manager.c | Matched | audio/src/player.rs:236 | audio/src/player.rs (measure) |
+| `sound_travel_milliseconds` | sound/sound_manager.c | Matched | audio/src/mixer.rs | audio/src/mixer.rs (measure) |
+| `refresh_sound` | sound/sound_manager.c | Matched | audio/src/mixer.rs | audio/src/mixer.rs (measure) |
+| `sound_channel_summary_build` | sound/sound_manager.c | Matched | audio/src/player.rs:299 | audio/src/player.rs (measure) |
+| `channel_set_properties_hardware` | sound/sound_manager.c | Partial | audio/src/mixer.rs | audio/src/mixer.rs (measure); leaves out the sound card's hardware voices: the engine mixes every channel itself |
+| `track_loop_track_sound` | sound/sound_manager.c | Matched | audio/src/player/looping.rs | audio/src/player/looping.rs (measure) |
+| `track_loop_impulse_sound` | sound/sound_manager.c | Matched | audio/src/player/looping.rs | audio/src/player/looping.rs (measure) |
+| `looping_sound_find` | sound/sound_manager.c | Matched | audio/src/player/looping.rs | audio/src/player/looping.rs (measure) |
+| `looping_sound_new` | sound/sound_manager.c | Matched | audio/src/player/looping.rs | audio/src/player/looping.rs (measure) |
+| `limit_pitch` | sound/sound_manager.c | Matched | audio/src/choice.rs:68 | audio/tests/sound_choice_reference.rs (trace) |
 | `render_debug_sound` | sound/sound_manager.c | Replaced | dev/src/draw.rs | the editor and tools |
 | `render_debug_looping_sound` | sound/sound_manager.c | Replaced | dev/src/draw.rs | the editor and tools |
 | `sound_scale_random_value` | sound/sound_manager.c | Ported | audio/src/choice.rs:56 | `tools/engine_sound_choice_reference.py` |
-| `sound_calculate_fade` | sound/sound_manager.c | Matched | audio/src/player/looping.rs | owed: the engine's own tests (audio/src/player/looping.rs); no check against the original yet |
-| `sound_start_fade` | sound/sound_manager.c | Matched | audio/src/player/looping.rs | owed: the engine's own tests (audio/src/player/looping.rs); no check against the original yet |
-| `sound_stop` | sound/sound_manager.c | Matched | audio/src/mixer.rs | owed: the engine's own tests (audio/src/mixer.rs); no check against the original yet |
-| `source_distance` | sound/sound_manager.c | Matched | audio/src/player.rs | owed: the engine's own tests (audio/src/player.rs); no check against the original yet |
-| `source_distance_squared` | sound/sound_manager.c | Matched | audio/src/player.rs | owed: the engine's own tests (audio/src/player.rs); no check against the original yet |
-| `sound_preempts_sound` | sound/sound_manager.c | Matched | audio/src/player.rs | owed: the engine's own tests (audio/src/player.rs); no check against the original yet |
-| `sound_find_best_channel` | sound/sound_manager.c | Matched | audio/src/player.rs | owed: the engine's own tests (audio/src/player.rs); no check against the original yet |
-| `sound_find_channel` | sound/sound_manager.c | Matched | audio/src/player.rs | owed: the engine's own tests (audio/src/player.rs); no check against the original yet |
-| `sound_find_like_channel` | sound/sound_manager.c | Matched | audio/src/player.rs:299 | owed: the mixer's channels; reads the object, tag and map world, which the fake worlds do not hold (the sound manager); Phase 15 |
-| `update_channel_for_impulse_sound` | sound/sound_manager.c | Matched | audio/src/mixer.rs | owed: the engine's own tests (audio/src/mixer.rs); no check against the original yet |
-| `update_channel_for_looping_sound` | sound/sound_manager.c | Matched | audio/src/mixer.rs | owed: the engine's own tests (audio/src/mixer.rs); no check against the original yet |
-| `process_looping_sounds` | sound/sound_manager.c | Matched | audio/src/player/looping.rs:1 | owed: sound; reads the object, tag and map world, which the fake worlds do not hold; Phase 15 |
-| `sound_stop_all` | sound/sound_manager.c | Matched | audio/src/mixer.rs | owed: the engine's own tests (audio/src/mixer.rs); no check against the original yet |
-| `refresh_sounds` | sound/sound_manager.c | Matched | audio/src/mixer.rs | owed: the engine's own tests (audio/src/mixer.rs); no check against the original yet |
-| `update_channels` | sound/sound_manager.c | Matched | audio/src/mixer.rs | owed: the engine's own tests (audio/src/mixer.rs); no check against the original yet |
-| `refresh_listener` | sound/sound_manager.c | Matched | audio/src/player.rs | owed: the engine's own tests (audio/src/player.rs); no check against the original yet |
-| `sound_new_impulse` | sound/sound_manager.c | Matched | audio/src/player.rs:1 | owed: sound; reads the object, tag and map world, which the fake worlds do not hold; Phase 15 |
-| `sound_refresh_looping` | sound/sound_manager.c | Matched | audio/src/player/looping.rs:1 | owed: sound; reads the object, tag and map world, which the fake worlds do not hold; Phase 15 |
-| `detail_sound_random_offset` | sound/sound_manager.c | Matched | audio/src/player/looping.rs:686 | owed: a looping sound's details; draws from the game's random seed; Phase 15 |
-| `sound_render` | sound/sound_manager.c | Matched | audio/src/mixer.rs | owed: the engine's own tests (audio/src/mixer.rs); no check against the original yet |
-| `read_sound_preferences` | sound/sound_preferences.c | Partial | ffi/src/settings.rs | leaves out the original's preferences file: the volumes are kept with the app's settings; owed: the engine's own tests (ffi/src/settings.rs); no check against the original yet |
-| `write_sound_preferences` | sound/sound_preferences.c | Partial | ffi/src/settings.rs | leaves out the original's preferences file: the volumes are kept with the app's settings; owed: the engine's own tests (ffi/src/settings.rs); no check against the original yet |
+| `sound_calculate_fade` | sound/sound_manager.c | Matched | audio/src/player/looping.rs | audio/src/player/looping.rs (measure) |
+| `sound_start_fade` | sound/sound_manager.c | Matched | audio/src/player/looping.rs | audio/src/player/looping.rs (measure) |
+| `sound_stop` | sound/sound_manager.c | Matched | audio/src/mixer.rs | audio/src/mixer.rs (measure) |
+| `source_distance` | sound/sound_manager.c | Matched | audio/src/player.rs | audio/src/player.rs (measure) |
+| `source_distance_squared` | sound/sound_manager.c | Matched | audio/src/player.rs | audio/src/player.rs (measure) |
+| `sound_preempts_sound` | sound/sound_manager.c | Matched | audio/src/player.rs | audio/src/player.rs (measure) |
+| `sound_find_best_channel` | sound/sound_manager.c | Matched | audio/src/player.rs | audio/src/player.rs (measure) |
+| `sound_find_channel` | sound/sound_manager.c | Matched | audio/src/player.rs | audio/src/player.rs (measure) |
+| `sound_find_like_channel` | sound/sound_manager.c | Matched | audio/src/player.rs:299 | audio/src/player.rs (measure) |
+| `update_channel_for_impulse_sound` | sound/sound_manager.c | Matched | audio/src/mixer.rs | audio/src/mixer.rs (measure) |
+| `update_channel_for_looping_sound` | sound/sound_manager.c | Matched | audio/src/mixer.rs | audio/src/mixer.rs (measure) |
+| `process_looping_sounds` | sound/sound_manager.c | Matched | audio/src/player/looping.rs:1 | audio/src/player/looping.rs (measure) |
+| `sound_stop_all` | sound/sound_manager.c | Matched | audio/src/mixer.rs | audio/src/mixer.rs (measure) |
+| `refresh_sounds` | sound/sound_manager.c | Matched | audio/src/mixer.rs | audio/src/mixer.rs (measure) |
+| `update_channels` | sound/sound_manager.c | Matched | audio/src/mixer.rs | audio/src/mixer.rs (measure) |
+| `refresh_listener` | sound/sound_manager.c | Matched | audio/src/player.rs | audio/src/player.rs (measure) |
+| `sound_new_impulse` | sound/sound_manager.c | Matched | audio/src/player.rs:1 | audio/src/player.rs (measure) |
+| `sound_refresh_looping` | sound/sound_manager.c | Matched | audio/src/player/looping.rs:1 | audio/src/player/looping.rs (measure) |
+| `detail_sound_random_offset` | sound/sound_manager.c | Matched | audio/src/player/looping.rs:686 | audio/src/player/looping.rs (measure) |
+| `sound_render` | sound/sound_manager.c | Matched | audio/src/mixer.rs | audio/src/mixer.rs (measure) |
+| `read_sound_preferences` | sound/sound_preferences.c | Partial | ffi/src/settings.rs | ffi/tests/settings.rs (measure); leaves out the original's preferences file: the volumes are kept with the app's settings |
+| `write_sound_preferences` | sound/sound_preferences.c | Partial | ffi/src/settings.rs | ffi/tests/settings.rs (measure); leaves out the original's preferences file: the volumes are kept with the app's settings |
 | `sound_samples_per_second` | sound/sound_dsound_xbox.c | Replaced | app/Sources/OpenCEEngineKit/SoundOutput.swift | Xbox-only hardware |
 | `dsound_volume_from_gain` | sound/sound_dsound_xbox.c | Replaced | app/Sources/OpenCEEngineKit/SoundOutput.swift | Xbox-only hardware |
 | `dsound_frequency_from_pitch` | sound/sound_dsound_xbox.c | Replaced | app/Sources/OpenCEEngineKit/SoundOutput.swift | Xbox-only hardware |
@@ -4228,15 +4228,15 @@ docs/engine.md's "The coverage census" says what each class needs.
 | Function | File | Class | Engine | Evidence |
 | --- | --- | --- | --- | --- |
 | `text_bounds_draw_character` | text/draw_string.c | Replaced |  | through its caller `draw_unicode_string_compute_bounds` |
-| `draw_string_get_string` | text/draw_string.c | Matched | ui/src/draw.rs | owed: the engine's own tests (ui/tests/draw.rs); no check against the original yet |
-| `draw_string_set_tab_stops` | text/draw_string.c | Matched | ui/src/draw.rs | owed: the engine's own tests (ui/tests/draw.rs); no check against the original yet |
+| `draw_string_get_string` | text/draw_string.c | Matched | ui/src/draw.rs | ui/tests/draw.rs (measure) |
+| `draw_string_set_tab_stops` | text/draw_string.c | Partial | ui/src/draw.rs | ui/tests/draw.rs (measure); leaves out tab stops: the interface's strings are laid out without them |
 | `draw_string_set_indents` | text/draw_string.c | Replaced |  | through its caller `draw_string_and_hack_in_icons` |
-| `draw_string_set_color` | text/draw_string.c | Matched | ui/src/draw.rs | owed: the engine's own tests (ui/tests/draw.rs); no check against the original yet |
+| `draw_string_set_color` | text/draw_string.c | Matched | ui/src/draw.rs | ui/tests/draw.rs (measure) |
 | `draw_string_get_color` | text/draw_string.c | Replaced |  | through its caller `draw_string_and_hack_in_icons` |
-| `draw_string_set_font` | text/draw_string.c | Matched | ui/src/draw.rs | owed: the engine's own tests (ui/tests/draw.rs); no check against the original yet |
-| `draw_string_set_format` | text/draw_string.c | Matched | ui/src/draw.rs | owed: the engine's own tests (ui/tests/draw.rs); no check against the original yet |
-| `draw_string_set_draw_mode` | text/draw_string.c | Matched | ui/src/draw.rs | owed: the engine's own tests (ui/tests/draw.rs); no check against the original yet |
-| `draw_string_set_highlight` | text/draw_string.c | Matched | ui/src/draw.rs | owed: the engine's own tests (ui/tests/draw.rs); no check against the original yet |
+| `draw_string_set_font` | text/draw_string.c | Matched | ui/src/draw.rs | ui/tests/draw.rs (measure) |
+| `draw_string_set_format` | text/draw_string.c | Matched | ui/src/draw.rs | ui/tests/draw.rs (measure) |
+| `draw_string_set_draw_mode` | text/draw_string.c | Partial | ui/src/draw.rs | ui/tests/draw.rs (measure); leaves out the draw modes other than plain text |
+| `draw_string_set_highlight` | text/draw_string.c | Partial | ui/src/draw.rs | ui/tests/draw.rs (measure); leaves out the highlighted run of characters |
 | `bitmap_draw_character` | text/draw_string.c | Replaced | app/Sources/OpenCEEngineRender/UiPass.swift | the enhanced lighting and Metal renderer; drawn by the Metal renderer |
 | `styled_font_get` | text/draw_string.c | Replaced |  | through its caller `draw_unicode_string_compute_bounds` |
 | `parse_string_new` | text/draw_string.c | Replaced |  | through its caller `draw_string` |
@@ -4244,9 +4244,9 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `parse_unicode_string` | text/draw_string.c | Replaced |  | through its caller `draw_unicode_string` |
 | `draw_string_partial` | text/draw_string.c | Replaced |  | through its caller `draw_string` |
 | `draw_unicode_string_partial` | text/draw_string.c | Replaced |  | through its caller `draw_unicode_string` |
-| `draw_string` | text/draw_string.c | Matched | ui/src/draw.rs:200 | owed: the engine cites it, with no check against the original yet |
+| `draw_string` | text/draw_string.c | Matched | ui/src/draw.rs:200 | ui/tests/draw.rs (measure) |
 | `draw_unicode_string` | text/draw_string.c | Replaced |  | through its caller `draw_unicode_string_compute_bounds` |
-| `draw_string_compute_bounds` | text/draw_string.c | Matched | ui/src/draw.rs | owed: the engine's own tests (ui/tests/draw.rs); no check against the original yet |
+| `draw_string_compute_bounds` | text/draw_string.c | Partial | ui/src/draw.rs | ui/tests/draw.rs (measure); leaves out the bounds of a string measured on its own: the engine lays text out within its widget's bounds |
 | `draw_unicode_string_compute_bounds` | text/draw_string.c | Replaced |  | through its caller `draw_unicode_string_capital_middle` |
 | `bitmap_draw_string` | text/draw_string.c | Replaced | app/Sources/OpenCEEngineRender/UiPass.swift | the enhanced lighting and Metal renderer; drawn by the Metal renderer |
 | `font_get_character_by_ascii_code` | text/font_group.c | Replaced |  | through its caller `draw_string` |
