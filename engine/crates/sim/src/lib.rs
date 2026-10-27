@@ -46,6 +46,7 @@ pub mod real_math;
 pub mod safety;
 pub mod scenery;
 pub mod seats;
+pub mod unit_aiming;
 pub mod unit_animator;
 pub mod unit_control;
 pub mod unit_definition;
