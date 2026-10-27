@@ -15,16 +15,16 @@ Every task is test first (`workflow.md`): the trace, measurement or census test 
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Layouts from a second source' (Protocol in workflow.md) (automated)
 
 ## Phase 3: Fields
-- [ ] Task: Wire or class each of the 516 kept-but-unused fields, one commit per tag group.
-- [ ] Task: Trace each of the 151 untraced fields.
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Fields' (Protocol in workflow.md) (automated)
+- [x] Task: Wire or class each of the 516 kept-but-unused fields, one commit per tag group. f17c00e7 9f6dffb3 (once the layouts were filled there were 597; 280 are traced through locals or by hand, the 13 finished functions reading 26 dropped fields are Partial, and the 291 left are classed by reason in `unused_fields.tsv`; in two commits, since the census checks every group at once)
+- [x] Task: Trace each of the 151 untraced fields. f17c00e7 (198 once the layouts were filled; 0 now)
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Fields' (Protocol in workflow.md) (automated) 9f6dffb3: 1432 tests pass, census --check clean, clippy and treefmt clean
 
 ## Phase 4: Cache and bitmaps
-- [ ] Task: Port, match or class the cache and bitmaps functions.
-- [ ] Task: Conductor - User Manual Verification 'Phase 4: Cache and bitmaps' (Protocol in workflow.md) (automated)
+- [x] Task: Port, match or class the cache and bitmaps functions. (already done by the evidence track at 1c398cf4: cache 187 Replaced, bitmaps 1 Matched and 209 Replaced, nothing owed; the ratchet leaves both out, which counts as zero)
+- [x] Task: Conductor - User Manual Verification 'Phase 4: Cache and bitmaps' (Protocol in workflow.md) (automated): census --check clean
 
 ## Phase 5: The report
-- [ ] Task: Run `census` and record the counts before and after this track, per system and per class.
-- [ ] Task: Write the data-backed report and lower the ratchet to the new counts.
-- [ ] Task: Send the user the report; it sets up the next track.
-- [ ] Task: Conductor - User Manual Verification 'Phase 5: The report' (Protocol in workflow.md) (automated)
+- [x] Task: Run `census` and record the counts before and after this track, per system and per class. (report.md)
+- [x] Task: Write the data-backed report and lower the ratchet to the new counts. (report.md; the ratchet already holds the counts after, raised by hand once in f17c00e7, and `census --check` fails on any count below it)
+- [x] Task: Send the user the report; it sets up the next track.
+- [x] Task: Conductor - User Manual Verification 'Phase 5: The report' (Protocol in workflow.md) (automated): census --check, 1432 tests and nix flake check pass at 9f6dffb3
