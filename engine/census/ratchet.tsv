@@ -1,5 +1,5 @@
 system	missing	partial	owed
-ai	796	12	30
+ai	795	12	30
 camera	79	3	22
 cutscene	48	2	9
 devices	34	0	4
@@ -10,7 +10,7 @@ input	1	0	0
 interface	452	19	100
 items	102	1	22
 main	91	1	1
-math	66	0	0
+math	64	0	0
 models	11	1	9
 objects	227	15	44
 physics	45	22	13
@@ -21,4 +21,4 @@ shell	2	0	0
 sound	43	2	59
 structures	26	0	0
 text	21	0	9
-units	227	21	57
+units	221	22	47

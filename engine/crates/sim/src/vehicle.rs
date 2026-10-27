@@ -418,15 +418,23 @@ impl Ground {
 /// left on the stack and set as the controller goes; here zeroed each
 /// tick).
 #[derive(Clone, Copy, Debug, Default, PartialEq)]
-struct Powered {
-    ground_friction_velocity: f32,
-    water_friction_velocity: f32,
-    water_lift: f32,
-    air_friction_velocity: f32,
-    air_lift: f32,
-    thrust_fraction: f32,
-    antigrav_fraction: f32,
-    rotation: Quat,
+pub struct Powered {
+    /// The speed it drives at along the ground.
+    pub ground_friction_velocity: f32,
+    /// The speed it drives at through water.
+    pub water_friction_velocity: f32,
+    /// How much it lifts in water.
+    pub water_lift: f32,
+    /// The speed it drives at through the air.
+    pub air_friction_velocity: f32,
+    /// How much it lifts in the air.
+    pub air_lift: f32,
+    /// How much of its thrust it pushes with.
+    pub thrust_fraction: f32,
+    /// How much of its antigravity it holds with.
+    pub antigrav_fraction: f32,
+    /// How it is turned from the vehicle's frame.
+    pub rotation: Quat,
 }
 
 /// A mass point as the tick found it.
@@ -526,7 +534,7 @@ pub fn game_tick(
             && ((throttle.x > 0.0 && state.speed < 0.0)
                 || (throttle.x < 0.0 && state.speed > 0.0)));
     let left = state.up.cross(state.forward);
-    let steering = libm::atan2f(
+    let steering = arctangent(
         left.dot(controls.facing),
         controls.facing.dot(state.forward),
     );
@@ -598,19 +606,33 @@ pub fn game_tick(
     );
 
     if !state.at_rest {
-        match vehicle.kind {
-            VehicleKind::HumanJeep => jeep(state, vehicle, physics, level)?,
-            VehicleKind::HumanTank => tank(state, vehicle, physics, level)?,
-            VehicleKind::HumanBoat => boat(state, physics, level)?,
-            VehicleKind::AlienScout => scout(state, vehicle, physics, controls, steering, level)?,
-            VehicleKind::AlienFighter => fighter(state, vehicle, physics, controls, level)?,
-            // (a plane and a turret are left to the mass points alone)
-            VehicleKind::HumanPlane | VehicleKind::Turret => {
-                let mut powered = [Powered::identity(); 32];
-                physics_update(state, physics, &mut powered, Vec3::ZERO, Vec3::ZERO, level)?;
+        let setup = match vehicle.kind {
+            VehicleKind::HumanJeep => jeep_setup(state, vehicle, physics),
+            VehicleKind::HumanTank => tank_setup(state, vehicle, physics),
+            VehicleKind::HumanBoat => boat_setup(state, physics),
+            VehicleKind::AlienScout => {
+                let depth = level.water_depth(state.position);
+                scout_setup(state, vehicle, physics, controls, steering, depth)
             }
+            VehicleKind::AlienFighter => fighter_setup(state, vehicle, physics, controls),
+            // (a plane and a turret are left to the mass points alone)
+            VehicleKind::HumanPlane | VehicleKind::Turret => ControllerSetup::NONE,
+        };
+        // (the C passes no powered mass points; the engine's update reads
+        // them as pushing with nothing)
+        let mut powered = setup.powered.unwrap_or([Powered::identity(); 32]);
+        physics_update(
+            state,
+            physics,
+            &mut powered,
+            setup.force,
+            setup.torque,
+            level,
+        )?;
+        if vehicle.kind == VehicleKind::AlienScout {
+            scout_hover(state, physics);
         }
-        compute_airborne_ticks(state, physics);
+        compute_airborne_ticks(state);
         if state.at_rest {
             state.stop_time = STOP_TICKS;
         }
@@ -636,7 +658,8 @@ pub fn game_tick(
 }
 
 impl Powered {
-    fn identity() -> Powered {
+    /// Pushing with nothing, unturned.
+    pub fn identity() -> Powered {
         Powered {
             rotation: Quat::IDENTITY,
             ..Powered::default()
@@ -686,27 +709,6 @@ fn normalize(v: Vec3) -> (f32, Vec3) {
     }
 }
 
-/// `v` shortened to `length` if it is longer (limit3d).
-fn limit(v: Vec3, length: f32) -> Vec3 {
-    let squared = v.dot(v);
-    if squared > length * length {
-        v * (length / libm::sqrtf(squared))
-    } else {
-        v
-    }
-}
-
-/// -1, 0 or 1, as `v` is.
-fn sign(v: f32) -> f32 {
-    if v > 0.0 {
-        1.0
-    } else if v < 0.0 {
-        -1.0
-    } else {
-        0.0
-    }
-}
-
 /// How far `v` is from `begin` to `end`, 0 to 1, either way round (as
 /// physics.c's `pin_fraction`).
 pub fn pin_fraction(v: f32, begin: f32, end: f32) -> f32 {
@@ -740,92 +742,373 @@ fn roll(value: f32, by: f32, circumference: f32) -> f32 {
     }
 }
 
-fn jeep(
-    state: &mut VehicleState,
-    vehicle: &Vehicle,
-    physics: &Physics,
-    level: VehicleLevel<'_>,
-) -> Result<(), PhysicsError> {
-    state.wheel = roll(state.wheel, state.speed, vehicle.wheel_circumference);
-    let mut powered = [Powered::identity(); 32];
-    if physics.powered_mass_points.len() == 2 {
-        // (the front wheels turn one way and the back the other)
-        powered[0].ground_friction_velocity = state.speed;
-        powered[0].rotation = Quat::from_xyzw(
-            0.0,
-            0.0,
-            libm::sinf(state.turn * 0.5),
-            libm::cosf(state.turn * 0.5),
-        );
-        powered[1].ground_friction_velocity = state.speed;
-        powered[1].rotation = Quat::from_xyzw(
-            0.0,
-            0.0,
-            libm::sinf(-state.turn * 0.5),
-            libm::cosf(-state.turn * 0.5),
-        );
-    }
-    physics_update(state, physics, &mut powered, Vec3::ZERO, Vec3::ZERO, level)
+/// What a vehicle's controller hands its physics update: what its powered
+/// mass points push with (none: they push with nothing, as the C's NULL),
+/// and the magic force and torque it adds to the whole vehicle.
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct ControllerSetup {
+    /// Each powered mass point's push (none: the controller set none).
+    pub powered: Option<[Powered; 32]>,
+    /// The force it adds, in world units a game tick a tick times mass.
+    pub force: Vec3,
+    /// The torque it adds, about its centre of mass.
+    pub torque: Vec3,
 }
 
-fn tank(
+impl ControllerSetup {
+    /// No powered mass points and no magic force (the C's NULLs).
+    const NONE: ControllerSetup = ControllerSetup {
+        powered: None,
+        force: Vec3::ZERO,
+        torque: Vec3::ZERO,
+    };
+
+    fn of(powered: [Powered; 32]) -> ControllerSetup {
+        ControllerSetup {
+            powered: Some(powered),
+            ..ControllerSetup::NONE
+        }
+    }
+}
+
+/// A matrix's rows, forward, left and up (real_matrix3x3's `n`).
+type Rows = [[f32; 3]; 3];
+
+/// The game's `sine`: the C library's, in double.
+fn sine(x: f32) -> f32 {
+    libm::sin(f64::from(x)) as f32
+}
+
+/// The game's `cosine`, in double.
+fn cosine(x: f32) -> f32 {
+    libm::cos(f64::from(x)) as f32
+}
+
+/// The game's `arctangent2`, in double.
+fn arctangent(y: f32, x: f32) -> f32 {
+    libm::atan2(f64::from(y), f64::from(x)) as f32
+}
+
+/// The C's `CEILING(n, c)`: `c` if `n` is above it (a NaN passes).
+fn ceiling(n: f32, c: f32) -> f32 {
+    if n > c {
+        c
+    } else {
+        n
+    }
+}
+
+/// The C's `PIN(n, f, c)` (a NaN passes).
+fn pin(n: f32, f: f32, c: f32) -> f32 {
+    if n < f {
+        f
+    } else {
+        ceiling(n, c)
+    }
+}
+
+/// The C's `MIN(a, b)`.
+fn min_c(a: f32, b: f32) -> f32 {
+    if a > b {
+        b
+    } else {
+        a
+    }
+}
+
+/// The C's `MAX(a, b)`.
+fn max_c(a: f32, b: f32) -> f32 {
+    if a > b {
+        a
+    } else {
+        b
+    }
+}
+
+/// `dot_product3d`, in its order.
+fn dot3(a: Vec3, b: Vec3) -> f32 {
+    a.x * b.x + a.y * b.y + a.z * b.z
+}
+
+/// `normalize3d`: the length, and the vector scaled by its reciprocal
+/// (unchanged, and 0, below the game's epsilon; a NaN length scales).
+fn normalize3d(v: Vec3) -> (f32, Vec3) {
+    let length = libm::sqrtf(dot3(v, v));
+    if EPSILON > libm::fabsf(length) {
+        (0.0, v)
+    } else {
+        (length, v * (1.0 / length))
+    }
+}
+
+/// `normalize2d`.
+fn normalize2d(v: Vec2) -> Vec2 {
+    let length = libm::sqrtf(v.x * v.x + v.y * v.y);
+    if EPSILON > libm::fabsf(length) {
+        v
+    } else {
+        v * (1.0 / length)
+    }
+}
+
+/// `limit3d`: `v` shortened to `length` if it is longer.
+fn limit3d(v: Vec3, length: f32) -> Vec3 {
+    let squared = dot3(v, v);
+    if squared > length * length {
+        v * (length * (1.0 / libm::sqrtf(squared)))
+    } else {
+        v
+    }
+}
+
+/// -1, 0 or 1, as the C's `long sign` takes it.
+fn sign_c(v: f32) -> f32 {
+    if v != 0.0 {
+        if v < 0.0 {
+            -1.0
+        } else {
+            1.0
+        }
+    } else {
+        0.0
+    }
+}
+
+/// `rotate_vector_about_axis`: `v` turned about the unit `axis` by the
+/// angle of `sin` and `cos`.
+fn rotate_about_axis(v: Vec3, n: Vec3, sin: f32, cos: f32) -> Vec3 {
+    let d = dot3(n, v) * (1.0 - cos);
+    let x = Vec3::new(
+        n.z * v.y - v.z * n.y,
+        n.x * v.z - v.x * n.z,
+        n.y * v.x - v.y * n.x,
+    );
+    Vec3::new(
+        cos * v.x + d * n.x - sin * x.x,
+        cos * v.y + d * n.y - sin * x.y,
+        cos * v.z + d * n.z - sin * x.z,
+    )
+}
+
+/// `yaw_vectors`: `forward` turned about `up`.
+fn yaw_vectors(forward: Vec3, up: Vec3, sin: f32, cos: f32) -> Vec3 {
+    let cross = up.cross(forward);
+    Vec3::new(
+        forward.x * cos + cross.x * sin,
+        forward.y * cos + cross.y * sin,
+        forward.z * cos + cross.z * sin,
+    )
+}
+
+/// `pitch_vectors`: `forward` and `up` turned about their left.
+fn pitch_vectors(forward: Vec3, up: Vec3, sin: f32, cos: f32) -> (Vec3, Vec3) {
+    let backward = -forward;
+    (
+        Vec3::new(
+            forward.x * cos + up.x * sin,
+            forward.y * cos + up.y * sin,
+            forward.z * cos + up.z * sin,
+        ),
+        Vec3::new(
+            up.x * cos + backward.x * sin,
+            up.y * cos + backward.y * sin,
+            up.z * cos + backward.z * sin,
+        ),
+    )
+}
+
+/// A frame's rows: forward, `up` × forward, up.
+fn rows(forward: Vec3, up: Vec3) -> Rows {
+    let left = up.cross(forward);
+    [forward.to_array(), left.to_array(), up.to_array()]
+}
+
+fn transpose(n: Rows) -> Rows {
+    [
+        [n[0][0], n[1][0], n[2][0]],
+        [n[0][1], n[1][1], n[2][1]],
+        [n[0][2], n[1][2], n[2][2]],
+    ]
+}
+
+/// `matrix3x3_multiply(a, b)`, in its order of terms.
+fn multiply3(a: Rows, b: Rows) -> Rows {
+    [
+        [
+            b[0][0] * a[0][0] + b[0][1] * a[1][0] + a[2][0] * b[0][2],
+            b[0][1] * a[1][1] + b[0][0] * a[0][1] + b[0][2] * a[2][1],
+            b[0][1] * a[1][2] + b[0][0] * a[0][2] + b[0][2] * a[2][2],
+        ],
+        [
+            b[1][1] * a[1][0] + a[0][0] * b[1][0] + a[2][0] * b[1][2],
+            b[1][2] * a[2][1] + b[1][1] * a[1][1] + b[1][0] * a[0][1],
+            b[1][2] * a[2][2] + b[1][1] * a[1][2] + b[1][0] * a[0][2],
+        ],
+        [
+            b[2][0] * a[0][0] + b[2][1] * a[1][0] + b[2][2] * a[2][0],
+            b[2][2] * a[2][1] + b[2][1] * a[1][1] + b[2][0] * a[0][1],
+            b[2][2] * a[2][2] + b[2][1] * a[1][2] + b[2][0] * a[0][2],
+        ],
+    ]
+}
+
+/// `matrix4x3_multiply(a, b)`'s rotation.
+fn multiply4(a: Rows, b: Rows) -> Rows {
+    let mut r = [[0.0; 3]; 3];
+    for (row, out) in r.iter_mut().enumerate() {
+        for (col, value) in out.iter_mut().enumerate() {
+            *value = b[row][0] * a[0][col] + b[row][1] * a[1][col] + b[row][2] * a[2][col];
+        }
+    }
+    r
+}
+
+/// A rotation's quaternion (`matrix3x3_rotation_to_quaternion`, and the
+/// 4×3's, whose trace sums the same): its vector and its w.
+fn quaternion(n: Rows) -> (Vec3, f32) {
+    let trace = n[0][0] + n[1][1] + n[2][2];
+    if trace > 0.0 {
+        let s = libm::sqrtf(trace + 1.0);
+        let w = 0.5 * s;
+        let s = 0.5 / s;
+        let v = Vec3::new(
+            (n[2][1] - n[1][2]) * s,
+            (n[0][2] - n[2][0]) * s,
+            (n[1][0] - n[0][1]) * s,
+        );
+        return (v, w);
+    }
+    const NEXT: [usize; 3] = [1, 2, 0];
+    let mut i = 0;
+    if n[1][1] > n[0][0] {
+        i = 1;
+    }
+    if n[2][2] > n[i][i] {
+        i = 2;
+    }
+    let j = NEXT[i];
+    let k = NEXT[j];
+    let mut s = libm::sqrtf(n[i][i] - (n[k][k] + n[j][j]) + 1.0);
+    let mut q = [0.0; 3];
+    q[i] = s * 0.5;
+    if s != 0.0 {
+        s = 0.5 / s;
+    }
+    q[j] = (n[i][j] + n[j][i]) * s;
+    q[k] = (n[i][k] + n[k][i]) * s;
+    let w = (n[k][j] - n[j][k]) * s;
+    (Vec3::from_array(q), w)
+}
+
+/// `quaternion_to_angle_and_vector`: the axis and the angle, at most a
+/// half turn.
+fn angle_and_vector((v, w): (Vec3, f32)) -> (Vec3, f32) {
+    let (length, mut axis) = normalize3d(v);
+    let mut angle = 2.0 * arctangent(length, w);
+    if angle > std::f32::consts::PI {
+        axis = -axis;
+        angle = std::f32::consts::PI * 2.0 - angle;
+    }
+    (axis, angle)
+}
+
+/// A jeep's controller (update_human_jeep_physics): its wheels roll, and
+/// its two powered mass points drive at its speed, turned half its turn
+/// each way.
+pub fn jeep_setup(
     state: &mut VehicleState,
     vehicle: &Vehicle,
     physics: &Physics,
-    level: VehicleLevel<'_>,
-) -> Result<(), PhysicsError> {
+) -> ControllerSetup {
+    state.wheel = roll(state.wheel, state.speed, vehicle.wheel_circumference);
+    if physics.powered_mass_points.len() != 2 {
+        return ControllerSetup::NONE;
+    }
+    let angle = state.turn * 0.5;
+    let (cs, sn) = (cosine(angle), sine(angle));
+    let mut powered = [Powered::identity(); 32];
+    powered[0].ground_friction_velocity = state.speed;
+    powered[0].rotation = Quat::from_xyzw(0.0, 0.0, sn, cs);
+    powered[1].ground_friction_velocity = state.speed;
+    powered[1].rotation = Quat::from_xyzw(0.0, 0.0, -sn, cs);
+    ControllerSetup::of(powered)
+}
+
+/// A tank's controller (update_human_tank_physics): its treads roll, and
+/// drive at its speed less and plus its turn.
+pub fn tank_setup(
+    state: &mut VehicleState,
+    vehicle: &Vehicle,
+    physics: &Physics,
+) -> ControllerSetup {
     let left = state.speed - state.turn;
-    let right = state.speed + state.turn;
+    let right = state.turn + state.speed;
     state.treads[0] = roll(state.treads[0], left, vehicle.wheel_circumference);
     state.treads[1] = roll(state.treads[1], right, vehicle.wheel_circumference);
-    let mut powered = [Powered::identity(); 32];
-    if physics.powered_mass_points.len() == 2 {
-        powered[0].ground_friction_velocity = left;
-        powered[1].ground_friction_velocity = right;
+    if physics.powered_mass_points.len() != 2 {
+        return ControllerSetup::NONE;
     }
-    physics_update(state, physics, &mut powered, Vec3::ZERO, Vec3::ZERO, level)
+    let mut powered = [Powered::identity(); 32];
+    powered[0].ground_friction_velocity = left;
+    powered[1].ground_friction_velocity = right;
+    ControllerSetup::of(powered)
 }
 
 /// The fastest a boat rights itself, in radians a game tick a tick
 /// (`VEHICLE_ANGULAR_ACCELERATION`).
 const BOAT_RIGHTING: f32 = 0.013962634;
 
-fn boat(
-    state: &mut VehicleState,
-    physics: &Physics,
-    level: VehicleLevel<'_>,
-) -> Result<(), PhysicsError> {
-    let mut powered = [Powered::identity(); 32];
+/// A boat's controller (update_human_boat_physics): its rudder turns less
+/// the faster it goes, its three powered mass points lift it, and it is
+/// rolled back upright about its forward axis, leant into its slide.
+pub fn boat_setup(state: &VehicleState, physics: &Physics) -> ControllerSetup {
     if physics.powered_mass_points.len() != 3 {
-        return physics_update(state, physics, &mut powered, Vec3::ZERO, Vec3::ZERO, level);
+        return ControllerSetup::NONE;
     }
-    // (the rudder turns less the faster it goes)
-    let speed = libm::sqrtf(state.velocity.dot(state.velocity)) * 2.5;
-    let angle = (1.0 - speed.min(1.0)) * (state.turn * 0.5);
+    let speed = libm::fabsf(libm::sqrtf(dot3(state.velocity, state.velocity)) * 2.5);
+    let most = state.turn * 0.5;
+    let angle = (1.0 - ceiling(speed, 1.0)) * most;
+    let mut powered = [Powered::identity(); 32];
     powered[0].water_friction_velocity = state.speed;
     powered[0].water_lift = 0.003;
-    powered[0].rotation = Quat::from_xyzw(0.0, 0.0, libm::sinf(angle), libm::cosf(angle));
+    powered[0].rotation = Quat::from_xyzw(0.0, 0.0, sine(angle), cosine(angle));
     powered[1].water_lift = 0.003;
     powered[2].water_lift = 0.005;
 
-    // (rolled back upright about its forward axis, leant into its slide)
-    let (forward, up) = (state.forward, state.up);
-    let (length, upright) = normalize(forward * -forward.z + Vec3::Z);
+    let (f, up, v) = (state.forward, state.up, state.velocity);
+    let negative_k = -f.z;
+    let (length, upright) = normalize3d(Vec3::new(
+        f.x * negative_k + 0.0,
+        f.y * negative_k + 0.0,
+        f.z * negative_k + 1.0,
+    ));
     let torque = if length != 0.0 {
-        let cross = up.cross(forward);
-        let spin = forward.cross(state.velocity).dot(Vec3::Z) * 2.0 * std::f32::consts::PI;
-        let upright = rotate(upright, forward, spin);
+        let cross = up.cross(f);
+        // (vehicle_triple_product3d_target(v, f, up))
+        let (cx, cy, cz) = (
+            v.z * f.y - v.y * f.z,
+            f.z * v.x - v.z * f.x,
+            v.y * f.x - f.y * v.x,
+        );
+        let triple = cx * 0.0 + (cy * 0.0) + cz * 1.0;
+        let spin = triple * 2.0 * std::f32::consts::PI;
+        let upright = rotate_about_axis(upright, f, sine(spin), cosine(spin));
         let mut angle = angle_between(upright, up);
-        if cross.dot(upright) > 0.0 {
+        if dot3(cross, upright) > 0.0 {
             angle = -angle;
         }
-        let dot = state.angular_velocity.dot(forward);
-        let wanted = libm::sqrtf(angle.abs() * 2.0 * BOAT_RIGHTING) * sign(angle) - dot;
-        forward * (wanted.clamp(-BOAT_RIGHTING, BOAT_RIGHTING) * physics.xx_moment)
+        let dot = dot3(state.angular_velocity, f);
+        let root =
+            libm::sqrtf((f64::from(libm::fabsf(angle)) * 2.0 * f64::from(BOAT_RIGHTING)) as f32);
+        f * (pin(root * sign_c(angle) - dot, -BOAT_RIGHTING, BOAT_RIGHTING) * physics.xx_moment)
     } else {
         Vec3::ZERO
     };
-    physics_update(state, physics, &mut powered, Vec3::ZERO, torque, level)
+    ControllerSetup {
+        powered: Some(powered),
+        force: Vec3::ZERO,
+        torque,
+    }
 }
 
 /// The angle between two vectors (`angle_between_vectors3d`, through the
@@ -846,244 +1129,361 @@ pub fn angle_between(a: Vec3, b: Vec3) -> f32 {
     }
 }
 
-fn scout(
-    state: &mut VehicleState,
+/// A scout's controller (update_alien_scout_physics): out of the water
+/// and not upside down, it is pushed toward its throttle and turned toward
+/// its steering as far as it hovers, levelled as far as it does not, and
+/// braked; `water_depth` is how deep its centre is.
+pub fn scout_setup(
+    state: &VehicleState,
     vehicle: &Vehicle,
     physics: &Physics,
     controls: &VehicleControls,
     steering: f32,
-    level: VehicleLevel<'_>,
-) -> Result<(), PhysicsError> {
+    water_depth: f32,
+) -> ControllerSetup {
     let antigrav = controls.seat_power[0];
     let mut powered = [Powered::identity(); 32];
-    for point in powered.iter_mut() {
+    for point in powered.iter_mut().take(physics.powered_mass_points.len()) {
         point.antigrav_fraction = antigrav;
     }
     let throttle = controls.throttle;
     let hover = state.hover;
-    let (forward, up) = (state.forward, state.up);
+    let (forward, up, spin) = (state.forward, state.up, state.angular_velocity);
     let mut force = Vec3::ZERO;
     let mut torque = Vec3::ZERO;
-    // (out of the water, and not upside down)
-    if level.water_depth(state.position) < 0.5 && up.z > -0.2 {
-        let frame = frame(forward, up);
+    if water_depth < 0.5 && up.z > -0.2 {
+        let left = up.cross(forward);
+        let v = state.velocity;
+        let local = Vec3::new(
+            v.x * forward.x + v.y * forward.y + v.z * forward.z,
+            v.x * left.x + v.y * left.y + v.z * left.z,
+            v.x * up.x + v.y * up.y + v.z * up.z,
+        );
         if hover > 0.0 {
-            let local = frame.transpose() * state.velocity;
-            let fastest = vehicle.maximum_forward_speed * if state.brake { 0.8 } else { 1.0 };
+            let mut fastest = vehicle.maximum_forward_speed;
+            if state.brake {
+                fastest *= 0.8;
+            }
             let mut most = vehicle.speed_acceleration;
             let acceleration = Vec3::new(
                 fastest * throttle.x - local.x,
                 fastest * throttle.y - local.y,
                 0.0,
             );
-            if state.on_ground_ticks > 0 && steering.abs() > std::f32::consts::FRAC_PI_4 {
-                most *= 1.0 - (f32::from(state.on_ground_ticks) * 0.05).min(0.98);
+            if state.on_ground_ticks > 0 && libm::fabsf(steering) > std::f32::consts::FRAC_PI_4 {
+                most *= 1.0 - min_c(f32::from(state.on_ground_ticks) * 0.05, 0.98);
             }
-            let acceleration = frame * limit(acceleration, most);
-            force += acceleration * (physics.mass * hover);
+            let a = limit3d(acceleration, most);
+            let a = Vec3::new(
+                a.x * forward.x + a.y * left.x + a.z * up.x,
+                a.x * forward.y + a.y * left.y + a.z * up.y,
+                a.x * forward.z + a.y * left.z + a.z * up.z,
+            );
+            force += a * (physics.mass * hover);
 
-            let current = up.dot(state.angular_velocity);
-            let mut desired = libm::sqrtf(steering.abs() * 0.0069813174) * sign(steering);
-            if desired.abs() > EPSILON && steering / desired < 2.0 {
+            let current = dot3(up, spin);
+            let root =
+                libm::sqrtf((f64::from(libm::fabsf(steering)) * f64::from(0.0069813174f32)) as f32);
+            let mut desired = root * sign_c(steering);
+            if libm::fabsf(desired) > EPSILON && steering / desired < 2.0 {
                 desired = steering * 0.5;
             }
-            let error = (desired - current).clamp(-0.0034906587, 0.0034906587);
-            torque += up * (error * physics.zz_moment * hover);
+            let error = pin(desired - current, -0.0034906587, 0.0034906587);
+            let mut turn = error * physics.zz_moment;
+            turn *= hover;
+            torque += up * turn;
         }
         if hover < 1.0 {
-            let left = up.cross(forward);
-            let flat_forward = Vec2::new(forward.x, forward.y).normalize_or_zero();
-            let flat_left = Vec2::new(left.x, left.y).normalize_or_zero();
-            let (pitch, roll);
+            let flat_forward = normalize2d(Vec2::new(forward.x, forward.y));
+            let flat_left = normalize2d(Vec2::new(left.x, left.y));
+            let mut control = Vec2::ZERO;
+            let (pitch, mut roll);
             if up.z > 0.0 {
+                let dot2 = |a: Vec2, b: Vec2| a.x * b.x + a.y * b.y;
                 let flat_up = Vec2::new(up.x, up.y);
-                let flat_spin = Vec2::new(state.angular_velocity.x, state.angular_velocity.y);
-                let align = Vec2::new(flat_up.dot(flat_forward), flat_up.dot(flat_left));
-                let rate = Vec2::new(flat_spin.dot(flat_left), -flat_spin.dot(flat_forward));
-                let level = -align - rate * 15.0;
-                let a = level.x.abs() * sign(throttle.x * level.x);
-                let b = level.y.abs() * sign(throttle.y * level.y);
-                let control = Vec2::new(
-                    throttle.x * (a + 1.0).clamp(0.3, 2.5),
-                    throttle.y * (b + 1.0).clamp(0.3, 2.5),
-                ) * 0.0015514038;
+                let flat_spin = Vec2::new(spin.x, spin.y);
+                let align = Vec2::new(dot2(flat_up, flat_forward), dot2(flat_up, flat_left));
+                let rate = Vec2::new(dot2(flat_spin, flat_left), -dot2(flat_spin, flat_forward));
+                let level = Vec2::new(
+                    (0.0 - align.x) - 15.0 * rate.x,
+                    (0.0 - align.y) - 15.0 * rate.y,
+                );
+                let a = libm::fabsf(level.x) * sign_c(throttle.x * level.x);
+                let b = libm::fabsf(level.y) * sign_c(throttle.y * level.y);
+                control.x += throttle.x * pin(a + 1.0, 0.3, 2.5) * 0.0015514038;
+                control.y += throttle.y * pin(b + 1.0, 0.3, 2.5) * 0.0015514038;
                 let levelling = (1.0 - up.z) * 0.0038785094;
                 pitch = levelling * level.x + control.x;
-                roll = levelling * level.y + control.y;
+                roll = levelling * level.y;
             } else {
-                pitch = throttle.x * 0.0015514038;
+                pitch = throttle.x * 0.0015514038 + control.x;
                 roll = throttle.y * 0.0015514038;
             }
-            torque += (left * (physics.yy_moment * pitch) + forward * (-physics.xx_moment * roll))
-                * (1.0 - hover);
+            roll += control.y;
+            let left_scale = physics.yy_moment * pitch;
+            let forward_scale = -(physics.xx_moment * roll);
+            let mut tipped = Vec3::ZERO;
+            tipped += left * left_scale;
+            tipped += forward * forward_scale;
+            torque += tipped * (1.0 - hover);
         }
         if state.brake {
-            let slowing = if vehicle.maximum_forward_speed > 0.0 {
-                (forward.dot(state.velocity) / vehicle.maximum_forward_speed).clamp(0.0, 1.0)
-            } else {
-                0.0
-            };
-            let left = up.cross(forward);
+            let slowing = pin(dot3(forward, v) / vehicle.maximum_forward_speed, 0.0, 1.0);
             if slowing > 0.0 {
                 torque += left * (physics.yy_moment * slowing * hover * -0.005817764);
                 force += Vec3::Z * (physics.mass * slowing * hover * 0.004);
             }
             if state.airborne_ticks > 0 {
-                let (length, axis) = normalize(left.cross(Vec3::Z));
+                let (length, axis) = normalize3d(left.cross(Vec3::Z));
                 if length > 0.0 {
-                    let fade = (1.0 - f32::from(state.airborne_ticks) / 30.0).clamp(0.0, 1.0);
-                    force += axis * ((1.0 - hover) * physics.mass * fade * 0.002)
-                        + Vec3::Z * ((1.0 - hover) * physics.mass * fade * 0.001);
+                    let fade = pin(
+                        1.0 - f32::from(state.airborne_ticks) * (1.0 / 30.0),
+                        0.0,
+                        1.0,
+                    );
+                    force += axis * ((1.0 - hover) * physics.mass * fade * 0.002);
+                    force += Vec3::Z * ((1.0 - hover) * physics.mass * fade * 0.001);
                 }
             }
         }
         force *= antigrav;
         torque *= antigrav;
     }
-    physics_update(state, physics, &mut powered, force, torque, level)?;
+    ControllerSetup {
+        powered: Some(powered),
+        force,
+        torque,
+    }
+}
 
-    let maximum = state.up.z.max(0.4);
-    let (mut held, mut pushed) = (0usize, 0usize);
+/// A scout's hover after its physics update: toward the share of its
+/// powered mass points that antigrav, less as it tips over, by at most a
+/// tenth a game tick.
+pub fn scout_hover(state: &mut VehicleState, physics: &Physics) {
+    let maximum = max_c(state.up.z, 0.4);
+    let (mut held, mut pushed) = (0i16, 0i16);
     for (point, flags) in physics.mass_points.iter().zip(&state.points) {
         if point.powered_mass_point.is_some() {
-            pushed += 1;
+            pushed = pushed.wrapping_add(1);
             if flags & POINT_ANTIGRAVING != 0 {
-                held += 1;
+                held = held.wrapping_add(1);
             }
         }
     }
     let ratio = if pushed > 0 {
-        held as f32 / pushed as f32
+        f32::from(held) / f32::from(pushed)
     } else {
         0.0
     };
-    let target = (ratio * maximum).clamp(0.0, 1.0);
-    state.hover = target.clamp(state.hover - 0.1, state.hover + 0.1);
-    Ok(())
+    let mut target = pin(ratio * maximum, 0.0, 1.0);
+    if target - state.hover > 0.1 {
+        target = state.hover + 0.1;
+    } else if target - state.hover < -0.1 {
+        target = state.hover - 0.1;
+    }
+    state.hover = target;
 }
 
-fn fighter(
+/// A fighter's controller (update_alien_fighter_physics): the old one for
+/// a physics with a radius, else the new.
+pub fn fighter_setup(
     state: &mut VehicleState,
     vehicle: &Vehicle,
     physics: &Physics,
     controls: &VehicleControls,
-    level: VehicleLevel<'_>,
-) -> Result<(), PhysicsError> {
+) -> ControllerSetup {
+    if physics.powered_mass_points.len() != 2 {
+        return ControllerSetup::NONE;
+    }
     let power = controls.seat_power[0];
-    let fastest = vehicle.maximum_forward_speed;
-
-    // (toward its speed along where it faces)
-    let desired_velocity = state.forward * state.speed;
-    let throttle = if state.speed > 0.0 && fastest > 0.0 {
-        state.speed / fastest
-    } else if state.speed < 0.0 && vehicle.maximum_reverse_speed > 0.0 {
-        -state.speed / vehicle.maximum_reverse_speed
-    } else {
-        0.0
-    };
-    let mut most = throttle * vehicle.speed_acceleration;
-    let least = throttle * vehicle.speed_deceleration;
-    let mut acceleration = desired_velocity - state.velocity;
-    acceleration.z += GRAVITY;
-    let dot = desired_velocity.dot(acceleration);
-    let wanted = desired_velocity.dot(desired_velocity);
-    if dot > EPSILON && wanted > 0.0 {
-        most = (most - least) * ((dot * dot / acceleration.dot(acceleration)) / wanted) + least;
-    } else {
-        most = least;
-    }
-    let force = limit(acceleration, most) * (physics.mass * power);
-
-    // (and turned to where its driver looks)
-    let mut desired_forward = controls.facing;
-    let (length, mut desired_up) = normalize(Vec3::Z - controls.facing * controls.facing.z);
-    if length == 0.0 {
-        desired_up = Vec3::X;
-    }
-    if !controls.ai {
-        let (sin, cos) = (
-            libm::sinf(vehicle.fixed_gun_pitch),
-            libm::cosf(vehicle.fixed_gun_pitch),
-        );
-        let (f, u) = (desired_forward, desired_up);
-        desired_forward = f * cos + u * sin;
-        desired_up = u * cos - f * sin;
-    }
-    // (banked into the turn: Halo's yaw_vectors turns the up about the
-    // forward here, its arguments the other way round)
-    if fastest > 0.0 {
-        let cross = desired_forward.x * state.velocity.y - desired_forward.y * state.velocity.x;
-        let bank = cross / fastest * vehicle.maximum_left_turn;
-        let (sin, cos) = (libm::sinf(bank), libm::cosf(bank));
-        desired_up = desired_up * cos + desired_forward.cross(desired_up) * sin;
-    }
-    let desired = frame(desired_forward, desired_up);
-    let current = frame(state.forward, state.up);
-    let (axis, angle) = axis_angle(desired * current.transpose());
-    let desired_spin = axis * (angle * vehicle.turn_rate / std::f32::consts::PI);
-    let moment = (physics.xx_moment + physics.yy_moment + physics.zz_moment) / 3.0;
-    let torque = (desired_spin - state.angular_velocity) * (moment * power);
-
-    if vehicle.turn_rate > 0.0 {
-        let spin =
-            libm::sqrtf(state.angular_velocity.dot(state.angular_velocity)) / vehicle.turn_rate;
-        let change = if spin > state.thrust {
-            let most = ((1.0 - state.thrust) * (1.0 - state.thrust) * 0.2).clamp(0.01, 0.05);
-            (spin - state.thrust).min(most)
-        } else {
-            let most = -(state.thrust * state.thrust * 0.05).max(0.005);
-            (spin - state.thrust).max(most)
-        };
-        state.thrust += change;
-    }
-
     let mut powered = [Powered::identity(); 32];
     for point in powered.iter_mut().take(2) {
         point.antigrav_fraction = power;
     }
-    physics_update(state, physics, &mut powered, force, torque, level)
+    let (force, torque) = if physics.radius > 0.0 {
+        fighter_old(state, vehicle, physics, controls)
+    } else {
+        fighter_new(state, vehicle, physics, controls)
+    };
+    ControllerSetup {
+        powered: Some(powered),
+        force,
+        torque,
+    }
 }
 
-/// A rotation's axis and angle, the angle at most a half turn.
-fn axis_angle(m: Mat3) -> (Vec3, f32) {
-    let q = rotation_of(m);
-    let (w, v) = (q.w.clamp(-1.0, 1.0), Vec3::new(q.x, q.y, q.z));
-    let mut angle = 2.0 * libm::acosf(w);
-    let (length, mut axis) = normalize(v);
+/// update_alien_fighter_physics_new's force and torque: toward its speed
+/// along where it faces, and turned to where its driver looks, banked into
+/// its turn; its thrust follows its spin.
+fn fighter_new(
+    state: &mut VehicleState,
+    vehicle: &Vehicle,
+    physics: &Physics,
+    controls: &VehicleControls,
+) -> (Vec3, Vec3) {
+    let power = controls.seat_power[0];
+    let desired_velocity = state.forward * state.speed;
+    let throttle = if state.speed > 0.0 {
+        state.speed / vehicle.maximum_forward_speed
+    } else {
+        -(state.speed / vehicle.maximum_reverse_speed)
+    };
+    // (compute_acceleration)
+    let (most, least) = (
+        throttle * vehicle.speed_acceleration,
+        throttle * vehicle.speed_deceleration,
+    );
+    let mut acceleration = desired_velocity - state.velocity;
+    acceleration.z += GRAVITY;
+    let dot = dot3(desired_velocity, acceleration);
+    let most = if dot > EPSILON {
+        (most - least)
+            * ((dot * dot / dot3(acceleration, acceleration))
+                / dot3(desired_velocity, desired_velocity))
+            + least
+    } else {
+        least
+    };
+    let force = (limit3d(acceleration, most) * physics.mass) * power;
+
+    let facing = controls.facing;
+    let mut forward = facing;
+    let (length, mut up) = normalize3d(Vec3::new(
+        facing.x * -facing.z + 0.0,
+        facing.y * -facing.z + 0.0,
+        facing.z * -facing.z + 1.0,
+    ));
     if length == 0.0 {
-        return (Vec3::Z, 0.0);
+        up = Vec3::X;
     }
-    if angle > std::f32::consts::PI {
-        axis = -axis;
-        angle = 2.0 * std::f32::consts::PI - angle;
+    if !controls.ai {
+        let pitch = vehicle.fixed_gun_pitch;
+        (forward, up) = pitch_vectors(forward, up, sine(pitch), cosine(pitch));
     }
-    (axis, angle)
+    let v = state.velocity;
+    let yaw = (forward.x * v.y - forward.y * v.x) / vehicle.maximum_forward_speed
+        * vehicle.maximum_left_turn;
+    up = yaw_vectors(up, forward, sine(yaw), cosine(yaw));
+    let desired = rows(forward, up);
+    let current = transpose(rows(state.forward, state.up));
+    let (axis, angle) = angle_and_vector(quaternion(multiply3(desired, current)));
+    let desired_spin = axis * ((-angle) * vehicle.turn_rate * (1.0 / std::f32::consts::PI));
+    let moment = (physics.zz_moment + physics.yy_moment + physics.xx_moment) * (1.0 / 3.0);
+    let torque = ((desired_spin - state.angular_velocity) * moment) * power;
+
+    let spin =
+        libm::sqrtf(dot3(state.angular_velocity, state.angular_velocity)) / vehicle.turn_rate;
+    let thrust = state.thrust;
+    let delta = if spin > thrust {
+        min_c(
+            spin - thrust,
+            pin((1.0 - thrust) * (1.0 - thrust) * 0.2, 0.01, 0.05),
+        )
+    } else {
+        max_c(spin - thrust, -max_c(thrust * thrust * 0.05, 0.005))
+    };
+    state.thrust += delta;
+    (force, torque)
 }
 
-fn compute_airborne_ticks(state: &mut VehicleState, physics: &Physics) {
+/// update_alien_fighter_physics_old's force and torque: thrust toward its
+/// speed and lift as it flies, and a turn toward where its driver looks.
+fn fighter_old(
+    state: &VehicleState,
+    vehicle: &Vehicle,
+    physics: &Physics,
+    controls: &VehicleControls,
+) -> (Vec3, Vec3) {
+    let power = controls.seat_power[0];
+    let facing = controls.facing;
+    let (length, mut perpendicular) = normalize3d(Vec3::new(
+        -facing.z * facing.x,
+        -(facing.z * facing.y),
+        1.0 - facing.z * facing.z,
+    ));
+    if length == 0.0 {
+        perpendicular = Vec3::X;
+    }
+    let (forward, up, v) = (state.forward, state.up, state.velocity);
+    let speed = dot3(forward, v);
+    let thrust = (state.speed - speed) * physics.mass * 0.05;
+    let lift = (libm::fabsf(speed / vehicle.maximum_forward_speed) * physics.mass) * GRAVITY * 1.05;
+    let force = Vec3::new(
+        lift * up.x + thrust * forward.x,
+        lift * up.y + thrust * forward.y,
+        lift * up.z + thrust * forward.z,
+    );
+    let yaw = (facing.x * v.y - facing.y * v.x) * (std::f32::consts::PI * 0.5)
+        / libm::fabsf(vehicle.maximum_forward_speed);
+    perpendicular = yaw_vectors(perpendicular, facing, sine(yaw), cosine(yaw));
+    let actual = rows(forward, up);
+    let desired = transpose(rows(facing, perpendicular));
+    let (axis, angle) = angle_and_vector(quaternion(multiply4(actual, desired)));
+    let scaled = axis * (angle * (4.0 / 30.0));
+    let scale = physics.radius * physics.radius * physics.mass * 0.05;
+    let spin = state.angular_velocity;
+    let torque = Vec3::new(
+        (scaled.x - spin.x) * scale,
+        (scaled.y - spin.y) * scale,
+        (scaled.z - spin.z) * scale,
+    );
+    (force * power, torque * power)
+}
+
+/// Counts its ticks off and on the ground (compute_airborne_ticks): off
+/// unless a mass point is on the ground (which counts it on) or antigravs.
+pub fn compute_airborne_ticks(state: &mut VehicleState) {
     state.airborne_ticks = state.airborne_ticks.saturating_add(1);
-    for (point, flags) in physics.mass_points.iter().zip(&state.points) {
+    for flags in &state.points {
         if flags & POINT_ON_GROUND != 0 {
             state.airborne_ticks = 0;
             state.on_ground_ticks = state.on_ground_ticks.saturating_add(1);
             return;
         }
-        if point.powered_mass_point.is_some() && flags & POINT_ANTIGRAVING != 0 {
+        if flags & POINT_ANTIGRAVING != 0 {
             state.airborne_ticks = 0;
         }
     }
     state.on_ground_ticks = 0;
 }
 
-fn slowly_stop(state: &mut VehicleState) {
-    state.stop_time -= 1;
+/// A tick of a vehicle come to rest slowing to a stop
+/// (slowly_stop_vehicle): it slides and spins on, slower each tick.
+pub fn slowly_stop(state: &mut VehicleState) {
+    state.stop_time = state.stop_time.wrapping_sub(1);
     state.velocity *= 0.835;
     state.angular_velocity *= 0.835;
-    state.position += state.velocity;
-    let (angle, axis) = normalize(state.angular_velocity);
-    if angle > 0.0 {
-        state.forward = rotate(state.forward, axis, angle);
-        state.up = rotate(state.up, axis, angle);
+    let (p, v) = (state.position, state.velocity);
+    state.position = Vec3::new(v.x + p.x, p.y + v.y, p.z + v.z);
+    let (magnitude, a) = normalize3d(state.angular_velocity);
+    if magnitude != 0.0 {
+        // (matrix4x3_rotation_from_axis_and_angle)
+        let (s, c) = (sine(magnitude), cosine(magnitude));
+        let sq = a * a;
+        let sc = a * s;
+        let omc = 1.0 - c;
+        let mut n = [[0.0f32; 3]; 3];
+        n[0][0] = (1.0 - sq.x) * c + sq.x;
+        let t = a.y * a.x * omc;
+        n[1][0] = t - sc.z;
+        n[0][1] = sc.z + t;
+        n[1][1] = (1.0 - sq.y) * c + sq.y;
+        let t = a.z * a.x * omc;
+        n[2][0] = t + sc.y;
+        n[0][2] = t - sc.y;
+        n[2][2] = (1.0 - sq.z) * c + sq.z;
+        let t = a.z * a.y * omc;
+        n[2][1] = t - sc.x;
+        n[1][2] = sc.x + t;
+        let transform = |v: Vec3| {
+            Vec3::new(
+                v.x * n[0][0] + v.y * n[1][0] + v.z * n[2][0],
+                v.x * n[0][1] + v.y * n[1][1] + v.z * n[2][1],
+                v.x * n[0][2] + v.y * n[1][2] + v.z * n[2][2],
+            )
+        };
+        state.forward = transform(state.forward);
+        state.up = transform(state.up);
     }
     if state.stop_time == 0 {
         state.velocity = Vec3::ZERO;
@@ -1101,6 +1501,42 @@ fn spun(forward: Vec3, up: Vec3, spin: Vec3) -> (Vec3, Vec3) {
     let up = rotate(up, axis, angle);
     let (_, up) = normalize(up - forward * up.dot(forward));
     (forward, up)
+}
+
+/// The slip a mass point on the ground makes, if it slides fast enough
+/// (create_slipping_effects): at the ground under it, just above, facing
+/// along its slide and out of the ground, the harder the faster; `depth`
+/// is how far into the ground it sinks and `sliding` its velocity relative
+/// to the ground.
+pub fn slip(
+    position: Vec3,
+    normal: Vec3,
+    depth: f32,
+    radius: f32,
+    sliding: Vec3,
+    material: i16,
+    metallic: bool,
+) -> Option<Slip> {
+    let speed = libm::sqrtf(dot3(sliding, sliding));
+    // (as the C asks it, so that no speed at all makes no slip)
+    let slides = speed > SLIP_SPEED;
+    if !slides {
+        return None;
+    }
+    let scale = (speed - SLIP_SPEED) * 4.5454545;
+    let lift = depth - radius + 0.003;
+    let inverse = 0.8660254 / speed;
+    Some(Slip {
+        position: Vec3::new(
+            lift * normal.x + position.x,
+            lift * normal.y + position.y,
+            lift * normal.z + position.z,
+        ),
+        normal: sliding * inverse + normal * 0.5,
+        material,
+        metallic,
+        scale: pin(scale, 0.0, 1.0),
+    })
 }
 
 /// The friction along or across a mass point's axis, scaled by type (as
@@ -1209,17 +1645,18 @@ fn compute_new(
                 up,
             );
             flags |= POINT_ON_GROUND;
-            let speed = sliding.length();
-            if speed > SLIP_SPEED {
-                let under = position - normal * (point.radius - depth);
-                state.slips.push(Slip {
-                    position: under + normal * 0.003,
-                    normal: sliding * (0.8660254 / speed) + normal * 0.5,
-                    material: level.surfaces.map_or(-1, |surfaces| surfaces.at(under)),
-                    metallic: point.flags & MassPoint::METALLIC != 0,
-                    scale: ((speed - SLIP_SPEED) * 4.5454545).clamp(0.0, 1.0),
-                });
-            }
+            let under = position - normal * (point.radius - depth);
+            let material = level.surfaces.map_or(-1, |surfaces| surfaces.at(under));
+            let metallic = point.flags & MassPoint::METALLIC != 0;
+            state.slips.extend(slip(
+                position,
+                normal,
+                depth,
+                point.radius,
+                sliding,
+                material,
+                metallic,
+            ));
         }
 
         let mut push = Vec3::ZERO;
@@ -1676,9 +2113,16 @@ mod tests {
         let q = Quat::from_axis_angle(Vec3::new(1.0, 2.0, 3.0).normalize(), 1.2);
         let back = rotation_of(Mat3::from_quat(q));
         assert!(back.dot(q).abs() > 0.99999);
-        let (axis, angle) = axis_angle(Mat3::from_quat(q));
+        let m = Mat3::from_quat(q);
+        let rows = [
+            m.x_axis.to_array(),
+            m.y_axis.to_array(),
+            m.z_axis.to_array(),
+        ];
+        let (axis, angle) = angle_and_vector(quaternion(rows));
         assert!((angle - 1.2).abs() < 1e-4);
-        assert!((axis - Vec3::new(1.0, 2.0, 3.0).normalize()).length() < 1e-4);
+        let along = axis.dot(Vec3::new(1.0, 2.0, 3.0).normalize());
+        assert!((along.abs() - 1.0).abs() < 1e-4, "{axis}");
     }
 
     #[test]
@@ -1847,6 +2291,24 @@ mod tests {
         )?;
         assert!(!state.in_water && state.velocity.z < 0.0);
         Ok(())
+    }
+
+    /// A boat's tick: its controller, then its physics update.
+    fn boat(
+        state: &mut VehicleState,
+        physics: &Physics,
+        level: VehicleLevel<'_>,
+    ) -> Result<(), PhysicsError> {
+        let setup = boat_setup(state, physics);
+        let mut powered = setup.powered.unwrap_or([Powered::identity(); 32]);
+        physics_update(
+            state,
+            physics,
+            &mut powered,
+            setup.force,
+            setup.torque,
+            level,
+        )
     }
 
     #[test]

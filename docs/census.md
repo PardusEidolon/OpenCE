@@ -7,7 +7,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 
 | System | Ported | Matched | Native | Partial | Replaced | Missing | Owed |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| `ai` | 41 (1664 B) | 19 (3408 B) | | 12 (16320 B) | 91 (5616 B) | 796 (269258 B) | 30 |
+| `ai` | 42 (1744 B) | 19 (3408 B) | | 12 (16320 B) | 91 (5616 B) | 795 (269178 B) | 30 |
 | `bink` | | | | | 24 (3968 B) | | 0 |
 | `bitmaps` | | 1 (224 B) | | | 209 (63904 B) | | 0 |
 | `bungie_net` | | | | | 105 (18992 B) | | 0 |
@@ -25,7 +25,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `interface` | 6 (1408 B) | 96 (33424 B) | | 19 (6112 B) | 104 (21432 B) | 452 (94304 B) | 100 |
 | `items` | 9 (4080 B) | 24 (19328 B) | | 1 (128 B) | 1 (16 B) | 102 (12496 B) | 22 |
 | `main` | | | | 1 (1648 B) | 34 (5440 B) | 91 (8752 B) | 1 |
-| `math` | 42 (5552 B) | 6 (256 B) | 70 (4720 B) | | 25 (4016 B) | 66 (8624 B) | 0 |
+| `math` | 44 (5552 B) | 6 (256 B) | 70 (4720 B) | | 25 (4016 B) | 64 (8624 B) | 0 |
 | `memory` | | 2 (336 B) | 128 (19856 B) | | 102 (15104 B) | | 0 |
 | `models` | 17 (8928 B) | 12 (4880 B) | | 1 (464 B) | 7 (1616 B) | 11 (1680 B) | 9 |
 | `networking` | | | | | 288 (49824 B) | | 0 |
@@ -42,8 +42,8 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `tag_files` | | | 43 (4288 B) | | 5 (0 B) | | 0 |
 | `text` | | 9 (1936 B) | 63 (6864 B) | | 19 (5744 B) | 21 (2368 B) | 9 |
 | `tool` | | | | | 27 (8752 B) | | 0 |
-| `units` | 12 (2288 B) | 60 (26848 B) | | 21 (18128 B) | 9 (1616 B) | 227 (58640 B) | 57 |
-| **all** | 199 (32656 B) | 559 (178672 B) | 332 (38896 B) | 140 (77408 B) | 2773 (575768 B) | 3624 (707722 B) | 502 |
+| `units` | 18 (6432 B) | 59 (24528 B) | | 22 (20448 B) | 9 (1616 B) | 221 (54496 B) | 47 |
+| **all** | 208 (36880 B) | 558 (176352 B) | 332 (38896 B) | 141 (79728 B) | 2773 (575768 B) | 3615 (703498 B) | 492 |
 
 ## `ai`
 
@@ -57,12 +57,13 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `scale_vector2d` | ai/action_charge.c | Ported |  | `tools/engine_math_reference.py` |
 | `magnitude_squared2d` | ai/action_charge.c | Ported |  | `tools/engine_math_reference.py` |
 | `magnitude2d` | ai/action_charge.c | Ported |  | `tools/engine_math_reference.py` |
+| `normalize2d` | ai/action_charge.c | Ported |  | `tools/engine_vehicle_physics_reference.py` |
 | `dot_product2d` | ai/action_charge.c | Ported |  | `tools/engine_math_reference.py` |
 | `point_from_line3d` | ai/action_charge.c | Ported |  | `tools/engine_math_reference.py` |
 | `scale_vector3d` | ai/action_charge.c | Ported |  | `tools/engine_math_reference.py` |
 | `magnitude3d` | ai/action_charge.c | Ported |  | `tools/engine_item_reference.py` |
 | `normalize3d` | ai/action_charge.c | Ported |  | `tools/engine_item_reference.py` |
-| `dot_product3d` | ai/action_charge.c | Ported |  | `tools/engine_handle_action_reference.py` |
+| `dot_product3d` | ai/action_charge.c | Ported | sim/src/vehicle.rs:828 | `tools/engine_handle_action_reference.py` |
 | `subtract_vectors3d` | ai/action_charge.c | Ported |  | `tools/engine_physics_math_reference.py` |
 | `real_random` | ai/action_charge.c | Ported |  | `tools/engine_cause_damage_reference.py` |
 | `vector_from_points2d` | ai/action_obey.c | Ported |  | `tools/engine_math_reference.py` |
@@ -213,11 +214,11 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `ai_debug_render_path_line` | ai/ai_debug.c | Replaced | dev/src/draw.rs | the editor and tools |
 | `ai_debug_get_this_actor` | ai/ai_debug.c | Replaced | dev/src/draw.rs | the editor and tools |
 
-796 Missing (782 reached from `main_loop`), by file:
+795 Missing (781 reached from `main_loop`), by file:
 
 - ai/action_alert.c: `action_alert_setup`, `action_alert_begin`, `action_alert_control`, `action_alert_flush_position_indices`, `action_alert_flush_structure_indices`, `action_alert_update`, `action_alert_next_position`, `action_alert_perform`
 - ai/action_avoid.c: `action_avoid_setup`, `action_avoid_begin`, `action_avoid_end`, `action_avoid_perform`, `action_avoid_update`, `action_avoid_control`
-- ai/action_charge.c: `action_charge_begin`, `action_charge_find_target_range`, `action_charge_update`, `action_charge_control`, `action_charge_is_leaping`, `normalize2d`, `collision_test_line`, `action_charge_perform`, `action_charge_valid_melee_destination`, `action_charge_setup`
+- ai/action_charge.c: `action_charge_begin`, `action_charge_find_target_range`, `action_charge_update`, `action_charge_control`, `action_charge_is_leaping`, `collision_test_line`, `action_charge_perform`, `action_charge_valid_melee_destination`, `action_charge_setup`
 - ai/action_converse.c: `action_converse_setup`, `action_converse_begin`, `action_converse_perform`, `action_converse_update`, `action_converse_control`, `action_converse_replace_prop`, `actor_conversation_control`, `actor_conversation_end`, `action_converse_end`
 - ai/action_fight.c: `action_fight_setup`, `action_fight_begin`, `action_fight_end`, `action_fight_update`, `action_fight_control`, `action_fight_perform`
 - ai/action_flee.c: `action_flee_end`, `action_flee_flush_position_indices`, `action_flee_modify_color`, `action_flee_find_flee_position`, `action_flee_current_position_exposed`, `action_flee_replace_prop`, `action_flee_blind_panic`, `action_flee_setup`, `action_flee_begin`, `action_flee_update`, `action_flee_control`, `action_flee_at_flee_position`, `action_flee_perform`
@@ -1919,7 +1920,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `matrix3x3_transpose` | math/matrix_math.c | Native |  | `glam::Mat3` |
 | `matrix3x3_inverse` | math/matrix_math.c | Native |  | `glam::Mat3` |
 | `matrix3x3_from_axis_and_angle` | math/matrix_math.c | Native |  | `glam::Mat3` |
-| `matrix3x3_multiply` | math/matrix_math.c | Native |  | `glam::Mat3` |
+| `matrix3x3_multiply` | math/matrix_math.c | Native | sim/src/vehicle.rs:934 | `glam::Mat3` |
 | `matrix3x3_transform_vector` | math/matrix_math.c | Native |  | `glam::Mat3` |
 | `matrix4x3_rotation_from_vectors` | math/matrix_math.c | Ported |  | `tools/engine_animation_reference.py` |
 | `matrix4x3_rotation_from_angles` | math/matrix_math.c | Matched | sim/src/objects.rs:400 | sim/tests/math_extra_reference.rs (trace) |
@@ -1930,7 +1931,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `matrix4x3_transform_plane` | math/matrix_math.c | Native |  | `glam::Affine3A` |
 | `matrix4x3_inverse_transform_plane` | math/matrix_math.c | Native |  | `glam::Affine3A` |
 | `matrix3x3_from_forward_and_up` | math/matrix_math.c | Native |  | `glam::Mat3` |
-| `matrix3x3_rotation_to_quaternion` | math/matrix_math.c | Native |  | `glam::Quat` |
+| `matrix3x3_rotation_to_quaternion` | math/matrix_math.c | Native | sim/src/vehicle.rs:966 | `glam::Quat` |
 | `matrix4x3_from_plane` | math/matrix_math.c | Native |  | `glam::Affine3A` |
 | `periodic_functions_dispose` | math/periodic_functions.c | Replaced |  | through its caller `real_math_dispose` |
 | `periodic_function_evaluate` | math/periodic_functions.c | Ported | sim/src/periodic.rs:165 | `tools/engine_cause_damage_reference.py` |
@@ -2007,14 +2008,16 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `quantize_real_to_byte_lower_bound` | math/real_math.c | Matched | sim/src/vehicle_animation.rs:171 | sim/tests/math_extra_reference.rs (trace) |
 | `signed_angle_between_vectors2d` | math/real_math.c | Native |  | `glam::Vec2` |
 | `angle_between_vectors2d` | math/real_math.c | Native |  | `glam::Vec2` |
-| `angle_between_vectors3d` | math/real_math.c | Ported | sim/src/vehicle.rs:831 | `tools/engine_math_reference.py` |
+| `angle_between_vectors3d` | math/real_math.c | Ported | sim/src/vehicle.rs:1114 | `tools/engine_math_reference.py` |
 | `angle_between_normals3d` | math/real_math.c | Native |  | `glam::Vec3` |
+| `yaw_vectors` | math/real_math.c | Ported | sim/src/vehicle.rs:893 | `tools/engine_vehicle_physics_reference.py` |
+| `pitch_vectors` | math/real_math.c | Ported | sim/src/vehicle.rs:903 | `tools/engine_vehicle_physics_reference.py` |
 | `fast_normals_interpolate` | math/real_math.c | Native |  | `glam::Vec3` |
 | `normals_interpolate` | math/real_math.c | Native |  | `glam::Vec3` |
 | `reflect_vector3d` | math/real_math.c | Native |  | `glam::Vec3` |
 | `quaternion_normalize` | math/real_math.c | Ported | sim/src/animation.rs:190 | `tools/engine_animation_reference.py` |
 | `quaternion_from_angle_and_vector` | math/real_math.c | Native |  | `glam::Quat` |
-| `quaternion_to_angle_and_vector` | math/real_math.c | Native |  | `glam::Quat` |
+| `quaternion_to_angle_and_vector` | math/real_math.c | Native | sim/src/vehicle.rs:1003 | `glam::Quat` |
 | `quaternions_interpolate_and_normalize` | math/real_math.c | Ported | sim/src/animation.rs:202 | `tools/engine_animation_reference.py` |
 | `orientations_interpolate` | math/real_math.c | Replaced |  | through its caller `first_person_weapon_build_node_matrices` |
 | `euler_angles2d_from_vector3d` | math/real_math.c | Ported | sim/src/animation_blend.rs:179 | `tools/engine_math_reference.py` |
@@ -2026,7 +2029,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `valid_real_sine_cosine` | math/real_math.c | Native |  | `libm::sinf` |
 | `set_real_point3d` | math/real_math.h | Native |  | `glam::Vec3` |
 
-66 Missing (20 reached from `main_loop`), by file:
+64 Missing (18 reached from `main_loop`), by file:
 
 - math/geometry.c: `vector_intersect_plane3d`, `build_torus`, `convex_hull2d`, `convex_hull2d_test_circle`, `convex_hull2d_test_point`, `convex_hull2d_area`, `convex_hull2d_perimeter`, `convex_hull2d_test_vector`, `convex_hull3d_begin`, `convex_hull3d_expand`, `convex_hull3d`, `convex_hull3d_test_point`, `convex_hull3d_test_vector`, `points_dimension2d`
 - math/integer_math.c: `integer_square_root`
@@ -2034,7 +2037,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 - math/periodic_functions.c: `@periodic_function_build_variable_period_x_table`
 - math/probability.c: `factorial`, `permutations`, `combinations`, `permute`, `combine`
 - math/random_math.c: `seed_random_orientation`
-- math/real_math.c: `component_vectors_from_direction3d`, `vectors3d_from_euler_angles3d`, `fast_vector_intersection_with_sphere`, `point_in_rectangle2d`, `point_in_rectangle3d`, `circle_intersects_rectangle2d`, `point_in_cone2d`, `point_in_cone3d`, `point_in_sector2d`, `point_in_sector3d`, `circle_intersects_cone2d`, `circle_intersects_sector2d`, `sphere_intersects_cone3d`, `sphere_intersects_sector3d`, `point_in_triangle2d`, `circle_intersects_triangle2d`, `pill_intersects_triangle2d`, `pill_intersects_rectangle2d`, `sphere_intersects_rectangle3d`, `sphere_intersects_triangle3d`, `pill_intersects_triangle3d`, `vector_intersects_rectangle2d`, `vector_intersects_pill2d`, `vector_intersects_pill3d`, `vector_intersects_triangle2d`, `vector_intersects_triangle3d`, `vector_intersects_rectangle3d`, `pill_intersects_rectangle3d`, `quantize_real_to_byte_upper_bound`, `quantize_real_to_byte_rectangle3d`, `yaw_vectors`, `pitch_vectors`, `pin_normal_to_cone3d`, `refract_vector3d`, `point_in_pill2d`, `sphere_test_vector3d`, `pill_test_vector3d`, `point_from_planes3d`, `line_from_planes3d`, `angular_accelerate_to_position`, `accelerate_to_velocity3d`, `accerate_to_position3d`, `accelerate_to_velocity`
+- math/real_math.c: `component_vectors_from_direction3d`, `vectors3d_from_euler_angles3d`, `fast_vector_intersection_with_sphere`, `point_in_rectangle2d`, `point_in_rectangle3d`, `circle_intersects_rectangle2d`, `point_in_cone2d`, `point_in_cone3d`, `point_in_sector2d`, `point_in_sector3d`, `circle_intersects_cone2d`, `circle_intersects_sector2d`, `sphere_intersects_cone3d`, `sphere_intersects_sector3d`, `point_in_triangle2d`, `circle_intersects_triangle2d`, `pill_intersects_triangle2d`, `pill_intersects_rectangle2d`, `sphere_intersects_rectangle3d`, `sphere_intersects_triangle3d`, `pill_intersects_triangle3d`, `vector_intersects_rectangle2d`, `vector_intersects_pill2d`, `vector_intersects_pill3d`, `vector_intersects_triangle2d`, `vector_intersects_triangle3d`, `vector_intersects_rectangle3d`, `pill_intersects_rectangle3d`, `quantize_real_to_byte_upper_bound`, `quantize_real_to_byte_rectangle3d`, `pin_normal_to_cone3d`, `refract_vector3d`, `point_in_pill2d`, `sphere_test_vector3d`, `pill_test_vector3d`, `point_from_planes3d`, `line_from_planes3d`, `angular_accelerate_to_position`, `accelerate_to_velocity3d`, `accerate_to_position3d`, `accelerate_to_velocity`
 
 ## `memory`
 
@@ -2821,14 +2824,14 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `collision_move_point` | physics/collisions.c | Partial | physics/src/lib.rs | leaves out the original's collision BSP walk: Jolt answers the query on a mesh made from the collision BSP, so what is hit at an edge, and in what order, can differ; owed: the engine's own tests (physics/tests/world.rs); no check against the original yet |
 | `collision_move_pill` | physics/collisions.c | Partial | physics/src/lib.rs | leaves out the original's collision BSP walk: Jolt answers the query on a mesh made from the collision BSP, so what is hit at an edge, and in what order, can differ; owed: the engine's own tests (physics/tests/world.rs); no check against the original yet |
 | `collision_move_sphere` | physics/collisions.c | Partial | physics/src/lib.rs | leaves out the original's collision BSP walk: Jolt answers the query on a mesh made from the collision BSP, so what is hit at an edge, and in what order, can differ; owed: the engine's own tests (physics/tests/world.rs); no check against the original yet |
-| `pin_fraction` | physics/physics.c | Matched | sim/src/vehicle.rs:711 | sim/tests/physics_math_reference.rs (trace) |
+| `pin_fraction` | physics/physics.c | Matched | sim/src/vehicle.rs:713 | sim/tests/physics_math_reference.rs (trace) |
 | `physics_get_features_in_sphere` | physics/physics.c | Partial | physics/src/lib.rs | physics/tests/collision_reference.rs (trace); leaves out the original's collision BSP walk: Jolt answers the query on a mesh made from the collision BSP, so what is hit at an edge, and in what order, can differ, which surfaces, edges and vertices are listed: the trace checks only whether a sphere touches |
 | `get_material_type` | physics/physics.c | Matched | physics/src/ground.rs:3 | owed: the ground's material; reads the object, tag and map world, which the fake worlds do not hold (the structure's collision) |
 | `render_debug_physics` | physics/physics.c | Replaced | dev/src/draw.rs | the editor and tools |
 | `physics_instance_new` | physics/physics.c | Replaced | physics/src/lib.rs | a library does the job; the same rigid bodies falling, rolling and coming to rest: Jolt integrates the dynamic bodies (physics/src/lib.rs) with the masses and shapes of the game's physics tags |
 | `physics_test_point` | physics/physics.c | Partial | physics/src/lib.rs | physics/tests/collision_reference.rs (trace); leaves out the original's collision BSP walk: Jolt answers the query on a mesh made from the collision BSP, so what is hit at an edge, and in what order, can differ |
 | `physics_test_vector` | physics/physics.c | Partial | physics/src/lib.rs | physics/tests/collision_reference.rs (trace); leaves out the original's collision BSP walk: Jolt answers the query on a mesh made from the collision BSP, so what is hit at an edge, and in what order, can differ |
-| `friction_evaluate` | physics/physics.c | Matched | sim/src/vehicle.rs:1107 | sim/tests/physics_math_reference.rs (trace) |
+| `friction_evaluate` | physics/physics.c | Matched | sim/src/vehicle.rs:1543 | sim/tests/physics_math_reference.rs (trace) |
 | `physics_compute_new` | physics/physics.c | Replaced | physics/src/lib.rs | a library does the job; the same rigid bodies falling, rolling and coming to rest: Jolt integrates the dynamic bodies (physics/src/lib.rs) with the masses and shapes of the game's physics tags |
 | `physics_compute_biped_collision` | physics/physics.c | Matched | sim/src/seats.rs:344 | owed: physics; Jolt stands for the original's collision; tools/engine_movement_traces.py |
 | `physics_compute_vehicle_collision` | physics/physics.c | Partial | physics/src/lib.rs | leaves out the original's rigid-body integrator: Jolt moves the dynamic bodies; owed: the engine's own tests (physics/tests/world.rs); no check against the original yet |
@@ -4439,30 +4442,36 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `unit_scripting_exit_vehicle` | units/units.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
 | `vehicle_causes_collision_damage` | units/vehicles.c | Matched | sim/src/damage.rs | owed: the engine's own tests (sim/src/damage.rs); no check against the original yet |
 | `vehicle_hover` | units/vehicles.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
-| `compute_airborne_ticks` | units/vehicles.c | Matched | sim/src/vehicle.rs | owed: the engine's own tests (sim/src/vehicle.rs); no check against the original yet |
-| `vehicle_is_flipped` | units/vehicles.c | Matched | sim/src/vehicle.rs:69 | owed: vehicles; reads the object, tag and map world, which the fake worlds do not hold (the vehicle's physics); Phase 13 |
+| `compute_airborne_ticks` | units/vehicles.c | Matched | sim/src/vehicle.rs | sim/tests/vehicle_physics_reference.rs (trace) |
+| `vehicle_is_flipped` | units/vehicles.c | Matched | sim/src/vehicle.rs:69 | sim/tests/vehicle_physics_reference.rs (trace) |
+| `update_alien_fighter_physics_new` | units/vehicles.c | Ported |  | `tools/engine_vehicle_physics_reference.py` |
 | `set_real_quaternion` | units/vehicles.c | Ported |  | `tools/engine_animation_reference.py` |
 | `vehicle_new` | units/vehicles.c | Matched | sim/src/objects.rs:345 | owed: the engine cites it, with no check against the original yet |
 | `vehicle_preprocess_node_orientations` | units/vehicles.c | Matched | sim/src/vehicle_animation.rs:3 | owed: vehicles; reads the object, tag and map world, which the fake worlds do not hold (the vehicle's model); Phase 13's wheels and tracks |
 | `vehicle_accelerate` | units/vehicles.c | Matched | sim/src/forces.rs:212 | owed: the engine cites it, with no check against the original yet |
 | `vehicle_render_debug` | units/vehicles.c | Replaced | dev/src/draw.rs | the editor and tools |
-| `slowly_stop_vehicle` | units/vehicles.c | Matched | sim/src/vehicle.rs | owed: the engine's own tests (sim/src/vehicle.rs); no check against the original yet |
+| `update_alien_fighter_physics_old` | units/vehicles.c | Ported |  | `tools/engine_vehicle_physics_reference.py` |
+| `slowly_stop_vehicle` | units/vehicles.c | Matched | sim/src/vehicle.rs | sim/tests/vehicle_physics_reference.rs (trace) |
+| `compute_acceleration` | units/vehicles.c | Ported |  | `tools/engine_vehicle_physics_reference.py` |
 | `create_ghost_effect` | units/vehicles.c | Matched | sim/src/seats.rs:1281 | owed: a vehicle's effects; reads the object, tag and map world, which the fake worlds do not hold; Phase 13's effects on the move |
 | `create_pelican_effect` | units/vehicles.c | Matched | sim/src/seats.rs:1282 | owed: a vehicle's effects; reads the object, tag and map world, which the fake worlds do not hold; Phase 13's effects on the move |
 | `update_suspension` | units/vehicles.c | Matched | sim/src/vehicle_animation.rs:4 | owed: the engine cites it, with no check against the original yet |
-| `create_slipping_effects` | units/vehicles.c | Matched | sim/src/vehicle.rs | owed: the engine's own tests (sim/src/vehicle.rs); no check against the original yet |
-| `update_human_tank_physics` | units/vehicles.c | Matched | sim/src/vehicle.rs | owed: the engine's own tests (sim/src/vehicle.rs); no check against the original yet |
+| `create_slipping_effects` | units/vehicles.c | Matched | sim/src/vehicle.rs | sim/tests/vehicle_slip_reference.rs (trace) |
+| `update_human_tank_physics` | units/vehicles.c | Matched | sim/src/vehicle.rs | sim/tests/vehicle_physics_reference.rs (trace) |
 | `vehicle_export_function_values` | units/vehicles.c | Ported | sim/src/functions.rs:222 | `tools/engine_vehicle_function_reference.py` |
-| `vehicle_update` | units/vehicles.c | Matched | sim/src/vehicle.rs | owed: the engine's own tests (sim/src/vehicle.rs); no check against the original yet |
+| `vehicle_cross_product3d_target` | units/vehicles.c | Ported |  | `tools/engine_vehicle_physics_reference.py` |
+| `vehicle_dot_product3d_target` | units/vehicles.c | Ported |  | `tools/engine_vehicle_physics_reference.py` |
+| `vehicle_triple_product3d_target` | units/vehicles.c | Ported |  | `tools/engine_vehicle_physics_reference.py` |
+| `vehicle_update` | units/vehicles.c | Partial | sim/src/vehicle.rs | sim/tests/vehicle_physics_reference.rs (trace); leaves out the upending torque, the speed, slide and turn seek before the controllers |
 | `unit_network_add_weapon` | units/units.c | Replaced | net/src/snapshot.rs | networking and Xbox Live; the original's network state and prediction; the engine sends snapshots |
 | `unit_network_drop_weapon` | units/units.c | Replaced | net/src/snapshot.rs | networking and Xbox Live; the original's network state and prediction; the engine sends snapshots |
 | `unit_network_forget_weapon` | units/units.c | Replaced | net/src/snapshot.rs | networking and Xbox Live; the original's network state and prediction; the engine sends snapshots |
-| `update_human_boat_physics` | units/vehicles.c | Matched | sim/src/vehicle.rs | owed: the engine's own tests (sim/src/vehicle.rs); no check against the original yet |
-| `update_human_jeep_physics` | units/vehicles.c | Matched | sim/src/vehicle.rs | owed: the engine's own tests (sim/src/vehicle.rs); no check against the original yet |
-| `update_alien_scout_physics` | units/vehicles.c | Matched | sim/src/vehicle.rs | owed: the engine's own tests (sim/src/vehicle.rs); no check against the original yet |
-| `update_alien_fighter_physics` | units/vehicles.c | Matched | sim/src/vehicle.rs | owed: the engine's own tests (sim/src/vehicle.rs); no check against the original yet |
+| `update_human_boat_physics` | units/vehicles.c | Matched | sim/src/vehicle.rs | sim/tests/vehicle_physics_reference.rs (trace) |
+| `update_human_jeep_physics` | units/vehicles.c | Matched | sim/src/vehicle.rs | sim/tests/vehicle_physics_reference.rs (trace) |
+| `update_alien_scout_physics` | units/vehicles.c | Matched | sim/src/vehicle.rs | sim/tests/vehicle_physics_reference.rs (trace) |
+| `update_alien_fighter_physics` | units/vehicles.c | Matched | sim/src/vehicle.rs | sim/tests/vehicle_physics_reference.rs (trace) |
 
-227 Missing (217 reached from `main_loop`), by file:
+221 Missing (211 reached from `main_loop`), by file:
 
 - units/biped_limp_noodle.c: `biped_limp_noodle_get_max_relaxation_iterations`, `biped_limp_noodle_valid_joint_rotation`, `biped_limp_noodle_move_relax_and_constrain_positions`, `validate_real_vector3d_axes3`, `biped_limp_noodle_adjust_orientations`, `biped_limp_noodle_relax_nodes_onto_environment`
 - units/bipeds.c: `animation_left_foot_frame_index`, `animation_right_foot_frame_index`, `bipeds_initialize`, `bipeds_initialize_for_new_map`, `bipeds_dispose_from_old_map`, `bipeds_dispose`, `biped_place`, `biped_delete`, `biped_reset`, `biped_disconnect_from_structure_bsp`, `biped_get_physics_pill`, `biped_stop_melee_attack`, `biped_stop_limp_body_physics`, `biped_bumped_object`, `biped_flying_through_air`, `biped_apply_rotation`, `biped_falling_danger`, `biped_adjust_placement`, `biped_export_function_values`, `biped_get_sight_position`, `biped_get_autoaim_pill`, `biped_fix_position`, `biped_find_ground_surface`, `biped_approximate_surface_index`, `biped_find_pathfinding_surface_index`, `biped_exit_seat_end`, `biped_vehicle_speech`, `biped_update_dead`, `biped_try_to_make_footsteps`, `biped_find_nearby_support_surface`, `biped_verify_object_vectors`, `biped_update_slipping`, `biped_build_flying_axes`, `biped_snap_facing`, `biped_new`, `biped_preprocess_node_orientations`, `biped_check_discard`
@@ -4471,4 +4480,4 @@ docs/engine.md's "The coverage census" says what each class needs.
 - units/unit_dialogue.c: `unit_test_speech`, `unit_is_speaking`, `unit_dialogue_determine_variant`, `unit_get_speech_priority_name`, `unit_get_speech_priority_by_name`, `unit_describe_speech`, `unit_lose_speech`, `unit_speak`, `unit_notify_impulse_sound`, `unit_make_damage_sound`, `unit_scream`, `unit_find_dialogue_variant`, `unit_dialogue_setup`, `unit_dialogue_update`
 - units/unit_scripting_commands.c: `unit_scripting_has_weapon`
 - units/units.c: `units_initialize`, `units_initialize_for_new_map`, `units_dispose_from_old_map`, `units_dispose`, `unit_kill_silent`, `unit_kill_no_statistics`, `unit_delete`, `unit_export_function_values`, `unit_persistent_control`, `unit_get_melee_range_and_ticks`, `unit_get_animation_frames_remaining`, `unit_euler_axis_doplan`, `unit_get_zoom_level`, `unit_animation_weapon_ik`, `unit_animation_vehicle_ik`, `unit_animation_start_action`, `unit_animation_start_overlay_action`, `unit_can_enter_seat`, `unit_impulse`, `unit_handle_weapon_state_change`, `unit_record_damage`, `unit_test_spawning`, `unit_get_head_position`, `unit_estimate_position`, `unit_get_center_of_mass`, `unit_get_aiming_unit_index`, `unit_get_aiming_vector`, `unit_get_looking_vector`, `unit_get_facing_vector`, `unit_inventory_next_grenade`, `unit_controllable`, `unit_set_controllable`, `unit_set_possessed`, `unit_is_busy`, `unit_scripting_set_emotion_animation`, `unit_scripting_can_blink`, `unit_scripting_vehicle_test_seat`, `unit_scripting_unit_riders`, `unit_scripting_unit_driver`, `unit_scripting_unit_gunner`, `unit_shield_sapping_update`, `unit_set_user_animation`, `any_unit_is_dangerous`, `unit_can_see_point`, `unit_driven_by_ai`, `unit_gunned_by_ai`, `unit_set_desired_flashlight_state`, `unit_get_current_flashlight_state`, `unit_seat_filled`, `unit_seat_is_driver`, `unit_seat_is_gunner`, `unit_seat_allow_noncombatants`, `unit_update_driver_and_gunner`, `unit_get_current_equipment`, `unit_add_grenade_to_inventory`, `unit_add_grenade_type_to_inventory`, `unit_add_equipment_to_inventory`, `unit_delete_current_equipment`, `unit_delete_all_weapons`, `unit_has_weapon_definition_index`, `unit_first_free_weapon_index`, `unit_get_grenade_count`, `unit_get_current_grenade_type`, `unit_throw_grenade_move_to_hand`, `base_seat_label_get`, `seat_label_to_base_seat_index`, `base_weapon_label_get`, `unit_set_animation`, `unit_refresh_illumination`, `unit_get_weapon`, `unit_drop_item`, `unit_drop_grenades`, `unit_drop_inventory_weapons`, `unit_handle_region_destroyed`, `unit_cause_continuous_melee_damage`, `unit_aim_without_turning`, `unit_is_playing_custom_animation`, `unit_start_user_animation`, `unit_set_mouth_aperture`, `unit_inventory_get_must_be_readied_weapon`, `unit_has_weapon`, `unit_has_weapon_with_flag`, `unit_start_running_blindly`, `unit_stop_running_blindly`, `unit_flame_to_death`, `unit_flying_through_air`, `unit_euler_axis_buildplan`, `unit_euler_axis_couple`, `unit_adjust_projectile_ray`, `unit_abort_animation`, `unit_clip_to_aiming_bounds`, `unit_inventory_get_weapon`, `unit_set_actively_controlled`, `vehicle_scripting_find_available_seats`, `unit_overcharged`, `unit_set_seat`, `unit_get_seat_label`, `unit_drop_current_equipment`, `unit_can_use_weapon`, `unit_weapon_next_index`, `unit_drop_current_weapon`, `unit_get_current_weapon_label`, `scripting_set_magic_base_seat`, `unit_handle_deleted_object`, `unit_cause_player_melee_damage`, `unit_align_facing`, `unit_start_flaming_to_death`, `unit_running_blind`, `unit_vectors_are_valid`, `unit_verify_vectors`, `unit_control`, `unit_postprocess_node_matrices`, `unit_euler_aiming_update`, `unit_has_animation_to_enter_seat`, `unit_unzoom`, `unit_get_zoom_magnification`, `unit_integrated_night_vision_is_active`, `unit_ping_animation`, `unit_inventory_next_weapon`, `unit_melee_attack_begin`, `unit_leap_begin`, `unit_unsuspecting`, `unit_add_weapon_to_inventory`, `unit_ready_desired_weapon`, `unit_throw_grenade_begin`, `scripting_magic_melee_attack`, `unit_impact_melee_damage`, `unit_place`, `unit_solo_player_integrated_night_vision_is_active`, `unit_add_initial_weapons`, `unit_adjust_for_seat_change`, `unit_died`, `vehicle_scripting_load_magic`, `unit_damage_aftermath`, `vehicle_scripting_unload`, `unit_animation_enhanced`, `unarmed_melee_weapon_definition_index`, `unit_grenade_throw_ease`, `unit_weapon_class_base_animation`, `unit_animation_pose_at_phase`, `unit_node_orientations_blend`, `unit_grenade_throw_keep_legs_moving`
-- units/vehicles.c: `vehicles_initialize`, `vehicles_initialize_for_new_map`, `vehicles_dispose_from_old_map`, `vehicles_dispose`, `vehicle_place`, `vehicle_delete`, `vehicle_build_update`, `vehicle_parse_update`, `update_alien_fighter_physics_new`, `vehicle_reset`, `vehicle_find_pathfinding_surface_index`, `update_alien_fighter_physics_old`, `compute_acceleration`, `vehicle_dot_product3d_test`, `update_human_plane_physics`, `create_crashing_effects`, `update_turret_physics`, `vehicle_moving_near_any_player`, `vehicle_stuck`, `vehicle_cross_product3d_target`, `vehicle_dot_product3d_target`, `vehicle_triple_product3d_target`, `vehicle_mass_points_fit`
+- units/vehicles.c: `vehicles_initialize`, `vehicles_initialize_for_new_map`, `vehicles_dispose_from_old_map`, `vehicles_dispose`, `vehicle_place`, `vehicle_delete`, `vehicle_build_update`, `vehicle_parse_update`, `vehicle_reset`, `vehicle_find_pathfinding_surface_index`, `vehicle_dot_product3d_test`, `update_human_plane_physics`, `create_crashing_effects`, `update_turret_physics`, `vehicle_moving_near_any_player`, `vehicle_stuck`, `vehicle_mass_points_fit`

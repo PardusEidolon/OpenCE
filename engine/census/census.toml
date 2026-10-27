@@ -2335,7 +2335,8 @@ stands_in = "dev/src/control.rs"
 [function.compute_airborne_ticks]
 class = "matched"
 engine = "sim/src/vehicle.rs"
-owed = "the engine's own tests (sim/src/vehicle.rs); no check against the original yet"
+check = "sim/tests/vehicle_physics_reference.rs"
+against = "trace"
 
 [function.compute_sound_obstruction]
 class = "matched"
@@ -2483,7 +2484,8 @@ owed = "a vehicle's effects; reads the object, tag and map world, which the fake
 [function.create_slipping_effects]
 class = "matched"
 engine = "sim/src/vehicle.rs"
-owed = "the engine's own tests (sim/src/vehicle.rs); no check against the original yet"
+check = "sim/tests/vehicle_slip_reference.rs"
+against = "trace"
 
 [function.cross_product_magnitude3d]
 class = "native"
@@ -7533,7 +7535,8 @@ against = "trace"
 [function.slowly_stop_vehicle]
 class = "matched"
 engine = "sim/src/vehicle.rs"
-owed = "the engine's own tests (sim/src/vehicle.rs); no check against the original yet"
+check = "sim/tests/vehicle_physics_reference.rs"
+against = "trace"
 
 [function.sound_calculate_fade]
 class = "matched"
@@ -9006,12 +9009,14 @@ owed = "the engine cites it, with no check against the original yet"
 [function.update_alien_fighter_physics]
 class = "matched"
 engine = "sim/src/vehicle.rs"
-owed = "the engine's own tests (sim/src/vehicle.rs); no check against the original yet"
+check = "sim/tests/vehicle_physics_reference.rs"
+against = "trace"
 
 [function.update_alien_scout_physics]
 class = "matched"
 engine = "sim/src/vehicle.rs"
-owed = "the engine's own tests (sim/src/vehicle.rs); no check against the original yet"
+check = "sim/tests/vehicle_physics_reference.rs"
+against = "trace"
 
 [function.update_channel_for_impulse_sound]
 class = "matched"
@@ -9055,17 +9060,20 @@ note = "the original's network state and prediction; the engine sends snapshots"
 [function.update_human_boat_physics]
 class = "matched"
 engine = "sim/src/vehicle.rs"
-owed = "the engine's own tests (sim/src/vehicle.rs); no check against the original yet"
+check = "sim/tests/vehicle_physics_reference.rs"
+against = "trace"
 
 [function.update_human_jeep_physics]
 class = "matched"
 engine = "sim/src/vehicle.rs"
-owed = "the engine's own tests (sim/src/vehicle.rs); no check against the original yet"
+check = "sim/tests/vehicle_physics_reference.rs"
+against = "trace"
 
 [function.update_human_tank_physics]
 class = "matched"
 engine = "sim/src/vehicle.rs"
-owed = "the engine's own tests (sim/src/vehicle.rs); no check against the original yet"
+check = "sim/tests/vehicle_physics_reference.rs"
+against = "trace"
 
 [function.update_motion_sensor]
 class = "matched"
@@ -9324,7 +9332,9 @@ against = "trace"
 
 [function.vehicle_is_flipped]
 class = "matched"
-owed = "vehicles; reads the object, tag and map world, which the fake worlds do not hold (the vehicle's physics); Phase 13"
+engine = "sim/src/vehicle.rs"
+check = "sim/tests/vehicle_physics_reference.rs"
+against = "trace"
 
 [function.vehicle_new]
 class = "matched"
@@ -9352,9 +9362,11 @@ class = "missing"
 note = "a stub in campaign/src/units.rs; the units track (coverage_units) owns it"
 
 [function.vehicle_update]
-class = "matched"
+class = "partial"
 engine = "sim/src/vehicle.rs"
-owed = "the engine's own tests (sim/src/vehicle.rs); no check against the original yet"
+check = "sim/tests/vehicle_physics_reference.rs"
+against = "trace"
+leaves_out = ["the upending torque", "the speed, slide and turn seek before the controllers"]
 
 [function.verify_item_location]
 class = "replaced"
