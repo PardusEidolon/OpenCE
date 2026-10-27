@@ -361,6 +361,26 @@ pub enum Mood {
 /// The base seats' labels (`base_seat_labels`).
 pub const BASE_SEATS: [&str; 6] = ["asleep", "alert", "stand", "crouch", "flee", "flaming"];
 
+/// The base weapons' labels (`base_weapon_label_get`'s).
+pub const BASE_WEAPONS: [&str; 1] = ["unarmed"];
+
+/// The label of base seat `index` (`base_seat_label_get`).
+pub fn base_seat_label(index: usize) -> Option<&'static str> {
+    BASE_SEATS.get(index).copied()
+}
+
+/// The base seat labelled `label`, in any case (`seat_label_to_base_seat_index`).
+pub fn base_seat_index(label: &str) -> Option<usize> {
+    BASE_SEATS
+        .iter()
+        .position(|seat| seat.eq_ignore_ascii_case(label))
+}
+
+/// The label of base weapon `index` (`base_weapon_label_get`).
+pub fn base_weapon_label(index: usize) -> Option<&'static str> {
+    BASE_WEAPONS.get(index).copied()
+}
+
 /// A seat's animation of entering it (`_unit_seat_animation_seat_enter`).
 const SEAT_ENTER: usize = 7;
 

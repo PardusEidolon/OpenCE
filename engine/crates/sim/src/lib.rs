@@ -47,6 +47,7 @@ pub mod safety;
 pub mod scenery;
 pub mod seats;
 pub mod unit_animator;
+pub mod unit_inventory;
 pub mod unit_states;
 pub mod units;
 pub mod vehicle;

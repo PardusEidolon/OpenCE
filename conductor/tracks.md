@@ -65,7 +65,7 @@ This file tracks all major tracks for the project.
 - [x] **Track: Coverage: data fidelity: every tag field, stride and load-time fix-up matched to the original, vehicle_definition and the shader subtypes from a second source, and the kept-but-unused and untraced fields wired or justified**
   *Link: [./tracks/coverage_data_20261026/](./tracks/coverage_data_20261026/)*
 
-- [ ] **Track: Coverage: units, players' effects and the object systems: unit update and damage, biped movement, player effects, objects, items, devices, effects and physics, ported and traced**
+- [~] **Track: Coverage: units, players' effects and the object systems: unit update and damage, biped movement, player effects, objects, items, devices, effects and physics, ported and traced**
   *Link: [./tracks/coverage_units_20261026/](./tracks/coverage_units_20261026/)*
 
 - [ ] **Track: Coverage: the game loop, flow and saves: the main loop iteration, winning a map and the next level, the game engine's update, players and respawn, saved games and the shell**
