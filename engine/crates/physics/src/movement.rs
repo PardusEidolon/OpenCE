@@ -59,6 +59,42 @@ pub enum Landing {
     Hard,
 }
 
+/// The landing a biped recovers from after landing at `velocity` into the
+/// ground (units a second), and for how many of Halo's ticks, as Halo's
+/// biped_start_landing: none slower than a soft landing, nor where the
+/// landing's range of velocities is empty.
+pub fn landing_recovery(biped: &Biped, velocity: f32) -> Option<(Landing, u32)> {
+    let soft = biped.minimum_soft_landing_velocity;
+    let hard = biped.minimum_hard_landing_velocity;
+    if velocity < soft {
+        return None;
+    }
+    let (landing, fraction, range, time) = if velocity < hard {
+        (
+            Landing::Soft,
+            velocity - soft,
+            hard - soft,
+            biped.maximum_soft_landing_time,
+        )
+    } else {
+        // (Halo's: the whole velocity over the range above the hard
+        // landing's)
+        (
+            Landing::Hard,
+            velocity,
+            biped.maximum_hard_landing_velocity - hard,
+            biped.maximum_hard_landing_time,
+        )
+    };
+    if range > 0.0 {
+        let fraction = (fraction / range).clamp(0.0, 1.0);
+        // (Halo truncates its ticks)
+        Some((landing, (time * HALO_TICKS_PER_SECOND * fraction) as u32))
+    } else {
+        None
+    }
+}
+
 /// The biped's movement settings: its tag's and the globals'.
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct MoverSettings {
@@ -338,36 +374,10 @@ impl Mover {
     /// Starts recovering from a landing at `velocity` into the ground, as
     /// Halo's biped_start_landing.
     fn start_landing(&mut self, velocity: f32) {
-        let biped = &self.settings.biped;
-        let soft = biped.minimum_soft_landing_velocity;
-        let hard = biped.minimum_hard_landing_velocity;
-        if velocity < soft {
-            return;
-        }
-        let (landing, fraction, range, time) = if velocity < hard {
-            (
-                Landing::Soft,
-                velocity - soft,
-                hard - soft,
-                biped.maximum_soft_landing_time,
-            )
-        } else {
-            // (Halo's: the whole velocity over the range above the hard
-            // landing's)
-            (
-                Landing::Hard,
-                velocity,
-                biped.maximum_hard_landing_velocity - hard,
-                biped.maximum_hard_landing_time,
-            )
-        };
-        if range > 0.0 {
-            let fraction = (fraction / range).clamp(0.0, 1.0);
+        if let Some((landing, ticks)) = landing_recovery(&self.settings.biped, velocity) {
             self.landing = Some(landing);
             self.landing_ticks = 0;
-            // (Halo truncates its ticks)
-            self.landing_recovery_ticks =
-                (time * HALO_TICKS_PER_SECOND * fraction) as u32 * TICKS_PER_HALO_TICK;
+            self.landing_recovery_ticks = ticks * TICKS_PER_HALO_TICK;
         }
     }
 

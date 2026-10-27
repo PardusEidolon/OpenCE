@@ -524,9 +524,11 @@ impl Simulation {
                 Some(handle),
                 |from, to| player.level_clear(from, to),
             ));
-            if let Some(speed) = player.landed() {
-                damage.extend(damage::apply_fall(&mut self.world, handle, speed));
-            }
+            // (as the game's biped_falling_damage, each tick: a landing's
+            // hurt, or a fall faster than any lived through)
+            let landing = player.landed().unwrap_or(0.0);
+            let upward = player.mover().velocity.z;
+            damage.extend(damage::apply_fall(&mut self.world, handle, landing, upward));
             self.impacts.append(&mut fired.impacts);
             self.detonations.append(&mut fired.detonations);
             self.damage.append(&mut damage);
@@ -1185,6 +1187,22 @@ impl Simulation {
             return false;
         }
         player.set_noclip(noclip);
+        true
+    }
+
+    /// Suspends the unit `handle` (true), holding it still where it is,
+    /// or lets it go, as `unit_scripting_suspended` does; false if it is
+    /// no player's or actor's biped.
+    pub fn suspend(&mut self, handle: ObjectHandle, suspended: bool) -> bool {
+        let unit = self
+            .players
+            .iter_mut()
+            .chain(self.actors.iter_mut())
+            .find(|unit| unit.handle() == handle);
+        let Some(unit) = unit else {
+            return false;
+        };
+        unit.set_suspended(suspended);
         true
     }
 

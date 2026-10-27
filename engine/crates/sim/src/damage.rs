@@ -441,6 +441,8 @@ pub struct Damageable {
     pub sphere: Option<f32>,
     /// It takes no damage from falls.
     pub immune_to_falling: bool,
+    /// It flies, and so never falls too fast.
+    pub flying: bool,
     /// Its bounding sphere's centre, from its root node, which
     /// explosions reach for.
     pub centre: Vec3,
@@ -620,6 +622,9 @@ impl DamageTable {
                 let immune_to_falling = object
                     .biped
                     .is_some_and(|biped| biped.flags & Biped::IMMUNE_TO_FALLING_DAMAGE != 0);
+                let flying = object
+                    .biped
+                    .is_some_and(|biped| biped.flags & Biped::FLYING != 0);
                 Some((
                     object.tag.clone(),
                     Damageable {
@@ -628,6 +633,7 @@ impl DamageTable {
                         pill,
                         sphere,
                         immune_to_falling,
+                        flying,
                         centre: Vec3::from_array(object.bounding_offset),
                         nodes,
                     },
@@ -972,30 +978,76 @@ pub fn apply_impacts(
     events
 }
 
-/// A fall's damage to `object`, landing at `speed` into the ground: none
-/// below the globals' least, the scaled falling damage up to their most,
-/// and above the fastest a biped falls, the damage of the greatest falls.
-pub fn apply_fall(world: &mut World, object: ObjectHandle, speed: f32) -> Option<DamageEvent> {
-    let table = world.get_resource::<DamageTable>()?;
-    let falling = &table.falling;
-    let (effect, scale) = if speed > falling.maximum_falling_velocity {
-        (falling.maximum_distance_damage.clone()?, 1.0)
-    } else if speed > falling.minimum_damage_velocity {
+/// The damage of a fall a biped takes, of the globals' two.
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub enum Fall {
+    /// It landed harder than the least that hurts: the falling damage, at
+    /// this scale.
+    Landing(f32),
+    /// It falls faster than any fall it lives through: the damage of the
+    /// greatest falls.
+    Greatest,
+}
+
+/// The fall a biped takes this tick, as the game's biped_falling_damage:
+/// landing at `landing` into the ground (units a second, 0 where it did
+/// not land) as it moves `upward` (units a second). A landing that hurts is
+/// the falling damage, scaled from the least speed that hurts to the most;
+/// with none, falling faster than the globals' fastest is the damage of the
+/// greatest falls, unless it flies or is dead already. An immune biped
+/// takes neither.
+pub fn fall(
+    falling: &FallingDamage,
+    landing: f32,
+    upward: f32,
+    immune: bool,
+    flying: bool,
+    dead: bool,
+) -> Option<Fall> {
+    if landing > falling.minimum_damage_velocity {
         let range = falling.maximum_damage_velocity - falling.minimum_damage_velocity;
+        // (the game divides by an empty range; the engine takes it whole)
         let scale = if range > 0.0 {
-            (speed - falling.minimum_damage_velocity) / range
+            (landing - falling.minimum_damage_velocity) / range
         } else {
             1.0
         };
-        (falling.falling_damage.clone()?, scale.clamp(0.0, 1.0))
+        (!immune).then_some(Fall::Landing(scale.clamp(0.0, 1.0)))
+    } else if !flying && upward < -falling.maximum_falling_velocity {
+        (!immune && !dead).then_some(Fall::Greatest)
     } else {
-        return None;
-    };
+        None
+    }
+}
+
+/// A fall's damage to `object` this tick, landing at `landing` into the
+/// ground (0 where it did not land) as it moves `upward`, as [`fall`]
+/// judges it.
+pub fn apply_fall(
+    world: &mut World,
+    object: ObjectHandle,
+    landing: f32,
+    upward: f32,
+) -> Option<DamageEvent> {
+    let table = world.get_resource::<DamageTable>()?;
     let entity = world.resource::<ObjectTable>().entity(object)?;
     let tag = &world.get::<Object>(entity)?.tag;
-    if table.objects.get(tag)?.immune_to_falling {
-        return None;
-    }
+    let damageable = table.objects.get(tag)?;
+    let dead = world
+        .get::<Vitality>(entity)
+        .is_some_and(|vitality| vitality.dead);
+    let falling = &table.falling;
+    let (effect, scale) = match fall(
+        falling,
+        landing,
+        upward,
+        damageable.immune_to_falling,
+        damageable.flying,
+        dead,
+    )? {
+        Fall::Landing(scale) => (falling.falling_damage.clone()?, scale),
+        Fall::Greatest => (falling.maximum_distance_damage.clone()?, 1.0),
+    };
     let outcome = damage_object(
         world,
         object,
@@ -1639,6 +1691,7 @@ mod tests {
                     pill: Some((0.2, 0.7)),
                     sphere: None,
                     immune_to_falling,
+                    flying: false,
                     centre: Vec3::new(0.0, 0.0, 0.35),
                     nodes: Vec::new(),
                     material: body_material(&cyborg()),
@@ -1676,19 +1729,28 @@ mod tests {
         let Ok(object) = spawned else {
             panic!("no room");
         };
-        assert_eq!(apply_fall(world, object, 4.0), None);
+        assert_eq!(apply_fall(world, object, 4.0, -4.0), None);
         // (halfway from the least to the most: half the damage)
-        let Some(event) = apply_fall(world, object, 7.5) else {
+        let Some(event) = apply_fall(world, object, 7.5, 0.0) else {
             panic!("no damage");
         };
         assert!((event.outcome.shield - 0.5).abs() < 1e-6, "{event:?}");
         assert_eq!(event.effect, tag("fall"));
-        let Some(event) = apply_fall(world, object, 20.0) else {
+        // (a landing past the most is the falling damage in full; falling
+        // past the fastest, landed or not, the greatest falls')
+        assert_eq!(
+            apply_fall(world, object, 20.0, -20.0).map(|event| event.effect),
+            Some(tag("fall"))
+        );
+        let Some(event) = apply_fall(world, object, 0.0, -20.0) else {
             panic!("no damage");
         };
         assert!(event.outcome.killed && event.effect == tag("distance"));
+        // (and the dead take it no more)
+        assert_eq!(apply_fall(world, object, 0.0, -20.0), None);
         world.insert_resource(table(true));
-        assert_eq!(apply_fall(world, object, 20.0), None);
+        assert_eq!(apply_fall(world, object, 20.0, 0.0), None);
+        assert_eq!(apply_fall(world, object, 0.0, -20.0), None);
         // (an explosion at its feet, behind a wall, then in the open)
         let mut whole = Vitality::new(&cyborg());
         whole.shield = 1.0;

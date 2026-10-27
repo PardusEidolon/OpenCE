@@ -19,6 +19,7 @@ pub(crate) const NATIVES: &[(&str, Native<Mission>)] = &[
     ("units_set_current_vitality", units_set_current_vitality),
     ("unit_set_maximum_vitality", unit_set_maximum_vitality),
     ("unit_impervious", unit_impervious),
+    ("unit_suspended", unit_suspended),
     ("unit_has_weapon_readied", unit_has_weapon_readied),
     ("unit_get_total_grenade_count", unit_get_total_grenade_count),
     (
@@ -178,6 +179,14 @@ impl Mission {
 
 fn unit(mission: &Mission, arguments: &[Value]) -> Option<ObjectHandle> {
     mission.handle(index(arguments, 0))
+}
+
+/// Holds a unit still (true) or lets it go (`unit_suspended`).
+fn unit_suspended(mission: &mut Mission, arguments: &[Value]) -> Value {
+    if let Some(handle) = unit(mission, arguments) {
+        mission.sim.suspend(handle, boolean(arguments, 1));
+    }
+    Value::Void
 }
 
 fn unit_get_health(mission: &mut Mission, arguments: &[Value]) -> Value {

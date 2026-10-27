@@ -42,8 +42,8 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `tag_files` | | | 43 (4288 B) | | 5 (0 B) | | 0 |
 | `text` | | 9 (1936 B) | 63 (6864 B) | | 19 (5744 B) | 21 (2368 B) | 9 |
 | `tool` | | | | | 27 (8752 B) | | 0 |
-| `units` | 18 (6432 B) | 59 (24528 B) | | 22 (20448 B) | 9 (1616 B) | 221 (54496 B) | 47 |
-| **all** | 208 (36880 B) | 558 (176352 B) | 332 (38896 B) | 141 (79728 B) | 2773 (575768 B) | 3615 (703498 B) | 492 |
+| `units` | 18 (6432 B) | 57 (23536 B) | | 24 (21440 B) | 9 (1616 B) | 221 (54496 B) | 40 |
+| **all** | 208 (36880 B) | 556 (175360 B) | 332 (38896 B) | 143 (80720 B) | 2773 (575768 B) | 3615 (703498 B) | 485 |
 
 ## `ai`
 
@@ -822,7 +822,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `scripted_camera_time` | camera/camera_scripting.c | Matched | campaign/src/cinematic.rs | owed: the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet |
 | `scripted_camera_update` | camera/camera_scripting.c | Matched | campaign/src/cinematic.rs:122 | owed: cutscene cameras; reads the object, tag and map world, which the fake worlds do not hold; campaign/tests/cutscenes.rs |
 | `dead_camera_new` | camera/dead_camera.c | Matched | sim/src/dead_camera.rs:46 | owed: the engine cites it, with no check against the original yet |
-| `dead_camera_update` | camera/dead_camera.c | Matched | sim/src/lib.rs:1425 | owed: the engine cites it, with no check against the original yet |
+| `dead_camera_update` | camera/dead_camera.c | Matched | sim/src/lib.rs:1443 | owed: the engine cites it, with no check against the original yet |
 | `director_desired_perspective` | camera/director.c | Matched | sim/src/seats.rs:1238 | owed: the camera; reads the object, tag and map world, which the fake worlds do not hold (the unit's seat); Phase 14's death camera |
 | `director_script_camera` | camera/director.c | Matched | campaign/src/cinematic.rs | owed: the engine's own tests (campaign/tests/cutscenes.rs); no check against the original yet |
 | `editor_camera_new` | camera/editor_flying_camera.c | Replaced | app/Sources/OpenCEEngineKit/FlyControls.swift | the editor and tools |
@@ -846,14 +846,14 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `first_person_camera_update` | camera/first_person_camera.c | Partial | sim/src/player.rs | leaves out the camera's own smoothing: the engine puts the camera at the eyes each tick; owed: the engine's own tests (sim/src/player.rs); no check against the original yet |
 | `following_camera_new` | camera/following_camera.c | Matched | sim/src/player.rs | owed: the engine's own tests (sim/src/player.rs); no check against the original yet |
 | `arcsine` | camera/following_camera.c | Ported |  | `tools/engine_math_reference.py` |
-| `uniform_cubic_spline` | camera/following_camera.c | Matched | sim/src/player.rs:1674 | owed: the engine cites it, with no check against the original yet |
+| `uniform_cubic_spline` | camera/following_camera.c | Matched | sim/src/player.rs:1696 | owed: the engine cites it, with no check against the original yet |
 | `uniform_cubic_spline_vector3d` | camera/following_camera.c | Ported |  | `tools/engine_wind_reference.py` |
-| `camera_track_splut` | camera/following_camera.c | Matched | sim/src/player.rs:1640 | owed: cutscene cameras; reads the object, tag and map world, which the fake worlds do not hold (the camera track tag); campaign/tests/cutscenes.rs |
+| `camera_track_splut` | camera/following_camera.c | Matched | sim/src/player.rs:1662 | owed: cutscene cameras; reads the object, tag and map world, which the fake worlds do not hold (the camera track tag); campaign/tests/cutscenes.rs |
 | `following_camera_deterministic` | camera/following_camera.c | Matched | sim/src/player.rs | owed: the engine's own tests (sim/src/player.rs); no check against the original yet |
-| `following_camera_update` | camera/following_camera.c | Matched | sim/src/player.rs:766 | owed: the camera; reads the object, tag and map world, which the fake worlds do not hold; Phase 14's death camera |
+| `following_camera_update` | camera/following_camera.c | Matched | sim/src/player.rs:788 | owed: the camera; reads the object, tag and map world, which the fake worlds do not hold; Phase 14's death camera |
 | `observer_up_from_forward` | camera/observer.c | Matched | sim/src/dead_camera.rs:95 | owed: the engine cites it, with no check against the original yet |
 | `observer_update_polynomial` | camera/observer.c | Matched | sim/src/dead_camera.rs:9 | owed: the engine cites it, with no check against the original yet |
-| `observer_update` | camera/observer.c | Partial | sim/src/player.rs:737 | leaves out the observer's dynamics and its springs, the cutscenes' cameras; owed: the engine's own version; no check against the original yet |
+| `observer_update` | camera/observer.c | Partial | sim/src/player.rs:759 | leaves out the observer's dynamics and its springs, the cutscenes' cameras; owed: the engine's own version; no check against the original yet |
 
 79 Missing (66 reached from `main_loop`), by file:
 
@@ -1034,7 +1034,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `byte_swap_recording_stream_v1` | cutscene/recorded_animation_playback_v1.c | Replaced | import/src/lib.rs | maps imported to a typed format; byte order is settled when the map is imported |
 | `recorded_animation_verify` | cutscene/recorded_animations.c | Replaced | dev/src/logbook.rs | the editor and tools; a debug check, statistic or editor hook of the original; the dev tools stand in |
 | `render_debug_recording` | cutscene/recorded_animations.c | Replaced | dev/src/draw.rs | the editor and tools |
-| `recorded_animation_play_internal` | cutscene/recorded_animations.c | Partial | campaign/src/units.rs:156 | leaves out the recording's version checks, the units in vehicles; owed: the engine's own version; no check against the original yet |
+| `recorded_animation_play_internal` | cutscene/recorded_animations.c | Partial | campaign/src/units.rs:157 | leaves out the recording's version checks, the units in vehicles; owed: the engine's own version; no check against the original yet |
 
 48 Missing (41 reached from `main_loop`), by file:
 
@@ -1327,8 +1327,8 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `limit2d` | game/player_control.c | Ported |  | `tools/engine_math_reference.py` |
 | `interpolate_scalar` | game/player_control.c | Ported |  | `tools/engine_facing_reference.py` |
 | `player_control_modify_desired_angles` | game/player_control.c | Partial | sim/src/facing.rs:2 | sim/tests/facing_reference.rs (trace); leaves out a seat's yaw limits and a unit camera's pitch limits, eased in, the vehicle's look levelled (autolevel) |
-| `handle_one_player_input` | game/player_control.c | Partial | sim/src/player.rs:580 | sim/tests/facing_reference.rs (trace); leaves out choosing the weapon and grenade, zoom, the vehicle's look levelled (autolevel), debug rotation and the ninja rope, the network client's queue, a seat's and a unit camera's own limits; the look's turn, through player_control_modify_desired_angles |
-| `player_control_update` | game/player_control.c | Partial | sim/src/player.rs:580 | sim/tests/facing_reference.rs (trace); leaves out choosing the weapon and grenade, zoom, the vehicle's look levelled (autolevel), debug rotation and the ninja rope, the network client's queue, a seat's and a unit camera's own limits; the look's turn, through player_control_modify_desired_angles |
+| `handle_one_player_input` | game/player_control.c | Partial | sim/src/player.rs:584 | sim/tests/facing_reference.rs (trace); leaves out choosing the weapon and grenade, zoom, the vehicle's look levelled (autolevel), debug rotation and the ninja rope, the network client's queue, a seat's and a unit camera's own limits; the look's turn, through player_control_modify_desired_angles |
+| `player_control_update` | game/player_control.c | Partial | sim/src/player.rs:584 | sim/tests/facing_reference.rs (trace); leaves out choosing the weapon and grenade, zoom, the vehicle's look levelled (autolevel), debug rotation and the ninja rope, the network client's queue, a seat's and a unit camera's own limits; the look's turn, through player_control_modify_desired_angles |
 | `update_client_delete` | game/player_queues_new.c | Replaced | net/src/snapshot.rs | networking and Xbox Live; the original's network state and prediction; the engine sends snapshots |
 | `update_client_get_maximum_actions` | game/player_queues_new.c | Replaced | net/src/snapshot.rs | networking and Xbox Live; the original's network state and prediction; the engine sends snapshots |
 | `player_new_queue` | game/player_queues_new.c | Replaced | net/src/snapshot.rs | networking and Xbox Live; the original's network state and prediction; the engine sends snapshots |
@@ -1346,7 +1346,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `rumble_update` | game/player_rumble.c | Replaced | app/Sources/OpenCEEngineKit/PlayControls.swift | keyboard and mouse only |
 | `unit_should_autopick_weapon` | game/players.c | Ported | sim/src/pickup.rs:6 | `tools/engine_pickup_reference.py` |
 | `random_direction3d` | game/players.c | Ported |  | `tools/engine_random_reference.py` |
-| `player_new` | game/players.c | Partial | sim/src/lib.rs:759 | sim/tests/game_engine_reference.rs (trace); leaves out the network's player slots, the player's profile and colours, its name, the squad, cluster and aim assist it starts without; a new player has no unit and is added to the game as game_engine_player_added adds it (the game engine trace); the rest of its datum the engine does not hold |
+| `player_new` | game/players.c | Partial | sim/src/lib.rs:761 | sim/tests/game_engine_reference.rs (trace); leaves out the network's player slots, the player's profile and colours, its name, the squad, cluster and aim assist it starts without; a new player has no unit and is added to the game as game_engine_player_added adds it (the game engine trace); the rest of its datum the engine does not hold |
 | `find_best_starting_location_index` | game/players.c | Ported | sim/src/game.rs:771 | `tools/engine_spawn_reference.py` |
 | `player_spawn` | game/players.c | Partial | sim/src/game.rs:317 | sim/tests/spawn_reference.rs (trace); leaves out the starting equipment's profiles, a campaign respawn's saved unit, a co-op respawn behind its teammate, the unit's colours; its start chosen as the game chooses it (find_best_starting_location_index's trace); the unit placed there and armed from the globals |
 | `player_handle_action` | game/players.c | Partial | sim/src/seats.rs:805 | sim/tests/handle_action_reference.rs (trace); leaves out the action's other uses (devices, powerups), the eviction of an AI from a seat, unit_can_enter_seat's own checks; a vehicle turned back over from the side or end the game chooses (vehicle::Approach::of), 3000 flips |
@@ -1597,7 +1597,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `model_build_remapping_table_for_animation_graph` | interface/first_person_weapons.c | Matched | sim/src/first_person.rs:75 | owed: reads the object, tag and map world, which the fake worlds do not hold (the model's and graph's node names) |
 | `first_person_weapon_state_from_weapon_message` | interface/first_person_weapons.c | Ported | sim/src/first_person_states.rs:315 | `tools/engine_first_person_reference.py` |
 | `first_person_animation_type_from_weapon_state` | interface/first_person_weapons.c | Ported | sim/src/first_person_states.rs:166 | `tools/engine_first_person_reference.py` |
-| `first_person_weapons_update` | interface/first_person_weapons.c | Partial | sim/src/lib.rs:1290 | leaves out the first-person animations' blending, the weapon's sway; owed: the engine's own version; no check against the original yet |
+| `first_person_weapons_update` | interface/first_person_weapons.c | Partial | sim/src/lib.rs:1308 | leaves out the first-person animations' blending, the weapon's sway; owed: the engine's own version; no check against the original yet |
 | `render_debug_profile_stall_tick` | interface/interface.c | Replaced | dev/src/profile.rs | the editor and tools |
 | `render_debug_profile` | interface/interface.c | Replaced | dev/src/profile.rs | the editor and tools |
 | `interface_draw_bitmap_modulated` | interface/interface.c | Replaced | app/Sources/OpenCEEngineRender/UiPass.swift | the enhanced lighting and Metal renderer; drawn by the Metal renderer |
@@ -1791,7 +1791,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | Function | File | Class | Engine | Evidence |
 | --- | --- | --- | --- | --- |
 | `equipment_place` | items/equipment.c | Matched | import/src/level.rs:1043 | owed: the engine cites it, with no check against the original yet |
-| `equipment_handle_pickup` | items/equipment.c | Matched | sim/src/player.rs:1231 | owed: items; reads the object, tag and map world, which the fake worlds do not hold |
+| `equipment_handle_pickup` | items/equipment.c | Matched | sim/src/player.rs:1253 | owed: items; reads the object, tag and map world, which the fake worlds do not hold |
 | `verify_item_location` | items/items.c | Replaced | dev/src/logbook.rs | the editor and tools; a debug check, statistic or editor hook of the original; the dev tools stand in |
 | `item_adjust_for_angular_velocity_change` | items/items.c | Ported | sim/src/item_physics.rs:393 | `tools/engine_item_reference.py` |
 | `item_accelerate` | items/items.c | Ported | sim/src/forces.rs:211 | `tools/engine_item_reference.py` |
@@ -1814,7 +1814,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `weapon_new` | items/weapons.c | Matched | sim/src/weapon.rs:170 | owed: the engine cites it, with no check against the original yet |
 | `weapon_export_function_values` | items/weapons.c | Matched | sim/src/functions.rs:156 | owed: the engine cites it, with no check against the original yet |
 | `weapon_trigger_can_fire_again` | items/weapons.c | Matched | sim/src/weapon.rs:424 | owed: weapons; reads the object, tag and map world, which the fake worlds do not hold (the weapon tag) |
-| `weapon_effect_new` | items/weapons.c | Matched | sim/src/lib.rs:588 | owed: weapons; reads the object, tag and map world, which the fake worlds do not hold; Phase 12's effects |
+| `weapon_effect_new` | items/weapons.c | Matched | sim/src/lib.rs:590 | owed: weapons; reads the object, tag and map world, which the fake worlds do not hold; Phase 12's effects |
 | `weapon_ready` | items/weapons.c | Partial | sim/src/weapon.rs:208 | leaves out weapon_reset of its triggers and magazines, the ready time taken from the first-person animation's length; owed: the engine's own version; no check against the original yet |
 | `projectile_distribute` | items/weapons.c | Matched | sim/src/projectile.rs | owed: the engine's own tests (sim/src/projectile.rs); no check against the original yet |
 | `trigger_create_projectiles` | items/weapons.c | Matched | sim/src/projectile.rs | owed: the engine's own tests (sim/src/projectile.rs); no check against the original yet |
@@ -2715,7 +2715,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `object_header_delete` | objects/objects.c | Ported |  | `tools/engine_data_reference.py` |
 | `object_scripting_set_collideable` | objects/objects.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
 | `objects_place` | objects/objects.c | Matched | sim/src/objects.rs | owed: the engine's own tests (sim/src/objects.rs); no check against the original yet |
-| `object_start_interpolation` | objects/objects.c | Matched | campaign/src/units.rs:56 | owed: interpolation; reads the object, tag and map world, which the fake worlds do not hold; Phase 12's impacts |
+| `object_start_interpolation` | objects/objects.c | Matched | campaign/src/units.rs:57 | owed: interpolation; reads the object, tag and map world, which the fake worlds do not hold; Phase 12's impacts |
 | `object_get_function_value` | objects/objects.c | Matched | ffi/src/particles/contrails.rs:56 | owed: the engine cites it, with no check against the original yet |
 | `object_index_from_name_index` | objects/objects.c | Matched | campaign/src/objects.rs | owed: the engine's own tests (campaign/src/objects.rs); no check against the original yet |
 | `objects_disconnect_from_structure_bsp` | objects/objects.c | Matched | sim/src/objects.rs | owed: the engine's own tests (sim/src/objects.rs); no check against the original yet |
@@ -2726,7 +2726,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `objects_reconnect_to_structure_bsp` | objects/objects.c | Matched | sim/src/objects.rs | owed: the engine's own tests (sim/src/objects.rs); no check against the original yet |
 | `objects_paparazzi` | objects/objects.c | Replaced | dev/src/logbook.rs | the editor and tools; a debug check, statistic or editor hook of the original; the dev tools stand in |
 | `object_export_function_values` | objects/objects.c | Matched | sim/src/functions.rs:228 | owed: object functions; reads the object, tag and map world, which the fake worlds do not hold; Phase 13's animations driven by their functions |
-| `object_compute_node_matrices` | objects/objects.c | Matched | sim/src/player.rs:789 | owed: the engine cites it, with no check against the original yet |
+| `object_compute_node_matrices` | objects/objects.c | Matched | sim/src/player.rs:811 | owed: the engine cites it, with no check against the original yet |
 | `object_choose_random_change_colors` | objects/objects.c | Matched | ffi/src/lib.rs:511 | owed: the engine cites it, with no check against the original yet |
 | `objects_scripting_detach` | objects/objects.c | Matched | campaign/src/objects.rs | owed: the engine's own tests (campaign/src/objects.rs); no check against the original yet |
 | `object_render_debug` | objects/objects.c | Replaced | dev/src/draw.rs | the editor and tools |
@@ -3935,7 +3935,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `game_looping_sound_new` | sound/game_sound.c | Matched | ffi/src/sound_world.rs | owed: the engine's own tests (ffi/src/sound_world.rs); no check against the original yet |
 | `game_looping_sound_delete` | sound/game_sound.c | Matched | ffi/src/sound_world.rs | owed: the engine's own tests (ffi/src/sound_world.rs); no check against the original yet |
 | `unattached_impulse_sound_new` | sound/game_sound.c | Matched | ffi/src/sound_events.rs | owed: the engine's own tests (ffi/src/sound_events.rs); no check against the original yet |
-| `unspatialized_impulse_sound_new` | sound/game_sound.c | Matched | sim/src/player.rs:1283 | owed: the engine cites it, with no check against the original yet |
+| `unspatialized_impulse_sound_new` | sound/game_sound.c | Matched | sim/src/player.rs:1305 | owed: the engine cites it, with no check against the original yet |
 | `scripted_sound_time` | sound/game_sound.c | Matched | campaign/src/sounds.rs:181 | owed: sound; reads the object, tag and map world, which the fake worlds do not hold (the sound tag); campaign/tests/sounds.rs |
 | `scripted_sound_stop` | sound/game_sound.c | Matched | campaign/src/sounds.rs | owed: the engine's own tests (campaign/src/sounds.rs); no check against the original yet |
 | `scripted_looping_sound_set_alternate` | sound/game_sound.c | Matched | campaign/src/sounds.rs | owed: the engine's own tests (campaign/src/sounds.rs); no check against the original yet |
@@ -4363,29 +4363,29 @@ docs/engine.md's "The coverage census" says what each class needs.
 | Function | File | Class | Engine | Evidence |
 | --- | --- | --- | --- | --- |
 | `biped_start_limp_body_physics` | units/bipeds.c | Matched | sim/src/unit_states.rs:436 | owed: death; reads the object, tag and map world, which the fake worlds do not hold; Phase 14's ragdoll |
-| `biped_falling_damage` | units/bipeds.c | Matched | sim/src/damage.rs | owed: the engine's own tests (sim/src/damage.rs); no check against the original yet |
-| `biped_start_landing` | units/bipeds.c | Matched | physics/src/movement.rs | owed: the engine's own tests (physics/src/movement.rs); no check against the original yet |
+| `biped_falling_damage` | units/bipeds.c | Partial | sim/src/damage.rs | sim/tests/biped_fall_reference.rs (trace); leaves out the jetpack cheat, erasing a biped that fell out of the world |
+| `biped_start_landing` | units/bipeds.c | Matched | physics/src/movement.rs | physics/tests/biped_landing_reference.rs (trace) |
 | `biped_render_debug` | units/bipeds.c | Replaced | dev/src/draw.rs | the editor and tools |
-| `biped_jump` | units/bipeds.c | Matched | physics/src/movement.rs | owed: the engine's own tests (physics/src/movement.rs); no check against the original yet |
+| `biped_jump` | units/bipeds.c | Partial | physics/src/movement.rs | physics/tests/movement.rs (measure); leaves out the stun penalty, the super jump, the actor's aim-jump |
 | `biped_make_footstep` | units/bipeds.c | Matched | ffi/src/sound_events.rs:97 | owed: the engine cites it, with no check against the original yet |
-| `biped_update_airborne` | units/bipeds.c | Partial | physics/src/movement.rs | leaves out the original's collision: the pill is moved by the physics library's character controller; owed: the engine's own tests (physics/src/movement.rs); no check against the original yet |
-| `biped_update_landing` | units/bipeds.c | Matched | sim/src/lib.rs:1734 | owed: the engine cites it, with no check against the original yet |
-| `biped_update_jumping` | units/bipeds.c | Matched | physics/src/movement.rs | owed: the engine's own tests (physics/src/movement.rs); no check against the original yet |
-| `biped_update_physics` | units/bipeds.c | Partial | physics/src/movement.rs | leaves out the original's collision: the pill is moved by the physics library's character controller; owed: the engine's own tests (physics/src/movement.rs); no check against the original yet |
+| `biped_update_airborne` | units/bipeds.c | Partial | physics/src/movement.rs | physics/tests/movement.rs (measure); leaves out turning while airborne, the airborne animation states |
+| `biped_update_landing` | units/bipeds.c | Matched | sim/src/lib.rs:1752 | owed: the engine cites it, with no check against the original yet |
+| `biped_update_jumping` | units/bipeds.c | Partial | physics/src/movement.rs | physics/tests/movement.rs (measure); leaves out the jetpack cheat |
+| `biped_update_physics` | units/bipeds.c | Partial | sim/src/player.rs:598 | physics/tests/movement.rs (measure); leaves out flying, the collision with up to 16 planes, replaced by the character controller |
 | `biped_accelerate` | units/bipeds.c | Matched | sim/src/forces.rs:213 | owed: the engine cites it, with no check against the original yet |
 | `biped_update_turning` | units/bipeds.c | Matched | sim/src/unit_states.rs:769 | owed: a biped's turning; reads the object, tag and map world, which the fake worlds do not hold; Phase 11's divergences |
-| `biped_update_moving` | units/bipeds.c | Partial | physics/src/movement.rs | leaves out the original's collision: the pill is moved by the physics library's character controller; owed: the engine's own tests (physics/src/movement.rs); no check against the original yet |
+| `biped_update_moving` | units/bipeds.c | Partial | physics/src/movement.rs | physics/tests/movement.rs (measure); leaves out flying bipeds, animation-driven movement, elevators and support surfaces, the random speed increase, simple creatures, climbing |
 | `biped_update` | units/bipeds.c | Matched | sim/src/unit_animator.rs:1 | owed: the engine cites it, with no check against the original yet |
-| `unit_scripting_set_maximum_vitality` | units/unit_scripting_commands.c | Matched | campaign/src/units.rs:135 | campaign/tests/unit_vitality_reference.rs (trace) |
+| `unit_scripting_set_maximum_vitality` | units/unit_scripting_commands.c | Matched | campaign/src/units.rs:136 | campaign/tests/unit_vitality_reference.rs (trace) |
 | `units_scripting_set_maximum_vitality` | units/unit_scripting_commands.c | Matched | campaign/src/units.rs | campaign/tests/unit_vitality_reference.rs (trace) |
 | `unit_scripting_set_current_vitality` | units/unit_scripting_commands.c | Matched | campaign/src/units.rs | campaign/tests/unit_vitality_reference.rs (trace) |
 | `units_scripting_set_current_vitality` | units/unit_scripting_commands.c | Matched | campaign/src/units.rs | campaign/tests/unit_vitality_reference.rs (trace) |
 | `unit_scripting_get_health` | units/unit_scripting_commands.c | Matched | sim/src/damage.rs:153 | campaign/tests/unit_vitality_reference.rs (trace) |
 | `unit_scripting_get_shield` | units/unit_scripting_commands.c | Matched | sim/src/damage.rs:163 | campaign/tests/unit_vitality_reference.rs (trace) |
-| `unit_scripting_get_grenade_count` | units/unit_scripting_commands.c | Partial | campaign/src/units.rs:270 | campaign/tests/unit_commands_reference.rs (trace); leaves out units that are not players: the engine's AI carries no inventory (coverage_units) |
-| `unit_scripting_impervious` | units/unit_scripting_commands.c | Partial | campaign/src/units.rs:231 | campaign/tests/unit_commands_reference.rs (trace); leaves out the damage push and the flinch it stops: the engine's damage has neither yet (coverage_units) |
-| `unit_scripting_start_user_animation_list` | units/unit_scripting_commands.c | Matched | campaign/src/units.rs:309 | campaign/tests/unit_vitality_reference.rs (trace) |
-| `unit_scripting_has_weapon_readied` | units/unit_scripting_commands.c | Partial | campaign/src/units.rs:256 | campaign/tests/unit_commands_reference.rs (trace); leaves out units that are not players: the engine's AI carries no inventory (coverage_units) |
+| `unit_scripting_get_grenade_count` | units/unit_scripting_commands.c | Partial | campaign/src/units.rs:279 | campaign/tests/unit_commands_reference.rs (trace); leaves out units that are not players: the engine's AI carries no inventory (coverage_units) |
+| `unit_scripting_impervious` | units/unit_scripting_commands.c | Partial | campaign/src/units.rs:240 | campaign/tests/unit_commands_reference.rs (trace); leaves out the damage push and the flinch it stops: the engine's damage has neither yet (coverage_units) |
+| `unit_scripting_start_user_animation_list` | units/unit_scripting_commands.c | Matched | campaign/src/units.rs:318 | campaign/tests/unit_vitality_reference.rs (trace) |
+| `unit_scripting_has_weapon_readied` | units/unit_scripting_commands.c | Partial | campaign/src/units.rs:265 | campaign/tests/unit_commands_reference.rs (trace); leaves out units that are not players: the engine's AI carries no inventory (coverage_units) |
 | `unit_kill` | units/units.c | Matched | script/src/lib.rs:508 | owed: the engine cites it, with no check against the original yet |
 | `units_update` | units/units.c | Partial | sim/src/lib.rs:389 | leaves out the units that are not players' (the campaign's actors step apart); owed: the engine's own version; no check against the original yet |
 | `unit_get_seat_entrance_point` | units/units.c | Matched | sim/src/seats.rs:63 | owed: seats; reads the object, tag and map world, which the fake worlds do not hold (the seat's marker) |
@@ -4402,22 +4402,22 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `unit_animation_impulse_get_index` | units/units.c | Matched | sim/src/ai_impulse.rs:3 | owed: AI's impulses; reads the object, tag and map world, which the fake worlds do not hold (the animation graph) |
 | `unit_can_play_animation_impulse` | units/units.c | Matched | sim/src/ai_impulse.rs:3 | owed: AI's impulses; reads the object, tag and map world, which the fake worlds do not hold (the animation graph) |
 | `unit_test_animation_impulse` | units/units.c | Matched | sim/src/ai_impulse.rs:131 | owed: AI's impulses; reads the object, tag and map world, which the fake worlds do not hold (the animation graph) |
-| `unit_scripting_suspended` | units/units.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
+| `unit_scripting_suspended` | units/units.c | Matched | sim/src/lib.rs:1194 | sim/tests/suspended.rs (measure) |
 | `unit_scripting_doesnt_drop_items` | units/units.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
-| `unit_scripting_vehicle_test_seat_list` | units/units.c | Matched | campaign/src/units.rs:448 | campaign/tests/unit_commands_reference.rs (trace) |
+| `unit_scripting_vehicle_test_seat_list` | units/units.c | Matched | campaign/src/units.rs:457 | campaign/tests/unit_commands_reference.rs (trace) |
 | `units_debug_get_next_unit` | units/units.c | Replaced | dev/src/control.rs | the editor and tools |
 | `units_debug_get_closest_unit` | units/units.c | Replaced | dev/src/control.rs | the editor and tools |
 | `unit_debug_ninja_rope` | units/units.c | Replaced | dev/src/control.rs | the editor and tools |
 | `unit_detach_from_parent` | units/units.c | Matched | sim/src/vehicle_animation.rs:337 | owed: seats; reads the object, tag and map world, which the fake worlds do not hold; Phase 13's getting in and out |
 | `unit_get_weapon_count` | units/units.c | Ported |  | `tools/engine_pickup_reference.py` |
 | `unit_approve_weapon_pickup` | units/units.c | Ported | sim/src/pickup.rs:69 | `tools/engine_pickup_reference.py` |
-| `unit_throw_grenade_release` | units/units.c | Matched | sim/src/player.rs:995 | owed: grenades; reads the object, tag and map world, which the fake worlds do not hold; Phase 12's thrown grenades |
+| `unit_throw_grenade_release` | units/units.c | Matched | sim/src/player.rs:1017 | owed: grenades; reads the object, tag and map world, which the fake worlds do not hold; Phase 12's thrown grenades |
 | `unit_seat_update` | units/units.c | Matched | sim/src/vehicle_animation.rs:5 | owed: seats; reads the object, tag and map world, which the fake worlds do not hold; Phase 13 |
 | `unit_animation_update` | units/units.c | Matched | ffi/src/sound_events.rs:71 | owed: the engine cites it, with no check against the original yet |
-| `unit_melee_sound` | units/units.c | Matched | sim/src/player.rs:1162 | owed: the engine cites it, with no check against the original yet |
+| `unit_melee_sound` | units/units.c | Matched | sim/src/player.rs:1184 | owed: the engine cites it, with no check against the original yet |
 | `unit_set_enterable_by_player` | units/units.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
 | `unit_set_emotion` | units/units.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
-| `unit_get_custom_animation_time` | units/units.c | Matched | campaign/src/units.rs:353 | campaign/tests/unit_commands_reference.rs (trace) |
+| `unit_get_custom_animation_time` | units/units.c | Matched | campaign/src/units.rs:362 | campaign/tests/unit_commands_reference.rs (trace) |
 | `unit_set_or_test_seat_and_weapon_label` | units/units.c | Matched | sim/src/animation.rs:1396 | owed: checked through the animation trace's labels |
 | `unit_render_debug` | units/units.c | Replaced | dev/src/draw.rs | the editor and tools |
 | `unit_animation_set_state` | units/units.c | Matched | sim/src/unit_states.rs:3 | owed: checked through the unit state trace's rules |
@@ -4435,7 +4435,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `unit_start_animation_impulse` | units/units.c | Matched | sim/src/ai_impulse.rs:4 | owed: AI's impulses; reads the object, tag and map world, which the fake worlds do not hold (the animation graph) |
 | `unit_new` | units/units.c | Partial | sim/src/objects.rs:247 | leaves out the unit's seats and its weapons, its animation graph's state; owed: the engine's own version; no check against the original yet |
 | `unit_enter_seat` | units/units.c | Matched | sim/src/unit_states.rs:571 | owed: seats; reads the object, tag and map world, which the fake worlds do not hold; Phase 13's getting in and out |
-| `unit_exit_seat_end` | units/units.c | Matched | sim/src/lib.rs:569 | owed: seats; reads the object, tag and map world, which the fake worlds do not hold; Phase 13's getting in and out |
+| `unit_exit_seat_end` | units/units.c | Matched | sim/src/lib.rs:571 | owed: seats; reads the object, tag and map world, which the fake worlds do not hold; Phase 13's getting in and out |
 | `unit_scripting_enter_vehicle` | units/units.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
 | `unit_try_and_exit_seat` | units/units.c | Matched | sim/src/unit_states.rs:603 | owed: the engine cites it, with no check against the original yet |
 | `unit_update` | units/units.c | Partial | sim/src/lib.rs:412 | leaves out dialogue, the aiming bounds and Euler aiming, shield sapping, the powerups' timers; owed: the engine's own version; no check against the original yet |

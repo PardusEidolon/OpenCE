@@ -23,7 +23,7 @@ use glam::{Quat, Vec3};
 
 pub use ground::{SurfaceMaterials, SURFACE_REACH};
 pub use mesh::LevelMesh;
-pub use movement::{Landing, MovementInput, Mover, MoverSettings};
+pub use movement::{landing_recovery, Landing, MovementInput, Mover, MoverSettings};
 pub use ragdoll::{shape_volume, RagdollId, RagdollPart, METRES_PER_UNIT_CUBED, RAGDOLL_PARTS_MAX};
 
 /// Metres in a world unit (port/macos/include/host_physics.h's).

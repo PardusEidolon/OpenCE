@@ -1083,14 +1083,18 @@ class = "matched"
 owed = "the engine cites it, with no check against the original yet"
 
 [function.biped_falling_damage]
-class = "matched"
+class = "partial"
 engine = "sim/src/damage.rs"
-owed = "the engine's own tests (sim/src/damage.rs); no check against the original yet"
+check = "sim/tests/biped_fall_reference.rs"
+against = "trace"
+leaves_out = ["the jetpack cheat", "erasing a biped that fell out of the world"]
 
 [function.biped_jump]
-class = "matched"
+class = "partial"
 engine = "physics/src/movement.rs"
-owed = "the engine's own tests (physics/src/movement.rs); no check against the original yet"
+check = "physics/tests/movement.rs"
+against = "measure"
+leaves_out = ["the stun penalty", "the super jump", "the actor's aim-jump"]
 
 [function.biped_make_footstep]
 class = "matched"
@@ -1104,7 +1108,8 @@ stands_in = "dev/src/draw.rs"
 [function.biped_start_landing]
 class = "matched"
 engine = "physics/src/movement.rs"
-owed = "the engine's own tests (physics/src/movement.rs); no check against the original yet"
+check = "physics/tests/biped_landing_reference.rs"
+against = "trace"
 
 [function.biped_start_limp_body_physics]
 class = "matched"
@@ -1117,13 +1122,16 @@ owed = "the engine cites it, with no check against the original yet"
 [function.biped_update_airborne]
 class = "partial"
 engine = "physics/src/movement.rs"
-leaves_out = ["the original's collision: the pill is moved by the physics library's character controller"]
-owed = "the engine's own tests (physics/src/movement.rs); no check against the original yet"
+leaves_out = ["turning while airborne", "the airborne animation states"]
+check = "physics/tests/movement.rs"
+against = "measure"
 
 [function.biped_update_jumping]
-class = "matched"
+class = "partial"
 engine = "physics/src/movement.rs"
-owed = "the engine's own tests (physics/src/movement.rs); no check against the original yet"
+check = "physics/tests/movement.rs"
+against = "measure"
+leaves_out = ["the jetpack cheat"]
 
 [function.biped_update_landing]
 class = "matched"
@@ -1132,14 +1140,16 @@ owed = "the engine cites it, with no check against the original yet"
 [function.biped_update_moving]
 class = "partial"
 engine = "physics/src/movement.rs"
-leaves_out = ["the original's collision: the pill is moved by the physics library's character controller"]
-owed = "the engine's own tests (physics/src/movement.rs); no check against the original yet"
+leaves_out = ["flying bipeds", "animation-driven movement", "elevators and support surfaces", "the random speed increase", "simple creatures", "climbing"]
+check = "physics/tests/movement.rs"
+against = "measure"
 
 [function.biped_update_physics]
 class = "partial"
 engine = "physics/src/movement.rs"
-leaves_out = ["the original's collision: the pill is moved by the physics library's character controller"]
-owed = "the engine's own tests (physics/src/movement.rs); no check against the original yet"
+leaves_out = ["flying", "the collision with up to 16 planes, replaced by the character controller"]
+check = "physics/tests/movement.rs"
+against = "measure"
 
 [function.biped_update_turning]
 class = "matched"
@@ -8876,11 +8886,10 @@ check = "campaign/tests/unit_vitality_reference.rs"
 against = "trace"
 
 [function.unit_scripting_suspended]
-class = "partial"
-engine = "campaign/src/presented.rs"
-leaves_out = ["what it does: the engine keeps it only as an event, which nothing acts on yet"]
-check = "campaign/tests/script_signatures_reference.rs"
-against = "trace"
+class = "matched"
+engine = "campaign/src/units.rs"
+check = "sim/tests/suspended.rs"
+against = "measure"
 
 [function.unit_scripting_vehicle_test_seat_list]
 class = "matched"

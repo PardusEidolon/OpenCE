@@ -74,7 +74,6 @@ crate::presents! {
     unit_set_emotion,
     unit_set_enterable_by_player,
     unit_set_seat,
-    unit_suspended,
     units_set_desired_flashlight_state,
     vehicle_hover,
 }

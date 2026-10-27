@@ -165,6 +165,9 @@ pub struct Player {
     /// It flies where it looks, through the level, as the shell's
     /// `noclip` makes it.
     noclip: bool,
+    /// Its unit is suspended (`unit_suspended`): it holds still where it
+    /// is, neither moving nor falling.
+    suspended: bool,
     /// Its biped's bounding sphere's centre, from its object's origin.
     bounding_offset: Vec3,
 }
@@ -383,6 +386,7 @@ impl Player {
             seat_camera: None,
             exiting: false,
             noclip: false,
+            suspended: false,
             bounding_offset,
         })
     }
@@ -590,6 +594,14 @@ impl Player {
             self.fly_through(input);
             return self.pose();
         }
+        if self.suspended {
+            // (as `biped_update_physics` holds a suspended unit's biped:
+            // where it was, still, and on no ground it could fall from)
+            self.mover.velocity = Vec3::ZERO;
+            self.mover.airborne = false;
+            self.landed = None;
+            return self.pose();
+        }
         let movement = MovementInput {
             throttle: throttle(input),
             yaw: self.yaw,
@@ -623,6 +635,16 @@ impl Player {
     pub(crate) fn shove(&mut self, offset: Vec3) -> bool {
         let (velocity, yaw) = (self.mover.velocity, self.yaw);
         self.correct(self.mover.position + offset, velocity, yaw)
+    }
+
+    /// Whether its unit is suspended, holding still.
+    pub fn suspended(&self) -> bool {
+        self.suspended
+    }
+
+    /// Suspends its unit (true), holding it still, or lets it go.
+    pub(crate) fn set_suspended(&mut self, suspended: bool) {
+        self.suspended = suspended;
     }
 
     /// Whether it flies through the level.

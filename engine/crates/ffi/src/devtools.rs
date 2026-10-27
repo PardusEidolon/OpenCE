@@ -923,8 +923,33 @@ fn teleport(state: &mut State, args: &Args) -> Result<Output, CommandError> {
                     .map(|definition| definition.bounding_radius)
             })
             .unwrap_or(0.5);
-        // (beside it, a little above, not inside it)
-        at.position + Vec3::new(0.0, radius + 1.0, 0.5)
+        // (beside it, a little above, not inside it, and on the ground
+        // there: on the first side of it that has ground under it, as a
+        // fern against a rock has only rock on one side, where a player
+        // put there would be inside the rock and fall through it to a
+        // fall's death; level with it where no side has ground)
+        let ceiling = at.position.z + radius + 2.0;
+        let ground_at = |point: Vec3| {
+            running.level.as_ref().and_then(|level| {
+                level
+                    .structure_bsps
+                    .iter()
+                    .filter_map(|bsp| bsp.collision.ground_at(point.x, point.y, ceiling))
+                    .reduce(f32::max)
+            })
+        };
+        let away = radius + 1.0;
+        let sides = [
+            Vec3::new(0.0, away, 0.0),
+            Vec3::new(0.0, -away, 0.0),
+            Vec3::new(away, 0.0, 0.0),
+            Vec3::new(-away, 0.0, 0.0),
+        ];
+        let standing = sides.iter().find_map(|&side| {
+            let beside = at.position + side;
+            ground_at(beside).map(|ground| Vec3::new(beside.x, beside.y, ground.max(beside.z)))
+        });
+        standing.unwrap_or(at.position + sides[0]) + Vec3::new(0.0, 0.0, 0.5)
     };
     let moved = if running.simulation.player().is_some() {
         running.simulation.teleport_player(0, to)
