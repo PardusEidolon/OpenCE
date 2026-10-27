@@ -129,7 +129,7 @@ pub(crate) fn normalize(v: &mut Vec3) -> f32 {
 
 /// `v` turned about the unit `n` by the angle of `sine` and `cosine`
 /// (`rotate_vector_about_axis`).
-fn rotate_about_axis(v: Vec3, n: Vec3, sine: f32, cosine: f32) -> Vec3 {
+pub(crate) fn rotate_about_axis(v: Vec3, n: Vec3, sine: f32, cosine: f32) -> Vec3 {
     let along = (n.x * v.x + n.y * v.y + n.z * v.z) * (1.0 - cosine);
     let cross = Vec3::new(
         n.z * v.y - v.z * n.y,

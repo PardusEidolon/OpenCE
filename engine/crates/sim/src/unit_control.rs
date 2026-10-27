@@ -14,6 +14,8 @@ impl UnitFlags {
     pub const ACTIVELY_CONTROLLED: u32 = 1 << 0;
     /// Its controls move it (`_unit_controllable_bit`).
     pub const CONTROLLABLE: u32 = 1 << 6;
+    /// Hard pings don't stagger it, as it burns (`_unit_ignore_hard_pings_bit`).
+    pub const IGNORE_HARD_PINGS: u32 = 1 << 7;
     /// It aims without turning to face its aim (`_unit_aim_without_turning_bit`).
     pub const AIM_WITHOUT_TURNING: u32 = 1 << 14;
     /// It does not blink (`_unit_cannot_blink_bit`).

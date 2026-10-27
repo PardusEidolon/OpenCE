@@ -51,6 +51,7 @@ pub mod unit_animator;
 pub mod unit_control;
 pub mod unit_definition;
 pub mod unit_dialogue;
+pub mod unit_flaming;
 pub mod unit_hands;
 pub mod unit_inventory;
 pub mod unit_items;

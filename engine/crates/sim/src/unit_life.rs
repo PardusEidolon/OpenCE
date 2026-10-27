@@ -18,6 +18,10 @@ pub struct DamageFlags(pub u32);
 impl DamageFlags {
     /// It is dead (`_object_dead_bit`).
     pub const DEAD: u32 = 1 << 2;
+    /// It dies by an act of god (`_object_die_act_of_god_bit`).
+    pub const DIE_ACT_OF_GOD: u32 = 1 << 5;
+    /// It can't be hurt (`_object_cannot_take_damage_bit`).
+    pub const CANNOT_TAKE_DAMAGE: u32 = 1 << 11;
     /// It dies by an act of god, with no sound or effect
     /// (`_object_die_act_of_god_silent_bit`).
     pub const DIE_ACT_OF_GOD_SILENT: u32 = 1 << 6;
@@ -28,6 +32,15 @@ impl DamageFlags {
     /// Whether `flag` is set.
     pub fn has(self, flag: u32) -> bool {
         self.0 & flag != 0
+    }
+
+    /// Sets `flag` to `on`.
+    pub fn set(&mut self, flag: u32, on: bool) {
+        if on {
+            self.0 |= flag;
+        } else {
+            self.0 &= !flag;
+        }
     }
 
     /// Its death will count in nobody's statistics

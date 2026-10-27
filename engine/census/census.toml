@@ -9485,10 +9485,6 @@ engine = "sim/src/ai_impulse.rs"
 check = "sim/src/ai_impulse.rs"
 against = "measure"
 
-[function.unit_start_flaming_to_death]
-class = "missing"
-note = "not reached from a root of the game; the units track owns it"
-
 [function.unit_stop_custom_animation]
 class = "partial"
 engine = "campaign/src/units.rs"
