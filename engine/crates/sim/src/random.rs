@@ -116,7 +116,7 @@ pub fn direction_table() -> &'static [[f32; 3]] {
 /// `v` made a unit vector, its length returned; left alone, and 0
 /// returned, when it is shorter than the game's epsilon (`normalize3d`,
 /// its square root in double).
-fn normalize(v: &mut Vec3) -> f32 {
+pub(crate) fn normalize(v: &mut Vec3) -> f32 {
     let magnitude = libm::sqrt(f64::from(v.x * v.x + v.y * v.y + v.z * v.z)) as f32;
     // a NaN length is scaled by, as the game's `!(epsilon > length)` does
     if magnitude.abs() < 0.0001 {

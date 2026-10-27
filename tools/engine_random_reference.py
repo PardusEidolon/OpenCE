@@ -185,8 +185,10 @@ int main(void)
 """
 
 
-def source_file():
-    """The fake world, the game's functions and the cases, as one C file."""
+def seeded_source(fake_world=FAKE_WORLD):
+    """The game's seed and its helpers over the direction table, in the math
+    trace's world and `fake_world` (which answers game_engine_running), as C
+    another trace can put its own code and cases after."""
     real_math_c = read("source/math/real_math.c")
     real_math_h = read("source/math/real_math.h")
     geometry_c = read("source/math/geometry.c")
@@ -218,8 +220,13 @@ def source_file():
     randoms = [function(random_c, name) for name in RANDOM_FUNCTIONS]
     wrappers = [inline(real_math_h, name) for name in WRAPPERS]
     return "\n\n".join(
-        [world, FAKE_WORLD, globals_, *helpers, rotate, *geosphere, random_prototype, *randoms, *wrappers, MAIN]
+        [world, fake_world, globals_, *helpers, rotate, *geosphere, random_prototype, *randoms, *wrappers]
     )
+
+
+def source_file():
+    """The fake world, the game's functions and the cases, as one C file."""
+    return "\n\n".join([seeded_source(), MAIN])
 
 
 def reference():
