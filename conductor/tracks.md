@@ -67,6 +67,7 @@ This file tracks all major tracks for the project.
 
 - [~] **Track: Coverage: units, players' effects and the object systems: unit update and damage, biped movement, player effects, objects, items, devices, effects and physics, ported and traced**
   *Link: [./tracks/coverage_units_20261026/](./tracks/coverage_units_20261026/)*
+  *Paused 27 October 2026, with the coverage tracks after it, while the hybrid (source/'s simulation compiled natively under the Rust engine) is tried.*
 
 - [ ] **Track: Coverage: the game loop, flow and saves: the main loop iteration, winning a map and the next level, the game engine's update, players and respawn, saved games and the shell**
   *Link: [./tracks/coverage_game_loop_20261026/](./tracks/coverage_game_loop_20261026/)*

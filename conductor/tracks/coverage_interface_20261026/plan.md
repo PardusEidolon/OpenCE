@@ -5,6 +5,7 @@ Every task is test first (`workflow.md`): the trace, measurement or census test 
 ## Phase 1: HUD
 - [ ] Task: Traces of HUD state.
 - [ ] Task: Port `hud_draw_screen`'s logic and the 14 natives.
+- [ ] Task: The user's feedback, 27 October: the HUD's elements still need fixing. The frame bloodgulch_hud_1920x1080 drawn then shows the grenade count reading 4 where the first frame had 0, and the first person's rifle and hand moved. Measure every element against the original's HUD (placement, scale, counts, colours) and fix each one that differs.
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: HUD' (Protocol in workflow.md) (automated)
 
 ## Phase 2: Interface

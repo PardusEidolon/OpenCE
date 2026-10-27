@@ -4,7 +4,7 @@ Every task is test first (`workflow.md`): the trace, measurement or census test 
 
 ## Phase 1: Units
 - [ ] Task: Traces for `unit_update`, `unit_damage_aftermath` and `biped_update_moving`.
-- [ ] Task: Port the units system until its counts are zero.
+- [~] Task: Port the units system until its counts are zero.
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Units' (Protocol in workflow.md) (automated)
 
 ## Phase 2: Player effects
@@ -18,6 +18,7 @@ Every task is test first (`workflow.md`): the trace, measurement or census test 
 
 ## Phase 4: Effects
 - [ ] Task: Traces and ports for effects and particles.
+- [ ] Task: The user's feedback, 27 October: the weapons station's particles are still incomplete. Its frame's plume changed shape after 592bb028; trace each weapon's effects (firing, impacts, contrails) against the original and draw every particle the game makes.
 - [ ] Task: Conductor - User Manual Verification 'Phase 4: Effects' (Protocol in workflow.md) (automated)
 
 ## Phase 5: Physics
