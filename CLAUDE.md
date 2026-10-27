@@ -1,49 +1,55 @@
 # Working on OpenCE
 
-These are the practices the project has settled on while building the new
-engine. They come before `AGENTS.md` where the two differ: `AGENTS.md`
-describes the old port (Linux, Windows, Android and the web, the
-decompilation compiled as it is), and some of its rules no longer apply.
+These are the practices the project has settled on. They come before
+`AGENTS.md` where the two differ. The direction was set on 27 October
+2026; its reasons are in `docs/retrospective_fork_in_the_road.md`.
 
 ## What the project is now
 
-- **macOS only.** The game is a new engine in Rust (`engine/crates/`) with a
-  Swift app (`engine/app/`), drawn with Metal. There is no VM, no guest and
-  no 32-bit addressing. `port/macos/` is the old hosted port, kept until the
-  engine replaces it.
-- **The decompilation is a reference.** `source/` says how the original
-  behaves; the engine is not compiled from it, and no new C is written.
-  The rules in `AGENTS.md` about changing `source/` with `port:` comments
-  apply only if `source/` itself is changed.
-- **Port, match, then extend.** Lighting, shaders and graphics are
-  rewritten and enhanced. AI, particles, animation, sound, script logic
-  and gameplay are ported from `source/` and matched to it (reference
-  traces) before anything is extended.
+- **macOS only.** A native macOS app: Swift for the app and Metal for
+  drawing, Rust under it (`engine/crates/`, `engine/app/`).
+- **The game is the original's own code.** `source/` is compiled unchanged
+  as wasm32 into `game.wasm` and run in Wasmtime inside the app (track
+  `native_port_20261028`). It is not a browser build. Wasm's 32-bit
+  pointers keep every tag layout and pointer in the maps as they are.
+- **One typed import list.** The game calls only the Rust import list: the
+  macOS platform layer and the plugin hooks. Plugins are written in Rust,
+  and read the game's memory only through read-only, bounds-checked views.
+  The Halo UI rewrite is a plugin.
+- **Drawing.** Swift and Metal draw what the game's rasterizer asks for.
+  The shaders first match the original's; then the lighting is extended
+  from the original's own (lightmaps, shader tags, lights), each extension
+  switchable back to stock.
+- **The bar.** p99 ≤ 8.33 ms at 3840×2160, ultra, on the M1 Max
+  (`--benchmark 60`).
+- **Built ahead of time.** The metallib and `game.wasm` at build; the
+  `.cwasm` and the Metal binary archive behind the loading screen, cached.
 - **Keyboard and mouse only.** No gamepad or controller support; pad
   events are filtered out.
-- **Departures from stock** need not be off by default in the engine
-  (the `AGENTS.md` settings rule was the old port's). The lighting is the
-  enhanced lighting only. The UI is built from the user's own `ui.map` at
-  native resolution (4K), not held to the original's low resolution.
-- **The launcher** shows Play, Settings and Exit, and its window can be
-  resized. Its Developer tab is for development.
-- **Nix is all the user needs**: `nix run .#engine` runs the game and
-  `nix build .#engine` builds it; `nix develop` is the shell to work in.
+- **No launcher.** The game starts on its main menu, or on the map `--map`
+  names. It runs through the CLI and Nix: `nix run .#engine` runs it,
+  `nix build .#engine` builds it, and `nix develop` is the shell to work
+  in.
+- **Being replaced.** The Rust simulation, `bevy_ecs`, the `net` crate and
+  `port/macos` (the Hypervisor.framework VM) stay until Track A's last
+  phase removes them; do not extend them.
 
 ## Still in force from `AGENTS.md`
 
 - Never read the Xbox SDK's headers or anything derived from them; do not
   read `xbox/include`.
+- `source/` changes as little as possible; each change is marked `port:`.
 - The repository is CC0. GPL code (OpenSauce, Reclaimer) is read as
   documentation of formats, never copied. Vendored code goes in
   `port/third_party/<name>` with a README.
-- Map, tag and other game files are untrusted input: read them through
-  bounds-checked readers, and fuzz the readers.
+- Map, tag and other game files, and the game's memory read by a plugin,
+  are untrusted input: read them through bounds-checked readers, and fuzz
+  the readers.
 - Art: hand-drawn redraws; fonts: Overpass and OpenCE only.
 - Nothing from the user's game data (maps, `ui.map`, the xbe, Bungie's
-  sounds) goes into the repository or the app bundle. Generated data
-  derived from it (devgulch, golden frames, bakes) stays on the user's
-  machine.
+  sounds) goes into the repository, the app bundle or an artifact.
+  Generated data derived from it (devgulch, golden frames, bakes) stays on
+  the user's machine.
 - Do not imitate Bungie's or Microsoft's branding.
 
 ## Building and testing
@@ -61,20 +67,21 @@ decompilation compiled as it is), and some of its rules no longer apply.
 
 ## Matching the original
 
-- **Reference traces.** Behaviour is checked against the original's own
-  functions: a `tools/engine_*_reference.py` script compiles the needed
-  functions from `source/` against a small fake world, records a trace,
-  and `engine/crates/sim/tests/*_reference.rs` compares the engine with
-  it. `--check` fails when the trace is stale.
-- **Determinism.** The simulation runs at 60 Hz, scripts at 30 Hz, in a
-  fixed `SimSet` order. Maths goes through `libm` (and `glam` with its
-  libm feature), with no fused multiply-add. Maps the simulation iterates
-  must iterate in a fixed order. A new crate that does floating-point maths
-  in the simulation must follow the same rules.
+- **Reference traces.** A `tools/engine_*_reference.py` script compiles
+  the needed functions from `source/` natively against a small fake world
+  and records a trace; the wasm build must match it. `--check` fails when
+  the trace is stale.
+- **The census** (`opence census --check`) classes every function of the
+  original, and stays current.
+- **Determinism.** The simulation runs at 60 Hz and scripts at 30 Hz, as
+  the original runs them. `game.wasm` uses musl's maths and no fused
+  multiply-add; Rust maths that must repeat goes through `libm`. Maps
+  iterated where order matters iterate in a fixed order.
 - **Measure, don't assume.** Compare with the stock game by measurement
-  (lightmap seams, shadow edges, timings), in systematic sweeps. The
-  user's own look found blocky shadows that the tests had missed; a check
-  that passes is not proof that the result looks right.
+  (image differences per region, shadow edges, sound, timings), in
+  systematic sweeps. A check that passes is not proof that the result
+  looks right. The Gearbox PC port's losses are measured against the Xbox
+  original, not taken from it.
 
 ## Running the game
 
@@ -94,11 +101,11 @@ decompilation compiled as it is), and some of its rules no longer apply.
 - **Claude writes all the code.** The user reads it. Do not leave
   `TODO(human)` or ask the user to write code; explanatory insight notes
   are welcome.
-- **Conductor tracks** (`conductor/tracks.md`) hold the plans. A fidelity
-  track runs all its phases to the end without stopping for manual
-  checks, with automated checks at each phase's end, and then a
-  data-backed report that sets up the next fix track. New features come
-  only after the user is satisfied with fidelity.
+- **Conductor tracks** (`conductor/tracks.md`) hold the plans, in order:
+  `native_port`, `halo_ui`, `map_audit`, `lighting_original`. A track runs
+  all its phases to the end without stopping for manual checks, with
+  automated checks at each phase's end. There is no report phase, except
+  where a track names one (A1's go/no-go).
 - **Designs** (screens, menus, layouts) are drawn as static prototypes in a
   Claude design artifact, not as markdown.
 - **Commits.** The subject is a plain sentence saying what changed; the

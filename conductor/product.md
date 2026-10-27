@@ -1,48 +1,59 @@
 # Product Guide: OpenCE (macOS)
 
 ## Vision
-Bring Halo: Combat Evolved to modern macOS as a native game on a modern engine. **From 2026-10-21** the engine is rebuilt from scratch in Rust and Swift (track `native_engine_20261021`), with no VM, no 32-bit addressing and no fixed addresses. It runs at native resolution at any aspect ratio, with temporal anti-aliasing, HDR, a mouse-first interface and typed, extensible systems. The decompilation is a reference for how the game behaves. The user's Xbox and Custom Edition maps are imported once into a typed native format. The original is not preserved byte for byte; what players feel (movement, weapons, vehicles, damage) is matched against the reference app.
-
-The VM app built from the decompilation (the earlier tracks) stays as the reference and the benchmark until the new engine reaches parity.
+Bring Halo: Combat Evolved to modern macOS as a native game that is the
+original's own code. **From 2026-10-27** the decompilation (`source/`) is
+compiled unchanged as wasm32 and run in Wasmtime inside a native macOS app
+(track `native_port_20261028`), so the game plays as the Xbox original
+does. Around it the app is modern: native resolution at any aspect ratio,
+4K, a keyboard-and-mouse interface built as a plugin, and lighting
+extended from the original's own. The reasons are in
+`docs/retrospective_fork_in_the_road.md`.
 
 ## Target Platform
-- **macOS only** (Apple Silicon-first). Linux, Windows, Android, and web targets are removed going forward to reduce scope.
-- Shipped as a **native macOS application package** (.app).
+- **macOS only** (Apple Silicon).
+- Run through the CLI and Nix (`nix run .#engine`); there is no launcher.
 
 ## Target Users
-- **Mac players** wanting Halo: CE running natively and fast on modern Apple hardware.
-- **Contributors & preservationists** interested in a clean, CC0 macOS decompilation port.
+- **Mac players** wanting Halo: CE running natively and fast on modern
+  Apple hardware, as the original plays.
+- **Contributors and preservationists** interested in a clean, CC0 port
+  of the decompilation.
 
 ## Core Value
-- **Native & performant:** Metal renderer exploiting Apple Silicon; 4K + 120fps+ target.
-- **Familiar, not frozen:** the game feels like Halo (movement, weapons, vehicles, damage, checked against the reference app), but its code, resolution, interface and physics are modern.
-- **Focused:** one platform, a smaller/sharper codebase and toolchain.
-- **Free & open:** CC0; game data from the user's own disc image; no commercial assets shipped.
+- **The original's game:** movement, weapons, vehicles, AI, scripts and
+  sound are the original's code, checked against the natively compiled
+  reference by traces.
+- **Native and fast:** Metal on Apple Silicon; p99 ≤ 8.33 ms at 4K ultra.
+- **Extended, switchably:** each extension (lighting, the HUD and menus at
+  4K) can be switched back to stock and is measured against it. The
+  Gearbox PC port's losses are fixed against the Xbox original.
+- **Free and open:** CC0; game data from the user's own copy; no
+  commercial assets shipped.
 
-## Architecture & Languages
-- **The new engine (`engine/`):** Rust for content, simulation, scripts, physics and the network; Swift for the app, input, Metal, menus and audio. The decompiled C (`source/`) is a reference only.
-- **Rust (via UniFFI):** low-level, portable engine-adjacent logic where memory safety and a clean FFI boundary matter. UniFFI generates the Swift bindings. Chosen partly to keep a **wasm32 build target reachable later**.
-- **Swift + Xcode:** the macOS app shell, windowing/lifecycle, packaging, and the **Metal harness**.
-- Rationale: Swift is the native path to AppKit/Metal/Xcode; Rust gives low-level control and a smooth future wasm on-ramp. Both are used at different layers rather than choosing one.
+## Architecture
+- **The game:** `source/` as `game.wasm`, run in Wasmtime, compiled ahead
+  of time with Cranelift.
+- **The import list (Rust):** the macOS platform layer (memory, files,
+  threads, input, sound, the render calls) and the plugin hooks. Plugins
+  are Rust and read the game through read-only, bounds-checked views.
+- **The app (Swift):** the window, keyboard and mouse, sound output, and
+  Metal drawing the rasterizer's buffer.
 
-## Toolchain & Workflow
-- **Nix** is the primary shell and harness for native builds — the Nix dev shell for quick iterative changes, `nix build` for final builds to close out a track.
-- Migration toward the **Swift/Xcode** toolchain for the Apple app layer and the Metal harness, alongside the **Rust** toolchain for the low-level layer.
-
-## Key Features
-- Native macOS .app running Halo: CE at performant speeds.
-- Metal-based rendering path replacing the D3D8-on-OpenGL layer.
-- 4K + 120fps+ on modern Apple displays/hardware.
-
-## Roadmap / Sequenced Later
-- **Hardware-accelerated ray tracing** for the lighting engine — unlocked once the Swift/Metal harness is in place (Metal ray tracing on Apple Silicon).
-- **wasm build target** — enabled by keeping the low-level layer in Rust; revisited after the macOS app is solid.
-
-## Parked (far-future, viability TBD)
-- **Ragdoll & extended physics:** extend Halo 1's native physics, studying how Halo 2 / Halo 3 handled player–environment interaction and building a native extension inspired by them. Explicitly parked; viability (including whether decompiled later engines can inform it) assessed later.
+## Roadmap
+1. `native_port_20261028`: the original running in Wasmtime, the platform
+   layer, the plugin interface, stock rendering on Metal, the presentation
+   as plugins, the PC port's losses, then the old engine removed. A1's
+   go/no-go decides whether it carries on.
+2. `halo_ui_20261028`: the Halo menus and HUD rewritten as a plugin, at 4K,
+   for keyboard and mouse.
+3. `map_audit_20261028`: every map and cutscene compared with stock.
+4. `lighting_original_20261028`: placed lights, bounce and probes, the sky
+   and atmosphere, and ray tracing, from the original's lighting.
+5. Later: the living world, kev-4b and the netcode rework.
 
 ## Non-Goals
-- Shipping game data or commercial fonts/art.
+- Shipping game data or commercial fonts or art.
 - OpenSauce feature support.
 - Reading from or copying the Xbox SDK headers.
-- Supporting Linux, Windows, Android, or web (web via wasm is a later roadmap item, not a current target).
+- Linux, Windows, Android, a browser build, or gamepads.
