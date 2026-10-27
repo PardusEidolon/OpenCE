@@ -392,14 +392,11 @@ pub(crate) fn erase(mission: &mut Mission, unit: ObjectHandle) -> bool {
     mission.sim.remove_actor(index)
 }
 
-/// Kills actor `unit` where it stands (`actor_kill`).
+/// Kills actor `unit` where it stands (`actor_kill`), even one placed this
+/// tick, whose vitality the simulation has yet to give it: the original
+/// marks the unit to die whatever its state.
 pub(crate) fn kill(mission: &mut Mission, unit: ObjectHandle) {
-    if let Some(mut vitality) = mission.sim.component::<Vitality>(unit) {
-        vitality.body = -1.0;
-        vitality.shield = 0.0;
-        vitality.dead = true;
-        mission.sim.insert(unit, vitality);
-    }
+    mission.sim.kill(unit);
 }
 
 /// Decides what each actor does this tick and gives the simulation their

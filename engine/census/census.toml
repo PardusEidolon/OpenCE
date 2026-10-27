@@ -779,12 +779,18 @@ because = "tools"
 stands_in = "dev/src/draw.rs"
 
 [function.actor_action_handle_surprise]
-class = "matched"
-owed = "AI; reads the object, tag and map world, which the fake worlds do not hold (the actor and its prop); Phase 11's divergences"
+class = "partial"
+check = "sim/src/ai_impulse.rs"
+against = "measure"
+engine = "sim/src/ai_impulse.rs"
+leaves_out = ["the surprise level and vehicle passenger tests", "the surprise's communication event", "the wild fire and the bursts held back", "the new target taken from what surprised it", "the facing it keeps when the way is unknown: the desired facing rather than the current one (the campaign always knows the way)"]
 
 [function.actor_action_try_to_dive]
-class = "matched"
-owed = "AI; reads the object, tag and map world, which the fake worlds do not hold (the actor and its prop); Phase 11's divergences"
+class = "partial"
+check = "sim/src/ai_impulse.rs"
+against = "measure"
+engine = "sim/src/ai_impulse.rs"
+leaves_out = ["the evasion direction tried against the world's collision and its ledges (actor_move_try_evasion_direction)", "a dive off a ledge"]
 
 [function.actor_activation_debug_color]
 class = "replaced"
@@ -796,14 +802,18 @@ class = "missing"
 note = "not reached from a root of the game; the AI track owns it"
 
 [function.actor_erase]
-class = "matched"
+class = "partial"
 engine = "campaign/src/actors.rs"
-owed = "the campaign's rewrite of the AI; no check against the original yet"
+check = "campaign/tests/actors.rs"
+against = "measure"
+leaves_out = ["swarms", "actor_died's notice to its encounter"]
 
 [function.actor_kill]
-class = "matched"
+class = "partial"
 engine = "campaign/src/actors.rs"
-owed = "the campaign's rewrite of the AI; no check against the original yet"
+check = "campaign/tests/actors.rs"
+against = "measure"
+leaves_out = ["swarms", "a silent death (ai_kill_silent kills as ai_kill does)", "the actor left in the AI's list once its unit is dead"]
 
 [function.actor_mode_name]
 class = "replaced"
@@ -819,7 +829,8 @@ note = "not reached from a root of the game; the AI track owns it"
 class = "partial"
 engine = "campaign/src/actors.rs"
 leaves_out = ["the actor's variants and their weapons", "its perception and memory"]
-owed = "the engine's own version; no check against the original yet"
+check = "campaign/tests/actors.rs"
+against = "measure"
 
 [function.actor_path_get_destination_firing_position_index]
 class = "missing"
@@ -833,31 +844,36 @@ note = "not reached from a root of the game; the AI track owns it"
 class = "partial"
 engine = "campaign/src/actors.rs"
 leaves_out = ["props and their knowledge states", "acknowledgement and orphans", "danger zones", "the target weights", "searching and uncovering"]
-owed = "the campaign's rewrite of the AI; no check against the original yet (Phase 11's divergences)"
+check = "campaign/tests/actors.rs"
+against = "measure"
 
 [function.actor_place]
 class = "partial"
 engine = "campaign/src/actors.rs"
 leaves_out = ["swarms", "the starting location's initial state and animation", "mounted weapons", "major upgrades"]
-owed = "the campaign's rewrite of the AI; no check against the original yet (Phase 11's divergences)"
+check = "campaign/tests/actors.rs"
+against = "measure"
 
 [function.actor_select_firing_position]
 class = "partial"
 engine = "campaign/src/actors.rs"
 leaves_out = ["the pre- and post-evaluators", "discarded positions", "line of sight from each position", "the firing position groups"]
-owed = "the campaign's rewrite of the AI; no check against the original yet (Phase 11's divergences)"
+check = "campaign/tests/actors.rs"
+against = "measure"
 
 [function.actor_update]
 class = "partial"
 engine = "campaign/src/actors.rs"
 leaves_out = ["actions and their state machines", "emotions", "swarms", "dormancy"]
-owed = "the engine's own version; no check against the original yet"
+check = "campaign/src/actors.rs"
+against = "measure"
 
 [function.actors_update]
 class = "partial"
 engine = "campaign/src/actors.rs"
 leaves_out = ["actions and their state machines", "emotions", "swarms", "dormancy and activation", "props"]
-owed = "the campaign's rewrite of the AI; no check against the original yet (Phase 11's divergences)"
+check = "campaign/tests/actors.rs"
+against = "measure"
 
 [function.adjust_rectangle2d]
 class = "native"
@@ -865,42 +881,52 @@ primitive = "min"
 
 [function.ai_conversation]
 class = "matched"
-owed = "the engine cites it, with no check against the original yet"
+check = "campaign/tests/natives.rs"
+against = "measure"
 
 [function.ai_conversation_advance]
 class = "matched"
-owed = "the engine cites it, with no check against the original yet"
+check = "campaign/src/conversations.rs"
+against = "measure"
 
 [function.ai_conversation_begin]
 class = "partial"
 engine = "campaign/src/conversations.rs"
 leaves_out = ["the participants chosen by distance and by sight"]
-owed = "the engine's own version; no check against the original yet"
+check = "campaign/src/conversations.rs"
+against = "measure"
 
 [function.ai_conversation_line]
 class = "matched"
-owed = "AI; reads the object, tag and map world, which the fake worlds do not hold (the scenario's conversations); campaign/tests/flow.rs"
+check = "campaign/tests/natives.rs"
+against = "measure"
 
 [function.ai_conversation_line_perform]
 class = "partial"
 engine = "campaign/src/conversations.rs"
 leaves_out = ["the speaker's animation", "the line's subtitle"]
-owed = "the engine's own version; no check against the original yet"
+check = "campaign/src/conversations.rs"
+against = "measure"
 
 [function.ai_conversation_status]
-class = "matched"
-owed = "AI; reads the object, tag and map world, which the fake worlds do not hold (the scenario's conversations); campaign/tests/flow.rs"
+class = "partial"
+check = "campaign/tests/natives.rs"
+against = "measure"
+engine = "campaign/src/conversations.rs"
+leaves_out = ["status 1, made but not yet begun", "status 5, unable to begin"]
 
 [function.ai_conversation_stop]
 class = "matched"
 engine = "campaign/src/conversations.rs"
-owed = "a script function the campaign wires; no check against the original yet"
+check = "campaign/tests/natives.rs"
+against = "measure"
 
 [function.ai_conversation_update]
 class = "partial"
 engine = "campaign/src/conversations.rs"
 leaves_out = ["the participants' gestures and looking at each other"]
-owed = "the engine's own version; no check against the original yet"
+check = "campaign/src/conversations.rs"
+against = "measure"
 
 [function.ai_debug_vocalize_evaluate]
 class = "replaced"
@@ -910,7 +936,8 @@ stands_in = "dev/src/script.rs"
 [function.ai_erase]
 class = "matched"
 engine = "campaign/src/ai.rs"
-owed = "a script function the campaign wires; no check against the original yet"
+check = "campaign/tests/actors.rs"
+against = "measure"
 
 [function.ai_handle_editing]
 class = "replaced"
@@ -920,7 +947,8 @@ note = "a debug check, statistic or editor hook of the original; the dev tools s
 
 [function.ai_place]
 class = "matched"
-owed = "the engine cites it, with no check against the original yet"
+check = "campaign/tests/actors.rs"
+against = "measure"
 
 [function.ai_scripting_attach_units]
 class = "missing"
@@ -933,27 +961,32 @@ note = "not reached from a root of the game; the scripts and sounds track owns i
 [function.ai_scripting_conversation]
 class = "matched"
 engine = "campaign/src/conversations.rs"
-owed = "a script function the campaign wires; no check against the original yet"
+check = "campaign/tests/natives.rs"
+against = "measure"
 
 [function.ai_scripting_conversation_advance]
 class = "matched"
 engine = "campaign/src/conversations.rs"
-owed = "a script function the campaign wires; no check against the original yet"
+check = "campaign/src/conversations.rs"
+against = "measure"
 
 [function.ai_scripting_conversation_line]
 class = "matched"
 engine = "campaign/src/conversations.rs"
-owed = "a script function the campaign wires; no check against the original yet"
+check = "campaign/tests/natives.rs"
+against = "measure"
 
 [function.ai_scripting_conversation_status]
 class = "matched"
 engine = "campaign/src/conversations.rs"
-owed = "a script function the campaign wires; no check against the original yet"
+check = "campaign/tests/natives.rs"
+against = "measure"
 
 [function.ai_scripting_conversation_stop]
 class = "matched"
 engine = "campaign/src/conversations.rs"
-owed = "a script function the campaign wires; no check against the original yet"
+check = "campaign/tests/natives.rs"
+against = "measure"
 
 [function.ai_scripting_detach_units]
 class = "missing"
@@ -966,7 +999,8 @@ note = "not reached from a root of the game; the scripts and sounds track owns i
 [function.ai_scripting_erase]
 class = "matched"
 engine = "campaign/src/ai.rs"
-owed = "a script function the campaign wires; no check against the original yet"
+check = "campaign/tests/actors.rs"
+against = "measure"
 
 [function.ai_scripting_magically_see_units]
 class = "missing"
@@ -979,13 +1013,15 @@ note = "not reached from a root of the game; the scripts and sounds track owns i
 [function.ai_scripting_place]
 class = "matched"
 engine = "campaign/src/ai.rs"
-owed = "a script function the campaign wires; no check against the original yet"
+check = "campaign/tests/actors.rs"
+against = "measure"
 
 [function.ai_update]
 class = "partial"
 engine = "campaign/src/actors.rs"
 leaves_out = ["inactive encounters and swarms released", "team status", "the AI's spatial effects", "the conversations' own update"]
-owed = "the campaign's rewrite of the AI; no check against the original yet (Phase 11's divergences)"
+check = "campaign/tests/actors.rs"
+against = "measure"
 
 [function.allocate_new_datablock]
 class = "replaced"
@@ -3590,13 +3626,15 @@ against = "measure"
 class = "partial"
 engine = "campaign/src/actors.rs"
 leaves_out = ["the encounter's firing positions and their states", "the squads placed by delay or by count"]
-owed = "the engine's own version; no check against the original yet"
+check = "campaign/tests/actors.rs"
+against = "measure"
 
 [function.encounters_create_for_new_map]
 class = "partial"
 engine = "campaign/src/actors.rs"
 leaves_out = ["activation cluster bit vectors", "firing position owner indices", "the encounter's own state (respawn, timers)"]
-owed = "the campaign's rewrite of the AI; no check against the original yet (Phase 11's divergences)"
+check = "campaign/tests/actors.rs"
+against = "measure"
 
 [function.equal_point2d]
 class = "native"

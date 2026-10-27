@@ -9,6 +9,7 @@ use std::sync::Arc;
 use opence_campaign::{AiReference, Mission};
 use opence_content::Level;
 use opence_import::testing::stock_level_unheld;
+use opence_script::Value;
 use opence_sim::damage::Vitality;
 use opence_sim::input::TickInput;
 use opence_sim::objects::Difficulty;
@@ -140,4 +141,45 @@ fn shoots(mission: &mut Mission, index: usize) -> bool {
             .any(|event| event.object == player && event.owner == Some(unit));
     }
     targeted && hurt
+}
+
+#[test]
+fn a_placed_encounter_is_counted_killed_and_erased() -> Result<(), Box<dyn Error>> {
+    let Some(stock) = stock_level_unheld("a10")? else {
+        return Ok(()); // (no game data here)
+    };
+    let level = Arc::new(stock);
+    let mut sim = Simulation::empty();
+    sim.spawn_player(&level, 0)?;
+    let mut mission = Mission::new(sim, Arc::clone(&level), Difficulty::Normal);
+    let living =
+        |mission: &mut Mission, e: i32| mission.call("ai_living_count", &[Value::Index(e)]);
+    // The first encounter that places anyone at normal.
+    let mut placed = None;
+    for e in 0..i32::try_from(level.scenario.campaign.encounters.len())? {
+        mission.call("ai_place", &[Value::Index(e)]);
+        if !mission.actors().is_empty() {
+            placed = Some(e);
+            break;
+        }
+    }
+    let e = placed.ok_or("no encounter places anyone")?;
+    let units: Vec<_> = mission.actors().iter().map(|a| a.unit).collect();
+    let placed_count = i16::try_from(units.len())?;
+    assert_eq!(living(&mut mission, e), Some(Value::Short(placed_count)));
+
+    mission.call("ai_kill", &[Value::Index(e)]);
+    assert_eq!(living(&mut mission, e), Some(Value::Short(0)), "killed");
+    for &unit in &units {
+        let vitality: Vitality = mission.sim().component(unit).ok_or("no vitality")?;
+        assert!(vitality.dead, "the unit dies");
+    }
+
+    mission.call("ai_erase", &[Value::Index(e)]);
+    assert!(mission.actors().is_empty(), "the actors are erased");
+    assert!(mission.sim().actors().is_empty());
+    for &unit in &units {
+        assert!(mission.sim().object(unit).is_none(), "with their units");
+    }
+    Ok(())
 }

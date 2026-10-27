@@ -7,7 +7,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 
 | System | Ported | Matched | Native | Partial | Replaced | Missing | Owed |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| `ai` | 42 (1744 B) | 19 (3408 B) | | 12 (16320 B) | 91 (5616 B) | 795 (269178 B) | 30 |
+| `ai` | 42 (1744 B) | 14 (1600 B) | | 17 (18128 B) | 91 (5616 B) | 795 (269178 B) | 0 |
 | `bink` | | | | | 24 (3968 B) | | 0 |
 | `bitmaps` | | 1 (224 B) | | | 209 (63904 B) | | 0 |
 | `bungie_net` | | | | | 105 (18992 B) | | 0 |
@@ -43,7 +43,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `text` | | 5 (1536 B) | 63 (6864 B) | 4 (400 B) | 19 (5744 B) | 21 (2368 B) | 0 |
 | `tool` | | | | | 27 (8752 B) | | 0 |
 | `units` | 18 (6432 B) | 52 (21248 B) | | 29 (23728 B) | 9 (1616 B) | 221 (54496 B) | 0 |
-| **all** | 208 (36880 B) | 543 (172480 B) | 332 (38896 B) | 156 (83600 B) | 2773 (575768 B) | 3615 (703498 B) | 30 |
+| **all** | 208 (36880 B) | 538 (170672 B) | 332 (38896 B) | 161 (85408 B) | 2773 (575768 B) | 3615 (703498 B) | 0 |
 
 ## `ai`
 
@@ -79,8 +79,8 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `actor_action_debug_color` | ai/actions.c | Replaced | dev/src/draw.rs | the editor and tools |
 | `set_real_vector2d` | ai/actions.c | Ported |  | `tools/engine_math_reference.py` |
 | `set_real_vector3d` | ai/actions.c | Ported |  | `tools/engine_math_reference.py` |
-| `actor_action_handle_surprise` | ai/actions.c | Matched | sim/src/ai_impulse.rs:6 | owed: AI; reads the object, tag and map world, which the fake worlds do not hold (the actor and its prop); Phase 11's divergences |
-| `actor_action_try_to_dive` | ai/actions.c | Matched | sim/src/ai_impulse.rs:5 | owed: AI; reads the object, tag and map world, which the fake worlds do not hold (the actor and its prop); Phase 11's divergences |
+| `actor_action_handle_surprise` | ai/actions.c | Partial | sim/src/ai_impulse.rs:6 | sim/src/ai_impulse.rs (measure); leaves out the surprise level and vehicle passenger tests, the surprise's communication event, the wild fire and the bursts held back, the new target taken from what surprised it, the facing it keeps when the way is unknown: the desired facing rather than the current one (the campaign always knows the way) |
+| `actor_action_try_to_dive` | ai/actions.c | Partial | sim/src/ai_impulse.rs:5 | sim/src/ai_impulse.rs (measure); leaves out the evasion direction tried against the world's collision and its ledges (actor_move_try_evasion_direction), a dive off a ledge |
 | `fast_ftol` | ai/actor_combat.c | Ported |  | `tools/engine_cause_damage_reference.py` |
 | `sine` | ai/actor_combat.c | Ported |  | `tools/engine_math_extra_reference.py` |
 | `cosine` | ai/actor_combat.c | Ported |  | `tools/engine_math_extra_reference.py` |
@@ -90,31 +90,31 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `random_boolean` | ai/actor_combat.c | Ported |  | `tools/engine_random_reference.py` |
 | `valid_real` | ai/actor_combat.c | Ported |  | `tools/engine_math_reference.py` |
 | `firing_position_store_evaluation_debug` | ai/actor_firing_position.c | Replaced | dev/src/draw.rs | the editor and tools |
-| `actor_select_firing_position` | ai/actor_firing_position.c | Partial | campaign/src/actors.rs:544 | leaves out the pre- and post-evaluators, discarded positions, line of sight from each position, the firing position groups; owed: the campaign's rewrite of the AI; no check against the original yet (Phase 11's divergences) |
+| `actor_select_firing_position` | ai/actor_firing_position.c | Partial | campaign/src/actors.rs:541 | campaign/tests/actors.rs (measure); leaves out the pre- and post-evaluators, discarded positions, line of sight from each position, the firing position groups |
 | `arccosine` | ai/actor_moving.c | Ported |  | `tools/engine_math_reference.py` |
 | `midpoint3d` | ai/actor_moving.c | Ported |  | `tools/engine_math_reference.py` |
 | `arctangent` | ai/actor_perception.c | Ported |  | `tools/engine_math_reference.py` |
-| `actor_perception_update` | ai/actor_perception.c | Partial | campaign/src/actors.rs:513 | leaves out props and their knowledge states, acknowledgement and orphans, danger zones, the target weights, searching and uncovering; owed: the campaign's rewrite of the AI; no check against the original yet (Phase 11's divergences) |
+| `actor_perception_update` | ai/actor_perception.c | Partial | campaign/src/actors.rs:510 | campaign/tests/actors.rs (measure); leaves out props and their knowledge states, acknowledgement and orphans, danger zones, the target weights, searching and uncovering |
 | `actor_activation_debug_color` | ai/actors.c | Replaced | dev/src/draw.rs | the editor and tools |
-| `actor_new` | ai/actors.c | Partial | campaign/src/actors.rs:307 | leaves out the actor's variants and their weapons, its perception and memory; owed: the engine's own version; no check against the original yet |
-| `actor_kill` | ai/actors.c | Matched | campaign/src/actors.rs:395 | owed: the campaign's rewrite of the AI; no check against the original yet |
-| `actor_erase` | ai/actors.c | Matched | campaign/src/actors.rs:385 | owed: the campaign's rewrite of the AI; no check against the original yet |
-| `actor_update` | ai/actors.c | Partial | campaign/src/actors.rs:603 | leaves out actions and their state machines, emotions, swarms, dormancy; owed: the engine's own version; no check against the original yet |
-| `actor_place` | ai/actors.c | Partial | campaign/src/actors.rs:306 | leaves out swarms, the starting location's initial state and animation, mounted weapons, major upgrades; owed: the campaign's rewrite of the AI; no check against the original yet (Phase 11's divergences) |
-| `actors_update` | ai/actors.c | Partial | campaign/src/actors.rs:406 | leaves out actions and their state machines, emotions, swarms, dormancy and activation, props; owed: the campaign's rewrite of the AI; no check against the original yet (Phase 11's divergences) |
-| `ai_place` | ai/ai.c | Matched | campaign/src/actors.rs:221 | owed: the engine cites it, with no check against the original yet |
-| `ai_erase` | ai/ai.c | Matched | campaign/src/ai.rs:223 | owed: a script function the campaign wires; no check against the original yet |
-| `ai_update` | ai/ai.c | Partial | campaign/src/actors.rs:406 | leaves out inactive encounters and swarms released, team status, the AI's spatial effects, the conversations' own update; owed: the campaign's rewrite of the AI; no check against the original yet (Phase 11's divergences) |
+| `actor_new` | ai/actors.c | Partial | campaign/src/actors.rs:307 | campaign/tests/actors.rs (measure); leaves out the actor's variants and their weapons, its perception and memory |
+| `actor_kill` | ai/actors.c | Partial | campaign/src/actors.rs:395 | campaign/tests/actors.rs (measure); leaves out swarms, a silent death (ai_kill_silent kills as ai_kill does), the actor left in the AI's list once its unit is dead |
+| `actor_erase` | ai/actors.c | Partial | campaign/src/actors.rs:385 | campaign/tests/actors.rs (measure); leaves out swarms, actor_died's notice to its encounter |
+| `actor_update` | ai/actors.c | Partial | campaign/src/actors.rs:600 | campaign/src/actors.rs (measure); leaves out actions and their state machines, emotions, swarms, dormancy |
+| `actor_place` | ai/actors.c | Partial | campaign/src/actors.rs:306 | campaign/tests/actors.rs (measure); leaves out swarms, the starting location's initial state and animation, mounted weapons, major upgrades |
+| `actors_update` | ai/actors.c | Partial | campaign/src/actors.rs:403 | campaign/tests/actors.rs (measure); leaves out actions and their state machines, emotions, swarms, dormancy and activation, props |
+| `ai_place` | ai/ai.c | Matched | campaign/src/actors.rs:221 | campaign/tests/actors.rs (measure) |
+| `ai_erase` | ai/ai.c | Matched | campaign/src/ai.rs:223 | campaign/tests/actors.rs (measure) |
+| `ai_update` | ai/ai.c | Partial | campaign/src/actors.rs:403 | campaign/tests/actors.rs (measure); leaves out inactive encounters and swarms released, team status, the AI's spatial effects, the conversations' own update |
 | `ai_handle_editing` | ai/ai.c | Replaced | dev/src/logbook.rs | the editor and tools; a debug check, statistic or editor hook of the original; the dev tools stand in |
 | `code_000309a0` | ai/ai.c | Replaced | dev/src/logbook.rs | the editor and tools; a debug check, statistic or editor hook of the original; the dev tools stand in |
-| `ai_conversation_status` | ai/ai_communication.c | Matched | campaign/src/conversations.rs:19 | owed: AI; reads the object, tag and map world, which the fake worlds do not hold (the scenario's conversations); campaign/tests/flow.rs |
-| `ai_conversation_line` | ai/ai_communication.c | Matched | campaign/src/conversations.rs:36 | owed: AI; reads the object, tag and map world, which the fake worlds do not hold (the scenario's conversations); campaign/tests/flow.rs |
-| `ai_conversation_advance` | ai/ai_communication.c | Matched | content/src/campaign.rs:98 | owed: the engine cites it, with no check against the original yet |
-| `ai_conversation_line_perform` | ai/ai_communication.c | Partial | campaign/src/conversations.rs:241 | leaves out the speaker's animation, the line's subtitle; owed: the engine's own version; no check against the original yet |
-| `ai_conversation_stop` | ai/ai_communication.c | Matched | campaign/src/conversations.rs:349 | owed: a script function the campaign wires; no check against the original yet |
-| `ai_conversation_begin` | ai/ai_communication.c | Partial | campaign/src/conversations.rs:117 | leaves out the participants chosen by distance and by sight; owed: the engine's own version; no check against the original yet |
-| `ai_conversation` | ai/ai_communication.c | Matched | content/src/campaign.rs:58 | owed: the engine cites it, with no check against the original yet |
-| `ai_conversation_update` | ai/ai_communication.c | Partial | campaign/src/conversations.rs:170 | leaves out the participants' gestures and looking at each other; owed: the engine's own version; no check against the original yet |
+| `ai_conversation_status` | ai/ai_communication.c | Partial | campaign/src/conversations.rs:19 | campaign/tests/natives.rs (measure); leaves out status 1, made but not yet begun, status 5, unable to begin |
+| `ai_conversation_line` | ai/ai_communication.c | Matched | campaign/src/conversations.rs:36 | campaign/tests/natives.rs (measure) |
+| `ai_conversation_advance` | ai/ai_communication.c | Matched | content/src/campaign.rs:98 | campaign/src/conversations.rs (measure) |
+| `ai_conversation_line_perform` | ai/ai_communication.c | Partial | campaign/src/conversations.rs:241 | campaign/src/conversations.rs (measure); leaves out the speaker's animation, the line's subtitle |
+| `ai_conversation_stop` | ai/ai_communication.c | Matched | campaign/src/conversations.rs:349 | campaign/tests/natives.rs (measure) |
+| `ai_conversation_begin` | ai/ai_communication.c | Partial | campaign/src/conversations.rs:117 | campaign/src/conversations.rs (measure); leaves out the participants chosen by distance and by sight |
+| `ai_conversation` | ai/ai_communication.c | Matched | content/src/campaign.rs:58 | campaign/tests/natives.rs (measure) |
+| `ai_conversation_update` | ai/ai_communication.c | Partial | campaign/src/conversations.rs:170 | campaign/src/conversations.rs (measure); leaves out the participants' gestures and looking at each other |
 | `ai_profile_initialize` | ai/ai_profile.c | Replaced | dev/src/draw.rs | the editor and tools |
 | `ai_profile_dispose` | ai/ai_profile.c | Replaced | dev/src/draw.rs | the editor and tools |
 | `ai_profile_initialize_for_new_map` | ai/ai_profile.c | Replaced | dev/src/draw.rs | the editor and tools |
@@ -138,15 +138,15 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `ai_profile_render_paths` | ai/ai_profile.c | Replaced | dev/src/draw.rs | the editor and tools |
 | `ai_profile_render_spray` | ai/ai_profile.c | Replaced | dev/src/draw.rs | the editor and tools |
 | `ai_profile_render` | ai/ai_profile.c | Replaced | dev/src/draw.rs | the editor and tools |
-| `ai_scripting_place` | ai/ai_script.c | Matched | campaign/src/ai.rs | owed: a script function the campaign wires; no check against the original yet |
-| `ai_scripting_erase` | ai/ai_script.c | Matched | campaign/src/ai.rs | owed: a script function the campaign wires; no check against the original yet |
-| `ai_scripting_conversation` | ai/ai_script.c | Matched | campaign/src/conversations.rs | owed: a script function the campaign wires; no check against the original yet |
-| `ai_scripting_conversation_stop` | ai/ai_script.c | Matched | campaign/src/conversations.rs | owed: a script function the campaign wires; no check against the original yet |
-| `ai_scripting_conversation_advance` | ai/ai_script.c | Matched | campaign/src/conversations.rs | owed: a script function the campaign wires; no check against the original yet |
-| `ai_scripting_conversation_line` | ai/ai_script.c | Matched | campaign/src/conversations.rs | owed: a script function the campaign wires; no check against the original yet |
-| `ai_scripting_conversation_status` | ai/ai_script.c | Matched | campaign/src/conversations.rs | owed: a script function the campaign wires; no check against the original yet |
-| `encounter_create` | ai/encounters.c | Partial | campaign/src/actors.rs:265 | leaves out the encounter's firing positions and their states, the squads placed by delay or by count; owed: the engine's own version; no check against the original yet |
-| `encounters_create_for_new_map` | ai/encounters.c | Partial | campaign/src/actors.rs:264 | leaves out activation cluster bit vectors, firing position owner indices, the encounter's own state (respawn, timers); owed: the campaign's rewrite of the AI; no check against the original yet (Phase 11's divergences) |
+| `ai_scripting_place` | ai/ai_script.c | Matched | campaign/src/ai.rs | campaign/tests/actors.rs (measure) |
+| `ai_scripting_erase` | ai/ai_script.c | Matched | campaign/src/ai.rs | campaign/tests/actors.rs (measure) |
+| `ai_scripting_conversation` | ai/ai_script.c | Matched | campaign/src/conversations.rs | campaign/tests/natives.rs (measure) |
+| `ai_scripting_conversation_stop` | ai/ai_script.c | Matched | campaign/src/conversations.rs | campaign/tests/natives.rs (measure) |
+| `ai_scripting_conversation_advance` | ai/ai_script.c | Matched | campaign/src/conversations.rs | campaign/src/conversations.rs (measure) |
+| `ai_scripting_conversation_line` | ai/ai_script.c | Matched | campaign/src/conversations.rs | campaign/tests/natives.rs (measure) |
+| `ai_scripting_conversation_status` | ai/ai_script.c | Matched | campaign/src/conversations.rs | campaign/tests/natives.rs (measure) |
+| `encounter_create` | ai/encounters.c | Partial | campaign/src/actors.rs:265 | campaign/tests/actors.rs (measure); leaves out the encounter's firing positions and their states, the squads placed by delay or by count |
+| `encounters_create_for_new_map` | ai/encounters.c | Partial | campaign/src/actors.rs:264 | campaign/tests/actors.rs (measure); leaves out activation cluster bit vectors, firing position owner indices, the encounter's own state (respawn, timers) |
 | `render_debug_path` | ai/path_obstacle_avoidance.c | Replaced | dev/src/draw.rs | the editor and tools |
 | `render_debug_obstacle_path` | ai/path_obstacle_avoidance.c | Replaced | dev/src/draw.rs | the editor and tools |
 | `set_real_point2d` | ai/path_obstacles.c | Ported |  | `tools/engine_math_reference.py` |

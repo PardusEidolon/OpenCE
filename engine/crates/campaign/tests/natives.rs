@@ -333,3 +333,51 @@ fn a_recording_plays_for_its_length_until_it_is_killed() -> Result {
     assert_eq!(time(&mut mission), Some(Value::Short(0)), "killed");
     Ok(())
 }
+
+#[test]
+fn a_conversation_begins_speaks_and_is_stopped_with_the_games_statuses() -> Result {
+    // The first campaign map with a conversation (`ai_communication.c`'s
+    // statuses: 0 never begun, 2 begun, 3 speaking, 4 waiting, 7 stopped;
+    // line 999 while it does not run).
+    for map in [
+        "a10", "a30", "a50", "b30", "b40", "c10", "c20", "c40", "d20", "d40",
+    ] {
+        let Some(mut mission) = mission(map)? else {
+            continue;
+        };
+        let count = mission.level().scenario.campaign.conversations.len();
+        if count == 0 {
+            continue;
+        }
+        let at = |n: usize| Value::Short(i16::try_from(n).unwrap_or(-1));
+        let status = |mission: &mut Mission| mission.call("ai_conversation_status", &[at(0)]);
+        let line = |mission: &mut Mission| mission.call("ai_conversation_line", &[at(0)]);
+        assert_eq!(status(&mut mission), Some(Value::Short(0)), "{map}");
+        assert_eq!(line(&mut mission), Some(Value::Short(999)), "{map}");
+        assert_eq!(
+            mission.call("ai_conversation", &[at(count)]),
+            Some(Value::Boolean(false)),
+            "{map}: a conversation the scenario does not have"
+        );
+        assert_eq!(
+            mission.call("ai_conversation", &[at(0)]),
+            Some(Value::Boolean(true)),
+            "{map}"
+        );
+        let begun = status(&mut mission);
+        assert!(
+            matches!(begun, Some(Value::Short(2..=4))),
+            "{map}: running, {begun:?}"
+        );
+        assert_ne!(line(&mut mission), Some(Value::Short(999)), "{map}");
+        mission.call("ai_conversation_stop", &[at(0)]);
+        assert_eq!(
+            status(&mut mission),
+            Some(Value::Short(7)),
+            "{map}: stopped"
+        );
+        assert_eq!(line(&mut mission), Some(Value::Short(999)), "{map}");
+        return Ok(());
+    }
+    Ok(())
+}
