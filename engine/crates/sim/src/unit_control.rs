@@ -28,6 +28,10 @@ impl UnitFlags {
     pub const DESIRED_INTEGRATED_LIGHT_ON: u32 = 1 << 28;
     /// Its integrated light is wished off (`_unit_desired_integrated_light_off_bit`).
     pub const DESIRED_INTEGRATED_LIGHT_OFF: u32 = 1 << 29;
+    /// No player may enter it (`_unit_not_enterable_by_player_bit`).
+    pub const NOT_ENTERABLE_BY_PLAYER: u32 = 1 << 16;
+    /// It drops nothing when it dies (`_unit_doesnt_drop_items_bit`).
+    pub const DOESNT_DROP_ITEMS: u32 = 1 << 20;
 
     /// Whether `flag` is set.
     pub fn has(self, flag: u32) -> bool {
@@ -41,6 +45,11 @@ impl UnitFlags {
         } else {
             self.0 &= !flag;
         }
+    }
+
+    /// Lets a player enter it, or not (`unit_set_enterable_by_player`).
+    pub fn set_enterable_by_player(&mut self, enterable: bool) {
+        self.set(Self::NOT_ENTERABLE_BY_PLAYER, !enterable);
     }
 
     /// Whether its controls move it (`unit_controllable`).
@@ -105,6 +114,15 @@ pub struct Crew<U> {
     pub driver: Option<U>,
     /// Its gunner (`gunner_object_index`).
     pub gunner: Option<U>,
+}
+
+/// Marks every unit of a script's object list to drop nothing when it
+/// dies; an object that is not a unit (none) is passed by
+/// (`unit_scripting_doesnt_drop_items`).
+pub fn doesnt_drop_items<'a>(units: impl IntoIterator<Item = Option<&'a mut UnitFlags>>) {
+    for flags in units.into_iter().flatten() {
+        flags.set(UnitFlags::DOESNT_DROP_ITEMS, true);
+    }
 }
 
 /// Sets whether a unit aims without turning to face its aim

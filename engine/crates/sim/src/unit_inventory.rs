@@ -56,6 +56,14 @@ impl<W> Default for UnitInventory<W> {
     }
 }
 
+/// The grenades a unit holds of every kind, as a script asks: none for
+/// no unit (`unit_scripting_get_grenade_count`).
+pub fn scripting_grenade_count<W>(unit: Option<&UnitInventory<W>>) -> i16 {
+    unit.map_or(0, |unit| {
+        unit.grenades.iter().map(|count| i16::from(*count)).sum()
+    })
+}
+
 /// The index after `index` of `count`, by `delta`'s sign (none counts as
 /// forward), wrapping.
 fn step(index: usize, delta: i16, count: usize) -> usize {
