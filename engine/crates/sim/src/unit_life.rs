@@ -110,6 +110,12 @@ impl UnitEquipment {
     pub fn current(self) -> Option<u32> {
         self.0
     }
+
+    /// Deletes the equipment it holds, if any, and holds none; returns the
+    /// equipment deleted (`unit_delete_current_equipment`).
+    pub fn delete_current(&mut self) -> Option<u32> {
+        self.0.take()
+    }
 }
 
 /// The most passes a biped's limp body relaxes its nodes in, whatever the

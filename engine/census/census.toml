@@ -1054,19 +1054,11 @@ note = "not reached from a root of the game; the animation and world track owns 
 class = "missing"
 note = "not reached from a root of the game; the units track owns it"
 
-[function.animation_left_foot_frame_index]
-class = "missing"
-note = "not reached from a root of the game; the units track owns it"
-
 [function.animation_loop_frame_index]
 class = "matched"
 engine = "sim/src/animation.rs"
 check = "sim/src/animation.rs"
 against = "measure"
-
-[function.animation_right_foot_frame_index]
-class = "missing"
-note = "not reached from a root of the game; the units track owns it"
 
 [function.animation_second_key_frame_index]
 class = "matched"
