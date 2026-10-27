@@ -394,6 +394,9 @@ pub fn census(root: &Path, mode: Mode) -> Result<String, Error> {
                 fields::write_fields(&fields::generate(root, &records)?),
             )
             .map_err(|source| Error::Io { path, source })?;
+            let path = root.join("engine").join(fields::UNUSED);
+            std::fs::write(&path, fields::write_unused(root, &census)?)
+                .map_err(|source| Error::Io { path, source })?;
             let path = root.join("engine").join(scripts::SCRIPTS);
             std::fs::write(&path, scripts::write_rows(&scripts::generate(root)?))
                 .map_err(|source| Error::Io { path, source })?;

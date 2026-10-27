@@ -33,6 +33,10 @@ pub const FIELDS: &str = "census/tag_fields.tsv";
 /// that use.
 pub const TRACES: &str = "census/field_traces.tsv";
 
+/// The kept fields the engine uses nowhere, each with its reason, from
+/// `engine/` (`opence census --write`).
+pub const UNUSED: &str = "census/unused_fields.tsv";
+
 /// How deep embedded structures are followed.
 const DEPTH: usize = 8;
 
@@ -305,7 +309,8 @@ pub fn reads(
 }
 
 /// The fields each function of `text` reads, as `reads` finds them: the
-/// function is the last name before a `(` at the top level ahead of the
+/// function is the last name before a `(` at the top level, outside any
+/// parentheses (so not a function pointer parameter's type), ahead of the
 /// body that holds the read, and a read outside any function is the
 /// empty name's.
 pub fn readers(
@@ -317,6 +322,7 @@ pub fn readers(
     let mut found: BTreeMap<String, BTreeSet<(String, String)>> = BTreeMap::new();
     let mut pointers: BTreeMap<&str, &str> = BTreeMap::new();
     let mut depth = 0usize;
+    let mut parentheses = 0usize;
     let mut candidate = "";
     let mut function = "";
     for (at, token) in tokens.iter().enumerate() {
@@ -335,6 +341,8 @@ pub fn readers(
                     function = "";
                 }
             }
+            Token::Punct(b'(') => parentheses += 1,
+            Token::Punct(b')') => parentheses = parentheses.saturating_sub(1),
             Token::Punct(b';' | b'=') if depth == 0 => {
                 if *token == Token::Punct(b';') {
                     pointers.clear();
@@ -347,7 +355,8 @@ pub fn readers(
                 }
             }
             Token::Name(name) => {
-                if depth == 0 && tokens.get(at + 1) == Some(&Token::Punct(b'(')) {
+                if depth == 0 && parentheses == 0 && tokens.get(at + 1) == Some(&Token::Punct(b'('))
+                {
                     candidate = name;
                 }
                 let member = at.checked_sub(1).and_then(|i| tokens.get(i))
@@ -864,20 +873,107 @@ pub fn gaps(
     gaps
 }
 
-/// The written fields' gaps (`gaps`), each reader classed as `census`
-/// classes it.
-pub fn owed(root: &Path, census: &crate::Census) -> Result<Vec<String>, Error> {
+/// Each unused field of `marks` as a line of `unused_fields.tsv`: its
+/// structure, path and why the engine owes it nothing yet. The original
+/// reads it nowhere; or it is owed to the Missing and Partial functions
+/// that read it, whose tracks use it; or it is read only where the engine
+/// replaced the original, and perhaps by functions that are not the
+/// original's (the old port's checks); or it is a gap (`gaps`). `marks`, `readers` and
+/// `class` are as for `gaps`.
+pub fn unused(
+    marks: &[Mark],
+    readers: &[BTreeSet<String>],
+    class: impl Fn(&str) -> Option<Class>,
+) -> Vec<String> {
+    let mut lines = Vec::new();
+    for (mark, by) in marks.iter().zip(readers) {
+        if mark.engine != Engine::Unused {
+            continue;
+        }
+        let classed: Vec<(&String, Option<Class>)> = by.iter().map(|f| (f, class(f))).collect();
+        let owed: Vec<String> = classed
+            .iter()
+            .filter(|(_, c)| matches!(c, Some(Class::Missing | Class::Partial)))
+            .map(|(f, c)| format!("{f} ({})", c.map_or("?", Class::name)))
+            .collect();
+        let replaced = classed
+            .iter()
+            .all(|(_, c)| matches!(c, Some(Class::Replaced)));
+        let unfinished = classed
+            .iter()
+            .all(|(_, c)| matches!(c, Some(Class::Replaced) | None));
+        let names: Vec<&str> = by.iter().map(String::as_str).collect();
+        let reason = if by.is_empty() {
+            "the original reads it nowhere".to_owned()
+        } else if !owed.is_empty() {
+            format!("owed to {}", owed.join(", "))
+        } else if replaced {
+            format!(
+                "read only where the engine replaced the original: {}",
+                names.join(", ")
+            )
+        } else if unfinished {
+            let list: Vec<String> = classed
+                .iter()
+                .map(|(f, c)| match c {
+                    Some(c) => format!("{f} ({})", c.name()),
+                    None => format!("{f} (not the original's)"),
+                })
+                .collect();
+            format!(
+                "read only where the engine replaced the original or outside it: {}",
+                list.join(", ")
+            )
+        } else {
+            format!("a gap: read by {}", names.join(", "))
+        };
+        lines.push(format!("{}\t{}\t{reason}", mark.structure, mark.path));
+    }
+    lines
+}
+
+/// The written fields with each one's readers in `source/`.
+type Written = (Vec<Mark>, Vec<BTreeSet<String>>);
+
+/// The written fields, their readers in `source/`, and each reader's class
+/// as `census` classes it; none if the fields are not the layout's.
+fn written_with_readers(root: &Path) -> Result<Option<Written>, Error> {
     let engine = root.join("engine");
     let layout = read_text(&engine.join(crate::layout::LAYOUT)).unwrap_or_default();
     let records = crate::layout::read_layout(&layout)?;
     let written = read_fields(&read_text(&engine.join(FIELDS)).unwrap_or_default())?;
     let by = readers_of(&records, &source_readers(root, &records)?);
-    if by.len() != written.len() {
-        return Ok(Vec::new());
+    Ok((by.len() == written.len()).then_some((written, by)))
+}
+
+/// `unused_fields.tsv`'s text for the written fields (`unused`).
+pub fn write_unused(root: &Path, census: &crate::Census) -> Result<String, Error> {
+    let mut text = String::from(
+        "# structure\tfield\twhy the engine uses it nowhere (opence census --write)\n",
+    );
+    if let Some((written, by)) = written_with_readers(root)? {
+        for line in unused(&written, &by, |f| census.function(f).and_then(|f| f.class)) {
+            text.push_str(&line);
+            text.push('\n');
+        }
     }
-    Ok(gaps(&written, &by, |f| {
-        census.function(f).and_then(|f| f.class)
-    }))
+    Ok(text)
+}
+
+/// The written fields' gaps (`gaps`), each reader classed as `census`
+/// classes it, and `unused_fields.tsv` if it is stale.
+pub fn owed(root: &Path, census: &crate::Census) -> Result<Vec<String>, Error> {
+    let Some((written, by)) = written_with_readers(root)? else {
+        return Ok(Vec::new());
+    };
+    let mut problems = gaps(&written, &by, |f| census.function(f).and_then(|f| f.class));
+    let file = read_text(&root.join("engine").join(UNUSED)).unwrap_or_default();
+    if file != write_unused(root, census)? {
+        problems.push(format!(
+            "engine/{UNUSED} is stale: run opence census --write"
+        ));
+    }
+    Ok(problems)
 }
 
 /// The written fields, if they are not the marks of the written layout

@@ -839,6 +839,12 @@ its use (an offset handed to a helper, a count checked where it is read),
 `engine/census/field_traces.tsv` names the use by hand: the engine file and
 the text of the use, which `--check` finds in that file. A trace whose use
 is gone, or that the census no longer needs, fails `--check` too.
+Every other kept field the engine uses nowhere is listed in
+`engine/census/unused_fields.tsv` with its reason: the original reads it
+nowhere, it is owed to the Missing or Partial functions that read it, or
+it is read only where the engine replaced the original (and perhaps by
+the old port's own checks, which are not the original's). `--write`
+writes it and `--check` fails when it is stale.
 
 Moving a function to Partial raises its system's Partial count, which
 the ratchet (`engine/census/ratchet.tsv`) refuses; it is raised by hand,

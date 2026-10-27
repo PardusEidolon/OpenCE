@@ -8,7 +8,7 @@ use std::collections::{BTreeMap, BTreeSet};
 use opence_census::classes::Class;
 use opence_census::fields::{
     declared, gaps, leaves, marks, members, read_fields, read_traces, readers, readers_of, reads,
-    trace, write_fields, Engine, FIELDS,
+    trace, unused, write_fields, Engine, FIELDS,
 };
 use opence_census::layout::{read_dump, read_layout, Record, LAYOUT};
 
@@ -346,4 +346,47 @@ fn a_trace_names_the_use_of_a_field_the_census_cannot_follow() -> Result<(), Fai
     );
     assert!(read_traces("thing_part\tmass\n").is_err());
     Ok(())
+}
+
+#[test]
+fn each_unused_field_has_its_reason() {
+    let records = read_dump(DUMP);
+    let by_function = readers(C, &names(&records), &BTreeMap::new());
+    let by = readers_of(&records, &by_function);
+    let mut marked = marks(&records, &by_function.values().flatten().cloned().collect());
+    for mark in &mut marked {
+        mark.importer = true;
+        mark.engine = match mark.path.as_str() {
+            "scale" | "unread" | "other" => Engine::Unused,
+            _ => Engine::Used,
+        };
+    }
+    let class = |function: &str| match function {
+        "thing_update" => Some(Class::Replaced),
+        _ => Some(Class::Missing),
+    };
+    assert_eq!(
+        unused(&marked, &by, class),
+        [
+            "thing_definition\tscale\tread only where the engine replaced the original: thing_update",
+            "thing_definition\tunread\tthe original reads it nowhere",
+            "big_definition\tother\towed to big_update (Missing)",
+        ]
+    );
+}
+
+#[test]
+fn a_function_pointer_parameter_does_not_name_the_function() {
+    let records = read_dump(DUMP);
+    let text = "
+static void thing_iterate(
+\tstruct thing_definition *definition,
+\tvoid (*visit)(short index))
+{
+\tlong flags= definition->flags;
+}
+";
+    let by_function = readers(text, &names(&records), &BTreeMap::new());
+    let functions: Vec<&str> = by_function.keys().map(String::as_str).collect();
+    assert_eq!(functions, ["thing_iterate"]);
 }
