@@ -1,0 +1,65 @@
+# Plan: The native port, the original run as wasm32 in Wasmtime
+
+Every task is test first (`workflow.md`): the trace, measurement or test is
+written and seen to fail before the change. Each phase ends with its
+automated checks: the workspace tests, the reference traces, `census
+--check` and `nix flake check`. The phases run to the end without manual
+stops, except A1's go/no-go.
+
+## Phase 1: The spike, then go or no-go (A1)
+- [ ] Task: Build `source/` as `game.wasm` from the web build's flags, in Nix; a test that the module's imports and exports are the expected list.
+- [ ] Task: The runtime crate: Wasmtime with Cranelift, the `.cwasm` cached by Wasmtime's version and the CPU, the 4 GB memory with the Xbox's window; stub imports that record their calls.
+- [ ] Task: Run devgulch headless for some thousands of ticks; record the reference traces from the wasm build and compare them with the native reference.
+- [ ] Task: Check the threads on shared memory and atomics, `setjmp` and `longjmp`, and deterministic floating point across runs.
+- [ ] Task: `--benchmark 60`: the simulation tick's p99 and the CPU frame's p99 on the M1 Max.
+- [ ] Task: Write the go/no-go (`a1_go_no_go.md` in this track) with the data, and bring it to the user. Stop on a no-go.
+- [ ] Task: Conductor - User Manual Verification 'Phase 1: The spike' (Protocol in workflow.md)
+
+## Phase 2: The macOS platform layer (A2)
+- [ ] Task: Memory and the map cache.
+- [ ] Task: Files: the data folder, saved games, the map copies.
+- [ ] Task: Threads, timers and the clock.
+- [ ] Task: Keyboard and mouse as the game's input, pad events filtered.
+- [ ] Task: Sound output from the game's mixer to Core Audio.
+- [ ] Task: The render calls as one buffer per frame.
+- [ ] Task: The dev shell, the control socket and the `opence` tool against the wasm game; devgulch and its stations as a map the original loads.
+- [ ] Task: Conductor - User Manual Verification 'Phase 2: The platform layer' (Protocol in workflow.md) (automated)
+
+## Phase 3: The plugin interface (A3)
+- [ ] Task: The hooks as imports and exports: tick, frame, rendering, HUD and UI, sound, AI.
+- [ ] Task: Read-only views of the game's memory through bounds-checked readers; fuzz them.
+- [ ] Task: Recorded inputs and exact replay.
+- [ ] Task: Per-plugin budgets logged per frame; a plugin over its share fails a test.
+- [ ] Task: With every plugin off, the run matches the traces.
+- [ ] Task: Conductor - User Manual Verification 'Phase 3: The plugin interface' (Protocol in workflow.md) (automated)
+
+## Phase 4: Stock rendering on Metal (A4)
+- [ ] Task: `default.metallib` linked from the `.air` at build and loaded with `makeLibrary(URL:)`.
+- [ ] Task: Draw the rasterizer's buffer: the environment shaders and lightmaps.
+- [ ] Task: The model, transparent and chicago shaders, and the rest.
+- [ ] Task: The dynamic lights and fog.
+- [ ] Task: Golden frames and image differences against the original, until each shader matches; the user re-approves the golden frames.
+- [ ] Task: The pipelines in a Metal binary archive behind the loading screen; a pipeline missing during play fails a test.
+- [ ] Task: The bar end to end: p99 ≤ 8.33 ms at 4K ultra on the M1 Max.
+- [ ] Task: Conductor - User Manual Verification 'Phase 4: Stock rendering' (Protocol in workflow.md) (automated)
+
+## Phase 5: The presentation as plugins (A5)
+- [ ] Task: The lighting extended from the original: bakes, probes and ray tracing on the original's lightmaps, shader tags and lights; each switchable to stock.
+- [ ] Task: The particles; the weapons station draws every particle the game makes.
+- [ ] Task: The HUD at 4K; the grenade count and every element measured against the original.
+- [ ] Task: The first-person rifle and hand where the original puts them.
+- [ ] Task: The sound.
+- [ ] Task: Conductor - User Manual Verification 'Phase 5: The presentation' (Protocol in workflow.md) (automated)
+
+## Phase 6: What the PC port left out (A6)
+- [ ] Task: Catalogue what the Gearbox PC port lost or broke, each with how it is measured.
+- [ ] Task: Measure and fix each one that falls to the presentation.
+- [ ] Task: Conductor - User Manual Verification 'Phase 6: The PC port' (Protocol in workflow.md) (automated)
+
+## Phase 7: Removals and checks (A7)
+- [ ] Task: Reclass the census for the new direction, with its `--check`.
+- [ ] Task: Remove the Rust simulation and `bevy_ecs`.
+- [ ] Task: Remove the presentation code the plugins replace, and the `net` crate.
+- [ ] Task: Remove `port/macos` and its VM.
+- [ ] Task: The traces as checks that the wasm build matches the native reference.
+- [ ] Task: Conductor - User Manual Verification 'Phase 7: Removals' (Protocol in workflow.md) (automated)
