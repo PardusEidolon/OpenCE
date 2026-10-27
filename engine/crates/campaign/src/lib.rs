@@ -38,7 +38,7 @@ pub use ai::{AiOrders, AiReference};
 pub use checkpoint::{Checkpoint, CheckpointError, CHECKPOINT_VERSION};
 pub use cinematic::{CameraShot, Cinematic};
 pub use conversations::ConversationStatus;
-pub use devices::DeviceState;
+pub use devices::{DeviceGroup, DeviceState, Devices, MAXIMUM_DEVICE_GROUPS};
 pub use game::Flow;
 pub use sounds::{ClassGain, ScriptedLoop, ScriptedSound, SoundOrders, DIALOGUE_CLASSES};
 
@@ -81,8 +81,7 @@ pub struct Mission {
     named: Vec<Option<ObjectHandle>>,
     // (each object name's placement, by the name's index)
     placements: Vec<Option<usize>>,
-    devices: BTreeMap<ObjectHandle, DeviceState>,
-    groups: Vec<f32>,
+    devices: Devices,
     graphs: BTreeMap<usize, Arc<AnimationGraph>>,
     recordings: BTreeMap<ObjectHandle, Playing>,
     animations: BTreeMap<ObjectHandle, Playing>,
@@ -134,13 +133,8 @@ impl Mission {
                     .position(|p| p.name.as_deref() == Some(name.as_str()))
             })
             .collect();
-        let groups: Vec<f32> = campaign
-            .device_groups
-            .iter()
-            .map(|group| group.initial_value)
-            .collect();
         let mut named = vec![None; placements.len()];
-        let mut devices = BTreeMap::new();
+        let mut devices = Devices::of(&campaign.device_groups);
         // (a mission starts in its first structure BSP)
         for (index, spawn) in level_placements(&level, 0) {
             let placement = &level.scenario.placements[index];
@@ -152,10 +146,7 @@ impl Mission {
             }
             if let Some(device) = &placement.device {
                 let definition = level.objects.iter().find(|d| d.tag == placement.tag);
-                devices.insert(
-                    handle,
-                    DeviceState::of(device, &groups).defined_by(definition),
-                );
+                devices.place(handle, device, definition);
             }
         }
         let mut mission = Self {
@@ -169,7 +160,6 @@ impl Mission {
             named,
             placements,
             devices,
-            groups,
             graphs: BTreeMap::new(),
             recordings: BTreeMap::new(),
             animations: BTreeMap::new(),
@@ -254,18 +244,25 @@ impl Mission {
 
     /// A device's state.
     pub fn device(&self, handle: ObjectHandle) -> Option<&DeviceState> {
-        self.devices.get(&handle)
+        self.devices.get(handle)
     }
 
     /// Every device in the world and its state, in the order of their
     /// handles.
     pub fn devices(&self) -> impl Iterator<Item = (ObjectHandle, &DeviceState)> {
-        self.devices.iter().map(|(&handle, state)| (handle, state))
+        self.devices.iter()
     }
 
-    /// A device group's value.
-    pub fn group(&self, group: usize) -> Option<f32> {
-        self.groups.get(group).copied()
+    /// A device group.
+    pub fn group(&self, group: i16) -> Option<&DeviceGroup> {
+        self.devices.group(group)
+    }
+
+    /// Takes an object out of the world, and its device's state and the
+    /// groups made for it (`object_delete`, `device_delete`).
+    pub fn remove(&mut self, handle: ObjectHandle) {
+        self.sim.remove(handle);
+        self.devices.delete(handle);
     }
 
     /// What the scripts have told the AI.
@@ -351,6 +348,7 @@ impl Mission {
                 playing.remove(&handle);
                 if delete {
                     self.sim.remove(handle);
+                    self.devices.delete(handle);
                 }
             }
         }
@@ -891,21 +889,34 @@ mod tests {
 
     #[test]
     fn a_device_begins_at_its_groups_values() {
+        let scenario = [0.5, 0.0].map(|initial_value| opence_content::DeviceGroup {
+            name: String::new(),
+            initial_value,
+            flags: 0,
+        });
+        let mut devices = Devices::of(&scenario);
+        let grouped = ObjectHandle { index: 0, salt: 1 };
         let device = PlacementDevice {
             power_group: 1,
             position_group: 0,
             flags: 0,
             kind_flags: 0,
         };
-        let state = DeviceState::of(&device, &[0.5, 0.0]);
-        assert_eq!((state.position(), state.power()), (0.5, 0.0));
+        devices.place(grouped, &device, None);
+        let state = devices.get(grouped);
+        assert_eq!(state.map(|s| (s.position(), s.power())), Some((0.5, 0.0)));
+        let alone = ObjectHandle { index: 1, salt: 1 };
         let open = PlacementDevice {
             power_group: -1,
             position_group: -1,
             flags: 1,
             kind_flags: 0,
         };
-        let state = DeviceState::of(&open, &[]);
-        assert_eq!((state.position(), state.power()), (1.0, 1.0));
+        devices.place(alone, &open, None);
+        let state = devices.get(alone);
+        assert_eq!(state.map(|s| (s.position(), s.power())), Some((1.0, 1.0)));
+        assert!(devices.group(2).is_some_and(|group| group.runtime));
+        devices.delete(alone);
+        assert_eq!((devices.group(2), devices.group(3)), (None, None));
     }
 }

@@ -153,6 +153,9 @@ pub struct Device {
     pub start_effects: [Option<TagRef>; 2],
     /// The effects it plays as its position stops moving up and down.
     pub stop_effects: [Option<TagRef>; 2],
+    /// The effects it plays as its power group changes to none and to
+    /// some (`depowered_effect`, `repowered_effect`).
+    pub power_effects: [Option<TagRef>; 2],
     /// The effect it plays as its delay begins.
     pub delay_effect: Option<TagRef>,
     /// How near a biped opens a door by itself (0: its bounding radius).

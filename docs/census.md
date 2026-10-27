@@ -15,7 +15,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `camera` | 3 (192 B) | 19 (8208 B) | | 3 (560 B) | 17 (2448 B) | 79 (25136 B) | 22 |
 | `cseries` | | 1 (16 B) | 28 (3168 B) | | 111 (18656 B) | | 0 |
 | `cutscene` | | 8 (288 B) | | 2 (672 B) | 7 (1072 B) | 48 (8496 B) | 9 |
-| `devices` | | 17 (3728 B) | | | 1 (432 B) | 42 (3024 B) | 17 |
+| `devices` | 7 (944 B) | 18 (3856 B) | | | 1 (432 B) | 34 (1952 B) | 4 |
 | `dialogs` | | | | | 5 (1328 B) | | 0 |
 | `editor` | | | | | 9 (0 B) | | 0 |
 | `effects` | 1 (48 B) | 88 (35024 B) | | 1 (288 B) | 13 (7344 B) | 87 (13904 B) | 79 |
@@ -43,7 +43,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `text` | | 9 (1936 B) | 63 (6864 B) | | 19 (5744 B) | 21 (2368 B) | 9 |
 | `tool` | | | | | 27 (8752 B) | | 0 |
 | `units` | 12 (2288 B) | 67 (27888 B) | | 17 (17808 B) | 9 (1616 B) | 224 (57920 B) | 73 |
-| **all** | 192 (31712 B) | 568 (183824 B) | 332 (38896 B) | 133 (72848 B) | 2773 (575768 B) | 3629 (708074 B) | 542 |
+| **all** | 199 (32656 B) | 569 (183952 B) | 332 (38896 B) | 133 (72848 B) | 2773 (575768 B) | 3621 (707002 B) | 529 |
 
 ## `ai`
 
@@ -1048,31 +1048,39 @@ docs/engine.md's "The coverage census" says what each class needs.
 
 | Function | File | Class | Engine | Evidence |
 | --- | --- | --- | --- | --- |
-| `machine_update` | devices/device_machines.c | Matched | campaign/src/devices.rs:170 | owed: the engine cites it, with no check against the original yet |
+| `machine_place` | devices/device_machines.c | Matched | campaign/src/devices.rs:219 | campaign/tests/devices_reference.rs (trace) |
+| `machine_update` | devices/device_machines.c | Matched | campaign/src/devices.rs:414 | owed: the engine cites it, with no check against the original yet |
+| `device_new` | devices/devices.c | Ported | campaign/src/devices.rs:218 | `tools/engine_devices_reference.py` |
 | `device_export_function_values` | devices/devices.c | Matched | sim/src/device_animation.rs:5 | owed: devices; reads the object, tag and map world, which the fake worlds do not hold |
 | `device_preprocess_node_orientations` | devices/devices.c | Matched | sim/src/device_animation.rs:6 | owed: devices; reads the object, tag and map world, which the fake worlds do not hold (the device's model) |
-| `device_get_position` | devices/devices.c | Matched | campaign/src/devices.rs | owed: the engine's own tests (campaign/src/devices.rs); no check against the original yet |
-| `device_get_power` | devices/devices.c | Matched | campaign/src/devices.rs | owed: the engine's own tests (campaign/src/devices.rs); no check against the original yet |
-| `device_set_never_appears_locked` | devices/devices.c | Matched | campaign/src/devices.rs | owed: the engine's own tests (campaign/src/devices.rs); no check against the original yet |
-| `device_one_sided_set` | devices/devices.c | Matched | campaign/src/devices.rs | owed: the engine's own tests (campaign/src/devices.rs); no check against the original yet |
-| `device_operates_automatically_set` | devices/devices.c | Matched | campaign/src/devices.rs | owed: the engine's own tests (campaign/src/devices.rs); no check against the original yet |
-| `device_group_change_only_once_more_set` | devices/devices.c | Matched | campaign/src/devices.rs | owed: the engine's own tests (campaign/src/devices.rs); no check against the original yet |
-| `device_group_get_value` | devices/devices.c | Matched | campaign/src/devices.rs | owed: the engine's own tests (campaign/src/devices.rs); no check against the original yet |
-| `create_initial_device_groups` | devices/devices.c | Matched | campaign/src/devices.rs | owed: the engine's own tests (campaign/src/devices.rs); no check against the original yet |
-| `device_update` | devices/devices.c | Matched | campaign/src/devices.rs:170 | owed: the engine cites it, with no check against the original yet |
+| `device_get_position` | devices/devices.c | Matched | campaign/src/devices.rs | campaign/tests/devices_reference.rs (trace) |
+| `device_get_power` | devices/devices.c | Matched | campaign/src/devices.rs | campaign/tests/devices_reference.rs (trace) |
+| `device_set_never_appears_locked` | devices/devices.c | Matched | campaign/src/devices.rs | campaign/tests/devices_reference.rs (trace) |
+| `device_group_set_actual_value` | devices/devices.c | Ported | campaign/src/devices.rs:321 | `tools/engine_devices_reference.py` |
+| `device_one_sided_set` | devices/devices.c | Matched | campaign/src/devices.rs | campaign/tests/devices_reference.rs (trace) |
+| `device_operates_automatically_set` | devices/devices.c | Matched | campaign/src/devices.rs | campaign/tests/devices_reference.rs (trace) |
+| `device_group_change_only_once_more_set` | devices/devices.c | Matched | campaign/src/devices.rs:341 | campaign/tests/devices_reference.rs (trace) |
+| `device_group_get_value` | devices/devices.c | Matched | campaign/src/devices.rs:288 | campaign/tests/devices_reference.rs (trace) |
+| `device_group_new` | devices/devices.c | Ported | campaign/src/devices.rs:142 | `tools/engine_devices_reference.py` |
+| `device_group_delete` | devices/devices.c | Ported | campaign/src/devices.rs:168 | `tools/engine_devices_reference.py` |
+| `create_initial_device_groups` | devices/devices.c | Matched | campaign/src/devices.rs:131 | campaign/tests/devices_reference.rs (trace) |
+| `devices_initialize_for_new_map` | devices/devices.c | Ported |  | `tools/engine_devices_reference.py` |
+| `device_delete` | devices/devices.c | Ported | campaign/src/devices.rs:280 | `tools/engine_devices_reference.py` |
+| `device_update` | devices/devices.c | Matched | campaign/src/devices.rs:414 | owed: the engine cites it, with no check against the original yet |
 | `device_render_debug` | devices/devices.c | Replaced | dev/src/draw.rs | the editor and tools |
-| `device_group_set_desired_value` | devices/devices.c | Matched | campaign/src/devices.rs | owed: the engine's own tests (campaign/src/devices.rs); no check against the original yet |
-| `device_set_actual_position` | devices/devices.c | Matched | campaign/src/devices.rs | owed: the engine's own tests (campaign/src/devices.rs); no check against the original yet |
-| `device_set_desired_position` | devices/devices.c | Matched | campaign/src/devices.rs | owed: the engine's own tests (campaign/src/devices.rs); no check against the original yet |
-| `device_set_power` | devices/devices.c | Matched | campaign/src/devices.rs | owed: the engine's own tests (campaign/src/devices.rs); no check against the original yet |
-| `device_group_change` | devices/devices.c | Matched | campaign/src/devices.rs | owed: the engine's own tests (campaign/src/devices.rs); no check against the original yet |
+| `device_group_set_desired_value` | devices/devices.c | Matched | campaign/src/devices.rs:296 | campaign/tests/devices_reference.rs (trace) |
+| `device_set_actual_position` | devices/devices.c | Matched | campaign/src/devices.rs:361 | campaign/tests/devices_reference.rs (trace) |
+| `device_add_scenario_information` | devices/devices.c | Ported | campaign/src/devices.rs:219 | `tools/engine_devices_reference.py` |
+| `device_set_desired_position` | devices/devices.c | Matched | campaign/src/devices.rs:350 | campaign/tests/devices_reference.rs (trace) |
+| `device_set_power` | devices/devices.c | Matched | campaign/src/devices.rs:371 | campaign/tests/devices_reference.rs (trace) |
+| `device_group_change` | devices/devices.c | Matched | campaign/src/devices.rs:296 | campaign/tests/devices_reference.rs (trace) |
 
-42 Missing (41 reached from `main_loop`), by file:
+34 Missing (33 reached from `main_loop`), by file:
 
 - devices/device_controls.c: `controls_initialize`, `controls_dispose`, `controls_initialize_for_new_map`, `controls_dispose_from_old_map`, `control_place`, `control_new`, `control_delete`, `control_update`, `control_toggle`, `control_touched`, `control_destroyed`
 - devices/device_light_fixtures.c: `light_fixtures_initialize`, `light_fixtures_dispose`, `light_fixtures_initialize_for_new_map`, `light_fixtures_dispose_from_old_map`, `light_fixture_place`, `light_fixture_new`, `light_fixture_delete`, `light_fixture_update`
-- devices/device_machines.c: `machines_initialize`, `machines_dispose`, `machines_initialize_for_new_map`, `machines_dispose_from_old_map`, `machine_place`, `machine_new`, `machine_delete`, `machine_bumped`, `machine_try_to_open_with_damage`
-- devices/devices.c: `devices_initialize`, `devices_dispose`, `devices_dispose_from_old_map`, `device_new`, `device_group_set_actual_value`, `device_touched`, `device_can_change_position`, `device_effect_new`, `device_group_new`, `device_group_delete`, `devices_initialize_for_new_map`, `device_delete`, `device_add_scenario_information`, `device_frontfacing`
+- devices/device_machines.c: `machines_initialize`, `machines_dispose`, `machines_initialize_for_new_map`, `machines_dispose_from_old_map`, `machine_new`, `machine_delete`, `machine_bumped`, `machine_try_to_open_with_damage`
+- devices/devices.c: `devices_initialize`, `devices_dispose`, `devices_dispose_from_old_map`, `device_touched`, `device_can_change_position`, `device_effect_new`, `device_frontfacing`
 
 ## `dialogs`
 
@@ -1346,7 +1354,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `players_update_before_game` | game/players.c | Partial | sim/src/lib.rs:390 | sim/tests/game_tick_reference.rs (trace); leaves out the network's prediction, the players' respawn timers, co-op's stranded players rescued, the actions' checks (its asserts); only its place in the tick is traced (game_tick); its body is the game loop track's |
 | `player_examine_nearby_item` | game/players.c | Partial | sim/src/pickup.rs:2 | sim/tests/pickup_reference.rs (trace); leaves out picking up equipment and powerups, the grenades' pickup, the action's priority among the objects nearby (player_set_action_result); taken, swapped or left as the game chooses (unit_should_autopick_weapon, unit_approve_weapon_swap), 4000 cases; the engine carries two weapons where the game's places are four |
 | `player_examine_nearby_objects` | game/players.c | Partial | sim/src/hud.rs:318 | sim/tests/pickup_reference.rs (trace); leaves out the objects found by objects_in_sphere (the engine looks within the pickup radius), the nearby bipeds and devices; the weapons examined as the game examines them (player_examine_nearby_item's trace); the vehicles' seats are offered by sim/src/seats.rs |
-| `players_update_after_game` | game/players.c | Partial | campaign/src/lib.rs:474 | sim/tests/game_tick_reference.rs (trace); leaves out the telefrag, the powerups' timers, double speed, co-op's wait for the host; only its place in the tick is traced (game_tick); the BSP switch and the end of a level are checked by campaign/tests/flow.rs; its body is the game loop track's |
+| `players_update_after_game` | game/players.c | Partial | campaign/src/lib.rs:472 | sim/tests/game_tick_reference.rs (trace); leaves out the telefrag, the powerups' timers, double speed, co-op's wait for the host; only its place in the tick is traced (game_tick); the BSP switch and the end of a level are checked by campaign/tests/flow.rs; its body is the game loop track's |
 | `game_engine_network_player_score` | game/game_engine.c | Replaced | net/src/snapshot.rs | networking and Xbox Live; the original's network state and prediction; the engine sends snapshots |
 | `game_engine_write_network_state` | game/game_engine.c | Replaced | net/src/snapshot.rs | networking and Xbox Live; the original's network state and prediction; the engine sends snapshots |
 | `game_engine_read_network_state` | game/game_engine.c | Replaced | net/src/snapshot.rs | networking and Xbox Live; the original's network state and prediction; the engine sends snapshots |
@@ -2274,7 +2282,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `animation_second_key_frame_index` | models/model_animations.c | Matched | sim/src/animation.rs | owed: the engine's own tests (sim/tests/stock_animations.rs); no check against the original yet |
 | `animation_sound_frame_index` | models/model_animations.c | Matched | sim/src/animation.rs | owed: the engine's own tests (sim/tests/stock_animations.rs); no check against the original yet |
 | `animation_is_compressed` | models/model_animations.c | Ported |  | `tools/engine_animation_reference.py` |
-| `build_damage_animation_index` | models/model_animations.c | Matched | content/src/object.rs:519 | owed: the damage animations; reads the object, tag and map world, which the fake worlds do not hold (the animation graph) |
+| `build_damage_animation_index` | models/model_animations.c | Matched | content/src/object.rs:522 | owed: the damage animations; reads the object, tag and map world, which the fake worlds do not hold (the animation graph) |
 | `animation_set_frame_size` | models/model_animations.c | Replaced | import/src/object.rs | maps imported to a typed format; the tool's, when it builds an animation: nothing in the game calls it, and the importer reads what it made |
 | `quaternion_decompress_8byte` | models/model_animations.c | Ported | sim/src/animation.rs:260 | `tools/engine_animation_reference.py` |
 | `quaternion_decompress_6byte` | models/model_animations.c | Ported | sim/src/animation.rs:272 | `tools/engine_animation_reference.py` |
@@ -2710,7 +2718,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `objects_disconnect_from_structure_bsp` | objects/objects.c | Matched | sim/src/objects.rs | owed: the engine's own tests (sim/src/objects.rs); no check against the original yet |
 | `object_pvs_activate` | objects/objects.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
 | `objects_scripting_set_scale` | objects/objects.c | Partial | campaign/src/objects.rs | leaves out the frames asked for: the scale is taken at once; owed: the engine's own tests (campaign/src/objects.rs); no check against the original yet |
-| `object_delete` | objects/objects.c | Matched | sim/src/objects.rs | owed: the engine's own tests (sim/src/objects.rs); no check against the original yet |
+| `object_delete` | objects/objects.c | Matched | campaign/src/lib.rs:262 | owed: the engine's own tests (sim/src/objects.rs); no check against the original yet |
 | `object_detach` | objects/objects.c | Matched | campaign/src/objects.rs | owed: the engine's own tests (campaign/src/objects.rs); no check against the original yet |
 | `objects_reconnect_to_structure_bsp` | objects/objects.c | Matched | sim/src/objects.rs | owed: the engine's own tests (sim/src/objects.rs); no check against the original yet |
 | `objects_paparazzi` | objects/objects.c | Replaced | dev/src/logbook.rs | the editor and tools; a debug check, statistic or editor hook of the original; the dev tools stand in |

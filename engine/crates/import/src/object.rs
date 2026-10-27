@@ -401,6 +401,10 @@ fn import_device(cache: &Cache, index: usize, kind: ObjectKind) -> Result<Device
             effect(0x44, "positive stop effect")?,
             effect(0x54, "negative stop effect")?,
         ],
+        power_effects: [
+            effect(0x64, "depowered effect")?,
+            effect(0x74, "repowered effect")?,
+        ],
         delay_effect: effect(0x90, "delay effect")?,
         automatic_activation_radius: f(0xA0, "automatic activation radius")?,
         maximum_power_acceleration: f(0xF8, "maximum power acceleration")?,

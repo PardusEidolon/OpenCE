@@ -200,7 +200,7 @@ pub struct DeviceGroup {
     pub name: String,
     /// The value it starts as.
     pub initial_value: f32,
-    /// Its flags: bit 0, only a script changes it.
+    /// Its flags: bit 0, it changes only once (`can_change_only_once`).
     pub flags: u32,
 }
 

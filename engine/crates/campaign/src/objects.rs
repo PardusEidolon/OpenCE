@@ -50,7 +50,7 @@ impl Mission {
             if !anew {
                 return Some(handle);
             }
-            self.sim.remove(handle);
+            self.remove(handle);
         }
         let placement = self
             .level
@@ -63,8 +63,7 @@ impl Mission {
         let handle = self.sim.spawn(spawn).ok()?;
         self.named[name] = Some(handle);
         if let Some(device) = device {
-            let state = crate::DeviceState::of(&device, &self.groups).defined_by(definition);
-            self.devices.insert(handle, state);
+            self.devices.place(handle, &device, definition);
         }
         Some(handle)
     }
@@ -199,7 +198,7 @@ fn object_create_anew_containing(mission: &mut Mission, arguments: &[Value]) -> 
 fn object_destroy(mission: &mut Mission, arguments: &[Value]) -> Value {
     if let Some(handle) = object(mission, arguments, 0) {
         if mission.player_of(handle).is_none() {
-            mission.sim.remove(handle);
+            mission.remove(handle);
         }
     }
     Value::Void
@@ -209,7 +208,7 @@ fn object_destroy_all(mission: &mut Mission, _: &[Value]) -> Value {
     let players = mission.player_units();
     for handle in mission.sim.objects() {
         if !players.contains(&handle) {
-            mission.sim.remove(handle);
+            mission.remove(handle);
         }
     }
     Value::Void
@@ -218,7 +217,7 @@ fn object_destroy_all(mission: &mut Mission, _: &[Value]) -> Value {
 fn object_destroy_containing(mission: &mut Mission, arguments: &[Value]) -> Value {
     for name in mission.names_containing(text(arguments, 0)) {
         if let Some(handle) = mission.named(name) {
-            mission.sim.remove(handle);
+            mission.remove(handle);
         }
     }
     Value::Void

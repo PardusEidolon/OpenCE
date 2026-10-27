@@ -2473,7 +2473,8 @@ owed = "a vehicle's effects; reads the object, tag and map world, which the fake
 [function.create_initial_device_groups]
 class = "matched"
 engine = "campaign/src/devices.rs"
-owed = "the engine's own tests (campaign/src/devices.rs); no check against the original yet"
+check = "campaign/tests/devices_reference.rs"
+against = "trace"
 
 [function.create_pelican_effect]
 class = "matched"
@@ -2981,42 +2982,50 @@ owed = "devices; reads the object, tag and map world, which the fake worlds do n
 [function.device_get_position]
 class = "matched"
 engine = "campaign/src/devices.rs"
-owed = "the engine's own tests (campaign/src/devices.rs); no check against the original yet"
+check = "campaign/tests/devices_reference.rs"
+against = "trace"
 
 [function.device_get_power]
 class = "matched"
 engine = "campaign/src/devices.rs"
-owed = "the engine's own tests (campaign/src/devices.rs); no check against the original yet"
+check = "campaign/tests/devices_reference.rs"
+against = "trace"
 
 [function.device_group_change]
 class = "matched"
 engine = "campaign/src/devices.rs"
-owed = "the engine's own tests (campaign/src/devices.rs); no check against the original yet"
+check = "campaign/tests/devices_reference.rs"
+against = "trace"
 
 [function.device_group_change_only_once_more_set]
 class = "matched"
 engine = "campaign/src/devices.rs"
-owed = "the engine's own tests (campaign/src/devices.rs); no check against the original yet"
+check = "campaign/tests/devices_reference.rs"
+against = "trace"
 
 [function.device_group_get_value]
 class = "matched"
 engine = "campaign/src/devices.rs"
-owed = "the engine's own tests (campaign/src/devices.rs); no check against the original yet"
+check = "campaign/tests/devices_reference.rs"
+against = "trace"
 
 [function.device_group_set_desired_value]
 class = "matched"
 engine = "campaign/src/devices.rs"
-owed = "the engine's own tests (campaign/src/devices.rs); no check against the original yet"
+check = "campaign/tests/devices_reference.rs"
+against = "trace"
 
 [function.device_one_sided_set]
 class = "matched"
 engine = "campaign/src/devices.rs"
-owed = "the engine's own tests (campaign/src/devices.rs); no check against the original yet"
+check = "campaign/tests/devices_reference.rs"
+against = "trace"
 
 [function.device_operates_automatically_set]
 class = "matched"
 engine = "campaign/src/devices.rs"
-owed = "the engine's own tests (campaign/src/devices.rs); no check against the original yet"
+check = "campaign/tests/devices_reference.rs"
+against = "trace"
 
 [function.device_preprocess_node_orientations]
 class = "matched"
@@ -3030,22 +3039,26 @@ stands_in = "dev/src/draw.rs"
 [function.device_set_actual_position]
 class = "matched"
 engine = "campaign/src/devices.rs"
-owed = "the engine's own tests (campaign/src/devices.rs); no check against the original yet"
+check = "campaign/tests/devices_reference.rs"
+against = "trace"
 
 [function.device_set_desired_position]
 class = "matched"
 engine = "campaign/src/devices.rs"
-owed = "the engine's own tests (campaign/src/devices.rs); no check against the original yet"
+check = "campaign/tests/devices_reference.rs"
+against = "trace"
 
 [function.device_set_never_appears_locked]
 class = "matched"
 engine = "campaign/src/devices.rs"
-owed = "the engine's own tests (campaign/src/devices.rs); no check against the original yet"
+check = "campaign/tests/devices_reference.rs"
+against = "trace"
 
 [function.device_set_power]
 class = "matched"
 engine = "campaign/src/devices.rs"
-owed = "the engine's own tests (campaign/src/devices.rs); no check against the original yet"
+check = "campaign/tests/devices_reference.rs"
+against = "trace"
 
 [function.device_update]
 class = "matched"
@@ -5126,6 +5139,12 @@ primitive = "Vec"
 [function.lru_unlock]
 class = "native"
 primitive = "Vec"
+
+[function.machine_place]
+class = "matched"
+engine = "campaign/src/devices.rs"
+check = "campaign/tests/devices_reference.rs"
+against = "trace"
 
 [function.machine_update]
 class = "matched"
