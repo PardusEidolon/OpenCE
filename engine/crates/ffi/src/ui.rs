@@ -42,6 +42,17 @@ pub fn pause_menu_widget(multiplayer: bool) -> String {
     }
 }
 
+/// The pause menu a level opened, and whether the world holds while it
+/// is open.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, uniffi::Enum)]
+pub enum PauseMenu {
+    /// The campaign's, in a game alone: the world holds.
+    HoldsWorld,
+    /// A network game's, or a multiplayer map's own played alone, which
+    /// closes as in a network game: the world runs on.
+    WorldRuns,
+}
+
 /// One quad of the UI: a bitmap's image from the level's textures, or a
 /// glyph from the atlas.
 #[derive(Clone, Debug, PartialEq, uniffi::Record)]
@@ -353,6 +364,18 @@ impl Menu {
             .is_some()
     }
 
+    /// Opens the level's pause menu, as the game picks it: a network
+    /// game's, else the campaign's, else (a multiplayer map played alone,
+    /// which has no campaign pause menu) the multiplayer one. None if the
+    /// level has none of them.
+    pub fn open_pause(&self, network: bool) -> Option<PauseMenu> {
+        if !network && self.open(PAUSE_MENU.into()) {
+            return Some(PauseMenu::HoldsWorld);
+        }
+        self.open(PAUSE_MENU_MULTIPLAYER.into())
+            .then_some(PauseMenu::WorldRuns)
+    }
+
     /// Runs the widgets' timers and fades to `now_ms`, the app's clock.
     pub fn update(&self, now_ms: u64) {
         let state = &mut *self.lock();
@@ -650,6 +673,49 @@ mod tests {
             .take_sounds()
             .iter()
             .all(|sound| sound.starts_with("sound\\")));
+    }
+
+    /// A menu of the test map with the screen copied to each of `paths`.
+    fn menu_with(paths: &[&str]) -> Arc<Menu> {
+        let mut level = level();
+        let screen = level.ui.widgets[0].clone();
+        for path in paths {
+            let mut widget = screen.clone();
+            widget.tag = tag(b"DeLa", path);
+            level.ui.widgets.push(widget);
+        }
+        // as the import leaves them, sorted by tag for the lookup
+        level.ui.widgets.sort_by(|a, b| a.tag.cmp(&b.tag));
+        let Some(render) = crate::render_level::RenderLevel::build(&level, 0) else {
+            panic!("the test map has no BSP");
+        };
+        Menu::new(Arc::new(LevelGeometry {
+            name: "test".into(),
+            level: render,
+            bsp: 0,
+            content: Arc::new(level),
+        }))
+    }
+
+    #[test]
+    fn a_multiplayer_map_alone_opens_its_own_pause_menu_and_holds_nothing() {
+        // a campaign map: its pause menu, which holds the world
+        let campaign = menu_with(&[PAUSE_MENU]);
+        assert_eq!(campaign.open_pause(false), Some(PauseMenu::HoldsWorld));
+        // a multiplayer map played alone has only the multiplayer one,
+        // which closes as in a network game and holds nothing
+        let multiplayer = menu_with(&[PAUSE_MENU_MULTIPLAYER]);
+        assert_eq!(multiplayer.open_pause(false), Some(PauseMenu::WorldRuns));
+        assert!(multiplayer.is_open());
+        // a network game opens the multiplayer one whatever else is there
+        let both = menu_with(&[PAUSE_MENU, PAUSE_MENU_MULTIPLAYER]);
+        assert_eq!(both.open_pause(true), Some(PauseMenu::WorldRuns));
+        assert_eq!(both.open_pause(false), Some(PauseMenu::HoldsWorld));
+        // a map with neither opens nothing
+        let neither = menu_with(&[]);
+        assert_eq!(neither.open_pause(false), None);
+        assert_eq!(neither.open_pause(true), None);
+        assert!(!neither.is_open());
     }
 
     #[test]

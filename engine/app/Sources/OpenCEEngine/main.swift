@@ -492,10 +492,17 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     /// Opens `widget` of the level's own menus over it, the pointer the
     /// menu's.
     func openMenu(widget: String) {
+        pauseHoldsWorld = false
+        openMenu(named: widget) { $0.open(widget: widget) }
+    }
+
+    /// Opens what `open` opens of the level's menus, `name` in the log if
+    /// the level has none.
+    private func openMenu(named name: String, open: (any MenuProtocol) -> Bool) {
         guard let level, let controller, let device = controller.window.engineView.device else { return }
         let halo = Menu(geometry: level.geometry)
-        guard menu.show(halo, widget: widget) else {
-            appLog("warn", "\(level.map) has no \(widget)")
+        guard menu.show(halo, open: open) else {
+            appLog("warn", "\(level.map) has no \(name)")
             return
         }
         do {
@@ -507,15 +514,28 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         controller.capturesMouse = false
     }
 
-    /// The game's pause menu (the world holds while it is open, unless the
-    /// game is a network one).
+    /// The game's pause menu: a network game's, else the campaign's (the
+    /// world holds while it is open), else a multiplayer map's own, played
+    /// alone, which holds nothing.
     func pause() {
-        openMenu(widget: pauseMenuWidget(multiplayer: engine.networkStatus() != .alone))
+        let network = engine.networkStatus() != .alone
+        var holds = false
+        openMenu(named: "pause menu") { menu in
+            guard let pause = menu.openPause(network: network) else { return false }
+            holds = pause == .holdsWorld
+            return true
+        }
+        pauseHoldsWorld = holds
     }
 
-    /// Whether the world holds: a game alone with its pause menu open.
+    /// Whether the menu open is a campaign's pause menu, which holds the
+    /// world.
+    var pauseHoldsWorld = false
+
+    /// Whether the world holds: a game alone with the campaign's pause
+    /// menu open.
     var holdsWorld: Bool {
-        (menu.isOpen && !inShellScene && engine.networkStatus() == .alone) || loadingHolds
+        (menu.isOpen && !inShellScene && pauseHoldsWorld && engine.networkStatus() == .alone) || loadingHolds
     }
 
     /// Whether the loading screen hides the mission (it starts with the fade).

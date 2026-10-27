@@ -101,6 +101,13 @@ public final class HaloMenu {
     /// has no such widget.
     @discardableResult
     public func show(_ menu: any MenuProtocol, widget: String) -> Bool {
+        show(menu) { $0.open(widget: widget) }
+    }
+
+    /// Opens what `open` opens on `menu`, its lists filled; false when
+    /// it opened nothing.
+    @discardableResult
+    public func show(_ menu: any MenuProtocol, open: (any MenuProtocol) -> Bool) -> Bool {
         menu.setLevels(levels: levels)
         menu.setMaps(maps: multiplayerMaps)
         menu.setProfile(profile: settings.settings.game.playerName)
@@ -108,7 +115,7 @@ public final class HaloMenu {
         listed = []
         menu.setServers(servers: [])
         lastRefresh = -.infinity
-        guard menu.open(widget: widget) else {
+        guard open(menu) else {
             self.menu = nil
             return false
         }
