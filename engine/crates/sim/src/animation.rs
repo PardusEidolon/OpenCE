@@ -2164,6 +2164,19 @@ pub(crate) mod tests {
     }
 
     #[test]
+    fn a_custom_animation_starts_at_a_frame_it_has() {
+        // (`unit_custom_animation_at_frame`: a frame past its last is
+        // refused, and the animation keeps the frame it had)
+        let mut player = AnimationPlayer::new(Arc::new(graph(vec![animation(5)])), None, 0);
+        assert!(player.start_at(4));
+        assert_eq!(player.state.frame, 4);
+        assert!(!player.start_at(5));
+        assert_eq!(player.state.frame, 4);
+        assert!(player.start_at(0));
+        assert_eq!(player.state.frame, 0);
+    }
+
+    #[test]
     fn a_graph_without_nodes_poses_its_models() {
         // (a vehicle's graph: the model's two nodes, the second the
         // first's child)

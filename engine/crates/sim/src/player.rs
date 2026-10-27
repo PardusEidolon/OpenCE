@@ -1786,6 +1786,34 @@ mod tests {
     }
 
     #[test]
+    fn a_push_throws_a_living_biped_half_as_hard_and_off_its_feet(
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        let Some(level) = opence_import::testing::stock_level("bloodgulch")? else {
+            return Ok(()); // (no game data here)
+        };
+        let handle = ObjectHandle { index: 0, salt: 1 };
+        let mut player = Player::new(&level, 0, |_, _| Some(handle))?;
+        let before = player.mover.velocity;
+        let push = Vec3::new(0.1, -0.02, 0.05);
+        player.push(push);
+        // (`biped_accelerate`: half the push a game tick, in world units a
+        // second here, and airborne and slipping)
+        let per_second = crate::vehicle::GAME_TICKS_PER_SECOND as f32;
+        assert!(near(
+            player.mover.velocity - before,
+            push * 0.5 * per_second
+        ));
+        assert!(player.mover.airborne && player.mover.slipping);
+        // (nothing it cannot be thrown by moves it)
+        let thrown = player.mover.velocity;
+        player.push(Vec3::new(f32::NAN, 0.0, 0.0));
+        player.noclip = true;
+        player.push(push);
+        assert_eq!(player.mover.velocity, thrown);
+        Ok(())
+    }
+
+    #[test]
     fn a_camera_track_passes_through_its_points_from_down_to_up() {
         let track = [
             [-1.0, 0.0, 3.0],
