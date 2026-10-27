@@ -11,6 +11,7 @@ use crate::cache::{CacheKind, HEADER_SIZE};
 use crate::fake::FakeCache;
 use crate::level::tests::{level, Breaks};
 use crate::level::BITM;
+use crate::script::tests::script_cache;
 use crate::sound::tests::sound_cache;
 use crate::ui::tests::{add_font, add_shell};
 use crate::{import_level, Cache};
@@ -107,6 +108,15 @@ pub(crate) fn import_bitmap_file(file: &[u8]) {
     }
 }
 
+/// The scripts fuzz target's entry: a cache file's scenario's scripts,
+/// fixed up as the game loads them, read or refused.
+pub(crate) fn import_scripts_file(file: &[u8]) {
+    if let Ok(cache) = Cache::open(file.to_vec()) {
+        let _ = crate::script::import_scripts(&cache);
+        let _ = crate::script::fixed_up_nodes(&cache);
+    }
+}
+
 /// An Xbox cache from its header and its inflated body (so that the
 /// mutations reach the tags, not just the stream).
 pub(crate) fn xbox_file(header: &[u8], body: &[u8]) -> Vec<u8> {
@@ -122,13 +132,14 @@ pub(crate) type Entry = fn(&[u8]);
 
 /// Each `cargo fuzz` target (engine/fuzz/Cargo.toml's bins) and the entry
 /// it runs.
-pub(crate) const TARGETS: [(&str, Entry); 6] = [
+pub(crate) const TARGETS: [(&str, Entry); 7] = [
     ("cache_file", import_file),
     ("xbox_cache", |input| xbox_input(input, import_file)),
     ("pack", read_pack_file),
     ("ui", import_ui_file),
     ("sound", |input| xbox_input(input, import_sound_file)),
     ("bitmap", import_bitmap_file),
+    ("scripts", |input| xbox_input(input, import_scripts_file)),
 ];
 
 /// An Xbox target's input, its header and inflated body, made a cache
@@ -281,6 +292,24 @@ fn mutated_bitmaps_are_read_or_refused() {
     println!("{cases} bitmap caches");
 }
 
+#[test]
+fn mutated_scripts_are_fixed_up_or_refused() {
+    let file = script_cache().build();
+    // (the cache, unmutated, has its scripts and runs them: the cases
+    // reach the fix-up)
+    let scripts = Cache::open(file.clone())
+        .map_err(|error| error.to_string())
+        .and_then(|cache| crate::script::import_scripts(&cache).map_err(|error| error.to_string()));
+    assert!(scripts.is_ok_and(|scripts| scripts.disabled.is_none() && !scripts.nodes.is_empty()));
+    let (header, body) = file.split_at(HEADER_SIZE);
+    let cases = fuzz(0x0C0C_0007, |random| {
+        let mut mutated = body.to_vec();
+        mutate(random, &mut mutated, 0);
+        import_scripts_file(&xbox_file(header, &mutated));
+    });
+    println!("{cases} script caches");
+}
+
 /// The inputs `cargo fuzz` kept on this machine (its corpus, and any
 /// crash it saved), each run through its target's entry again: a crash
 /// found in a long run stays fixed. (They are never committed; without
@@ -345,13 +374,14 @@ fn the_seeds_are_each_targets_fake() {
     let mut ui = FakeCache::new(CacheKind::CustomEdition);
     add_shell(&mut ui);
     add_font(&mut ui, false);
-    let seeds: [(&str, Vec<u8>); 6] = [
+    let seeds: [(&str, Vec<u8>); 7] = [
         ("cache_file", custom.clone()),
         ("xbox_cache", xbox_cache.file().to_vec()),
         ("pack", level_pack),
         ("ui", ui.build()),
         ("sound", sound.file().to_vec()),
         ("bitmap", custom),
+        ("scripts", script_cache().build()),
     ];
     let names: Vec<&str> = seeds.iter().map(|(target, _)| *target).collect();
     let targets: Vec<&str> = TARGETS.iter().map(|(target, _)| *target).collect();

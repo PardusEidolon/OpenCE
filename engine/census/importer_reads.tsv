@@ -703,6 +703,7 @@
 686d7420	20:2	0	1	type
 686d7420	20:2	1	1	data
 686d7420	32:64	0	1	name
+686d7420	32:64	0	32	name
 686d7420	32:64	32	2	text start index
 686d7420	32:64	34	2	element start index
 686d7420	32:64	36	1	element count
@@ -734,6 +735,8 @@
 68756467	-	200	4	button icons
 68756467	-	240	4	hud messages
 68756467	-	252	4	hud messages
+68756467	-	352	4	waypoint arrows
+68756467	-	356	4	waypoint arrows
 68756467	-	444	4	hud scale in multiplayer
 68756467	-	704	4	default weapon hud
 68756467	-	716	4	default weapon hud
@@ -748,6 +751,7 @@
 68756467	196:16	12	1	icon frame rate
 68756467	196:16	13	1	icon flags
 68756467	196:16	14	2	icon text index
+68756467	352:104	0	32	name
 69746d63	-	0	4	permutations
 69746d63	-	4	4	permutations
 69746d63	-	12	2	spawn time
@@ -1817,6 +1821,36 @@
 73627370	600:16	12	1	decal type
 73627370	600:16	14	1	yaw
 73627370	600:16	15	1	pitch
+73636869	-	0	2	flags
+73636869	-	4	4	power
+73636869	-	8	4	color of emitted light
+73636869	-	12	4	color of emitted light
+73636869	-	16	4	color of emitted light
+73636869	-	20	4	tint color
+73636869	-	24	4	tint color
+73636869	-	28	4	tint color
+73636869	-	34	2	material type
+73636869	-	40	1	numeric counter limit
+73636869	-	41	1	flags
+73636869	-	42	2	first map type
+73636869	-	44	2	framebuffer blend function
+73636869	-	46	2	framebuffer fade mode
+73636869	-	48	2	framebuffer fade source
+73636869	-	72	4	extra layers
+73636869	-	76	4	extra layers
+73636869	-	84	4	maps
+73636869	-	88	4	maps
+73636869	84:220	0	2	flags
+73636869	84:220	44	2	color function
+73636869	84:220	46	2	alpha function
+73636869	84:220	84	4	map u-scale
+73636869	84:220	88	4	map v-scale
+73636869	84:220	92	4	map u-offset
+73636869	84:220	96	4	map v-offset
+73636869	84:220	100	4	map rotation
+73636869	84:220	104	4	mipmap bias
+73636869	84:220	108	4	map
+73636869	84:220	120	4	map
 73636e72	-	48	4	skies
 73636e72	-	52	4	skies
 73636e72	-	516	4	object names
@@ -1842,7 +1876,9 @@
 73636e72	-	636	4	palette
 73636e72	-	640	4	palette
 73636e72	-	648	4	device groups
+73636e72	-	648	4	named elements
 73636e72	-	652	4	device groups
+73636e72	-	652	4	named elements
 73636e72	-	660	4	placements
 73636e72	-	664	4	placements
 73636e72	-	672	4	palette
@@ -1859,13 +1895,19 @@
 73636e72	-	736	4	placements
 73636e72	-	744	4	palette
 73636e72	-	748	4	palette
+73636e72	-	840	4	named elements
 73636e72	-	840	4	starting profiles
+73636e72	-	844	4	named elements
 73636e72	-	844	4	starting profiles
 73636e72	-	852	4	player starting locations
 73636e72	-	856	4	player starting locations
+73636e72	-	864	4	named elements
 73636e72	-	864	4	trigger volumes
+73636e72	-	868	4	named elements
 73636e72	-	868	4	trigger volumes
+73636e72	-	876	4	named elements
 73636e72	-	876	4	recorded animations
+73636e72	-	880	4	named elements
 73636e72	-	880	4	recorded animations
 73636e72	-	888	4	netgame flags
 73636e72	-	892	4	netgame flags
@@ -1882,9 +1924,13 @@
 73636e72	-	1068	4	encounters
 73636e72	-	1072	4	encounters
 73636e72	-	1080	4	command lists
+73636e72	-	1080	4	named elements
 73636e72	-	1084	4	command lists
+73636e72	-	1084	4	named elements
 73636e72	-	1128	4	conversations
+73636e72	-	1128	4	named elements
 73636e72	-	1132	4	conversations
+73636e72	-	1132	4	named elements
 73636e72	-	1140	4	script syntax data
 73636e72	-	1152	4	script syntax data
 73636e72	-	1160	4	script strings
@@ -1893,18 +1939,33 @@
 73636e72	-	1184	4	scripts
 73636e72	-	1192	4	globals
 73636e72	-	1196	4	globals
+73636e72	-	1204	4	script references
+73636e72	-	1208	4	script references
+73636e72	-	1216	4	source files
 73636e72	-	1252	4	cutscene flags
+73636e72	-	1252	4	named elements
 73636e72	-	1256	4	cutscene flags
+73636e72	-	1256	4	named elements
 73636e72	-	1264	4	camera points
+73636e72	-	1264	4	named elements
 73636e72	-	1268	4	camera points
+73636e72	-	1268	4	named elements
 73636e72	-	1276	4	cutscene titles
+73636e72	-	1276	4	named elements
 73636e72	-	1280	4	cutscene titles
+73636e72	-	1280	4	named elements
+73636e72	-	1428	4	hud messages
+73636e72	-	1440	4	hud messages
 73636e72	-	1444	4	structure bsps
 73636e72	-	1448	4	structure bsps
 73636e72	48:16	0	4	sky
 73636e72	48:16	12	4	sky
 73636e72	516:36	0	1	name
 73636e72	516:36	0	1	object name
+73636e72	516:36	0	32	name
+73636e72	516:36	32	2	object name type
+73636e72	516:36	32	2	type
+73636e72	516:36	34	2	object name placement
 73636e72	528:72	0	2	palette index
 73636e72	528:72	2	2	name index
 73636e72	528:72	4	2	placement flags
@@ -1988,6 +2049,7 @@
 73636e72	636:48	0	4	palette entry
 73636e72	636:48	12	4	palette entry
 73636e72	648:52	0	1	name
+73636e72	648:52	0	32	name
 73636e72	648:52	32	4	initial value
 73636e72	648:52	36	4	flags
 73636e72	660:64	0	2	palette index
@@ -2047,6 +2109,7 @@
 73636e72	744:48	0	4	palette entry
 73636e72	744:48	12	4	palette entry
 73636e72	840:104	0	1	name
+73636e72	840:104	0	32	name
 73636e72	852:52	0	4	position
 73636e72	852:52	4	4	position
 73636e72	852:52	8	4	position
@@ -2059,6 +2122,7 @@
 73636e72	852:52	26	2	game type
 73636e72	864:96	0	2	trigger volume type
 73636e72	864:96	4	1	name
+73636e72	864:96	4	32	name
 73636e72	864:96	48	4	forward
 73636e72	864:96	52	4	forward
 73636e72	864:96	56	4	forward
@@ -2072,6 +2136,7 @@
 73636e72	864:96	88	4	extents
 73636e72	864:96	92	4	extents
 73636e72	876:64	0	1	name
+73636e72	876:64	0	32	name
 73636e72	876:64	36	2	length
 73636e72	888:148	0	4	position
 73636e72	888:148	4	4	position
@@ -2103,6 +2168,7 @@
 73636e72	1056:16	0	4	actor variant
 73636e72	1056:16	12	4	actor variant
 73636e72	1068:176	0	1	name
+73636e72	1068:176	0	32	name
 73636e72	1068:176	32	4	flags
 73636e72	1068:176	36	2	team
 73636e72	1068:176	128	4	squads
@@ -2112,6 +2178,7 @@
 73636e72	1068:176	152	4	firing positions
 73636e72	1068:176	156	4	firing positions
 73636e72	1068:176/128:232	0	1	name
+73636e72	1068:176/128:232	0	32	name
 73636e72	1068:176/128:232	32	2	actor type
 73636e72	1068:176/128:232	34	2	platoon
 73636e72	1068:176/128:232	36	2	initial state
@@ -2137,11 +2204,13 @@
 73636e72	1068:176/128:232/208:28	24	2	actor type
 73636e72	1068:176/128:232/208:28	26	2	command list
 73636e72	1068:176/140:172	0	1	name
+73636e72	1068:176/140:172	0	32	name
 73636e72	1068:176/152:24	0	4	position
 73636e72	1068:176/152:24	4	4	position
 73636e72	1068:176/152:24	8	4	position
 73636e72	1068:176/152:24	12	2	group
 73636e72	1080:96	0	1	name
+73636e72	1080:96	0	32	name
 73636e72	1080:96	32	4	flags
 73636e72	1080:96	48	4	commands
 73636e72	1080:96	52	4	commands
@@ -2158,6 +2227,7 @@
 73636e72	1080:96/60:20	4	4	point
 73636e72	1080:96/60:20	8	4	point
 73636e72	1128:116	0	1	name
+73636e72	1128:116	0	32	name
 73636e72	1128:116	80	4	participants
 73636e72	1128:116	84	4	participants
 73636e72	1128:116	92	4	lines
@@ -2186,19 +2256,25 @@
 73636e72	1128:116/92:124	108	4	variant
 73636e72	1128:116/92:124	120	4	variant
 73636e72	1180:92	0	1	name
+73636e72	1180:92	0	32	name
 73636e72	1180:92	32	2	type
 73636e72	1180:92	34	2	return type
 73636e72	1180:92	36	4	root expression
 73636e72	1192:92	0	1	name
+73636e72	1192:92	0	32	name
 73636e72	1192:92	32	2	type
 73636e72	1192:92	40	4	initialization expression
+73636e72	1204:40	24	4	reference
+73636e72	1204:40	36	4	reference
 73636e72	1252:92	4	1	name
+73636e72	1252:92	4	32	name
 73636e72	1252:92	36	4	position
 73636e72	1252:92	40	4	position
 73636e72	1252:92	44	4	position
 73636e72	1252:92	48	4	facing
 73636e72	1252:92	52	4	facing
 73636e72	1264:104	4	1	name
+73636e72	1264:104	4	32	name
 73636e72	1264:104	40	4	position
 73636e72	1264:104	44	4	position
 73636e72	1264:104	48	4	position
@@ -2207,269 +2283,131 @@
 73636e72	1264:104	60	4	orientation
 73636e72	1264:104	64	4	field of view
 73636e72	1276:96	4	1	name
+73636e72	1276:96	4	32	name
 73636e72	1444:32	0	4	file offset
 73636e72	1444:32	4	4	size
 73636e72	1444:32	8	4	address
 73636e72	1444:32	16	4	structure bsp
 73636e72	1444:32	28	4	structure bsp
-73686472	-	0	2	flags
-73686472	-	4	4	power
-73686472	-	8	4	color of emitted light
-73686472	-	12	4	color of emitted light
-73686472	-	16	4	color of emitted light
-73686472	-	20	4	tint color
-73686472	-	24	4	tint color
-73686472	-	28	4	tint color
-73686472	-	34	2	material type
-73686472	-	40	1	numeric counter limit
-73686472	-	40	2	flags
-73686472	-	41	1	flags
-73686472	-	42	2	first map type
-73686472	-	42	2	type
-73686472	-	44	2	framebuffer blend function
-73686472	-	44	2	intensity source
-73686472	-	46	2	framebuffer fade mode
-73686472	-	48	2	framebuffer fade source
-73686472	-	48	4	intensity exponent
-73686472	-	56	4	offset amount
-73686472	-	56	4	translucency
-73686472	-	72	4	extra layers
-73686472	-	76	2	change color source
-73686472	-	76	4	base map
-73686472	-	76	4	extra layers
-73686472	-	76	4	map
-73686472	-	84	4	background tint color
-73686472	-	84	4	maps
-73686472	-	88	4	background tint color
-73686472	-	88	4	base map
-73686472	-	88	4	map
-73686472	-	88	4	maps
-73686472	-	92	4	background tint color
-73686472	-	96	4	background tint map scale
-73686472	-	96	4	perpendicular alpha
-73686472	-	96	4	stages
-73686472	-	100	4	background tint map
-73686472	-	100	4	perpendicular tint color
-73686472	-	100	4	stages
-73686472	-	104	4	perpendicular tint color
-73686472	-	108	2	diffuse flags
-73686472	-	108	2	self-illumination flags
-73686472	-	108	4	perpendicular tint color
-73686472	-	108	4	view perpendicular tint
-73686472	-	112	2	self-illumination color source
-73686472	-	112	4	background tint map
-73686472	-	112	4	parallel alpha
-73686472	-	112	4	view perpendicular tint
-73686472	-	114	2	self-illumination function
-73686472	-	116	4	parallel tint color
-73686472	-	116	4	self-illumination period
-73686472	-	116	4	view perpendicular tint
-73686472	-	120	4	parallel tint color
-73686472	-	120	4	self-illumination lower bound
-73686472	-	120	4	view perpendicular tint
-73686472	-	124	4	gradient min color
-73686472	-	124	4	parallel tint color
-73686472	-	124	4	self-illumination lower bound
-73686472	-	124	4	view parallel tint
-73686472	-	128	2	tint color source
-73686472	-	128	4	gradient min color
-73686472	-	128	4	self-illumination lower bound
-73686472	-	128	4	view parallel tint
-73686472	-	132	4	gradient min color
-73686472	-	132	4	self-illumination upper bound
-73686472	-	132	4	view parallel tint
-73686472	-	136	4	base map
-73686472	-	136	4	gradient max color
-73686472	-	136	4	self-illumination upper bound
-73686472	-	136	4	view parallel tint
-73686472	-	138	2	reflection type
-73686472	-	140	4	gradient max color
-73686472	-	140	4	perpendicular color
-73686472	-	140	4	self-illumination upper bound
-73686472	-	144	4	gradient max color
-73686472	-	144	4	perpendicular color
-73686472	-	148	4	background color
-73686472	-	148	4	base map
-73686472	-	148	4	perpendicular color
-73686472	-	152	4	background color
-73686472	-	152	4	perpendicular color
-73686472	-	156	4	background color
-73686472	-	156	4	map u scale
-73686472	-	156	4	parallel color
-73686472	-	156	4	reflection map
-73686472	-	160	4	flash color
-73686472	-	160	4	map v scale
-73686472	-	160	4	parallel color
-73686472	-	164	4	base map
-73686472	-	164	4	flash color
-73686472	-	164	4	parallel color
-73686472	-	168	4	flash color
-73686472	-	168	4	parallel color
-73686472	-	168	4	reflection map
-73686472	-	172	4	reflection map
-73686472	-	172	4	tint color
-73686472	-	176	2	detail map function
-73686472	-	176	4	base map
-73686472	-	176	4	tint color
-73686472	-	180	4	primary detail map scale
-73686472	-	180	4	tint color
-73686472	-	184	4	meter transparency
-73686472	-	184	4	primary detail map
-73686472	-	184	4	reflection map
-73686472	-	188	4	background transparency
-73686472	-	188	4	bump map scale
-73686472	-	188	4	multipurpose map
-73686472	-	188	4	ripple animation angle
-73686472	-	192	4	bump map
-73686472	-	192	4	noise map animation period
-73686472	-	192	4	ripple animation velocity
-73686472	-	196	4	noise map animation direction
-73686472	-	196	4	primary detail map
-73686472	-	196	4	ripple scale
-73686472	-	200	4	multipurpose map
-73686472	-	200	4	noise map animation direction
-73686472	-	200	4	ripple maps
-73686472	-	200	4	secondary detail map scale
-73686472	-	204	4	bump map
-73686472	-	204	4	noise map animation direction
-73686472	-	204	4	secondary detail map
-73686472	-	208	4	noise map scale
-73686472	-	212	2	detail function
-73686472	-	212	4	noise map
-73686472	-	212	4	ripple maps
-73686472	-	214	2	detail mask
-73686472	-	216	4	detail map scale
-73686472	-	216	4	secondary detail map
-73686472	-	220	2	value source
-73686472	-	220	4	detail map
-73686472	-	224	4	noise map
-73686472	-	232	4	detail map
-73686472	-	236	4	detail map v scale
-73686472	-	244	2	micro detail map function
-73686472	-	248	4	micro detail map scale
-73686472	-	252	4	micro detail map
-73686472	-	254	2	u animation
-73686472	-	256	4	u animation
-73686472	-	260	4	u animation
-73686472	-	264	4	micro detail map
-73686472	-	264	4	noise map animation period
-73686472	-	264	4	u animation
-73686472	-	268	4	material color
-73686472	-	268	4	noise map animation direction
-73686472	-	272	4	material color
-73686472	-	272	4	noise map animation direction
-73686472	-	274	2	v animation
-73686472	-	276	4	material color
-73686472	-	276	4	noise map animation direction
-73686472	-	276	4	v animation
-73686472	-	280	4	noise map scale
-73686472	-	280	4	v animation
-73686472	-	284	4	noise map
-73686472	-	284	4	v animation
-73686472	-	292	4	bump map scale
-73686472	-	296	4	bump map
-73686472	-	296	4	noise map
-73686472	-	308	4	bump map
-73686472	-	316	4	reflection falloff distance
-73686472	-	320	4	reflection cutoff distance
-73686472	-	324	4	perpendicular brightness
-73686472	-	328	4	perpendicular tint color
-73686472	-	332	4	perpendicular tint color
-73686472	-	336	2	u animation
-73686472	-	336	4	perpendicular tint color
-73686472	-	340	4	diffuse map scale
-73686472	-	340	4	parallel brightness
-73686472	-	340	4	u animation
-73686472	-	344	4	diffuse map
-73686472	-	344	4	parallel tint color
-73686472	-	344	4	u animation
-73686472	-	348	2	v animation
-73686472	-	348	4	parallel tint color
-73686472	-	352	4	parallel tint color
-73686472	-	352	4	v animation
-73686472	-	356	4	diffuse map
-73686472	-	356	4	reflection cube map
-73686472	-	356	4	v animation
-73686472	-	360	4	diffuse detail map scale
-73686472	-	364	4	diffuse detail map
-73686472	-	368	4	reflection cube map
-73686472	-	376	4	diffuse detail map
-73686472	-	384	2	self-illumination flags
-73686472	-	412	4	primary
-73686472	-	416	4	primary
-73686472	-	420	4	primary
-73686472	-	424	4	primary
-73686472	-	428	4	primary
-73686472	-	432	4	primary
-73686472	-	436	2	primary
-73686472	-	440	4	primary
-73686472	-	444	4	primary
-73686472	-	472	4	secondary
-73686472	-	476	4	secondary
-73686472	-	480	4	secondary
-73686472	-	484	4	secondary
-73686472	-	488	4	secondary
-73686472	-	492	4	secondary
-73686472	-	496	2	secondary
-73686472	-	500	4	secondary
-73686472	-	504	4	secondary
-73686472	-	532	4	plasma
-73686472	-	536	4	plasma
-73686472	-	540	4	plasma
-73686472	-	544	4	plasma
-73686472	-	548	4	plasma
-73686472	-	552	4	plasma
-73686472	-	556	2	plasma
-73686472	-	560	4	plasma
-73686472	-	564	4	plasma
-73686472	-	592	4	self-illumination map scale
-73686472	-	596	4	self-illumination map
-73686472	-	608	4	self-illumination map
-73686472	-	636	2	specular flags
-73686472	-	656	4	specular brightness
-73686472	-	680	4	specular perpendicular color
-73686472	-	684	4	specular perpendicular color
-73686472	-	688	4	specular perpendicular color
-73686472	-	692	4	specular parallel color
-73686472	-	696	4	specular parallel color
-73686472	-	700	4	specular parallel color
-73686472	-	720	2	reflection flags
-73686472	-	722	2	reflection type
-73686472	-	724	4	lightmap brightness scale
-73686472	-	756	4	reflection perpendicular brightness
-73686472	-	760	4	reflection parallel brightness
-73686472	-	804	4	reflection cube map
-73686472	-	816	4	reflection cube map
-73686472	72:16	0	4	shader
-73686472	72:16	12	4	shader
-73686472	84:100	0	2	flags
-73686472	84:100	4	4	map u-scale
-73686472	84:100	8	4	map v-scale
-73686472	84:100	12	4	map u-offset
-73686472	84:100	16	4	map v-offset
-73686472	84:100	20	4	map rotation
-73686472	84:100	28	4	map
-73686472	84:100	40	4	map
-73686472	84:220	0	2	flags
-73686472	84:220	44	2	color function
-73686472	84:220	46	2	alpha function
-73686472	84:220	84	4	map u-scale
-73686472	84:220	88	4	map v-scale
-73686472	84:220	92	4	map u-offset
-73686472	84:220	96	4	map v-offset
-73686472	84:220	100	4	map rotation
-73686472	84:220	104	4	mipmap bias
-73686472	84:220	108	4	map
-73686472	84:220	120	4	map
-73686472	96:112	0	2	flags
-73686472	96:112	12	4	color0
-73686472	96:112	16	4	color0
-73686472	96:112	20	4	color0
-73686472	96:112	24	4	color0
-73686472	96:112	28	4	color1
-73686472	96:112	32	4	color1
-73686472	96:112	36	4	color1
-73686472	96:112	40	4	color1
+73656e76	-	0	2	flags
+73656e76	-	4	4	power
+73656e76	-	8	4	color of emitted light
+73656e76	-	12	4	color of emitted light
+73656e76	-	16	4	color of emitted light
+73656e76	-	20	4	tint color
+73656e76	-	24	4	tint color
+73656e76	-	28	4	tint color
+73656e76	-	34	2	material type
+73656e76	-	40	2	flags
+73656e76	-	42	2	type
+73656e76	-	108	2	diffuse flags
+73656e76	-	136	4	base map
+73656e76	-	148	4	base map
+73656e76	-	176	2	detail map function
+73656e76	-	180	4	primary detail map scale
+73656e76	-	184	4	primary detail map
+73656e76	-	196	4	primary detail map
+73656e76	-	200	4	secondary detail map scale
+73656e76	-	204	4	secondary detail map
+73656e76	-	216	4	secondary detail map
+73656e76	-	244	2	micro detail map function
+73656e76	-	248	4	micro detail map scale
+73656e76	-	252	4	micro detail map
+73656e76	-	264	4	micro detail map
+73656e76	-	268	4	material color
+73656e76	-	272	4	material color
+73656e76	-	276	4	material color
+73656e76	-	292	4	bump map scale
+73656e76	-	296	4	bump map
+73656e76	-	308	4	bump map
+73656e76	-	336	2	u animation
+73656e76	-	340	4	u animation
+73656e76	-	344	4	u animation
+73656e76	-	348	2	v animation
+73656e76	-	352	4	v animation
+73656e76	-	356	4	v animation
+73656e76	-	384	2	self-illumination flags
+73656e76	-	412	4	primary
+73656e76	-	416	4	primary
+73656e76	-	420	4	primary
+73656e76	-	424	4	primary
+73656e76	-	428	4	primary
+73656e76	-	432	4	primary
+73656e76	-	436	2	primary
+73656e76	-	440	4	primary
+73656e76	-	444	4	primary
+73656e76	-	472	4	secondary
+73656e76	-	476	4	secondary
+73656e76	-	480	4	secondary
+73656e76	-	484	4	secondary
+73656e76	-	488	4	secondary
+73656e76	-	492	4	secondary
+73656e76	-	496	2	secondary
+73656e76	-	500	4	secondary
+73656e76	-	504	4	secondary
+73656e76	-	532	4	plasma
+73656e76	-	536	4	plasma
+73656e76	-	540	4	plasma
+73656e76	-	544	4	plasma
+73656e76	-	548	4	plasma
+73656e76	-	552	4	plasma
+73656e76	-	556	2	plasma
+73656e76	-	560	4	plasma
+73656e76	-	564	4	plasma
+73656e76	-	592	4	self-illumination map scale
+73656e76	-	596	4	self-illumination map
+73656e76	-	608	4	self-illumination map
+73656e76	-	636	2	specular flags
+73656e76	-	656	4	specular brightness
+73656e76	-	680	4	specular perpendicular color
+73656e76	-	684	4	specular perpendicular color
+73656e76	-	688	4	specular perpendicular color
+73656e76	-	692	4	specular parallel color
+73656e76	-	696	4	specular parallel color
+73656e76	-	700	4	specular parallel color
+73656e76	-	720	2	reflection flags
+73656e76	-	722	2	reflection type
+73656e76	-	724	4	lightmap brightness scale
+73656e76	-	756	4	reflection perpendicular brightness
+73656e76	-	760	4	reflection parallel brightness
+73656e76	-	804	4	reflection cube map
+73656e76	-	816	4	reflection cube map
+73676c61	-	0	2	flags
+73676c61	-	4	4	power
+73676c61	-	8	4	color of emitted light
+73676c61	-	12	4	color of emitted light
+73676c61	-	16	4	color of emitted light
+73676c61	-	20	4	tint color
+73676c61	-	24	4	tint color
+73676c61	-	28	4	tint color
+73676c61	-	34	2	material type
+73676c61	-	40	2	flags
+73676c61	-	84	4	background tint color
+73676c61	-	88	4	background tint color
+73676c61	-	92	4	background tint color
+73676c61	-	96	4	background tint map scale
+73676c61	-	100	4	background tint map
+73676c61	-	112	4	background tint map
+73676c61	-	138	2	reflection type
+73676c61	-	140	4	perpendicular color
+73676c61	-	144	4	perpendicular color
+73676c61	-	148	4	perpendicular color
+73676c61	-	152	4	perpendicular color
+73676c61	-	156	4	parallel color
+73676c61	-	160	4	parallel color
+73676c61	-	164	4	parallel color
+73676c61	-	168	4	parallel color
+73676c61	-	172	4	reflection map
+73676c61	-	184	4	reflection map
+73676c61	-	188	4	bump map scale
+73676c61	-	192	4	bump map
+73676c61	-	204	4	bump map
+73676c61	-	340	4	diffuse map scale
+73676c61	-	344	4	diffuse map
+73676c61	-	356	4	diffuse map
+73676c61	-	360	4	diffuse detail map scale
+73676c61	-	364	4	diffuse detail map
+73676c61	-	376	4	diffuse detail map
 736b7920	-	0	4	model
 736b7920	-	12	4	model
 736b7920	-	56	4	indoor ambient
@@ -2505,6 +2443,36 @@
 736b7920	196:116	104	4	direction
 736b7920	196:116	108	4	direction
 736b7920	196:116	112	4	diameter
+736d6574	-	0	2	flags
+736d6574	-	4	4	power
+736d6574	-	8	4	color of emitted light
+736d6574	-	12	4	color of emitted light
+736d6574	-	16	4	color of emitted light
+736d6574	-	20	4	tint color
+736d6574	-	24	4	tint color
+736d6574	-	28	4	tint color
+736d6574	-	34	2	material type
+736d6574	-	40	2	flags
+736d6574	-	76	4	map
+736d6574	-	88	4	map
+736d6574	-	124	4	gradient min color
+736d6574	-	128	4	gradient min color
+736d6574	-	132	4	gradient min color
+736d6574	-	136	4	gradient max color
+736d6574	-	140	4	gradient max color
+736d6574	-	144	4	gradient max color
+736d6574	-	148	4	background color
+736d6574	-	152	4	background color
+736d6574	-	156	4	background color
+736d6574	-	160	4	flash color
+736d6574	-	164	4	flash color
+736d6574	-	168	4	flash color
+736d6574	-	172	4	tint color
+736d6574	-	176	4	tint color
+736d6574	-	180	4	tint color
+736d6574	-	184	4	meter transparency
+736d6574	-	188	4	background transparency
+736d6574	-	220	2	value source
 736e6421	-	0	4	flags
 736e6421	-	4	2	class
 736e6421	-	6	2	sample rate
@@ -2562,10 +2530,164 @@
 736e6465	-	44	4	sound environment
 736e6465	-	48	4	sound environment
 736e6465	-	52	4	sound environment
+736f736f	-	0	2	flags
+736f736f	-	4	4	power
+736f736f	-	8	4	color of emitted light
+736f736f	-	12	4	color of emitted light
+736f736f	-	16	4	color of emitted light
+736f736f	-	20	4	tint color
+736f736f	-	24	4	tint color
+736f736f	-	28	4	tint color
+736f736f	-	34	2	material type
+736f736f	-	40	2	flags
+736f736f	-	56	4	translucency
+736f736f	-	76	2	change color source
+736f736f	-	108	2	self-illumination flags
+736f736f	-	112	2	self-illumination color source
+736f736f	-	114	2	self-illumination function
+736f736f	-	116	4	self-illumination period
+736f736f	-	120	4	self-illumination lower bound
+736f736f	-	124	4	self-illumination lower bound
+736f736f	-	128	4	self-illumination lower bound
+736f736f	-	132	4	self-illumination upper bound
+736f736f	-	136	4	self-illumination upper bound
+736f736f	-	140	4	self-illumination upper bound
+736f736f	-	156	4	map u scale
+736f736f	-	160	4	map v scale
+736f736f	-	164	4	base map
+736f736f	-	176	4	base map
+736f736f	-	188	4	multipurpose map
+736f736f	-	200	4	multipurpose map
+736f736f	-	212	2	detail function
+736f736f	-	214	2	detail mask
+736f736f	-	216	4	detail map scale
+736f736f	-	220	4	detail map
+736f736f	-	232	4	detail map
+736f736f	-	236	4	detail map v scale
+736f736f	-	254	2	u animation
+736f736f	-	256	4	u animation
+736f736f	-	260	4	u animation
+736f736f	-	264	4	u animation
+736f736f	-	274	2	v animation
+736f736f	-	276	4	v animation
+736f736f	-	280	4	v animation
+736f736f	-	284	4	v animation
+736f736f	-	316	4	reflection falloff distance
+736f736f	-	320	4	reflection cutoff distance
+736f736f	-	324	4	perpendicular brightness
+736f736f	-	328	4	perpendicular tint color
+736f736f	-	332	4	perpendicular tint color
+736f736f	-	336	4	perpendicular tint color
+736f736f	-	340	4	parallel brightness
+736f736f	-	344	4	parallel tint color
+736f736f	-	348	4	parallel tint color
+736f736f	-	352	4	parallel tint color
+736f736f	-	356	4	reflection cube map
+736f736f	-	368	4	reflection cube map
+736f7472	-	0	2	flags
+736f7472	-	4	4	power
+736f7472	-	8	4	color of emitted light
+736f7472	-	12	4	color of emitted light
+736f7472	-	16	4	color of emitted light
+736f7472	-	20	4	tint color
+736f7472	-	24	4	tint color
+736f7472	-	28	4	tint color
+736f7472	-	34	2	material type
+736f7472	-	41	1	flags
+736f7472	-	42	2	first map type
+736f7472	-	44	2	framebuffer blend function
+736f7472	-	46	2	framebuffer fade mode
+736f7472	-	72	4	extra layers
+736f7472	-	76	4	extra layers
+736f7472	-	84	4	maps
+736f7472	-	88	4	maps
+736f7472	-	96	4	stages
+736f7472	-	100	4	stages
+736f7472	72:16	0	4	shader
+736f7472	72:16	12	4	shader
+736f7472	84:100	0	2	flags
+736f7472	84:100	4	4	map u-scale
+736f7472	84:100	8	4	map v-scale
+736f7472	84:100	12	4	map u-offset
+736f7472	84:100	16	4	map v-offset
+736f7472	84:100	20	4	map rotation
+736f7472	84:100	28	4	map
+736f7472	84:100	40	4	map
+736f7472	96:112	0	2	flags
+736f7472	96:112	12	4	color0
+736f7472	96:112	16	4	color0
+736f7472	96:112	20	4	color0
+736f7472	96:112	24	4	color0
+736f7472	96:112	28	4	color1
+736f7472	96:112	32	4	color1
+736f7472	96:112	36	4	color1
+736f7472	96:112	40	4	color1
+73706c61	-	0	2	flags
+73706c61	-	4	4	power
+73706c61	-	8	4	color of emitted light
+73706c61	-	12	4	color of emitted light
+73706c61	-	16	4	color of emitted light
+73706c61	-	20	4	tint color
+73706c61	-	24	4	tint color
+73706c61	-	28	4	tint color
+73706c61	-	34	2	material type
+73706c61	-	44	2	intensity source
+73706c61	-	48	4	intensity exponent
+73706c61	-	56	4	offset amount
+73706c61	-	96	4	perpendicular alpha
+73706c61	-	100	4	perpendicular tint color
+73706c61	-	104	4	perpendicular tint color
+73706c61	-	108	4	perpendicular tint color
+73706c61	-	112	4	parallel alpha
+73706c61	-	116	4	parallel tint color
+73706c61	-	120	4	parallel tint color
+73706c61	-	124	4	parallel tint color
+73706c61	-	128	2	tint color source
+73706c61	-	192	4	noise map animation period
+73706c61	-	196	4	noise map animation direction
+73706c61	-	200	4	noise map animation direction
+73706c61	-	204	4	noise map animation direction
+73706c61	-	208	4	noise map scale
+73706c61	-	212	4	noise map
+73706c61	-	224	4	noise map
+73706c61	-	264	4	noise map animation period
+73706c61	-	268	4	noise map animation direction
+73706c61	-	272	4	noise map animation direction
+73706c61	-	276	4	noise map animation direction
+73706c61	-	280	4	noise map scale
+73706c61	-	284	4	noise map
+73706c61	-	296	4	noise map
 73747223	-	0	4	string references
 73747223	-	4	4	string references
 73747223	0:20	0	4	string
 73747223	0:20	12	4	string
+73776174	-	0	2	flags
+73776174	-	4	4	power
+73776174	-	8	4	color of emitted light
+73776174	-	12	4	color of emitted light
+73776174	-	16	4	color of emitted light
+73776174	-	20	4	tint color
+73776174	-	24	4	tint color
+73776174	-	28	4	tint color
+73776174	-	34	2	material type
+73776174	-	40	2	flags
+73776174	-	76	4	base map
+73776174	-	88	4	base map
+73776174	-	108	4	view perpendicular tint
+73776174	-	112	4	view perpendicular tint
+73776174	-	116	4	view perpendicular tint
+73776174	-	120	4	view perpendicular tint
+73776174	-	124	4	view parallel tint
+73776174	-	128	4	view parallel tint
+73776174	-	132	4	view parallel tint
+73776174	-	136	4	view parallel tint
+73776174	-	156	4	reflection map
+73776174	-	168	4	reflection map
+73776174	-	188	4	ripple animation angle
+73776174	-	192	4	ripple animation velocity
+73776174	-	196	4	ripple scale
+73776174	-	200	4	ripple maps
+73776174	-	212	4	ripple maps
 7472616b	-	4	4	control points
 7472616b	-	8	4	control points
 7472616b	4:60	0	4	position

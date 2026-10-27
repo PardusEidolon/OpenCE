@@ -67,7 +67,14 @@ pub(crate) fn import_shader(
         SWAT => WATER_SIZE,
         _ => SHADER_BASE_SIZE,
     };
-    let shader = cache.tag(index, SHDR, size)?;
+    // a shader of a known class is asked for as its class's, so what is
+    // read of it is the class's structure's
+    let asked = if size == SHADER_BASE_SIZE {
+        SHDR
+    } else {
+        group
+    };
+    let shader = cache.tag(index, asked, size)?;
     let class = match group {
         SENV => ShaderClass::Environment(Box::new(environment(&shader, reached)?)),
         SCHI => ShaderClass::TransparentChicago(chicago(&shader, reached, false)?),

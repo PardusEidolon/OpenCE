@@ -379,8 +379,31 @@ pub fn roots(
             found.entry(*code).or_insert(structure);
         }
     }
+    for (group, structure) in SHADER_GROUPS {
+        if by_name.contains_key(structure) {
+            found
+                .entry(u32::from_be_bytes(**group))
+                .or_insert_with(|| (*structure).to_owned());
+        }
+    }
     found
 }
+
+/// The shader classes' groups and the structure each is: `source/` names
+/// no tag constant for them, as the original tells a shader's class by
+/// its `shader.base.type`, but the cache names each tag's group, and the
+/// importer asks for a shader as its class's. (`scex`, the PC's chicago
+/// extended, has no layout in `source/`.)
+const SHADER_GROUPS: &[(&[u8; 4], &str)] = &[
+    (b"senv", "shader_environment_definition"),
+    (b"soso", "shader_model_definition"),
+    (b"sotr", "shader_transparent_generic_definition"),
+    (b"schi", "shader_transparent_chicago_definition"),
+    (b"sgla", "shader_transparent_glass_definition"),
+    (b"smet", "shader_transparent_meter_definition"),
+    (b"spla", "shader_transparent_plasma_definition"),
+    (b"swat", "shader_transparent_water_definition"),
+];
 
 /// What a block's elements are: a laid-out structure, something the C
 /// names that is not one (`real_plane3d`), or not known.

@@ -6,8 +6,9 @@ mod common;
 
 use common::Tree;
 use opence_census::layout::{
-    asserts, disagreements, generate, is_tag_header, read_dump, read_layout, tag_structures,
-    write_layout, Assert, LAYOUT,
+    asserts, declared, disagreements, first_member, generate, grown, is_tag_header,
+    local_structures, merge, read_dump, read_layout, says_nothing, span, tag_structures,
+    write_layout, Assert, Field, Record, LAYOUT,
 };
 
 type Failure = Box<dyn std::error::Error>;
@@ -214,4 +215,197 @@ fn the_written_layout_agrees_with_the_headers_asserts() -> Result<(), Failure> {
         .collect();
     assert!(missing.is_empty(), "not laid out: {missing:?}");
     Ok(())
+}
+
+fn record(name: &str, size: u32, fields: &[(&str, u32, &str)]) -> Record {
+    Record {
+        name: name.to_owned(),
+        size,
+        fields: fields
+            .iter()
+            .map(|(path, offset, kind)| Field {
+                path: (*path).to_owned(),
+                offset: *offset,
+                kind: (*kind).to_owned(),
+            })
+            .collect(),
+    }
+}
+
+fn paths(record: &Record) -> Vec<(&str, u32)> {
+    record
+        .fields
+        .iter()
+        .map(|f| (f.path.as_str(), f.offset))
+        .collect()
+}
+
+#[test]
+fn a_name_that_says_nothing_is_unknown_unused_pad_or_reserved() {
+    for path in [
+        "pad",
+        "pad2A",
+        "unknown308",
+        "__unknown308",
+        "unused_x",
+        "a.reserved",
+    ] {
+        assert!(says_nothing(path), "{path}");
+    }
+    for path in [
+        "padding_scale",
+        "unknowns",
+        "flags",
+        "unusedness",
+        "a.unknownzz",
+    ] {
+        assert!(!says_nothing(path), "{path}");
+    }
+}
+
+const LOCAL: &str = "
+struct shader_glass
+{
+\tstruct shader shader;
+\treal refraction;
+};
+
+struct pill
+{
+\tstruct collision_bsp const *bsp;
+\treal radius;
+};
+";
+
+#[test]
+fn a_definitions_span_and_first_member_are_read_from_its_text() {
+    assert_eq!(span(LOCAL, "shader_glass"), Some((2, 6)));
+    assert_eq!(span(LOCAL, "missing"), None);
+    assert_eq!(
+        first_member(LOCAL, "shader_glass").as_deref(),
+        Some("shader")
+    );
+    assert_eq!(
+        first_member(LOCAL, "pill"),
+        None,
+        "a pointer is no member structure"
+    );
+    assert_eq!(
+        declared("struct a;\nstruct b *c;\n  struct d;\n"),
+        ["a", "d"]
+    );
+}
+
+#[test]
+fn the_c_files_tag_structures_are_those_a_tag_takes() {
+    let file = |path: &str, text: &str| (path.to_owned(), text.to_owned());
+    let files = [
+        file(
+            "shaders/shader_definitions.h",
+            "struct shader\n{\n\tshort type;\n};\nstruct glass_map;\n",
+        ),
+        file("shaders/glass.c", LOCAL),
+        file(
+            "shaders/maps.c",
+            "struct glass_map\n{\n\treal scale;\n};\nstruct helper\n{\n\treal x;\n};\n",
+        ),
+        file("shaders/shader.c", "struct shader\n{\n\tshort type;\n};\n"),
+    ];
+    let found = local_structures(&files);
+    let names: Vec<&str> = found.keys().map(String::as_str).collect();
+    assert_eq!(names, ["glass_map", "shader_glass"]);
+    assert_eq!(found["shader_glass"], ["shaders/glass.c"]);
+}
+
+#[test]
+fn merging_keeps_each_named_field_and_names_the_bytes_left_unknown() -> Result<(), Failure> {
+    let short = record(
+        "thing",
+        12,
+        &[
+            ("flags", 0, "short"),
+            ("pad2", 2, "short"),
+            ("scale", 4, "real"),
+            ("pad8", 8, "byte[4]"),
+        ],
+    );
+    let long = record(
+        "thing",
+        16,
+        &[
+            ("flags", 0, "short"),
+            ("pad2", 2, "byte[8]"),
+            ("mass", 10, "short"),
+            ("pad12", 12, "byte[4]"),
+        ],
+    );
+    let merged = merge("thing", &[short, long])?;
+    assert_eq!(merged.size, 16);
+    assert_eq!(
+        paths(&merged),
+        [
+            ("flags", 0),
+            ("pad2", 2),
+            ("scale", 4),
+            ("unknown8", 8),
+            ("mass", 10),
+            ("pad12", 12)
+        ]
+    );
+    Ok(())
+}
+
+#[test]
+fn merging_definitions_that_put_a_field_at_two_offsets_is_a_problem() {
+    let one = record("thing", 8, &[("scale", 0, "real"), ("mass", 4, "real")]);
+    let two = record("thing", 8, &[("mass", 0, "real"), ("scale", 4, "real")]);
+    assert!(merge("thing", &[one, two]).is_err());
+}
+
+/// The structures the `.c` files define are laid out where the tag
+/// documentation puts them.
+#[test]
+fn the_c_files_structures_are_laid_out_as_the_tags_are() -> Result<(), Failure> {
+    let Some(root) = common::repository() else {
+        return Ok(());
+    };
+    let records = read_layout(&std::fs::read_to_string(root.join("engine").join(LAYOUT))?)?;
+    let size = |name: &str| records.iter().find(|r| r.name == name).map(|r| r.size);
+    let offset = |name: &str, path: &str| {
+        records
+            .iter()
+            .find(|r| r.name == name)
+            .and_then(|r| r.fields.iter().find(|f| f.path == path))
+            .map(|f| f.offset)
+    };
+    assert_eq!(size("vehicle_definition"), Some(1008));
+    assert_eq!(
+        offset("vehicle_definition", "wheel_circumference"),
+        Some(784)
+    );
+    assert_eq!(
+        offset("vehicle_definition", "ai_sideslip_distance"),
+        Some(896)
+    );
+    assert_eq!(offset("vehicle_definition", "suspension_sound"), Some(944));
+    for (name, bytes) in [
+        ("shader_environment_definition", 836),
+        ("shader_transparent_glass_definition", 480),
+        ("shader_transparent_meter_definition", 260),
+        ("shader_transparent_generic_definition", 108),
+        ("shader_transparent_chicago_map", 220),
+    ] {
+        assert_eq!(size(name), Some(bytes), "{name}");
+    }
+    Ok(())
+}
+
+#[test]
+fn a_structure_grown_to_its_tags_size_names_the_added_bytes_unknown() {
+    let short = record("thing", 6, &[("flags", 0, "short"), ("scale", 2, "real")]);
+    let tag = grown(short.clone(), 12);
+    assert_eq!(tag.size, 12);
+    assert_eq!(paths(&tag), [("flags", 0), ("scale", 2), ("unknown6", 6)]);
+    assert_eq!(tag.fields[2].kind, "byte[6]");
+    assert_eq!(grown(short.clone(), 4), short, "never shrunk");
 }

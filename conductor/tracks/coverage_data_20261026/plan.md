@@ -9,10 +9,10 @@ Every task is test first (`workflow.md`): the trace, measurement or census test 
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Strides and fix-ups' (Protocol in workflow.md) (automated): 1410 tests pass, census --check passes, treefmt clean
 
 ## Phase 2: Layouts from a second source
-- [ ] Task: Write tests for `vehicle_definition` and each shader subtype's layout against a synthetic tag.
-- [ ] Task: Fill the layouts from format documentation and check them on the user's maps where present.
-- [ ] Task: Fuzz targets for the new readers.
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Layouts from a second source' (Protocol in workflow.md) (automated)
+- [x] Task: Write tests for `vehicle_definition` and each shader subtype's layout against a synthetic tag.
+- [x] Task: Fill the layouts from format documentation and check them on the user's maps where present.
+- [x] Task: Fuzz targets for the new readers.
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Layouts from a second source' (Protocol in workflow.md) (automated)
 
 ## Phase 3: Fields
 - [ ] Task: Wire or class each of the 516 kept-but-unused fields, one commit per tag group.

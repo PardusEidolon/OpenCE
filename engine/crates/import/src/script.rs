@@ -596,7 +596,7 @@ fn compile(scenario: &Element<'_>) -> Result<Scripts, ImportError> {
 }
 
 #[cfg(test)]
-mod tests {
+pub(crate) mod tests {
     use super::*;
     use crate::cache::CacheKind;
     use crate::fake::FakeCache;
@@ -616,6 +616,19 @@ mod tests {
     /// A scenario of one global and one startup script, whose nodes are
     /// `nodes` (the script's root the first) and strings `strings`.
     fn scenario(nodes: &[Node], strings: &[u8]) -> Result<Scripts> {
+        Ok(import_scripts(&Cache::open(
+            scenario_cache(nodes, strings).build(),
+        )?)?)
+    }
+
+    /// `(begin (set count 3))` in a cache of its own (the scripts fuzz
+    /// target's seed).
+    pub(crate) fn script_cache() -> FakeCache {
+        scenario_cache(&nodes(), &strings(STRINGS))
+    }
+
+    /// The cache of [`scenario`]'s scenario.
+    fn scenario_cache(nodes: &[Node], strings: &[u8]) -> FakeCache {
         let mut fake = FakeCache::new(CacheKind::Xbox);
         let mut syntax = vec![0u8; DATA_ARRAY_SIZE + MAX_NODES * NODE_SIZE];
         put(&mut syntax, 0x20, &(MAX_NODES as i16).to_le_bytes());
@@ -667,7 +680,7 @@ mod tests {
         block(&mut data, GLOBALS_OFFSET, 1, global);
         put(&mut data, HUD_MESSAGES_OFFSET + 12, &NONE.to_le_bytes());
         fake.set_scenario_data(&data);
-        Ok(import_scripts(&Cache::open(fake.build())?)?)
+        fake
     }
 
     /// `(begin (set count 3))`: the strings are "begin\0set\0count\0".

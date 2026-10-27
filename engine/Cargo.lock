@@ -1251,6 +1251,7 @@ dependencies = [
 name = "opence_census"
 version = "0.1.0"
 dependencies = [
+ "opence_import",
  "serde",
  "thiserror",
  "toml 0.9.12+spec-1.1.0",
