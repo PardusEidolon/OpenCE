@@ -42,8 +42,8 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `tag_files` | | | 43 (4288 B) | | 5 (0 B) | | 0 |
 | `text` | | 5 (1536 B) | 63 (6864 B) | 4 (400 B) | 19 (5744 B) | 21 (2368 B) | 0 |
 | `tool` | | | | | 27 (8752 B) | | 0 |
-| `units` | 56 (9680 B) | 50 (19024 B) | | 31 (25952 B) | 9 (1616 B) | 183 (51248 B) | 0 |
-| **all** | 247 (40288 B) | 525 (149456 B) | 332 (38896 B) | 174 (106624 B) | 2773 (575768 B) | 3576 (700090 B) | 0 |
+| `units` | 71 (11440 B) | 50 (19024 B) | | 31 (25952 B) | 9 (1616 B) | 168 (49488 B) | 0 |
+| **all** | 262 (42048 B) | 525 (149456 B) | 332 (38896 B) | 174 (106624 B) | 2773 (575768 B) | 3561 (698330 B) | 0 |
 
 ## `ai`
 
@@ -4379,8 +4379,8 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `biped_update` | units/bipeds.c | Partial | sim/src/unit_animator.rs:1 | sim/src/unit_states.rs (measure); leaves out its physics, landing and jumping, done by the player's mover (physics/src/movement.rs) |
 | `dialogue_get_vocalization_name` | units/dialogue_definitions.c | Ported | sim/src/unit_dialogue.rs:239 | `tools/engine_unit_tables_reference.py` |
 | `dialogue_get_vocalization_type_by_name` | units/dialogue_definitions.c | Ported | sim/src/unit_dialogue.rs:246 | `tools/engine_unit_tables_reference.py` |
-| `unit_definition_get_active_hud_index` | units/unit_definitions.c | Ported | sim/src/unit_definition.rs:21 | `tools/engine_unit_tables_reference.py` |
-| `unit_definition_get_seat_active_hud_index` | units/unit_definitions.c | Ported | sim/src/unit_definition.rs:22 | `tools/engine_unit_tables_reference.py` |
+| `unit_definition_get_active_hud_index` | units/unit_definitions.c | Ported | sim/src/unit_definition.rs:26 | `tools/engine_unit_tables_reference.py` |
+| `unit_definition_get_seat_active_hud_index` | units/unit_definitions.c | Ported | sim/src/unit_definition.rs:27 | `tools/engine_unit_tables_reference.py` |
 | `unit_get_speech_priority_name` | units/unit_dialogue.c | Ported | sim/src/unit_dialogue.rs:251 | `tools/engine_unit_tables_reference.py` |
 | `unit_get_speech_priority_by_name` | units/unit_dialogue.c | Ported | sim/src/unit_dialogue.rs:260 | `tools/engine_unit_tables_reference.py` |
 | `unit_scripting_set_maximum_vitality` | units/unit_scripting_commands.c | Matched | campaign/src/units.rs:136 | campaign/tests/unit_vitality_reference.rs (trace) |
@@ -4392,7 +4392,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `unit_scripting_get_grenade_count` | units/unit_scripting_commands.c | Partial | campaign/src/units.rs:279 | campaign/tests/unit_commands_reference.rs (trace); leaves out units that are not players: the engine's AI carries no inventory (coverage_units) |
 | `unit_scripting_impervious` | units/unit_scripting_commands.c | Partial | campaign/src/units.rs:240 | campaign/tests/unit_commands_reference.rs (trace); leaves out the damage push and the flinch it stops: the engine's damage has neither yet (coverage_units) |
 | `unit_scripting_start_user_animation_list` | units/unit_scripting_commands.c | Matched | campaign/src/units.rs:318 | campaign/tests/unit_vitality_reference.rs (trace) |
-| `unit_scripting_has_weapon` | units/unit_scripting_commands.c | Ported | sim/src/unit_inventory.rs:217 | `tools/engine_unit_control_reference.py` |
+| `unit_scripting_has_weapon` | units/unit_scripting_commands.c | Ported | sim/src/unit_inventory.rs:282 | `tools/engine_unit_control_reference.py` |
 | `unit_scripting_has_weapon_readied` | units/unit_scripting_commands.c | Partial | campaign/src/units.rs:265 | campaign/tests/unit_commands_reference.rs (trace); leaves out units that are not players: the engine's AI carries no inventory (coverage_units) |
 | `unit_kill` | units/units.c | Matched | script/src/lib.rs:508 | script/tests/runtime.rs (measure) |
 | `units_update` | units/units.c | Partial | sim/src/lib.rs:393 | sim/tests/player.rs (measure); leaves out the units' network updates, the units' order in the object list: the engine runs the players, then the actors |
@@ -4412,25 +4412,30 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `unit_can_play_animation_impulse` | units/units.c | Matched | sim/src/ai_impulse.rs:3 | sim/src/ai_impulse.rs (measure) |
 | `unit_test_animation_impulse` | units/units.c | Matched | sim/src/ai_impulse.rs:131 | sim/src/ai_impulse.rs (measure) |
 | `unit_inventory_next_grenade` | units/units.c | Ported | sim/src/unit_inventory.rs:125 | `tools/engine_unit_inventory_reference.py` |
-| `unit_controllable` | units/units.c | Ported | sim/src/unit_control.rs:42 | `tools/engine_unit_control_reference.py` |
-| `unit_set_controllable` | units/units.c | Ported | sim/src/unit_control.rs:47 | `tools/engine_unit_control_reference.py` |
-| `unit_set_possessed` | units/units.c | Ported | sim/src/unit_control.rs:52 | `tools/engine_unit_control_reference.py` |
+| `unit_controllable` | units/units.c | Ported | sim/src/unit_control.rs:44 | `tools/engine_unit_control_reference.py` |
+| `unit_set_controllable` | units/units.c | Ported | sim/src/unit_control.rs:49 | `tools/engine_unit_control_reference.py` |
+| `unit_set_possessed` | units/units.c | Ported | sim/src/unit_control.rs:54 | `tools/engine_unit_control_reference.py` |
 | `unit_is_busy` | units/units.c | Ported | sim/src/unit_states.rs:242 | `tools/engine_unit_control_reference.py` |
 | `unit_scripting_suspended` | units/units.c | Matched | sim/src/lib.rs:1198 | sim/tests/suspended.rs (measure) |
+| `unit_scripting_can_blink` | units/units.c | Ported | sim/src/unit_control.rs:81 | `tools/engine_unit_seats_reference.py` |
 | `unit_scripting_doesnt_drop_items` | units/units.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
 | `unit_scripting_vehicle_test_seat_list` | units/units.c | Matched | campaign/src/units.rs:457 | campaign/tests/unit_commands_reference.rs (trace) |
+| `unit_scripting_vehicle_test_seat` | units/units.c | Ported | sim/src/unit_definition.rs:50 | `tools/engine_unit_seats_reference.py` |
+| `unit_scripting_unit_riders` | units/units.c | Ported | sim/src/unit_control.rs:119 | `tools/engine_unit_seats_reference.py` |
+| `unit_scripting_unit_driver` | units/units.c | Ported | sim/src/unit_control.rs:109 | `tools/engine_unit_seats_reference.py` |
+| `unit_scripting_unit_gunner` | units/units.c | Ported | sim/src/unit_control.rs:109 | `tools/engine_unit_seats_reference.py` |
 | `units_debug_get_next_unit` | units/units.c | Replaced | dev/src/control.rs | the editor and tools |
 | `units_debug_get_closest_unit` | units/units.c | Replaced | dev/src/control.rs | the editor and tools |
 | `unit_debug_ninja_rope` | units/units.c | Replaced | dev/src/control.rs | the editor and tools |
-| `unit_driven_by_ai` | units/units.c | Ported | sim/src/unit_control.rs:88 | `tools/engine_unit_control_reference.py` |
-| `unit_gunned_by_ai` | units/units.c | Ported | sim/src/unit_control.rs:88 | `tools/engine_unit_control_reference.py` |
-| `unit_set_desired_flashlight_state` | units/units.c | Ported | sim/src/unit_control.rs:59 | `tools/engine_unit_control_reference.py` |
-| `unit_get_current_flashlight_state` | units/units.c | Ported | sim/src/unit_control.rs:69 | `tools/engine_unit_control_reference.py` |
+| `unit_driven_by_ai` | units/units.c | Ported | sim/src/unit_control.rs:140 | `tools/engine_unit_control_reference.py` |
+| `unit_gunned_by_ai` | units/units.c | Ported | sim/src/unit_control.rs:140 | `tools/engine_unit_control_reference.py` |
+| `unit_set_desired_flashlight_state` | units/units.c | Ported | sim/src/unit_control.rs:61 | `tools/engine_unit_control_reference.py` |
+| `unit_get_current_flashlight_state` | units/units.c | Ported | sim/src/unit_control.rs:71 | `tools/engine_unit_control_reference.py` |
 | `unit_detach_from_parent` | units/units.c | Matched | sim/src/vehicle_animation.rs:337 | sim/tests/seats.rs (measure) |
-| `unit_seat_filled` | units/units.c | Ported | sim/src/unit_control.rs:97 | `tools/engine_unit_control_reference.py` |
-| `unit_seat_is_driver` | units/units.c | Ported | sim/src/unit_definition.rs:9 | `tools/engine_unit_tables_reference.py` |
-| `unit_seat_is_gunner` | units/units.c | Ported | sim/src/unit_definition.rs:10 | `tools/engine_unit_tables_reference.py` |
-| `unit_seat_allow_noncombatants` | units/units.c | Ported | sim/src/unit_definition.rs:10 | `tools/engine_unit_tables_reference.py` |
+| `unit_seat_filled` | units/units.c | Ported | sim/src/unit_control.rs:149 | `tools/engine_unit_control_reference.py` |
+| `unit_seat_is_driver` | units/units.c | Ported | sim/src/unit_definition.rs:14 | `tools/engine_unit_tables_reference.py` |
+| `unit_seat_is_gunner` | units/units.c | Ported | sim/src/unit_definition.rs:15 | `tools/engine_unit_tables_reference.py` |
+| `unit_seat_allow_noncombatants` | units/units.c | Ported | sim/src/unit_definition.rs:15 | `tools/engine_unit_tables_reference.py` |
 | `unit_add_grenade_type_to_inventory` | units/units.c | Ported | sim/src/unit_inventory.rs:156 | `tools/engine_unit_inventory_reference.py` |
 | `unit_has_weapon_definition_index` | units/units.c | Ported | sim/src/unit_inventory.rs:174 | `tools/engine_unit_control_reference.py` |
 | `unit_first_free_weapon_index` | units/units.c | Ported | sim/src/unit_inventory.rs:148 | `tools/engine_unit_inventory_reference.py` |
@@ -4449,29 +4454,38 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `unit_set_enterable_by_player` | units/units.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
 | `unit_set_emotion` | units/units.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
 | `unit_get_custom_animation_time` | units/units.c | Matched | campaign/src/units.rs:362 | campaign/tests/unit_commands_reference.rs (trace) |
-| `unit_set_mouth_aperture` | units/units.c | Ported | sim/src/unit_control.rs:81 | `tools/engine_unit_control_reference.py` |
+| `unit_set_mouth_aperture` | units/units.c | Ported | sim/src/unit_control.rs:133 | `tools/engine_unit_control_reference.py` |
 | `unit_inventory_get_must_be_readied_weapon` | units/units.c | Ported | sim/src/unit_inventory.rs:202 | `tools/engine_unit_inventory_reference.py` |
 | `unit_has_weapon` | units/units.c | Ported | sim/src/unit_inventory.rs:180 | `tools/engine_unit_tables_reference.py` |
 | `unit_has_weapon_with_flag` | units/units.c | Ported | sim/src/unit_inventory.rs:174 | `tools/engine_unit_inventory_reference.py` |
-| `unit_stop_running_blindly` | units/units.c | Ported | sim/src/unit_control.rs:74 | `tools/engine_unit_control_reference.py` |
+| `unit_stop_running_blindly` | units/units.c | Ported | sim/src/unit_control.rs:76 | `tools/engine_unit_control_reference.py` |
 | `unit_set_or_test_seat_and_weapon_label` | units/units.c | Matched | sim/src/animation.rs:1396 | sim/src/unit_states.rs (measure) |
 | `unit_render_debug` | units/units.c | Replaced | dev/src/draw.rs | the editor and tools |
 | `unit_animation_set_state` | units/units.c | Matched | sim/src/unit_states.rs:3 | sim/src/unit_states.rs (measure) |
 | `unit_find_nearby_seat` | units/units.c | Matched | sim/src/seats.rs:4 | sim/tests/seats.rs (measure) |
 | `unit_inventory_get_weapon` | units/units.c | Ported | sim/src/unit_inventory.rs:77 | `tools/engine_unit_inventory_reference.py` |
+| `unit_set_actively_controlled` | units/units.c | Ported | sim/src/unit_control.rs:90 | `tools/engine_unit_seats_reference.py` |
+| `vehicle_scripting_find_available_seats` | units/units.c | Ported | sim/src/unit_definition.rs:103 | `tools/engine_unit_seats_reference.py` |
 | `unit_open` | units/units.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
 | `unit_close` | units/units.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
+| `unit_overcharged` | units/units.c | Ported | sim/src/unit_inventory.rs:225 | `tools/engine_unit_seats_reference.py` |
 | `units_set_desired_flashlight_state` | units/units.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
+| `unit_get_seat_label` | units/units.c | Ported | sim/src/unit_definition.rs:39 | `tools/engine_unit_seats_reference.py` |
 | `unit_approve_weapon_swap` | units/units.c | Ported | sim/src/pickup.rs:10 | `tools/engine_pickup_reference.py` |
 | `unit_weapon_next_index` | units/units.c | Ported | sim/src/unit_inventory.rs:83 | `tools/engine_unit_inventory_reference.py` |
+| `unit_get_current_weapon_label` | units/units.c | Ported | sim/src/unit_inventory.rs:231 | `tools/engine_unit_seats_reference.py` |
 | `unit_scripting_set_seat` | units/units.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
 | `unit_cause_melee_damage` | units/units.c | Matched | sim/src/unit_states.rs:450 | sim/src/unit_states.rs (measure) |
 | `unit_stop_custom_animation` | units/units.c | Partial | campaign/src/units.rs | campaign/tests/unit_commands_reference.rs (trace); leaves out the unit's return to its idle animation (coverage_units) |
 | `unit_custom_animation_at_frame` | units/units.c | Matched | sim/src/animation.rs:1479 | sim/src/animation.rs (measure) |
 | `unit_preprocess_node_orientations` | units/units.c | Matched | sim/src/animation_blend.rs:5 | sim/src/animation_blend.rs (measure) |
 | `unit_update_animation` | units/units.c | Matched | sim/src/unit_animator.rs:1 | sim/src/unit_animator.rs (measure) |
+| `unit_unzoom` | units/units.c | Ported | sim/src/unit_inventory.rs:245 | `tools/engine_unit_seats_reference.py` |
+| `unit_get_zoom_magnification` | units/units.c | Ported | sim/src/unit_inventory.rs:220 | `tools/engine_unit_seats_reference.py` |
+| `unit_integrated_night_vision_is_active` | units/units.c | Ported | sim/src/unit_inventory.rs:237 | `tools/engine_unit_seats_reference.py` |
 | `unit_start_animation_impulse` | units/units.c | Matched | sim/src/ai_impulse.rs:4 | sim/src/ai_impulse.rs (measure) |
 | `unit_inventory_next_weapon` | units/units.c | Ported | sim/src/unit_inventory.rs:83 | `tools/engine_unit_inventory_reference.py` |
+| `unit_solo_player_integrated_night_vision_is_active` | units/units.c | Ported | sim/src/unit_inventory.rs:264 | `tools/engine_unit_seats_reference.py` |
 | `unit_new` | units/units.c | Partial | sim/src/objects.rs:247 | sim/tests/player.rs (measure); leaves out the unit's seats and its weapons, its animation graph's state |
 | `unit_enter_seat` | units/units.c | Matched | sim/src/unit_states.rs:591 | sim/tests/seats.rs (measure) |
 | `unit_exit_seat_end` | units/units.c | Matched | sim/src/lib.rs:575 | sim/tests/seats.rs (measure) |
@@ -4502,6 +4516,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `vehicle_dot_product3d_target` | units/vehicles.c | Ported |  | `tools/engine_vehicle_physics_reference.py` |
 | `vehicle_triple_product3d_target` | units/vehicles.c | Ported |  | `tools/engine_vehicle_physics_reference.py` |
 | `vehicle_update` | units/vehicles.c | Partial | sim/src/vehicle.rs | sim/tests/vehicle_physics_reference.rs (trace); leaves out the upending torque, the speed, slide and turn seek before the controllers |
+| `unarmed_melee_weapon_definition_index` | units/units.c | Ported | sim/src/unit_inventory.rs:275 | `tools/engine_unit_seats_reference.py` |
 | `unit_network_add_weapon` | units/units.c | Replaced | net/src/snapshot.rs | networking and Xbox Live; the original's network state and prediction; the engine sends snapshots |
 | `unit_network_drop_weapon` | units/units.c | Replaced | net/src/snapshot.rs | networking and Xbox Live; the original's network state and prediction; the engine sends snapshots |
 | `unit_network_forget_weapon` | units/units.c | Replaced | net/src/snapshot.rs | networking and Xbox Live; the original's network state and prediction; the engine sends snapshots |
@@ -4510,10 +4525,10 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `update_alien_scout_physics` | units/vehicles.c | Matched | sim/src/vehicle.rs | sim/tests/vehicle_physics_reference.rs (trace) |
 | `update_alien_fighter_physics` | units/vehicles.c | Matched | sim/src/vehicle.rs | sim/tests/vehicle_physics_reference.rs (trace) |
 
-183 Missing (174 reached from `main_loop`), by file:
+168 Missing (159 reached from `main_loop`), by file:
 
 - units/biped_limp_noodle.c: `biped_limp_noodle_get_max_relaxation_iterations`, `biped_limp_noodle_valid_joint_rotation`, `biped_limp_noodle_move_relax_and_constrain_positions`, `validate_real_vector3d_axes3`, `biped_limp_noodle_adjust_orientations`, `biped_limp_noodle_relax_nodes_onto_environment`
 - units/bipeds.c: `animation_left_foot_frame_index`, `animation_right_foot_frame_index`, `bipeds_initialize`, `bipeds_initialize_for_new_map`, `bipeds_dispose_from_old_map`, `bipeds_dispose`, `biped_place`, `biped_delete`, `biped_reset`, `biped_disconnect_from_structure_bsp`, `biped_get_physics_pill`, `biped_stop_melee_attack`, `biped_stop_limp_body_physics`, `biped_bumped_object`, `biped_flying_through_air`, `biped_apply_rotation`, `biped_falling_danger`, `biped_adjust_placement`, `biped_export_function_values`, `biped_get_sight_position`, `biped_get_autoaim_pill`, `biped_fix_position`, `biped_find_ground_surface`, `biped_approximate_surface_index`, `biped_find_pathfinding_surface_index`, `biped_exit_seat_end`, `biped_vehicle_speech`, `biped_update_dead`, `biped_try_to_make_footsteps`, `biped_find_nearby_support_surface`, `biped_verify_object_vectors`, `biped_update_slipping`, `biped_build_flying_axes`, `biped_snap_facing`, `biped_new`, `biped_preprocess_node_orientations`, `biped_check_discard`
 - units/unit_dialogue.c: `unit_test_speech`, `unit_is_speaking`, `unit_dialogue_determine_variant`, `unit_describe_speech`, `unit_lose_speech`, `unit_speak`, `unit_notify_impulse_sound`, `unit_make_damage_sound`, `unit_scream`, `unit_find_dialogue_variant`, `unit_dialogue_setup`, `unit_dialogue_update`
-- units/units.c: `units_initialize`, `units_initialize_for_new_map`, `units_dispose_from_old_map`, `units_dispose`, `unit_kill_silent`, `unit_kill_no_statistics`, `unit_delete`, `unit_export_function_values`, `unit_persistent_control`, `unit_get_melee_range_and_ticks`, `unit_get_animation_frames_remaining`, `unit_euler_axis_doplan`, `unit_animation_weapon_ik`, `unit_animation_vehicle_ik`, `unit_animation_start_action`, `unit_animation_start_overlay_action`, `unit_can_enter_seat`, `unit_impulse`, `unit_handle_weapon_state_change`, `unit_record_damage`, `unit_test_spawning`, `unit_get_head_position`, `unit_estimate_position`, `unit_get_center_of_mass`, `unit_get_aiming_unit_index`, `unit_get_aiming_vector`, `unit_get_looking_vector`, `unit_get_facing_vector`, `unit_scripting_set_emotion_animation`, `unit_scripting_can_blink`, `unit_scripting_vehicle_test_seat`, `unit_scripting_unit_riders`, `unit_scripting_unit_driver`, `unit_scripting_unit_gunner`, `unit_shield_sapping_update`, `unit_set_user_animation`, `any_unit_is_dangerous`, `unit_can_see_point`, `unit_update_driver_and_gunner`, `unit_get_current_equipment`, `unit_add_grenade_to_inventory`, `unit_add_equipment_to_inventory`, `unit_delete_current_equipment`, `unit_delete_all_weapons`, `unit_throw_grenade_move_to_hand`, `unit_set_animation`, `unit_refresh_illumination`, `unit_drop_item`, `unit_drop_grenades`, `unit_drop_inventory_weapons`, `unit_handle_region_destroyed`, `unit_cause_continuous_melee_damage`, `unit_aim_without_turning`, `unit_is_playing_custom_animation`, `unit_start_user_animation`, `unit_start_running_blindly`, `unit_flame_to_death`, `unit_flying_through_air`, `unit_euler_axis_buildplan`, `unit_euler_axis_couple`, `unit_adjust_projectile_ray`, `unit_abort_animation`, `unit_clip_to_aiming_bounds`, `unit_set_actively_controlled`, `vehicle_scripting_find_available_seats`, `unit_overcharged`, `unit_set_seat`, `unit_get_seat_label`, `unit_drop_current_equipment`, `unit_can_use_weapon`, `unit_drop_current_weapon`, `unit_get_current_weapon_label`, `scripting_set_magic_base_seat`, `unit_handle_deleted_object`, `unit_cause_player_melee_damage`, `unit_align_facing`, `unit_start_flaming_to_death`, `unit_running_blind`, `unit_vectors_are_valid`, `unit_verify_vectors`, `unit_control`, `unit_postprocess_node_matrices`, `unit_euler_aiming_update`, `unit_has_animation_to_enter_seat`, `unit_unzoom`, `unit_get_zoom_magnification`, `unit_integrated_night_vision_is_active`, `unit_ping_animation`, `unit_melee_attack_begin`, `unit_leap_begin`, `unit_unsuspecting`, `unit_add_weapon_to_inventory`, `unit_ready_desired_weapon`, `unit_throw_grenade_begin`, `scripting_magic_melee_attack`, `unit_impact_melee_damage`, `unit_place`, `unit_solo_player_integrated_night_vision_is_active`, `unit_add_initial_weapons`, `unit_adjust_for_seat_change`, `unit_died`, `vehicle_scripting_load_magic`, `unit_damage_aftermath`, `vehicle_scripting_unload`, `unit_animation_enhanced`, `unarmed_melee_weapon_definition_index`, `unit_grenade_throw_ease`, `unit_weapon_class_base_animation`, `unit_animation_pose_at_phase`, `unit_node_orientations_blend`, `unit_grenade_throw_keep_legs_moving`
+- units/units.c: `units_initialize`, `units_initialize_for_new_map`, `units_dispose_from_old_map`, `units_dispose`, `unit_kill_silent`, `unit_kill_no_statistics`, `unit_delete`, `unit_export_function_values`, `unit_persistent_control`, `unit_get_melee_range_and_ticks`, `unit_get_animation_frames_remaining`, `unit_euler_axis_doplan`, `unit_animation_weapon_ik`, `unit_animation_vehicle_ik`, `unit_animation_start_action`, `unit_animation_start_overlay_action`, `unit_can_enter_seat`, `unit_impulse`, `unit_handle_weapon_state_change`, `unit_record_damage`, `unit_test_spawning`, `unit_get_head_position`, `unit_estimate_position`, `unit_get_center_of_mass`, `unit_get_aiming_unit_index`, `unit_get_aiming_vector`, `unit_get_looking_vector`, `unit_get_facing_vector`, `unit_scripting_set_emotion_animation`, `unit_shield_sapping_update`, `unit_set_user_animation`, `any_unit_is_dangerous`, `unit_can_see_point`, `unit_update_driver_and_gunner`, `unit_get_current_equipment`, `unit_add_grenade_to_inventory`, `unit_add_equipment_to_inventory`, `unit_delete_current_equipment`, `unit_delete_all_weapons`, `unit_throw_grenade_move_to_hand`, `unit_set_animation`, `unit_refresh_illumination`, `unit_drop_item`, `unit_drop_grenades`, `unit_drop_inventory_weapons`, `unit_handle_region_destroyed`, `unit_cause_continuous_melee_damage`, `unit_aim_without_turning`, `unit_is_playing_custom_animation`, `unit_start_user_animation`, `unit_start_running_blindly`, `unit_flame_to_death`, `unit_flying_through_air`, `unit_euler_axis_buildplan`, `unit_euler_axis_couple`, `unit_adjust_projectile_ray`, `unit_abort_animation`, `unit_clip_to_aiming_bounds`, `unit_set_seat`, `unit_drop_current_equipment`, `unit_can_use_weapon`, `unit_drop_current_weapon`, `scripting_set_magic_base_seat`, `unit_handle_deleted_object`, `unit_cause_player_melee_damage`, `unit_align_facing`, `unit_start_flaming_to_death`, `unit_running_blind`, `unit_vectors_are_valid`, `unit_verify_vectors`, `unit_control`, `unit_postprocess_node_matrices`, `unit_euler_aiming_update`, `unit_has_animation_to_enter_seat`, `unit_ping_animation`, `unit_melee_attack_begin`, `unit_leap_begin`, `unit_unsuspecting`, `unit_add_weapon_to_inventory`, `unit_ready_desired_weapon`, `unit_throw_grenade_begin`, `scripting_magic_melee_attack`, `unit_impact_melee_damage`, `unit_place`, `unit_add_initial_weapons`, `unit_adjust_for_seat_change`, `unit_died`, `vehicle_scripting_load_magic`, `unit_damage_aftermath`, `vehicle_scripting_unload`, `unit_animation_enhanced`, `unit_grenade_throw_ease`, `unit_weapon_class_base_animation`, `unit_animation_pose_at_phase`, `unit_node_orientations_blend`, `unit_grenade_throw_keep_legs_moving`
 - units/vehicles.c: `vehicles_initialize`, `vehicles_initialize_for_new_map`, `vehicles_dispose_from_old_map`, `vehicles_dispose`, `vehicle_place`, `vehicle_delete`, `vehicle_build_update`, `vehicle_parse_update`, `vehicle_reset`, `vehicle_find_pathfinding_surface_index`, `vehicle_dot_product3d_test`, `update_human_plane_physics`, `create_crashing_effects`, `update_turret_physics`, `vehicle_moving_near_any_player`, `vehicle_stuck`, `vehicle_mass_points_fit`

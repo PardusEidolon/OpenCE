@@ -9487,10 +9487,6 @@ note = "not reached from a root of the game; the units track owns it"
 class = "missing"
 note = "not reached from a root of the game; the units track owns it"
 
-[function.unit_solo_player_integrated_night_vision_is_active]
-class = "missing"
-note = "a stub in campaign/src/units.rs; the units track (coverage_units) owns it"
-
 [function.unit_start_animation_impulse]
 class = "matched"
 engine = "sim/src/ai_impulse.rs"

@@ -3,7 +3,7 @@
 //! drives or guns it and whether a seat of it is filled.
 //!
 //! Each is checked against the game's code by
-//! tests/unit_control_reference.rs.
+//! tests/unit_control_reference.rs and tests/unit_seats_reference.rs.
 
 /// A unit's flags (`unit_datum.unit.flags`): a word of the bits below.
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
@@ -14,6 +14,8 @@ impl UnitFlags {
     pub const ACTIVELY_CONTROLLED: u32 = 1 << 0;
     /// Its controls move it (`_unit_controllable_bit`).
     pub const CONTROLLABLE: u32 = 1 << 6;
+    /// It does not blink (`_unit_cannot_blink_bit`).
+    pub const CANNOT_BLINK: u32 = 1 << 22;
     /// Its integrated light is on (`_unit_integrated_light_on_bit`).
     pub const INTEGRATED_LIGHT_ON: u32 = 1 << 19;
     /// It runs blindly, as a flood-infected unit does (`_unit_running_blindly_bit`).
@@ -75,6 +77,56 @@ impl UnitFlags {
     pub fn stop_running_blindly(&mut self) {
         self.set(Self::RUNNING_BLINDLY, false);
     }
+
+    /// Lets it blink, or not (`unit_scripting_can_blink`).
+    pub fn set_can_blink(&mut self, can_blink: bool) {
+        self.set(Self::CANNOT_BLINK, !can_blink);
+    }
+
+    /// Makes it actively controlled, and controllable, when it is `wanted`
+    /// to be or an actor, a swarm or a player controls it (`someone`),
+    /// unless it is `dead`, answering whether it is. The caller then tells
+    /// each of its weapons it is in its inventory and updates its driver
+    /// and gunner (`unit_set_actively_controlled`).
+    pub fn set_actively_controlled(&mut self, wanted: bool, someone: bool, dead: bool) -> bool {
+        let active = !dead && (wanted || someone);
+        self.set(Self::ACTIVELY_CONTROLLED, active);
+        self.set(Self::CONTROLLABLE, active);
+        active
+    }
+}
+
+/// The units in a unit's driver's and gunner's seats.
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
+pub struct Crew<U> {
+    /// Its driver (`driver_object_index`).
+    pub driver: Option<U>,
+    /// Its gunner (`gunner_object_index`).
+    pub gunner: Option<U>,
+}
+
+/// A script's question of a unit's driver and gunner: none of no unit
+/// (`unit_scripting_unit_driver`, `unit_scripting_unit_gunner`).
+pub fn scripting_crew<U: Copy>(unit: Option<&Crew<U>>) -> Crew<U> {
+    unit.copied().unwrap_or(Crew {
+        driver: None,
+        gunner: None,
+    })
+}
+
+/// The children of a unit (each with whether it is a unit and its seat)
+/// that are units in a seat, in its children's order: a script's list of
+/// its riders, none of no unit (`unit_scripting_unit_riders`).
+pub fn seated_riders<O>(
+    children: Option<impl IntoIterator<Item = (O, bool, Option<i16>)>>,
+) -> Option<Vec<O>> {
+    children.map(|children| {
+        children
+            .into_iter()
+            .filter(|(_, is_unit, seat)| *is_unit && seat.is_some())
+            .map(|(child, _, _)| child)
+            .collect()
+    })
 }
 
 /// The mouth aperture after one tick from `current` towards `wanted`,

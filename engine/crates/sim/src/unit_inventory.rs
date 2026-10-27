@@ -210,6 +210,71 @@ impl<W> UnitInventory<W> {
     pub fn zoom_level(&self) -> Option<u8> {
         self.current_zoom
     }
+
+    /// The weapon in hand (`unit_get_current_weapon_index`).
+    pub fn current(&self) -> Option<&W> {
+        self.weapon(self.current_weapon)
+    }
+
+    /// The magnification of the weapon in hand, by `magnification`, and 1
+    /// with none (`unit_get_zoom_magnification`).
+    pub fn zoom_magnification(&self, magnification: impl Fn(&W) -> f32) -> f32 {
+        self.current().map_or(1.0, magnification)
+    }
+
+    /// Whether the weapon in hand is overcharged (`unit_overcharged`).
+    pub fn overcharged(&self, overcharged: impl Fn(&W) -> bool) -> bool {
+        self.current().is_some_and(overcharged)
+    }
+
+    /// The label of the weapon in hand, by `label`, and "unarmed" with none
+    /// (`unit_get_current_weapon_label`).
+    pub fn current_weapon_label<'a>(&self, label: impl Fn(&W) -> &'a str) -> &'a str {
+        self.current().map_or("unarmed", label)
+    }
+
+    /// Whether its integrated night vision is on: it is zoomed with a weapon
+    /// that `enables` it (`unit_integrated_night_vision_is_active`).
+    pub fn night_vision_active(&self, enables: impl Fn(&W) -> bool) -> bool {
+        self.current_zoom.is_some() && self.current().is_some_and(enables)
+    }
+
+    /// Unzooms it, answering the zoom-out sound of the weapon in hand (by
+    /// `zoom_out_sound`) when a local player zoomed it; the caller plays it,
+    /// turns its night vision power to 0 and unzooms the player's control
+    /// (`unit_unzoom`).
+    pub fn unzoom<S>(
+        &mut self,
+        local_player: bool,
+        zoom_out_sound: impl Fn(&W) -> Option<S>,
+    ) -> Option<S> {
+        let sound = if local_player && self.current_zoom.is_some() {
+            self.current().and_then(zoom_out_sound)
+        } else {
+            None
+        };
+        self.current_zoom = None;
+        self.desired_zoom = None;
+        sound
+    }
+}
+
+/// Whether the one local player's unit (none for none) has its integrated
+/// night vision on; with more or fewer local players none has
+/// (`unit_solo_player_integrated_night_vision_is_active`).
+pub fn solo_player_night_vision<W>(
+    local_players: usize,
+    unit: Option<&UnitInventory<W>>,
+    enables: impl Fn(&W) -> bool,
+) -> bool {
+    local_players == 1 && unit.is_some_and(|unit| unit.night_vision_active(enables))
+}
+
+/// The weapon a unit melees with unarmed: the first of the game globals'
+/// weapon list, none with no globals or an empty list
+/// (`unarmed_melee_weapon_definition_index`).
+pub fn unarmed_melee_weapon<D: Copy>(weapon_list: Option<&[D]>) -> Option<D> {
+    weapon_list.and_then(|list| list.first().copied())
 }
 
 /// Whether a unit (none for none) holds a weapon whose definition, by
