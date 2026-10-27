@@ -1721,6 +1721,11 @@ pub(crate) fn run_ticks(state: &mut State, ticks: u32) -> Result<(), EngineError
         running.dressed = network::dress_players(&mut running.simulation, level, running.dressed);
     }
     let spawned = running.simulation.take_spawned();
+    if let Some(level) = &running.level {
+        running
+            .effects
+            .created(level, &running.simulation, &spawned);
+    }
     if let Some(campaign) = &mut running.campaign {
         campaign.dress(&mut running.simulation);
     } else if let Some(level) = &running.level {

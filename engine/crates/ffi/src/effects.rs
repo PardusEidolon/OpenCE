@@ -113,6 +113,21 @@ impl LevelEffects {
         self.effects.start(level, tag, origin);
     }
 
+    /// Starts the creation effects of the objects just made
+    /// (`object_new`'s), each on its object.
+    pub(crate) fn created(
+        &mut self,
+        level: &Level,
+        simulation: &Simulation,
+        made: &[ObjectHandle],
+    ) {
+        for &handle in made {
+            if let Some(object) = simulation.object(handle) {
+                self.effects.created(level, handle, &object.tag);
+            }
+        }
+    }
+
     /// One tick, after the simulation's: this tick's shots, impacts (by
     /// the materials they struck) and detonations make their effects,
     /// objects start those they carry, and every effect runs on.

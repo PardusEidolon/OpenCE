@@ -272,6 +272,22 @@ impl Effects {
         self.start(level, tag, origin);
     }
 
+    /// Starts the creation effect of the object `handle`, just made as
+    /// `object` (`object_new`): on it, at its origin.
+    pub fn created(&mut self, level: &Level, handle: ObjectHandle, object: &TagRef) {
+        let Some(effect) = level
+            .object(object)
+            .and_then(|definition| definition.creation_effect.as_ref())
+        else {
+            return;
+        };
+        let origin = Origin {
+            on: Some((handle, String::new())),
+            ..Origin::at(Vec3::ZERO, Quat::IDENTITY)
+        };
+        self.start(level, effect, origin);
+    }
+
     /// Begins `effect`'s event `event` for `running`: whether it is
     /// skipped, its delay and its duration.
     fn enter(&mut self, effect: &Effect, running: &mut Running, event: usize) {
@@ -559,7 +575,7 @@ fn part_scale(part: &EffectPart, by: [f32; 2]) -> f32 {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use opence_content::{EffectEvent, Group};
+    use opence_content::{EffectEvent, Group, ObjectDefinition, ObjectKind};
 
     fn tag(group: &[u8; 4], path: &str) -> TagRef {
         TagRef {
@@ -607,6 +623,39 @@ mod tests {
             ..Effect::new(tag(b"effe", "two"))
         });
         level
+    }
+
+    fn object(tag: TagRef, creation_effect: Option<TagRef>) -> ObjectDefinition {
+        ObjectDefinition {
+            widgets: Vec::new(),
+            tag,
+            kind: ObjectKind::Scenery,
+            flags: 0,
+            bounding_radius: 1.0,
+            bounding_offset: [0.0, 0.0, 0.0],
+            acceleration_scale: 1.0,
+            render_bounding_radius: 1.0,
+            icon_text_index: -1,
+            model: None,
+            animation_graph: None,
+            collision_model: None,
+            physics: None,
+            modifier_shader: None,
+            creation_effect,
+            function_modes: Default::default(),
+            functions: Vec::new(),
+            change_colors: Vec::new(),
+            unit_hud: None,
+            material_effects: None,
+            unit_melee_damage: None,
+            biped: None,
+            weapon: None,
+            projectile: None,
+            equipment: None,
+            vehicle: None,
+            device: None,
+            attachments: Vec::new(),
+        }
     }
 
     fn names(effects: &Effects) -> Vec<&str> {
@@ -776,6 +825,28 @@ mod tests {
         assert_eq!(seen[30], (45, 1, 15, 0));
         assert!(effects.running().is_empty());
         assert!(effects.emitting().is_empty());
+    }
+
+    #[test]
+    fn an_object_starts_its_creation_effect_on_itself_when_it_is_made() {
+        let mut level = level(-1);
+        let made = tag(b"scen", "made with smoke");
+        let plain = tag(b"scen", "plain");
+        level
+            .objects
+            .push(object(made.clone(), Some(tag(b"effe", "two"))));
+        level.objects.push(object(plain.clone(), None));
+        let mut effects = Effects::default();
+        let handle = ObjectHandle { index: 3, salt: 1 };
+        effects.created(&level, handle, &made);
+        effects.created(&level, ObjectHandle { index: 4, salt: 1 }, &plain);
+        let running: Vec<_> = effects
+            .running()
+            .iter()
+            .map(|r| r.origin.on.clone())
+            .collect();
+        // (at the object's origin: no marker)
+        assert_eq!(running, [Some((handle, String::new()))]);
     }
 
     #[test]
