@@ -9295,10 +9295,6 @@ engine = "sim/src/seats.rs"
 check = "sim/tests/seats.rs"
 against = "measure"
 
-[function.unit_gunned_by_ai]
-class = "missing"
-note = "not reached from a root of the game; the units track owns it"
-
 [function.unit_hud_shield_meter_mapper_init]
 class = "missing"
 note = "not reached from a root of the game; the interface track owns it"

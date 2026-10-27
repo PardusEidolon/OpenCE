@@ -176,6 +176,15 @@ impl<W> UnitInventory<W> {
         self.weapons.iter().flatten().any(test)
     }
 
+    /// Whether any slot holds `weapon`, none matching an empty slot as the
+    /// game's NONE does (`unit_has_weapon`).
+    pub fn holds(&self, weapon: Option<&W>) -> bool
+    where
+        W: PartialEq,
+    {
+        self.weapons.iter().any(|slot| slot.as_ref() == weapon)
+    }
+
     /// The grenades of `kind`, none for none or a kind the unit doesn't
     /// carry (`unit_get_grenade_count`).
     pub fn grenade_count(&self, kind: Option<i16>) -> i16 {
@@ -200,6 +209,23 @@ impl<W> UnitInventory<W> {
     /// Its zoom level, none unzoomed (`unit_get_zoom_level`).
     pub fn zoom_level(&self) -> Option<u8> {
         self.current_zoom
+    }
+}
+
+/// Whether a unit (none for none) holds a weapon whose definition, by
+/// `definition_of`, is `definition` (none for none): a script's question,
+/// which asks no unit or no definition as none (`unit_scripting_has_weapon`,
+/// asking `unit_has_weapon_definition_index`).
+pub fn scripting_has_weapon<W, D: PartialEq>(
+    inventory: Option<&UnitInventory<W>>,
+    definition: Option<D>,
+    definition_of: impl Fn(&W) -> D,
+) -> bool {
+    match (inventory, definition) {
+        (Some(inventory), Some(definition)) => {
+            inventory.has_weapon(|weapon| definition_of(weapon) == definition)
+        }
+        _ => false,
     }
 }
 

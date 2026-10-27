@@ -239,7 +239,7 @@ pub fn interruptable(current: Option<UnitState>, desired: UnitState) -> bool {
 }
 
 /// Whether a unit in `state` is too busy to start another animation of its
-/// own, as leaving its seat (`unit_animation_busy`).
+/// own, as leaving its seat (`unit_animation_busy`, `unit_is_busy`).
 pub fn busy(state: Option<UnitState>) -> bool {
     matches!(
         state,
