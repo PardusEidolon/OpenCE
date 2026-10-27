@@ -394,9 +394,12 @@ enum Element<'a> {
 
 /// The elements of the block at `path` of `element_size` bytes: the
 /// structure of that size the C takes from a block of that name, or the
-/// one such structure at another size, or else the one laid-out
-/// structure of that size.
+/// one such structure at another size when `owner`, the structure
+/// holding the block, shares its first word and has no structure of its
+/// own of the stepped size (another group's block of the same name is
+/// not it), or else the one laid-out structure of that size.
 fn element<'a>(
+    owner: &str,
     path: &str,
     element_size: u32,
     elements: &[(String, String)],
@@ -421,8 +424,20 @@ fn element<'a>(
         .filter_map(|name| by_name.get(name))
         .copied()
         .collect();
+    let first = |name: &str| name.split('_').next().unwrap_or(name).to_owned();
     if let ([], [record]) = (&sized[..], &laid[..]) {
-        return Element::Resized(record);
+        // The owner's own structure of the stepped size is the block's,
+        // though the C names another of that block name elsewhere.
+        let owned: Vec<&Record> = by_name
+            .values()
+            .filter(|r| r.size == element_size && first(&r.name) == first(owner))
+            .copied()
+            .collect();
+        return match owned[..] {
+            [owned] => Element::Structure(owned),
+            [] if first(&record.name) == first(owner) => Element::Resized(record),
+            _ => Element::Unknown,
+        };
     }
     if sized.is_empty() && !named.is_empty() && laid.is_empty() {
         return Element::Other;
@@ -482,7 +497,13 @@ pub fn resolve(
                 kept.unresolved += 1;
                 continue 'reads;
             };
-            match element(&block.path, hop.element_size, elements, &by_name) {
+            match element(
+                &record.name,
+                &block.path,
+                hop.element_size,
+                elements,
+                &by_name,
+            ) {
                 Element::Structure(inner) => record = inner,
                 Element::Resized(inner) => {
                     kept.resized

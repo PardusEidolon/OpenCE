@@ -25,9 +25,9 @@ const PLAYER_INFORMATION_SIZE: usize = 0xF4;
 const PLAYER_CONTROL_OFFSET: usize = 0x110;
 const PLAYER_CONTROL_SIZE: usize = 0x80;
 const DIFFICULTY_OFFSET: usize = 0x11C;
-// (36 values at the 4 levels, then padding)
-const DIFFICULTY_SIZE: usize = 0x294;
-const DIFFICULTY_VALUES: usize = 36;
+// (35 values at the 4 levels, then 21 words of padding)
+const DIFFICULTY_SIZE: usize = 0x284;
+const DIFFICULTY_VALUES: usize = 35;
 const CAMERA_OFFSET: usize = 0x104;
 const CAMERA_SIZE: usize = 0x10;
 const MAX_CAMERAS: usize = 1;

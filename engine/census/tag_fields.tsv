@@ -107,14 +107,14 @@ _device_definition	negative_stop_effect.group_tag	84	unsigned long	-	kept	untrac
 _device_definition	negative_stop_effect.name	88	char *	-	-	-
 _device_definition	negative_stop_effect.name_length	92	long	-	-	-
 _device_definition	negative_stop_effect.index	96	long	read	kept	untraced
-_device_definition	depowered_effect.group_tag	100	unsigned long	-	-	-
+_device_definition	depowered_effect.group_tag	100	unsigned long	-	kept	used
 _device_definition	depowered_effect.name	104	char *	-	-	-
 _device_definition	depowered_effect.name_length	108	long	-	-	-
-_device_definition	depowered_effect.index	112	long	read	-	-
-_device_definition	repowered_effect.group_tag	116	unsigned long	-	-	-
+_device_definition	depowered_effect.index	112	long	read	kept	used
+_device_definition	repowered_effect.group_tag	116	unsigned long	-	kept	untraced
 _device_definition	repowered_effect.name	120	char *	-	-	-
 _device_definition	repowered_effect.name_length	124	long	-	-	-
-_device_definition	repowered_effect.index	128	long	read	-	-
+_device_definition	repowered_effect.index	128	long	read	kept	untraced
 _device_definition	delay_time	132	real	-	-	-
 _device_definition	delay_unused	136	unsigned long[2]	-	-	-
 _device_definition	delay_effect.group_tag	144	unsigned long	-	kept	used
@@ -2034,7 +2034,7 @@ contrail_definition	first_sequence_index	64	short	read	kept	used
 contrail_definition	sequence_count	66	short	read	kept	untraced
 contrail_definition	reserved44	68	long[16]	-	-	-
 contrail_definition	shader.shader.base.radiosity.flags	132	unsigned short	read	kept	used
-contrail_definition	shader.shader.base.radiosity.detail_level	134	short	-	kept	used
+contrail_definition	shader.shader.base.radiosity.detail_level	134	short	-	-	-
 contrail_definition	shader.shader.base.radiosity.power	136	real	-	kept	used
 contrail_definition	shader.shader.base.radiosity.color_of_emitted_light.n	140	real[3]	-	kept	used
 contrail_definition	shader.shader.base.radiosity.color_of_emitted_light.red	140	real	-	kept	used
@@ -2084,7 +2084,7 @@ contrail_point_state	color_upper_bound.green	92	real	read	kept	used
 contrail_point_state	color_upper_bound.blue	96	real	read	kept	used
 contrail_point_state	scale_flags	100	unsigned long	read	kept	used
 contrail_shader	shader.base.radiosity.flags	0	unsigned short	read	kept	used
-contrail_shader	shader.base.radiosity.detail_level	2	short	-	kept	used
+contrail_shader	shader.base.radiosity.detail_level	2	short	-	-	-
 contrail_shader	shader.base.radiosity.power	4	real	-	kept	used
 contrail_shader	shader.base.radiosity.color_of_emitted_light.n	8	real[3]	-	kept	used
 contrail_shader	shader.base.radiosity.color_of_emitted_light.red	8	real	-	kept	used
@@ -2293,14 +2293,14 @@ control_definition	device.negative_stop_effect.group_tag	464	unsigned long	-	kep
 control_definition	device.negative_stop_effect.name	468	char *	-	-	-
 control_definition	device.negative_stop_effect.name_length	472	long	-	-	-
 control_definition	device.negative_stop_effect.index	476	long	read	kept	untraced
-control_definition	device.depowered_effect.group_tag	480	unsigned long	-	-	-
+control_definition	device.depowered_effect.group_tag	480	unsigned long	-	kept	used
 control_definition	device.depowered_effect.name	484	char *	-	-	-
 control_definition	device.depowered_effect.name_length	488	long	-	-	-
-control_definition	device.depowered_effect.index	492	long	read	-	-
-control_definition	device.repowered_effect.group_tag	496	unsigned long	-	-	-
+control_definition	device.depowered_effect.index	492	long	read	kept	used
+control_definition	device.repowered_effect.group_tag	496	unsigned long	-	kept	untraced
 control_definition	device.repowered_effect.name	500	char *	-	-	-
 control_definition	device.repowered_effect.name_length	504	long	-	-	-
-control_definition	device.repowered_effect.index	508	long	read	-	-
+control_definition	device.repowered_effect.index	508	long	read	kept	untraced
 control_definition	device.delay_time	512	real	-	-	-
 control_definition	device.delay_unused	516	unsigned long[2]	-	-	-
 control_definition	device.delay_effect.group_tag	524	unsigned long	-	kept	used
@@ -2527,14 +2527,14 @@ device_definition	device.negative_stop_effect.group_tag	464	unsigned long	-	kept
 device_definition	device.negative_stop_effect.name	468	char *	-	-	-
 device_definition	device.negative_stop_effect.name_length	472	long	-	-	-
 device_definition	device.negative_stop_effect.index	476	long	read	kept	untraced
-device_definition	device.depowered_effect.group_tag	480	unsigned long	-	-	-
+device_definition	device.depowered_effect.group_tag	480	unsigned long	-	kept	used
 device_definition	device.depowered_effect.name	484	char *	-	-	-
 device_definition	device.depowered_effect.name_length	488	long	-	-	-
-device_definition	device.depowered_effect.index	492	long	read	-	-
-device_definition	device.repowered_effect.group_tag	496	unsigned long	-	-	-
+device_definition	device.depowered_effect.index	492	long	read	kept	used
+device_definition	device.repowered_effect.group_tag	496	unsigned long	-	kept	untraced
 device_definition	device.repowered_effect.name	500	char *	-	-	-
 device_definition	device.repowered_effect.name_length	504	long	-	-	-
-device_definition	device.repowered_effect.index	508	long	read	-	-
+device_definition	device.repowered_effect.index	508	long	read	kept	untraced
 device_definition	device.delay_time	512	real	-	-	-
 device_definition	device.delay_unused	516	unsigned long[2]	-	-	-
 device_definition	device.delay_effect.group_tag	524	unsigned long	-	kept	used
@@ -2819,7 +2819,7 @@ game_globals	playlist.count	416	long	-	-	-
 game_globals	playlist.address	420	void *	-	-	-
 game_globals	playlist.definition	424	struct tag_block_definition *	-	-	-
 game_globals_difficulty_information	values	0	real[35][4]	read	kept	untraced
-game_globals_difficulty_information	pad	560	real[21]	-	kept	untraced
+game_globals_difficulty_information	pad	560	real[21]	-	-	-
 game_globals_first_person_interface	hands.group_tag	0	unsigned long	-	kept	used
 game_globals_first_person_interface	hands.name	4	char *	-	-	-
 game_globals_first_person_interface	hands.name_length	8	long	-	-	-
@@ -3011,10 +3011,10 @@ game_globals_rasterizer_data	distance_attenuation_2d_for_the_pc.group_tag	412	un
 game_globals_rasterizer_data	distance_attenuation_2d_for_the_pc.name	416	char *	-	-	-
 game_globals_rasterizer_data	distance_attenuation_2d_for_the_pc.name_length	420	long	-	-	-
 game_globals_rasterizer_data	distance_attenuation_2d_for_the_pc.index	424	long	-	-	-
-game_globals_vehicle	vehicle.group_tag	0	unsigned long	-	kept	used
-game_globals_vehicle	vehicle.name	4	char *	-	kept	used
-game_globals_vehicle	vehicle.name_length	8	long	-	kept	used
-game_globals_vehicle	vehicle.index	12	long	read	kept	used
+game_globals_vehicle	vehicle.group_tag	0	unsigned long	-	-	-
+game_globals_vehicle	vehicle.name	4	char *	-	-	-
+game_globals_vehicle	vehicle.name_length	8	long	-	-	-
+game_globals_vehicle	vehicle.index	12	long	read	-	-
 health_meter_extras_definition	mid_color	0	unsigned long	read	kept	used
 health_meter_extras_definition	max_cutoff	4	real	read	kept	used
 health_meter_extras_definition	min_cutoff	8	real	read	kept	used
@@ -3787,14 +3787,14 @@ machine_definition	device.negative_stop_effect.group_tag	464	unsigned long	-	kep
 machine_definition	device.negative_stop_effect.name	468	char *	-	-	-
 machine_definition	device.negative_stop_effect.name_length	472	long	-	-	-
 machine_definition	device.negative_stop_effect.index	476	long	read	kept	untraced
-machine_definition	device.depowered_effect.group_tag	480	unsigned long	-	-	-
+machine_definition	device.depowered_effect.group_tag	480	unsigned long	-	kept	used
 machine_definition	device.depowered_effect.name	484	char *	-	-	-
 machine_definition	device.depowered_effect.name_length	488	long	-	-	-
-machine_definition	device.depowered_effect.index	492	long	read	-	-
-machine_definition	device.repowered_effect.group_tag	496	unsigned long	-	-	-
+machine_definition	device.depowered_effect.index	492	long	read	kept	used
+machine_definition	device.repowered_effect.group_tag	496	unsigned long	-	kept	untraced
 machine_definition	device.repowered_effect.name	500	char *	-	-	-
 machine_definition	device.repowered_effect.name_length	504	long	-	-	-
-machine_definition	device.repowered_effect.index	508	long	read	-	-
+machine_definition	device.repowered_effect.index	508	long	read	kept	untraced
 machine_definition	device.delay_time	512	real	-	-	-
 machine_definition	device.delay_unused	516	unsigned long[2]	-	-	-
 machine_definition	device.delay_effect.group_tag	524	unsigned long	-	kept	used
@@ -4033,7 +4033,7 @@ model_marker	instances.definition	60	struct tag_block_definition *	read	-	-
 model_marker_instance	region_index	0	byte	read	kept	used
 model_marker_instance	permutation_index	1	byte	read	kept	used
 model_marker_instance	node_index	2	byte	read	kept	used
-model_marker_instance	pad	3	byte	-	-	-
+model_marker_instance	pad	3	byte	-	kept	used
 model_marker_instance	translation.n	4	real[3]	read	kept	used
 model_marker_instance	translation.x	4	real	read	kept	used
 model_marker_instance	translation.y	8	real	read	kept	used
@@ -4087,10 +4087,10 @@ model_node	runtime_default_inverse_matrix.position.u	144	real	read	kept	used
 model_node	runtime_default_inverse_matrix.position.v	148	real	read	kept	used
 model_node	runtime_default_inverse_matrix.position.w	152	real	read	kept	used
 model_region	name	0	char[32]	read	kept	used
-model_region	unused	32	long[8]	-	kept	used
+model_region	unused	32	long[8]	-	-	-
 model_region	permutations.count	64	long	read	kept	used
 model_region	permutations.address	68	void *	read	kept	used
-model_region	permutations.definition	72	struct tag_block_definition *	read	kept	used
+model_region	permutations.definition	72	struct tag_block_definition *	read	-	-
 model_region_permutation	name	0	char[32]	read	kept	used
 model_region_permutation	flags	32	long	read	kept	used
 model_region_permutation	variant_number	36	short	read	-	-
@@ -4437,7 +4437,7 @@ particle_definition	runtime_oo_width	168	real	read	-	-
 particle_definition	sprite_orientation	172	short	read	kept	used
 particle_definition	padAE	174	word	-	-	-
 particle_definition	shader.shader.base.radiosity.flags	176	unsigned short	read	kept	used
-particle_definition	shader.shader.base.radiosity.detail_level	178	short	-	kept	used
+particle_definition	shader.shader.base.radiosity.detail_level	178	short	-	-	-
 particle_definition	shader.shader.base.radiosity.power	180	real	-	kept	used
 particle_definition	shader.shader.base.radiosity.color_of_emitted_light.n	184	real[3]	-	kept	used
 particle_definition	shader.shader.base.radiosity.color_of_emitted_light.red	184	real	-	kept	used
@@ -4563,7 +4563,7 @@ particle_system_type_particle_state	point_physics.name_length	140	long	-	-	-
 particle_system_type_particle_state	point_physics.index	144	long	read	kept	used
 particle_system_type_particle_state	reserved94	148	byte[36]	-	-	-
 particle_system_type_particle_state	shader.shader.base.radiosity.flags	184	unsigned short	read	kept	used
-particle_system_type_particle_state	shader.shader.base.radiosity.detail_level	186	short	-	kept	used
+particle_system_type_particle_state	shader.shader.base.radiosity.detail_level	186	short	-	-	-
 particle_system_type_particle_state	shader.shader.base.radiosity.power	188	real	-	kept	used
 particle_system_type_particle_state	shader.shader.base.radiosity.color_of_emitted_light.n	192	real[3]	-	kept	used
 particle_system_type_particle_state	shader.shader.base.radiosity.color_of_emitted_light.red	192	real	-	kept	used
@@ -5370,7 +5370,7 @@ screen_flash_definition	screen_flash_color.red	44	real	read	-	-
 screen_flash_definition	screen_flash_color.green	48	real	read	-	-
 screen_flash_definition	screen_flash_color.blue	52	real	read	-	-
 shader	base.radiosity.flags	0	unsigned short	read	kept	used
-shader	base.radiosity.detail_level	2	short	-	kept	used
+shader	base.radiosity.detail_level	2	short	-	-	-
 shader	base.radiosity.power	4	real	-	kept	used
 shader	base.radiosity.color_of_emitted_light.n	8	real[3]	-	kept	used
 shader	base.radiosity.color_of_emitted_light.red	8	real	-	kept	used
@@ -5385,7 +5385,7 @@ shader	base.physics.material_type	34	short	-	kept	used
 shader	base.type	36	short	read	-	-
 shader	base.pad	38	short	-	-	-
 shader_base	radiosity.flags	0	unsigned short	read	kept	used
-shader_base	radiosity.detail_level	2	short	-	kept	used
+shader_base	radiosity.detail_level	2	short	-	-	-
 shader_base	radiosity.power	4	real	-	kept	used
 shader_base	radiosity.color_of_emitted_light.n	8	real[3]	-	kept	used
 shader_base	radiosity.color_of_emitted_light.red	8	real	-	kept	used
@@ -5400,7 +5400,7 @@ shader_base	physics.material_type	34	short	-	kept	used
 shader_base	type	36	short	read	-	-
 shader_base	pad	38	short	-	-	-
 shader_effect_definition	shader.base.radiosity.flags	0	unsigned short	read	kept	used
-shader_effect_definition	shader.base.radiosity.detail_level	2	short	-	kept	used
+shader_effect_definition	shader.base.radiosity.detail_level	2	short	-	-	-
 shader_effect_definition	shader.base.radiosity.power	4	real	-	kept	used
 shader_effect_definition	shader.base.radiosity.color_of_emitted_light.n	8	real[3]	-	kept	used
 shader_effect_definition	shader.base.radiosity.color_of_emitted_light.red	8	real	-	kept	used
@@ -5451,7 +5451,7 @@ shader_effect_definition	reserved_after_secondary_map_zsprite_radius_scale	160	b
 shader_physics_properties	flags	0	unsigned short	-	-	-
 shader_physics_properties	material_type	2	short	-	kept	used
 shader_radiosity_properties	flags	0	unsigned short	read	kept	used
-shader_radiosity_properties	detail_level	2	short	-	kept	used
+shader_radiosity_properties	detail_level	2	short	-	-	-
 shader_radiosity_properties	power	4	real	-	kept	used
 shader_radiosity_properties	color_of_emitted_light.n	8	real[3]	-	kept	used
 shader_radiosity_properties	color_of_emitted_light.red	8	real	-	kept	used
@@ -5737,10 +5737,10 @@ structure_bsp	lens_flare_markers.definition	304	struct tag_block_definition *	re
 structure_bsp	clusters.count	308	long	read	kept	unused
 structure_bsp	clusters.address	312	void *	read	kept	unused
 structure_bsp	clusters.definition	316	struct tag_block_definition *	read	-	-
-structure_bsp	cluster_data.size	320	long	read	-	-
+structure_bsp	cluster_data.size	320	long	read	kept	used
 structure_bsp	cluster_data.pad	324	unsigned long	-	-	-
 structure_bsp	cluster_data.file_offset	328	long	-	-	-
-structure_bsp	cluster_data.address	332	void *	read	-	-
+structure_bsp	cluster_data.address	332	void *	read	kept	used
 structure_bsp	cluster_data.definition	336	struct tag_data_definition *	-	-	-
 structure_bsp	cluster_portals.count	340	long	read	-	-
 structure_bsp	cluster_portals.address	344	void *	read	-	-
@@ -5838,14 +5838,14 @@ structure_fog_plane	unused14	20	byte[12]	-	-	-
 structure_fog_region	unused	0	byte[36]	-	-	-
 structure_fog_region	fog_palette_index	36	short	read	kept	unused
 structure_fog_region	weather_palette_index	38	short	read	kept	used
-structure_leaf	bounds.n	0	byte[6]	read	kept	used
-structure_leaf	bounds.x0	0	byte	read	kept	used
-structure_leaf	bounds.x1	1	byte	read	kept	used
-structure_leaf	bounds.y0	2	byte	read	kept	used
-structure_leaf	bounds.y1	3	byte	read	kept	used
-structure_leaf	bounds.z0	4	byte	read	kept	used
-structure_leaf	bounds.z1	5	byte	read	kept	used
-structure_leaf	pad	6	word	-	kept	used
+structure_leaf	bounds.n	0	byte[6]	read	-	-
+structure_leaf	bounds.x0	0	byte	read	-	-
+structure_leaf	bounds.x1	1	byte	read	-	-
+structure_leaf	bounds.y0	2	byte	read	-	-
+structure_leaf	bounds.y1	3	byte	read	-	-
+structure_leaf	bounds.z0	4	byte	read	-	-
+structure_leaf	bounds.z1	5	byte	read	-	-
+structure_leaf	pad	6	word	-	-	-
 structure_leaf	cluster_index	8	short	read	kept	unused
 structure_leaf	surface_reference_count	10	short	read	-	-
 structure_leaf	first_surface_reference_index	12	long	read	-	-

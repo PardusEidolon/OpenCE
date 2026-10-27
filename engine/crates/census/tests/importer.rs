@@ -5,9 +5,11 @@ use std::collections::BTreeSet;
 
 use opence_census::fields::{keep, marks};
 use opence_census::importer::{
-    casts, elements, groups, read_reads, resolve, roots, write_reads, Hop, Read,
+    casts, elements, groups, kept, read_reads, resolve, roots, write_reads, Hop, Read,
 };
-use opence_census::layout::read_dump;
+use opence_census::layout::{read_dump, read_layout, LAYOUT};
+
+mod common;
 
 type Failure = Box<dyn std::error::Error>;
 
@@ -166,8 +168,8 @@ fn each_read_is_the_fields_it_overlaps_in_the_element_its_blocks_reach() {
         read(THNG, &[], 40, 4),
         read(THNG, &[(12, 8)], 0, 4),
         read(u32::from_be_bytes(*b"none"), &[], 0, 4),
-        // The other's parts are named thing_part, at a stride that is not
-        // its size.
+        // The other's parts share the thing's block name, at a stride that
+        // is not its size: they are not the thing's parts.
         read(OTHR, &[(0, 20)], 4, 2),
     ]
     .into();
@@ -183,15 +185,11 @@ fn each_read_is_the_fields_it_overlaps_in_the_element_its_blocks_reach() {
             ("thing_definition", "flags"),
             ("thing_definition", "name"),
             ("thing_definition", "parts.count"),
-            ("thing_part", "flags"),
             ("thing_part", "mass"),
         ]
     );
-    assert_eq!(kept.unresolved, 3);
-    assert_eq!(
-        kept.resized.into_iter().collect::<Vec<_>>(),
-        [("thing_part".to_owned(), 20, 8)]
-    );
+    assert_eq!(kept.unresolved, 4);
+    assert!(kept.resized.is_empty(), "{:?}", kept.resized);
 }
 
 #[test]
@@ -243,4 +241,51 @@ fn a_block_the_c_never_names_is_the_structure_its_name_gives() {
         [("thing_widget_datum".to_owned(), "size".to_owned())]
     );
     assert_eq!(kept.unresolved, 0);
+}
+
+#[test]
+fn a_block_is_resized_only_against_a_structure_its_owner_names() {
+    let dump = format!(
+        "{DUMP}
+*** Dumping AST Record Layout
+         0 | struct other_holder
+         0 |   struct tag_block parts
+         0 |     long count
+         4 |     void * address
+           | [sizeof=8, align=4]
+"
+    );
+    let records = read_dump(&dump);
+    let elements = [("parts".to_owned(), "thing_part".to_owned())];
+    // Another group's `parts`, stepped at 16, is not the thing's parts.
+    let other: BTreeSet<Read> = [read(OTHR, &[(0, 16)], 0, 4)].into();
+    let roots = [(OTHR, "other_holder".to_owned())].into();
+    let kept = resolve(&other, &roots, &elements, &records);
+    assert!(kept.resized.is_empty(), "{:?}", kept.resized);
+    assert_eq!(kept.unresolved, 1);
+    // The thing's own parts, stepped at 12, are resized.
+    let own: BTreeSet<Read> = [read(THNG, &[(4, 12)], 0, 4)].into();
+    let roots = [(THNG, "thing_definition".to_owned())].into();
+    let kept = resolve(&own, &roots, &elements, &records);
+    assert_eq!(
+        kept.resized.into_iter().collect::<Vec<_>>(),
+        [("thing_part".to_owned(), 12, 8)]
+    );
+}
+
+#[test]
+fn the_importer_steps_every_block_at_the_originals_element_size() -> Result<(), Failure> {
+    let Some(root) = common::repository() else {
+        return Ok(()); // (no source/ here)
+    };
+    let layout = opence_census::read_text(&root.join("engine").join(LAYOUT))?;
+    let records = read_layout(&layout)?;
+    let kept = kept(&root, &records)?;
+    let resized: Vec<String> = kept
+        .resized
+        .iter()
+        .map(|(name, stride, size)| format!("{name}: stepped at {stride:#x}, sized {size:#x}"))
+        .collect();
+    assert!(resized.is_empty(), "{resized:#?}");
+    Ok(())
 }
