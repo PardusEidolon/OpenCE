@@ -16,12 +16,12 @@ Every task is test first (`workflow.md`): the trace, measurement or census test 
 - [x] Task: Conductor - User Manual Verification 'Phase 2: The top of the owed list' (Protocol in workflow.md) (automated)
 
 ## Phase 3: The rest by system
-- [ ] Task: Work the owed list down by caller count, one commit per system, fixing or recording each divergence.
-- [ ] Task: The AI owed entries, on the fake world with actors, props and the map.
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: The rest by system' (Protocol in workflow.md) (automated)
+- [x] Task: Work the owed list down by caller count, one commit per system, fixing or recording each divergence. 698aa773
+- [x] Task: The AI owed entries, on the fake world with actors, props and the map. a3d09543 (on mission tests over the stock maps; see the report)
+- [x] Task: Conductor - User Manual Verification 'Phase 3: The rest by system' (Protocol in workflow.md) (automated) a3d09543
 
 ## Phase 4: The report
-- [ ] Task: Run `census` and record the counts before and after this track, per system and per class.
-- [ ] Task: Write the data-backed report and lower the ratchet to the new counts.
-- [ ] Task: Send the user the report; it sets up the next track.
-- [ ] Task: Conductor - User Manual Verification 'Phase 4: The report' (Protocol in workflow.md) (automated)
+- [x] Task: Run `census` and record the counts before and after this track, per system and per class. 468e9b81
+- [x] Task: Write the data-backed report and lower the ratchet to the new counts. 468e9b81
+- [x] Task: Send the user the report; it sets up the next track. 468e9b81
+- [x] Task: Conductor - User Manual Verification 'Phase 4: The report' (Protocol in workflow.md) (automated) 468e9b81
