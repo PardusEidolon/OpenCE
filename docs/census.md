@@ -18,12 +18,12 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `devices` | 7 (944 B) | 18 (3856 B) | | | 1 (432 B) | 34 (1952 B) | 0 |
 | `dialogs` | | | | | 5 (1328 B) | | 0 |
 | `editor` | | | | | 9 (0 B) | | 0 |
-| `effects` | 1 (48 B) | 88 (35024 B) | | 1 (288 B) | 13 (7344 B) | 87 (13904 B) | 0 |
+| `effects` | 1 (48 B) | 87 (33136 B) | | 2 (2176 B) | 13 (7344 B) | 87 (13904 B) | 0 |
 | `game` | 47 (5264 B) | 15 (1616 B) | | 28 (13936 B) | 61 (4384 B) | 565 (78880 B) | 0 |
 | `hs` | 2 (384 B) | 42 (7984 B) | | 8 (1776 B) | 11 (2880 B) | 576 (53968 B) | 0 |
 | `input` | | | | | 46 (7216 B) | 1 (0 B) | 0 |
 | `interface` | 6 (1408 B) | 96 (33424 B) | | 19 (6112 B) | 104 (21432 B) | 452 (94304 B) | 0 |
-| `items` | 9 (4080 B) | 24 (19328 B) | | 1 (128 B) | 1 (16 B) | 102 (12496 B) | 0 |
+| `items` | 9 (4080 B) | 17 (4976 B) | | 8 (14480 B) | 1 (16 B) | 102 (12496 B) | 0 |
 | `main` | | | | 1 (1648 B) | 34 (5440 B) | 91 (8752 B) | 0 |
 | `math` | 44 (5552 B) | 6 (256 B) | 70 (4720 B) | | 25 (4016 B) | 64 (8624 B) | 0 |
 | `memory` | | 2 (336 B) | 128 (19856 B) | | 102 (15104 B) | | 0 |
@@ -31,19 +31,19 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `networking` | | | | | 288 (49824 B) | | 0 |
 | `objects` | 3 (160 B) | 42 (5536 B) | | 17 (4336 B) | 59 (13424 B) | 226 (28128 B) | 0 |
 | `physics` | | 14 (2672 B) | | 22 (12592 B) | 64 (25040 B) | 45 (6928 B) | 0 |
-| `rasterizer` | | 3 (2784 B) | | | 777 (182416 B) | | 0 |
+| `rasterizer` | | 2 (544 B) | | 1 (2240 B) | 777 (182416 B) | | 0 |
 | `render` | 2 (592 B) | 2 (240 B) | | | 115 (37520 B) | | 0 |
 | `saved games` | | | | 2 (96 B) | 31 (3712 B) | 104 (21184 B) | 0 |
 | `scenario` | | 11 (4000 B) | | 2 (320 B) | 23 (3136 B) | 21 (2128 B) | 0 |
 | `shaders` | | | | | 21 (2624 B) | | 0 |
 | `shell` | | | | | 11 (528 B) | 2 (0 B) | 0 |
-| `sound` | 8 (1312 B) | 62 (15680 B) | | 3 (160 B) | 56 (2832 B) | 43 (6976 B) | 0 |
+| `sound` | 8 (1312 B) | 60 (15168 B) | | 5 (672 B) | 56 (2832 B) | 43 (6976 B) | 0 |
 | `structures` | | 2 (0 B) | | | 98 (27952 B) | 26 (3760 B) | 0 |
 | `tag_files` | | | 43 (4288 B) | | 5 (0 B) | | 0 |
 | `text` | | 5 (1536 B) | 63 (6864 B) | 4 (400 B) | 19 (5744 B) | 21 (2368 B) | 0 |
 | `tool` | | | | | 27 (8752 B) | | 0 |
-| `units` | 18 (6432 B) | 52 (21248 B) | | 29 (23728 B) | 9 (1616 B) | 221 (54496 B) | 0 |
-| **all** | 209 (37040 B) | 538 (170672 B) | 332 (38896 B) | 161 (85408 B) | 2773 (575768 B) | 3614 (703338 B) | 0 |
+| `units` | 18 (6432 B) | 50 (19024 B) | | 31 (25952 B) | 9 (1616 B) | 221 (54496 B) | 0 |
+| **all** | 209 (37040 B) | 525 (149456 B) | 332 (38896 B) | 174 (106624 B) | 2773 (575768 B) | 3614 (703338 B) | 0 |
 
 ## `ai`
 
@@ -1155,7 +1155,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `effect_random_translational_velocity` | effects/effects.c | Matched | sim/src/effects.rs | sim/src/effects.rs (measure) |
 | `effect_allocate` | effects/effects.c | Matched | sim/src/effects.rs | sim/src/effects.rs (measure) |
 | `effect_build_locations` | effects/effects.c | Matched | sim/src/effects.rs | sim/src/effects.rs (measure) |
-| `effect_generate_particles` | effects/effects.c | Matched | ffi/src/particles.rs | ffi/src/particles.rs (measure) |
+| `effect_generate_particles` | effects/effects.c | Partial | ffi/src/particles.rs | ffi/src/particles.rs (measure); leaves out a particle's camera mode: first person only, third person only or both (camera_mode) |
 | `effect_generate_part` | effects/effects.c | Matched | sim/src/effects.rs | sim/src/effects.rs (measure) |
 | `effect_marker_list_get_marker` | effects/effects.c | Matched | sim/src/effects.rs | sim/src/effects.rs (measure) |
 | `effect_generate_parts` | effects/effects.c | Matched | sim/src/effects.rs | sim/src/effects.rs (measure) |
@@ -1572,7 +1572,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `hud_render_unit_interface` | interface/hud_unit.c | Matched | ffi/src/hud.rs:82 | ffi/tests/hud.rs (measure) |
 | `scripted_hud_show_crosshair` | interface/hud_weapon.c | Partial | campaign/src/presented.rs | campaign/tests/script_signatures_reference.rs (trace); leaves out what it does: the engine keeps it only as an event, which nothing acts on yet |
 | `get_crosshair_state` | interface/hud_weapon.c | Matched | ffi/src/hud.rs | ffi/tests/hud.rs (measure) |
-| `render_grenade_hud` | interface/hud_weapon.c | Matched | ffi/src/hud.rs:618 | ffi/tests/hud.rs (measure) |
+| `render_grenade_hud` | interface/hud_weapon.c | Matched | ffi/src/hud.rs:623 | ffi/tests/hud.rs (measure) |
 | `crosshairs_draw` | interface/hud_weapon.c | Matched | ffi/src/hud.rs | ffi/tests/hud.rs (measure) |
 | `render_weapon_hud` | interface/hud_weapon.c | Matched | ffi/src/hud.rs | ffi/tests/hud.rs (measure) |
 | `hud_render_weapon_interface` | interface/hud_weapon.c | Matched | ffi/src/hud.rs | ffi/tests/hud.rs (measure) |
@@ -1801,10 +1801,10 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `projectile_calculate_deceleration` | items/projectiles.c | Matched | sim/src/projectile.rs:3 | sim/tests/projectile_deceleration_reference.rs (trace) |
 | `random_vector_in_cone3d` | items/projectiles.c | Matched | sim/src/random.rs | sim/tests/random_reference.rs (trace) |
 | `projectile_collision_test_line` | items/projectiles.c | Matched | sim/src/projectile.rs | sim/src/projectile.rs (measure) |
-| `projectile_detonate` | items/projectiles.c | Matched | sim/src/effects.rs:178 | sim/src/projectile.rs (measure) |
+| `projectile_detonate` | items/projectiles.c | Partial | sim/src/effects.rs:178 | sim/src/projectile.rs (measure); leaves out the super detonation, made when enough projectiles stick in one object (super_detonation) |
 | `projectile_new` | items/projectiles.c | Matched | sim/src/projectile.rs | sim/src/projectile.rs (measure) |
-| `projectile_collision` | items/projectiles.c | Matched | sim/src/effects.rs:177 | sim/src/effects.rs (measure) |
-| `projectile_update` | items/projectiles.c | Matched | sim/src/projectile.rs:71 | sim/tests/projectile_deceleration_reference.rs (trace) |
+| `projectile_collision` | items/projectiles.c | Partial | sim/src/effects.rs:177 | sim/src/effects.rs (measure); leaves out the effect a projectile makes as it starts to detonate (detonation_started), a material response's potential effect (potential_effect), the effects scaled by the impact's damage or angle (scale_effects_by) |
+| `projectile_update` | items/projectiles.c | Partial | sim/src/projectile.rs:71 | sim/tests/projectile_deceleration_reference.rs (trace); leaves out the turning of a guided projectile towards its target (guided_angular_velocity) |
 | `weapon_place` | items/weapons.c | Matched | import/src/level.rs:1046 | sim/tests/item_spawn_reference.rs (trace) |
 | `weapon_magazine_finish_reload` | items/weapons.c | Matched | sim/src/weapon.rs:584 | sim/src/weapon.rs (measure) |
 | `weapon_trigger_recover` | items/weapons.c | Matched | sim/src/weapon.rs:489 | sim/src/weapon.rs (measure) |
@@ -1812,16 +1812,16 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `power` | items/weapons.c | Ported |  | `tools/engine_math_reference.py` |
 | `random` | items/weapons.c | Ported |  | `tools/engine_random_reference.py` |
 | `weapon_new` | items/weapons.c | Matched | sim/src/weapon.rs:170 | sim/src/weapon.rs (measure) |
-| `weapon_export_function_values` | items/weapons.c | Matched | sim/src/functions.rs:156 | sim/src/functions.rs (measure) |
+| `weapon_export_function_values` | items/weapons.c | Partial | sim/src/functions.rs:156 | sim/src/functions.rs (measure); leaves out the charged illumination exported while charged (charged_illumination) |
 | `weapon_trigger_can_fire_again` | items/weapons.c | Matched | sim/src/weapon.rs:424 | sim/src/weapon.rs (measure) |
 | `weapon_effect_new` | items/weapons.c | Matched | sim/src/lib.rs:590 | sim/tests/weapons.rs (measure) |
 | `weapon_ready` | items/weapons.c | Partial | sim/src/weapon.rs:208 | sim/src/weapon.rs (measure); leaves out weapon_reset of its triggers and magazines, the ready time taken from the first-person animation's length |
 | `projectile_distribute` | items/weapons.c | Matched | sim/src/projectile.rs | sim/src/projectile.rs (measure) |
-| `trigger_create_projectiles` | items/weapons.c | Matched | sim/src/projectile.rs | sim/src/projectile.rs (measure) |
-| `weapon_trigger_fire` | items/weapons.c | Matched | sim/src/weapon.rs:496 | sim/src/weapon.rs (measure) |
+| `trigger_create_projectiles` | items/weapons.c | Partial | sim/src/projectile.rs | sim/src/projectile.rs (measure); leaves out the tracers, one every so many rounds (rounds_between_tracers), the inner cone of the projectiles' error (projectile_error_inner_cone_angle) |
+| `weapon_trigger_fire` | items/weapons.c | Partial | sim/src/weapon.rs:496 | sim/src/weapon.rs (measure); leaves out the alternate shots loaded at most (maximum_alternate_shots_loaded), the detonation of a weapon past its heat threshold (heat_detonation_threshold) |
 | `weapon_trigger_begin_firing` | items/weapons.c | Matched | sim/src/weapon.rs:440 | sim/src/weapon.rs (measure) |
 | `weapon_trigger_release_charge` | items/weapons.c | Matched | sim/src/weapon.rs:466 | sim/src/weapon.rs (measure) |
-| `weapon_update` | items/weapons.c | Matched | sim/src/weapon.rs:2 | sim/tests/weapons.rs (measure) |
+| `weapon_update` | items/weapons.c | Partial | sim/src/weapon.rs:2 | sim/tests/weapons.rs (measure); leaves out the alternate shots loaded at most (maximum_alternate_shots_loaded), the rate of fire past which a trigger's barrels blur (blurred_rate_of_fire) |
 | `item_rested_surface_index` | items/items.c | Ported |  | `tools/engine_item_reference.py` |
 | `item_rested_surface` | items/items.c | Ported |  | `tools/engine_item_reference.py` |
 | `item_set_rested_surface` | items/items.c | Ported |  | `tools/engine_item_reference.py` |
@@ -2732,7 +2732,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `objects_scripting_detach` | objects/objects.c | Matched | campaign/src/objects.rs | campaign/tests/objects.rs (measure) |
 | `object_render_debug` | objects/objects.c | Replaced | dev/src/draw.rs | the editor and tools |
 | `object_set_position` | objects/objects.c | Matched | campaign/src/objects.rs | campaign/tests/cutscenes.rs (measure) |
-| `object_new` | objects/objects.c | Matched | sim/src/animation.rs:1362 | sim/src/animation.rs (measure) |
+| `object_new` | objects/objects.c | Matched | ffi/src/effects.rs:117 | sim/src/animation.rs (measure) |
 | `object_new_from_scenario` | objects/objects.c | Matched | sim/src/objects.rs:362 | sim/src/objects.rs (measure) |
 | `object_attach_to_marker` | objects/objects.c | Partial | campaign/src/objects.rs | campaign/tests/objects.rs (measure); leaves out the parent's markers: a child is carried at its parent's origin |
 | `object_new_by_name` | objects/objects.c | Matched | import/src/level.rs:1097 | campaign/tests/objects.rs (measure) |
@@ -3571,7 +3571,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `rasterizer_lens_flare_submit` | rasterizer/rasterizer_lights.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
 | `rasterizer_lens_flare_submit_for_cluster` | rasterizer/rasterizer_lights.c | Matched | import/src/level.rs:1679 | ffi/src/camera.rs (measure) |
 | `rasterizer_lens_flares_submit_occlusion_tests` | rasterizer/rasterizer_lights.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
-| `rasterizer_lens_flares_draw` | rasterizer/rasterizer_lights.c | Matched | ffi/src/camera.rs:3 | ffi/src/camera.rs (measure) |
+| `rasterizer_lens_flares_draw` | rasterizer/rasterizer_lights.c | Partial | ffi/src/camera.rs:3 | ffi/src/camera.rs (measure); leaves out the animation of each reflection (lens_flare_reflection.animation_flags) |
 | `lock_rasterizer_text_data` | rasterizer/rasterizer_text.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
 | `unlock_rasterizer_text_data` | rasterizer/rasterizer_text.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
 | `rasterizer_text_cache_initialize` | rasterizer/rasterizer_text.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
@@ -4000,8 +4000,8 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `sound_find_best_channel` | sound/sound_manager.c | Matched | audio/src/player.rs | audio/src/player.rs (measure) |
 | `sound_find_channel` | sound/sound_manager.c | Matched | audio/src/player.rs | audio/src/player.rs (measure) |
 | `sound_find_like_channel` | sound/sound_manager.c | Matched | audio/src/player.rs:299 | audio/src/player.rs (measure) |
-| `update_channel_for_impulse_sound` | sound/sound_manager.c | Matched | audio/src/mixer.rs | audio/src/mixer.rs (measure) |
-| `update_channel_for_looping_sound` | sound/sound_manager.c | Matched | audio/src/mixer.rs | audio/src/mixer.rs (measure) |
+| `update_channel_for_impulse_sound` | sound/sound_manager.c | Partial | audio/src/mixer.rs | audio/src/mixer.rs (measure); leaves out the sound's cone: its inner and outer angles and outer gain (inner_cone_angle, outer_cone_angle, outer_cone_gain) |
+| `update_channel_for_looping_sound` | sound/sound_manager.c | Partial | audio/src/mixer.rs | audio/src/mixer.rs (measure); leaves out the sound's cone: its inner and outer angles and outer gain (inner_cone_angle, outer_cone_angle, outer_cone_gain), the pitch's bend per second at most and its natural pitch (maximum_bend_per_second, natural_pitch) |
 | `process_looping_sounds` | sound/sound_manager.c | Matched | audio/src/player/looping.rs:1 | audio/src/player/looping.rs (measure) |
 | `sound_stop_all` | sound/sound_manager.c | Matched | audio/src/mixer.rs | audio/src/mixer.rs (measure) |
 | `refresh_sounds` | sound/sound_manager.c | Matched | audio/src/mixer.rs | audio/src/mixer.rs (measure) |
@@ -4374,7 +4374,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `biped_update_jumping` | units/bipeds.c | Partial | physics/src/movement.rs | physics/tests/movement.rs (measure); leaves out the jetpack cheat |
 | `biped_update_physics` | units/bipeds.c | Partial | sim/src/player.rs:598 | physics/tests/movement.rs (measure); leaves out flying, the collision with up to 16 planes, replaced by the character controller |
 | `biped_accelerate` | units/bipeds.c | Partial | sim/src/forces.rs:213 | sim/src/player.rs (measure); leaves out the spin it gives a dead, flying or climbing biped (the ragdolls throw the dead), turning a biped's facing to the push |
-| `biped_update_turning` | units/bipeds.c | Matched | sim/src/unit_states.rs:769 | sim/src/unit_states.rs (measure) |
+| `biped_update_turning` | units/bipeds.c | Partial | sim/src/unit_states.rs:769 | sim/src/unit_states.rs (measure); leaves out the turning speed it uses while moving (moving_turning_speed) |
 | `biped_update_moving` | units/bipeds.c | Partial | physics/src/movement.rs | physics/tests/movement.rs (measure); leaves out flying bipeds, animation-driven movement, elevators and support surfaces, the random speed increase, simple creatures, climbing |
 | `biped_update` | units/bipeds.c | Partial | sim/src/unit_animator.rs:1 | sim/src/unit_states.rs (measure); leaves out its physics, landing and jumping, done by the player's mover (physics/src/movement.rs) |
 | `unit_scripting_set_maximum_vitality` | units/unit_scripting_commands.c | Matched | campaign/src/units.rs:136 | campaign/tests/unit_vitality_reference.rs (trace) |
@@ -4456,7 +4456,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `compute_acceleration` | units/vehicles.c | Ported |  | `tools/engine_vehicle_physics_reference.py` |
 | `create_ghost_effect` | units/vehicles.c | Matched | sim/src/seats.rs:1281 | sim/src/seats.rs (measure) |
 | `create_pelican_effect` | units/vehicles.c | Matched | sim/src/seats.rs:1282 | sim/src/seats.rs (measure) |
-| `update_suspension` | units/vehicles.c | Matched | sim/src/vehicle_animation.rs:4 | sim/src/vehicle_animation.rs (measure) |
+| `update_suspension` | units/vehicles.c | Partial | sim/src/vehicle_animation.rs:4 | sim/src/vehicle_animation.rs (measure); leaves out the suspension's sound (suspension_sound) |
 | `create_slipping_effects` | units/vehicles.c | Matched | sim/src/vehicle.rs | sim/tests/vehicle_slip_reference.rs (trace) |
 | `update_human_tank_physics` | units/vehicles.c | Matched | sim/src/vehicle.rs | sim/tests/vehicle_physics_reference.rs (trace) |
 | `vehicle_export_function_values` | units/vehicles.c | Ported | sim/src/functions.rs:222 | `tools/engine_vehicle_function_reference.py` |

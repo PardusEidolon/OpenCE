@@ -21,11 +21,17 @@
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::Path;
 
+use crate::classes::Class;
 use crate::layout::{Field, Record};
 use crate::{read_text, walk, Error};
 
 /// The written fields, from `engine/`.
 pub const FIELDS: &str = "census/tag_fields.tsv";
+
+/// The hand-kept traces, from `engine/`: for each kept field whose use
+/// the census cannot follow, the engine file that uses it and the text of
+/// that use.
+pub const TRACES: &str = "census/field_traces.tsv";
 
 /// How deep embedded structures are followed.
 const DEPTH: usize = 8;
@@ -56,6 +62,9 @@ pub enum Engine {
     Unkept,
     /// The engine reads what the importer fills from it.
     Used,
+    /// A block the importer reads only to walk its elements, which are
+    /// marked on their own: its count and address fill nothing.
+    Walked,
     /// What the importer fills from it is read nowhere in the engine.
     Unused,
     /// A read that keeps it could not be traced to what it fills.
@@ -64,13 +73,17 @@ pub enum Engine {
 
 /// The fields of `record` that hold no smaller ones, once each, in order.
 pub fn leaves(record: &Record) -> Vec<&Field> {
+    let paths: BTreeSet<&str> = record.fields.iter().map(|f| f.path.as_str()).collect();
     let mut seen = BTreeSet::new();
     record
         .fields
         .iter()
         .filter(|field| {
             let inside = format!("{}.", field.path);
-            !record.fields.iter().any(|f| f.path.starts_with(&inside))
+            !paths
+                .range(inside.as_str()..)
+                .next()
+                .is_some_and(|p| p.starts_with(&inside))
         })
         .filter(|field| seen.insert(field.path.as_str()))
         .collect()
@@ -285,26 +298,58 @@ pub fn reads(
     structures: &BTreeSet<String>,
     members: &BTreeMap<String, String>,
 ) -> BTreeSet<(String, String)> {
+    readers(text, structures, members)
+        .into_values()
+        .flatten()
+        .collect()
+}
+
+/// The fields each function of `text` reads, as `reads` finds them: the
+/// function is the last name before a `(` at the top level ahead of the
+/// body that holds the read, and a read outside any function is the
+/// empty name's.
+pub fn readers(
+    text: &str,
+    structures: &BTreeSet<String>,
+    members: &BTreeMap<String, String>,
+) -> BTreeMap<String, BTreeSet<(String, String)>> {
     let tokens = tokens(text);
-    let mut found = BTreeSet::new();
+    let mut found: BTreeMap<String, BTreeSet<(String, String)>> = BTreeMap::new();
     let mut pointers: BTreeMap<&str, &str> = BTreeMap::new();
     let mut depth = 0usize;
+    let mut candidate = "";
+    let mut function = "";
     for (at, token) in tokens.iter().enumerate() {
         match token {
-            Token::Punct(b'{') => depth += 1,
+            Token::Punct(b'{') => {
+                if depth == 0 {
+                    function = candidate;
+                }
+                depth += 1;
+            }
             Token::Punct(b'}') => {
                 depth = depth.saturating_sub(1);
                 if depth == 0 {
                     pointers.clear();
+                    candidate = "";
+                    function = "";
                 }
             }
-            Token::Punct(b';') if depth == 0 => pointers.clear(),
+            Token::Punct(b';' | b'=') if depth == 0 => {
+                if *token == Token::Punct(b';') {
+                    pointers.clear();
+                }
+                candidate = "";
+            }
             Token::Name("struct") => {
                 if let Some((name, structure)) = declaration(&tokens, at, structures) {
                     pointers.insert(name, structure);
                 }
             }
             Token::Name(name) => {
+                if depth == 0 && tokens.get(at + 1) == Some(&Token::Punct(b'(')) {
+                    candidate = name;
+                }
                 let member = at.checked_sub(1).and_then(|i| tokens.get(i))
                     == Some(&Token::Punct(b'.'))
                     || at.checked_sub(1).and_then(|i| tokens.get(i)) == Some(&Token::Punct(b'>'))
@@ -317,7 +362,10 @@ pub fn reads(
                 };
                 if let Some(structure) = structure {
                     if let Some(path) = access(&tokens, at) {
-                        found.insert((structure.to_owned(), path));
+                        found
+                            .entry(function.to_owned())
+                            .or_default()
+                            .insert((structure.to_owned(), path));
                     }
                 }
             }
@@ -333,6 +381,21 @@ fn embedded<'a>(kind: &'a str, records: &BTreeMap<&str, &Record>) -> Option<&'a 
     (!name.contains(['[', '*', ':']) && records.contains_key(name)).then_some(name)
 }
 
+/// Whether a read of `read` in `record` reaches its field `path` there,
+/// not through a structure `path` is inside: the field itself, one inside
+/// it, or a part of a field the census does not lay out.
+fn directly(record: &Record, path: &str, read: &str, records: &BTreeMap<&str, &Record>) -> bool {
+    if path == read || read.starts_with(&format!("{path}.")) {
+        return true;
+    }
+    path.starts_with(&format!("{read}."))
+        && record
+            .fields
+            .iter()
+            .find(|f| f.path == read)
+            .is_some_and(|f| embedded(&f.kind, records).is_none())
+}
+
 /// Whether the original reads `path` of `record`.
 fn is_read(
     record: &Record,
@@ -341,19 +404,9 @@ fn is_read(
     read: &BTreeMap<&str, Vec<&str>>,
     depth: usize,
 ) -> bool {
-    let direct = read.get(record.name.as_str()).is_some_and(|paths| {
-        paths.iter().any(|a| {
-            if path == *a || a.starts_with(&format!("{path}.")) {
-                return true;
-            }
-            path.starts_with(&format!("{a}."))
-                && record
-                    .fields
-                    .iter()
-                    .find(|f| f.path == *a)
-                    .is_some_and(|f| embedded(&f.kind, records).is_none())
-        })
-    });
+    let direct = read
+        .get(record.name.as_str())
+        .is_some_and(|paths| paths.iter().any(|a| directly(record, path, a, records)));
     direct
         || depth < DEPTH
             && record.fields.iter().any(|field| {
@@ -420,6 +473,75 @@ fn reached(records: &[Record], reads: &BTreeSet<(String, String)>) -> Vec<bool> 
         .collect()
 }
 
+/// For every leaf of `records`, in their order, the functions of
+/// `readers` whose reads reach it, as `marks` marks a leaf read: each
+/// read reaches the leaves it reads directly, in its structure and the
+/// ones inside it, and each structure embedding one of those has that
+/// leaf read too.
+pub fn readers_of(
+    records: &[Record],
+    readers: &BTreeMap<String, BTreeSet<(String, String)>>,
+) -> Vec<BTreeSet<String>> {
+    let by_name: BTreeMap<&str, &Record> = records.iter().map(|r| (r.name.as_str(), r)).collect();
+    let mut index: BTreeMap<(&str, &str), usize> = BTreeMap::new();
+    let mut embedders: BTreeMap<&str, Vec<(&str, &str)>> = BTreeMap::new();
+    let mut count = 0;
+    for record in records {
+        for field in leaves(record) {
+            index.insert((record.name.as_str(), field.path.as_str()), count);
+            count += 1;
+        }
+        for field in &record.fields {
+            if let Some(inner) = embedded(&field.kind, &by_name) {
+                embedders
+                    .entry(inner)
+                    .or_default()
+                    .push((record.name.as_str(), field.path.as_str()));
+            }
+        }
+    }
+    let mut functions: BTreeMap<&(String, String), BTreeSet<&String>> = BTreeMap::new();
+    for (function, reads) in readers {
+        for read in reads {
+            functions.entry(read).or_default().insert(function);
+        }
+    }
+    let mut found = vec![BTreeSet::new(); count];
+    for ((structure, path), by) in functions {
+        let mut expanded = BTreeSet::from([(structure.clone(), path.clone())]);
+        innermost(structure, path, &by_name, &mut expanded, 0);
+        let mut frontier = Vec::new();
+        for (structure, read) in &expanded {
+            let Some(record) = by_name.get(structure.as_str()) else {
+                continue;
+            };
+            for field in leaves(record) {
+                if directly(record, &field.path, read, &by_name) {
+                    frontier.push((record.name.as_str(), field.path.clone(), 0));
+                }
+            }
+        }
+        let mut reached = BTreeSet::new();
+        while let Some((structure, path, depth)) = frontier.pop() {
+            let Some(&at) = index.get(&(structure, path.as_str())) else {
+                continue;
+            };
+            if !reached.insert(at) || depth >= DEPTH {
+                continue;
+            }
+            for (outer, field) in embedders.get(structure).into_iter().flatten() {
+                frontier.push((outer, format!("{field}.{path}"), depth + 1));
+            }
+        }
+        for at in reached {
+            if let Some(leaf) = found.get_mut(at) {
+                leaf.extend(by.iter().map(|f| (*f).clone()));
+            }
+        }
+    }
+    found
+}
+
 /// Every leaf of `records`, in their order, marked with whether `reads`
 /// reach it (and none kept by the importer).
 pub fn marks(records: &[Record], reads: &BTreeSet<(String, String)>) -> Vec<Mark> {
@@ -454,6 +576,8 @@ pub fn keep(marks: &mut [Mark], records: &[Record], kept: &BTreeSet<(String, Str
 /// `marks` of `records` with what the engine does with each kept field:
 /// the `labels` of the reads that keep it are traced through `assigned`
 /// to what they fill, and that is used if the engine reads it (`used`).
+/// A field none of whose reads fills anything the engine uses, and all of
+/// whose reads are blocks the importer only walks (`walked`), is walked.
 /// A field kept in an embedded structure is marked wherever that
 /// structure is embedded, as `keep` marks it.
 pub fn engine(
@@ -461,10 +585,12 @@ pub fn engine(
     records: &[Record],
     labels: &BTreeMap<(String, String), BTreeSet<String>>,
     assigned: &BTreeMap<String, BTreeSet<String>>,
+    walked: &BTreeSet<String>,
     used: &BTreeSet<String>,
 ) {
     let mut using = BTreeSet::new();
     let mut unused = BTreeSet::new();
+    let mut walking = BTreeSet::new();
     for (field, labels) in labels {
         let mut traced = true;
         let mut fills = BTreeSet::new();
@@ -476,25 +602,32 @@ pub fn engine(
         }
         if fills.iter().any(|ident| used.contains(*ident)) {
             using.insert(field.clone());
+        } else if !labels.is_empty() && labels.iter().all(|label| walked.contains(label)) {
+            walking.insert(field.clone());
         } else if traced {
             unused.insert(field.clone());
         }
     }
     let using = reached(records, &using);
     let unused = reached(records, &unused);
-    for ((mark, using), unused) in marks.iter_mut().zip(using).zip(unused) {
-        mark.engine = match (mark.importer, using, unused) {
-            (false, _, _) => Engine::Unkept,
-            (true, true, _) => Engine::Used,
-            (true, false, true) => Engine::Unused,
-            (true, false, false) => Engine::Untraced,
+    let walking = reached(records, &walking);
+    for (((mark, using), unused), walking) in marks.iter_mut().zip(using).zip(unused).zip(walking) {
+        mark.engine = match (mark.importer, using, walking, unused) {
+            (false, ..) => Engine::Unkept,
+            (true, true, ..) => Engine::Used,
+            (true, false, true, _) => Engine::Walked,
+            (true, false, false, true) => Engine::Unused,
+            (true, false, false, false) => Engine::Untraced,
         };
     }
 }
 
-/// The marks of `records` against `source/`'s C in the repository at
-/// `root`.
-pub fn generate(root: &Path, records: &[Record]) -> Result<Vec<Mark>, Error> {
+/// The fields of `records` each function of `source/`'s C in the
+/// repository at `root` reads (`readers`).
+pub fn source_readers(
+    root: &Path,
+    records: &[Record],
+) -> Result<BTreeMap<String, BTreeSet<(String, String)>>, Error> {
     let structures: BTreeSet<String> = records.iter().map(|r| r.name.clone()).collect();
     let mut texts = Vec::new();
     let mut all: BTreeMap<String, BTreeSet<String>> = BTreeMap::new();
@@ -508,16 +641,116 @@ pub fn generate(root: &Path, records: &[Record]) -> Result<Vec<Mark>, Error> {
         }
     }
     let members = members(&all);
-    let mut found = BTreeSet::new();
+    let mut by: BTreeMap<String, BTreeSet<(String, String)>> = BTreeMap::new();
     for text in &texts {
-        found.extend(reads(text, &structures, &members));
+        for (function, read) in readers(text, &structures, &members) {
+            by.entry(function).or_default().extend(read);
+        }
     }
+    Ok(by)
+}
+
+/// A kept field's use, named by hand where the census cannot follow it.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct Trace {
+    /// The structure.
+    pub structure: String,
+    /// The field's path in it.
+    pub path: String,
+    /// The file that uses it, from `engine/crates/`.
+    pub file: String,
+    /// The text of the use in that file.
+    pub uses: String,
+}
+
+/// `field_traces.tsv` read: a line for each field, its structure, path,
+/// file and use.
+pub fn read_traces(text: &str) -> Result<Vec<Trace>, Error> {
+    let mut traces = Vec::new();
+    for (index, line) in text.lines().enumerate() {
+        if line.starts_with('#') || line.is_empty() {
+            continue;
+        }
+        let [structure, path, file, uses] = line.split('\t').collect::<Vec<_>>()[..] else {
+            return Err(Error::Malformed {
+                file: format!("engine/{TRACES}"),
+                line: index + 1,
+                why: "not four columns".to_owned(),
+            });
+        };
+        traces.push(Trace {
+            structure: structure.to_owned(),
+            path: path.to_owned(),
+            file: file.to_owned(),
+            uses: uses.to_owned(),
+        });
+    }
+    Ok(traces)
+}
+
+/// Marks each untraced field `traces` names used, where the text of its
+/// file (`text`) holds its use; the problems are the traces whose use is
+/// not there, that name a field the census traces itself, or that name no
+/// kept field.
+pub fn trace(
+    marks: &mut [Mark],
+    traces: &[Trace],
+    text: impl Fn(&str) -> Option<String>,
+) -> Vec<String> {
+    let mut problems = Vec::new();
+    for t in traces {
+        let name = format!("engine/{TRACES}: {}.{}", t.structure, t.path);
+        let found = marks
+            .iter_mut()
+            .find(|m| m.importer && m.structure == t.structure && m.path == t.path);
+        match found {
+            None => problems.push(format!("{name} names no kept field")),
+            Some(mark) if mark.engine != Engine::Untraced => {
+                problems.push(format!("{name} needs no trace: the census traces it"));
+            }
+            Some(mark) => {
+                if text(&t.file).is_some_and(|text| text.contains(&t.uses)) {
+                    mark.engine = Engine::Used;
+                } else {
+                    problems.push(format!("{name}'s use {} is not in {}", t.uses, t.file));
+                }
+            }
+        }
+    }
+    problems
+}
+
+/// The marks of `records` against `source/`'s C in the repository at
+/// `root`.
+pub fn generate(root: &Path, records: &[Record]) -> Result<Vec<Mark>, Error> {
+    Ok(generate_traced(root, records)?.0)
+}
+
+/// `generate`, with the problems of its hand-kept traces (`trace`).
+fn generate_traced(root: &Path, records: &[Record]) -> Result<(Vec<Mark>, Vec<String>), Error> {
+    let found: BTreeSet<(String, String)> = source_readers(root, records)?
+        .into_values()
+        .flatten()
+        .collect();
     let mut marked = marks(records, &found);
     let kept = crate::importer::kept(root, records)?;
     keep(&mut marked, records, &kept.fields);
-    let (assigned, used) = crate::engine::traced(root)?;
-    engine(&mut marked, records, &kept.labels, &assigned, &used);
-    Ok(marked)
+    let (assigned, walked, used) = crate::engine::traced(root)?;
+    engine(
+        &mut marked,
+        records,
+        &kept.labels,
+        &assigned,
+        &walked,
+        &used,
+    );
+    let engine = root.join("engine");
+    let traces = read_traces(&read_text(&engine.join(TRACES)).unwrap_or_default())?;
+    let crates = engine.join("crates");
+    let problems = trace(&mut marked, &traces, |file| {
+        read_text(&crates.join(file)).ok()
+    });
+    Ok((marked, problems))
 }
 
 /// `tag_fields.tsv`'s text: a line for each field.
@@ -537,6 +770,7 @@ pub fn write_fields(marks: &[Mark]) -> String {
             match mark.engine {
                 Engine::Unkept => "-",
                 Engine::Used => "used",
+                Engine::Walked => "walked",
                 Engine::Unused => "unused",
                 Engine::Untraced => "untraced",
             }
@@ -579,27 +813,86 @@ pub fn read_fields(text: &str) -> Result<Vec<Mark>, Error> {
             engine: match engine {
                 "-" => Engine::Unkept,
                 "used" => Engine::Used,
+                "walked" => Engine::Walked,
                 "unused" => Engine::Unused,
                 "untraced" => Engine::Untraced,
-                _ => return Err(malformed("not used, unused, untraced or -")),
+                _ => return Err(malformed("not used, walked, unused, untraced or -")),
             },
         });
     }
     Ok(marks)
 }
 
+/// The kept fields the engine owes a use: each untraced one, and each
+/// unused one the original reads in a function the engine has finished
+/// (Ported, Matched or Native) and in none it has yet to finish. `marks`
+/// and `readers` are in the same order (`readers_of`); `class` is each
+/// reader's class. A field with a Missing or Partial reader is owed to
+/// that function's track, and one read only where the engine replaced
+/// the original owes nothing.
+pub fn gaps(
+    marks: &[Mark],
+    readers: &[BTreeSet<String>],
+    class: impl Fn(&str) -> Option<Class>,
+) -> Vec<String> {
+    let mut gaps = Vec::new();
+    for (mark, by) in marks.iter().zip(readers) {
+        let name = format!("{}.{}", mark.structure, mark.path);
+        match mark.engine {
+            Engine::Untraced => gaps.push(format!("{name}: kept, but its use could not be traced")),
+            Engine::Unused => {
+                let classes: Vec<Option<Class>> = by.iter().map(|f| class(f)).collect();
+                let finished = |c: &Option<Class>| {
+                    matches!(c, Some(Class::Ported | Class::Matched | Class::Native))
+                };
+                let owed = |c: &Option<Class>| matches!(c, Some(Class::Missing | Class::Partial));
+                if classes.iter().any(finished) && !classes.iter().any(owed) {
+                    let list: Vec<String> = by
+                        .iter()
+                        .zip(&classes)
+                        .map(|(f, c)| format!("{f} ({})", c.map_or("?", Class::name)))
+                        .collect();
+                    gaps.push(format!(
+                        "{name}: read by {}, used nowhere in the engine",
+                        list.join(", ")
+                    ));
+                }
+            }
+            _ => {}
+        }
+    }
+    gaps
+}
+
+/// The written fields' gaps (`gaps`), each reader classed as `census`
+/// classes it.
+pub fn owed(root: &Path, census: &crate::Census) -> Result<Vec<String>, Error> {
+    let engine = root.join("engine");
+    let layout = read_text(&engine.join(crate::layout::LAYOUT)).unwrap_or_default();
+    let records = crate::layout::read_layout(&layout)?;
+    let written = read_fields(&read_text(&engine.join(FIELDS)).unwrap_or_default())?;
+    let by = readers_of(&records, &source_readers(root, &records)?);
+    if by.len() != written.len() {
+        return Ok(Vec::new());
+    }
+    Ok(gaps(&written, &by, |f| {
+        census.function(f).and_then(|f| f.class)
+    }))
+}
+
 /// The written fields, if they are not the marks of the written layout
-/// (a tree with neither has none).
+/// (a tree with neither has none), and the problems of the hand-kept
+/// traces.
 pub fn stale(root: &Path) -> Result<Vec<String>, Error> {
     let engine = root.join("engine");
     let layout = read_text(&engine.join(crate::layout::LAYOUT)).unwrap_or_default();
     let records = crate::layout::read_layout(&layout)?;
     let written = read_fields(&read_text(&engine.join(FIELDS)).unwrap_or_default())?;
-    Ok(if written == generate(root, &records)? {
-        Vec::new()
-    } else {
-        vec![format!(
+    let (fresh, mut problems) = generate_traced(root, &records)?;
+    if written != fresh {
+        problems.push(format!(
             "engine/{FIELDS} is stale: run opence census --write"
-        )]
-    })
+        ));
+    }
+    Ok(problems)
 }

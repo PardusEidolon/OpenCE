@@ -3,21 +3,22 @@ ai	795	17	0
 camera	79	4	0
 cutscene	48	2	0
 devices	34	0	0
-effects	87	1	0
+effects	87	2	0
 game	565	28	0
 hs	576	8	0
 input	1	0	0
 interface	452	19	0
-items	102	1	0
+items	102	8	0
 main	91	1	0
 math	64	0	0
 models	11	1	0
 objects	226	17	0
 physics	45	22	0
+rasterizer	0	1	0
 saved games	104	2	0
 scenario	21	2	0
 shell	2	0	0
-sound	43	3	0
+sound	43	5	0
 structures	26	0	0
 text	21	4	0
-units	221	29	0
+units	221	31	0

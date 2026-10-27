@@ -829,6 +829,22 @@ function, by system) and the table below; `opence census --check` fails
 when a class lacks its evidence, when a doc or `traced.tsv` is stale, and
 when any trace is stale (each script's own `--check`).
 
+The census also marks each tag structure's fields (`engine/census/tag_fields.tsv`)
+with whether the original reads them, whether the importer keeps them, and
+whether the engine uses what the importer keeps. A kept field the engine
+uses nowhere, read by a finished function (Ported, Matched or Native) and
+by none still to finish, fails `--check`: the function is Partial, and its
+`leaves_out` names the field. Where the census cannot follow a read to
+its use (an offset handed to a helper, a count checked where it is read),
+`engine/census/field_traces.tsv` names the use by hand: the engine file and
+the text of the use, which `--check` finds in that file. A trace whose use
+is gone, or that the census no longer needs, fails `--check` too.
+
+Moving a function to Partial raises its system's Partial count, which
+the ratchet (`engine/census/ratchet.tsv`) refuses; it is raised by hand,
+with the reason in the commit. The data track raised it once, for the
+13 functions the tag-field check found reading fields the engine drops.
+
 <!-- coverage census: opence census --write writes this table -->
 | System | Ported | Matched | Native | Partial | Replaced | Missing | Owed |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
@@ -843,12 +859,12 @@ when any trace is stale (each script's own `--check`).
 | `devices` | 7 (944 B) | 18 (3856 B) | | | 1 (432 B) | 34 (1952 B) | 0 |
 | `dialogs` | | | | | 5 (1328 B) | | 0 |
 | `editor` | | | | | 9 (0 B) | | 0 |
-| `effects` | 1 (48 B) | 88 (35024 B) | | 1 (288 B) | 13 (7344 B) | 87 (13904 B) | 0 |
+| `effects` | 1 (48 B) | 87 (33136 B) | | 2 (2176 B) | 13 (7344 B) | 87 (13904 B) | 0 |
 | `game` | 47 (5264 B) | 15 (1616 B) | | 28 (13936 B) | 61 (4384 B) | 565 (78880 B) | 0 |
 | `hs` | 2 (384 B) | 42 (7984 B) | | 8 (1776 B) | 11 (2880 B) | 576 (53968 B) | 0 |
 | `input` | | | | | 46 (7216 B) | 1 (0 B) | 0 |
 | `interface` | 6 (1408 B) | 96 (33424 B) | | 19 (6112 B) | 104 (21432 B) | 452 (94304 B) | 0 |
-| `items` | 9 (4080 B) | 24 (19328 B) | | 1 (128 B) | 1 (16 B) | 102 (12496 B) | 0 |
+| `items` | 9 (4080 B) | 17 (4976 B) | | 8 (14480 B) | 1 (16 B) | 102 (12496 B) | 0 |
 | `main` | | | | 1 (1648 B) | 34 (5440 B) | 91 (8752 B) | 0 |
 | `math` | 44 (5552 B) | 6 (256 B) | 70 (4720 B) | | 25 (4016 B) | 64 (8624 B) | 0 |
 | `memory` | | 2 (336 B) | 128 (19856 B) | | 102 (15104 B) | | 0 |
@@ -856,19 +872,19 @@ when any trace is stale (each script's own `--check`).
 | `networking` | | | | | 288 (49824 B) | | 0 |
 | `objects` | 3 (160 B) | 42 (5536 B) | | 17 (4336 B) | 59 (13424 B) | 226 (28128 B) | 0 |
 | `physics` | | 14 (2672 B) | | 22 (12592 B) | 64 (25040 B) | 45 (6928 B) | 0 |
-| `rasterizer` | | 3 (2784 B) | | | 777 (182416 B) | | 0 |
+| `rasterizer` | | 2 (544 B) | | 1 (2240 B) | 777 (182416 B) | | 0 |
 | `render` | 2 (592 B) | 2 (240 B) | | | 115 (37520 B) | | 0 |
 | `saved games` | | | | 2 (96 B) | 31 (3712 B) | 104 (21184 B) | 0 |
 | `scenario` | | 11 (4000 B) | | 2 (320 B) | 23 (3136 B) | 21 (2128 B) | 0 |
 | `shaders` | | | | | 21 (2624 B) | | 0 |
 | `shell` | | | | | 11 (528 B) | 2 (0 B) | 0 |
-| `sound` | 8 (1312 B) | 62 (15680 B) | | 3 (160 B) | 56 (2832 B) | 43 (6976 B) | 0 |
+| `sound` | 8 (1312 B) | 60 (15168 B) | | 5 (672 B) | 56 (2832 B) | 43 (6976 B) | 0 |
 | `structures` | | 2 (0 B) | | | 98 (27952 B) | 26 (3760 B) | 0 |
 | `tag_files` | | | 43 (4288 B) | | 5 (0 B) | | 0 |
 | `text` | | 5 (1536 B) | 63 (6864 B) | 4 (400 B) | 19 (5744 B) | 21 (2368 B) | 0 |
 | `tool` | | | | | 27 (8752 B) | | 0 |
-| `units` | 18 (6432 B) | 52 (21248 B) | | 29 (23728 B) | 9 (1616 B) | 221 (54496 B) | 0 |
-| **all** | 209 (37040 B) | 538 (170672 B) | 332 (38896 B) | 161 (85408 B) | 2773 (575768 B) | 3614 (703338 B) | 0 |
+| `units` | 18 (6432 B) | 50 (19024 B) | | 31 (25952 B) | 9 (1616 B) | 221 (54496 B) | 0 |
+| **all** | 209 (37040 B) | 525 (149456 B) | 332 (38896 B) | 174 (106624 B) | 2773 (575768 B) | 3614 (703338 B) | 0 |
 <!-- end of the coverage census -->
 
 ### The divergences

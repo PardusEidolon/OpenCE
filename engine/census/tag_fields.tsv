@@ -3,7 +3,7 @@ _biped_definition	moving_turning_speed	0	real	read	kept	unused
 _biped_definition	flags	4	unsigned long	read	kept	used
 _biped_definition	stationary_turning_threshold	8	real	-	kept	unused
 _biped_definition	turning_unused	12	real[4]	-	-	-
-_biped_definition	function_modes	28	short[4]	read	kept	untraced
+_biped_definition	function_modes	28	short[4]	read	kept	used
 _biped_definition	melee_damage.group_tag	36	unsigned long	-	-	-
 _biped_definition	melee_damage.name	40	char *	-	-	-
 _biped_definition	melee_damage.name_length	44	long	-	-	-
@@ -90,31 +90,31 @@ _device_definition	powered_position_transition_time	12	real	-	-	-
 _device_definition	powered_position_acceleration_time	16	real	-	-	-
 _device_definition	depowered_position_transition_time	20	real	-	-	-
 _device_definition	depowered_position_acceleration_time	24	real	-	-	-
-_device_definition	function_modes	28	short[4]	read	kept	untraced
+_device_definition	function_modes	28	short[4]	read	kept	used
 _device_definition	positive_start_effect.group_tag	36	unsigned long	-	kept	used
 _device_definition	positive_start_effect.name	40	char *	-	-	-
 _device_definition	positive_start_effect.name_length	44	long	-	-	-
 _device_definition	positive_start_effect.index	48	long	read	kept	used
-_device_definition	negative_start_effect.group_tag	52	unsigned long	-	kept	untraced
+_device_definition	negative_start_effect.group_tag	52	unsigned long	-	kept	used
 _device_definition	negative_start_effect.name	56	char *	-	-	-
 _device_definition	negative_start_effect.name_length	60	long	-	-	-
-_device_definition	negative_start_effect.index	64	long	read	kept	untraced
+_device_definition	negative_start_effect.index	64	long	read	kept	used
 _device_definition	positive_stop_effect.group_tag	68	unsigned long	-	kept	used
 _device_definition	positive_stop_effect.name	72	char *	-	-	-
 _device_definition	positive_stop_effect.name_length	76	long	-	-	-
 _device_definition	positive_stop_effect.index	80	long	read	kept	used
-_device_definition	negative_stop_effect.group_tag	84	unsigned long	-	kept	untraced
+_device_definition	negative_stop_effect.group_tag	84	unsigned long	-	kept	used
 _device_definition	negative_stop_effect.name	88	char *	-	-	-
 _device_definition	negative_stop_effect.name_length	92	long	-	-	-
-_device_definition	negative_stop_effect.index	96	long	read	kept	untraced
+_device_definition	negative_stop_effect.index	96	long	read	kept	used
 _device_definition	depowered_effect.group_tag	100	unsigned long	-	kept	used
 _device_definition	depowered_effect.name	104	char *	-	-	-
 _device_definition	depowered_effect.name_length	108	long	-	-	-
 _device_definition	depowered_effect.index	112	long	read	kept	used
-_device_definition	repowered_effect.group_tag	116	unsigned long	-	kept	untraced
+_device_definition	repowered_effect.group_tag	116	unsigned long	-	kept	used
 _device_definition	repowered_effect.name	120	char *	-	-	-
 _device_definition	repowered_effect.name_length	124	long	-	-	-
-_device_definition	repowered_effect.index	128	long	read	kept	untraced
+_device_definition	repowered_effect.index	128	long	read	kept	used
 _device_definition	delay_time	132	real	-	-	-
 _device_definition	delay_unused	136	unsigned long[2]	-	-	-
 _device_definition	delay_effect.group_tag	144	unsigned long	-	kept	used
@@ -220,27 +220,27 @@ _object_definition	modifier_shader.group_tag	144	unsigned long	-	kept	unused
 _object_definition	modifier_shader.name	148	char *	-	-	-
 _object_definition	modifier_shader.name_length	152	long	-	-	-
 _object_definition	modifier_shader.index	156	long	read	kept	unused
-_object_definition	creation_effect.group_tag	160	unsigned long	-	kept	unused
+_object_definition	creation_effect.group_tag	160	unsigned long	-	kept	used
 _object_definition	creation_effect.name	164	char *	-	-	-
 _object_definition	creation_effect.name_length	168	long	-	-	-
-_object_definition	creation_effect.index	172	long	read	kept	unused
+_object_definition	creation_effect.index	172	long	read	kept	used
 _object_definition	unused1	176	long[21]	-	-	-
 _object_definition	render_bounding_radius	260	real	-	kept	unused
-_object_definition	function_modes	264	short[4]	read	kept	untraced
+_object_definition	function_modes	264	short[4]	read	kept	used
 _object_definition	unused2	272	long[11]	-	-	-
 _object_definition	icon_text_index	316	short	-	kept	used
 _object_definition	forced_shader_permutation_index	318	short	read	-	-
-_object_definition	attachments.count	320	long	read	kept	unused
-_object_definition	attachments.address	324	void *	read	kept	unused
+_object_definition	attachments.count	320	long	read	kept	walked
+_object_definition	attachments.address	324	void *	read	kept	walked
 _object_definition	attachments.definition	328	struct tag_block_definition *	read	-	-
-_object_definition	widgets.count	332	long	read	kept	unused
-_object_definition	widgets.address	336	void *	read	kept	unused
+_object_definition	widgets.count	332	long	read	kept	walked
+_object_definition	widgets.address	336	void *	read	kept	walked
 _object_definition	widgets.definition	340	struct tag_block_definition *	read	-	-
-_object_definition	functions.count	344	long	read	kept	unused
-_object_definition	functions.address	348	void *	read	kept	unused
+_object_definition	functions.count	344	long	read	kept	walked
+_object_definition	functions.address	348	void *	read	kept	walked
 _object_definition	functions.definition	352	struct tag_block_definition *	read	-	-
-_object_definition	change_colors.count	356	long	read	kept	unused
-_object_definition	change_colors.address	360	void *	read	kept	unused
+_object_definition	change_colors.count	356	long	read	kept	walked
+_object_definition	change_colors.address	360	void *	read	kept	walked
 _object_definition	change_colors.definition	364	struct tag_block_definition *	read	-	-
 _object_definition	predicted_resources.count	368	long	read	-	-
 _object_definition	predicted_resources.address	372	void *	read	-	-
@@ -304,7 +304,7 @@ _unit_definition	integrated_light_toggle_effect.group_tag	12	unsigned long	-	-	-
 _unit_definition	integrated_light_toggle_effect.name	16	char *	-	-	-
 _unit_definition	integrated_light_toggle_effect.name_length	20	long	-	-	-
 _unit_definition	integrated_light_toggle_effect.index	24	long	read	-	-
-_unit_definition	function_modes	28	short[4]	read	kept	untraced
+_unit_definition	function_modes	28	short[4]	read	kept	used
 _unit_definition	camera_field_of_view	36	real	read	-	-
 _unit_definition	camera_impulse_stiffness	40	real	-	-	-
 _unit_definition	camera.marker_name	44	char[32]	read	kept	used
@@ -357,8 +357,8 @@ _unit_definition	melee_damage.index	280	long	read	kept	used
 _unit_definition	blip_type	284	short	read	-	-
 _unit_definition	padxxx	286	short	-	-	-
 _unit_definition	unused	288	long[3]	-	-	-
-_unit_definition	huds.count	300	long	read	kept	unused
-_unit_definition	huds.address	304	void *	read	kept	unused
+_unit_definition	huds.count	300	long	read	kept	walked
+_unit_definition	huds.address	304	void *	read	kept	walked
 _unit_definition	huds.definition	308	struct tag_block_definition *	read	-	-
 _unit_definition	dialogue_variants.count	312	long	read	-	-
 _unit_definition	dialogue_variants.address	316	void *	read	-	-
@@ -368,20 +368,20 @@ _unit_definition	grenade_type	328	short	read	-	-
 _unit_definition	grenade_count	330	short	read	-	-
 _unit_definition	runtime_soft_ping_minimum_interrupt_ticks	332	short	read	-	-
 _unit_definition	runtime_hard_ping_minimum_interrupt_ticks	334	short	read	-	-
-_unit_definition	powered_seats.count	336	long	read	kept	unused
-_unit_definition	powered_seats.address	340	void *	read	kept	unused
+_unit_definition	powered_seats.count	336	long	read	kept	walked
+_unit_definition	powered_seats.address	340	void *	read	kept	walked
 _unit_definition	powered_seats.definition	344	struct tag_block_definition *	read	-	-
-_unit_definition	initial_weapons.count	348	long	read	kept	unused
-_unit_definition	initial_weapons.address	352	void *	read	kept	unused
+_unit_definition	initial_weapons.count	348	long	read	kept	walked
+_unit_definition	initial_weapons.address	352	void *	read	kept	walked
 _unit_definition	initial_weapons.definition	356	struct tag_block_definition *	read	-	-
-_unit_definition	seats.count	360	long	read	kept	unused
-_unit_definition	seats.address	364	void *	read	kept	unused
+_unit_definition	seats.count	360	long	read	kept	walked
+_unit_definition	seats.address	364	void *	read	kept	walked
 _unit_definition	seats.definition	368	struct tag_block_definition *	read	-	-
 _weapon_definition	flags	0	unsigned long	read	kept	used
 _weapon_definition	label	4	char[32]	read	kept	used
 _weapon_definition	secondary_trigger_mode	36	short	read	kept	used
 _weapon_definition	maximum_alternate_shots_loaded	38	short	read	kept	unused
-_weapon_definition	function_modes	40	short[4]	read	kept	untraced
+_weapon_definition	function_modes	40	short[4]	read	kept	used
 _weapon_definition	ready_time	48	real	-	kept	used
 _weapon_definition	ready_effect.group_tag	52	unsigned long	-	kept	used
 _weapon_definition	ready_effect.name	56	char *	-	-	-
@@ -487,11 +487,11 @@ _weapon_definition	weapon_type	474	short	read	kept	used
 _weapon_definition	predicted_resources.count	476	long	read	-	-
 _weapon_definition	predicted_resources.address	480	void *	read	-	-
 _weapon_definition	predicted_resources.definition	484	struct tag_block_definition *	read	-	-
-_weapon_definition	magazines.count	488	long	read	kept	unused
-_weapon_definition	magazines.address	492	void *	read	kept	unused
+_weapon_definition	magazines.count	488	long	read	kept	walked
+_weapon_definition	magazines.address	492	void *	read	kept	walked
 _weapon_definition	magazines.definition	496	struct tag_block_definition *	read	-	-
-_weapon_definition	triggers.count	500	long	read	kept	unused
-_weapon_definition	triggers.address	504	void *	read	kept	unused
+_weapon_definition	triggers.count	500	long	read	kept	walked
+_weapon_definition	triggers.address	504	void *	read	kept	walked
 _weapon_definition	triggers.definition	508	struct tag_block_definition *	read	-	-
 actor_berserk_properties	melee_attack_delay_timer	0	real	read	-	-
 actor_berserk_properties	melee_attack_range	4	real	read	-	-
@@ -502,7 +502,7 @@ actor_berserk_properties	melee_leap_velocity	20	real	read	-	-
 actor_berserk_properties	melee_leap_chance	24	real	read	-	-
 actor_berserk_properties	melee_leap_ballistic	28	real	read	-	-
 actor_berserk_properties	damage_berserk_amount	32	real	read	kept	used
-actor_berserk_properties	damage_berserk_threshold	36	real	read	kept	untraced
+actor_berserk_properties	damage_berserk_threshold	36	real	read	kept	used
 actor_berserk_properties	proximity_berserk_distance	40	real	read	kept	used
 actor_berserk_properties	suicide_sensing_distance	44	real	read	-	-
 actor_berserk_properties	grenade_attached_chance	48	real	read	-	-
@@ -702,7 +702,7 @@ actor_definition	berserk.melee_leap_velocity	908	real	read	-	-
 actor_definition	berserk.melee_leap_chance	912	real	read	-	-
 actor_definition	berserk.melee_leap_ballistic	916	real	read	-	-
 actor_definition	berserk.damage_berserk_amount	920	real	read	kept	used
-actor_definition	berserk.damage_berserk_threshold	924	real	read	kept	untraced
+actor_definition	berserk.damage_berserk_threshold	924	real	read	kept	used
 actor_definition	berserk.proximity_berserk_distance	928	real	read	kept	used
 actor_definition	berserk.suicide_sensing_distance	932	real	read	-	-
 actor_definition	berserk.grenade_attached_chance	936	real	read	-	-
@@ -1219,11 +1219,11 @@ animation_aiming_screen_bounds	negative_pitch_delta	12	real	read	kept	used
 animation_aiming_screen_bounds	positive_pitch_delta	16	real	read	kept	used
 animation_aiming_screen_bounds	negative_pitch_frame_count	20	short	read	kept	used
 animation_aiming_screen_bounds	positive_pitch_frame_count	22	short	read	kept	used
-animation_graph	object_overlays.count	0	long	read	kept	unused
-animation_graph	object_overlays.address	4	void *	read	kept	unused
+animation_graph	object_overlays.count	0	long	read	kept	walked
+animation_graph	object_overlays.address	4	void *	read	kept	walked
 animation_graph	object_overlays.definition	8	struct tag_block_definition *	read	-	-
-animation_graph	unit_seats.count	12	long	read	kept	unused
-animation_graph	unit_seats.address	16	void *	read	kept	unused
+animation_graph	unit_seats.count	12	long	read	kept	walked
+animation_graph	unit_seats.address	16	void *	read	kept	walked
 animation_graph	unit_seats.definition	20	struct tag_block_definition *	read	-	-
 animation_graph	weapon_animations.count	24	long	read	kept	used
 animation_graph	weapon_animations.address	28	void *	read	kept	used
@@ -1246,8 +1246,8 @@ animation_graph	sound_references.definition	92	struct tag_block_definition *	rea
 animation_graph	limp_body_node_collision_radius	96	real	read	kept	unused
 animation_graph	flags	100	word	-	kept	used
 animation_graph	pad	102	word	-	-	-
-animation_graph	nodes.count	104	long	read	kept	unused
-animation_graph	nodes.address	108	void *	read	kept	unused
+animation_graph	nodes.count	104	long	read	kept	walked
+animation_graph	nodes.address	108	void *	read	kept	walked
 animation_graph	nodes.definition	112	struct tag_block_definition *	read	-	-
 animation_graph	animations.count	116	long	read	kept	used
 animation_graph	animations.address	120	void *	read	kept	used
@@ -1298,8 +1298,8 @@ animation_graph_unit_seat	unused	56	long[2]	-	-	-
 animation_graph_unit_seat	animations.count	64	long	read	kept	used
 animation_graph_unit_seat	animations.address	68	void *	read	kept	used
 animation_graph_unit_seat	animations.definition	72	struct tag_block_definition *	read	-	-
-animation_graph_unit_seat	ik_points.count	76	long	read	kept	unused
-animation_graph_unit_seat	ik_points.address	80	void *	read	kept	unused
+animation_graph_unit_seat	ik_points.count	76	long	read	kept	walked
+animation_graph_unit_seat	ik_points.address	80	void *	read	kept	walked
 animation_graph_unit_seat	ik_points.definition	84	struct tag_block_definition *	read	-	-
 animation_graph_unit_seat	weapon_classes.count	88	long	read	kept	used
 animation_graph_unit_seat	weapon_classes.address	92	void *	read	kept	used
@@ -1323,11 +1323,11 @@ animation_graph_weapon_class	unused	120	long[8]	-	-	-
 animation_graph_weapon_class	animations.count	152	long	read	kept	used
 animation_graph_weapon_class	animations.address	156	void *	read	kept	used
 animation_graph_weapon_class	animations.definition	160	struct tag_block_definition *	read	-	-
-animation_graph_weapon_class	ik_points.count	164	long	read	kept	unused
-animation_graph_weapon_class	ik_points.address	168	void *	read	kept	unused
+animation_graph_weapon_class	ik_points.count	164	long	read	kept	walked
+animation_graph_weapon_class	ik_points.address	168	void *	read	kept	walked
 animation_graph_weapon_class	ik_points.definition	172	struct tag_block_definition *	read	-	-
-animation_graph_weapon_class	weapon_types.count	176	long	read	kept	unused
-animation_graph_weapon_class	weapon_types.address	180	void *	read	kept	unused
+animation_graph_weapon_class	weapon_types.count	176	long	read	kept	walked
+animation_graph_weapon_class	weapon_types.address	180	void *	read	kept	walked
 animation_graph_weapon_class	weapon_types.definition	184	struct tag_block_definition *	read	-	-
 animation_graph_weapon_type	label	0	char[32]	read	kept	used
 animation_graph_weapon_type	unused	32	long[4]	-	-	-
@@ -1424,7 +1424,7 @@ auxilary_meter_definition	panel.background.placement.offset.x	20	short	read	kept
 auxilary_meter_definition	panel.background.placement.offset.y	22	short	read	kept	used
 auxilary_meter_definition	panel.background.placement.scale.n	24	real[2]	read	kept	used
 auxilary_meter_definition	panel.background.placement.scale.i	24	real	read	kept	used
-auxilary_meter_definition	panel.background.placement.scale.j	28	real	read	kept	untraced
+auxilary_meter_definition	panel.background.placement.scale.j	28	real	read	kept	used
 auxilary_meter_definition	panel.background.placement.multiplayer_scaling_flags	32	short	read	kept	used
 auxilary_meter_definition	panel.background.placement.pad	34	short	-	-	-
 auxilary_meter_definition	panel.background.placement.unused0	36	long[5]	-	-	-
@@ -1454,7 +1454,7 @@ auxilary_meter_definition	panel.meter.placement.offset.x	124	short	read	kept	use
 auxilary_meter_definition	panel.meter.placement.offset.y	126	short	read	kept	used
 auxilary_meter_definition	panel.meter.placement.scale.n	128	real[2]	read	kept	used
 auxilary_meter_definition	panel.meter.placement.scale.i	128	real	read	kept	used
-auxilary_meter_definition	panel.meter.placement.scale.j	132	real	read	kept	untraced
+auxilary_meter_definition	panel.meter.placement.scale.j	132	real	read	kept	used
 auxilary_meter_definition	panel.meter.placement.multiplayer_scaling_flags	136	short	read	kept	used
 auxilary_meter_definition	panel.meter.placement.pad	138	short	-	-	-
 auxilary_meter_definition	panel.meter.placement.unused0	140	long[5]	-	-	-
@@ -1500,7 +1500,7 @@ auxilary_overlay_definition	static_element.placement.offset.x	0	short	read	kept	
 auxilary_overlay_definition	static_element.placement.offset.y	2	short	read	kept	used
 auxilary_overlay_definition	static_element.placement.scale.n	4	real[2]	read	kept	used
 auxilary_overlay_definition	static_element.placement.scale.i	4	real	read	kept	used
-auxilary_overlay_definition	static_element.placement.scale.j	8	real	read	kept	untraced
+auxilary_overlay_definition	static_element.placement.scale.j	8	real	read	kept	used
 auxilary_overlay_definition	static_element.placement.multiplayer_scaling_flags	12	short	read	kept	used
 auxilary_overlay_definition	static_element.placement.pad	14	short	-	-	-
 auxilary_overlay_definition	static_element.placement.unused0	16	long[5]	-	-	-
@@ -1577,27 +1577,27 @@ biped_definition	object.modifier_shader.group_tag	144	unsigned long	-	kept	unuse
 biped_definition	object.modifier_shader.name	148	char *	-	-	-
 biped_definition	object.modifier_shader.name_length	152	long	-	-	-
 biped_definition	object.modifier_shader.index	156	long	read	kept	unused
-biped_definition	object.creation_effect.group_tag	160	unsigned long	-	kept	unused
+biped_definition	object.creation_effect.group_tag	160	unsigned long	-	kept	used
 biped_definition	object.creation_effect.name	164	char *	-	-	-
 biped_definition	object.creation_effect.name_length	168	long	-	-	-
-biped_definition	object.creation_effect.index	172	long	read	kept	unused
+biped_definition	object.creation_effect.index	172	long	read	kept	used
 biped_definition	object.unused1	176	long[21]	-	-	-
 biped_definition	object.render_bounding_radius	260	real	-	kept	unused
-biped_definition	object.function_modes	264	short[4]	read	kept	untraced
+biped_definition	object.function_modes	264	short[4]	read	kept	used
 biped_definition	object.unused2	272	long[11]	-	-	-
 biped_definition	object.icon_text_index	316	short	-	kept	used
 biped_definition	object.forced_shader_permutation_index	318	short	read	-	-
-biped_definition	object.attachments.count	320	long	read	kept	unused
-biped_definition	object.attachments.address	324	void *	read	kept	unused
+biped_definition	object.attachments.count	320	long	read	kept	walked
+biped_definition	object.attachments.address	324	void *	read	kept	walked
 biped_definition	object.attachments.definition	328	struct tag_block_definition *	read	-	-
-biped_definition	object.widgets.count	332	long	read	kept	unused
-biped_definition	object.widgets.address	336	void *	read	kept	unused
+biped_definition	object.widgets.count	332	long	read	kept	walked
+biped_definition	object.widgets.address	336	void *	read	kept	walked
 biped_definition	object.widgets.definition	340	struct tag_block_definition *	read	-	-
-biped_definition	object.functions.count	344	long	read	kept	unused
-biped_definition	object.functions.address	348	void *	read	kept	unused
+biped_definition	object.functions.count	344	long	read	kept	walked
+biped_definition	object.functions.address	348	void *	read	kept	walked
 biped_definition	object.functions.definition	352	struct tag_block_definition *	read	-	-
-biped_definition	object.change_colors.count	356	long	read	kept	unused
-biped_definition	object.change_colors.address	360	void *	read	kept	unused
+biped_definition	object.change_colors.count	356	long	read	kept	walked
+biped_definition	object.change_colors.address	360	void *	read	kept	walked
 biped_definition	object.change_colors.definition	364	struct tag_block_definition *	read	-	-
 biped_definition	object.predicted_resources.count	368	long	read	-	-
 biped_definition	object.predicted_resources.address	372	void *	read	-	-
@@ -1610,7 +1610,7 @@ biped_definition	unit.integrated_light_toggle_effect.group_tag	392	unsigned long
 biped_definition	unit.integrated_light_toggle_effect.name	396	char *	-	-	-
 biped_definition	unit.integrated_light_toggle_effect.name_length	400	long	-	-	-
 biped_definition	unit.integrated_light_toggle_effect.index	404	long	read	-	-
-biped_definition	unit.function_modes	408	short[4]	read	kept	untraced
+biped_definition	unit.function_modes	408	short[4]	read	kept	used
 biped_definition	unit.camera_field_of_view	416	real	read	-	-
 biped_definition	unit.camera_impulse_stiffness	420	real	-	-	-
 biped_definition	unit.camera.marker_name	424	char[32]	read	kept	used
@@ -1663,8 +1663,8 @@ biped_definition	unit.melee_damage.index	660	long	read	kept	used
 biped_definition	unit.blip_type	664	short	read	-	-
 biped_definition	unit.padxxx	666	short	-	-	-
 biped_definition	unit.unused	668	long[3]	-	-	-
-biped_definition	unit.huds.count	680	long	read	kept	unused
-biped_definition	unit.huds.address	684	void *	read	kept	unused
+biped_definition	unit.huds.count	680	long	read	kept	walked
+biped_definition	unit.huds.address	684	void *	read	kept	walked
 biped_definition	unit.huds.definition	688	struct tag_block_definition *	read	-	-
 biped_definition	unit.dialogue_variants.count	692	long	read	-	-
 biped_definition	unit.dialogue_variants.address	696	void *	read	-	-
@@ -1674,20 +1674,20 @@ biped_definition	unit.grenade_type	708	short	read	-	-
 biped_definition	unit.grenade_count	710	short	read	-	-
 biped_definition	unit.runtime_soft_ping_minimum_interrupt_ticks	712	short	read	-	-
 biped_definition	unit.runtime_hard_ping_minimum_interrupt_ticks	714	short	read	-	-
-biped_definition	unit.powered_seats.count	716	long	read	kept	unused
-biped_definition	unit.powered_seats.address	720	void *	read	kept	unused
+biped_definition	unit.powered_seats.count	716	long	read	kept	walked
+biped_definition	unit.powered_seats.address	720	void *	read	kept	walked
 biped_definition	unit.powered_seats.definition	724	struct tag_block_definition *	read	-	-
-biped_definition	unit.initial_weapons.count	728	long	read	kept	unused
-biped_definition	unit.initial_weapons.address	732	void *	read	kept	unused
+biped_definition	unit.initial_weapons.count	728	long	read	kept	walked
+biped_definition	unit.initial_weapons.address	732	void *	read	kept	walked
 biped_definition	unit.initial_weapons.definition	736	struct tag_block_definition *	read	-	-
-biped_definition	unit.seats.count	740	long	read	kept	unused
-biped_definition	unit.seats.address	744	void *	read	kept	unused
+biped_definition	unit.seats.count	740	long	read	kept	walked
+biped_definition	unit.seats.address	744	void *	read	kept	walked
 biped_definition	unit.seats.definition	748	struct tag_block_definition *	read	-	-
 biped_definition	biped.moving_turning_speed	752	real	read	kept	unused
 biped_definition	biped.flags	756	unsigned long	read	kept	used
 biped_definition	biped.stationary_turning_threshold	760	real	-	kept	unused
 biped_definition	biped.turning_unused	764	real[4]	-	-	-
-biped_definition	biped.function_modes	780	short[4]	read	kept	untraced
+biped_definition	biped.function_modes	780	short[4]	read	kept	used
 biped_definition	biped.melee_damage.group_tag	788	unsigned long	-	-	-
 biped_definition	biped.melee_damage.name	792	char *	-	-	-
 biped_definition	biped.melee_damage.name_length	796	long	-	-	-
@@ -1793,8 +1793,8 @@ bitmap_group	mipmap_count	76	short	read	-	-
 bitmap_group	sprite_usage	78	short	read	-	-
 bitmap_group	sprite_spacing	80	short	read	-	-
 bitmap_group	unused	82	unsigned short	-	-	-
-bitmap_group	sequences.count	84	long	read	kept	unused
-bitmap_group	sequences.address	88	void *	read	kept	unused
+bitmap_group	sequences.count	84	long	read	kept	walked
+bitmap_group	sequences.address	88	void *	read	kept	walked
 bitmap_group	sequences.definition	92	struct tag_block_definition *	read	-	-
 bitmap_group	bitmaps.count	96	long	read	kept	used
 bitmap_group	bitmaps.address	100	void *	read	kept	used
@@ -1871,8 +1871,8 @@ camera_track_control_point	orientation.v.k	20	real	-	-	-
 camera_track_control_point	orientation.w	24	real	-	-	-
 camera_track_control_point	unused	28	long[8]	-	-	-
 camera_track_definition	flags	0	unsigned long	-	-	-
-camera_track_definition	control_points.count	4	long	read	kept	unused
-camera_track_definition	control_points.address	8	void *	read	kept	unused
+camera_track_definition	control_points.count	4	long	read	kept	walked
+camera_track_definition	control_points.address	8	void *	read	kept	walked
 camera_track_definition	control_points.definition	12	struct tag_block_definition *	read	-	-
 camera_track_definition	unused	16	long[8]	-	-	-
 collision_bsp	bsp3d.nodes.count	0	long	read	kept	used
@@ -1881,8 +1881,8 @@ collision_bsp	bsp3d.nodes.definition	8	struct tag_block_definition *	read	-	-
 collision_bsp	bsp3d.planes.count	12	long	read	kept	used
 collision_bsp	bsp3d.planes.address	16	void *	read	kept	used
 collision_bsp	bsp3d.planes.definition	20	struct tag_block_definition *	read	-	-
-collision_bsp	leaves.count	24	long	read	kept	unused
-collision_bsp	leaves.address	28	void *	read	kept	unused
+collision_bsp	leaves.count	24	long	read	kept	walked
+collision_bsp	leaves.address	28	void *	read	kept	walked
 collision_bsp	leaves.definition	32	struct tag_block_definition *	read	-	-
 collision_bsp	bsp2d_references.count	36	long	read	kept	unused
 collision_bsp	bsp2d_references.address	40	void *	read	kept	unused
@@ -1971,25 +1971,25 @@ collision_model	resistance.unused	452	unsigned long[28]	read	-	-
 collision_model	resistance.materials.count	564	long	read	kept	used
 collision_model	resistance.materials.address	568	void *	read	kept	used
 collision_model	resistance.materials.definition	572	struct tag_block_definition *	read	-	-
-collision_model	resistance.regions.count	576	long	read	kept	unused
-collision_model	resistance.regions.address	580	void *	read	kept	unused
+collision_model	resistance.regions.count	576	long	read	kept	walked
+collision_model	resistance.regions.address	580	void *	read	kept	walked
 collision_model	resistance.regions.definition	584	struct tag_block_definition *	read	-	-
 collision_model	resistance.modifiers.count	588	long	read	-	-
 collision_model	resistance.modifiers.address	592	void *	read	-	-
 collision_model	resistance.modifiers.definition	596	struct tag_block_definition *	read	-	-
 collision_model	unused	600	long[4]	-	-	-
-collision_model	pathfinding_box.n	616	real[6]	read	kept	untraced
-collision_model	pathfinding_box.x0	616	real	read	kept	untraced
-collision_model	pathfinding_box.x1	620	real	read	kept	untraced
-collision_model	pathfinding_box.y0	624	real	read	kept	untraced
-collision_model	pathfinding_box.y1	628	real	read	kept	untraced
-collision_model	pathfinding_box.z0	632	real	read	kept	untraced
-collision_model	pathfinding_box.z1	636	real	read	kept	untraced
-collision_model	pathfinding_spheres.count	640	long	read	kept	unused
-collision_model	pathfinding_spheres.address	644	void *	read	kept	unused
+collision_model	pathfinding_box.n	616	real[6]	read	kept	unused
+collision_model	pathfinding_box.x0	616	real	read	kept	unused
+collision_model	pathfinding_box.x1	620	real	read	kept	unused
+collision_model	pathfinding_box.y0	624	real	read	kept	unused
+collision_model	pathfinding_box.y1	628	real	read	kept	unused
+collision_model	pathfinding_box.z0	632	real	read	kept	unused
+collision_model	pathfinding_box.z1	636	real	read	kept	unused
+collision_model	pathfinding_spheres.count	640	long	read	kept	walked
+collision_model	pathfinding_spheres.address	644	void *	read	kept	walked
 collision_model	pathfinding_spheres.definition	648	struct tag_block_definition *	read	-	-
-collision_model	nodes.count	652	long	read	kept	unused
-collision_model	nodes.address	656	void *	read	kept	unused
+collision_model	nodes.count	652	long	read	kept	walked
+collision_model	nodes.address	656	void *	read	kept	walked
 collision_model	nodes.definition	660	struct tag_block_definition *	read	-	-
 collision_node	name	0	char[32]	-	-	-
 collision_node	region_index	32	short	read	-	-
@@ -2009,11 +2009,11 @@ collision_surface	breakable_surface_index	9	byte	read	kept	unused
 collision_surface	material_index	10	short	read	kept	used
 collision_vertex	point.n	0	real[3]	read	kept	used
 collision_vertex	point.x	0	real	read	kept	used
-collision_vertex	point.y	4	real	read	kept	untraced
-collision_vertex	point.z	8	real	read	kept	untraced
+collision_vertex	point.y	4	real	read	kept	used
+collision_vertex	point.z	8	real	read	kept	used
 collision_vertex	point.u	0	real	read	kept	used
-collision_vertex	point.v	4	real	read	kept	untraced
-collision_vertex	point.w	8	real	read	kept	untraced
+collision_vertex	point.v	4	real	read	kept	used
+collision_vertex	point.w	8	real	read	kept	used
 collision_vertex	first_edge_index	12	long	read	kept	used
 color_table_color	name	0	char[32]	-	kept	used
 color_table_color	real_color.n	32	real[4]	-	kept	used
@@ -2025,8 +2025,8 @@ color_table_color	real_color.rgb.blue	44	real	-	kept	used
 color_table_color	real_color.red	36	real	-	kept	used
 color_table_color	real_color.green	40	real	-	kept	used
 color_table_color	real_color.blue	44	real	-	kept	used
-color_table_definition	colors.count	0	long	read	kept	unused
-color_table_definition	colors.address	4	void *	read	kept	unused
+color_table_definition	colors.count	0	long	read	kept	walked
+color_table_definition	colors.address	4	void *	read	kept	walked
 color_table_definition	colors.definition	8	struct tag_block_definition *	read	-	-
 compressed_quaternion_6byte	words	0	word[3]	read	-	-
 compressed_quaternion_8byte	i	0	short	read	-	-
@@ -2074,7 +2074,7 @@ continuous_damage_effect_definition	damage.stun_unused	336	unsigned long[1]	-	-	
 continuous_damage_effect_definition	damage.instantaneous_acceleration	340	real	read	kept	used
 continuous_damage_effect_definition	damage.instantaneous_acceleration_zero_scale_factor	344	real	-	-	-
 continuous_damage_effect_definition	damage.instantaneous_acceleration_unused	348	unsigned long[1]	-	-	-
-continuous_damage_effect_definition	damage.material_modifiers	352	real[40]	read	kept	untraced
+continuous_damage_effect_definition	damage.material_modifiers	352	real[40]	read	kept	used
 continuous_vibrate_definition	frequencies	0	real[2]	read	-	-
 continuous_vibrate_definition	unused	8	unsigned long[6]	-	-	-
 contrail_definition	flags	0	word	read	kept	used
@@ -2096,7 +2096,7 @@ contrail_definition	bitmap.name	52	char *	-	-	-
 contrail_definition	bitmap.name_length	56	long	-	-	-
 contrail_definition	bitmap.index	60	long	read	kept	used
 contrail_definition	first_sequence_index	64	short	read	kept	used
-contrail_definition	sequence_count	66	short	read	kept	untraced
+contrail_definition	sequence_count	66	short	read	kept	used
 contrail_definition	reserved44	68	long[16]	-	-	-
 contrail_definition	shader.shader.base.radiosity.flags	132	unsigned short	read	kept	used
 contrail_definition	shader.shader.base.radiosity.detail_level	134	short	-	-	-
@@ -2116,8 +2116,8 @@ contrail_definition	shader.shader.base.pad	170	short	-	-	-
 contrail_definition	shader.reserved28	172	byte[4]	-	kept	used
 contrail_definition	shader.framebuffer_fade_mode	176	short	read	kept	used
 contrail_definition	shader.reserved2E	178	byte[134]	-	-	-
-contrail_definition	states.count	312	long	read	kept	unused
-contrail_definition	states.address	316	void *	read	kept	unused
+contrail_definition	states.count	312	long	read	kept	walked
+contrail_definition	states.address	316	void *	read	kept	walked
 contrail_definition	states.definition	320	struct tag_block_definition *	read	-	-
 contrail_point_state	duration_lower_bound	0	real	read	kept	used
 contrail_point_state	duration_upper_bound	4	real	read	kept	used
@@ -2309,27 +2309,27 @@ control_definition	object.modifier_shader.group_tag	144	unsigned long	-	kept	unu
 control_definition	object.modifier_shader.name	148	char *	-	-	-
 control_definition	object.modifier_shader.name_length	152	long	-	-	-
 control_definition	object.modifier_shader.index	156	long	read	kept	unused
-control_definition	object.creation_effect.group_tag	160	unsigned long	-	kept	unused
+control_definition	object.creation_effect.group_tag	160	unsigned long	-	kept	used
 control_definition	object.creation_effect.name	164	char *	-	-	-
 control_definition	object.creation_effect.name_length	168	long	-	-	-
-control_definition	object.creation_effect.index	172	long	read	kept	unused
+control_definition	object.creation_effect.index	172	long	read	kept	used
 control_definition	object.unused1	176	long[21]	-	-	-
 control_definition	object.render_bounding_radius	260	real	-	kept	unused
-control_definition	object.function_modes	264	short[4]	read	kept	untraced
+control_definition	object.function_modes	264	short[4]	read	kept	used
 control_definition	object.unused2	272	long[11]	-	-	-
 control_definition	object.icon_text_index	316	short	-	kept	used
 control_definition	object.forced_shader_permutation_index	318	short	read	-	-
-control_definition	object.attachments.count	320	long	read	kept	unused
-control_definition	object.attachments.address	324	void *	read	kept	unused
+control_definition	object.attachments.count	320	long	read	kept	walked
+control_definition	object.attachments.address	324	void *	read	kept	walked
 control_definition	object.attachments.definition	328	struct tag_block_definition *	read	-	-
-control_definition	object.widgets.count	332	long	read	kept	unused
-control_definition	object.widgets.address	336	void *	read	kept	unused
+control_definition	object.widgets.count	332	long	read	kept	walked
+control_definition	object.widgets.address	336	void *	read	kept	walked
 control_definition	object.widgets.definition	340	struct tag_block_definition *	read	-	-
-control_definition	object.functions.count	344	long	read	kept	unused
-control_definition	object.functions.address	348	void *	read	kept	unused
+control_definition	object.functions.count	344	long	read	kept	walked
+control_definition	object.functions.address	348	void *	read	kept	walked
 control_definition	object.functions.definition	352	struct tag_block_definition *	read	-	-
-control_definition	object.change_colors.count	356	long	read	kept	unused
-control_definition	object.change_colors.address	360	void *	read	kept	unused
+control_definition	object.change_colors.count	356	long	read	kept	walked
+control_definition	object.change_colors.address	360	void *	read	kept	walked
 control_definition	object.change_colors.definition	364	struct tag_block_definition *	read	-	-
 control_definition	object.predicted_resources.count	368	long	read	-	-
 control_definition	object.predicted_resources.address	372	void *	read	-	-
@@ -2341,31 +2341,31 @@ control_definition	device.powered_position_transition_time	392	real	-	-	-
 control_definition	device.powered_position_acceleration_time	396	real	-	-	-
 control_definition	device.depowered_position_transition_time	400	real	-	-	-
 control_definition	device.depowered_position_acceleration_time	404	real	-	-	-
-control_definition	device.function_modes	408	short[4]	read	kept	untraced
+control_definition	device.function_modes	408	short[4]	read	kept	used
 control_definition	device.positive_start_effect.group_tag	416	unsigned long	-	kept	used
 control_definition	device.positive_start_effect.name	420	char *	-	-	-
 control_definition	device.positive_start_effect.name_length	424	long	-	-	-
 control_definition	device.positive_start_effect.index	428	long	read	kept	used
-control_definition	device.negative_start_effect.group_tag	432	unsigned long	-	kept	untraced
+control_definition	device.negative_start_effect.group_tag	432	unsigned long	-	kept	used
 control_definition	device.negative_start_effect.name	436	char *	-	-	-
 control_definition	device.negative_start_effect.name_length	440	long	-	-	-
-control_definition	device.negative_start_effect.index	444	long	read	kept	untraced
+control_definition	device.negative_start_effect.index	444	long	read	kept	used
 control_definition	device.positive_stop_effect.group_tag	448	unsigned long	-	kept	used
 control_definition	device.positive_stop_effect.name	452	char *	-	-	-
 control_definition	device.positive_stop_effect.name_length	456	long	-	-	-
 control_definition	device.positive_stop_effect.index	460	long	read	kept	used
-control_definition	device.negative_stop_effect.group_tag	464	unsigned long	-	kept	untraced
+control_definition	device.negative_stop_effect.group_tag	464	unsigned long	-	kept	used
 control_definition	device.negative_stop_effect.name	468	char *	-	-	-
 control_definition	device.negative_stop_effect.name_length	472	long	-	-	-
-control_definition	device.negative_stop_effect.index	476	long	read	kept	untraced
+control_definition	device.negative_stop_effect.index	476	long	read	kept	used
 control_definition	device.depowered_effect.group_tag	480	unsigned long	-	kept	used
 control_definition	device.depowered_effect.name	484	char *	-	-	-
 control_definition	device.depowered_effect.name_length	488	long	-	-	-
 control_definition	device.depowered_effect.index	492	long	read	kept	used
-control_definition	device.repowered_effect.group_tag	496	unsigned long	-	kept	untraced
+control_definition	device.repowered_effect.group_tag	496	unsigned long	-	kept	used
 control_definition	device.repowered_effect.name	500	char *	-	-	-
 control_definition	device.repowered_effect.name_length	504	long	-	-	-
-control_definition	device.repowered_effect.index	508	long	read	kept	untraced
+control_definition	device.repowered_effect.index	508	long	read	kept	used
 control_definition	device.delay_time	512	real	-	-	-
 control_definition	device.delay_unused	516	unsigned long[2]	-	-	-
 control_definition	device.delay_effect.group_tag	524	unsigned long	-	kept	used
@@ -2422,7 +2422,7 @@ damage_definition	stun_unused	44	unsigned long[1]	-	-	-
 damage_definition	instantaneous_acceleration	48	real	read	kept	used
 damage_definition	instantaneous_acceleration_zero_scale_factor	52	real	-	-	-
 damage_definition	instantaneous_acceleration_unused	56	unsigned long[1]	-	-	-
-damage_definition	material_modifiers	60	real[40]	read	kept	untraced
+damage_definition	material_modifiers	60	real[40]	read	kept	used
 damage_effect_definition	falloff_radius	0	real	read	kept	used
 damage_effect_definition	cutoff_radius	4	real	read	kept	used
 damage_effect_definition	cutoff_scale	8	real	-	kept	unused
@@ -2502,7 +2502,7 @@ damage_effect_definition	damage.stun_unused	496	unsigned long[1]	-	-	-
 damage_effect_definition	damage.instantaneous_acceleration	500	real	read	kept	used
 damage_effect_definition	damage.instantaneous_acceleration_zero_scale_factor	504	real	-	-	-
 damage_effect_definition	damage.instantaneous_acceleration_unused	508	unsigned long[1]	-	-	-
-damage_effect_definition	damage.material_modifiers	512	real[40]	read	kept	untraced
+damage_effect_definition	damage.material_modifiers	512	real[40]	read	kept	used
 damage_region	name	0	char[32]	-	kept	used
 damage_region	flags	32	unsigned long	read	kept	used
 damage_region	unused0	36	long	-	-	-
@@ -2532,10 +2532,10 @@ decal_definition	color_lower_bound.n	52	real[3]	read	kept	used
 decal_definition	color_lower_bound.red	52	real	read	kept	used
 decal_definition	color_lower_bound.green	56	real	read	kept	used
 decal_definition	color_lower_bound.blue	60	real	read	kept	used
-decal_definition	color_upper_bound.n	64	real[3]	read	kept	untraced
-decal_definition	color_upper_bound.red	64	real	read	kept	untraced
-decal_definition	color_upper_bound.green	68	real	read	kept	untraced
-decal_definition	color_upper_bound.blue	72	real	read	kept	untraced
+decal_definition	color_upper_bound.n	64	real[3]	read	kept	used
+decal_definition	color_upper_bound.red	64	real	read	kept	used
+decal_definition	color_upper_bound.green	68	real	read	kept	used
+decal_definition	color_upper_bound.blue	72	real	read	kept	used
 decal_definition	unused04C	76	long[3]	-	-	-
 decal_definition	animation_loop_frame_index	88	short	-	kept	unused
 decal_definition	animation_speed	90	short	-	kept	unused
@@ -2628,8 +2628,8 @@ detail_object_collection_definition	map.group_tag	52	unsigned long	-	kept	used
 detail_object_collection_definition	map.name	56	char *	-	-	-
 detail_object_collection_definition	map.name_length	60	long	-	-	-
 detail_object_collection_definition	map.index	64	long	read	kept	used
-detail_object_collection_definition	type_definitions.count	68	long	read	kept	unused
-detail_object_collection_definition	type_definitions.address	72	void *	read	kept	unused
+detail_object_collection_definition	type_definitions.count	68	long	read	kept	walked
+detail_object_collection_definition	type_definitions.address	72	void *	read	kept	walked
 detail_object_collection_definition	type_definitions.definition	76	struct tag_block_definition *	read	-	-
 detail_object_collection_definition	unused50	80	long[12]	-	-	-
 device_definition	object.type	0	short	read	kept	used
@@ -2672,27 +2672,27 @@ device_definition	object.modifier_shader.group_tag	144	unsigned long	-	kept	unus
 device_definition	object.modifier_shader.name	148	char *	-	-	-
 device_definition	object.modifier_shader.name_length	152	long	-	-	-
 device_definition	object.modifier_shader.index	156	long	read	kept	unused
-device_definition	object.creation_effect.group_tag	160	unsigned long	-	kept	unused
+device_definition	object.creation_effect.group_tag	160	unsigned long	-	kept	used
 device_definition	object.creation_effect.name	164	char *	-	-	-
 device_definition	object.creation_effect.name_length	168	long	-	-	-
-device_definition	object.creation_effect.index	172	long	read	kept	unused
+device_definition	object.creation_effect.index	172	long	read	kept	used
 device_definition	object.unused1	176	long[21]	-	-	-
 device_definition	object.render_bounding_radius	260	real	-	kept	unused
-device_definition	object.function_modes	264	short[4]	read	kept	untraced
+device_definition	object.function_modes	264	short[4]	read	kept	used
 device_definition	object.unused2	272	long[11]	-	-	-
 device_definition	object.icon_text_index	316	short	-	kept	used
 device_definition	object.forced_shader_permutation_index	318	short	read	-	-
-device_definition	object.attachments.count	320	long	read	kept	unused
-device_definition	object.attachments.address	324	void *	read	kept	unused
+device_definition	object.attachments.count	320	long	read	kept	walked
+device_definition	object.attachments.address	324	void *	read	kept	walked
 device_definition	object.attachments.definition	328	struct tag_block_definition *	read	-	-
-device_definition	object.widgets.count	332	long	read	kept	unused
-device_definition	object.widgets.address	336	void *	read	kept	unused
+device_definition	object.widgets.count	332	long	read	kept	walked
+device_definition	object.widgets.address	336	void *	read	kept	walked
 device_definition	object.widgets.definition	340	struct tag_block_definition *	read	-	-
-device_definition	object.functions.count	344	long	read	kept	unused
-device_definition	object.functions.address	348	void *	read	kept	unused
+device_definition	object.functions.count	344	long	read	kept	walked
+device_definition	object.functions.address	348	void *	read	kept	walked
 device_definition	object.functions.definition	352	struct tag_block_definition *	read	-	-
-device_definition	object.change_colors.count	356	long	read	kept	unused
-device_definition	object.change_colors.address	360	void *	read	kept	unused
+device_definition	object.change_colors.count	356	long	read	kept	walked
+device_definition	object.change_colors.address	360	void *	read	kept	walked
 device_definition	object.change_colors.definition	364	struct tag_block_definition *	read	-	-
 device_definition	object.predicted_resources.count	368	long	read	-	-
 device_definition	object.predicted_resources.address	372	void *	read	-	-
@@ -2704,31 +2704,31 @@ device_definition	device.powered_position_transition_time	392	real	-	-	-
 device_definition	device.powered_position_acceleration_time	396	real	-	-	-
 device_definition	device.depowered_position_transition_time	400	real	-	-	-
 device_definition	device.depowered_position_acceleration_time	404	real	-	-	-
-device_definition	device.function_modes	408	short[4]	read	kept	untraced
+device_definition	device.function_modes	408	short[4]	read	kept	used
 device_definition	device.positive_start_effect.group_tag	416	unsigned long	-	kept	used
 device_definition	device.positive_start_effect.name	420	char *	-	-	-
 device_definition	device.positive_start_effect.name_length	424	long	-	-	-
 device_definition	device.positive_start_effect.index	428	long	read	kept	used
-device_definition	device.negative_start_effect.group_tag	432	unsigned long	-	kept	untraced
+device_definition	device.negative_start_effect.group_tag	432	unsigned long	-	kept	used
 device_definition	device.negative_start_effect.name	436	char *	-	-	-
 device_definition	device.negative_start_effect.name_length	440	long	-	-	-
-device_definition	device.negative_start_effect.index	444	long	read	kept	untraced
+device_definition	device.negative_start_effect.index	444	long	read	kept	used
 device_definition	device.positive_stop_effect.group_tag	448	unsigned long	-	kept	used
 device_definition	device.positive_stop_effect.name	452	char *	-	-	-
 device_definition	device.positive_stop_effect.name_length	456	long	-	-	-
 device_definition	device.positive_stop_effect.index	460	long	read	kept	used
-device_definition	device.negative_stop_effect.group_tag	464	unsigned long	-	kept	untraced
+device_definition	device.negative_stop_effect.group_tag	464	unsigned long	-	kept	used
 device_definition	device.negative_stop_effect.name	468	char *	-	-	-
 device_definition	device.negative_stop_effect.name_length	472	long	-	-	-
-device_definition	device.negative_stop_effect.index	476	long	read	kept	untraced
+device_definition	device.negative_stop_effect.index	476	long	read	kept	used
 device_definition	device.depowered_effect.group_tag	480	unsigned long	-	kept	used
 device_definition	device.depowered_effect.name	484	char *	-	-	-
 device_definition	device.depowered_effect.name_length	488	long	-	-	-
 device_definition	device.depowered_effect.index	492	long	read	kept	used
-device_definition	device.repowered_effect.group_tag	496	unsigned long	-	kept	untraced
+device_definition	device.repowered_effect.group_tag	496	unsigned long	-	kept	used
 device_definition	device.repowered_effect.name	500	char *	-	-	-
 device_definition	device.repowered_effect.name_length	504	long	-	-	-
-device_definition	device.repowered_effect.index	508	long	read	kept	untraced
+device_definition	device.repowered_effect.index	508	long	read	kept	used
 device_definition	device.delay_time	512	real	-	-	-
 device_definition	device.delay_unused	516	unsigned long[2]	-	-	-
 device_definition	device.delay_effect.group_tag	524	unsigned long	-	kept	used
@@ -2821,17 +2821,17 @@ effect_particles_definition	runtime_direction.n	32	real[3]	read	-	-
 effect_particles_definition	runtime_direction.j	36	real	read	-	-
 effect_particles_definition	runtime_direction.k	40	real	read	-	-
 effect_particles_definition	unused02c	44	long[10]	-	-	-
-effect_particles_definition	particle.group_tag	84	unsigned long	-	kept	untraced
+effect_particles_definition	particle.group_tag	84	unsigned long	-	kept	used
 effect_particles_definition	particle.name	88	char *	-	-	-
 effect_particles_definition	particle.name_length	92	long	-	-	-
-effect_particles_definition	particle.index	96	long	read	kept	untraced
+effect_particles_definition	particle.index	96	long	read	kept	used
 effect_particles_definition	flags	100	unsigned long	read	kept	used
 effect_particles_definition	distribution_function	104	short	read	kept	used
 effect_particles_definition	unused06a	106	short	-	-	-
 effect_particles_definition	count_lower_bound	108	short	read	kept	used
 effect_particles_definition	count_upper_bound	110	short	read	kept	used
-effect_particles_definition	distribution_radius_lower_bound	112	real	read	kept	unused
-effect_particles_definition	distribution_radius_upper_bound	116	real	read	kept	unused
+effect_particles_definition	distribution_radius_lower_bound	112	real	read	kept	used
+effect_particles_definition	distribution_radius_upper_bound	116	real	read	kept	used
 effect_particles_definition	unused078	120	long[3]	-	-	-
 effect_particles_definition	velocity_lower_bound	132	real	read	kept	used
 effect_particles_definition	velocity_upper_bound	136	real	read	kept	used
@@ -2848,15 +2848,15 @@ effect_particles_definition	tint_lower_bound.rgb.n	180	real[3]	read	kept	used
 effect_particles_definition	tint_lower_bound.rgb.red	180	real	read	kept	used
 effect_particles_definition	tint_lower_bound.rgb.green	184	real	read	kept	used
 effect_particles_definition	tint_lower_bound.rgb.blue	188	real	read	kept	used
-effect_particles_definition	tint_upper_bound.alpha	192	real	read	kept	untraced
-effect_particles_definition	tint_upper_bound.n	192	real[4]	-	kept	untraced
-effect_particles_definition	tint_upper_bound.rgb.n	196	real[3]	read	kept	untraced
-effect_particles_definition	tint_upper_bound.rgb.red	196	real	read	kept	untraced
-effect_particles_definition	tint_upper_bound.rgb.green	200	real	read	kept	untraced
-effect_particles_definition	tint_upper_bound.rgb.blue	204	real	read	kept	untraced
+effect_particles_definition	tint_upper_bound.alpha	192	real	read	kept	used
+effect_particles_definition	tint_upper_bound.n	192	real[4]	-	kept	used
+effect_particles_definition	tint_upper_bound.rgb.n	196	real[3]	read	kept	used
+effect_particles_definition	tint_upper_bound.rgb.red	196	real	read	kept	used
+effect_particles_definition	tint_upper_bound.rgb.green	200	real	read	kept	used
+effect_particles_definition	tint_upper_bound.rgb.blue	204	real	read	kept	used
 effect_particles_definition	unused0d0	208	long[4]	-	-	-
 effect_particles_definition	scale_a_flags	224	unsigned long	read	kept	used
-effect_particles_definition	scale_b_flags	228	unsigned long	read	kept	untraced
+effect_particles_definition	scale_b_flags	228	unsigned long	read	kept	used
 encounter_definition	name	0	char[32]	read	kept	used
 encounter_definition	flags	32	unsigned long	read	kept	used
 encounter_definition	team_index	36	short	read	kept	used
@@ -2932,27 +2932,27 @@ equipment_definition	object.modifier_shader.group_tag	144	unsigned long	-	kept	u
 equipment_definition	object.modifier_shader.name	148	char *	-	-	-
 equipment_definition	object.modifier_shader.name_length	152	long	-	-	-
 equipment_definition	object.modifier_shader.index	156	long	read	kept	unused
-equipment_definition	object.creation_effect.group_tag	160	unsigned long	-	kept	unused
+equipment_definition	object.creation_effect.group_tag	160	unsigned long	-	kept	used
 equipment_definition	object.creation_effect.name	164	char *	-	-	-
 equipment_definition	object.creation_effect.name_length	168	long	-	-	-
-equipment_definition	object.creation_effect.index	172	long	read	kept	unused
+equipment_definition	object.creation_effect.index	172	long	read	kept	used
 equipment_definition	object.unused1	176	long[21]	-	-	-
 equipment_definition	object.render_bounding_radius	260	real	-	kept	unused
-equipment_definition	object.function_modes	264	short[4]	read	kept	untraced
+equipment_definition	object.function_modes	264	short[4]	read	kept	used
 equipment_definition	object.unused2	272	long[11]	-	-	-
 equipment_definition	object.icon_text_index	316	short	-	kept	used
 equipment_definition	object.forced_shader_permutation_index	318	short	read	-	-
-equipment_definition	object.attachments.count	320	long	read	kept	unused
-equipment_definition	object.attachments.address	324	void *	read	kept	unused
+equipment_definition	object.attachments.count	320	long	read	kept	walked
+equipment_definition	object.attachments.address	324	void *	read	kept	walked
 equipment_definition	object.attachments.definition	328	struct tag_block_definition *	read	-	-
-equipment_definition	object.widgets.count	332	long	read	kept	unused
-equipment_definition	object.widgets.address	336	void *	read	kept	unused
+equipment_definition	object.widgets.count	332	long	read	kept	walked
+equipment_definition	object.widgets.address	336	void *	read	kept	walked
 equipment_definition	object.widgets.definition	340	struct tag_block_definition *	read	-	-
-equipment_definition	object.functions.count	344	long	read	kept	unused
-equipment_definition	object.functions.address	348	void *	read	kept	unused
+equipment_definition	object.functions.count	344	long	read	kept	walked
+equipment_definition	object.functions.address	348	void *	read	kept	walked
 equipment_definition	object.functions.definition	352	struct tag_block_definition *	read	-	-
-equipment_definition	object.change_colors.count	356	long	read	kept	unused
-equipment_definition	object.change_colors.address	360	void *	read	kept	unused
+equipment_definition	object.change_colors.count	356	long	read	kept	walked
+equipment_definition	object.change_colors.address	360	void *	read	kept	walked
 equipment_definition	object.change_colors.definition	364	struct tag_block_definition *	read	-	-
 equipment_definition	object.predicted_resources.count	368	long	read	-	-
 equipment_definition	object.predicted_resources.address	372	void *	read	-	-
@@ -3033,7 +3033,7 @@ flag_definition	shader_blue.index	80	long	read	-	-
 flag_definition	attachment_points.count	84	long	read	-	-
 flag_definition	attachment_points.address	88	void *	read	-	-
 flag_definition	attachment_points.definition	92	struct tag_block_definition *	read	-	-
-fog_definition	flags	0	byte	read	kept	untraced
+fog_definition	flags	0	byte	read	kept	used
 fog_definition	unused1	1	byte[115]	-	-	-
 fog_definition	plane_distance	116	real	read	kept	used
 fog_definition	unused78	120	byte[136]	-	-	-
@@ -3045,9 +3045,9 @@ fog_definition	sound_environment.index	272	long	read	-	-
 font_character	character	0	word	read	kept	used
 font_character	character_width	2	short	read	kept	used
 font_character	bitmap_width	4	short	read	kept	used
-font_character	bitmap_height	6	short	read	kept	untraced
+font_character	bitmap_height	6	short	read	kept	used
 font_character	bitmap_origin_x	8	short	read	kept	used
-font_character	bitmap_origin_y	10	short	read	kept	untraced
+font_character	bitmap_origin_y	10	short	read	kept	used
 font_character	hardware_character_index	12	short	read	-	-
 font_character	pad	14	word	read	-	-
 font_character	pixels_offset	16	long	read	kept	used
@@ -3060,10 +3060,10 @@ font_header	descending_height	6	short	read	kept	used
 font_header	leading_height	8	short	read	kept	used
 font_header	leading_width	10	short	read	kept	used
 font_header	pad	12	long[9]	-	-	-
-font_header	character_tables.count	48	long	read	kept	unused
-font_header	character_tables.address	52	void *	read	kept	unused
+font_header	character_tables.count	48	long	read	kept	walked
+font_header	character_tables.address	52	void *	read	kept	walked
 font_header	character_tables.definition	56	struct tag_block_definition *	read	-	-
-font_header	style_fonts	60	struct tag_reference[4]	-	kept	untraced
+font_header	style_fonts	60	struct tag_reference[4]	-	kept	unused
 font_header	characters.count	124	long	read	kept	used
 font_header	characters.address	128	void *	read	kept	used
 font_header	characters.definition	132	struct tag_block_definition *	read	-	-
@@ -3092,8 +3092,8 @@ game_globals	grenades.definition	304	struct tag_block_definition *	-	-	-
 game_globals	rasterizer_data.count	308	long	read	-	-
 game_globals	rasterizer_data.address	312	void *	read	-	-
 game_globals	rasterizer_data.definition	316	struct tag_block_definition *	read	-	-
-game_globals	interface_tag_references.count	320	long	read	kept	unused
-game_globals	interface_tag_references.address	324	void *	read	kept	unused
+game_globals	interface_tag_references.count	320	long	read	kept	walked
+game_globals	interface_tag_references.address	324	void *	read	kept	walked
 game_globals	interface_tag_references.definition	328	struct tag_block_definition *	read	-	-
 game_globals	weapon_list.count	332	long	read	kept	used
 game_globals	weapon_list.address	336	void *	read	kept	used
@@ -3119,7 +3119,7 @@ game_globals	materials.definition	412	struct tag_block_definition *	read	-	-
 game_globals	playlist.count	416	long	-	-	-
 game_globals	playlist.address	420	void *	-	-	-
 game_globals	playlist.definition	424	struct tag_block_definition *	-	-	-
-game_globals_difficulty_information	values	0	real[35][4]	read	kept	untraced
+game_globals_difficulty_information	values	0	real[35][4]	read	kept	used
 game_globals_difficulty_information	pad	560	real[21]	-	-	-
 game_globals_falling_damage	falling_unused	0	long[2]	-	-	-
 game_globals_falling_damage	falling_distance_lower_bound	8	real	-	-	-
@@ -3430,7 +3430,7 @@ grenade_count_panel_definition	background.placement.offset.x	0	short	read	kept	u
 grenade_count_panel_definition	background.placement.offset.y	2	short	read	kept	used
 grenade_count_panel_definition	background.placement.scale.i	4	real	read	kept	used
 grenade_count_panel_definition	background.placement.scale.n	4	real[2]	read	kept	used
-grenade_count_panel_definition	background.placement.scale.j	8	real	read	kept	untraced
+grenade_count_panel_definition	background.placement.scale.j	8	real	read	kept	used
 grenade_count_panel_definition	background.placement.multiplayer_scaling_flags	12	short	read	kept	used
 grenade_count_panel_definition	background.placement.pad	14	short	-	-	-
 grenade_count_panel_definition	background.placement.unused0	16	long[5]	-	-	-
@@ -3459,7 +3459,7 @@ grenade_count_panel_definition	numbers.placement.offset.x	104	short	read	kept	us
 grenade_count_panel_definition	numbers.placement.offset.y	106	short	read	kept	used
 grenade_count_panel_definition	numbers.placement.scale.i	108	real	read	kept	used
 grenade_count_panel_definition	numbers.placement.scale.n	108	real[2]	read	kept	used
-grenade_count_panel_definition	numbers.placement.scale.j	112	real	read	kept	untraced
+grenade_count_panel_definition	numbers.placement.scale.j	112	real	read	kept	used
 grenade_count_panel_definition	numbers.placement.multiplayer_scaling_flags	116	short	read	kept	used
 grenade_count_panel_definition	numbers.placement.pad	118	short	-	-	-
 grenade_count_panel_definition	numbers.placement.unused0	120	long[5]	-	-	-
@@ -3475,7 +3475,7 @@ grenade_count_panel_definition	numbers.colors.custom.objective.up_ticks	168	shor
 grenade_count_panel_definition	numbers.colors.custom.objective.fade_ticks	170	short	read	-	-
 grenade_count_panel_definition	numbers.digits	172	char	read	kept	used
 grenade_count_panel_definition	numbers.number_flags	173	byte	read	kept	used
-grenade_count_panel_definition	numbers.fractional_digits	174	char	read	kept	unused
+grenade_count_panel_definition	numbers.fractional_digits	174	char	read	kept	used
 grenade_count_panel_definition	numbers.pad	175	byte	-	-	-
 grenade_count_panel_definition	numbers.unused	176	long[3]	-	-	-
 grenade_count_panel_definition	flash_cutoff	188	short	read	-	-
@@ -3488,7 +3488,7 @@ grenade_hud_interface_definition	background.placement.offset.x	36	short	read	kep
 grenade_hud_interface_definition	background.placement.offset.y	38	short	read	kept	used
 grenade_hud_interface_definition	background.placement.scale.i	40	real	read	kept	used
 grenade_hud_interface_definition	background.placement.scale.n	40	real[2]	read	kept	used
-grenade_hud_interface_definition	background.placement.scale.j	44	real	read	kept	untraced
+grenade_hud_interface_definition	background.placement.scale.j	44	real	read	kept	used
 grenade_hud_interface_definition	background.placement.multiplayer_scaling_flags	48	short	read	kept	used
 grenade_hud_interface_definition	background.placement.pad	50	short	-	-	-
 grenade_hud_interface_definition	background.placement.unused0	52	long[5]	-	-	-
@@ -3517,7 +3517,7 @@ grenade_hud_interface_definition	grenade_count_panel.background.placement.offset
 grenade_hud_interface_definition	grenade_count_panel.background.placement.offset.y	142	short	read	kept	used
 grenade_hud_interface_definition	grenade_count_panel.background.placement.scale.i	144	real	read	kept	used
 grenade_hud_interface_definition	grenade_count_panel.background.placement.scale.n	144	real[2]	read	kept	used
-grenade_hud_interface_definition	grenade_count_panel.background.placement.scale.j	148	real	read	kept	untraced
+grenade_hud_interface_definition	grenade_count_panel.background.placement.scale.j	148	real	read	kept	used
 grenade_hud_interface_definition	grenade_count_panel.background.placement.multiplayer_scaling_flags	152	short	read	kept	used
 grenade_hud_interface_definition	grenade_count_panel.background.placement.pad	154	short	-	-	-
 grenade_hud_interface_definition	grenade_count_panel.background.placement.unused0	156	long[5]	-	-	-
@@ -3546,7 +3546,7 @@ grenade_hud_interface_definition	grenade_count_panel.numbers.placement.offset.x	
 grenade_hud_interface_definition	grenade_count_panel.numbers.placement.offset.y	246	short	read	kept	used
 grenade_hud_interface_definition	grenade_count_panel.numbers.placement.scale.i	248	real	read	kept	used
 grenade_hud_interface_definition	grenade_count_panel.numbers.placement.scale.n	248	real[2]	read	kept	used
-grenade_hud_interface_definition	grenade_count_panel.numbers.placement.scale.j	252	real	read	kept	untraced
+grenade_hud_interface_definition	grenade_count_panel.numbers.placement.scale.j	252	real	read	kept	used
 grenade_hud_interface_definition	grenade_count_panel.numbers.placement.multiplayer_scaling_flags	256	short	read	kept	used
 grenade_hud_interface_definition	grenade_count_panel.numbers.placement.pad	258	short	-	-	-
 grenade_hud_interface_definition	grenade_count_panel.numbers.placement.unused0	260	long[5]	-	-	-
@@ -3562,7 +3562,7 @@ grenade_hud_interface_definition	grenade_count_panel.numbers.colors.custom.objec
 grenade_hud_interface_definition	grenade_count_panel.numbers.colors.custom.objective.fade_ticks	310	short	read	-	-
 grenade_hud_interface_definition	grenade_count_panel.numbers.digits	312	char	read	kept	used
 grenade_hud_interface_definition	grenade_count_panel.numbers.number_flags	313	byte	read	kept	used
-grenade_hud_interface_definition	grenade_count_panel.numbers.fractional_digits	314	char	read	kept	unused
+grenade_hud_interface_definition	grenade_count_panel.numbers.fractional_digits	314	char	read	kept	used
 grenade_hud_interface_definition	grenade_count_panel.numbers.pad	315	byte	-	-	-
 grenade_hud_interface_definition	grenade_count_panel.numbers.unused	316	long[3]	-	-	-
 grenade_hud_interface_definition	grenade_count_panel.flash_cutoff	328	short	read	-	-
@@ -3681,7 +3681,7 @@ hud_globals_definition	messaging.placement.offset.x	36	short	read	kept	used
 hud_globals_definition	messaging.placement.offset.y	38	short	read	kept	used
 hud_globals_definition	messaging.placement.scale.n	40	real[2]	read	kept	used
 hud_globals_definition	messaging.placement.scale.i	40	real	read	kept	used
-hud_globals_definition	messaging.placement.scale.j	44	real	read	kept	untraced
+hud_globals_definition	messaging.placement.scale.j	44	real	read	kept	used
 hud_globals_definition	messaging.placement.multiplayer_scaling_flags	48	short	read	kept	used
 hud_globals_definition	messaging.placement.pad	50	short	-	-	-
 hud_globals_definition	messaging.placement.unused0	52	long[5]	-	-	-
@@ -3726,8 +3726,8 @@ hud_globals_definition	messaging.alternate_icon_text.group_tag	180	unsigned long
 hud_globals_definition	messaging.alternate_icon_text.name	184	char *	-	-	-
 hud_globals_definition	messaging.alternate_icon_text.name_length	188	long	-	-	-
 hud_globals_definition	messaging.alternate_icon_text.index	192	long	-	kept	used
-hud_globals_definition	messaging.button_icons.count	196	long	-	kept	unused
-hud_globals_definition	messaging.button_icons.address	200	void *	-	kept	unused
+hud_globals_definition	messaging.button_icons.count	196	long	-	kept	walked
+hud_globals_definition	messaging.button_icons.address	200	void *	-	kept	walked
 hud_globals_definition	messaging.button_icons.definition	204	struct tag_block_definition *	-	-	-
 hud_globals_definition	messaging.color.color	208	unsigned long	read	kept	used
 hud_globals_definition	messaging.color.flash_color	212	unsigned long	read	kept	used
@@ -3764,8 +3764,8 @@ hud_globals_definition	waypoint.arrow_bitmap.group_tag	336	unsigned long	-	-	-
 hud_globals_definition	waypoint.arrow_bitmap.name	340	char *	-	-	-
 hud_globals_definition	waypoint.arrow_bitmap.name_length	344	long	-	-	-
 hud_globals_definition	waypoint.arrow_bitmap.index	348	long	-	-	-
-hud_globals_definition	waypoint.arrows.count	352	long	read	kept	untraced
-hud_globals_definition	waypoint.arrows.address	356	void *	read	kept	untraced
+hud_globals_definition	waypoint.arrows.count	352	long	read	kept	used
+hud_globals_definition	waypoint.arrows.address	356	void *	read	kept	used
 hud_globals_definition	waypoint.arrows.definition	360	struct tag_block_definition *	read	-	-
 hud_globals_definition	waypoint.unused1	364	long[20]	-	-	-
 hud_globals_definition	multiplayer.hud_scale	444	real	-	kept	unused
@@ -3840,7 +3840,7 @@ hud_messaging_parameters_definition	placement.offset.x	36	short	read	kept	used
 hud_messaging_parameters_definition	placement.offset.y	38	short	read	kept	used
 hud_messaging_parameters_definition	placement.scale.n	40	real[2]	read	kept	used
 hud_messaging_parameters_definition	placement.scale.i	40	real	read	kept	used
-hud_messaging_parameters_definition	placement.scale.j	44	real	read	kept	untraced
+hud_messaging_parameters_definition	placement.scale.j	44	real	read	kept	used
 hud_messaging_parameters_definition	placement.multiplayer_scaling_flags	48	short	read	kept	used
 hud_messaging_parameters_definition	placement.pad	50	short	-	-	-
 hud_messaging_parameters_definition	placement.unused0	52	long[5]	-	-	-
@@ -3885,8 +3885,8 @@ hud_messaging_parameters_definition	alternate_icon_text.group_tag	180	unsigned l
 hud_messaging_parameters_definition	alternate_icon_text.name	184	char *	-	-	-
 hud_messaging_parameters_definition	alternate_icon_text.name_length	188	long	-	-	-
 hud_messaging_parameters_definition	alternate_icon_text.index	192	long	-	kept	used
-hud_messaging_parameters_definition	button_icons.count	196	long	-	kept	unused
-hud_messaging_parameters_definition	button_icons.address	200	void *	-	kept	unused
+hud_messaging_parameters_definition	button_icons.count	196	long	-	kept	walked
+hud_messaging_parameters_definition	button_icons.address	200	void *	-	kept	walked
 hud_messaging_parameters_definition	button_icons.definition	204	struct tag_block_definition *	-	-	-
 hud_messaging_parameters_definition	color.color	208	unsigned long	read	kept	used
 hud_messaging_parameters_definition	color.flash_color	212	unsigned long	read	kept	used
@@ -3921,7 +3921,7 @@ hud_placement_definition	offset.x	0	short	read	kept	used
 hud_placement_definition	offset.y	2	short	read	kept	used
 hud_placement_definition	scale.n	4	real[2]	read	kept	used
 hud_placement_definition	scale.i	4	real	read	kept	used
-hud_placement_definition	scale.j	8	real	read	kept	untraced
+hud_placement_definition	scale.j	8	real	read	kept	used
 hud_placement_definition	multiplayer_scaling_flags	12	short	read	kept	used
 hud_placement_definition	pad	14	short	-	-	-
 hud_placement_definition	unused0	16	long[5]	-	-	-
@@ -4005,8 +4005,8 @@ hud_waypoint_definition	arrow_bitmap.group_tag	48	unsigned long	-	-	-
 hud_waypoint_definition	arrow_bitmap.name	52	char *	-	-	-
 hud_waypoint_definition	arrow_bitmap.name_length	56	long	-	-	-
 hud_waypoint_definition	arrow_bitmap.index	60	long	-	-	-
-hud_waypoint_definition	arrows.count	64	long	read	kept	untraced
-hud_waypoint_definition	arrows.address	68	void *	read	kept	untraced
+hud_waypoint_definition	arrows.count	64	long	read	kept	used
+hud_waypoint_definition	arrows.address	68	void *	read	kept	used
 hud_waypoint_definition	arrows.definition	72	struct tag_block_definition *	read	-	-
 hud_waypoint_definition	unused1	76	long[20]	-	-	-
 icon_hud_element_definition	sequence_index	0	short	read	kept	used
@@ -4021,7 +4021,7 @@ icon_hud_element_definition	text_index	14	short	read	kept	used
 item_collection_definition	permutations.count	0	long	read	kept	used
 item_collection_definition	permutations.address	4	void *	read	kept	used
 item_collection_definition	permutations.definition	8	struct tag_block_definition *	read	-	-
-item_collection_definition	spawn_time	12	short	read	kept	untraced
+item_collection_definition	spawn_time	12	short	read	kept	used
 item_collection_definition	pad	14	short	-	-	-
 item_collection_definition	unused	16	long[19]	-	-	-
 item_definition	object.type	0	short	read	kept	used
@@ -4064,27 +4064,27 @@ item_definition	object.modifier_shader.group_tag	144	unsigned long	-	kept	unused
 item_definition	object.modifier_shader.name	148	char *	-	-	-
 item_definition	object.modifier_shader.name_length	152	long	-	-	-
 item_definition	object.modifier_shader.index	156	long	read	kept	unused
-item_definition	object.creation_effect.group_tag	160	unsigned long	-	kept	unused
+item_definition	object.creation_effect.group_tag	160	unsigned long	-	kept	used
 item_definition	object.creation_effect.name	164	char *	-	-	-
 item_definition	object.creation_effect.name_length	168	long	-	-	-
-item_definition	object.creation_effect.index	172	long	read	kept	unused
+item_definition	object.creation_effect.index	172	long	read	kept	used
 item_definition	object.unused1	176	long[21]	-	-	-
 item_definition	object.render_bounding_radius	260	real	-	kept	unused
-item_definition	object.function_modes	264	short[4]	read	kept	untraced
+item_definition	object.function_modes	264	short[4]	read	kept	used
 item_definition	object.unused2	272	long[11]	-	-	-
 item_definition	object.icon_text_index	316	short	-	kept	used
 item_definition	object.forced_shader_permutation_index	318	short	read	-	-
-item_definition	object.attachments.count	320	long	read	kept	unused
-item_definition	object.attachments.address	324	void *	read	kept	unused
+item_definition	object.attachments.count	320	long	read	kept	walked
+item_definition	object.attachments.address	324	void *	read	kept	walked
 item_definition	object.attachments.definition	328	struct tag_block_definition *	read	-	-
-item_definition	object.widgets.count	332	long	read	kept	unused
-item_definition	object.widgets.address	336	void *	read	kept	unused
+item_definition	object.widgets.count	332	long	read	kept	walked
+item_definition	object.widgets.address	336	void *	read	kept	walked
 item_definition	object.widgets.definition	340	struct tag_block_definition *	read	-	-
-item_definition	object.functions.count	344	long	read	kept	unused
-item_definition	object.functions.address	348	void *	read	kept	unused
+item_definition	object.functions.count	344	long	read	kept	walked
+item_definition	object.functions.address	348	void *	read	kept	walked
 item_definition	object.functions.definition	352	struct tag_block_definition *	read	-	-
-item_definition	object.change_colors.count	356	long	read	kept	unused
-item_definition	object.change_colors.address	360	void *	read	kept	unused
+item_definition	object.change_colors.count	356	long	read	kept	walked
+item_definition	object.change_colors.address	360	void *	read	kept	walked
 item_definition	object.change_colors.definition	364	struct tag_block_definition *	read	-	-
 item_definition	object.predicted_resources.count	368	long	read	-	-
 item_definition	object.predicted_resources.address	372	void *	read	-	-
@@ -4148,8 +4148,8 @@ lens_flare_definition	corona_radius_scale.i	160	real	read	kept	used
 lens_flare_definition	corona_radius_scale.n	160	real[2]	read	kept	used
 lens_flare_definition	corona_radius_scale.j	164	real	read	kept	used
 lens_flare_definition	reservedA8	168	byte[28]	-	-	-
-lens_flare_definition	reflections.count	196	long	read	kept	unused
-lens_flare_definition	reflections.address	200	void *	read	kept	unused
+lens_flare_definition	reflections.count	196	long	read	kept	walked
+lens_flare_definition	reflections.address	200	void *	read	kept	walked
 lens_flare_definition	reflections.definition	204	struct tag_block_definition *	read	-	-
 lens_flare_definition	reservedD0	208	byte[32]	-	-	-
 lens_flare_reflection	flags	0	word	read	kept	used
@@ -4441,27 +4441,27 @@ machine_definition	object.modifier_shader.group_tag	144	unsigned long	-	kept	unu
 machine_definition	object.modifier_shader.name	148	char *	-	-	-
 machine_definition	object.modifier_shader.name_length	152	long	-	-	-
 machine_definition	object.modifier_shader.index	156	long	read	kept	unused
-machine_definition	object.creation_effect.group_tag	160	unsigned long	-	kept	unused
+machine_definition	object.creation_effect.group_tag	160	unsigned long	-	kept	used
 machine_definition	object.creation_effect.name	164	char *	-	-	-
 machine_definition	object.creation_effect.name_length	168	long	-	-	-
-machine_definition	object.creation_effect.index	172	long	read	kept	unused
+machine_definition	object.creation_effect.index	172	long	read	kept	used
 machine_definition	object.unused1	176	long[21]	-	-	-
 machine_definition	object.render_bounding_radius	260	real	-	kept	unused
-machine_definition	object.function_modes	264	short[4]	read	kept	untraced
+machine_definition	object.function_modes	264	short[4]	read	kept	used
 machine_definition	object.unused2	272	long[11]	-	-	-
 machine_definition	object.icon_text_index	316	short	-	kept	used
 machine_definition	object.forced_shader_permutation_index	318	short	read	-	-
-machine_definition	object.attachments.count	320	long	read	kept	unused
-machine_definition	object.attachments.address	324	void *	read	kept	unused
+machine_definition	object.attachments.count	320	long	read	kept	walked
+machine_definition	object.attachments.address	324	void *	read	kept	walked
 machine_definition	object.attachments.definition	328	struct tag_block_definition *	read	-	-
-machine_definition	object.widgets.count	332	long	read	kept	unused
-machine_definition	object.widgets.address	336	void *	read	kept	unused
+machine_definition	object.widgets.count	332	long	read	kept	walked
+machine_definition	object.widgets.address	336	void *	read	kept	walked
 machine_definition	object.widgets.definition	340	struct tag_block_definition *	read	-	-
-machine_definition	object.functions.count	344	long	read	kept	unused
-machine_definition	object.functions.address	348	void *	read	kept	unused
+machine_definition	object.functions.count	344	long	read	kept	walked
+machine_definition	object.functions.address	348	void *	read	kept	walked
 machine_definition	object.functions.definition	352	struct tag_block_definition *	read	-	-
-machine_definition	object.change_colors.count	356	long	read	kept	unused
-machine_definition	object.change_colors.address	360	void *	read	kept	unused
+machine_definition	object.change_colors.count	356	long	read	kept	walked
+machine_definition	object.change_colors.address	360	void *	read	kept	walked
 machine_definition	object.change_colors.definition	364	struct tag_block_definition *	read	-	-
 machine_definition	object.predicted_resources.count	368	long	read	-	-
 machine_definition	object.predicted_resources.address	372	void *	read	-	-
@@ -4473,31 +4473,31 @@ machine_definition	device.powered_position_transition_time	392	real	-	-	-
 machine_definition	device.powered_position_acceleration_time	396	real	-	-	-
 machine_definition	device.depowered_position_transition_time	400	real	-	-	-
 machine_definition	device.depowered_position_acceleration_time	404	real	-	-	-
-machine_definition	device.function_modes	408	short[4]	read	kept	untraced
+machine_definition	device.function_modes	408	short[4]	read	kept	used
 machine_definition	device.positive_start_effect.group_tag	416	unsigned long	-	kept	used
 machine_definition	device.positive_start_effect.name	420	char *	-	-	-
 machine_definition	device.positive_start_effect.name_length	424	long	-	-	-
 machine_definition	device.positive_start_effect.index	428	long	read	kept	used
-machine_definition	device.negative_start_effect.group_tag	432	unsigned long	-	kept	untraced
+machine_definition	device.negative_start_effect.group_tag	432	unsigned long	-	kept	used
 machine_definition	device.negative_start_effect.name	436	char *	-	-	-
 machine_definition	device.negative_start_effect.name_length	440	long	-	-	-
-machine_definition	device.negative_start_effect.index	444	long	read	kept	untraced
+machine_definition	device.negative_start_effect.index	444	long	read	kept	used
 machine_definition	device.positive_stop_effect.group_tag	448	unsigned long	-	kept	used
 machine_definition	device.positive_stop_effect.name	452	char *	-	-	-
 machine_definition	device.positive_stop_effect.name_length	456	long	-	-	-
 machine_definition	device.positive_stop_effect.index	460	long	read	kept	used
-machine_definition	device.negative_stop_effect.group_tag	464	unsigned long	-	kept	untraced
+machine_definition	device.negative_stop_effect.group_tag	464	unsigned long	-	kept	used
 machine_definition	device.negative_stop_effect.name	468	char *	-	-	-
 machine_definition	device.negative_stop_effect.name_length	472	long	-	-	-
-machine_definition	device.negative_stop_effect.index	476	long	read	kept	untraced
+machine_definition	device.negative_stop_effect.index	476	long	read	kept	used
 machine_definition	device.depowered_effect.group_tag	480	unsigned long	-	kept	used
 machine_definition	device.depowered_effect.name	484	char *	-	-	-
 machine_definition	device.depowered_effect.name_length	488	long	-	-	-
 machine_definition	device.depowered_effect.index	492	long	read	kept	used
-machine_definition	device.repowered_effect.group_tag	496	unsigned long	-	kept	untraced
+machine_definition	device.repowered_effect.group_tag	496	unsigned long	-	kept	used
 machine_definition	device.repowered_effect.name	500	char *	-	-	-
 machine_definition	device.repowered_effect.name_length	504	long	-	-	-
-machine_definition	device.repowered_effect.index	508	long	read	kept	untraced
+machine_definition	device.repowered_effect.index	508	long	read	kept	used
 machine_definition	device.delay_time	512	real	-	-	-
 machine_definition	device.delay_unused	516	unsigned long[2]	-	-	-
 machine_definition	device.delay_effect.group_tag	524	unsigned long	-	kept	used
@@ -4590,10 +4590,10 @@ material_definition	breakable_surface.particle_effects.count	796	long	read	-	-
 material_definition	breakable_surface.particle_effects.address	800	void *	read	-	-
 material_definition	breakable_surface.particle_effects.definition	804	struct tag_block_definition *	read	-	-
 material_definition	unused2	808	long[15]	-	-	-
-material_definition	melee_hit_sound.group_tag	868	unsigned long	-	kept	untraced
+material_definition	melee_hit_sound.group_tag	868	unsigned long	-	kept	used
 material_definition	melee_hit_sound.name	872	char *	-	-	-
 material_definition	melee_hit_sound.name_length	876	long	-	-	-
-material_definition	melee_hit_sound.index	880	long	read	kept	untraced
+material_definition	melee_hit_sound.index	880	long	read	kept	used
 material_effect	materials.count	0	long	read	kept	used
 material_effect	materials.address	4	void *	read	kept	used
 material_effect	materials.definition	8	struct tag_block_definition *	read	-	-
@@ -4607,15 +4607,15 @@ material_effect_material	sound.name	20	char *	-	-	-
 material_effect_material	sound.name_length	24	long	-	-	-
 material_effect_material	sound.index	28	long	read	kept	used
 material_effect_material	pad20	32	byte[16]	-	-	-
-material_effects_definition	effects.count	0	long	read	kept	unused
-material_effects_definition	effects.address	4	void *	read	kept	unused
+material_effects_definition	effects.count	0	long	read	kept	walked
+material_effects_definition	effects.address	4	void *	read	kept	walked
 material_effects_definition	effects.definition	8	struct tag_block_definition *	read	-	-
 meter_hud_element_definition	placement.offset.n	0	short[2]	-	kept	used
 meter_hud_element_definition	placement.offset.x	0	short	read	kept	used
 meter_hud_element_definition	placement.offset.y	2	short	read	kept	used
 meter_hud_element_definition	placement.scale.n	4	real[2]	read	kept	used
 meter_hud_element_definition	placement.scale.i	4	real	read	kept	used
-meter_hud_element_definition	placement.scale.j	8	real	read	kept	untraced
+meter_hud_element_definition	placement.scale.j	8	real	read	kept	used
 meter_hud_element_definition	placement.multiplayer_scaling_flags	12	short	read	kept	used
 meter_hud_element_definition	placement.pad	14	short	-	-	-
 meter_hud_element_definition	placement.unused0	16	long[5]	-	-	-
@@ -4645,7 +4645,7 @@ metered_panel_definition	background.placement.offset.x	0	short	read	kept	used
 metered_panel_definition	background.placement.offset.y	2	short	read	kept	used
 metered_panel_definition	background.placement.scale.n	4	real[2]	read	kept	used
 metered_panel_definition	background.placement.scale.i	4	real	read	kept	used
-metered_panel_definition	background.placement.scale.j	8	real	read	kept	untraced
+metered_panel_definition	background.placement.scale.j	8	real	read	kept	used
 metered_panel_definition	background.placement.multiplayer_scaling_flags	12	short	read	kept	used
 metered_panel_definition	background.placement.pad	14	short	-	-	-
 metered_panel_definition	background.placement.unused0	16	long[5]	-	-	-
@@ -4675,7 +4675,7 @@ metered_panel_definition	meter.placement.offset.x	104	short	read	kept	used
 metered_panel_definition	meter.placement.offset.y	106	short	read	kept	used
 metered_panel_definition	meter.placement.scale.n	108	real[2]	read	kept	used
 metered_panel_definition	meter.placement.scale.i	108	real	read	kept	used
-metered_panel_definition	meter.placement.scale.j	112	real	read	kept	untraced
+metered_panel_definition	meter.placement.scale.j	112	real	read	kept	used
 metered_panel_definition	meter.placement.multiplayer_scaling_flags	116	short	read	kept	used
 metered_panel_definition	meter.placement.pad	118	short	-	-	-
 metered_panel_definition	meter.placement.unused0	120	long[5]	-	-	-
@@ -4715,7 +4715,7 @@ metered_panel_definition	aux_extras.pad	216	long[2]	-	kept	used
 metered_panel_definition	unused	224	long[4]	-	-	-
 model	flags	0	unsigned long	-	kept	used
 model	node_list_checksum	4	unsigned long	read	kept	used
-model	detail_cutoff_pixels	8	real[5]	read	kept	untraced
+model	detail_cutoff_pixels	8	real[5]	read	kept	used
 model	node_counts	28	short[5]	-	-	-
 model	pad	38	word	-	-	-
 model	unused1	40	long[2]	-	-	-
@@ -4723,20 +4723,20 @@ model	base_map_scale.n	48	real[2]	read	kept	used
 model	base_map_scale.i	48	real	read	kept	used
 model	base_map_scale.j	52	real	read	kept	used
 model	unused2	56	long[29]	-	-	-
-model	markers.count	172	long	read	kept	unused
-model	markers.address	176	void *	read	kept	unused
+model	markers.count	172	long	read	kept	walked
+model	markers.address	176	void *	read	kept	walked
 model	markers.definition	180	struct tag_block_definition *	read	-	-
-model	nodes.count	184	long	read	kept	unused
-model	nodes.address	188	void *	read	kept	unused
+model	nodes.count	184	long	read	kept	walked
+model	nodes.address	188	void *	read	kept	walked
 model	nodes.definition	192	struct tag_block_definition *	read	-	-
-model	regions.count	196	long	read	kept	unused
-model	regions.address	200	void *	read	kept	unused
+model	regions.count	196	long	read	kept	walked
+model	regions.address	200	void *	read	kept	walked
 model	regions.definition	204	struct tag_block_definition *	read	-	-
-model	geometries.count	208	long	read	kept	unused
-model	geometries.address	212	void *	read	kept	unused
+model	geometries.count	208	long	read	kept	walked
+model	geometries.address	212	void *	read	kept	walked
 model	geometries.definition	216	struct tag_block_definition *	read	-	-
-model	shaders.count	220	long	read	kept	unused
-model	shaders.address	224	void *	read	kept	unused
+model	shaders.count	220	long	read	kept	walked
+model	shaders.address	224	void *	read	kept	walked
 model	shaders.definition	228	struct tag_block_definition *	read	-	-
 model_geometry	reserved	0	byte[36]	-	-	-
 model_geometry	parts.count	36	long	read	kept	used
@@ -4845,7 +4845,7 @@ model_region_permutation	flags	32	long	read	kept	used
 model_region_permutation	variant_number	36	short	read	-	-
 model_region_permutation	pad	38	word	-	-	-
 model_region_permutation	unused	40	long[6]	-	-	-
-model_region_permutation	geometry_indices	64	short[5]	read	kept	untraced
+model_region_permutation	geometry_indices	64	short[5]	read	kept	used
 model_region_permutation	pad2	74	word	-	-	-
 model_region_permutation	markers.count	76	long	-	-	-
 model_region_permutation	markers.address	80	void *	-	-	-
@@ -4862,7 +4862,7 @@ motion_sensor_panel_definition	background.placement.offset.x	0	short	read	kept	u
 motion_sensor_panel_definition	background.placement.offset.y	2	short	read	kept	used
 motion_sensor_panel_definition	background.placement.scale.n	4	real[2]	read	kept	used
 motion_sensor_panel_definition	background.placement.scale.i	4	real	read	kept	used
-motion_sensor_panel_definition	background.placement.scale.j	8	real	read	kept	untraced
+motion_sensor_panel_definition	background.placement.scale.j	8	real	read	kept	used
 motion_sensor_panel_definition	background.placement.multiplayer_scaling_flags	12	short	read	kept	used
 motion_sensor_panel_definition	background.placement.pad	14	short	-	-	-
 motion_sensor_panel_definition	background.placement.unused0	16	long[5]	-	-	-
@@ -4892,7 +4892,7 @@ motion_sensor_panel_definition	foreground.placement.offset.x	104	short	read	kept
 motion_sensor_panel_definition	foreground.placement.offset.y	106	short	read	kept	used
 motion_sensor_panel_definition	foreground.placement.scale.n	108	real[2]	read	kept	used
 motion_sensor_panel_definition	foreground.placement.scale.i	108	real	read	kept	used
-motion_sensor_panel_definition	foreground.placement.scale.j	112	real	read	kept	untraced
+motion_sensor_panel_definition	foreground.placement.scale.j	112	real	read	kept	used
 motion_sensor_panel_definition	foreground.placement.multiplayer_scaling_flags	116	short	read	kept	used
 motion_sensor_panel_definition	foreground.placement.pad	118	short	-	-	-
 motion_sensor_panel_definition	foreground.placement.unused0	120	long[5]	-	-	-
@@ -5012,7 +5012,7 @@ number_hud_element_definition	placement.offset.x	0	short	read	kept	used
 number_hud_element_definition	placement.offset.y	2	short	read	kept	used
 number_hud_element_definition	placement.scale.i	4	real	read	kept	used
 number_hud_element_definition	placement.scale.n	4	real[2]	read	kept	used
-number_hud_element_definition	placement.scale.j	8	real	read	kept	untraced
+number_hud_element_definition	placement.scale.j	8	real	read	kept	used
 number_hud_element_definition	placement.multiplayer_scaling_flags	12	short	read	kept	used
 number_hud_element_definition	placement.pad	14	short	-	-	-
 number_hud_element_definition	placement.unused0	16	long[5]	-	-	-
@@ -5028,7 +5028,7 @@ number_hud_element_definition	colors.custom.objective.up_ticks	64	short	read	-	-
 number_hud_element_definition	colors.custom.objective.fade_ticks	66	short	read	-	-
 number_hud_element_definition	digits	68	char	read	kept	used
 number_hud_element_definition	number_flags	69	byte	read	kept	used
-number_hud_element_definition	fractional_digits	70	char	read	kept	unused
+number_hud_element_definition	fractional_digits	70	char	read	kept	used
 number_hud_element_definition	pad	71	byte	-	-	-
 number_hud_element_definition	unused	72	long[3]	-	-	-
 object_attachment_definition	type.group_tag	0	unsigned long	read	kept	used
@@ -5104,27 +5104,27 @@ object_definition	object.modifier_shader.group_tag	144	unsigned long	-	kept	unus
 object_definition	object.modifier_shader.name	148	char *	-	-	-
 object_definition	object.modifier_shader.name_length	152	long	-	-	-
 object_definition	object.modifier_shader.index	156	long	read	kept	unused
-object_definition	object.creation_effect.group_tag	160	unsigned long	-	kept	unused
+object_definition	object.creation_effect.group_tag	160	unsigned long	-	kept	used
 object_definition	object.creation_effect.name	164	char *	-	-	-
 object_definition	object.creation_effect.name_length	168	long	-	-	-
-object_definition	object.creation_effect.index	172	long	read	kept	unused
+object_definition	object.creation_effect.index	172	long	read	kept	used
 object_definition	object.unused1	176	long[21]	-	-	-
 object_definition	object.render_bounding_radius	260	real	-	kept	unused
-object_definition	object.function_modes	264	short[4]	read	kept	untraced
+object_definition	object.function_modes	264	short[4]	read	kept	used
 object_definition	object.unused2	272	long[11]	-	-	-
 object_definition	object.icon_text_index	316	short	-	kept	used
 object_definition	object.forced_shader_permutation_index	318	short	read	-	-
-object_definition	object.attachments.count	320	long	read	kept	unused
-object_definition	object.attachments.address	324	void *	read	kept	unused
+object_definition	object.attachments.count	320	long	read	kept	walked
+object_definition	object.attachments.address	324	void *	read	kept	walked
 object_definition	object.attachments.definition	328	struct tag_block_definition *	read	-	-
-object_definition	object.widgets.count	332	long	read	kept	unused
-object_definition	object.widgets.address	336	void *	read	kept	unused
+object_definition	object.widgets.count	332	long	read	kept	walked
+object_definition	object.widgets.address	336	void *	read	kept	walked
 object_definition	object.widgets.definition	340	struct tag_block_definition *	read	-	-
-object_definition	object.functions.count	344	long	read	kept	unused
-object_definition	object.functions.address	348	void *	read	kept	unused
+object_definition	object.functions.count	344	long	read	kept	walked
+object_definition	object.functions.address	348	void *	read	kept	walked
 object_definition	object.functions.definition	352	struct tag_block_definition *	read	-	-
-object_definition	object.change_colors.count	356	long	read	kept	unused
-object_definition	object.change_colors.address	360	void *	read	kept	unused
+object_definition	object.change_colors.count	356	long	read	kept	walked
+object_definition	object.change_colors.address	360	void *	read	kept	walked
 object_definition	object.change_colors.definition	364	struct tag_block_definition *	read	-	-
 object_definition	object.predicted_resources.count	368	long	read	-	-
 object_definition	object.predicted_resources.address	372	void *	read	-	-
@@ -5219,10 +5219,10 @@ particle_definition	physics.group_tag	20	unsigned long	-	kept	used
 particle_definition	physics.name	24	char *	-	-	-
 particle_definition	physics.name_length	28	long	-	-	-
 particle_definition	physics.index	32	long	read	kept	used
-particle_definition	collision_material_effects.group_tag	36	unsigned long	-	kept	unused
+particle_definition	collision_material_effects.group_tag	36	unsigned long	-	kept	used
 particle_definition	collision_material_effects.name	40	char *	-	-	-
 particle_definition	collision_material_effects.name_length	44	long	-	-	-
-particle_definition	collision_material_effects.index	48	long	read	kept	unused
+particle_definition	collision_material_effects.index	48	long	read	kept	used
 particle_definition	reserved34	52	long	-	-	-
 particle_definition	life_span_lower_bound	56	real	read	kept	used
 particle_definition	life_span_upper_bound	60	real	read	kept	used
@@ -5243,7 +5243,7 @@ particle_definition	radius_upper_bound	120	real	read	kept	used
 particle_definition	reserved7C	124	long	-	-	-
 particle_definition	frames_per_second_lower_bound	128	real	read	kept	used
 particle_definition	frames_per_second_upper_bound	132	real	read	kept	used
-particle_definition	frames_per_second_contact_deterioration	136	real	read	kept	unused
+particle_definition	frames_per_second_contact_deterioration	136	real	read	kept	used
 particle_definition	lod_falloff	140	real	-	kept	unused
 particle_definition	lod_cutoff	144	real	read	kept	unused
 particle_definition	reserved94	148	long	-	-	-
@@ -5275,10 +5275,10 @@ particle_definition	shader.framebuffer_blend_function	218	short	read	kept	used
 particle_definition	shader.framebuffer_fade_mode	220	short	-	kept	used
 particle_definition	shader.primary_map_flags	222	unsigned short	read	kept	unused
 particle_definition	shader.reserved_before_secondary_map	224	byte[28]	-	-	-
-particle_definition	shader.secondary_map.group_tag	252	unsigned long	-	kept	untraced
+particle_definition	shader.secondary_map.group_tag	252	unsigned long	-	kept	used
 particle_definition	shader.secondary_map.name	256	char *	-	-	-
 particle_definition	shader.secondary_map.name_length	260	long	-	-	-
-particle_definition	shader.secondary_map.index	264	long	read	kept	untraced
+particle_definition	shader.secondary_map.index	264	long	read	kept	used
 particle_definition	shader.secondary_map_anchor	268	short	read	kept	used
 particle_definition	shader.secondary_map_flags	270	unsigned short	read	kept	used
 particle_definition	shader.secondary_map_animation.u_source	272	short	read	-	-
@@ -5312,13 +5312,13 @@ particle_system_definition	system_update_point_physics.index	68	long	read	kept	u
 particle_system_definition	system_update_physics	72	short	read	kept	used
 particle_system_definition	pad4A	74	word	-	-	-
 particle_system_definition	physics_flags	76	unsigned long	-	kept	unused
-particle_system_definition	physics_constants.count	80	long	-	kept	unused
-particle_system_definition	physics_constants.address	84	void *	-	kept	unused
+particle_system_definition	physics_constants.count	80	long	-	kept	walked
+particle_system_definition	physics_constants.address	84	void *	-	kept	walked
 particle_system_definition	physics_constants.definition	88	struct tag_block_definition *	-	-	-
-particle_system_definition	types.count	92	long	read	kept	unused
-particle_system_definition	types.address	96	void *	read	kept	unused
+particle_system_definition	types.count	92	long	read	kept	walked
+particle_system_definition	types.address	96	void *	read	kept	walked
 particle_system_definition	types.definition	100	struct tag_block_definition *	read	-	-
-particle_system_physics_constant	k	0	real	-	kept	untraced
+particle_system_physics_constant	k	0	real	-	kept	used
 particle_system_type	name	0	char[32]	-	kept	used
 particle_system_type	flags	32	unsigned long	read	kept	used
 particle_system_type	initial_particle_count	36	short	read	kept	used
@@ -5330,8 +5330,8 @@ particle_system_type	reserved30	48	byte[36]	-	-	-
 particle_system_type	initial_particle_creation_physics	84	short	read	kept	used
 particle_system_type	pad56	86	word	-	-	-
 particle_system_type	physics_flags	88	unsigned long	-	kept	unused
-particle_system_type	physics_constants.count	92	long	read	kept	unused
-particle_system_type	physics_constants.address	96	void *	read	kept	unused
+particle_system_type	physics_constants.count	92	long	read	kept	walked
+particle_system_type	physics_constants.address	96	void *	read	kept	walked
 particle_system_type	physics_constants.definition	100	struct tag_block_definition *	read	-	-
 particle_system_type	type_states.count	104	long	read	kept	used
 particle_system_type	type_states.address	108	void *	read	kept	used
@@ -5366,15 +5366,15 @@ particle_system_type_particle_state	color_lower_bound.rgb.blue	108	real	-	kept	u
 particle_system_type_particle_state	color_lower_bound.red	100	real	read	kept	used
 particle_system_type_particle_state	color_lower_bound.green	104	real	read	kept	used
 particle_system_type_particle_state	color_lower_bound.blue	108	real	read	kept	used
-particle_system_type_particle_state	color_upper_bound.n	112	real[4]	-	kept	untraced
-particle_system_type_particle_state	color_upper_bound.alpha	112	real	read	kept	untraced
-particle_system_type_particle_state	color_upper_bound.rgb.n	116	real[3]	-	kept	untraced
-particle_system_type_particle_state	color_upper_bound.rgb.red	116	real	-	kept	untraced
-particle_system_type_particle_state	color_upper_bound.rgb.green	120	real	-	kept	untraced
-particle_system_type_particle_state	color_upper_bound.rgb.blue	124	real	-	kept	untraced
-particle_system_type_particle_state	color_upper_bound.red	116	real	read	kept	untraced
-particle_system_type_particle_state	color_upper_bound.green	120	real	read	kept	untraced
-particle_system_type_particle_state	color_upper_bound.blue	124	real	read	kept	untraced
+particle_system_type_particle_state	color_upper_bound.n	112	real[4]	-	kept	used
+particle_system_type_particle_state	color_upper_bound.alpha	112	real	read	kept	used
+particle_system_type_particle_state	color_upper_bound.rgb.n	116	real[3]	-	kept	used
+particle_system_type_particle_state	color_upper_bound.rgb.red	116	real	-	kept	used
+particle_system_type_particle_state	color_upper_bound.rgb.green	120	real	-	kept	used
+particle_system_type_particle_state	color_upper_bound.rgb.blue	124	real	-	kept	used
+particle_system_type_particle_state	color_upper_bound.red	116	real	read	kept	used
+particle_system_type_particle_state	color_upper_bound.green	120	real	read	kept	used
+particle_system_type_particle_state	color_upper_bound.blue	124	real	read	kept	used
 particle_system_type_particle_state	variables.radius	128	real	read	kept	used
 particle_system_type_particle_state	point_physics.group_tag	132	unsigned long	-	kept	used
 particle_system_type_particle_state	point_physics.name	136	char *	-	-	-
@@ -5401,10 +5401,10 @@ particle_system_type_particle_state	shader.framebuffer_blend_function	226	short	
 particle_system_type_particle_state	shader.framebuffer_fade_mode	228	short	-	kept	used
 particle_system_type_particle_state	shader.primary_map_flags	230	unsigned short	read	kept	unused
 particle_system_type_particle_state	shader.reserved_before_secondary_map	232	byte[28]	-	-	-
-particle_system_type_particle_state	shader.secondary_map.group_tag	260	unsigned long	-	kept	untraced
+particle_system_type_particle_state	shader.secondary_map.group_tag	260	unsigned long	-	kept	used
 particle_system_type_particle_state	shader.secondary_map.name	264	char *	-	-	-
 particle_system_type_particle_state	shader.secondary_map.name_length	268	long	-	-	-
-particle_system_type_particle_state	shader.secondary_map.index	272	long	read	kept	untraced
+particle_system_type_particle_state	shader.secondary_map.index	272	long	read	kept	used
 particle_system_type_particle_state	shader.secondary_map_anchor	276	short	read	kept	used
 particle_system_type_particle_state	shader.secondary_map_flags	278	unsigned short	read	kept	used
 particle_system_type_particle_state	shader.secondary_map_animation.u_source	280	short	read	-	-
@@ -5468,8 +5468,8 @@ particle_system_type_state	variables.particle_creation_rate	88	real	-	kept	used
 particle_system_type_state	unused5C	92	long[21]	-	-	-
 particle_system_type_state	particle_creation_physics	176	short	read	kept	used
 particle_system_type_state	particle_update_physics	178	short	read	kept	used
-particle_system_type_state	physics_constants.count	180	long	-	kept	unused
-particle_system_type_state	physics_constants.address	184	void *	-	kept	unused
+particle_system_type_state	physics_constants.count	180	long	-	kept	walked
+particle_system_type_state	physics_constants.address	184	void *	-	kept	walked
 particle_system_type_state	physics_constants.definition	188	struct tag_block_definition *	-	-	-
 particle_system_type_state_interpolated_variables	particle_state_randomized_multipliers.scale	0	real	read	kept	used
 particle_system_type_state_interpolated_variables	particle_state_randomized_multipliers.animation_rate	4	real	read	kept	used
@@ -5489,13 +5489,13 @@ particle_system_type_state_interpolated_variables	particle_creation_rate	36	real
 pathfinding_sphere	node_index	0	short	read	kept	used
 pathfinding_sphere	pad	2	word	-	-	-
 pathfinding_sphere	unused	4	long[3]	-	-	-
-pathfinding_sphere	center.n	16	real[3]	read	kept	unused
-pathfinding_sphere	center.x	16	real	read	kept	unused
-pathfinding_sphere	center.y	20	real	read	kept	unused
-pathfinding_sphere	center.z	24	real	read	kept	unused
-pathfinding_sphere	center.u	16	real	read	kept	unused
-pathfinding_sphere	center.v	20	real	read	kept	unused
-pathfinding_sphere	center.w	24	real	read	kept	unused
+pathfinding_sphere	center.n	16	real[3]	read	kept	used
+pathfinding_sphere	center.x	16	real	read	kept	used
+pathfinding_sphere	center.y	20	real	read	kept	used
+pathfinding_sphere	center.z	24	real	read	kept	used
+pathfinding_sphere	center.u	16	real	read	kept	used
+pathfinding_sphere	center.v	20	real	read	kept	used
+pathfinding_sphere	center.w	24	real	read	kept	used
 pathfinding_sphere	radius	28	real	read	kept	used
 physics_definition	radius	0	real	read	kept	used
 physics_definition	moment	4	real	read	kept	used
@@ -5524,14 +5524,14 @@ physics_definition	air_unused	76	real	-	-	-
 physics_definition	xx_moment	80	real	read	kept	used
 physics_definition	yy_moment	84	real	read	kept	used
 physics_definition	zz_moment	88	real	read	kept	used
-physics_definition	inertial_matrix.count	92	long	-	kept	unused
-physics_definition	inertial_matrix.address	96	void *	-	kept	unused
+physics_definition	inertial_matrix.count	92	long	-	kept	walked
+physics_definition	inertial_matrix.address	96	void *	-	kept	walked
 physics_definition	inertial_matrix.definition	100	struct tag_block_definition *	-	-	-
-physics_definition	powered_mass_points.count	104	long	read	kept	unused
-physics_definition	powered_mass_points.address	108	void *	read	kept	unused
+physics_definition	powered_mass_points.count	104	long	read	kept	walked
+physics_definition	powered_mass_points.address	108	void *	read	kept	walked
 physics_definition	powered_mass_points.definition	112	struct tag_block_definition *	read	-	-
-physics_definition	mass_points.count	116	long	read	kept	unused
-physics_definition	mass_points.address	120	void *	read	kept	unused
+physics_definition	mass_points.count	116	long	read	kept	walked
+physics_definition	mass_points.address	120	void *	read	kept	walked
 physics_definition	mass_points.definition	124	struct tag_block_definition *	read	-	-
 physics_mass_point_definition	unused0	0	byte[32]	-	-	-
 physics_mass_point_definition	powered_mass_point_index	32	short	read	-	-
@@ -5696,27 +5696,27 @@ projectile_definition	object.modifier_shader.group_tag	144	unsigned long	-	kept	
 projectile_definition	object.modifier_shader.name	148	char *	-	-	-
 projectile_definition	object.modifier_shader.name_length	152	long	-	-	-
 projectile_definition	object.modifier_shader.index	156	long	read	kept	unused
-projectile_definition	object.creation_effect.group_tag	160	unsigned long	-	kept	unused
+projectile_definition	object.creation_effect.group_tag	160	unsigned long	-	kept	used
 projectile_definition	object.creation_effect.name	164	char *	-	-	-
 projectile_definition	object.creation_effect.name_length	168	long	-	-	-
-projectile_definition	object.creation_effect.index	172	long	read	kept	unused
+projectile_definition	object.creation_effect.index	172	long	read	kept	used
 projectile_definition	object.unused1	176	long[21]	-	-	-
 projectile_definition	object.render_bounding_radius	260	real	-	kept	unused
-projectile_definition	object.function_modes	264	short[4]	read	kept	untraced
+projectile_definition	object.function_modes	264	short[4]	read	kept	used
 projectile_definition	object.unused2	272	long[11]	-	-	-
 projectile_definition	object.icon_text_index	316	short	-	kept	used
 projectile_definition	object.forced_shader_permutation_index	318	short	read	-	-
-projectile_definition	object.attachments.count	320	long	read	kept	unused
-projectile_definition	object.attachments.address	324	void *	read	kept	unused
+projectile_definition	object.attachments.count	320	long	read	kept	walked
+projectile_definition	object.attachments.address	324	void *	read	kept	walked
 projectile_definition	object.attachments.definition	328	struct tag_block_definition *	read	-	-
-projectile_definition	object.widgets.count	332	long	read	kept	unused
-projectile_definition	object.widgets.address	336	void *	read	kept	unused
+projectile_definition	object.widgets.count	332	long	read	kept	walked
+projectile_definition	object.widgets.address	336	void *	read	kept	walked
 projectile_definition	object.widgets.definition	340	struct tag_block_definition *	read	-	-
-projectile_definition	object.functions.count	344	long	read	kept	unused
-projectile_definition	object.functions.address	348	void *	read	kept	unused
+projectile_definition	object.functions.count	344	long	read	kept	walked
+projectile_definition	object.functions.address	348	void *	read	kept	walked
 projectile_definition	object.functions.definition	352	struct tag_block_definition *	read	-	-
-projectile_definition	object.change_colors.count	356	long	read	kept	unused
-projectile_definition	object.change_colors.address	360	void *	read	kept	unused
+projectile_definition	object.change_colors.count	356	long	read	kept	walked
+projectile_definition	object.change_colors.address	360	void *	read	kept	walked
 projectile_definition	object.change_colors.definition	364	struct tag_block_definition *	read	-	-
 projectile_definition	object.predicted_resources.count	368	long	read	-	-
 projectile_definition	object.predicted_resources.address	372	void *	read	-	-
@@ -5831,8 +5831,8 @@ scenario	bad_sky.group_tag	32	unsigned long	-	-	-
 scenario	bad_sky.name	36	char *	-	-	-
 scenario	bad_sky.name_length	40	long	-	-	-
 scenario	bad_sky.index	44	long	-	-	-
-scenario	sky_references.count	48	long	read	kept	unused
-scenario	sky_references.address	52	void *	read	kept	unused
+scenario	sky_references.count	48	long	read	kept	walked
+scenario	sky_references.address	52	void *	read	kept	walked
 scenario	sky_references.definition	56	struct tag_block_definition *	read	-	-
 scenario	type	60	short	read	-	-
 scenario	flags	62	word	-	-	-
@@ -5860,66 +5860,66 @@ scenario	user_edit_unused	292	long[56]	-	-	-
 scenario	object_names.count	516	long	read	kept	used
 scenario	object_names.address	520	void *	read	kept	used
 scenario	object_names.definition	524	struct tag_block_definition *	read	-	-
-scenario	scenery.count	528	long	-	kept	untraced
-scenario	scenery.address	532	void *	-	kept	untraced
+scenario	scenery.count	528	long	-	kept	walked
+scenario	scenery.address	532	void *	-	kept	walked
 scenario	scenery.definition	536	struct tag_block_definition *	-	-	-
-scenario	scenery_palette.count	540	long	-	kept	unused
-scenario	scenery_palette.address	544	void *	-	kept	unused
+scenario	scenery_palette.count	540	long	-	kept	walked
+scenario	scenery_palette.address	544	void *	-	kept	walked
 scenario	scenery_palette.definition	548	struct tag_block_definition *	-	-	-
-scenario	bipeds.count	552	long	-	kept	untraced
-scenario	bipeds.address	556	void *	-	kept	untraced
+scenario	bipeds.count	552	long	-	kept	walked
+scenario	bipeds.address	556	void *	-	kept	walked
 scenario	bipeds.definition	560	struct tag_block_definition *	-	-	-
-scenario	biped_palette.count	564	long	-	kept	unused
-scenario	biped_palette.address	568	void *	-	kept	unused
+scenario	biped_palette.count	564	long	-	kept	walked
+scenario	biped_palette.address	568	void *	-	kept	walked
 scenario	biped_palette.definition	572	struct tag_block_definition *	-	-	-
-scenario	vehicles.count	576	long	-	kept	untraced
-scenario	vehicles.address	580	void *	-	kept	untraced
+scenario	vehicles.count	576	long	-	kept	walked
+scenario	vehicles.address	580	void *	-	kept	walked
 scenario	vehicles.definition	584	struct tag_block_definition *	-	-	-
-scenario	vehicle_palette.count	588	long	-	kept	unused
-scenario	vehicle_palette.address	592	void *	-	kept	unused
+scenario	vehicle_palette.count	588	long	-	kept	walked
+scenario	vehicle_palette.address	592	void *	-	kept	walked
 scenario	vehicle_palette.definition	596	struct tag_block_definition *	-	-	-
-scenario	equipment.count	600	long	-	kept	untraced
-scenario	equipment.address	604	void *	-	kept	untraced
+scenario	equipment.count	600	long	-	kept	walked
+scenario	equipment.address	604	void *	-	kept	walked
 scenario	equipment.definition	608	struct tag_block_definition *	-	-	-
-scenario	equipment_palette.count	612	long	-	kept	unused
-scenario	equipment_palette.address	616	void *	-	kept	unused
+scenario	equipment_palette.count	612	long	-	kept	walked
+scenario	equipment_palette.address	616	void *	-	kept	walked
 scenario	equipment_palette.definition	620	struct tag_block_definition *	-	-	-
-scenario	weapons.count	624	long	-	kept	untraced
-scenario	weapons.address	628	void *	-	kept	untraced
+scenario	weapons.count	624	long	-	kept	walked
+scenario	weapons.address	628	void *	-	kept	walked
 scenario	weapons.definition	632	struct tag_block_definition *	-	-	-
-scenario	weapon_palette.count	636	long	-	kept	unused
-scenario	weapon_palette.address	640	void *	-	kept	unused
+scenario	weapon_palette.count	636	long	-	kept	walked
+scenario	weapon_palette.address	640	void *	-	kept	walked
 scenario	weapon_palette.definition	644	struct tag_block_definition *	-	-	-
 scenario	device_groups.count	648	long	read	kept	used
 scenario	device_groups.address	652	void *	read	kept	used
 scenario	device_groups.definition	656	struct tag_block_definition *	read	-	-
-scenario	machines.count	660	long	-	kept	untraced
-scenario	machines.address	664	void *	-	kept	untraced
+scenario	machines.count	660	long	-	kept	walked
+scenario	machines.address	664	void *	-	kept	walked
 scenario	machines.definition	668	struct tag_block_definition *	-	-	-
-scenario	machine_palette.count	672	long	-	kept	unused
-scenario	machine_palette.address	676	void *	-	kept	unused
+scenario	machine_palette.count	672	long	-	kept	walked
+scenario	machine_palette.address	676	void *	-	kept	walked
 scenario	machine_palette.definition	680	struct tag_block_definition *	-	-	-
-scenario	controls.count	684	long	-	kept	untraced
-scenario	controls.address	688	void *	-	kept	untraced
+scenario	controls.count	684	long	-	kept	walked
+scenario	controls.address	688	void *	-	kept	walked
 scenario	controls.definition	692	struct tag_block_definition *	-	-	-
-scenario	control_palette.count	696	long	-	kept	unused
-scenario	control_palette.address	700	void *	-	kept	unused
+scenario	control_palette.count	696	long	-	kept	walked
+scenario	control_palette.address	700	void *	-	kept	walked
 scenario	control_palette.definition	704	struct tag_block_definition *	-	-	-
-scenario	light_fixtures.count	708	long	-	kept	untraced
-scenario	light_fixtures.address	712	void *	-	kept	untraced
+scenario	light_fixtures.count	708	long	-	kept	walked
+scenario	light_fixtures.address	712	void *	-	kept	walked
 scenario	light_fixtures.definition	716	struct tag_block_definition *	-	-	-
-scenario	light_fixtures_palette.count	720	long	-	kept	unused
-scenario	light_fixtures_palette.address	724	void *	-	kept	unused
+scenario	light_fixtures_palette.count	720	long	-	kept	walked
+scenario	light_fixtures_palette.address	724	void *	-	kept	walked
 scenario	light_fixtures_palette.definition	728	struct tag_block_definition *	-	-	-
-scenario	sound_scenery.count	732	long	-	kept	untraced
-scenario	sound_scenery.address	736	void *	-	kept	untraced
+scenario	sound_scenery.count	732	long	-	kept	walked
+scenario	sound_scenery.address	736	void *	-	kept	walked
 scenario	sound_scenery.definition	740	struct tag_block_definition *	-	-	-
-scenario	sound_scenery_palette.count	744	long	-	kept	unused
-scenario	sound_scenery_palette.address	748	void *	-	kept	unused
+scenario	sound_scenery_palette.count	744	long	-	kept	walked
+scenario	sound_scenery_palette.address	748	void *	-	kept	walked
 scenario	sound_scenery_palette.definition	752	struct tag_block_definition *	-	-	-
 scenario	unused_blocks	756	struct tag_block[7]	-	-	-
-scenario	starting_profiles.count	840	long	read	kept	untraced
-scenario	starting_profiles.address	844	void *	read	kept	untraced
+scenario	starting_profiles.count	840	long	read	kept	unused
+scenario	starting_profiles.address	844	void *	read	kept	unused
 scenario	starting_profiles.definition	848	struct tag_block_definition *	read	-	-
 scenario	players.count	852	long	read	kept	used
 scenario	players.address	856	void *	read	kept	used
@@ -5945,11 +5945,11 @@ scenario	bsp_switch_trigger_volumes.definition	932	struct tag_block_definition *
 scenario	decals.count	936	long	-	-	-
 scenario	decals.address	940	void *	-	-	-
 scenario	decals.definition	944	struct tag_block_definition *	-	-	-
-scenario	decal_palette.count	948	long	-	kept	unused
-scenario	decal_palette.address	952	void *	-	kept	unused
+scenario	decal_palette.count	948	long	-	kept	walked
+scenario	decal_palette.address	952	void *	-	kept	walked
 scenario	decal_palette.definition	956	struct tag_block_definition *	-	-	-
-scenario	detail_object_collection_palette.count	960	long	read	kept	unused
-scenario	detail_object_collection_palette.address	964	void *	read	kept	unused
+scenario	detail_object_collection_palette.count	960	long	read	kept	walked
+scenario	detail_object_collection_palette.address	964	void *	read	kept	walked
 scenario	detail_object_collection_palette.definition	968	struct tag_block_definition *	read	-	-
 scenario	render_unused	972	long[21]	-	-	-
 scenario	ai_actor_palette.count	1056	long	read	kept	used
@@ -5989,10 +5989,10 @@ scenario	hs_scripts.definition	1188	struct tag_block_definition *	read	-	-
 scenario	hs_globals.count	1192	long	read	kept	used
 scenario	hs_globals.address	1196	void *	read	kept	used
 scenario	hs_globals.definition	1200	struct tag_block_definition *	read	-	-
-scenario	hs_references.count	1204	long	read	kept	untraced
-scenario	hs_references.address	1208	void *	read	kept	untraced
+scenario	hs_references.count	1204	long	read	kept	walked
+scenario	hs_references.address	1208	void *	read	kept	walked
 scenario	hs_references.definition	1212	struct tag_block_definition *	read	-	-
-scenario	hs_source_files.count	1216	long	read	kept	untraced
+scenario	hs_source_files.count	1216	long	read	kept	used
 scenario	hs_source_files.address	1220	void *	read	-	-
 scenario	hs_source_files.definition	1224	struct tag_block_definition *	read	-	-
 scenario	scripting_unused	1228	long[6]	-	-	-
@@ -6002,8 +6002,8 @@ scenario	cutscene_flags.definition	1260	struct tag_block_definition *	read	-	-
 scenario	cutscene_camera_points.count	1264	long	-	kept	used
 scenario	cutscene_camera_points.address	1268	void *	-	kept	used
 scenario	cutscene_camera_points.definition	1272	struct tag_block_definition *	-	-	-
-scenario	cutscene_chapter_titles.count	1276	long	-	kept	untraced
-scenario	cutscene_chapter_titles.address	1280	void *	-	kept	untraced
+scenario	cutscene_chapter_titles.count	1276	long	-	kept	unused
+scenario	cutscene_chapter_titles.address	1280	void *	-	kept	unused
 scenario	cutscene_chapter_titles.definition	1284	struct tag_block_definition *	-	-	-
 scenario	rapidly_dwindling_unused_space	1288	long[27]	-	-	-
 scenario	custom_object_names.group_tag	1396	unsigned long	-	-	-
@@ -6037,7 +6037,7 @@ scenario_biped_datum	object.on_bsp_flags	32	word	read	kept	used
 scenario_biped_datum	object.misc_flags	34	word	-	-	-
 scenario_biped_datum	object.unused	36	unsigned long	-	-	-
 scenario_biped_datum	permutation.change_colors	40	unsigned long[4]	-	kept	used
-scenario_biped_datum	permutation.region_permutations	56	byte[8]	-	kept	untraced
+scenario_biped_datum	permutation.region_permutations	56	byte[8]	-	kept	used
 scenario_biped_datum	permutation.unused	64	unsigned long[2]	-	-	-
 scenario_biped_datum	unit.body_vitality	72	real	read	-	-
 scenario_biped_datum	unit.flags	76	unsigned long	read	-	-
@@ -6073,7 +6073,7 @@ scenario_conversation_line_view	address_participant_index	6	short	read	-	-
 scenario_conversation_line_view	unknown08	8	long	-	-	-
 scenario_conversation_line_view	delay_time	12	real	read	kept	used
 scenario_conversation_line_view	__unknown10	16	byte[12]	-	-	-
-scenario_conversation_line_view	dialogue	28	struct tag_reference[6]	read	kept	untraced
+scenario_conversation_line_view	dialogue	28	struct tag_reference[6]	read	kept	used
 scenario_conversation_participant_view	pad00	0	word	-	-	-
 scenario_conversation_participant_view	flags	2	word	read	-	-
 scenario_conversation_participant_view	selection_type	4	short	read	kept	used
@@ -6081,7 +6081,7 @@ scenario_conversation_participant_view	actor_type	6	short	read	-	-
 scenario_conversation_participant_view	preexisting_object_name_index	8	short	read	kept	used
 scenario_conversation_participant_view	new_attach_object_name_index	10	short	read	-	-
 scenario_conversation_participant_view	__unknown0C	12	byte[12]	-	-	-
-scenario_conversation_participant_view	dialogue_variants	24	short[6]	read	kept	untraced
+scenario_conversation_participant_view	dialogue_variants	24	short[6]	read	kept	used
 scenario_conversation_participant_view	ai_index_name	36	char[32]	-	-	-
 scenario_conversation_participant_view	runtime_ai_index	68	long	read	-	-
 scenario_conversation_participant_view	__unknown48	72	byte[12]	-	-	-
@@ -6175,9 +6175,9 @@ scenario_light_fixture_datum	intensity	60	real	read	-	-
 scenario_light_fixture_datum	falloff_angle	64	real	read	-	-
 scenario_light_fixture_datum	cutoff_angle	68	real	read	-	-
 scenario_netgame_equipment	flags	0	long	read	kept	used
-scenario_netgame_equipment	game_type	4	short[4]	read	kept	untraced
+scenario_netgame_equipment	game_type	4	short[4]	read	kept	used
 scenario_netgame_equipment	team_index	12	short	-	kept	used
-scenario_netgame_equipment	spawn_time	14	short	read	kept	untraced
+scenario_netgame_equipment	spawn_time	14	short	read	kept	used
 scenario_netgame_equipment	run_time_spawned_item_index	16	long	-	-	-
 scenario_netgame_equipment	unused1	20	long[11]	-	-	-
 scenario_netgame_equipment	position.n	64	real[3]	read	kept	used
@@ -6188,10 +6188,10 @@ scenario_netgame_equipment	position.u	64	real	read	kept	used
 scenario_netgame_equipment	position.v	68	real	read	kept	used
 scenario_netgame_equipment	position.w	72	real	read	kept	used
 scenario_netgame_equipment	facing	76	real	read	kept	used
-scenario_netgame_equipment	item_collection.group_tag	80	unsigned long	-	kept	untraced
+scenario_netgame_equipment	item_collection.group_tag	80	unsigned long	-	kept	used
 scenario_netgame_equipment	item_collection.name	84	char *	-	-	-
 scenario_netgame_equipment	item_collection.name_length	88	long	-	-	-
-scenario_netgame_equipment	item_collection.index	92	long	read	kept	untraced
+scenario_netgame_equipment	item_collection.index	92	long	read	kept	used
 scenario_netgame_equipment	unused2	96	long[12]	-	-	-
 scenario_netgame_flag	position.n	0	real[3]	read	kept	used
 scenario_netgame_flag	position.x	0	real	read	kept	used
@@ -6224,14 +6224,14 @@ scenario_object_datum	misc_flags	34	word	-	-	-
 scenario_object_datum	unused	36	unsigned long	-	-	-
 scenario_object_name	name	0	char[32]	read	kept	used
 scenario_object_name	runtime_object_type	32	short	read	kept	used
-scenario_object_name	runtime_scenario_datum_index	34	short	read	kept	untraced
+scenario_object_name	runtime_scenario_datum_index	34	short	read	kept	used
 scenario_object_palette_entry	reference.group_tag	0	unsigned long	-	-	-
 scenario_object_palette_entry	reference.name	4	char *	-	-	-
 scenario_object_palette_entry	reference.name_length	8	long	-	-	-
 scenario_object_palette_entry	reference.index	12	long	read	-	-
 scenario_object_palette_entry	unused	16	unsigned long[8]	-	-	-
 scenario_object_permutation	change_colors	0	unsigned long[4]	-	kept	used
-scenario_object_permutation	region_permutations	16	byte[8]	-	kept	untraced
+scenario_object_permutation	region_permutations	16	byte[8]	-	kept	used
 scenario_object_permutation	unused2	24	unsigned long[2]	-	-	-
 scenario_placeholder_datum	object.palette_entry_index	0	short	read	kept	used
 scenario_placeholder_datum	object.name_index	2	short	read	kept	used
@@ -6337,7 +6337,7 @@ scenario_weapon_datum	object.on_bsp_flags	32	word	read	kept	used
 scenario_weapon_datum	object.misc_flags	34	word	-	-	-
 scenario_weapon_datum	object.unused	36	unsigned long	-	-	-
 scenario_weapon_datum	permutation.change_colors	40	unsigned long[4]	-	kept	used
-scenario_weapon_datum	permutation.region_permutations	56	byte[8]	-	kept	untraced
+scenario_weapon_datum	permutation.region_permutations	56	byte[8]	-	kept	used
 scenario_weapon_datum	permutation.unused2	64	unsigned long[2]	-	-	-
 scenario_weapon_datum	rounds_total	72	short	read	-	-
 scenario_weapon_datum	rounds_loaded	74	short	read	-	-
@@ -6412,10 +6412,10 @@ shader_effect_definition	framebuffer_blend_function	42	short	read	kept	used
 shader_effect_definition	framebuffer_fade_mode	44	short	-	kept	used
 shader_effect_definition	primary_map_flags	46	unsigned short	read	kept	unused
 shader_effect_definition	reserved_before_secondary_map	48	byte[28]	-	-	-
-shader_effect_definition	secondary_map.group_tag	76	unsigned long	-	kept	untraced
+shader_effect_definition	secondary_map.group_tag	76	unsigned long	-	kept	used
 shader_effect_definition	secondary_map.name	80	char *	-	-	-
 shader_effect_definition	secondary_map.name_length	84	long	-	-	-
-shader_effect_definition	secondary_map.index	88	long	read	kept	untraced
+shader_effect_definition	secondary_map.index	88	long	read	kept	used
 shader_effect_definition	secondary_map_anchor	92	short	read	kept	used
 shader_effect_definition	secondary_map_flags	94	unsigned short	read	kept	used
 shader_effect_definition	secondary_map_animation.u_source	96	short	read	-	-
@@ -6726,7 +6726,7 @@ shader_model_definition	model.self_illumination_animation_color_upper_bound.gree
 shader_model_definition	model.self_illumination_animation_color_upper_bound.blue	140	real	read	kept	used
 shader_model_definition	model.reserved68	144	byte[12]	-	-	-
 shader_model_definition	model.map_u_scale	156	real	read	kept	used
-shader_model_definition	model.map_v_scale	160	real	read	kept	untraced
+shader_model_definition	model.map_v_scale	160	real	read	kept	used
 shader_model_definition	model.base_map.group_tag	164	unsigned long	-	kept	used
 shader_model_definition	model.base_map.name	168	char *	-	-	-
 shader_model_definition	model.base_map.name_length	172	long	-	-	-
@@ -6837,9 +6837,9 @@ shader_transparent_chicago_map	color_function	44	short	read	kept	used
 shader_transparent_chicago_map	alpha_function	46	short	read	kept	used
 shader_transparent_chicago_map	reserved_before_map_u_scale	48	byte[36]	-	-	-
 shader_transparent_chicago_map	map_u_scale	84	real	read	kept	used
-shader_transparent_chicago_map	map_v_scale	88	real	read	kept	untraced
+shader_transparent_chicago_map	map_v_scale	88	real	read	kept	used
 shader_transparent_chicago_map	map_u_offset	92	real	read	kept	used
-shader_transparent_chicago_map	map_v_offset	96	real	read	kept	untraced
+shader_transparent_chicago_map	map_v_offset	96	real	read	kept	used
 shader_transparent_chicago_map	map_rotation	100	real	read	kept	used
 shader_transparent_chicago_map	mipmap_bias	104	real	-	kept	unused
 shader_transparent_chicago_map	map.group_tag	108	unsigned long	-	kept	used
@@ -6898,15 +6898,15 @@ shader_transparent_generic_definition	generic.extra_layers.definition	80	struct 
 shader_transparent_generic_definition	generic.maps.count	84	long	read	kept	used
 shader_transparent_generic_definition	generic.maps.address	88	void *	read	kept	used
 shader_transparent_generic_definition	generic.maps.definition	92	struct tag_block_definition *	read	-	-
-shader_transparent_generic_definition	generic.stages.count	96	long	read	kept	unused
-shader_transparent_generic_definition	generic.stages.address	100	void *	read	kept	unused
+shader_transparent_generic_definition	generic.stages.count	96	long	read	kept	walked
+shader_transparent_generic_definition	generic.stages.address	100	void *	read	kept	walked
 shader_transparent_generic_definition	generic.stages.definition	104	struct tag_block_definition *	read	-	-
 shader_transparent_generic_map	flags	0	word	read	kept	used
 shader_transparent_generic_map	pad02	2	word	-	-	-
 shader_transparent_generic_map	map_u_scale	4	real	read	kept	used
-shader_transparent_generic_map	map_v_scale	8	real	read	kept	untraced
+shader_transparent_generic_map	map_v_scale	8	real	read	kept	used
 shader_transparent_generic_map	map_u_offset	12	real	read	kept	used
-shader_transparent_generic_map	map_v_offset	16	real	read	kept	untraced
+shader_transparent_generic_map	map_v_offset	16	real	read	kept	used
 shader_transparent_generic_map	map_rotation	20	real	read	kept	used
 shader_transparent_generic_map	mipmap_bias	24	real	read	-	-
 shader_transparent_generic_map	map.group_tag	28	unsigned long	-	kept	used
@@ -7340,7 +7340,7 @@ sound_pitch_range	name	0	char[32]	read	kept	used
 sound_pitch_range	natural_pitch	32	real	read	kept	unused
 sound_pitch_range	bend_bounds.lower	36	real	read	kept	used
 sound_pitch_range	bend_bounds.upper	40	real	read	kept	used
-sound_pitch_range	actual_permutation_count	44	short	read	kept	unused
+sound_pitch_range	actual_permutation_count	44	short	read	kept	used
 sound_pitch_range	unused	46	short	-	-	-
 sound_pitch_range	playback_rate	48	real	read	kept	used
 sound_pitch_range	played_permutation_mask	52	unsigned long	read	-	-
@@ -7361,7 +7361,7 @@ squad_definition	unused1	48	unsigned long[7]	-	-	-
 squad_definition	pad5	76	word	-	-	-
 squad_definition	maneuver_squad_index	78	short	read	-	-
 squad_definition	squad_delay_timer	80	real	read	-	-
-squad_definition	firing_position_groups	84	unsigned long[8]	read	kept	untraced
+squad_definition	firing_position_groups	84	unsigned long[8]	read	kept	used
 squad_definition	pad2	116	unsigned long[2]	-	-	-
 squad_definition	min_count	124	short	read	kept	used
 squad_definition	max_count	126	short	read	kept	used
@@ -7388,7 +7388,7 @@ static_hud_element_definition	placement.offset.x	0	short	read	kept	used
 static_hud_element_definition	placement.offset.y	2	short	read	kept	used
 static_hud_element_definition	placement.scale.n	4	real[2]	read	kept	used
 static_hud_element_definition	placement.scale.i	4	real	read	kept	used
-static_hud_element_definition	placement.scale.j	8	real	read	kept	untraced
+static_hud_element_definition	placement.scale.j	8	real	read	kept	used
 static_hud_element_definition	placement.multiplayer_scaling_flags	12	short	read	kept	used
 static_hud_element_definition	placement.pad	14	short	-	-	-
 static_hud_element_definition	placement.unused0	16	long[5]	-	-	-
@@ -7471,15 +7471,15 @@ structure_bsp	collision_bsp.definition	184	struct tag_block_definition *	read	-	
 structure_bsp	nodes.count	188	long	read	-	-
 structure_bsp	nodes.address	192	void *	read	-	-
 structure_bsp	nodes.definition	196	struct tag_block_definition *	read	-	-
-structure_bsp	world_bounds.n	200	real[6]	read	kept	untraced
-structure_bsp	world_bounds.x0	200	real	read	kept	untraced
-structure_bsp	world_bounds.x1	204	real	read	kept	untraced
-structure_bsp	world_bounds.y0	208	real	read	kept	untraced
-structure_bsp	world_bounds.y1	212	real	read	kept	untraced
-structure_bsp	world_bounds.z0	216	real	read	kept	untraced
-structure_bsp	world_bounds.z1	220	real	read	kept	untraced
-structure_bsp	leaves.count	224	long	read	kept	unused
-structure_bsp	leaves.address	228	void *	read	kept	unused
+structure_bsp	world_bounds.n	200	real[6]	read	kept	used
+structure_bsp	world_bounds.x0	200	real	read	kept	used
+structure_bsp	world_bounds.x1	204	real	read	kept	used
+structure_bsp	world_bounds.y0	208	real	read	kept	used
+structure_bsp	world_bounds.y1	212	real	read	kept	used
+structure_bsp	world_bounds.z0	216	real	read	kept	used
+structure_bsp	world_bounds.z1	220	real	read	kept	used
+structure_bsp	leaves.count	224	long	read	kept	walked
+structure_bsp	leaves.address	228	void *	read	kept	walked
 structure_bsp	leaves.definition	232	struct tag_block_definition *	read	-	-
 structure_bsp	surface_references.count	236	long	read	-	-
 structure_bsp	surface_references.address	240	void *	read	-	-
@@ -7487,18 +7487,18 @@ structure_bsp	surface_references.definition	244	struct tag_block_definition *	re
 structure_bsp	surfaces.count	248	long	read	kept	used
 structure_bsp	surfaces.address	252	void *	read	kept	used
 structure_bsp	surfaces.definition	256	struct tag_block_definition *	read	-	-
-structure_bsp	lightmaps.count	260	long	read	kept	unused
-structure_bsp	lightmaps.address	264	void *	read	kept	unused
+structure_bsp	lightmaps.count	260	long	read	kept	walked
+structure_bsp	lightmaps.address	264	void *	read	kept	walked
 structure_bsp	lightmaps.definition	268	struct tag_block_definition *	read	-	-
 structure_bsp	render_unused	272	long[3]	-	-	-
-structure_bsp	lens_flares.count	284	long	read	kept	unused
-structure_bsp	lens_flares.address	288	void *	read	kept	unused
+structure_bsp	lens_flares.count	284	long	read	kept	walked
+structure_bsp	lens_flares.address	288	void *	read	kept	walked
 structure_bsp	lens_flares.definition	292	struct tag_block_definition *	read	-	-
-structure_bsp	lens_flare_markers.count	296	long	read	kept	unused
-structure_bsp	lens_flare_markers.address	300	void *	read	kept	unused
+structure_bsp	lens_flare_markers.count	296	long	read	kept	walked
+structure_bsp	lens_flare_markers.address	300	void *	read	kept	walked
 structure_bsp	lens_flare_markers.definition	304	struct tag_block_definition *	read	-	-
-structure_bsp	clusters.count	308	long	read	kept	unused
-structure_bsp	clusters.address	312	void *	read	kept	unused
+structure_bsp	clusters.count	308	long	read	kept	walked
+structure_bsp	clusters.address	312	void *	read	kept	walked
 structure_bsp	clusters.definition	316	struct tag_block_definition *	read	-	-
 structure_bsp	cluster_data.size	320	long	read	kept	used
 structure_bsp	cluster_data.pad	324	unsigned long	-	-	-
@@ -7518,15 +7518,15 @@ structure_bsp	fog_planes.definition	384	struct tag_block_definition *	read	-	-
 structure_bsp	fog_regions.count	388	long	read	kept	used
 structure_bsp	fog_regions.address	392	void *	read	kept	used
 structure_bsp	fog_regions.definition	396	struct tag_block_definition *	read	-	-
-structure_bsp	fog_palette.count	400	long	read	kept	unused
-structure_bsp	fog_palette.address	404	void *	read	kept	unused
+structure_bsp	fog_palette.count	400	long	read	kept	walked
+structure_bsp	fog_palette.address	404	void *	read	kept	walked
 structure_bsp	fog_palette.definition	408	struct tag_block_definition *	read	-	-
 structure_bsp	fog_unused	412	long[6]	-	-	-
-structure_bsp	weather_palette.count	436	long	read	kept	unused
-structure_bsp	weather_palette.address	440	void *	read	kept	unused
+structure_bsp	weather_palette.count	436	long	read	kept	walked
+structure_bsp	weather_palette.address	440	void *	read	kept	walked
 structure_bsp	weather_palette.definition	444	struct tag_block_definition *	read	-	-
-structure_bsp	weather_polyhedra.count	448	long	read	kept	unused
-structure_bsp	weather_polyhedra.address	452	void *	read	kept	unused
+structure_bsp	weather_polyhedra.count	448	long	read	kept	walked
+structure_bsp	weather_polyhedra.address	452	void *	read	kept	walked
 structure_bsp	weather_polyhedra.definition	456	struct tag_block_definition *	read	-	-
 structure_bsp	weather_unused	460	long[6]	-	-	-
 structure_bsp	pathfinding_surfaces.count	484	long	read	-	-
@@ -7535,11 +7535,11 @@ structure_bsp	pathfinding_surfaces.definition	492	struct tag_block_definition *	
 structure_bsp	pathfinding_edges.count	496	long	-	-	-
 structure_bsp	pathfinding_edges.address	500	void *	-	-	-
 structure_bsp	pathfinding_edges.definition	504	struct tag_block_definition *	-	-	-
-structure_bsp	background_sound_palette.count	508	long	read	kept	unused
-structure_bsp	background_sound_palette.address	512	void *	read	kept	unused
+structure_bsp	background_sound_palette.count	508	long	read	kept	walked
+structure_bsp	background_sound_palette.address	512	void *	read	kept	walked
 structure_bsp	background_sound_palette.definition	516	struct tag_block_definition *	read	-	-
-structure_bsp	sound_environment_palette.count	520	long	read	kept	unused
-structure_bsp	sound_environment_palette.address	524	void *	read	kept	unused
+structure_bsp	sound_environment_palette.count	520	long	read	kept	walked
+structure_bsp	sound_environment_palette.address	524	void *	read	kept	walked
 structure_bsp	sound_environment_palette.definition	528	struct tag_block_definition *	read	-	-
 structure_bsp	sound_cluster_data.size	532	long	read	kept	used
 structure_bsp	sound_cluster_data.pad	536	unsigned long	-	-	-
@@ -7553,8 +7553,8 @@ structure_bsp	markers.definition	584	struct tag_block_definition *	-	-	-
 structure_bsp	detail_object_data.count	588	long	-	kept	used
 structure_bsp	detail_object_data.address	592	void *	-	kept	used
 structure_bsp	detail_object_data.definition	596	struct tag_block_definition *	-	-	-
-structure_bsp	runtime_decals.count	600	long	read	kept	unused
-structure_bsp	runtime_decals.address	604	void *	read	kept	unused
+structure_bsp	runtime_decals.count	600	long	read	kept	walked
+structure_bsp	runtime_decals.address	604	void *	read	kept	walked
 structure_bsp	runtime_decals.definition	608	struct tag_block_definition *	read	-	-
 structure_bsp	diminishing_misc_unused	612	long[2]	-	-	-
 structure_bsp	leaf_map.bsp	620	const struct bsp3d *	read	-	-
@@ -7631,17 +7631,17 @@ structure_detail_object_data	detail_objects.definition	20	struct tag_block_defin
 structure_detail_object_data	counts.count	24	long	read	kept	used
 structure_detail_object_data	counts.address	28	void *	read	kept	used
 structure_detail_object_data	counts.definition	32	struct tag_block_definition *	read	-	-
-structure_detail_object_data	z_reference_vectors.count	36	long	read	kept	unused
-structure_detail_object_data	z_reference_vectors.address	40	void *	read	kept	unused
+structure_detail_object_data	z_reference_vectors.count	36	long	read	kept	walked
+structure_detail_object_data	z_reference_vectors.address	40	void *	read	kept	walked
 structure_detail_object_data	z_reference_vectors.definition	44	struct tag_block_definition *	read	-	-
 structure_detail_object_data	valid	48	byte	read	-	-
 structure_detail_object_data	pad31	49	byte[3]	-	-	-
 structure_detail_object_data	unused34	52	long[3]	-	-	-
 structure_fog_palette_entry	unused	0	byte[32]	-	-	-
-structure_fog_palette_entry	fog.group_tag	32	unsigned long	-	kept	unused
+structure_fog_palette_entry	fog.group_tag	32	unsigned long	-	kept	used
 structure_fog_palette_entry	fog.name	36	char *	-	-	-
 structure_fog_palette_entry	fog.name_length	40	long	-	-	-
-structure_fog_palette_entry	fog.index	44	long	read	kept	unused
+structure_fog_palette_entry	fog.index	44	long	read	kept	used
 structure_fog_palette_entry	unused2	48	byte[88]	-	-	-
 structure_fog_plane	region_index	0	short	read	-	-
 structure_fog_plane	runtime_material_type	2	short	read	-	-
@@ -7662,7 +7662,7 @@ structure_fog_plane_render	vertices.count	20	long	read	-	-
 structure_fog_plane_render	vertices.address	24	void *	read	-	-
 structure_fog_plane_render	vertices.definition	28	struct tag_block_definition *	read	-	-
 structure_fog_region	unused	0	byte[36]	-	-	-
-structure_fog_region	fog_palette_index	36	short	read	kept	unused
+structure_fog_region	fog_palette_index	36	short	read	kept	used
 structure_fog_region	weather_palette_index	38	short	read	kept	used
 structure_leaf	bounds.n	0	byte[6]	read	-	-
 structure_leaf	bounds.x0	0	byte	read	-	-
@@ -7675,10 +7675,10 @@ structure_leaf	pad	6	word	-	-	-
 structure_leaf	cluster_index	8	short	read	kept	unused
 structure_leaf	surface_reference_count	10	short	read	-	-
 structure_leaf	first_surface_reference_index	12	long	read	-	-
-structure_lens_flare	lens_flare.group_tag	0	unsigned long	read	kept	untraced
+structure_lens_flare	lens_flare.group_tag	0	unsigned long	read	kept	used
 structure_lens_flare	lens_flare.name	4	char *	read	-	-
 structure_lens_flare	lens_flare.name_length	8	long	read	-	-
-structure_lens_flare	lens_flare.index	12	long	read	kept	untraced
+structure_lens_flare	lens_flare.index	12	long	read	kept	used
 structure_lens_flare_marker	position.n	0	real[3]	read	kept	used
 structure_lens_flare_marker	position.x	0	real	read	kept	used
 structure_lens_flare_marker	position.y	4	real	read	kept	used
@@ -7883,15 +7883,15 @@ structure_weather_palette_entry	wind_direction.i	144	real	read	kept	used
 structure_weather_palette_entry	wind_direction.n	144	real[3]	read	kept	used
 structure_weather_palette_entry	wind_direction.j	148	real	read	kept	used
 structure_weather_palette_entry	wind_direction.k	152	real	read	kept	used
-structure_weather_palette_entry	wind_magnitude	156	real	read	kept	untraced
+structure_weather_palette_entry	wind_magnitude	156	real	read	kept	used
 structure_weather_palette_entry	padA0	160	word	-	-	-
 structure_weather_palette_entry	wind_global_function_index	162	short	-	-	-
 structure_weather_palette_entry	wind_global_function_name	164	char[32]	-	-	-
 structure_weather_palette_entry	wind_unused	196	long[11]	-	-	-
-structure_weather_polyhedron	bounding_sphere_center.n	0	real[3]	read	kept	unused
-structure_weather_polyhedron	bounding_sphere_center.x	0	real	read	kept	unused
-structure_weather_polyhedron	bounding_sphere_center.y	4	real	read	kept	unused
-structure_weather_polyhedron	bounding_sphere_center.z	8	real	read	kept	unused
+structure_weather_polyhedron	bounding_sphere_center.n	0	real[3]	read	kept	used
+structure_weather_polyhedron	bounding_sphere_center.x	0	real	read	kept	used
+structure_weather_polyhedron	bounding_sphere_center.y	4	real	read	kept	used
+structure_weather_polyhedron	bounding_sphere_center.z	8	real	read	kept	used
 structure_weather_polyhedron	bounding_sphere_radius	12	real	read	kept	used
 structure_weather_polyhedron	unused	16	long	-	-	-
 structure_weather_polyhedron	planes.count	20	long	read	kept	used
@@ -7900,7 +7900,7 @@ structure_weather_polyhedron	planes.definition	28	struct tag_block_definition *	
 trigger_firing_effect	shots_lower_bound	0	short	read	-	-
 trigger_firing_effect	shots_upper_bound	2	short	read	-	-
 trigger_firing_effect	unused	4	long[8]	-	-	-
-trigger_firing_effect	effects	36	struct tag_reference[3]	read	kept	untraced
+trigger_firing_effect	effects	36	struct tag_reference[3]	read	kept	used
 trigger_firing_effect	damage_effects	84	struct tag_reference[3]	read	-	-
 ui_widget_definition	type	0	short	read	kept	used
 ui_widget_definition	unknown002	2	byte[82]	-	kept	used
@@ -7920,10 +7920,10 @@ unit_camera	pitch_maximum	72	real	read	kept	unused
 unit_camera	unit_camera_tracks.count	76	long	read	kept	used
 unit_camera	unit_camera_tracks.address	80	void *	read	kept	used
 unit_camera	unit_camera_tracks.definition	84	struct tag_block_definition *	read	-	-
-unit_camera_track	track.group_tag	0	unsigned long	-	kept	untraced
+unit_camera_track	track.group_tag	0	unsigned long	-	kept	used
 unit_camera_track	track.name	4	char *	-	-	-
 unit_camera_track	track.name_length	8	long	-	-	-
-unit_camera_track	track.index	12	long	read	kept	untraced
+unit_camera_track	track.index	12	long	read	kept	used
 unit_camera_track	unused	16	long[3]	-	-	-
 unit_definition	object.type	0	short	read	kept	used
 unit_definition	object.flags	2	word	read	kept	used
@@ -7965,27 +7965,27 @@ unit_definition	object.modifier_shader.group_tag	144	unsigned long	-	kept	unused
 unit_definition	object.modifier_shader.name	148	char *	-	-	-
 unit_definition	object.modifier_shader.name_length	152	long	-	-	-
 unit_definition	object.modifier_shader.index	156	long	read	kept	unused
-unit_definition	object.creation_effect.group_tag	160	unsigned long	-	kept	unused
+unit_definition	object.creation_effect.group_tag	160	unsigned long	-	kept	used
 unit_definition	object.creation_effect.name	164	char *	-	-	-
 unit_definition	object.creation_effect.name_length	168	long	-	-	-
-unit_definition	object.creation_effect.index	172	long	read	kept	unused
+unit_definition	object.creation_effect.index	172	long	read	kept	used
 unit_definition	object.unused1	176	long[21]	-	-	-
 unit_definition	object.render_bounding_radius	260	real	-	kept	unused
-unit_definition	object.function_modes	264	short[4]	read	kept	untraced
+unit_definition	object.function_modes	264	short[4]	read	kept	used
 unit_definition	object.unused2	272	long[11]	-	-	-
 unit_definition	object.icon_text_index	316	short	-	kept	used
 unit_definition	object.forced_shader_permutation_index	318	short	read	-	-
-unit_definition	object.attachments.count	320	long	read	kept	unused
-unit_definition	object.attachments.address	324	void *	read	kept	unused
+unit_definition	object.attachments.count	320	long	read	kept	walked
+unit_definition	object.attachments.address	324	void *	read	kept	walked
 unit_definition	object.attachments.definition	328	struct tag_block_definition *	read	-	-
-unit_definition	object.widgets.count	332	long	read	kept	unused
-unit_definition	object.widgets.address	336	void *	read	kept	unused
+unit_definition	object.widgets.count	332	long	read	kept	walked
+unit_definition	object.widgets.address	336	void *	read	kept	walked
 unit_definition	object.widgets.definition	340	struct tag_block_definition *	read	-	-
-unit_definition	object.functions.count	344	long	read	kept	unused
-unit_definition	object.functions.address	348	void *	read	kept	unused
+unit_definition	object.functions.count	344	long	read	kept	walked
+unit_definition	object.functions.address	348	void *	read	kept	walked
 unit_definition	object.functions.definition	352	struct tag_block_definition *	read	-	-
-unit_definition	object.change_colors.count	356	long	read	kept	unused
-unit_definition	object.change_colors.address	360	void *	read	kept	unused
+unit_definition	object.change_colors.count	356	long	read	kept	walked
+unit_definition	object.change_colors.address	360	void *	read	kept	walked
 unit_definition	object.change_colors.definition	364	struct tag_block_definition *	read	-	-
 unit_definition	object.predicted_resources.count	368	long	read	-	-
 unit_definition	object.predicted_resources.address	372	void *	read	-	-
@@ -7998,7 +7998,7 @@ unit_definition	unit.integrated_light_toggle_effect.group_tag	392	unsigned long	
 unit_definition	unit.integrated_light_toggle_effect.name	396	char *	-	-	-
 unit_definition	unit.integrated_light_toggle_effect.name_length	400	long	-	-	-
 unit_definition	unit.integrated_light_toggle_effect.index	404	long	read	-	-
-unit_definition	unit.function_modes	408	short[4]	read	kept	untraced
+unit_definition	unit.function_modes	408	short[4]	read	kept	used
 unit_definition	unit.camera_field_of_view	416	real	read	-	-
 unit_definition	unit.camera_impulse_stiffness	420	real	-	-	-
 unit_definition	unit.camera.marker_name	424	char[32]	read	kept	used
@@ -8051,8 +8051,8 @@ unit_definition	unit.melee_damage.index	660	long	read	kept	used
 unit_definition	unit.blip_type	664	short	read	-	-
 unit_definition	unit.padxxx	666	short	-	-	-
 unit_definition	unit.unused	668	long[3]	-	-	-
-unit_definition	unit.huds.count	680	long	read	kept	unused
-unit_definition	unit.huds.address	684	void *	read	kept	unused
+unit_definition	unit.huds.count	680	long	read	kept	walked
+unit_definition	unit.huds.address	684	void *	read	kept	walked
 unit_definition	unit.huds.definition	688	struct tag_block_definition *	read	-	-
 unit_definition	unit.dialogue_variants.count	692	long	read	-	-
 unit_definition	unit.dialogue_variants.address	696	void *	read	-	-
@@ -8062,14 +8062,14 @@ unit_definition	unit.grenade_type	708	short	read	-	-
 unit_definition	unit.grenade_count	710	short	read	-	-
 unit_definition	unit.runtime_soft_ping_minimum_interrupt_ticks	712	short	read	-	-
 unit_definition	unit.runtime_hard_ping_minimum_interrupt_ticks	714	short	read	-	-
-unit_definition	unit.powered_seats.count	716	long	read	kept	unused
-unit_definition	unit.powered_seats.address	720	void *	read	kept	unused
+unit_definition	unit.powered_seats.count	716	long	read	kept	walked
+unit_definition	unit.powered_seats.address	720	void *	read	kept	walked
 unit_definition	unit.powered_seats.definition	724	struct tag_block_definition *	read	-	-
-unit_definition	unit.initial_weapons.count	728	long	read	kept	unused
-unit_definition	unit.initial_weapons.address	732	void *	read	kept	unused
+unit_definition	unit.initial_weapons.count	728	long	read	kept	walked
+unit_definition	unit.initial_weapons.address	732	void *	read	kept	walked
 unit_definition	unit.initial_weapons.definition	736	struct tag_block_definition *	read	-	-
-unit_definition	unit.seats.count	740	long	read	kept	unused
-unit_definition	unit.seats.address	744	void *	read	kept	unused
+unit_definition	unit.seats.count	740	long	read	kept	walked
+unit_definition	unit.seats.address	744	void *	read	kept	walked
 unit_definition	unit.seats.definition	748	struct tag_block_definition *	read	-	-
 unit_dialogue_variant	variant_number	0	short	read	-	-
 unit_dialogue_variant	pad	2	short	-	-	-
@@ -8083,7 +8083,7 @@ unit_hud_interface_definition	background.placement.offset.x	36	short	read	kept	u
 unit_hud_interface_definition	background.placement.offset.y	38	short	read	kept	used
 unit_hud_interface_definition	background.placement.scale.n	40	real[2]	read	kept	used
 unit_hud_interface_definition	background.placement.scale.i	40	real	read	kept	used
-unit_hud_interface_definition	background.placement.scale.j	44	real	read	kept	untraced
+unit_hud_interface_definition	background.placement.scale.j	44	real	read	kept	used
 unit_hud_interface_definition	background.placement.multiplayer_scaling_flags	48	short	read	kept	used
 unit_hud_interface_definition	background.placement.pad	50	short	-	-	-
 unit_hud_interface_definition	background.placement.unused0	52	long[5]	-	-	-
@@ -8113,7 +8113,7 @@ unit_hud_interface_definition	shield_meter.background.placement.offset.x	140	sho
 unit_hud_interface_definition	shield_meter.background.placement.offset.y	142	short	read	kept	used
 unit_hud_interface_definition	shield_meter.background.placement.scale.n	144	real[2]	read	kept	used
 unit_hud_interface_definition	shield_meter.background.placement.scale.i	144	real	read	kept	used
-unit_hud_interface_definition	shield_meter.background.placement.scale.j	148	real	read	kept	untraced
+unit_hud_interface_definition	shield_meter.background.placement.scale.j	148	real	read	kept	used
 unit_hud_interface_definition	shield_meter.background.placement.multiplayer_scaling_flags	152	short	read	kept	used
 unit_hud_interface_definition	shield_meter.background.placement.pad	154	short	-	-	-
 unit_hud_interface_definition	shield_meter.background.placement.unused0	156	long[5]	-	-	-
@@ -8143,7 +8143,7 @@ unit_hud_interface_definition	shield_meter.meter.placement.offset.x	244	short	re
 unit_hud_interface_definition	shield_meter.meter.placement.offset.y	246	short	read	kept	used
 unit_hud_interface_definition	shield_meter.meter.placement.scale.n	248	real[2]	read	kept	used
 unit_hud_interface_definition	shield_meter.meter.placement.scale.i	248	real	read	kept	used
-unit_hud_interface_definition	shield_meter.meter.placement.scale.j	252	real	read	kept	untraced
+unit_hud_interface_definition	shield_meter.meter.placement.scale.j	252	real	read	kept	used
 unit_hud_interface_definition	shield_meter.meter.placement.multiplayer_scaling_flags	256	short	read	kept	used
 unit_hud_interface_definition	shield_meter.meter.placement.pad	258	short	-	-	-
 unit_hud_interface_definition	shield_meter.meter.placement.unused0	260	long[5]	-	-	-
@@ -8185,7 +8185,7 @@ unit_hud_interface_definition	health_meter.background.placement.offset.x	380	sho
 unit_hud_interface_definition	health_meter.background.placement.offset.y	382	short	read	kept	used
 unit_hud_interface_definition	health_meter.background.placement.scale.n	384	real[2]	read	kept	used
 unit_hud_interface_definition	health_meter.background.placement.scale.i	384	real	read	kept	used
-unit_hud_interface_definition	health_meter.background.placement.scale.j	388	real	read	kept	untraced
+unit_hud_interface_definition	health_meter.background.placement.scale.j	388	real	read	kept	used
 unit_hud_interface_definition	health_meter.background.placement.multiplayer_scaling_flags	392	short	read	kept	used
 unit_hud_interface_definition	health_meter.background.placement.pad	394	short	-	-	-
 unit_hud_interface_definition	health_meter.background.placement.unused0	396	long[5]	-	-	-
@@ -8215,7 +8215,7 @@ unit_hud_interface_definition	health_meter.meter.placement.offset.x	484	short	re
 unit_hud_interface_definition	health_meter.meter.placement.offset.y	486	short	read	kept	used
 unit_hud_interface_definition	health_meter.meter.placement.scale.n	488	real[2]	read	kept	used
 unit_hud_interface_definition	health_meter.meter.placement.scale.i	488	real	read	kept	used
-unit_hud_interface_definition	health_meter.meter.placement.scale.j	492	real	read	kept	untraced
+unit_hud_interface_definition	health_meter.meter.placement.scale.j	492	real	read	kept	used
 unit_hud_interface_definition	health_meter.meter.placement.multiplayer_scaling_flags	496	short	read	kept	used
 unit_hud_interface_definition	health_meter.meter.placement.pad	498	short	-	-	-
 unit_hud_interface_definition	health_meter.meter.placement.unused0	500	long[5]	-	-	-
@@ -8257,7 +8257,7 @@ unit_hud_interface_definition	motion_sensor.background.placement.offset.x	620	sh
 unit_hud_interface_definition	motion_sensor.background.placement.offset.y	622	short	read	kept	used
 unit_hud_interface_definition	motion_sensor.background.placement.scale.n	624	real[2]	read	kept	used
 unit_hud_interface_definition	motion_sensor.background.placement.scale.i	624	real	read	kept	used
-unit_hud_interface_definition	motion_sensor.background.placement.scale.j	628	real	read	kept	untraced
+unit_hud_interface_definition	motion_sensor.background.placement.scale.j	628	real	read	kept	used
 unit_hud_interface_definition	motion_sensor.background.placement.multiplayer_scaling_flags	632	short	read	kept	used
 unit_hud_interface_definition	motion_sensor.background.placement.pad	634	short	-	-	-
 unit_hud_interface_definition	motion_sensor.background.placement.unused0	636	long[5]	-	-	-
@@ -8287,7 +8287,7 @@ unit_hud_interface_definition	motion_sensor.foreground.placement.offset.x	724	sh
 unit_hud_interface_definition	motion_sensor.foreground.placement.offset.y	726	short	read	kept	used
 unit_hud_interface_definition	motion_sensor.foreground.placement.scale.n	728	real[2]	read	kept	used
 unit_hud_interface_definition	motion_sensor.foreground.placement.scale.i	728	real	read	kept	used
-unit_hud_interface_definition	motion_sensor.foreground.placement.scale.j	732	real	read	kept	untraced
+unit_hud_interface_definition	motion_sensor.foreground.placement.scale.j	732	real	read	kept	used
 unit_hud_interface_definition	motion_sensor.foreground.placement.multiplayer_scaling_flags	736	short	read	kept	used
 unit_hud_interface_definition	motion_sensor.foreground.placement.pad	738	short	-	-	-
 unit_hud_interface_definition	motion_sensor.foreground.placement.unused0	740	long[5]	-	-	-
@@ -8318,7 +8318,7 @@ unit_hud_interface_definition	blip_placement.offset.x	860	short	read	kept	used
 unit_hud_interface_definition	blip_placement.offset.y	862	short	read	kept	used
 unit_hud_interface_definition	blip_placement.scale.n	864	real[2]	read	kept	used
 unit_hud_interface_definition	blip_placement.scale.i	864	real	read	kept	used
-unit_hud_interface_definition	blip_placement.scale.j	868	real	read	kept	untraced
+unit_hud_interface_definition	blip_placement.scale.j	868	real	read	kept	used
 unit_hud_interface_definition	blip_placement.multiplayer_scaling_flags	872	short	read	kept	used
 unit_hud_interface_definition	blip_placement.pad	874	short	-	-	-
 unit_hud_interface_definition	blip_placement.unused0	876	long[5]	-	-	-
@@ -8337,10 +8337,10 @@ unit_hud_interface_definition	auxilary_meters.address	976	void *	read	-	-
 unit_hud_interface_definition	auxilary_meters.definition	980	struct tag_block_definition *	read	-	-
 unit_hud_interface_definition	unused1	984	long[89]	-	-	-
 unit_hud_interface_definition	unused2	1340	long[12]	-	-	-
-unit_hud_reference	hud.group_tag	0	unsigned long	-	kept	untraced
+unit_hud_reference	hud.group_tag	0	unsigned long	-	kept	used
 unit_hud_reference	hud.name	4	char *	-	-	-
 unit_hud_reference	hud.name_length	8	long	-	-	-
-unit_hud_reference	hud.index	12	long	-	kept	untraced
+unit_hud_reference	hud.index	12	long	-	kept	used
 unit_hud_reference	unused	16	long[8]	-	-	-
 unit_initial_weapon	weapon.group_tag	0	unsigned long	-	kept	used
 unit_initial_weapon	weapon.name	4	char *	-	-	-
@@ -8391,8 +8391,8 @@ vehicle_animation	unused	24	long[17]	-	-	-
 vehicle_animation	animations.count	92	long	read	kept	used
 vehicle_animation	animations.address	96	void *	read	kept	used
 vehicle_animation	animations.definition	100	struct tag_block_definition *	-	-	-
-vehicle_animation	suspensions.count	104	long	read	kept	unused
-vehicle_animation	suspensions.address	108	void *	read	kept	unused
+vehicle_animation	suspensions.count	104	long	read	kept	walked
+vehicle_animation	suspensions.address	108	void *	read	kept	walked
 vehicle_animation	suspensions.definition	112	struct tag_block_definition *	read	-	-
 vehicle_definition	unit.object.type	0	short	read	kept	used
 vehicle_definition	unit.object.flags	2	word	read	kept	used
@@ -8428,27 +8428,27 @@ vehicle_definition	unit.object.modifier_shader.group_tag	144	unsigned long	-	kep
 vehicle_definition	unit.object.modifier_shader.name	148	char *	-	-	-
 vehicle_definition	unit.object.modifier_shader.name_length	152	long	-	-	-
 vehicle_definition	unit.object.modifier_shader.index	156	long	read	kept	unused
-vehicle_definition	unit.object.creation_effect.group_tag	160	unsigned long	-	kept	unused
+vehicle_definition	unit.object.creation_effect.group_tag	160	unsigned long	-	kept	used
 vehicle_definition	unit.object.creation_effect.name	164	char *	-	-	-
 vehicle_definition	unit.object.creation_effect.name_length	168	long	-	-	-
-vehicle_definition	unit.object.creation_effect.index	172	long	read	kept	unused
+vehicle_definition	unit.object.creation_effect.index	172	long	read	kept	used
 vehicle_definition	unit.object.unused1	176	long[21]	-	-	-
 vehicle_definition	unit.object.render_bounding_radius	260	real	-	kept	unused
-vehicle_definition	unit.object.function_modes	264	short[4]	read	kept	untraced
+vehicle_definition	unit.object.function_modes	264	short[4]	read	kept	used
 vehicle_definition	unit.object.unused2	272	long[11]	-	-	-
 vehicle_definition	unit.object.icon_text_index	316	short	-	kept	used
 vehicle_definition	unit.object.forced_shader_permutation_index	318	short	read	-	-
-vehicle_definition	unit.object.attachments.count	320	long	read	kept	unused
-vehicle_definition	unit.object.attachments.address	324	void *	read	kept	unused
+vehicle_definition	unit.object.attachments.count	320	long	read	kept	walked
+vehicle_definition	unit.object.attachments.address	324	void *	read	kept	walked
 vehicle_definition	unit.object.attachments.definition	328	struct tag_block_definition *	read	-	-
-vehicle_definition	unit.object.widgets.count	332	long	read	kept	unused
-vehicle_definition	unit.object.widgets.address	336	void *	read	kept	unused
+vehicle_definition	unit.object.widgets.count	332	long	read	kept	walked
+vehicle_definition	unit.object.widgets.address	336	void *	read	kept	walked
 vehicle_definition	unit.object.widgets.definition	340	struct tag_block_definition *	read	-	-
-vehicle_definition	unit.object.functions.count	344	long	read	kept	unused
-vehicle_definition	unit.object.functions.address	348	void *	read	kept	unused
+vehicle_definition	unit.object.functions.count	344	long	read	kept	walked
+vehicle_definition	unit.object.functions.address	348	void *	read	kept	walked
 vehicle_definition	unit.object.functions.definition	352	struct tag_block_definition *	read	-	-
-vehicle_definition	unit.object.change_colors.count	356	long	read	kept	unused
-vehicle_definition	unit.object.change_colors.address	360	void *	read	kept	unused
+vehicle_definition	unit.object.change_colors.count	356	long	read	kept	walked
+vehicle_definition	unit.object.change_colors.address	360	void *	read	kept	walked
 vehicle_definition	unit.object.change_colors.definition	364	struct tag_block_definition *	read	-	-
 vehicle_definition	unit.object.predicted_resources.count	368	long	read	-	-
 vehicle_definition	unit.object.predicted_resources.address	372	void *	read	-	-
@@ -8461,7 +8461,7 @@ vehicle_definition	unit.unit.integrated_light_toggle_effect.group_tag	392	unsign
 vehicle_definition	unit.unit.integrated_light_toggle_effect.name	396	char *	-	-	-
 vehicle_definition	unit.unit.integrated_light_toggle_effect.name_length	400	long	-	-	-
 vehicle_definition	unit.unit.integrated_light_toggle_effect.index	404	long	read	-	-
-vehicle_definition	unit.unit.function_modes	408	short[4]	read	kept	untraced
+vehicle_definition	unit.unit.function_modes	408	short[4]	read	kept	used
 vehicle_definition	unit.unit.camera_field_of_view	416	real	read	-	-
 vehicle_definition	unit.unit.camera_impulse_stiffness	420	real	-	-	-
 vehicle_definition	unit.unit.camera.marker_name	424	char[32]	read	kept	used
@@ -8514,8 +8514,8 @@ vehicle_definition	unit.unit.melee_damage.index	660	long	read	kept	used
 vehicle_definition	unit.unit.blip_type	664	short	read	-	-
 vehicle_definition	unit.unit.padxxx	666	short	-	-	-
 vehicle_definition	unit.unit.unused	668	long[3]	-	-	-
-vehicle_definition	unit.unit.huds.count	680	long	read	kept	unused
-vehicle_definition	unit.unit.huds.address	684	void *	read	kept	unused
+vehicle_definition	unit.unit.huds.count	680	long	read	kept	walked
+vehicle_definition	unit.unit.huds.address	684	void *	read	kept	walked
 vehicle_definition	unit.unit.huds.definition	688	struct tag_block_definition *	read	-	-
 vehicle_definition	unit.unit.dialogue_variants.count	692	long	read	-	-
 vehicle_definition	unit.unit.dialogue_variants.address	696	void *	read	-	-
@@ -8525,14 +8525,14 @@ vehicle_definition	unit.unit.grenade_type	708	short	read	-	-
 vehicle_definition	unit.unit.grenade_count	710	short	read	-	-
 vehicle_definition	unit.unit.runtime_soft_ping_minimum_interrupt_ticks	712	short	read	-	-
 vehicle_definition	unit.unit.runtime_hard_ping_minimum_interrupt_ticks	714	short	read	-	-
-vehicle_definition	unit.unit.powered_seats.count	716	long	read	kept	unused
-vehicle_definition	unit.unit.powered_seats.address	720	void *	read	kept	unused
+vehicle_definition	unit.unit.powered_seats.count	716	long	read	kept	walked
+vehicle_definition	unit.unit.powered_seats.address	720	void *	read	kept	walked
 vehicle_definition	unit.unit.powered_seats.definition	724	struct tag_block_definition *	read	-	-
-vehicle_definition	unit.unit.initial_weapons.count	728	long	read	kept	unused
-vehicle_definition	unit.unit.initial_weapons.address	732	void *	read	kept	unused
+vehicle_definition	unit.unit.initial_weapons.count	728	long	read	kept	walked
+vehicle_definition	unit.unit.initial_weapons.address	732	void *	read	kept	walked
 vehicle_definition	unit.unit.initial_weapons.definition	736	struct tag_block_definition *	read	-	-
-vehicle_definition	unit.unit.seats.count	740	long	read	kept	unused
-vehicle_definition	unit.unit.seats.address	744	void *	read	kept	unused
+vehicle_definition	unit.unit.seats.count	740	long	read	kept	walked
+vehicle_definition	unit.unit.seats.address	744	void *	read	kept	walked
 vehicle_definition	unit.unit.seats.definition	748	struct tag_block_definition *	read	-	-
 vehicle_definition	flags	752	unsigned long	read	kept	used
 vehicle_definition	vehicle_type	756	short	read	kept	used
@@ -8546,7 +8546,7 @@ vehicle_definition	unknown30c	780	real	read	kept	used
 vehicle_definition	wheel_circumference	784	real	read	kept	used
 vehicle_definition	unknown314	788	real	read	kept	used
 vehicle_definition	unknown318	792	real	read	kept	unused
-vehicle_definition	function_modes	796	short[4]	read	kept	untraced
+vehicle_definition	function_modes	796	short[4]	read	kept	used
 vehicle_definition	unknown324	804	byte[12]	-	-	-
 vehicle_definition	unknown330	816	real	read	kept	used
 vehicle_definition	unknown334	820	real	read	kept	used
@@ -8608,8 +8608,8 @@ virtual_keyboard_definition	special_key_labels_string_list_tag.group_tag	32	unsi
 virtual_keyboard_definition	special_key_labels_string_list_tag.name	36	char *	-	-	-
 virtual_keyboard_definition	special_key_labels_string_list_tag.name_length	40	long	-	-	-
 virtual_keyboard_definition	special_key_labels_string_list_tag.index	44	long	read	kept	unused
-virtual_keyboard_definition	keys.count	48	long	-	kept	unused
-virtual_keyboard_definition	keys.address	52	void *	read	kept	unused
+virtual_keyboard_definition	keys.count	48	long	-	kept	walked
+virtual_keyboard_definition	keys.address	52	void *	read	kept	walked
 virtual_keyboard_definition	keys.definition	56	struct tag_block_definition *	-	-	-
 water_ripple	reserved00	0	byte[4]	-	-	-
 water_ripple	contibution_factor	4	real	-	-	-
@@ -8668,27 +8668,27 @@ weapon_definition	object.modifier_shader.group_tag	144	unsigned long	-	kept	unus
 weapon_definition	object.modifier_shader.name	148	char *	-	-	-
 weapon_definition	object.modifier_shader.name_length	152	long	-	-	-
 weapon_definition	object.modifier_shader.index	156	long	read	kept	unused
-weapon_definition	object.creation_effect.group_tag	160	unsigned long	-	kept	unused
+weapon_definition	object.creation_effect.group_tag	160	unsigned long	-	kept	used
 weapon_definition	object.creation_effect.name	164	char *	-	-	-
 weapon_definition	object.creation_effect.name_length	168	long	-	-	-
-weapon_definition	object.creation_effect.index	172	long	read	kept	unused
+weapon_definition	object.creation_effect.index	172	long	read	kept	used
 weapon_definition	object.unused1	176	long[21]	-	-	-
 weapon_definition	object.render_bounding_radius	260	real	-	kept	unused
-weapon_definition	object.function_modes	264	short[4]	read	kept	untraced
+weapon_definition	object.function_modes	264	short[4]	read	kept	used
 weapon_definition	object.unused2	272	long[11]	-	-	-
 weapon_definition	object.icon_text_index	316	short	-	kept	used
 weapon_definition	object.forced_shader_permutation_index	318	short	read	-	-
-weapon_definition	object.attachments.count	320	long	read	kept	unused
-weapon_definition	object.attachments.address	324	void *	read	kept	unused
+weapon_definition	object.attachments.count	320	long	read	kept	walked
+weapon_definition	object.attachments.address	324	void *	read	kept	walked
 weapon_definition	object.attachments.definition	328	struct tag_block_definition *	read	-	-
-weapon_definition	object.widgets.count	332	long	read	kept	unused
-weapon_definition	object.widgets.address	336	void *	read	kept	unused
+weapon_definition	object.widgets.count	332	long	read	kept	walked
+weapon_definition	object.widgets.address	336	void *	read	kept	walked
 weapon_definition	object.widgets.definition	340	struct tag_block_definition *	read	-	-
-weapon_definition	object.functions.count	344	long	read	kept	unused
-weapon_definition	object.functions.address	348	void *	read	kept	unused
+weapon_definition	object.functions.count	344	long	read	kept	walked
+weapon_definition	object.functions.address	348	void *	read	kept	walked
 weapon_definition	object.functions.definition	352	struct tag_block_definition *	read	-	-
-weapon_definition	object.change_colors.count	356	long	read	kept	unused
-weapon_definition	object.change_colors.address	360	void *	read	kept	unused
+weapon_definition	object.change_colors.count	356	long	read	kept	walked
+weapon_definition	object.change_colors.address	360	void *	read	kept	walked
 weapon_definition	object.change_colors.definition	364	struct tag_block_definition *	read	-	-
 weapon_definition	object.predicted_resources.count	368	long	read	-	-
 weapon_definition	object.predicted_resources.address	372	void *	read	-	-
@@ -8725,7 +8725,7 @@ weapon_definition	weapon.flags	776	unsigned long	read	kept	used
 weapon_definition	weapon.label	780	char[32]	read	kept	used
 weapon_definition	weapon.secondary_trigger_mode	812	short	read	kept	used
 weapon_definition	weapon.maximum_alternate_shots_loaded	814	short	read	kept	unused
-weapon_definition	weapon.function_modes	816	short[4]	read	kept	untraced
+weapon_definition	weapon.function_modes	816	short[4]	read	kept	used
 weapon_definition	weapon.ready_time	824	real	-	kept	used
 weapon_definition	weapon.ready_effect.group_tag	828	unsigned long	-	kept	used
 weapon_definition	weapon.ready_effect.name	832	char *	-	-	-
@@ -8831,18 +8831,18 @@ weapon_definition	weapon.weapon_type	1250	short	read	kept	used
 weapon_definition	weapon.predicted_resources.count	1252	long	read	-	-
 weapon_definition	weapon.predicted_resources.address	1256	void *	read	-	-
 weapon_definition	weapon.predicted_resources.definition	1260	struct tag_block_definition *	read	-	-
-weapon_definition	weapon.magazines.count	1264	long	read	kept	unused
-weapon_definition	weapon.magazines.address	1268	void *	read	kept	unused
+weapon_definition	weapon.magazines.count	1264	long	read	kept	walked
+weapon_definition	weapon.magazines.address	1268	void *	read	kept	walked
 weapon_definition	weapon.magazines.definition	1272	struct tag_block_definition *	read	-	-
-weapon_definition	weapon.triggers.count	1276	long	read	kept	unused
-weapon_definition	weapon.triggers.address	1280	void *	read	kept	unused
+weapon_definition	weapon.triggers.count	1276	long	read	kept	walked
+weapon_definition	weapon.triggers.address	1280	void *	read	kept	walked
 weapon_definition	weapon.triggers.definition	1284	struct tag_block_definition *	read	-	-
 weapon_hud_crosshair_item	placement.offset.n	0	short[2]	-	kept	used
 weapon_hud_crosshair_item	placement.offset.x	0	short	read	kept	used
 weapon_hud_crosshair_item	placement.offset.y	2	short	read	kept	used
 weapon_hud_crosshair_item	placement.scale.i	4	real	read	kept	used
 weapon_hud_crosshair_item	placement.scale.n	4	real[2]	read	kept	used
-weapon_hud_crosshair_item	placement.scale.j	8	real	read	kept	untraced
+weapon_hud_crosshair_item	placement.scale.j	8	real	read	kept	used
 weapon_hud_crosshair_item	placement.multiplayer_scaling_flags	12	short	read	kept	used
 weapon_hud_crosshair_item	placement.pad	14	short	-	-	-
 weapon_hud_crosshair_item	placement.unused0	16	long[5]	-	-	-
@@ -8883,7 +8883,7 @@ weapon_hud_meter_element	meter_element.placement.offset.x	36	short	read	kept	use
 weapon_hud_meter_element	meter_element.placement.offset.y	38	short	read	kept	used
 weapon_hud_meter_element	meter_element.placement.scale.i	40	real	read	kept	used
 weapon_hud_meter_element	meter_element.placement.scale.n	40	real[2]	read	kept	used
-weapon_hud_meter_element	meter_element.placement.scale.j	44	real	read	kept	untraced
+weapon_hud_meter_element	meter_element.placement.scale.j	44	real	read	kept	used
 weapon_hud_meter_element	meter_element.placement.multiplayer_scaling_flags	48	short	read	kept	used
 weapon_hud_meter_element	meter_element.placement.pad	50	short	-	-	-
 weapon_hud_meter_element	meter_element.placement.unused0	52	long[5]	-	-	-
@@ -8919,7 +8919,7 @@ weapon_hud_number_element	number_element.placement.offset.x	36	short	read	kept	u
 weapon_hud_number_element	number_element.placement.offset.y	38	short	read	kept	used
 weapon_hud_number_element	number_element.placement.scale.i	40	real	read	kept	used
 weapon_hud_number_element	number_element.placement.scale.n	40	real[2]	read	kept	used
-weapon_hud_number_element	number_element.placement.scale.j	44	real	read	kept	untraced
+weapon_hud_number_element	number_element.placement.scale.j	44	real	read	kept	used
 weapon_hud_number_element	number_element.placement.multiplayer_scaling_flags	48	short	read	kept	used
 weapon_hud_number_element	number_element.placement.pad	50	short	-	-	-
 weapon_hud_number_element	number_element.placement.unused0	52	long[5]	-	-	-
@@ -8935,7 +8935,7 @@ weapon_hud_number_element	number_element.colors.custom.objective.up_ticks	100	sh
 weapon_hud_number_element	number_element.colors.custom.objective.fade_ticks	102	short	read	-	-
 weapon_hud_number_element	number_element.digits	104	char	read	kept	used
 weapon_hud_number_element	number_element.number_flags	105	byte	read	kept	used
-weapon_hud_number_element	number_element.fractional_digits	106	char	read	kept	unused
+weapon_hud_number_element	number_element.fractional_digits	106	char	read	kept	used
 weapon_hud_number_element	number_element.pad	107	byte	-	-	-
 weapon_hud_number_element	number_element.unused	108	long[3]	-	-	-
 weapon_hud_number_element	weapon_flags	120	word	read	-	-
@@ -8946,7 +8946,7 @@ weapon_hud_overlay_item	placement.offset.x	0	short	read	kept	used
 weapon_hud_overlay_item	placement.offset.y	2	short	read	kept	used
 weapon_hud_overlay_item	placement.scale.i	4	real	read	kept	used
 weapon_hud_overlay_item	placement.scale.n	4	real[2]	read	kept	used
-weapon_hud_overlay_item	placement.scale.j	8	real	read	kept	untraced
+weapon_hud_overlay_item	placement.scale.j	8	real	read	kept	used
 weapon_hud_overlay_item	placement.multiplayer_scaling_flags	12	short	read	kept	used
 weapon_hud_overlay_item	placement.pad	14	short	-	-	-
 weapon_hud_overlay_item	placement.unused0	16	long[5]	-	-	-
@@ -8989,7 +8989,7 @@ weapon_hud_static_element	static_element.placement.offset.x	36	short	read	kept	u
 weapon_hud_static_element	static_element.placement.offset.y	38	short	read	kept	used
 weapon_hud_static_element	static_element.placement.scale.i	40	real	read	kept	used
 weapon_hud_static_element	static_element.placement.scale.n	40	real[2]	read	kept	used
-weapon_hud_static_element	static_element.placement.scale.j	44	real	read	kept	untraced
+weapon_hud_static_element	static_element.placement.scale.j	44	real	read	kept	used
 weapon_hud_static_element	static_element.placement.multiplayer_scaling_flags	48	short	read	kept	used
 weapon_hud_static_element	static_element.placement.pad	50	short	-	-	-
 weapon_hud_static_element	static_element.placement.unused0	52	long[5]	-	-	-
@@ -9048,8 +9048,8 @@ weapon_magazine_definition	chambering_effect.name	76	char *	-	-	-
 weapon_magazine_definition	chambering_effect.name_length	80	long	-	-	-
 weapon_magazine_definition	chambering_effect.index	84	long	read	kept	used
 weapon_magazine_definition	unused	88	long[3]	-	-	-
-weapon_magazine_definition	ammunition_objects.count	100	long	read	kept	unused
-weapon_magazine_definition	ammunition_objects.address	104	void *	read	kept	unused
+weapon_magazine_definition	ammunition_objects.count	100	long	read	kept	walked
+weapon_magazine_definition	ammunition_objects.address	104	void *	read	kept	walked
 weapon_magazine_definition	ammunition_objects.definition	108	struct tag_block_definition *	read	-	-
 weapon_magazine_interface_definition	unused	0	long[2]	-	-	-
 weapon_magazine_interface_definition	unused_rectangles	8	rectangle2d[2]	-	-	-
@@ -9120,19 +9120,19 @@ weapon_trigger_definition	firing_effects.address	268	void *	read	kept	used
 weapon_trigger_definition	firing_effects.definition	272	struct tag_block_definition *	read	-	-
 weather_particle_system_definition	flags	0	unsigned long	-	-	-
 weather_particle_system_definition	unused	4	long[8]	-	-	-
-weather_particle_system_definition	particle_types.count	36	long	read	kept	unused
-weather_particle_system_definition	particle_types.address	40	void *	read	kept	unused
+weather_particle_system_definition	particle_types.count	36	long	read	kept	walked
+weather_particle_system_definition	particle_types.address	40	void *	read	kept	walked
 weather_particle_system_definition	particle_types.definition	44	struct tag_block_definition *	read	-	-
 weather_particle_type_definition	name	0	char[32]	-	-	-
 weather_particle_type_definition	flags	32	unsigned long	read	kept	used
-weather_particle_type_definition	distance_fadein_start	36	real	read	kept	unused
-weather_particle_type_definition	distance_fadein_end	40	real	read	kept	unused
-weather_particle_type_definition	distance_fadeout_start	44	real	read	kept	unused
-weather_particle_type_definition	distance_fadeout_end	48	real	read	kept	unused
-weather_particle_type_definition	height_fadein_start	52	real	read	kept	unused
-weather_particle_type_definition	height_fadein_end	56	real	read	kept	unused
-weather_particle_type_definition	height_fadeout_start	60	real	read	kept	unused
-weather_particle_type_definition	height_fadeout_end	64	real	read	kept	unused
+weather_particle_type_definition	distance_fadein_start	36	real	read	kept	used
+weather_particle_type_definition	distance_fadein_end	40	real	read	kept	used
+weather_particle_type_definition	distance_fadeout_start	44	real	read	kept	used
+weather_particle_type_definition	distance_fadeout_end	48	real	read	kept	used
+weather_particle_type_definition	height_fadein_start	52	real	read	kept	used
+weather_particle_type_definition	height_fadein_end	56	real	read	kept	used
+weather_particle_type_definition	height_fadeout_start	60	real	read	kept	used
+weather_particle_type_definition	height_fadeout_end	64	real	read	kept	used
 weather_particle_type_definition	unused	68	long[24]	-	-	-
 weather_particle_type_definition	particle_count_lower_bound	164	real	read	kept	used
 weather_particle_type_definition	particle_count_upper_bound	168	real	read	kept	used
@@ -9171,8 +9171,8 @@ weather_particle_type_definition	bitmap.group_tag	404	unsigned long	-	kept	used
 weather_particle_type_definition	bitmap.name	408	char *	-	-	-
 weather_particle_type_definition	bitmap.name_length	412	long	-	-	-
 weather_particle_type_definition	bitmap.index	416	long	read	kept	used
-weather_particle_type_definition	render_mode	420	short	read	kept	unused
-weather_particle_type_definition	render_direction_source	422	short	read	kept	unused
+weather_particle_type_definition	render_mode	420	short	read	kept	used
+weather_particle_type_definition	render_direction_source	422	short	read	kept	used
 weather_particle_type_definition	shader.shader.base.radiosity.flags	424	unsigned short	read	kept	used
 weather_particle_type_definition	shader.shader.base.radiosity.detail_level	426	short	-	-	-
 weather_particle_type_definition	shader.shader.base.radiosity.power	428	real	-	kept	used
@@ -9193,10 +9193,10 @@ weather_particle_type_definition	shader.framebuffer_blend_function	466	short	rea
 weather_particle_type_definition	shader.framebuffer_fade_mode	468	short	-	kept	used
 weather_particle_type_definition	shader.primary_map_flags	470	unsigned short	read	kept	unused
 weather_particle_type_definition	shader.reserved_before_secondary_map	472	byte[28]	-	-	-
-weather_particle_type_definition	shader.secondary_map.group_tag	500	unsigned long	-	kept	untraced
+weather_particle_type_definition	shader.secondary_map.group_tag	500	unsigned long	-	kept	used
 weather_particle_type_definition	shader.secondary_map.name	504	char *	-	-	-
 weather_particle_type_definition	shader.secondary_map.name_length	508	long	-	-	-
-weather_particle_type_definition	shader.secondary_map.index	512	long	read	kept	untraced
+weather_particle_type_definition	shader.secondary_map.index	512	long	read	kept	used
 weather_particle_type_definition	shader.secondary_map_anchor	516	short	read	kept	used
 weather_particle_type_definition	shader.secondary_map_flags	518	unsigned short	read	kept	used
 weather_particle_type_definition	shader.secondary_map_animation.u_source	520	short	read	-	-

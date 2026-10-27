@@ -359,6 +359,7 @@ pub fn census(root: &Path, mode: Mode) -> Result<String, Error> {
             let mut problems = census.problems();
             problems.extend(docs::stale(root, &census));
             problems.extend(fields::stale(root)?);
+            problems.extend(fields::owed(root, &census)?);
             problems.extend(fixups::stale(root)?);
             problems.extend(scripts::stale(root)?);
             problems.extend(crate::original::stale(root)?);

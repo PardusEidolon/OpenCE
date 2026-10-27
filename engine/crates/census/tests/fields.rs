@@ -5,8 +5,10 @@ mod common;
 
 use std::collections::{BTreeMap, BTreeSet};
 
+use opence_census::classes::Class;
 use opence_census::fields::{
-    declared, leaves, marks, members, read_fields, reads, write_fields, FIELDS,
+    declared, gaps, leaves, marks, members, read_fields, read_traces, readers, readers_of, reads,
+    trace, write_fields, Engine, FIELDS,
 };
 use opence_census::layout::{read_dump, read_layout, Record, LAYOUT};
 
@@ -148,6 +150,81 @@ fn a_read_inside_an_embedded_structure_is_read_wherever_it_is_embedded() {
 }
 
 #[test]
+fn each_read_is_its_functions() {
+    let records = read_dump(DUMP);
+    let by_function = readers(C, &names(&records), &BTreeMap::new());
+    let functions: Vec<&str> = by_function.keys().map(String::as_str).collect();
+    assert_eq!(functions, ["big_update", "thing_update"]);
+    let all: BTreeSet<(String, String)> = by_function.values().flatten().cloned().collect();
+    assert_eq!(all, reads(C, &names(&records), &BTreeMap::new()));
+    // A field is read by each function whose reads reach it, through the
+    // structures embedding it too.
+    let marked = marks(&records, &all);
+    let by = readers_of(&records, &by_function);
+    let read: Vec<bool> = by.iter().map(|b| !b.is_empty()).collect();
+    assert_eq!(read, marked.iter().map(|m| m.original).collect::<Vec<_>>());
+    let read_by: Vec<(&str, &str, Vec<&str>)> = marked
+        .iter()
+        .zip(&by)
+        .filter(|(_, by)| !by.is_empty())
+        .map(|(m, by)| {
+            (
+                m.structure.as_str(),
+                m.path.as_str(),
+                by.iter().map(String::as_str).collect(),
+            )
+        })
+        .collect();
+    assert_eq!(
+        read_by,
+        [
+            ("thing_part", "mass", vec!["thing_update"]),
+            ("thing_definition", "flags", vec!["thing_update"]),
+            ("thing_definition", "parts.count", vec!["thing_update"]),
+            ("thing_definition", "parts.address", vec!["thing_update"]),
+            ("thing_definition", "origin.n", vec!["thing_update"]),
+            ("thing_definition", "origin.x", vec!["thing_update"]),
+            ("thing_definition", "origin.y", vec!["thing_update"]),
+            ("thing_definition", "origin.z", vec!["thing_update"]),
+            ("thing_definition", "scale", vec!["thing_update"]),
+            ("big_definition", "part.mass", vec!["thing_update"]),
+            ("big_definition", "other", vec!["big_update"]),
+        ]
+    );
+}
+
+#[test]
+fn a_kept_field_only_finished_functions_read_and_nothing_uses_is_a_gap() {
+    let records = read_dump(DUMP);
+    let by_function = readers(C, &names(&records), &BTreeMap::new());
+    let by = readers_of(&records, &by_function);
+    let mut marked = marks(&records, &by_function.values().flatten().cloned().collect());
+    for mark in &mut marked {
+        mark.importer = true;
+        mark.engine = match (mark.structure.as_str(), mark.path.as_str()) {
+            ("thing_definition", "scale") | ("big_definition", "other") => Engine::Unused,
+            ("thing_definition", "unread") => Engine::Unused,
+            ("thing_part", "mass") => Engine::Untraced,
+            _ => Engine::Used,
+        };
+    }
+    // (thing_update is matched, big_update not started: the field it
+    // reads is owed to it, the unread one stands behind nothing)
+    let class = |function: &str| match function {
+        "thing_update" => Some(Class::Matched),
+        _ => Some(Class::Missing),
+    };
+    assert_eq!(
+        gaps(&marked, &by, class),
+        [
+            "thing_part.mass: kept, but its use could not be traced".to_owned(),
+            "thing_definition.scale: read by thing_update (Matched), used nowhere in the engine"
+                .to_owned(),
+        ]
+    );
+}
+
+#[test]
 fn every_leaf_is_marked_read_or_not() {
     let records = read_dump(DUMP);
     let found = reads(C, &names(&records), &BTreeMap::new());
@@ -227,5 +304,46 @@ fn the_written_fields_are_current() -> Result<(), Failure> {
     );
     let read = fresh.iter().filter(|m| m.original).count();
     assert!(read > 1000, "only {read} fields read");
+    Ok(())
+}
+
+#[test]
+fn a_trace_names_the_use_of_a_field_the_census_cannot_follow() -> Result<(), Failure> {
+    let records = read_dump(DUMP);
+    let mut marked = marks(&records, &reads(C, &names(&records), &BTreeMap::new()));
+    for mark in &mut marked {
+        mark.importer = true;
+        mark.engine = match mark.path.as_str() {
+            "mass" | "scale" => Engine::Untraced,
+            _ => Engine::Used,
+        };
+    }
+    let traces = read_traces(
+        "# structure\tfield\tfile\tuse\n\
+         thing_part\tmass\tsim/src/thing.rs\tpart.mass\n\
+         thing_definition\tscale\tsim/src/thing.rs\tdefinition.scale\n\
+         thing_definition\tflags\tsim/src/thing.rs\tflags\n\
+         thing_definition\tmissing\tsim/src/thing.rs\tmissing\n",
+    )?;
+    let text = |file: &str| (file == "sim/src/thing.rs").then(|| "let m = part.mass;".to_owned());
+    let problems = trace(&mut marked, &traces, text);
+    assert_eq!(
+        problems,
+        [
+            "engine/census/field_traces.tsv: thing_definition.scale's use definition.scale is not in sim/src/thing.rs",
+            "engine/census/field_traces.tsv: thing_definition.flags needs no trace: the census traces it",
+            "engine/census/field_traces.tsv: thing_definition.missing names no kept field",
+        ]
+    );
+    let engine: Vec<(&str, Engine)> = marked
+        .iter()
+        .filter(|m| m.path == "mass" || m.path == "scale")
+        .map(|m| (m.path.as_str(), m.engine))
+        .collect();
+    assert_eq!(
+        engine,
+        [("mass", Engine::Used), ("scale", Engine::Untraced)]
+    );
+    assert!(read_traces("thing_part\tmass\n").is_err());
     Ok(())
 }

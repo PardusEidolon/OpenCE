@@ -1212,10 +1212,11 @@ check = "physics/tests/movement.rs"
 against = "measure"
 
 [function.biped_update_turning]
-class = "matched"
+class = "partial"
 engine = "sim/src/unit_states.rs"
 check = "sim/src/unit_states.rs"
 against = "measure"
+leaves_out = ["the turning speed it uses while moving (moving_turning_speed)"]
 
 [function.bit_vector_and]
 class = "native"
@@ -3509,10 +3510,11 @@ check = "sim/src/effects.rs"
 against = "measure"
 
 [function.effect_generate_particles]
-class = "matched"
+class = "partial"
 engine = "ffi/src/particles.rs"
 check = "ffi/src/particles.rs"
 against = "measure"
+leaves_out = ["a particle's camera mode: first person only, third person only or both (camera_mode)"]
 
 [function.effect_generate_parts]
 class = "matched"
@@ -7054,10 +7056,11 @@ check = "sim/tests/projectile_deceleration_reference.rs"
 against = "trace"
 
 [function.projectile_collision]
-class = "matched"
+class = "partial"
 engine = "sim/src/effects.rs"
 check = "sim/src/effects.rs"
 against = "measure"
+leaves_out = ["the effect a projectile makes as it starts to detonate (detonation_started)", "a material response's potential effect (potential_effect)", "the effects scaled by the impact's damage or angle (scale_effects_by)"]
 
 [function.projectile_collision_test_line]
 class = "matched"
@@ -7066,10 +7069,11 @@ check = "sim/src/projectile.rs"
 against = "measure"
 
 [function.projectile_detonate]
-class = "matched"
+class = "partial"
 engine = "sim/src/effects.rs"
 check = "sim/src/projectile.rs"
 against = "measure"
+leaves_out = ["the super detonation, made when enough projectiles stick in one object (super_detonation)"]
 
 [function.projectile_distribute]
 class = "matched"
@@ -7088,10 +7092,11 @@ check = "sim/src/projectile.rs"
 against = "measure"
 
 [function.projectile_update]
-class = "matched"
+class = "partial"
 engine = "sim/src/projectile.rs"
 check = "sim/tests/projectile_deceleration_reference.rs"
 against = "trace"
+leaves_out = ["the turning of a guided projectile towards its target (guided_angular_velocity)"]
 
 [function.projection_from_vector3d]
 class = "replaced"
@@ -7186,10 +7191,11 @@ check = "ffi/src/camera.rs"
 against = "measure"
 
 [function.rasterizer_lens_flares_draw]
-class = "matched"
+class = "partial"
 engine = "ffi/src/camera.rs"
 check = "ffi/src/camera.rs"
 against = "measure"
+leaves_out = ["the animation of each reflection (lens_flare_reflection.animation_flags)"]
 
 [function.read]
 class = "replaced"
@@ -8780,10 +8786,11 @@ check = "ffi/src/sound_events.rs"
 against = "measure"
 
 [function.trigger_create_projectiles]
-class = "matched"
+class = "partial"
 engine = "sim/src/projectile.rs"
 check = "sim/src/projectile.rs"
 against = "measure"
+leaves_out = ["the tracers, one every so many rounds (rounds_between_tracers)", "the inner cone of the projectiles' error (projectile_error_inner_cone_angle)"]
 
 [function.triple_product3d]
 class = "matched"
@@ -9595,16 +9602,18 @@ check = "sim/tests/vehicle_physics_reference.rs"
 against = "trace"
 
 [function.update_channel_for_impulse_sound]
-class = "matched"
+class = "partial"
 engine = "audio/src/mixer.rs"
 check = "audio/src/mixer.rs"
 against = "measure"
+leaves_out = ["the sound's cone: its inner and outer angles and outer gain (inner_cone_angle, outer_cone_angle, outer_cone_gain)"]
 
 [function.update_channel_for_looping_sound]
-class = "matched"
+class = "partial"
 engine = "audio/src/mixer.rs"
 check = "audio/src/mixer.rs"
 against = "measure"
+leaves_out = ["the sound's cone: its inner and outer angles and outer gain (inner_cone_angle, outer_cone_angle, outer_cone_gain)", "the pitch's bend per second at most and its natural pitch (maximum_bend_per_second, natural_pitch)"]
 
 [function.update_channels]
 class = "matched"
@@ -9685,10 +9694,11 @@ stands_in = "net/src/snapshot.rs"
 note = "the original's network state and prediction; the engine sends snapshots"
 
 [function.update_suspension]
-class = "matched"
+class = "partial"
 engine = "sim/src/vehicle_animation.rs"
 check = "sim/src/vehicle_animation.rs"
 against = "measure"
+leaves_out = ["the suspension's sound (suspension_sound)"]
 
 [function.uperror]
 class = "native"
@@ -10129,10 +10139,11 @@ check = "sim/tests/weapons.rs"
 against = "measure"
 
 [function.weapon_export_function_values]
-class = "matched"
+class = "partial"
 engine = "sim/src/functions.rs"
 check = "sim/src/functions.rs"
 against = "measure"
+leaves_out = ["the charged illumination exported while charged (charged_illumination)"]
 
 [function.weapon_magazine_finish_reload]
 class = "matched"
@@ -10182,10 +10193,11 @@ check = "sim/src/weapon.rs"
 against = "measure"
 
 [function.weapon_trigger_fire]
-class = "matched"
+class = "partial"
 engine = "sim/src/weapon.rs"
 check = "sim/src/weapon.rs"
 against = "measure"
+leaves_out = ["the alternate shots loaded at most (maximum_alternate_shots_loaded)", "the detonation of a weapon past its heat threshold (heat_detonation_threshold)"]
 
 [function.weapon_trigger_recover]
 class = "matched"
@@ -10200,10 +10212,11 @@ check = "sim/src/weapon.rs"
 against = "measure"
 
 [function.weapon_update]
-class = "matched"
+class = "partial"
 engine = "sim/src/weapon.rs"
 check = "sim/tests/weapons.rs"
 against = "measure"
+leaves_out = ["the alternate shots loaded at most (maximum_alternate_shots_loaded)", "the rate of fire past which a trigger's barrels blur (blurred_rate_of_fire)"]
 
 [function.weapon_useful]
 class = "missing"
