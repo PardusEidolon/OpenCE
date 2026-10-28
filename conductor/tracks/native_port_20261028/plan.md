@@ -18,14 +18,16 @@ stops, except A1's go/no-go.
   - Finding: two host threads, each with its own store and instance on one `SharedMemory` and the runtime's engine, share atomics exactly (200,000 from 2 × 100,000), so A2 maps the Win32 thread imports onto Wasmtime threads that way.
   - Finding: game.wasm imports no `setjmp` or `longjmp` (`source/` has none), so it needs neither wasm exceptions nor unwinding.
   - Finding: NaNs come out canonical, relaxed SIMD is refused at compile, and the game is built with `-ffp-contract=off`; the 63 wasm traces ran twice with identical output.
-- [ ] Task: `--benchmark 60`: the simulation tick's p99 and the CPU frame's p99 on the M1 Max.
-- [ ] Task: Write the go/no-go (`a1_go_no_go.md` in this track) with the data, and bring it to the user. Stop on a no-go.
+- [x] Task: `--benchmark 60`: the simulation tick's p99 and the CPU frame's p99 on the M1 Max. 419951f2 (moved to Phase 2, after the threads)
+  - Finding: the game does not tick with its imports stubbed, so the benchmark cannot run before A2. The proxies, measured with `tools/engine_wasm_traces.py --speed`: the 15 harnesses heavy enough to time run at 1.38× native in wasm (geometric mean, 0.97× to 1.93×, both at `-O1`); game.wasm loads in 315 ms uncached and 54 ms from its `.cwasm`; a host call costs about 51 ns.
+- [x] Task: Write the go/no-go (`a1_go_no_go.md` in this track) with the data, and bring it to the user. Stop on a no-go. efb9f12a (go; brought to the user in the overnight summary)
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: The spike' (Protocol in workflow.md)
 
 ## Phase 2: The macOS platform layer (A2)
 - [ ] Task: Memory and the map cache.
 - [ ] Task: Files: the data folder, saved games, the map copies.
 - [ ] Task: Threads, timers and the clock.
+- [ ] Task: `--benchmark 60` on devgulch, the A1 bar moved here: the simulation tick's p99 within about 1 ms and the CPU frame's p99 at most 8.33 ms on the M1 Max. A miss stops the track with the measurements (the go/no-go's condition).
 - [ ] Task: Keyboard and mouse as the game's input, pad events filtered.
 - [ ] Task: Sound output from the game's mixer to Core Audio.
 - [ ] Task: The render calls as one buffer per frame.
