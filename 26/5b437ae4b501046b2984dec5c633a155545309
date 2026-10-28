@@ -1,0 +1,1 @@
+Screen scale (native_port Phase 5, under the bar task). Found: game.wasm drew at 640x480 scale 1 because its environment is empty, so A1's p99 7.113 ms and Phase 4's numbers were of a 640x480 frame scaled up. Now 3840x2160 targets and viewport. The bar must be re-run at real 4K.
