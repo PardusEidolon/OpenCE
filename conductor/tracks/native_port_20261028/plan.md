@@ -51,7 +51,7 @@ stops, except A1's go/no-go.
   - 63 of 63 traces match (`tools/engine_wasm_traces.py`) with the plugins off; no code change was needed.
 - [x] Task: Conductor - User Manual Verification 'Phase 3: The plugin interface' (Protocol in workflow.md) (automated) 5a532559
 
-## Phase 4: Stock rendering on Metal (A4)
+## Phase 4: Stock rendering on Metal (A4) [checkpoint: fcde94ab]
 - [x] Task: `default.metallib` linked from the `.air` at build and loaded with `makeLibrary(URL:)`. bab7d49f
   - Finding: the bake's path tracer stays compiled per bake, with safe maths; a source whose SHA-256 differs from the one linked is compiled at run time, so the hot reload still works.
 - [x] Task: Draw the rasterizer's buffer: the environment shaders and lightmaps. 01ead901 246b8c2a d7fe6f1c
@@ -72,7 +72,7 @@ stops, except A1's go/no-go.
 - [ ] Task: The bar end to end: p99 ≤ 8.33 ms at 4K ultra on the M1 Max. b889c617 492ee877
   - **Blocked:** `--benchmark 60 --game --size 3840x2160`, each frame the slower of its CPU frame and its GPU work: 2304 frames, p50 7.243 ms, **p99 9.198 ms**, p99.9 175 ms, 4 hitches. The GPU's p99 is 0.845 ms; the CPU frame is the whole of it, and at 640×480 it is the same (p99 8.960 ms).
   - Where it goes (`opence-game --benchmark 30`, no screen): the frame's p50 5.25 ms, of which the profiled sections are about 1.5 ms (`game_time_update` 0.88, `present` 0.34); the rest is the game's rasterizer and the C Metal device in game.wasm, which have no profile sections. The app's sink (the runtime's check, the batch to Swift and the readbacks) adds about 2 ms more. Next: profile sections in the rasterizer and the device, then the sink. "Ultra" is the stock shaders until Phase 5, which re-runs the bar.
-- [ ] Task: Conductor - User Manual Verification 'Phase 4: Stock rendering' (Protocol in workflow.md) (automated)
+- [x] Task: Conductor - User Manual Verification 'Phase 4: Stock rendering' (Protocol in workflow.md) (automated) fcde94ab (the bar stays blocked; the golden frame awaits approval)
 
 ## Phase 5: The presentation as plugins (A5)
 - [ ] Task: The lighting extended from the original: bakes, probes and ray tracing on the original's lightmaps, shader tags and lights; each switchable to stock.
