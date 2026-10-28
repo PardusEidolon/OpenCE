@@ -8,6 +8,8 @@ publish.workspace = true
 
 [dependencies]
 thiserror.workspace = true
+# (the saved games' signatures)
+sha2.workspace = true
 # (Cranelift ahead of time, its compiled modules cached by Wasmtime's
 # version, the compiler's settings and the CPU's features; threads for the
 # game's shared memory)

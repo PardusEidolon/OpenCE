@@ -18,6 +18,7 @@
 use std::collections::BTreeMap;
 use std::path::Path;
 
+pub mod files;
 pub mod memory;
 
 use wasmtime::{
@@ -169,6 +170,8 @@ struct Record {
     outputs: BTreeMap<i32, Vec<u8>>,
     /// the Xbox's contiguous window, as `XPhysicalAlloc` hands it out
     window: memory::Window,
+    /// the game's folders, open files and last error
+    files: files::Files,
 }
 
 /// `fd_write(fd, iovs, count, written)`: gathers the `count` iovecs at
@@ -305,6 +308,7 @@ impl Runtime {
             let exits = name == PROC_EXIT;
             let writes = name == FD_WRITE;
             let serves = memory::handler(&name);
+            let files_service = files::service(&name);
             linker
                 .func_new(
                     import.module(),
@@ -344,6 +348,9 @@ impl Runtime {
                         if let Some(serve) = serves {
                             return serve(&mut caller, params, results);
                         }
+                        if let Some(service) = files_service {
+                            return files::serve(&mut caller, service, params, results);
+                        }
                         for (result, ty) in results.iter_mut().zip(ty.results()) {
                             *result = Val::default_for_ty(&ty).ok_or_else(|| {
                                 wasmtime::format_err!("no zero value for a result of type {ty}")
@@ -367,6 +374,7 @@ impl Runtime {
                 budget: None,
                 outputs: BTreeMap::new(),
                 window: memory::Window::new(),
+                files: files::Files::default(),
             },
         );
         let instance = linker.instantiate(&mut store, &module).map_err(called)?;
@@ -500,6 +508,19 @@ impl Game {
     /// for no budget).
     pub fn set_call_budget(&mut self, budget: Option<u64>) {
         self.store.data_mut().budget = budget;
+    }
+
+    /// Sets the game's data folder (`d:\`, the maps) and save folder (the
+    /// other drives); until then no path is found.
+    pub fn set_folders(&mut self, data: &std::path::Path, saves: &std::path::Path) {
+        self.store.data_mut().files.set_folders(data, saves);
+    }
+
+    /// The completion routines `ReadFileEx` and `WriteFileEx` queued, oldest
+    /// first, for the game's next alertable wait.
+    #[must_use]
+    pub fn completions(&self) -> &[files::Completion] {
+        self.store.data().files.completions()
     }
 
     /// The "module.name" of import `index` (empty if there is none).
