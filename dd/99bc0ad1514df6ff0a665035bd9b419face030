@@ -1,0 +1,1 @@
+Task: Keyboard and mouse as the game's input, pad events filtered (native_port_20261028 Phase 2). Controls handle on the runtime's shared input; only port 0 opens; get_state reads the keyboard. Tests: controls (5), workspace (only the known flaky AI budget test failed), Swift 214/51 skipped/0 failures.
