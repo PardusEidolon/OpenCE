@@ -79,7 +79,7 @@ stops, except A1's go/no-go.
 - [ ] Task: The particles; the weapons station draws every particle the game makes.
 - [ ] Task: The HUD at 4K; the grenade count and every element measured against the original.
 - [ ] Task: The first-person rifle and hand where the original puts them.
-- [ ] Task: The sound.
+- [x] Task: The sound. b57ed742 (game.wasm's mixer heard headless through GameSpeakers; the app's interactive play moves to WasmGame in Phase 7)
 - [ ] Task: Conductor - User Manual Verification 'Phase 5: The presentation' (Protocol in workflow.md) (automated)
 
 ## Phase 6: What the PC port left out (A6)
