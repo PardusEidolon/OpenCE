@@ -1,0 +1,102 @@
+// What the game's passes on colour texture 0 draw to (GameRenderer): the
+// game's window (a CAMetalLayer's drawables), or a texture off the screen
+// for the tests and headless runs.
+
+import Foundation
+import Metal
+import QuartzCore
+
+/// A frame of the window, drawn by the passes on colour 0 until Present.
+public struct WindowFrame {
+    public let texture: MTLTexture
+    let drawable: MTLDrawable?
+}
+
+public protocol RenderWindow: AnyObject, Sendable {
+    /// The frame to draw next, or nil when there is none to have.
+    func nextFrame() -> WindowFrame?
+    /// Shows `frame` once `commands` have run (before they are committed).
+    func present(_ frame: WindowFrame, in commands: MTLCommandBuffer)
+}
+
+/// The game's window: its view's CAMetalLayer, BGRA8, once the game has
+/// opened it (the game makes its textures before).
+public final class LayerWindow: RenderWindow, @unchecked Sendable {
+    private let lock = NSLock()
+    private var shown: CAMetalLayer?
+
+    public init(layer: CAMetalLayer? = nil) {
+        shown = layer
+    }
+
+    /// The layer drawn to (set on the main thread, read on the game's).
+    public var layer: CAMetalLayer? {
+        get {
+            lock.lock()
+            defer { lock.unlock() }
+            return shown
+        }
+        set {
+            lock.lock()
+            defer { lock.unlock() }
+            shown = newValue
+        }
+    }
+
+    public func nextFrame() -> WindowFrame? {
+        // (blocks while the layer's drawables are all in flight, which keeps
+        // the game no more than their number of frames ahead)
+        guard let drawable = layer?.nextDrawable() else { return nil }
+        return WindowFrame(texture: drawable.texture, drawable: drawable)
+    }
+
+    public func present(_ frame: WindowFrame, in commands: MTLCommandBuffer) {
+        if let drawable = frame.drawable {
+            commands.present(drawable)
+        }
+    }
+}
+
+/// A window off the screen: one BGRA8 texture, which each frame draws over,
+/// and a count of the frames presented.
+public final class OffscreenWindow: RenderWindow, @unchecked Sendable {
+    public let texture: MTLTexture
+    private let lock = NSLock()
+    private var presentedFrames = 0
+
+    public init?(device: MTLDevice, width: Int, height: Int) {
+        let descriptor = MTLTextureDescriptor.texture2DDescriptor(
+            pixelFormat: .bgra8Unorm, width: width,
+            height: height, mipmapped: false)
+        descriptor.usage = [.renderTarget, .shaderRead]
+        descriptor.storageMode = .shared
+        guard let texture = device.makeTexture(descriptor: descriptor) else { return nil }
+        self.texture = texture
+    }
+
+    public func nextFrame() -> WindowFrame? {
+        WindowFrame(texture: texture, drawable: nil)
+    }
+
+    public func present(_ frame: WindowFrame, in commands: MTLCommandBuffer) {
+        lock.lock()
+        defer { lock.unlock() }
+        presentedFrames += 1
+    }
+
+    /// The frames presented so far.
+    public var presented: Int {
+        lock.lock()
+        defer { lock.unlock() }
+        return presentedFrames
+    }
+
+    /// The texture's pixels, RGBA, rows from the top (once the renderer has
+    /// finished drawing them).
+    public func pixels() -> [[UInt8]] {
+        let (width, height) = (texture.width, texture.height)
+        var bytes = [UInt8](repeating: 0, count: width * height * 4)
+        texture.getBytes(&bytes, bytesPerRow: width * 4, from: MTLRegionMake2D(0, 0, width, height), mipmapLevel: 0)
+        return stride(from: 0, to: bytes.count, by: 4).map { [bytes[$0 + 2], bytes[$0 + 1], bytes[$0], bytes[$0 + 3]] }
+    }
+}
