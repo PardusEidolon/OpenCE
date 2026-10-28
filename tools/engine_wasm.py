@@ -61,7 +61,10 @@ BUILD = Path("build/engine/wasm")
 IMPORTS_LIST = Path("tools/engine_wasm_imports.txt")
 EXPORTS_LIST = Path("tools/engine_wasm_exports.txt")
 
-TARGET = "wasm32-wasip1"
+# the game's target: wasm32 with atomics and a shared memory, so its threads
+# are its own, each the module instantiated again over the same memory
+# (wasi-threads; opence_runtime's threads module answers its imports)
+TARGET = "wasm32-wasip1-threads"
 
 # The game's address space. The module starts with 2 GB, which wasi-libc's
 # malloc takes as its first region (__heap_base to __heap_end, the end of
@@ -75,12 +78,11 @@ MAXIMUM_MEMORY_BYTES = 0x100000000
 # (the game recurses deeply in places: scripts, the BSP's walks)
 STACK_BYTES = 8 * 1024 * 1024
 
-# The ABI the game was written for, as the web build reproduces it, less the
-# threads: wasi-libc for wasm32-wasip1 is built without atomics, so for now
-# the module is single-threaded and its threads are the platform's
-# (the go/no-go, conductor/tracks/native_port_20261028/a1_go_no_go.md).
+# The ABI the game was written for, as the web build reproduces it, with
+# its threads (-pthread: atomics and bulk memory).
 ABI_FLAGS = [
     f"--target={TARGET}",
+    "-pthread",
     "-DHALO_WASMTIME=1",
     "-fshort-wchar",
     "-ffp-contract=off",
@@ -91,19 +93,28 @@ ABI_FLAGS = [
     "-g2",
 ]
 
-# what the module exports to the runtime: the game's entry point and the C
-# heap, which the platform layer allocates the game's buffers from
-EXPORTS = ["halo_game_main", "malloc", "free"]
+# what the module exports to the runtime: the game's entry point, the C
+# heap, which the platform layer allocates the game's buffers from, and what
+# its threads need (CreateThread calls the game's pthread_create, and a new
+# thread starts at wasi_thread_start)
+EXPORTS = ["halo_game_main", "malloc", "free", "pthread_create", "pthread_detach", "wasi_thread_start"]
+
+# wasi-libc for each target, as nix develop names it
+WASI_LIBC = {
+    "wasm32-wasip1-threads": "HALO_WASI_LIBC_THREADS",
+    "wasm32-wasip1": "HALO_WASI_LIBC",
+}
 
 
-def wasi_paths() -> Tuple[Path, Path]:
-    """wasi-libc's include and lib directories (nix develop's
-    HALO_WASI_LIBC_DEV and HALO_WASI_LIBC)"""
-    dev = os.environ.get("HALO_WASI_LIBC_DEV")
-    lib = os.environ.get("HALO_WASI_LIBC")
+def wasi_paths(target: str = TARGET) -> Tuple[Path, Path]:
+    """wasi-libc's include and lib directories for target (nix develop's
+    HALO_WASI_LIBC and HALO_WASI_LIBC_DEV, or their _THREADS forms)"""
+    name = WASI_LIBC[target]
+    dev = os.environ.get(f"{name}_DEV")
+    lib = os.environ.get(name)
     if not dev or not lib:
-        raise SystemExit("engine_wasm: run inside nix develop (HALO_WASI_LIBC and HALO_WASI_LIBC_DEV are unset)")
-    return Path(dev) / "include" / TARGET, Path(lib) / "lib" / TARGET
+        raise SystemExit(f"engine_wasm: run inside nix develop ({name} and {name}_DEV are unset)")
+    return Path(dev) / "include" / target, Path(lib) / "lib" / target
 
 
 def clang() -> str:
@@ -222,6 +233,12 @@ def link(objects: Sequence[Path], lib: Path, output: Path) -> None:
         f"-Wl,--initial-memory={MEMORY_BYTES}",
         f"-Wl,--max-memory={MAXIMUM_MEMORY_BYTES}",
         f"-Wl,-z,stack-size={STACK_BYTES}",
+        # the memory, shared between the game's threads, is the runtime's,
+        # and the function table is exported for the completion routines
+        "-pthread",
+        "-Wl,--shared-memory",
+        "-Wl,--import-memory",
+        "-Wl,--export-table",
         *(f"-Wl,--export={name}" for name in EXPORTS),
         "-lsetjmp",
         "-lwasi-emulated-mman",

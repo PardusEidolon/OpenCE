@@ -36,9 +36,17 @@ from tools import engine_wasm  # noqa: E402
 # the host compiler's flags a wasm build cannot take
 HOST_ONLY = {"-lm", "-pthread", "-lpthread"}
 
+# the harnesses' target: a WASI command, single-threaded (the functions they
+# trace run on one thread, and the runner gives a command its own memory)
+TARGET = "wasm32-wasip1"
+
 # the game's ABI less its optimisation and debug levels, which the
-# reference keeps as it asked
-ABI_FLAGS = [flag for flag in engine_wasm.ABI_FLAGS if not flag.startswith(("-O", "-g"))]
+# reference keeps as it asked, and its threads
+ABI_FLAGS = [
+    f"--target={TARGET}" if flag.startswith("--target=") else flag
+    for flag in engine_wasm.ABI_FLAGS
+    if not flag.startswith(("-O", "-g")) and flag != "-pthread"
+]
 
 # the diagnostics the game's build keeps as warnings, which clang 22 makes
 # errors; they change no code, and the harnesses build natively with them as
@@ -49,7 +57,7 @@ DIAGNOSTIC_FLAGS = [flag for flag in engine_wasm.GAME_FLAGS if flag.startswith("
 def wasm_command(arguments: Sequence[str], output: Path) -> List[str]:
     """the clang command that builds the harness, with its own flags and the
     game's ABI, as a WASI command module at output"""
-    include, lib = engine_wasm.wasi_paths()
+    include, lib = engine_wasm.wasi_paths(TARGET)
     builtins = os.environ.get("HALO_WASM_BUILTINS")
     if not builtins:
         raise SystemExit("engine_wasm_cc: run inside nix develop (HALO_WASM_BUILTINS is unset)")

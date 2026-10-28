@@ -34,8 +34,9 @@ use std::time::{Duration, SystemTime, UNIX_EPOCH};
 use sha2::{Digest, Sha256};
 use wasmtime::{Caller, Val};
 
-use super::memory::{arg, bytes, give, memory};
-use super::Record;
+use super::memory::{arg, give};
+use super::space::Space;
+use super::{with_space, Record};
 
 /// Win32's error codes, as `GetLastError` gives them
 const ERROR_SUCCESS: u32 = 0;
@@ -122,6 +123,9 @@ pub struct Completion {
     pub transferred: u32,
     /// the `OVERLAPPED` the call was given
     pub overlapped: u32,
+    /// the game's thread that queued it, which alone runs it (as Windows
+    /// runs an APC only on its own thread)
+    pub thread: u32,
 }
 
 /// what a find found, as `WIN32_FIND_DATAA` gives it
@@ -161,7 +165,10 @@ pub struct Files {
     saves: Option<PathBuf>,
     handles: BTreeMap<u32, Open>,
     next: u32,
-    last_error: u32,
+    /// the game's thread calling now
+    thread: u32,
+    /// each thread's last error
+    last_errors: BTreeMap<u32, u32>,
     completions: Vec<Completion>,
 }
 
@@ -178,14 +185,23 @@ impl Files {
         &self.completions
     }
 
-    /// Takes the completion routines waiting, oldest first.
-    pub fn take_completions(&mut self) -> Vec<Completion> {
-        std::mem::take(&mut self.completions)
+    /// Takes the completion routines waiting for `thread`, oldest first.
+    pub fn take_completions(&mut self, thread: u32) -> Vec<Completion> {
+        let (taken, left) = std::mem::take(&mut self.completions)
+            .into_iter()
+            .partition(|done| done.thread == thread);
+        self.completions = left;
+        taken
+    }
+
+    /// whether any completion routine waits for `thread`
+    pub(crate) fn has_completions(&self, thread: u32) -> bool {
+        self.completions.iter().any(|done| done.thread == thread)
     }
 
     /// sets the last error and gives `value`
     fn fail(&mut self, error: u32, value: u32) -> u32 {
-        self.last_error = error;
+        self.last_errors.insert(self.thread, error);
         value
     }
 
@@ -205,7 +221,7 @@ impl Files {
 
     /// the host path of the game's path at `address`, if it is a string and
     /// its drive has a folder
-    fn path(&self, data: &[u8], address: u32) -> Option<PathBuf> {
+    fn path(&self, data: &Space<'_>, address: u32) -> Option<PathBuf> {
         self.resolve(&string(data, address)?)
     }
 
@@ -234,7 +250,7 @@ impl Files {
         Some(host)
     }
 
-    fn create_file(&mut self, data: &mut [u8], a: &[u32; 8]) -> u32 {
+    fn create_file(&mut self, data: &mut Space<'_>, a: &[u32; 8]) -> u32 {
         let (access, disposition) = (a[1], a[4]);
         let Some(path) = self.path(data, a[0]) else {
             return self.fail(ERROR_PATH_NOT_FOUND, INVALID_HANDLE_VALUE);
@@ -276,7 +292,7 @@ impl Files {
 
     /// `ReadFile` and `WriteFile`: at the file's position, or at the
     /// `OVERLAPPED`'s offset (leaving the position alone)
-    fn transfer(&mut self, data: &mut [u8], a: &[u32; 8], writing: bool) -> u32 {
+    fn transfer(&mut self, data: &mut Space<'_>, a: &[u32; 8], writing: bool) -> u32 {
         let (handle, buffer, count, done, overlapped) = (a[0], a[1], a[2], a[3], a[4]);
         let offset = (overlapped != 0)
             .then(|| offset(data, overlapped))
@@ -287,21 +303,31 @@ impl Files {
         let Some(file) = self.file(handle) else {
             return self.fail(ERROR_INVALID_HANDLE, 0);
         };
-        let Some(buffer) = bytes(data, buffer, count) else {
-            return self.fail(ERROR_INVALID_PARAMETER, 0);
-        };
-        let moved = match (offset, writing) {
-            (Some(at), false) => read_at(file, buffer, at),
-            (Some(at), true) => file.write_all_at(buffer, at).map(|()| buffer.len()),
-            (None, false) => read_all(file, buffer),
-            (None, true) => file.write_all(buffer).map(|()| buffer.len()),
+        let moved = if writing {
+            let Some(buffer) = data.read(buffer, count) else {
+                return self.fail(ERROR_INVALID_PARAMETER, 0);
+            };
+            match offset {
+                Some(at) => file.write_all_at(&buffer, at),
+                None => file.write_all(&buffer),
+            }
+            .map(|()| buffer.len())
+        } else {
+            let read = data.update(buffer, count, |buffer| match offset {
+                Some(at) => read_at(file, buffer, at),
+                None => read_all(file, buffer),
+            });
+            let Some(read) = read else {
+                return self.fail(ERROR_INVALID_PARAMETER, 0);
+            };
+            read
         };
         let moved = match moved {
             Ok(moved) => u32::try_from(moved).unwrap_or(count),
             Err(error) => return self.fail(code(&error, Path::new("")), 0),
         };
         if done != 0 {
-            put(data, done, moved);
+            data.put(done, moved);
         }
         if overlapped != 0 {
             let error = if moved == 0 && count != 0 && !writing {
@@ -309,8 +335,8 @@ impl Files {
             } else {
                 ERROR_SUCCESS
             };
-            put(data, overlapped, error);
-            put(data, overlapped + 4, moved);
+            data.put(overlapped, error);
+            data.put(overlapped + 4, moved);
             if error != ERROR_SUCCESS {
                 return self.fail(error, 0);
             }
@@ -320,7 +346,7 @@ impl Files {
 
     /// `ReadFileEx` and `WriteFileEx`: done at once, at the `OVERLAPPED`'s
     /// offset, with the completion routine queued
-    fn transfer_ex(&mut self, data: &mut [u8], a: &[u32; 8], writing: bool) -> u32 {
+    fn transfer_ex(&mut self, data: &mut Space<'_>, a: &[u32; 8], writing: bool) -> u32 {
         let (handle, buffer, count, overlapped, routine) = (a[0], a[1], a[2], a[3], a[4]);
         let Some(at) = (overlapped != 0)
             .then(|| offset(data, overlapped))
@@ -331,36 +357,38 @@ impl Files {
         let Some(file) = self.file(handle) else {
             return self.fail(ERROR_INVALID_HANDLE, 0);
         };
-        let Some(buffer) = bytes(data, buffer, count) else {
-            return self.fail(ERROR_INVALID_PARAMETER, 0);
-        };
         let moved = if writing {
-            file.write_all_at(buffer, at).map(|()| buffer.len())
+            data.read(buffer, count)
+                .map(|buffer| file.write_all_at(&buffer, at).map(|()| buffer.len()))
         } else {
-            read_at(file, buffer, at)
+            data.update(buffer, count, |buffer| read_at(file, buffer, at))
+        };
+        let Some(moved) = moved else {
+            return self.fail(ERROR_INVALID_PARAMETER, 0);
         };
         let (error, moved) = match moved {
             Ok(0) if !writing && count != 0 => (ERROR_HANDLE_EOF, 0),
             Ok(moved) => (ERROR_SUCCESS, u32::try_from(moved).unwrap_or(count)),
             Err(error) => (code(&error, Path::new("")), 0),
         };
-        put(data, overlapped, error);
-        put(data, overlapped + 4, moved);
+        data.put(overlapped, error);
+        data.put(overlapped + 4, moved);
         self.completions.push(Completion {
             routine,
             error,
             transferred: moved,
             overlapped,
+            thread: self.thread,
         });
         self.fail(ERROR_SUCCESS, 1)
     }
 
-    fn set_file_pointer(&mut self, data: &mut [u8], a: &[u32; 8]) -> u32 {
+    fn set_file_pointer(&mut self, data: &mut Space<'_>, a: &[u32; 8]) -> u32 {
         let (handle, low, high_at, method) = (a[0], a[1], a[2], a[3]);
         let distance = if high_at == 0 {
             i64::from(low.cast_signed())
         } else {
-            let Some(high) = get(data, high_at) else {
+            let Some(high) = data.get(high_at) else {
                 return self.fail(ERROR_INVALID_PARAMETER, INVALID_SET_FILE_POINTER);
             };
             ((u64::from(high) << 32) | u64::from(low)).cast_signed()
@@ -380,7 +408,7 @@ impl Files {
         match file.seek(from) {
             Ok(at) => {
                 if high_at != 0 {
-                    put(data, high_at, (at >> 32) as u32);
+                    data.put(high_at, (at >> 32) as u32);
                 }
                 self.fail(ERROR_SUCCESS, at as u32)
             }
@@ -388,14 +416,14 @@ impl Files {
         }
     }
 
-    fn get_file_size(&mut self, data: &mut [u8], a: &[u32; 8]) -> u32 {
+    fn get_file_size(&mut self, data: &mut Space<'_>, a: &[u32; 8]) -> u32 {
         let Some(file) = self.file(a[0]) else {
             return self.fail(ERROR_INVALID_HANDLE, u32::MAX);
         };
         match file.metadata() {
             Ok(metadata) => {
                 if a[1] != 0 {
-                    put(data, a[1], (metadata.len() >> 32) as u32);
+                    data.put(a[1], (metadata.len() >> 32) as u32);
                 }
                 metadata.len() as u32
             }
@@ -403,7 +431,7 @@ impl Files {
         }
     }
 
-    fn set_end_of_file(&mut self, _: &mut [u8], a: &[u32; 8]) -> u32 {
+    fn set_end_of_file(&mut self, _: &mut Space<'_>, a: &[u32; 8]) -> u32 {
         let Some(file) = self.file(a[0]) else {
             return self.fail(ERROR_INVALID_HANDLE, 0);
         };
@@ -414,7 +442,7 @@ impl Files {
         }
     }
 
-    fn get_file_time(&mut self, data: &mut [u8], a: &[u32; 8]) -> u32 {
+    fn get_file_time(&mut self, data: &mut Space<'_>, a: &[u32; 8]) -> u32 {
         let Some(file) = self.file(a[0]) else {
             return self.fail(ERROR_INVALID_HANDLE, 0);
         };
@@ -422,7 +450,7 @@ impl Files {
             Ok(metadata) => {
                 for (at, time) in [a[1], a[2], a[3]].into_iter().zip(times(&metadata)) {
                     if at != 0 {
-                        put64(data, at, time);
+                        data.put64(at, time);
                     }
                 }
                 1
@@ -432,8 +460,8 @@ impl Files {
     }
 
     /// `SetFileTime`: only the last write time, the one the game sets
-    fn set_file_time(&mut self, data: &mut [u8], a: &[u32; 8]) -> u32 {
-        let written = (a[3] != 0).then(|| get64(data, a[3])).flatten();
+    fn set_file_time(&mut self, data: &mut Space<'_>, a: &[u32; 8]) -> u32 {
+        let written = (a[3] != 0).then(|| data.get64(a[3])).flatten();
         let Some(file) = self.file(a[0]) else {
             return self.fail(ERROR_INVALID_HANDLE, 0);
         };
@@ -443,14 +471,14 @@ impl Files {
         }
     }
 
-    fn close_handle(&mut self, _: &mut [u8], a: &[u32; 8]) -> u32 {
+    fn close_handle(&mut self, _: &mut Space<'_>, a: &[u32; 8]) -> u32 {
         match self.handles.remove(&a[0]) {
             Some(_) => 1,
             None => self.fail(ERROR_INVALID_HANDLE, 0),
         }
     }
 
-    fn find_close(&mut self, _: &mut [u8], a: &[u32; 8]) -> u32 {
+    fn find_close(&mut self, _: &mut Space<'_>, a: &[u32; 8]) -> u32 {
         if matches!(
             self.handles.get(&a[0]),
             Some(Open::Find { .. } | Open::SaveGames { .. } | Open::Nicknames)
@@ -461,15 +489,15 @@ impl Files {
         self.fail(ERROR_INVALID_HANDLE, 0)
     }
 
-    fn get_last_error(&mut self, _: &mut [u8], _: &[u32; 8]) -> u32 {
-        self.last_error
+    fn get_last_error(&mut self, _: &mut Space<'_>, _: &[u32; 8]) -> u32 {
+        self.last_errors.get(&self.thread).copied().unwrap_or(0)
     }
 
-    fn set_last_error(&mut self, _: &mut [u8], a: &[u32; 8]) -> u32 {
+    fn set_last_error(&mut self, _: &mut Space<'_>, a: &[u32; 8]) -> u32 {
         self.fail(a[0], 0)
     }
 
-    fn get_file_attributes(&mut self, data: &mut [u8], a: &[u32; 8]) -> u32 {
+    fn get_file_attributes(&mut self, data: &mut Space<'_>, a: &[u32; 8]) -> u32 {
         let Some(path) = self.path(data, a[0]) else {
             return self.fail(ERROR_PATH_NOT_FOUND, INVALID_FILE_ATTRIBUTES);
         };
@@ -481,7 +509,7 @@ impl Files {
 
     /// `GetFileAttributesExA(name, GetFileExInfoStandard, data)`: a
     /// `WIN32_FILE_ATTRIBUTE_DATA`
-    fn get_file_attributes_ex(&mut self, data: &mut [u8], a: &[u32; 8]) -> u32 {
+    fn get_file_attributes_ex(&mut self, data: &mut Space<'_>, a: &[u32; 8]) -> u32 {
         if a[1] != 0 {
             return self.fail(ERROR_INVALID_PARAMETER, 0);
         }
@@ -492,21 +520,22 @@ impl Files {
             Ok(metadata) => metadata,
             Err(error) => return self.fail(code(&error, &path), 0),
         };
-        let Some(out) = bytes(data, a[2], 36) else {
-            return self.fail(ERROR_INVALID_PARAMETER, 0);
-        };
         let size = if metadata.is_dir() { 0 } else { metadata.len() };
+        let mut out = [0; 36];
         out[0..4].copy_from_slice(&attributes(&metadata).to_le_bytes());
         for (index, time) in times(&metadata).into_iter().enumerate() {
             out[4 + index * 8..12 + index * 8].copy_from_slice(&time.to_le_bytes());
         }
         out[28..32].copy_from_slice(&((size >> 32) as u32).to_le_bytes());
         out[32..36].copy_from_slice(&(size as u32).to_le_bytes());
+        if !data.write(a[2], &out) {
+            return self.fail(ERROR_INVALID_PARAMETER, 0);
+        }
         1
     }
 
     /// `SetFileAttributesA`: only the read-only bit has a meaning here
-    fn set_file_attributes(&mut self, data: &mut [u8], a: &[u32; 8]) -> u32 {
+    fn set_file_attributes(&mut self, data: &mut Space<'_>, a: &[u32; 8]) -> u32 {
         let Some(path) = self.path(data, a[0]) else {
             return self.fail(ERROR_PATH_NOT_FOUND, 0);
         };
@@ -521,7 +550,7 @@ impl Files {
         }
     }
 
-    fn create_directory(&mut self, data: &mut [u8], a: &[u32; 8]) -> u32 {
+    fn create_directory(&mut self, data: &mut Space<'_>, a: &[u32; 8]) -> u32 {
         let Some(path) = self.path(data, a[0]) else {
             return self.fail(ERROR_PATH_NOT_FOUND, 0);
         };
@@ -534,7 +563,7 @@ impl Files {
         }
     }
 
-    fn remove_directory(&mut self, data: &mut [u8], a: &[u32; 8]) -> u32 {
+    fn remove_directory(&mut self, data: &mut Space<'_>, a: &[u32; 8]) -> u32 {
         let Some(path) = self.path(data, a[0]) else {
             return self.fail(ERROR_PATH_NOT_FOUND, 0);
         };
@@ -544,7 +573,7 @@ impl Files {
         }
     }
 
-    fn delete_file(&mut self, data: &mut [u8], a: &[u32; 8]) -> u32 {
+    fn delete_file(&mut self, data: &mut Space<'_>, a: &[u32; 8]) -> u32 {
         let Some(path) = self.path(data, a[0]) else {
             return self.fail(ERROR_PATH_NOT_FOUND, 0);
         };
@@ -558,7 +587,7 @@ impl Files {
     }
 
     /// `MoveFileA`, which never replaces what is there
-    fn move_file(&mut self, data: &mut [u8], a: &[u32; 8]) -> u32 {
+    fn move_file(&mut self, data: &mut Space<'_>, a: &[u32; 8]) -> u32 {
         let (Some(from), Some(to)) = (self.path(data, a[0]), self.path(data, a[1])) else {
             return self.fail(ERROR_PATH_NOT_FOUND, 0);
         };
@@ -575,7 +604,7 @@ impl Files {
     }
 
     /// `CopyFileA(from, to, fail_if_exists)`
-    fn copy_file(&mut self, data: &mut [u8], a: &[u32; 8]) -> u32 {
+    fn copy_file(&mut self, data: &mut Space<'_>, a: &[u32; 8]) -> u32 {
         let (Some(from), Some(to)) = (self.path(data, a[0]), self.path(data, a[1])) else {
             return self.fail(ERROR_PATH_NOT_FOUND, 0);
         };
@@ -591,7 +620,7 @@ impl Files {
         }
     }
 
-    fn find_first_file(&mut self, data: &mut [u8], a: &[u32; 8]) -> u32 {
+    fn find_first_file(&mut self, data: &mut Space<'_>, a: &[u32; 8]) -> u32 {
         let Some(pattern) = string(data, a[0]) else {
             return self.fail(ERROR_INVALID_PARAMETER, INVALID_HANDLE_VALUE);
         };
@@ -634,7 +663,7 @@ impl Files {
         self.fail(ERROR_SUCCESS, handle)
     }
 
-    fn find_next_file(&mut self, data: &mut [u8], a: &[u32; 8]) -> u32 {
+    fn find_next_file(&mut self, data: &mut Space<'_>, a: &[u32; 8]) -> u32 {
         let Some(Open::Find { entries, next }) = self.handles.get_mut(&a[0]) else {
             return self.fail(ERROR_INVALID_HANDLE, 0);
         };
@@ -649,26 +678,26 @@ impl Files {
     }
 
     /// `GetDiskFreeSpaceExA(path, free_to_caller, total, total_free)`
-    fn get_disk_free_space(&mut self, data: &mut [u8], a: &[u32; 8]) -> u32 {
+    fn get_disk_free_space(&mut self, data: &mut Space<'_>, a: &[u32; 8]) -> u32 {
         for at in [a[1], a[2], a[3]] {
             if at != 0 {
-                put64(data, at, REPORTED_DISK);
+                data.put64(at, REPORTED_DISK);
             }
         }
         1
     }
 
     /// `CompareFileTime(a, b)`: -1, 0 or 1
-    fn compare_file_time(&mut self, data: &mut [u8], a: &[u32; 8]) -> u32 {
-        let (Some(first), Some(second)) = (get64(data, a[0]), get64(data, a[1])) else {
+    fn compare_file_time(&mut self, data: &mut Space<'_>, a: &[u32; 8]) -> u32 {
+        let (Some(first), Some(second)) = (data.get64(a[0]), data.get64(a[1])) else {
             return 0;
         };
         (first.cmp(&second) as i32).cast_unsigned()
     }
 
     /// `SystemTimeToFileTime(system, file)`
-    fn system_time_to_file_time(&mut self, data: &mut [u8], a: &[u32; 8]) -> u32 {
-        let Some(system) = bytes(data, a[0], 16) else {
+    fn system_time_to_file_time(&mut self, data: &mut Space<'_>, a: &[u32; 8]) -> u32 {
+        let Some(system) = data.read(a[0], 16) else {
             return self.fail(ERROR_INVALID_PARAMETER, 0);
         };
         let mut parts = [0i64; 8];
@@ -689,7 +718,7 @@ impl Files {
         let days = days_from_civil(year, month, day) - days_from_civil(1601, 1, 1);
         let seconds = days * 86_400 + hour * 3_600 + minute * 60 + second;
         let time = (seconds * 1_000 + millisecond) * 10_000;
-        if !put64(data, a[1], time.cast_unsigned()) {
+        if !data.put64(a[1], time.cast_unsigned()) {
             return self.fail(ERROR_INVALID_PARAMETER, 0);
         }
         1
@@ -697,7 +726,7 @@ impl Files {
 
     /// `XCreateSaveGame(root, name, disposition, flags, path, size)`: the
     /// saved game's folder, as `root` and a `\`, made if asked for
-    fn create_save_game(&mut self, data: &mut [u8], a: &[u32; 8]) -> u32 {
+    fn create_save_game(&mut self, data: &mut Space<'_>, a: &[u32; 8]) -> u32 {
         let (Some(root), Some(name)) = (string(data, a[0]), wide_string(data, a[1], MAX_GAMENAME))
         else {
             return ERROR_INVALID_PARAMETER;
@@ -728,7 +757,7 @@ impl Files {
     }
 
     /// `XDeleteSaveGame(root, name)`: the folder and all in it
-    fn delete_save_game(&mut self, data: &mut [u8], a: &[u32; 8]) -> u32 {
+    fn delete_save_game(&mut self, data: &mut Space<'_>, a: &[u32; 8]) -> u32 {
         let (Some(root), Some(name)) = (string(data, a[0]), wide_string(data, a[1], MAX_GAMENAME))
         else {
             return ERROR_INVALID_PARAMETER;
@@ -746,7 +775,7 @@ impl Files {
         }
     }
 
-    fn find_first_save_game(&mut self, data: &mut [u8], a: &[u32; 8]) -> u32 {
+    fn find_first_save_game(&mut self, data: &mut Space<'_>, a: &[u32; 8]) -> u32 {
         let Some(root) = string(data, a[0]) else {
             return self.fail(ERROR_INVALID_PARAMETER, INVALID_HANDLE_VALUE);
         };
@@ -769,7 +798,7 @@ impl Files {
         self.fail(ERROR_SUCCESS, handle)
     }
 
-    fn find_next_save_game(&mut self, data: &mut [u8], a: &[u32; 8]) -> u32 {
+    fn find_next_save_game(&mut self, data: &mut Space<'_>, a: &[u32; 8]) -> u32 {
         let Some(Open::SaveGames { root, saves, next }) = self.handles.get_mut(&a[0]) else {
             return self.fail(ERROR_INVALID_HANDLE, 0);
         };
@@ -783,26 +812,26 @@ impl Files {
         1
     }
 
-    fn signature_begin(&mut self, _: &mut [u8], _: &[u32; 8]) -> u32 {
+    fn signature_begin(&mut self, _: &mut Space<'_>, _: &[u32; 8]) -> u32 {
         self.add(Open::Signature(Box::default()))
     }
 
     /// `XCalculateSignatureUpdate(handle, data, size)`
-    fn signature_update(&mut self, data: &mut [u8], a: &[u32; 8]) -> u32 {
-        let given = data.get(a[1] as usize..(a[1] as usize).saturating_add(a[2] as usize));
+    fn signature_update(&mut self, data: &mut Space<'_>, a: &[u32; 8]) -> u32 {
+        let given = data.read(a[1], a[2]);
         let Some(Open::Signature(hash)) = self.handles.get_mut(&a[0]) else {
             return ERROR_INVALID_HANDLE;
         };
         let Some(given) = given else {
             return ERROR_INVALID_PARAMETER;
         };
-        hash.update(given);
+        hash.update(&given);
         ERROR_SUCCESS
     }
 
     /// `XCalculateSignatureEnd(handle, signature)`: the signature, and the
     /// handle freed
-    fn signature_end(&mut self, data: &mut [u8], a: &[u32; 8]) -> u32 {
+    fn signature_end(&mut self, data: &mut Space<'_>, a: &[u32; 8]) -> u32 {
         if !matches!(self.handles.get(&a[0]), Some(Open::Signature(_))) {
             return ERROR_INVALID_HANDLE;
         }
@@ -810,14 +839,8 @@ impl Files {
             return ERROR_INVALID_HANDLE;
         };
         let digest = hash.finalize();
-        match (
-            bytes(data, a[1], SIGNATURE_SIZE as u32),
-            digest.get(..SIGNATURE_SIZE),
-        ) {
-            (Some(out), Some(signature)) => {
-                out.copy_from_slice(signature);
-                ERROR_SUCCESS
-            }
+        match digest.get(..SIGNATURE_SIZE) {
+            Some(signature) if data.write(a[1], signature) => ERROR_SUCCESS,
             _ => ERROR_INVALID_PARAMETER,
         }
     }
@@ -839,7 +862,7 @@ impl Files {
     }
 
     /// `XSetNicknameW(name, roaming)`: the name first, kept
-    fn set_nickname(&mut self, data: &mut [u8], a: &[u32; 8]) -> u32 {
+    fn set_nickname(&mut self, data: &mut Space<'_>, a: &[u32; 8]) -> u32 {
         let (Some(name), Some(file)) =
             (wide_string(data, a[0], MAX_NICKNAME), self.nicknames_file())
         else {
@@ -860,7 +883,7 @@ impl Files {
 
     /// `XFindFirstNicknameW(roaming, name, size)`: the newest, cut to `size`
     /// units with its NUL
-    fn find_first_nickname(&mut self, data: &mut [u8], a: &[u32; 8]) -> u32 {
+    fn find_first_nickname(&mut self, data: &mut Space<'_>, a: &[u32; 8]) -> u32 {
         let Some(name) = self.nicknames().into_iter().next() else {
             return self.fail(ERROR_NO_MORE_FILES, INVALID_HANDLE_VALUE);
         };
@@ -874,7 +897,7 @@ impl Files {
 
 /// a file service: the game's files, its memory and the import's arguments
 /// (as unsigned 32 bits) to the import's result
-pub(crate) type Service = fn(&mut Files, &mut [u8], &[u32; 8]) -> u32;
+pub(crate) type Service = fn(&mut Files, &mut Space<'_>, &[u32; 8]) -> u32;
 
 /// the file import named "module.name", if this module answers it
 pub(crate) fn service(name: &str) -> Option<Service> {
@@ -931,18 +954,19 @@ pub(crate) fn serve(
     for (index, slot) in args.iter_mut().enumerate() {
         *slot = arg(params, index);
     }
-    let memory = memory(caller)?;
-    let (data, record) = memory.data_and_store_mut(caller);
-    let value = service(&mut record.files, data, &args);
+    let value = with_space(caller, |space, record| {
+        let mut files = record.files();
+        files.thread = record.thread;
+        service(&mut files, space, &args)
+    })?;
     give(results, value);
     Ok(())
 }
 
 /// the NUL-terminated string at `address`, if its NUL is inside the memory
 /// and within [`MAX_PATH_STRING`]
-fn string(data: &[u8], address: u32) -> Option<String> {
-    let rest = data.get(address as usize..)?;
-    let rest = rest.get(..rest.len().min(MAX_PATH_STRING)).unwrap_or(rest);
+fn string(data: &Space<'_>, address: u32) -> Option<String> {
+    let rest = data.read_up_to(address, MAX_PATH_STRING as u32)?;
     let end = rest.iter().position(|&byte| byte == 0)?;
     Some(String::from_utf8_lossy(rest.get(..end)?).into_owned())
 }
@@ -1053,8 +1077,8 @@ fn days_in_month(year: i64, month: i64) -> i64 {
 }
 
 /// an `OVERLAPPED`'s offset (`Offset`, `OffsetHigh`)
-fn offset(data: &[u8], overlapped: u32) -> Option<u64> {
-    get64(data, overlapped.checked_add(8)?)
+fn offset(data: &Space<'_>, overlapped: u32) -> Option<u64> {
+    data.get64(overlapped.checked_add(8)?)
 }
 
 /// reads until `buffer` is full or the file ends
@@ -1082,11 +1106,8 @@ fn read_at(file: &File, buffer: &mut [u8], at: u64) -> io::Result<usize> {
 }
 
 /// writes `entry` as a `WIN32_FIND_DATAA` up to the end of `cFileName`
-fn find_data(data: &mut [u8], address: u32, entry: &Entry) -> bool {
-    let Some(out) = bytes(data, address, FIND_DATA) else {
-        return false;
-    };
-    out.fill(0);
+fn find_data(data: &mut Space<'_>, address: u32, entry: &Entry) -> bool {
+    let mut out = [0; FIND_DATA as usize];
     out[0..4].copy_from_slice(&entry.attributes.to_le_bytes());
     for (index, time) in entry.times.iter().enumerate() {
         out[4 + index * 8..12 + index * 8].copy_from_slice(&time.to_le_bytes());
@@ -1094,41 +1115,13 @@ fn find_data(data: &mut [u8], address: u32, entry: &Entry) -> bool {
     out[28..32].copy_from_slice(&((entry.size >> 32) as u32).to_le_bytes());
     out[32..36].copy_from_slice(&(entry.size as u32).to_le_bytes());
     out[44..44 + entry.name.len()].copy_from_slice(entry.name.as_bytes());
-    true
-}
-
-fn get(data: &[u8], address: u32) -> Option<u32> {
-    let start = address as usize;
-    let word = data.get(start..start.checked_add(4)?)?;
-    Some(u32::from_le_bytes(word.try_into().ok()?))
-}
-
-fn get64(data: &[u8], address: u32) -> Option<u64> {
-    let low = get(data, address)?;
-    let high = get(data, address.checked_add(4)?)?;
-    Some((u64::from(high) << 32) | u64::from(low))
-}
-
-fn put(data: &mut [u8], address: u32, value: u32) -> bool {
-    bytes(data, address, 4)
-        .map(|word| word.copy_from_slice(&value.to_le_bytes()))
-        .is_some()
-}
-
-fn put64(data: &mut [u8], address: u32, value: u64) -> bool {
-    bytes(data, address, 8)
-        .map(|word| word.copy_from_slice(&value.to_le_bytes()))
-        .is_some()
+    data.write(address, &out)
 }
 
 /// the NUL-terminated UTF-16 string at `address`, if its NUL is inside the
 /// memory and within `most` units
-fn wide_string(data: &[u8], address: u32, most: u32) -> Option<String> {
-    let start = address as usize;
-    let rest = data.get(start..)?;
-    let rest = rest
-        .get(..rest.len().min(most as usize * 2))
-        .unwrap_or(rest);
+fn wide_string(data: &Space<'_>, address: u32, most: u32) -> Option<String> {
+    let rest = data.read_up_to(address, most.saturating_mul(2))?;
     let units: Vec<u16> = rest
         .as_chunks::<2>()
         .0
@@ -1140,22 +1133,15 @@ fn wide_string(data: &[u8], address: u32, most: u32) -> Option<String> {
 }
 
 /// writes `text` at `address` as a C string
-fn put_string(data: &mut [u8], address: u32, text: &str) -> bool {
-    let Ok(size) = u32::try_from(text.len() + 1) else {
-        return false;
-    };
-    let Some(out) = bytes(data, address, size) else {
-        return false;
-    };
-    let (body, nul) = out.split_at_mut(text.len());
-    body.copy_from_slice(text.as_bytes());
-    nul.fill(0);
-    true
+fn put_string(data: &mut Space<'_>, address: u32, text: &str) -> bool {
+    let mut out = text.as_bytes().to_vec();
+    out.push(0);
+    data.write(address, &out)
 }
 
 /// writes `text` at `address` as a UTF-16 string of at most `size` units,
 /// its NUL included
-fn put_wide(data: &mut [u8], address: u32, text: &str, size: u32) -> bool {
+fn put_wide(data: &mut Space<'_>, address: u32, text: &str, size: u32) -> bool {
     let mut units: Vec<u16> = text
         .encode_utf16()
         .take((size as usize).saturating_sub(1))
@@ -1164,13 +1150,8 @@ fn put_wide(data: &mut [u8], address: u32, text: &str, size: u32) -> bool {
         return false;
     }
     units.push(0);
-    let Some(out) = bytes(data, address, units.len() as u32 * 2) else {
-        return false;
-    };
-    for (pair, unit) in out.as_chunks_mut::<2>().0.iter_mut().zip(units) {
-        *pair = unit.to_le_bytes();
-    }
-    true
+    let out: Vec<u8> = units.into_iter().flat_map(u16::to_le_bytes).collect();
+    data.write(address, &out)
 }
 
 /// `root` ending in one `\`
@@ -1251,12 +1232,13 @@ fn new_save(folder: &Path, name: &str) -> io::Result<String> {
 }
 
 /// writes `save` as an `XGAME_FIND_DATA`, its directory under `root`
-fn game_find_data(data: &mut [u8], address: u32, root: &str, save: &Save) -> bool {
-    if bytes(data, address, GAME_FIND_DATA).is_none() || !find_data(data, address, &save.folder) {
+fn game_find_data(data: &mut Space<'_>, address: u32, root: &str, save: &Save) -> bool {
+    // (the tail first: when it fits, the whole of it does)
+    let Some(tail) = address.checked_add(FIND_DATA) else {
         return false;
-    }
-    if let Some(rest) = bytes(data, address + FIND_DATA, GAME_FIND_DATA - FIND_DATA) {
-        rest.fill(0);
+    };
+    if !data.fill(tail, GAME_FIND_DATA - FIND_DATA, 0) || !find_data(data, address, &save.folder) {
+        return false;
     }
     put_string(
         data,

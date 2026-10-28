@@ -10,8 +10,14 @@ let
   # clang 22: the guest's compiler (its arm64_32 target), and the
   # version the profiles in pgo/ were recorded with
   llvm = pkgs.llvmPackages_22;
-  # wasm32-wasip1's C library, for game.wasm
+  # wasm32-wasip1's C library, for the reference harnesses, and the same
+  # library built for wasm32-wasip1-threads (atomics, a shared memory and
+  # wasi-libc's pthreads), for game.wasm
   wasi = pkgs.pkgsCross.wasi32;
+  wasilibcThreads = wasi.wasilibc.overrideAttrs (old: {
+    pname = "wasilibc-threads";
+    cmakeFlags = old.cmakeFlags ++ [ "-DTARGET_TRIPLE=wasm32-wasip1-threads" ];
+  });
   rust = pkgs.rust-bin.fromRustupToolchainFile (root + /rust-toolchain.toml);
   python = pkgs.python3.withPackages (ps: [
     ps.pytest
@@ -43,8 +49,11 @@ in
     HALO_MACOS_SDL_LIB = "${pkgs.sdl3}/lib";
     HALO_MACOS_CODESIGN = "${pkgs.darwin.sigtool}/bin/codesign";
     # game.wasm (tools/engine_wasm.py): the unwrapped clang, for its wasm32
-    # target, and wasi-libc for wasm32-wasip1
+    # target, wasi-libc for wasm32-wasip1-threads (the game) and for
+    # wasm32-wasip1 (the reference harnesses)
     HALO_WASM_CC = "${llvm.clang-unwrapped}/bin/clang";
+    HALO_WASI_LIBC_THREADS = "${wasilibcThreads}";
+    HALO_WASI_LIBC_THREADS_DEV = "${wasilibcThreads.dev}";
     HALO_WASI_LIBC = "${wasi.wasilibc}";
     HALO_WASI_LIBC_DEV = "${wasi.wasilibc.dev}";
     # (compiler-rt's builtins for wasm32, which the unwrapped clang's

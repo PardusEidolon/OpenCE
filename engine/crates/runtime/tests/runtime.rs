@@ -3,7 +3,7 @@
 
 use std::path::PathBuf;
 
-use opence_runtime::{Error, Runtime, Val, Value};
+use opence_runtime::{answers, Error, Runtime, Val, Value};
 
 fn module(text: &str) -> Vec<u8> {
     wat::parse_str(text).unwrap_or_default()
@@ -215,6 +215,26 @@ fn game_wasm_loads_with_a_stub_for_every_import() -> Result<(), Error> {
     assert!(game.import_count() > 400);
     for export in ["halo_game_main", "malloc", "free", "_initialize"] {
         assert!(game.has_export(export), "game.wasm has no {export}");
+    }
+    // its threads are its own: the platform starts each at wasi_thread_start
+    // through the game's pthread_create, and answers what they need
+    for export in ["pthread_create", "pthread_detach", "wasi_thread_start"] {
+        assert!(game.has_export(export), "game.wasm has no {export}");
+    }
+    let names: Vec<String> = (0..game.import_count())
+        .map(|index| game.import_name(index))
+        .collect();
+    for import in [
+        "wasi.thread-spawn",
+        "wasi_snapshot_preview1.sched_yield",
+        "wasi_snapshot_preview1.clock_time_get",
+        "env.CreateThread",
+    ] {
+        assert!(
+            names.iter().any(|name| name == import),
+            "game.wasm does not import {import}"
+        );
+        assert!(answers(import), "the platform does not answer {import}");
     }
     // source/ never jumps out of a function (no setjmp or longjmp), so the
     // module needs neither wasm exceptions nor a host to unwind it

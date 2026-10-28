@@ -17,13 +17,17 @@
 
 use std::collections::BTreeMap;
 use std::path::Path;
+use std::sync::{Arc, Mutex, MutexGuard, PoisonError};
 
 pub mod files;
 pub mod memory;
+mod space;
+mod threads;
 
+use space::Space;
 use wasmtime::{
     Cache, CacheConfig, Caller, Config, Engine, Extern, ExternType, Instance, Linker, Memory,
-    Module, Store,
+    Module, SharedMemory, Store,
 };
 
 /// a wasm value, as the game's functions take and return them
@@ -154,6 +158,23 @@ impl std::fmt::Display for Budget {
 
 impl std::error::Error for Budget {}
 
+/// the game's memory: its own, or shared between its threads
+#[derive(Clone)]
+enum Mem {
+    Own(Memory),
+    Shared(SharedMemory),
+}
+
+/// what the game's threads share
+struct Shared {
+    /// the Xbox's contiguous window, as `XPhysicalAlloc` hands it out
+    window: Mutex<memory::Window>,
+    /// the game's folders, open files and last error
+    files: Mutex<files::Files>,
+    /// the game's threads, the objects they wait on and the clocks
+    threads: threads::Threads,
+}
+
 /// the record the stubs keep, in the store
 struct Record {
     /// each import's "module.name", in the module's order
@@ -168,10 +189,75 @@ struct Record {
     budget: Option<u64>,
     /// what `fd_write` wrote, per descriptor
     outputs: BTreeMap<i32, Vec<u8>>,
-    /// the Xbox's contiguous window, as `XPhysicalAlloc` hands it out
-    window: memory::Window,
-    /// the game's folders, open files and last error
-    files: files::Files,
+    /// the game's memory, once there is one (until then, its export)
+    memory: Option<Mem>,
+    /// what this thread shares with the game's others
+    shared: Arc<Shared>,
+    /// this thread's id (0 for the game's first)
+    thread: u32,
+    /// the handle of the thread `CreateThread` is starting
+    pending: Option<u32>,
+}
+
+impl Record {
+    /// a record for the game's thread `thread`, sharing this one's memory
+    /// and state (the thread's own calls are not counted or budgeted)
+    fn for_thread(&self, thread: u32) -> Self {
+        Self {
+            names: self.names.clone(),
+            counts: vec![0; self.names.len()],
+            calls: Vec::new(),
+            limit: 0,
+            made: 0,
+            budget: None,
+            outputs: BTreeMap::new(),
+            memory: self.memory.clone(),
+            shared: Arc::clone(&self.shared),
+            thread,
+            pending: None,
+        }
+    }
+
+    /// the Xbox's window, held while the guard lives
+    fn window(&self) -> MutexGuard<'_, memory::Window> {
+        self.shared
+            .window
+            .lock()
+            .unwrap_or_else(PoisonError::into_inner)
+    }
+
+    /// the game's files, held while the guard lives
+    fn files(&self) -> MutexGuard<'_, files::Files> {
+        self.shared
+            .files
+            .lock()
+            .unwrap_or_else(PoisonError::into_inner)
+    }
+}
+
+/// runs `use_space` on the caller's memory, with its record beside it
+///
+/// # Errors
+/// If the game has no memory yet and exports none.
+fn with_space<R>(
+    caller: &mut Caller<'_, Record>,
+    use_space: impl FnOnce(&mut Space<'_>, &mut Record) -> R,
+) -> wasmtime::Result<R> {
+    let memory = match caller.data().memory.clone() {
+        Some(memory) => memory,
+        None => caller
+            .get_export("memory")
+            .and_then(Extern::into_memory)
+            .map(Mem::Own)
+            .ok_or_else(|| wasmtime::format_err!("the game has no memory"))?,
+    };
+    Ok(match memory {
+        Mem::Own(memory) => {
+            let (data, record) = memory.data_and_store_mut(&mut *caller);
+            use_space(&mut Space::own(data), record)
+        }
+        Mem::Shared(memory) => use_space(&mut Space::shared(memory.data()), caller.data_mut()),
+    })
 }
 
 /// `fd_write(fd, iovs, count, written)`: gathers the `count` iovecs at
@@ -184,59 +270,54 @@ fn fd_write(caller: &mut Caller<'_, Record>, params: &[Val]) -> i32 {
     };
     // (the module's pointers are unsigned)
     let (iovs, count, written) = (
-        u64::from(iovs.cast_unsigned()),
-        u64::from(count.cast_unsigned()),
-        u64::from(written.cast_unsigned()),
+        iovs.cast_unsigned(),
+        count.cast_unsigned(),
+        written.cast_unsigned(),
     );
-    let Some(memory) = caller.get_export("memory").and_then(Extern::into_memory) else {
-        return EFAULT;
-    };
-    let data = memory.data(&*caller);
-    let at = |address: u64, len: u64| {
-        let start = usize::try_from(address).ok()?;
-        let end = usize::try_from(address.checked_add(len)?).ok()?;
-        data.get(start..end)
-    };
-    let word = |address: u64| {
-        at(address, 4)
-            .and_then(|bytes| <[u8; 4]>::try_from(bytes).ok())
-            .map(|bytes| u64::from(u32::from_le_bytes(bytes)))
-    };
-    let mut bytes = Vec::new();
-    for index in 0..count {
-        let Some(base) = index
-            .checked_mul(8)
-            .and_then(|offset| iovs.checked_add(offset))
-        else {
-            return EFAULT;
-        };
-        let Some(chunk) = word(base)
-            .zip(base.checked_add(4).and_then(word))
-            .and_then(|(address, len)| at(address, len))
-        else {
-            return EFAULT;
-        };
-        bytes.extend_from_slice(chunk);
-    }
-    let Ok(total) = u32::try_from(bytes.len()) else {
-        return EOVERFLOW;
-    };
-    let target = usize::try_from(written).ok().and_then(|start| {
-        memory
-            .data_mut(&mut *caller)
-            .get_mut(start..start.checked_add(4)?)
+    let gathered = with_space(caller, |space, _| {
+        let mut bytes = Vec::new();
+        for index in 0..count {
+            let base = index
+                .checked_mul(8)
+                .and_then(|offset| iovs.checked_add(offset))
+                .ok_or(EFAULT)?;
+            let chunk = space
+                .get(base)
+                .zip(base.checked_add(4).and_then(|at| space.get(at)))
+                .and_then(|(address, len)| space.read(address, len))
+                .ok_or(EFAULT)?;
+            bytes.extend(chunk);
+        }
+        let total = u32::try_from(bytes.len()).map_err(|_| EOVERFLOW)?;
+        if !space.put(written, total) {
+            return Err(EFAULT);
+        }
+        Ok(bytes)
     });
-    let Some(target) = target else {
-        return EFAULT;
-    };
-    target.copy_from_slice(&total.to_le_bytes());
-    caller
-        .data_mut()
-        .outputs
-        .entry(*fd)
-        .or_default()
-        .extend(bytes);
-    0
+    match gathered {
+        Ok(Ok(bytes)) => {
+            caller
+                .data_mut()
+                .outputs
+                .entry(*fd)
+                .or_default()
+                .extend(bytes);
+            0
+        }
+        Ok(Err(errno)) => errno,
+        Err(_) => EFAULT,
+    }
+}
+
+/// Whether the platform answers the import "module.name" (rather than
+/// leaving it to a stub that returns zeros).
+#[must_use]
+pub fn answers(name: &str) -> bool {
+    name == PROC_EXIT
+        || name == FD_WRITE
+        || threads::handler(name).is_some()
+        || memory::handler(name).is_some()
+        || files::service(name).is_some()
 }
 
 /// Wasmtime, set up for the game
@@ -293,20 +374,36 @@ impl Runtime {
     ///
     /// # Errors
     /// [`Error::Compile`] if the module is malformed or invalid,
-    /// [`Error::Import`] if it imports anything but functions, and
+    /// [`Error::Import`] if it imports anything but functions and one
+    /// shared memory, and
     /// [`Error::Trap`] if instantiating it traps.
     pub fn load(&self, wasm: &[u8]) -> Result<Game, Error> {
         let module = Module::new(&self.engine, wasm)
             .map_err(|error| Error::Compile(format!("{error:#}")))?;
         let mut linker = Linker::new(&self.engine);
         let mut names = Vec::new();
+        // (a threaded game imports its memory, shared, and exports none)
+        let mut shared = None;
         for (index, import) in module.imports().enumerate() {
             let name = format!("{}.{}", import.module(), import.name());
-            let ExternType::Func(ty) = import.ty() else {
-                return Err(Error::Import(name));
+            let ty = match import.ty() {
+                ExternType::Func(ty) => ty,
+                ExternType::Memory(ty) if ty.is_shared() && shared.is_none() => {
+                    let memory = SharedMemory::new(&self.engine, ty)
+                        .map_err(|error| Error::Import(format!("{name}: {error:#}")))?;
+                    shared = Some((
+                        import.module().to_string(),
+                        import.name().to_string(),
+                        memory,
+                    ));
+                    names.push(name);
+                    continue;
+                }
+                _ => return Err(Error::Import(name)),
             };
             let exits = name == PROC_EXIT;
             let writes = name == FD_WRITE;
+            let threads = threads::handler(&name);
             let serves = memory::handler(&name);
             let files_service = files::service(&name);
             linker
@@ -345,6 +442,9 @@ impl Runtime {
                             }
                             return Ok(());
                         }
+                        if let Some(serve) = threads {
+                            return serve(&mut caller, params, results);
+                        }
                         if let Some(serve) = serves {
                             return serve(&mut caller, params, results);
                         }
@@ -373,12 +473,36 @@ impl Runtime {
                 made: 0,
                 budget: None,
                 outputs: BTreeMap::new(),
-                window: memory::Window::new(),
-                files: files::Files::default(),
+                memory: shared
+                    .as_ref()
+                    .map(|(_, _, memory)| Mem::Shared(memory.clone())),
+                shared: Arc::new(Shared {
+                    window: Mutex::new(memory::Window::new()),
+                    files: Mutex::new(files::Files::default()),
+                    threads: threads::Threads::new(),
+                }),
+                thread: 0,
+                pending: None,
             },
         );
-        let instance = linker.instantiate(&mut store, &module).map_err(called)?;
-        let memory = instance.get_memory(&mut store, "memory");
+        if let Some((module_name, name, memory)) = &shared {
+            linker
+                .define(&store, module_name, name, memory.clone())
+                .map_err(|error| Error::Import(format!("{module_name}.{name}: {error:#}")))?;
+        }
+        let instance = if shared.is_some() {
+            // (each new thread instantiates the game again, over its memory)
+            let pre = linker.instantiate_pre(&module).map_err(called)?;
+            store.data().shared.threads.set_spawner(pre.clone());
+            pre.instantiate(&mut store).map_err(called)?
+        } else {
+            linker.instantiate(&mut store, &module).map_err(called)?
+        };
+        let memory = match shared {
+            Some((_, _, memory)) => Some(Mem::Shared(memory)),
+            None => instance.get_memory(&mut store, "memory").map(Mem::Own),
+        };
+        store.data_mut().memory.clone_from(&memory);
         let functions = module
             .exports()
             .filter(|export| matches!(export.ty(), ExternType::Func(_)))
@@ -390,6 +514,13 @@ impl Runtime {
             memory,
             functions,
         })
+    }
+}
+
+impl Drop for Game {
+    /// ends the waits of the game's threads, so they end with it
+    fn drop(&mut self) {
+        self.store.data().shared.threads.close();
     }
 }
 
@@ -408,7 +539,7 @@ fn called(error: wasmtime::Error) -> Error {
 pub struct Game {
     store: Store<Record>,
     instance: Instance,
-    memory: Option<Memory>,
+    memory: Option<Mem>,
     /// the names of the functions it exports
     functions: Vec<String>,
 }
@@ -513,14 +644,20 @@ impl Game {
     /// Sets the game's data folder (`d:\`, the maps) and save folder (the
     /// other drives); until then no path is found.
     pub fn set_folders(&mut self, data: &std::path::Path, saves: &std::path::Path) {
-        self.store.data_mut().files.set_folders(data, saves);
+        self.store.data().files().set_folders(data, saves);
+    }
+
+    /// What each of the game's threads that trapped said, oldest first.
+    #[must_use]
+    pub fn thread_faults(&self) -> Vec<String> {
+        self.store.data().shared.threads.faults()
     }
 
     /// The completion routines `ReadFileEx` and `WriteFileEx` queued, oldest
     /// first, for the game's next alertable wait.
     #[must_use]
-    pub fn completions(&self) -> &[files::Completion] {
-        self.store.data().files.completions()
+    pub fn completions(&self) -> Vec<files::Completion> {
+        self.store.data().files().completions().to_vec()
     }
 
     /// The "module.name" of import `index` (empty if there is none).
@@ -559,45 +696,51 @@ impl Game {
         self.functions.iter().any(|function| function == name)
     }
 
-    /// The size of the exported memory in bytes (0 if there is none).
+    /// The size of the game's memory in bytes (0 if there is none).
     #[must_use]
     pub fn memory_size(&self) -> u64 {
-        self.memory
-            .map_or(0, |memory| memory.data_size(&self.store) as u64)
+        match &self.memory {
+            Some(Mem::Own(memory)) => memory.data_size(&self.store) as u64,
+            Some(Mem::Shared(memory)) => memory.data_size() as u64,
+            None => 0,
+        }
     }
 
-    /// Grows the exported memory to at least `bytes` (rounded up to whole
+    /// Grows the game's memory to at least `bytes` (rounded up to whole
     /// wasm pages); does nothing if it is that large already.
     ///
     /// # Errors
     /// [`Error::Grow`] if there is no memory, or it cannot grow that far
     /// (its maximum, or the host's).
     pub fn grow_memory_to(&mut self, bytes: u64) -> Result<(), Error> {
-        let memory = self.memory.ok_or(Error::Grow(bytes))?;
-        let page = memory.page_size(&self.store);
-        let want = bytes.div_ceil(page);
-        let have = memory.size(&self.store);
-        if want > have {
-            memory
-                .grow(&mut self.store, want - have)
-                .map_err(|_| Error::Grow(bytes))?;
+        match self.memory.clone().ok_or(Error::Grow(bytes))? {
+            Mem::Own(memory) => {
+                let want = bytes.div_ceil(memory.page_size(&self.store));
+                let have = memory.size(&self.store);
+                if want > have {
+                    memory
+                        .grow(&mut self.store, want - have)
+                        .map_err(|_| Error::Grow(bytes))?;
+                }
+            }
+            Mem::Shared(memory) => {
+                let want = bytes.div_ceil(memory.page_size());
+                let have = memory.size();
+                if want > have {
+                    memory.grow(want - have).map_err(|_| Error::Grow(bytes))?;
+                }
+            }
         }
         Ok(())
     }
 
-    /// The memory's bytes from `address` to `address + len`, checked
-    /// against its size.
-    fn range(&self, address: u64, len: u64) -> Result<std::ops::Range<usize>, Error> {
-        let size = self.memory_size();
-        let outside = Error::OutOfBounds { address, len, size };
-        let end = address
-            .checked_add(len)
-            .filter(|end| *end <= size)
-            .ok_or(outside)?;
-        let start =
-            usize::try_from(address).map_err(|_| Error::OutOfBounds { address, len, size })?;
-        let end = usize::try_from(end).map_err(|_| Error::OutOfBounds { address, len, size })?;
-        Ok(start..end)
+    /// what an access of `len` bytes at `address` outside the memory is
+    fn outside(&self, address: u64, len: u64) -> Error {
+        Error::OutOfBounds {
+            address,
+            len,
+            size: self.memory_size(),
+        }
     }
 
     /// Reads `len` bytes of the memory at `address`.
@@ -605,21 +748,19 @@ impl Game {
     /// # Errors
     /// [`Error::OutOfBounds`] if any of them is outside the memory.
     pub fn read(&self, address: u64, len: u64) -> Result<Vec<u8>, Error> {
-        let range = self.range(address, len)?;
-        let memory = self.memory.ok_or(Error::OutOfBounds {
-            address,
-            len,
-            size: 0,
-        })?;
-        memory
-            .data(&self.store)
-            .get(range)
-            .map(<[u8]>::to_vec)
-            .ok_or(Error::OutOfBounds {
-                address,
-                len,
-                size: 0,
-            })
+        let (Ok(at), Ok(count)) = (u32::try_from(address), u32::try_from(len)) else {
+            return Err(self.outside(address, len));
+        };
+        let read = match &self.memory {
+            Some(Mem::Own(memory)) => {
+                let (start, end) = (at as usize, (at as usize).checked_add(count as usize));
+                end.and_then(|end| memory.data(&self.store).get(start..end))
+                    .map(<[u8]>::to_vec)
+            }
+            Some(Mem::Shared(memory)) => Space::shared(memory.data()).read(at, count),
+            None => None,
+        };
+        read.ok_or_else(|| self.outside(address, len))
     }
 
     /// Writes `bytes` to the memory at `address`.
@@ -628,21 +769,18 @@ impl Game {
     /// [`Error::OutOfBounds`] if any of them would be outside the memory.
     pub fn write(&mut self, address: u64, bytes: &[u8]) -> Result<(), Error> {
         let len = bytes.len() as u64;
-        let range = self.range(address, len)?;
-        let memory = self.memory.ok_or(Error::OutOfBounds {
-            address,
-            len,
-            size: 0,
-        })?;
-        let target = memory
-            .data_mut(&mut self.store)
-            .get_mut(range)
-            .ok_or(Error::OutOfBounds {
-                address,
-                len,
-                size: 0,
-            })?;
-        target.copy_from_slice(bytes);
-        Ok(())
+        let Ok(at) = u32::try_from(address) else {
+            return Err(self.outside(address, len));
+        };
+        let written = match self.memory.clone() {
+            Some(Mem::Own(memory)) => Space::own(memory.data_mut(&mut self.store)).write(at, bytes),
+            Some(Mem::Shared(memory)) => Space::shared(memory.data()).write(at, bytes),
+            None => false,
+        };
+        if written {
+            Ok(())
+        } else {
+            Err(self.outside(address, len))
+        }
     }
 }

@@ -14,6 +14,8 @@ sha2.workspace = true
 # version, the compiler's settings and the CPU's features; threads for the
 # game's shared memory)
 wasmtime = { version = "50", default-features = false, features = ["cranelift", "cache", "runtime", "std", "threads", "parallel-compilation"] }
+# (safe reads and writes of the game's shared memory)
+wiggle = { version = "50", default-features = false }
 
 [dev-dependencies]
 # (the tests' small modules, written as text)

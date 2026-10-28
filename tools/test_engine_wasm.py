@@ -152,5 +152,8 @@ def test_game_wasm_imports_and_exports_are_the_reviewed_lists():
     # the game's entry point and the heap the platform allocates from
     for export in engine_wasm.EXPORTS:
         assert any(line.startswith(f"{export}: func") for line in exports)
-    # the game reaches the platform through "env" and wasi only
-    assert {line.split(".", 1)[0] for line in imports} <= {"env", "wasi_snapshot_preview1"}
+    # the game reaches the platform through "env" and wasi only (wasi's
+    # thread-spawn starts its threads), and imports its shared memory
+    assert {line.split(".", 1)[0] for line in imports} <= {"env", "wasi", "wasi_snapshot_preview1"}
+    assert "env.memory: memory" in imports
+    assert not any(line.endswith(": memory") for line in exports)

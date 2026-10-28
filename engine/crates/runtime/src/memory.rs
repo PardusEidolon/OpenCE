@@ -12,9 +12,9 @@
 //! protect, so protection is only remembered, for the game's own checks
 //! (`physical_memory_verify`).
 
-use wasmtime::{Caller, Extern, Memory, Val};
+use wasmtime::{Caller, Extern, Val};
 
-use super::Record;
+use super::{with_space, Record};
 
 /// where the window begins: physical address 0
 pub const WINDOW_BASE: u32 = 0x8000_0000;
@@ -233,23 +233,12 @@ pub(crate) fn give(results: &mut [Val], value: u32) {
     }
 }
 
-/// the caller's memory
-pub(crate) fn memory(caller: &mut Caller<'_, Record>) -> wasmtime::Result<Memory> {
-    caller
-        .get_export("memory")
-        .and_then(Extern::into_memory)
-        .ok_or_else(|| wasmtime::format_err!("the game exports no memory"))
-}
-
-/// the caller's memory from `address` to `address + len`, if all of it is
-/// inside
-pub(crate) fn bytes(data: &mut [u8], address: u32, len: u32) -> Option<&mut [u8]> {
-    let start = address as usize;
-    data.get_mut(start..start.checked_add(len as usize)?)
-}
-
 /// calls the game's exported `name` with `args`, which returns one i32
-fn call_game(caller: &mut Caller<'_, Record>, name: &str, args: &[Val]) -> wasmtime::Result<u32> {
+pub(crate) fn call_game(
+    caller: &mut Caller<'_, Record>,
+    name: &str,
+    args: &[Val],
+) -> wasmtime::Result<u32> {
     let func = caller
         .get_export(name)
         .and_then(Extern::into_func)
@@ -273,24 +262,15 @@ pub(crate) fn x_physical_alloc(
         arg(params, 2),
         arg(params, 3),
     );
-    let memory = memory(caller)?;
-    // (the window must be in the memory: the platform grows it so)
-    let covered =
-        memory.data_size(&*caller) as u64 >= u64::from(WINDOW_BASE) + u64::from(WINDOW_SIZE);
-    let block = covered
-        .then(|| {
-            caller
-                .data_mut()
-                .window
-                .allocate(size, physical, alignment, protect)
-        })
-        .flatten();
-    if let Some(block) = block {
-        let len = size.div_ceil(PAGE).max(1) * PAGE;
-        if let Some(bytes) = bytes(memory.data_mut(&mut *caller), block, len) {
-            bytes.fill(0);
-        }
-    }
+    let block = with_space(caller, |space, record| {
+        // (the window must be in the memory: the platform grows it so)
+        let covered = space.len() as u64 >= u64::from(WINDOW_BASE) + u64::from(WINDOW_SIZE);
+        let block = covered
+            .then(|| record.window().allocate(size, physical, alignment, protect))
+            .flatten()?;
+        space.fill(block, size.div_ceil(PAGE).max(1) * PAGE, 0);
+        Some(block)
+    })?;
     give(results, block.unwrap_or(0));
     Ok(())
 }
@@ -301,7 +281,7 @@ pub(crate) fn x_physical_free(
     params: &[Val],
     _results: &mut [Val],
 ) -> wasmtime::Result<()> {
-    caller.data_mut().window.free(arg(params, 0));
+    caller.data().window().free(arg(params, 0));
     Ok(())
 }
 
@@ -319,15 +299,8 @@ pub(crate) fn virtual_protect(
         arg(params, 2),
         arg(params, 3),
     );
-    let old = caller.data_mut().window.protect(address, size, protect);
-    let mut done = true;
-    if old_at != 0 {
-        let memory = memory(caller)?;
-        match bytes(memory.data_mut(&mut *caller), old_at, 4) {
-            Some(bytes) => bytes.copy_from_slice(&old.to_le_bytes()),
-            None => done = false,
-        }
-    }
+    let old = caller.data().window().protect(address, size, protect);
+    let done = old_at == 0 || with_space(caller, |space, _| space.put(old_at, old))?;
     give(results, u32::from(done));
     Ok(())
 }
@@ -339,8 +312,8 @@ pub(crate) fn x_physical_protect(
     _results: &mut [Val],
 ) -> wasmtime::Result<()> {
     caller
-        .data_mut()
-        .window
+        .data()
+        .window()
         .protect(arg(params, 0), arg(params, 1), arg(params, 2));
     Ok(())
 }
@@ -351,7 +324,7 @@ pub(crate) fn x_query_memory_protect(
     params: &[Val],
     results: &mut [Val],
 ) -> wasmtime::Result<()> {
-    let protect = caller.data().window.query(arg(params, 0));
+    let protect = caller.data().window().query(arg(params, 0));
     give(results, protect);
     Ok(())
 }
@@ -370,19 +343,15 @@ fn global_alloc_block(
     if block == 0 {
         return Ok(0);
     }
-    let memory = memory(caller)?;
-    let Some(bytes) = bytes(memory.data_mut(&mut *caller), block, total) else {
+    let placed = with_space(caller, |space, _| {
+        space.fill(block, HEADER, 0)
+            && space.put(block, size)
+            && (!zero || space.fill(block + HEADER, size, 0))
+    })?;
+    if !placed {
         return Err(wasmtime::format_err!(
             "malloc gave {block:#x}, outside the memory"
         ));
-    };
-    let (header, payload) = bytes.split_at_mut(HEADER as usize);
-    header.fill(0);
-    if let Some(word) = header.get_mut(..4) {
-        word.copy_from_slice(&size.to_le_bytes());
-    }
-    if zero {
-        payload.fill(0);
     }
     Ok(block + HEADER)
 }
@@ -403,13 +372,11 @@ pub(crate) fn global_alloc(
 /// the size in the header of the `GlobalAlloc` block at `block`, if its
 /// header is inside the memory
 fn global_size(caller: &mut Caller<'_, Record>, block: u32) -> wasmtime::Result<Option<u32>> {
-    let memory = memory(caller)?;
-    let size = block
-        .checked_sub(HEADER)
-        .and_then(|header| bytes(memory.data_mut(&mut *caller), header, 4))
-        .and_then(|bytes| <[u8; 4]>::try_from(&*bytes).ok())
-        .map(u32::from_le_bytes);
-    Ok(size)
+    with_space(caller, |space, _| {
+        block
+            .checked_sub(HEADER)
+            .and_then(|header| space.get(header))
+    })
 }
 
 /// `GlobalReAlloc(block, size, flags)`: the block moved to one of `size`
@@ -434,13 +401,8 @@ pub(crate) fn global_re_alloc(
     };
     let block = global_alloc_block(caller, size, zero)?;
     if block != 0 {
-        let memory = memory(caller)?;
-        let kept = old_size.min(size) as usize;
-        let data = memory.data_mut(&mut *caller);
-        let (from, to) = (old as usize, block as usize);
-        if from.checked_add(kept).is_some_and(|end| end <= data.len()) {
-            data.copy_within(from..from + kept, to);
-        }
+        let kept = old_size.min(size);
+        with_space(caller, |space, _| space.copy_within(old, kept, block))?;
         call_game(caller, "free", &[Val::I32((old - HEADER).cast_signed())])?;
     }
     give(results, block);
@@ -480,12 +442,8 @@ pub(crate) fn global_memory_status(
         REPORTED_VIRTUAL,
         REPORTED_VIRTUAL,
     ];
-    let memory = memory(caller)?;
-    if let Some(bytes) = bytes(memory.data_mut(&mut *caller), status, 32) {
-        for (chunk, word) in bytes.as_chunks_mut::<4>().0.iter_mut().zip(words) {
-            chunk.copy_from_slice(&word.to_le_bytes());
-        }
-    }
+    let bytes: Vec<u8> = words.iter().flat_map(|word| word.to_le_bytes()).collect();
+    with_space(caller, |space, _| space.write(status, &bytes))?;
     Ok(())
 }
 

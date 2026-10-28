@@ -23,7 +23,9 @@ from tools import engine_wasm, engine_wasm_cc, engine_wasm_traces  # noqa: E402
 
 @pytest.fixture
 def toolchain(monkeypatch, tmp_path):
-    monkeypatch.setattr(engine_wasm, "wasi_paths", lambda: (tmp_path / "include", tmp_path / "lib"))
+    monkeypatch.setattr(
+        engine_wasm, "wasi_paths", lambda target=engine_wasm.TARGET: (tmp_path / "include", tmp_path / "lib")
+    )
     monkeypatch.setattr(engine_wasm, "clang", lambda: "clang-wasm")
     monkeypatch.setenv("HALO_WASM_BUILTINS", str(tmp_path / "builtins.a"))
     return tmp_path
@@ -34,7 +36,7 @@ def test_the_harness_keeps_its_own_optimisation_and_takes_the_game_s_abi(toolcha
         ["-std=gnu99", "-O1", "-ffp-contract=off", "-w", "h.c", "-lm"], toolchain / "h.wasm"
     )
     assert command[0] == "clang-wasm"
-    assert f"--target={engine_wasm.TARGET}" in command
+    assert f"--target={engine_wasm_cc.TARGET}" in command
     assert "-O1" in command and "-O2" not in command and "-g2" not in command
     assert "-lm" not in command
     assert str(toolchain / "lib" / "crt1-command.o") in command
