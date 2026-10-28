@@ -236,7 +236,10 @@ fn surface_words(format: u32, width: u32, height: u32) -> (u32, u32) {
 }
 
 /// the address the module exports as the global `name`
-fn exported_address(caller: &mut Caller<'_, Record>, name: &str) -> wasmtime::Result<u32> {
+pub(crate) fn exported_address(
+    caller: &mut Caller<'_, Record>,
+    name: &str,
+) -> wasmtime::Result<u32> {
     let global = caller
         .get_export(name)
         .and_then(Extern::into_global)

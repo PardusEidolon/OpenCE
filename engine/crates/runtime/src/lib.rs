@@ -29,6 +29,7 @@ mod input;
 pub mod memory;
 mod net;
 mod profile;
+mod render;
 mod resources;
 mod space;
 mod system;
@@ -47,6 +48,7 @@ pub use wasmtime::Val;
 pub use audio::{Speakers, SPEAKER_RATE, SPEAKER_TARGET_FRAMES};
 pub use controls::{keystroke_flags, virtual_key, Controls};
 pub use profile::{Span, SLEEP};
+pub use render::{Command, Frame, Frames, Op, CALLS, STATES};
 
 /// the import that ends the game, with its exit code
 const PROC_EXIT: &str = "wasi_snapshot_preview1.proc_exit";
@@ -213,6 +215,8 @@ struct Shared {
     audio: audio::Output,
     /// the profile sections' spans, while profiling is on
     profile: Mutex<profile::Profile>,
+    /// the render calls of the frame being made, and the frames made
+    render: render::Render,
 }
 
 /// the record the stubs keep, in the store
@@ -499,6 +503,7 @@ impl Runtime {
                 .or_else(|| net::handler(&name))
                 .or_else(|| profile::handler(&name));
             let files_service = files::service(&name);
+            let draws = render::op(&name);
             linker
                 .func_new(
                     import.module(),
@@ -544,6 +549,9 @@ impl Runtime {
                         if let Some(serve) = threads {
                             return serve(&mut caller, params, results);
                         }
+                        if let Some(op) = draws {
+                            render::record(&mut caller, op, params)?;
+                        }
                         if let Some(serve) = serves {
                             return serve(&mut caller, params, results);
                         }
@@ -585,6 +593,7 @@ impl Runtime {
                     input: Mutex::new(input::Input::default()),
                     audio: audio::Output::default(),
                     profile: Mutex::new(profile::Profile::default()),
+                    render: render::Render::default(),
                 }),
                 thread: 0,
                 pending: None,
@@ -845,6 +854,13 @@ impl Game {
     #[must_use]
     pub fn speakers(&self) -> Speakers {
         Speakers::new(Arc::clone(&self.store.data().shared))
+    }
+
+    /// The frames the game presents, each its render calls, to take on
+    /// the drawing thread while `halo_game_main` keeps this game busy.
+    #[must_use]
+    pub fn frames(&self) -> Frames {
+        Frames::new(Arc::clone(&self.store.data().shared))
     }
 
     /// The texture and palette the game last set for the texture `stage`,
