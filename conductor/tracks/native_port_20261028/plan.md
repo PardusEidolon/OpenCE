@@ -42,11 +42,13 @@ stops, except A1's go/no-go.
 - [x] Task: Conductor - User Manual Verification 'Phase 2: The platform layer' (Protocol in workflow.md) (automated) a87a63ef
 
 ## Phase 3: The plugin interface (A3)
-- [ ] Task: The hooks as imports and exports: tick, frame, rendering, HUD and UI, sound, AI.
-- [ ] Task: Read-only views of the game's memory through bounds-checked readers; fuzz them.
-- [ ] Task: Recorded inputs and exact replay.
-- [ ] Task: Per-plugin budgets logged per frame; a plugin over its share fails a test.
-- [ ] Task: With every plugin off, the run matches the traces.
+- [x] Task: The hooks as imports and exports: tick, frame, rendering, HUD and UI, sound, AI. c8af1699
+- [x] Task: Read-only views of the game's memory through bounds-checked readers; fuzz them. c8af1699
+- [x] Task: Recorded inputs and exact replay. 8785e994
+  - Limits: the main thread only; sockets are not replayed; no sound on replay; an import that calls back into the game is one answer, not asked again on replay.
+- [x] Task: Per-plugin budgets logged per frame; a plugin over its share fails a test. c8af1699
+- [x] Task: With every plugin off, the run matches the traces. 8785e994
+  - 63 of 63 traces match (`tools/engine_wasm_traces.py`) with the plugins off; no code change was needed.
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: The plugin interface' (Protocol in workflow.md) (automated)
 
 ## Phase 4: Stock rendering on Metal (A4)
