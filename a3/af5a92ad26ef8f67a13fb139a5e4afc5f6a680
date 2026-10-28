@@ -1,0 +1,1 @@
+Task: game.wasm from source/ in Nix. 422 imports and 5 exports, checked by tools/test_engine_wasm.py (14 tests). Workspace 199/200 (the AI station's allocation budget fails at HEAD too); Swift 214, 0 failures.
