@@ -130,8 +130,8 @@ pub(crate) fn xbox_file(header: &[u8], body: &[u8]) -> Vec<u8> {
 /// A fuzz target's entry: its input, read or refused.
 pub(crate) type Entry = fn(&[u8]);
 
-/// Each `cargo fuzz` target (engine/fuzz/Cargo.toml's bins) and the entry
-/// it runs.
+/// Each of the importer's `cargo fuzz` targets (engine/fuzz/Cargo.toml's
+/// bins) and the entry it runs.
 pub(crate) const TARGETS: [(&str, Entry); 7] = [
     ("cache_file", import_file),
     ("xbox_cache", |input| xbox_input(input, import_file)),
@@ -343,6 +343,9 @@ fn every_fuzz_target_has_an_entry() {
         .filter_map(|line| line.strip_prefix("name = \""))
         .filter_map(|name| name.strip_suffix('"'))
         .filter(|name| *name != "opence_fuzz")
+        // the plugins' readers, whose stable run is the runtime's
+        // (crates/runtime/tests/views.rs)
+        .filter(|name| *name != "views")
         .collect();
     let entries: Vec<&str> = TARGETS.iter().map(|(target, _)| *target).collect();
     assert_eq!(bins, entries);

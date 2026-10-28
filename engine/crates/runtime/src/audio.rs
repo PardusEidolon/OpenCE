@@ -18,6 +18,7 @@ use std::time::{Duration, Instant};
 use wasmtime::{Caller, Val};
 
 use super::memory::{arg, give, Handler};
+use super::plugins::{self, Event};
 use super::{with_space, Record, Shared};
 
 /// The output's rate, a second.
@@ -144,17 +145,18 @@ fn audio_output(
     let bytes = with_space(caller, |space, _| space.read(address, len))?.ok_or_else(|| {
         wasmtime::format_err!("the sound's frames at {address:#x} are outside the memory")
     })?;
+    let samples: Vec<f32> = bytes
+        .as_chunks::<{ size_of::<f32>() }>()
+        .0
+        .iter()
+        .map(|sample| f32::from_le_bytes(*sample))
+        .collect();
+    plugins::fire(caller, &Event::Sound(&samples))?;
     let shared = Arc::clone(&caller.data().shared);
     let output = &shared.audio;
     let mut ring = output.ring.lock().unwrap_or_else(PoisonError::into_inner);
     ring.drain_by_clock(Instant::now());
-    ring.samples.extend(
-        bytes
-            .as_chunks::<{ size_of::<f32>() }>()
-            .0
-            .iter()
-            .map(|sample| f32::from_le_bytes(*sample)),
-    );
+    ring.samples.extend(samples);
     while ring.frames() >= SPEAKER_TARGET_FRAMES {
         ring = output
             .pulled

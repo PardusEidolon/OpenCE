@@ -641,7 +641,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `tag_reference_set` | cache/cache_files.c | Replaced | import/src/lib.rs | maps imported to a typed format |
 | `tag_iterator_new` | cache/cache_files.c | Replaced | import/src/lib.rs | maps imported to a typed format |
 | `tag_iterator_next` | cache/cache_files.c | Replaced | import/src/lib.rs | maps imported to a typed format |
-| `cache_get_tag_instance` | cache/cache_files.c | Replaced | import/src/lib.rs | maps imported to a typed format |
+| `cache_get_tag_instance` | cache/cache_files.c | Replaced | runtime/src/views.rs:9 | maps imported to a typed format |
 | `cache_file_header_verify` | cache/cache_files.c | Replaced | import/src/lib.rs | maps imported to a typed format |
 | `cache_files_give_time_to_precache` | cache/cache_files.c | Replaced | import/src/lib.rs | maps imported to a typed format |
 | `scenario_tags_load` | cache/cache_files.c | Replaced | import/src/lib.rs | maps imported to a typed format |
@@ -2075,9 +2075,9 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `crc_checksum_buffer` | memory/crc.c | Replaced | import/src/lib.rs | maps imported to a typed format |
 | `data_allocation_size` | memory/data.c | Native |  | `Vec` |
 | `data_initialize` | memory/data.c | Native |  | `Vec` |
-| `datum_try_and_get` | memory/data.c | Native |  | `Vec` |
+| `datum_try_and_get` | memory/data.c | Native | runtime/src/views.rs:9 | `Vec` |
 | `datum_get` | memory/data.c | Native |  | `Vec` |
-| `data_verify` | memory/data.c | Native |  | `Vec` |
+| `data_verify` | memory/data.c | Native | runtime/src/views.rs:9 | `Vec` |
 | `datum_initialize` | memory/data.c | Native |  | `Vec` |
 | `data_new` | memory/data.c | Native |  | `Vec` |
 | `data_dispose` | memory/data.c | Native |  | `Vec` |
@@ -2087,7 +2087,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `datum_delete` | memory/data.c | Native |  | `Vec` |
 | `data_delete_all` | memory/data.c | Native |  | `Vec` |
 | `data_iterator_new` | memory/data.c | Native |  | `Vec` |
-| `data_iterator_next` | memory/data.c | Native |  | `Vec` |
+| `data_iterator_next` | memory/data.c | Native | runtime/src/views.rs:65 | `Vec` |
 | `data_next_index` | memory/data.c | Matched | ffi/src/particles/slots.rs:4 | sim/tests/data_reference.rs (trace) |
 | `data_prev_index` | memory/data.c | Replaced |  | through its caller `ai_debug_change_selected_encounter` |
 | `data_compact` | memory/data.c | Native |  | `Vec` |

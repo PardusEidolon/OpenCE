@@ -19,6 +19,7 @@ use std::sync::{Arc, Mutex, PoisonError};
 
 use wasmtime::{Caller, Val};
 
+use super::plugins::{self, Event};
 use super::{with_space, Record, Shared};
 
 /// The calls a frame keeps, by the index its commands give ([`Op`]).
@@ -336,6 +337,11 @@ pub(crate) fn record(
         frame.number = number;
         recorder.presented += 1;
         recorder.states.clear();
+        // the render hook sees the frame before the app can take it, with
+        // the recorder free while the plugins run
+        drop(recorder);
+        plugins::fire(caller, &Event::Render(&frame))?;
+        let mut recorder = shared.render.lock().unwrap_or_else(PoisonError::into_inner);
         recorder.finished.push_back(frame);
         while recorder.finished.len() > FRAMES_KEPT {
             recorder.finished.pop_front();

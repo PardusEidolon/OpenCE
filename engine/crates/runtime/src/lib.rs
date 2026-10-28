@@ -29,6 +29,7 @@ pub mod files;
 mod input;
 pub mod memory;
 mod net;
+pub mod plugins;
 mod profile;
 mod render;
 mod resources;
@@ -36,6 +37,7 @@ mod space;
 mod system;
 mod textures;
 mod threads;
+pub mod views;
 
 use space::Space;
 use wasmtime::{
@@ -221,6 +223,8 @@ struct Shared {
     render: render::Render,
     /// the game's sockets, and the console's link to the host
     sockets: Mutex<net::Sockets>,
+    /// the plugins, called at their hooks
+    plugins: plugins::Plugins,
 }
 
 /// the record the stubs keep, in the store
@@ -607,6 +611,7 @@ impl Runtime {
                     profile: Mutex::new(profile::Profile::default()),
                     render: render::Render::default(),
                     sockets: Mutex::new(net::Sockets::default()),
+                    plugins: plugins::Plugins::default(),
                 }),
                 thread: 0,
                 pending: None,
@@ -782,6 +787,20 @@ impl Game {
     /// off ([`profile`]'s module documentation).
     pub fn set_profiling(&mut self, on: bool) {
         self.store.data().profile().set(on);
+    }
+
+    /// Adds `plugin`, called at each of its hooks after the plugins added
+    /// before it ([`plugins`]).
+    pub fn add_plugin(&mut self, plugin: Box<dyn plugins::Plugin>) {
+        self.store.data().shared.plugins.add(plugin);
+    }
+
+    /// Each plugin's time in each frame since they were last taken, oldest
+    /// first, the plugins in the order they were added (at most
+    /// [`plugins::FRAMES_KEPT`] frames); none while no plugin is added.
+    #[must_use]
+    pub fn take_plugin_frames(&self) -> Vec<Vec<plugins::PluginTime>> {
+        self.store.data().shared.plugins.take_frames()
     }
 
     /// The profile sections' spans ended since they were last taken, in

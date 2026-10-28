@@ -13,7 +13,7 @@ use std::time::Instant;
 use wasmtime::{Caller, Val};
 
 use super::memory::{arg, Handler};
-use super::{with_space, Record};
+use super::{plugins, with_space, Record};
 
 /// the span the game's first thread spends in `Sleep` or `SleepEx`, kept
 /// while profiling is on: the stock game's 30 Hz pacing
@@ -132,18 +132,33 @@ fn enter(caller: &mut Caller<'_, Record>, params: &[Val], _: &mut [Val]) -> wasm
     Ok(())
 }
 
-/// `halo_profile_exit(name)`: the section, if it was entered, ends
+/// `halo_profile_exit(name)`: the section, if it was entered, ends; then
+/// the plugin hook that follows it, if any, fires
 fn exit(caller: &mut Caller<'_, Record>, params: &[Val], _: &mut [Val]) -> wasmtime::Result<()> {
     let address = arg(params, 0);
-    let mut profile = caller.data().profile();
-    let Some(end_ns) = profile.now() else {
+    end(caller.data(), address);
+    if !caller.data().shared.plugins.any() || name(caller, address)?.is_none() {
         return Ok(());
+    }
+    let section = caller.data().profile().names.get(&address).cloned();
+    match section {
+        Some(section) => plugins::after_section(caller, &section),
+        None => Ok(()),
+    }
+}
+
+/// the span of the section at `address`, if it was entered while
+/// profiling is on, ends
+fn end(record: &Record, address: u32) {
+    let mut profile = record.profile();
+    let Some(end_ns) = profile.now() else {
+        return;
     };
     let Some(start_ns) = profile.open.get_mut(&address).and_then(Vec::pop) else {
-        return Ok(());
+        return;
     };
     let Some(name) = profile.names.get(&address).cloned() else {
-        return Ok(());
+        return;
     };
     if profile.spans.len() < MAXIMUM_SPANS {
         profile.spans.push(Span {
@@ -152,5 +167,4 @@ fn exit(caller: &mut Caller<'_, Record>, params: &[Val], _: &mut [Val]) -> wasmt
             end_ns,
         });
     }
-    Ok(())
 }
