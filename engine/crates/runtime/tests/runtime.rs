@@ -216,5 +216,88 @@ fn game_wasm_loads_with_a_stub_for_every_import() -> Result<(), Error> {
     for export in ["halo_game_main", "malloc", "free", "_initialize"] {
         assert!(game.has_export(export), "game.wasm has no {export}");
     }
+    // source/ never jumps out of a function (no setjmp or longjmp), so the
+    // module needs neither wasm exceptions nor a host to unwind it
+    for index in 0..game.import_count() {
+        let name = game.import_name(index);
+        assert!(
+            !name.contains("setjmp") && !name.contains("longjmp"),
+            "game.wasm imports {name}"
+        );
+    }
+    Ok(())
+}
+
+/// adds 1 to the word at 0, atomically, `n` times; reads it atomically
+const ADDER: &str = r#"
+(module
+  (import "env" "memory" (memory 1 1 shared))
+  (func (export "get") (result i32) (i32.atomic.load (i32.const 0)))
+  (func (export "add") (param $n i32)
+    (loop $again
+      (drop (i32.atomic.rmw.add (i32.const 0) (i32.const 1)))
+      (local.tee $n (i32.sub (local.get $n) (i32.const 1)))
+      (br_if $again))))
+"#;
+
+#[test]
+fn two_threads_share_a_memory_and_its_atomics() -> Result<(), Box<dyn std::error::Error>> {
+    use wasmtime::{Instance, MemoryType, Module, SharedMemory, Store};
+    let runtime = Runtime::new(None)?;
+    let engine = runtime.engine();
+    let module = Module::new(engine, module(ADDER))?;
+    let memory = SharedMemory::new(engine, MemoryType::shared(1, 1))?;
+    let threads: Vec<_> = (0..2)
+        .map(|_| {
+            let (engine, module, memory) = (engine.clone(), module.clone(), memory.clone());
+            std::thread::spawn(move || -> wasmtime::Result<()> {
+                let mut store = Store::new(&engine, ());
+                let instance = Instance::new(&mut store, &module, &[memory.into()])?;
+                let add = instance.get_typed_func::<i32, ()>(&mut store, "add")?;
+                add.call(&mut store, 100_000)
+            })
+        })
+        .collect();
+    for thread in threads {
+        thread.join().map_err(|_| "a thread panicked")??;
+    }
+    let mut store = Store::new(engine, ());
+    let instance = Instance::new(&mut store, &module, &[memory.into()])?;
+    let get = instance.get_typed_func::<(), i32>(&mut store, "get")?;
+    assert_eq!(get.call(&mut store, ())?, 200_000);
+    Ok(())
+}
+
+#[test]
+fn a_nan_has_the_same_bits_on_every_machine() -> Result<(), Error> {
+    // a NaN with a payload, plus one: ARM keeps the payload, x86 too, but
+    // the runtime canonicalises it, as the simulation's determinism needs
+    let runtime = Runtime::new(None)?;
+    let mut game = runtime.load(&module(
+        r#"(module
+          (func (export "run") (result i32)
+            (i32.reinterpret_f32
+              (f32.add (f32.reinterpret_i32 (i32.const 0x7fa00001)) (f32.const 1)))))"#,
+    ))?;
+    assert_eq!(game.call_i32("run")?.cast_unsigned(), 0x7fc0_0000);
+    Ok(())
+}
+
+#[test]
+fn relaxed_simd_whose_results_differ_by_machine_is_refused() -> Result<(), Error> {
+    // relaxed_madd may or may not fuse the multiply and add; the game is
+    // built with -ffp-contract=off and no relaxed SIMD, so the runtime
+    // refuses it rather than let a module differ between machines
+    let runtime = Runtime::new(None)?;
+    let result = runtime.load(&module(
+        r#"(module
+          (func (export "run") (param v128 v128 v128) (result v128)
+            (f32x4.relaxed_madd (local.get 0) (local.get 1) (local.get 2))))"#,
+    ));
+    assert!(
+        matches!(result, Err(Error::Compile(_))),
+        "{:?}",
+        result.err()
+    );
     Ok(())
 }

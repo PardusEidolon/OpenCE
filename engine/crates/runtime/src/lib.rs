@@ -245,7 +245,10 @@ impl Runtime {
             .shared_memory(true)
             // the simulation must be deterministic: every NaN the game makes
             // has the same bits on every machine
-            .cranelift_nan_canonicalization(true);
+            .cranelift_nan_canonicalization(true)
+            // and relaxed SIMD, whose results may differ by machine (a fused
+            // multiply-add or not), is refused: the game is built without it
+            .wasm_relaxed_simd(false);
         let cache = match cache {
             Some(folder) => {
                 let mut settings = CacheConfig::new();
@@ -257,6 +260,13 @@ impl Runtime {
         config.cache(cache.clone());
         let engine = Engine::new(&config).map_err(|error| Error::Setup(format!("{error:#}")))?;
         Ok(Self { engine, cache })
+    }
+
+    /// Wasmtime's engine, as the runtime set it up: what the platform layer
+    /// shares between the game's threads, with their shared memory.
+    #[must_use]
+    pub fn engine(&self) -> &Engine {
+        &self.engine
     }
 
     /// How many times a compiled module was found in the cache.
