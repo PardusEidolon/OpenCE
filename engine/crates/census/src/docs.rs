@@ -31,7 +31,7 @@ pub fn entry<'a>(census: &'a Census, function: &Function) -> Option<&'a Entry> {
     match function.from {
         From::Entry => census.manifest.function.get(&function.name),
         From::Rule(index) => census.manifest.rule.get(index),
-        From::Trace | From::Nothing => None,
+        From::Trace | From::Game | From::Nothing => None,
     }
 }
 
@@ -75,6 +75,7 @@ pub fn evidence(census: &Census, function: &Function) -> String {
                 parts.push(format!("leaves out {}", e.leaves_out.join(", ")));
             }
         }
+        Some(Class::Compiled) => parts.push("compiled into game.wasm".to_owned()),
         Some(Class::Native) => {
             if let Some(primitive) = field(|e| e.primitive.as_ref()) {
                 parts.push(format!("`{primitive}`"));

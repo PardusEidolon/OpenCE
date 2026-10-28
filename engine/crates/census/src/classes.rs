@@ -36,6 +36,9 @@ pub enum Class {
     /// Ported line for line: a reference trace compiles it, or a trace of
     /// a caller covers it (`why` and `through`).
     Ported,
+    /// Compiled unchanged into game.wasm: its file is one
+    /// `port/linux/port.json`'s game compiles ([`Game`]).
+    Compiled,
     /// Rewritten: the engine does its job its own way, and a check against
     /// the original (a trace, a golden comparison or a measurement) shows
     /// that the behaviour matches.
@@ -55,8 +58,9 @@ pub enum Class {
 
 impl Class {
     /// Every class, in order.
-    pub const ALL: [Self; 6] = [
+    pub const ALL: [Self; 7] = [
         Self::Ported,
+        Self::Compiled,
         Self::Matched,
         Self::Native,
         Self::Partial,
@@ -68,6 +72,7 @@ impl Class {
     pub fn name(self) -> &'static str {
         match self {
             Self::Ported => "Ported",
+            Self::Compiled => "Compiled",
             Self::Matched => "Matched",
             Self::Native => "Native",
             Self::Partial => "Partial",
@@ -224,6 +229,8 @@ pub enum From {
     Rule(usize),
     /// A reference trace, which makes it Ported.
     Trace,
+    /// game.wasm, which compiles its file and makes it Compiled.
+    Game,
     /// Nothing.
     Nothing,
 }
@@ -322,9 +329,18 @@ impl Engine {
         })
     }
 
-    /// Whether `place` (`sim/src/units.rs:12`, `app/Sources/...`) exists.
+    /// Whether `place` (`sim/src/units.rs:12`, `app/Sources/...`, or the
+    /// repository's `port/...` and `source/...`) exists.
     pub fn exists(&self, place: &str) -> bool {
         let path = place.split(':').next().unwrap_or(place);
+        // (game.wasm's stand-ins are the port's C, or the original's own,
+        // outside engine/)
+        if path.starts_with("port/") || path.starts_with("source/") {
+            return self
+                .root
+                .parent()
+                .is_some_and(|repository| repository.join(path).exists());
+        }
         match path.strip_prefix("app/") {
             Some(_) => self.root.join(path).exists(),
             None => self.root.join("crates").join(path).exists(),
@@ -468,7 +484,80 @@ pub fn lacking(
                     .push("Replaced names nothing that stands in for it".to_owned()),
             }
         }
-        Class::Missing => {}
+        Class::Compiled | Class::Missing => {}
     }
     lacks
+}
+
+/// What game.wasm compiles: `port/linux/port.json`'s game, every C file
+/// under its root (`source`) but those it excludes (a folder ends in `/`).
+#[derive(Debug, Clone, Default, PartialEq, Eq)]
+pub struct Game {
+    /// The excluded files and folders, from `source/`.
+    pub exclude: Vec<String>,
+    /// Whether the repository has a port.json; without one nothing is
+    /// compiled.
+    pub found: bool,
+}
+
+/// `port/linux/port.json`, from the repository.
+pub const PORT: &str = "port/linux/port.json";
+
+#[derive(Deserialize)]
+struct Port {
+    game: PortGame,
+}
+
+#[derive(Deserialize)]
+struct PortGame {
+    root: String,
+    #[serde(default)]
+    exclude: Vec<String>,
+}
+
+impl Game {
+    /// The game of the repository at `root`.
+    pub fn read(root: &Path) -> Result<Self, Error> {
+        let path = root.join(PORT);
+        if !path.is_file() {
+            return Ok(Self::default());
+        }
+        let port: Port =
+            serde_json::from_str(&read_text(&path)?).map_err(|error| Error::Malformed {
+                file: PORT.to_owned(),
+                line: error.line(),
+                why: error.to_string(),
+            })?;
+        if port.game.root != "source" {
+            return Err(Error::Malformed {
+                file: PORT.to_owned(),
+                line: 0,
+                why: format!("the game's root is {}, not source", port.game.root),
+            });
+        }
+        let exclude = port
+            .game
+            .exclude
+            .iter()
+            .map(|place| place.strip_prefix("source/").unwrap_or(place).to_owned())
+            .collect();
+        Ok(Self {
+            exclude,
+            found: true,
+        })
+    }
+
+    /// Whether game.wasm compiles `file` (of `source/`).
+    pub fn compiles(&self, file: &str) -> bool {
+        self.found
+            && !self
+                .exclude
+                .iter()
+                .any(|place| match place.strip_suffix('/') {
+                    Some(folder) => file
+                        .strip_prefix(folder)
+                        .is_some_and(|rest| rest.starts_with('/')),
+                    None => file == place,
+                })
+    }
 }

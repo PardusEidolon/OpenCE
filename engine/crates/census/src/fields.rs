@@ -855,7 +855,9 @@ pub fn gaps(
                     matches!(c, Some(Class::Ported | Class::Matched | Class::Native))
                 };
                 let owed = |c: &Option<Class>| matches!(c, Some(Class::Missing | Class::Partial));
-                if classes.iter().any(finished) && !classes.iter().any(owed) {
+                // (game.wasm runs the original's own reader)
+                let compiled = classes.contains(&Some(Class::Compiled));
+                if classes.iter().any(finished) && !classes.iter().any(owed) && !compiled {
                     let list: Vec<String> = by
                         .iter()
                         .zip(&classes)
@@ -903,8 +905,15 @@ pub fn unused(
             .iter()
             .all(|(_, c)| matches!(c, Some(Class::Replaced) | None));
         let names: Vec<&str> = by.iter().map(String::as_str).collect();
+        let compiled: Vec<&str> = classed
+            .iter()
+            .filter(|(_, c)| *c == Some(Class::Compiled))
+            .map(|(f, _)| f.as_str())
+            .collect();
         let reason = if by.is_empty() {
             "the original reads it nowhere".to_owned()
+        } else if !compiled.is_empty() {
+            format!("game.wasm reads it: {}", compiled.join(", "))
         } else if !owed.is_empty() {
             format!("owed to {}", owed.join(", "))
         } else if replaced {
@@ -952,7 +961,7 @@ pub fn write_unused(root: &Path, census: &crate::Census) -> Result<String, Error
         "# structure\tfield\twhy the engine uses it nowhere (opence census --write)\n",
     );
     if let Some((written, by)) = written_with_readers(root)? {
-        for line in unused(&written, &by, |f| census.function(f).and_then(|f| f.class)) {
+        for line in unused(&written, &by, |f| census.reader_class(f)) {
             text.push_str(&line);
             text.push('\n');
         }
@@ -966,7 +975,7 @@ pub fn owed(root: &Path, census: &crate::Census) -> Result<Vec<String>, Error> {
     let Some((written, by)) = written_with_readers(root)? else {
         return Ok(Vec::new());
     };
-    let mut problems = gaps(&written, &by, |f| census.function(f).and_then(|f| f.class));
+    let mut problems = gaps(&written, &by, |f| census.reader_class(f));
     let file = read_text(&root.join("engine").join(UNUSED)).unwrap_or_default();
     if file != write_unused(root, census)? {
         problems.push(format!(

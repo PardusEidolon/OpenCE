@@ -7,7 +7,7 @@ use std::fmt::Write as _;
 use std::path::Path;
 
 use crate::citations::{self, Citations};
-use crate::classes::{lacking, Class, Engine, From, Manifest, Traced};
+use crate::classes::{lacking, Class, Engine, From, Game, Manifest, Traced};
 use crate::original::Original;
 use crate::{docs, fields, fixups, layout, ratchet, read_text, scripts, traced, Error};
 
@@ -50,6 +50,8 @@ pub struct Census {
     pub manifest: Manifest,
     /// The traced functions.
     pub traced: Traced,
+    /// What game.wasm compiles.
+    pub game: Game,
     /// Every function, classed.
     pub functions: Vec<Function>,
     /// What does not meet the requirements, a line each.
@@ -104,12 +106,14 @@ impl Census {
             path if path.is_file() => read_traced(&read_text(&path)?),
             _ => Traced::new(),
         };
+        let game = Game::read(root)?;
         let mut census = Self {
             original,
             citations,
             reached,
             manifest,
             traced,
+            game,
             functions: Vec::new(),
             problems: Vec::new(),
         };
@@ -124,15 +128,22 @@ impl Census {
             let (entry, mut from) = self.manifest.lookup(&function.name, &function.file);
             let traced_by = self.traced.get(&function.name).cloned();
             // (a trace makes a function Ported, unless its own entry, or a
-            // rule over traces, says otherwise)
+            // rule over traces, says otherwise; else game.wasm compiling its
+            // file makes it Compiled, over any rule)
             let over = entry.and_then(|e| e.over_traces) == Some(true);
+            let compiled = self.game.compiles(&function.file);
             let class = match (from.clone(), &traced_by) {
-                (From::Entry, _) | (_, None) => entry.and_then(|e| e.class),
+                (From::Entry, _) => entry.and_then(|e| e.class),
                 (From::Rule(_), Some(_)) if over => entry.and_then(|e| e.class),
                 (_, Some(_)) => {
                     from = From::Trace;
                     Some(Class::Ported)
                 }
+                (_, None) if compiled => {
+                    from = From::Game;
+                    Some(Class::Compiled)
+                }
+                (_, None) => entry.and_then(|e| e.class),
             };
             self.functions.push(Function {
                 name: function.name.clone(),
@@ -242,13 +253,19 @@ impl Census {
                     }
                 }
                 Some(_) if function.through_caller.is_some() => {}
+                Some(Class::Compiled) if !self.game.compiles(&function.file) => {
+                    problems.push(format!(
+                        "{name}: {} is not compiled into game.wasm",
+                        function.file
+                    ));
+                }
                 Some(class) => {
                     let default = crate::classes::Entry::default();
                     let entry = self
                         .manifest
                         .lookup(name, &function.file)
                         .0
-                        .filter(|_| function.from != From::Trace)
+                        .filter(|_| !matches!(function.from, From::Trace | From::Game))
                         .unwrap_or(&default);
                     let lacks = lacking(name, class, entry, &self.traced, &function.cited, engine);
                     problems.extend(lacks.wrong.iter().map(|why| format!("{name}: {why}")));
@@ -302,6 +319,17 @@ impl Census {
     /// The classed function named `name`.
     pub fn function(&self, name: &str) -> Option<&Function> {
         self.functions.iter().find(|f| f.name == name)
+    }
+
+    /// The class `name` counts as where it reads a tag's field: a function
+    /// of a file game.wasm compiles is Compiled there, traced or not,
+    /// since game.wasm runs the original's own function.
+    pub fn reader_class(&self, name: &str) -> Option<Class> {
+        let function = self.function(name)?;
+        match function.class {
+            Some(Class::Ported) if self.game.compiles(&function.file) => Some(Class::Compiled),
+            class => class,
+        }
     }
 
     /// The functions that owe evidence.

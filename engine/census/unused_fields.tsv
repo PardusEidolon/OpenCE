@@ -1,5 +1,5 @@
 # structure	field	why the engine uses it nowhere (opence census --write)
-_biped_definition	moving_turning_speed	owed to biped_update_turning (Partial)
+_biped_definition	moving_turning_speed	game.wasm reads it: biped_update_turning
 _biped_definition	stationary_turning_threshold	the original reads it nowhere
 _biped_definition	maximum_slope_angle	the original reads it nowhere
 _biped_definition	downhill_falloff_angle	the original reads it nowhere
@@ -7,56 +7,56 @@ _biped_definition	downhill_cutoff_angle	the original reads it nowhere
 _biped_definition	uphill_falloff_angle	the original reads it nowhere
 _biped_definition	uphill_cutoff_angle	the original reads it nowhere
 _biped_definition	death_hard_landing_velocity	the original reads it nowhere
-_item_definition	hud_message_index	owed to hud_messaging_update (Partial)
+_item_definition	hud_message_index	game.wasm reads it: hud_messaging_update
 _item_definition	inventory_sort_order	the original reads it nowhere
-_item_definition	detonation_delay_timer_lower_bound	owed to item_detonate (Missing)
-_item_definition	detonation_delay_timer_upper_bound	owed to item_detonate (Missing)
+_item_definition	detonation_delay_timer_lower_bound	game.wasm reads it: item_detonate
+_item_definition	detonation_delay_timer_upper_bound	game.wasm reads it: item_detonate
 _item_definition	detonating_effect.group_tag	the original reads it nowhere
-_item_definition	detonating_effect.index	owed to item_detonate (Missing)
-_machine_definition	elevator_node_index	owed to biped_update_physics (Partial)
+_item_definition	detonating_effect.index	game.wasm reads it: item_detonate
+_machine_definition	elevator_node_index	game.wasm reads it: biped_update_physics, machine_update
 _object_definition	modifier_shader.group_tag	the original reads it nowhere
-_object_definition	modifier_shader.index	owed to first_person_weapon_draw (Missing)
+_object_definition	modifier_shader.index	game.wasm reads it: first_person_weapon_draw, render_object_list
 _object_definition	render_bounding_radius	the original reads it nowhere
 _projectile_definition	super_detonation.group_tag	the original reads it nowhere
-_projectile_definition	super_detonation.index	owed to projectile_detonate (Partial)
-_projectile_definition	danger_radius	owed to actor_perception_refresh_test_object (Missing)
-_projectile_definition	guided_angular_velocity	owed to projectile_update (Partial)
+_projectile_definition	super_detonation.index	game.wasm reads it: projectile_detonate
+_projectile_definition	danger_radius	game.wasm reads it: actor_perception_refresh_test_object
+_projectile_definition	guided_angular_velocity	game.wasm reads it: projectile_update
 _projectile_definition	detonation_started.group_tag	the original reads it nowhere
-_projectile_definition	detonation_started.index	owed to projectile_collision (Partial)
+_projectile_definition	detonation_started.index	game.wasm reads it: projectile_collision
 _unit_definition	camera.submerged_marker_name	the original reads it nowhere
-_unit_definition	camera.pitch_autolevel	owed to player_control_modify_desired_angles (Partial)
-_unit_definition	camera.pitch_minimum	owed to player_control_modify_desired_angles (Partial)
-_unit_definition	camera.pitch_maximum	owed to player_control_modify_desired_angles (Partial)
-_weapon_definition	maximum_alternate_shots_loaded	owed to weapon_trigger_fire (Partial), weapon_update (Partial)
-_weapon_definition	heat_detonation_threshold	owed to weapon_trigger_fire (Partial)
+_unit_definition	camera.pitch_autolevel	game.wasm reads it: player_control_modify_desired_angles
+_unit_definition	camera.pitch_minimum	game.wasm reads it: player_control_modify_desired_angles
+_unit_definition	camera.pitch_maximum	game.wasm reads it: player_control_modify_desired_angles
+_weapon_definition	maximum_alternate_shots_loaded	game.wasm reads it: weapon_trigger_fire, weapon_update
+_weapon_definition	heat_detonation_threshold	game.wasm reads it: weapon_trigger_fire
 _weapon_definition	melee_attack_response.group_tag	the original reads it nowhere
-_weapon_definition	melee_attack_response.index	owed to unit_cause_player_melee_damage (Missing)
-_weapon_definition	zoom_level_count	owed to unit_update (Partial), weapon_get_zoom_magnification (Missing), weapon_rotate_zoom_level (Missing)
-_weapon_definition	zoom_magnification_minimum	owed to weapon_get_zoom_magnification (Missing)
-_weapon_definition	zoom_magnification_maximum	owed to weapon_get_zoom_magnification (Missing)
-_weapon_definition	aim_assist_parameters.autoaim_angle	owed to temporary_hud_draw (Missing), unit_get_aim_assist_parameters (Missing)
-_weapon_definition	aim_assist_parameters.autoaim_distance	owed to unit_get_aim_assist_parameters (Missing)
-_weapon_definition	aim_assist_parameters.magnetism_angle	owed to unit_get_aim_assist_parameters (Missing)
-_weapon_definition	aim_assist_parameters.magnetism_distance	owed to unit_get_aim_assist_parameters (Missing)
-_weapon_definition	aim_assist_parameters.deviation_angle	owed to unit_get_aim_assist_parameters (Missing)
-_weapon_definition	movement_penalty_mode	owed to weapon_compute_movement_penalty (Missing)
-_weapon_definition	forward_movement_penalty	owed to weapon_compute_movement_penalty (Missing)
-_weapon_definition	sideways_movement_penalty	owed to weapon_compute_movement_penalty (Missing)
-actor_starting_location	initial_state	owed to actor_place (Partial)
-ai_command_definition	atom_modifier	owed to action_obey_command_begin (Missing), action_obey_command_end (Missing), action_obey_command_perform (Missing), action_obey_describe_command (Missing)
-animation	frame_info_type	owed to animation_frame_get_xy_translation (Missing), animation_get_x_offsets (Missing), biped_update_moving (Partial)
-animation	frame_info.size	owed to animation_get_frame_info (Missing), animation_get_x_offsets (Missing)
-animation	frame_info.address	owed to animation_get_frame_info (Missing), animation_get_x_offsets (Missing)
-animation_graph	limp_body_node_collision_radius	owed to biped_limp_noodle_move_relax_and_constrain_positions (Missing), biped_limp_noodle_valid_joint_rotation (Missing)
-animation_graph_ik_point	attached_to_marker_name	owed to unit_postprocess_node_matrices (Missing)
+_weapon_definition	melee_attack_response.index	game.wasm reads it: unit_cause_player_melee_damage
+_weapon_definition	zoom_level_count	game.wasm reads it: unit_update, weapon_get_zoom_magnification, weapon_rotate_zoom_level
+_weapon_definition	zoom_magnification_minimum	game.wasm reads it: weapon_get_zoom_magnification
+_weapon_definition	zoom_magnification_maximum	game.wasm reads it: weapon_get_zoom_magnification
+_weapon_definition	aim_assist_parameters.autoaim_angle	game.wasm reads it: temporary_hud_draw, unit_get_aim_assist_parameters
+_weapon_definition	aim_assist_parameters.autoaim_distance	game.wasm reads it: unit_get_aim_assist_parameters
+_weapon_definition	aim_assist_parameters.magnetism_angle	game.wasm reads it: unit_get_aim_assist_parameters
+_weapon_definition	aim_assist_parameters.magnetism_distance	game.wasm reads it: unit_get_aim_assist_parameters
+_weapon_definition	aim_assist_parameters.deviation_angle	game.wasm reads it: unit_get_aim_assist_parameters
+_weapon_definition	movement_penalty_mode	game.wasm reads it: weapon_compute_movement_penalty
+_weapon_definition	forward_movement_penalty	game.wasm reads it: weapon_compute_movement_penalty
+_weapon_definition	sideways_movement_penalty	game.wasm reads it: weapon_compute_movement_penalty
+actor_starting_location	initial_state	game.wasm reads it: actor_place
+ai_command_definition	atom_modifier	game.wasm reads it: action_obey_command_begin, action_obey_command_end, action_obey_command_perform, action_obey_describe_command
+animation	frame_info_type	game.wasm reads it: animation_frame_get_xy_translation, animation_get_x_offsets, biped_update_moving
+animation	frame_info.size	game.wasm reads it: animation_get_frame_info, animation_get_x_offsets
+animation	frame_info.address	game.wasm reads it: animation_get_frame_info, animation_get_x_offsets
+animation_graph	limp_body_node_collision_radius	game.wasm reads it: biped_limp_noodle_move_relax_and_constrain_positions, biped_limp_noodle_valid_joint_rotation
+animation_graph_ik_point	attached_to_marker_name	game.wasm reads it: unit_postprocess_node_matrices
 biped_definition	object.modifier_shader.group_tag	the original reads it nowhere
-biped_definition	object.modifier_shader.index	owed to first_person_weapon_draw (Missing)
+biped_definition	object.modifier_shader.index	game.wasm reads it: first_person_weapon_draw, render_object_list
 biped_definition	object.render_bounding_radius	the original reads it nowhere
 biped_definition	unit.camera.submerged_marker_name	the original reads it nowhere
-biped_definition	unit.camera.pitch_autolevel	owed to player_control_modify_desired_angles (Partial)
-biped_definition	unit.camera.pitch_minimum	owed to player_control_modify_desired_angles (Partial)
-biped_definition	unit.camera.pitch_maximum	owed to player_control_modify_desired_angles (Partial)
-biped_definition	biped.moving_turning_speed	owed to biped_update_turning (Partial)
+biped_definition	unit.camera.pitch_autolevel	game.wasm reads it: player_control_modify_desired_angles
+biped_definition	unit.camera.pitch_minimum	game.wasm reads it: player_control_modify_desired_angles
+biped_definition	unit.camera.pitch_maximum	game.wasm reads it: player_control_modify_desired_angles
+biped_definition	biped.moving_turning_speed	game.wasm reads it: biped_update_turning
 biped_definition	biped.stationary_turning_threshold	the original reads it nowhere
 biped_definition	biped.maximum_slope_angle	the original reads it nowhere
 biped_definition	biped.downhill_falloff_angle	the original reads it nowhere
@@ -64,228 +64,228 @@ biped_definition	biped.downhill_cutoff_angle	the original reads it nowhere
 biped_definition	biped.uphill_falloff_angle	the original reads it nowhere
 biped_definition	biped.uphill_cutoff_angle	the original reads it nowhere
 biped_definition	biped.death_hard_landing_velocity	the original reads it nowhere
-bitmap_data	mipmap_count	read only where the engine replaced the original: _rasterizer_present, bitmap_2d_address, bitmap_2d_compress_to_mipmap, bitmap_2d_get_pixel, bitmap_2d_new, bitmap_2d_uncompress_from_mipmap, bitmap_3d_address, bitmap_3d_compress_to_mipmap, bitmap_3d_new, bitmap_3d_slice_extract, bitmap_3d_slice_insert, bitmap_3d_uncompress_from_mipmap, bitmap_clone, bitmap_cm_compress_to_mipmap, bitmap_cm_uncompress_from_mipmap, bitmap_compress_to_mipmap, bitmap_cube_map_address, bitmap_cube_map_face_extract, bitmap_cube_map_face_insert, bitmap_cube_map_new, bitmap_get_pixel_count, bitmap_mipmap_get_depth, bitmap_mipmap_get_height, bitmap_mipmap_get_pixel_count, bitmap_mipmap_get_pixel_data_size, bitmap_mipmap_get_row_pitch, bitmap_mipmap_get_width, bitmap_uncompress_from_mipmap, bitmap_verify, extract_build_debug_plate, extract_mipmaps_to_bitmap, extract_pixels_from_mipmap, extract_pixels_to_mipmap, rasterizer_bitmap_2d_changed, rasterizer_bitmap_3d_changed, rasterizer_bitmap_cm_changed, rasterizer_bitmap_new, rasterizer_xbox_bitmap_get_max_mipmap_count, rasterizer_xbox_bitmap_swizzle, texture_cache_bitmap_valid
-bitmap_group	bump_height	read only where the engine replaced the original: extract_mipmaps_to_bitmap
-collision_bsp	bsp2d_references.count	read only where the engine replaced the original or outside it: bsp3d_test_pill_recursive (Replaced), bsp3d_test_sphere_recursive (Replaced), collision_bsp_valid_leaf (not the original's), collision_leaf_test_vector (Replaced)
-collision_bsp	bsp2d_references.address	read only where the engine replaced the original: bsp3d_test_pill_recursive, bsp3d_test_sphere_recursive, collision_leaf_test_vector
-collision_bsp	bsp2d.nodes.count	read only where the engine replaced the original or outside it: bsp2d_test_pill_recursive (Replaced), bsp2d_test_sphere_recursive (Replaced), bsp3d_test_pill_recursive (Replaced), bsp3d_test_sphere_recursive (Replaced), collision_bsp2d_enter_node (not the original's), collision_leaf_test_vector (Replaced)
-collision_bsp	bsp2d.nodes.address	read only where the engine replaced the original: bsp2d_test_pill_recursive, bsp2d_test_sphere_recursive, bsp3d_test_pill_recursive, collision_leaf_test_vector
-collision_model	resistance.body_damaged_effect_threshold	owed to object_cause_damage (Partial)
-collision_model	resistance.body_destroyed_threshold	owed to object_cause_damage (Partial)
-collision_model	resistance.shield_damaged_effect_threshold	owed to object_cause_damage (Partial)
-collision_model	pathfinding_box.n	read only where the engine replaced the original: object_render_debug
-collision_model	pathfinding_box.x0	read only where the engine replaced the original: object_render_debug
-collision_model	pathfinding_box.x1	read only where the engine replaced the original: object_render_debug
-collision_model	pathfinding_box.y0	read only where the engine replaced the original: object_render_debug
-collision_model	pathfinding_box.y1	read only where the engine replaced the original: object_render_debug
-collision_model	pathfinding_box.z0	read only where the engine replaced the original: object_render_debug
-collision_model	pathfinding_box.z1	read only where the engine replaced the original: object_render_debug
-collision_surface	breakable_surface_index	owed to breakable_surface_effect (Missing), collision_features_from_edge (Missing), collision_features_from_surface (Missing), collision_features_from_vertex (Missing), structure_test_line2d (Missing), structure_test_ray2d (Missing), surface_is_broken (Missing), surface_is_walkable (Missing)
-continuous_damage_effect_definition	damage.vehicle_passthrough_penalty	owed to object_cause_damage (Partial)
-continuous_damage_effect_definition	damage.active_camouflage_damage	owed to unit_damage_aftermath (Missing)
-continuous_damage_effect_definition	damage.stun	owed to unit_damage_aftermath (Missing)
-continuous_damage_effect_definition	damage.maximum_stun	owed to unit_damage_aftermath (Missing)
+bitmap_data	mipmap_count	game.wasm reads it: _rasterizer_present, bitmap_2d_address, bitmap_2d_compress_to_mipmap, bitmap_2d_get_pixel, bitmap_2d_new, bitmap_2d_uncompress_from_mipmap, bitmap_3d_address, bitmap_3d_compress_to_mipmap, bitmap_3d_new, bitmap_3d_slice_extract, bitmap_3d_slice_insert, bitmap_3d_uncompress_from_mipmap, bitmap_clone, bitmap_cm_compress_to_mipmap, bitmap_cm_uncompress_from_mipmap, bitmap_compress_to_mipmap, bitmap_cube_map_address, bitmap_cube_map_face_extract, bitmap_cube_map_face_insert, bitmap_cube_map_new, bitmap_get_pixel_count, bitmap_mipmap_get_depth, bitmap_mipmap_get_height, bitmap_mipmap_get_pixel_count, bitmap_mipmap_get_pixel_data_size, bitmap_mipmap_get_row_pitch, bitmap_mipmap_get_width, bitmap_uncompress_from_mipmap, bitmap_verify, extract_build_debug_plate, extract_mipmaps_to_bitmap, extract_pixels_from_mipmap, extract_pixels_to_mipmap, rasterizer_bitmap_2d_changed, rasterizer_bitmap_3d_changed, rasterizer_bitmap_cm_changed, rasterizer_bitmap_new, rasterizer_xbox_bitmap_get_max_mipmap_count, rasterizer_xbox_bitmap_swizzle, texture_cache_bitmap_valid
+bitmap_group	bump_height	game.wasm reads it: extract_mipmaps_to_bitmap
+collision_bsp	bsp2d_references.count	game.wasm reads it: bsp3d_test_pill_recursive, bsp3d_test_sphere_recursive, collision_leaf_test_vector
+collision_bsp	bsp2d_references.address	game.wasm reads it: bsp3d_test_pill_recursive, bsp3d_test_sphere_recursive, collision_leaf_test_vector
+collision_bsp	bsp2d.nodes.count	game.wasm reads it: bsp2d_test_pill_recursive, bsp2d_test_sphere_recursive, bsp3d_test_pill_recursive, bsp3d_test_sphere_recursive, collision_leaf_test_vector
+collision_bsp	bsp2d.nodes.address	game.wasm reads it: bsp2d_test_pill_recursive, bsp2d_test_sphere_recursive, bsp3d_test_pill_recursive, collision_leaf_test_vector
+collision_model	resistance.body_damaged_effect_threshold	game.wasm reads it: object_cause_damage
+collision_model	resistance.body_destroyed_threshold	game.wasm reads it: object_cause_damage
+collision_model	resistance.shield_damaged_effect_threshold	game.wasm reads it: object_cause_damage
+collision_model	pathfinding_box.n	game.wasm reads it: object_render_debug
+collision_model	pathfinding_box.x0	game.wasm reads it: object_render_debug
+collision_model	pathfinding_box.x1	game.wasm reads it: object_render_debug
+collision_model	pathfinding_box.y0	game.wasm reads it: object_render_debug
+collision_model	pathfinding_box.y1	game.wasm reads it: object_render_debug
+collision_model	pathfinding_box.z0	game.wasm reads it: object_render_debug
+collision_model	pathfinding_box.z1	game.wasm reads it: object_render_debug
+collision_surface	breakable_surface_index	game.wasm reads it: breakable_surface_effect, collision_bsp_test_vector_recursive, collision_features_from_edge, collision_features_from_surface, collision_features_from_vertex, collision_surface_test_point, collision_surface_test_sphere, item_update, structure_test_line2d, structure_test_ray2d, surface_is_broken, surface_is_walkable
+continuous_damage_effect_definition	damage.vehicle_passthrough_penalty	game.wasm reads it: object_cause_damage
+continuous_damage_effect_definition	damage.active_camouflage_damage	game.wasm reads it: unit_damage_aftermath
+continuous_damage_effect_definition	damage.stun	game.wasm reads it: unit_damage_aftermath
+continuous_damage_effect_definition	damage.maximum_stun	game.wasm reads it: unit_damage_aftermath
 control_definition	object.modifier_shader.group_tag	the original reads it nowhere
-control_definition	object.modifier_shader.index	owed to first_person_weapon_draw (Missing)
+control_definition	object.modifier_shader.index	game.wasm reads it: first_person_weapon_draw, render_object_list
 control_definition	object.render_bounding_radius	the original reads it nowhere
-damage_definition	vehicle_passthrough_penalty	owed to object_cause_damage (Partial)
-damage_definition	active_camouflage_damage	owed to unit_damage_aftermath (Missing)
-damage_definition	stun	owed to unit_damage_aftermath (Missing)
-damage_definition	maximum_stun	owed to unit_damage_aftermath (Missing)
+damage_definition	vehicle_passthrough_penalty	game.wasm reads it: object_cause_damage
+damage_definition	active_camouflage_damage	game.wasm reads it: unit_damage_aftermath
+damage_definition	stun	game.wasm reads it: unit_damage_aftermath
+damage_definition	maximum_stun	game.wasm reads it: unit_damage_aftermath
 damage_effect_definition	cutoff_scale	the original reads it nowhere
-damage_effect_definition	damage.vehicle_passthrough_penalty	owed to object_cause_damage (Partial)
-damage_effect_definition	damage.active_camouflage_damage	owed to unit_damage_aftermath (Missing)
-damage_effect_definition	damage.stun	owed to unit_damage_aftermath (Missing)
-damage_effect_definition	damage.maximum_stun	owed to unit_damage_aftermath (Missing)
+damage_effect_definition	damage.vehicle_passthrough_penalty	game.wasm reads it: object_cause_damage
+damage_effect_definition	damage.active_camouflage_damage	game.wasm reads it: unit_damage_aftermath
+damage_effect_definition	damage.stun	game.wasm reads it: unit_damage_aftermath
+damage_effect_definition	damage.maximum_stun	game.wasm reads it: unit_damage_aftermath
 decal_definition	animation_loop_frame_index	the original reads it nowhere
 decal_definition	animation_speed	the original reads it nowhere
 device_definition	object.modifier_shader.group_tag	the original reads it nowhere
-device_definition	object.modifier_shader.index	owed to first_person_weapon_draw (Missing)
+device_definition	object.modifier_shader.index	game.wasm reads it: first_person_weapon_draw, render_object_list
 device_definition	object.render_bounding_radius	the original reads it nowhere
-effect_particles_definition	camera_mode	owed to effect_generate_particles (Partial)
-encounter_definition	platoons.count	owed to ai_index_platoon_iterator_new (Missing), ai_index_to_string (Missing), encounter_attach_actor (Missing), encounter_control_actors (Missing), encounter_create (Partial), encounter_definition_fit (Missing), encounter_definition_get_platoon_by_name (Missing), encounter_new (Missing), encounter_update_follow (Missing), encounter_update_platoons (Missing)
-encounter_definition	platoons.address	owed to ai_index_to_string (Missing), encounter_control_actors (Missing), encounter_create (Partial), encounter_definition_get_platoon_by_name (Missing), encounter_new (Missing), encounter_update_platoons (Missing)
+effect_particles_definition	camera_mode	game.wasm reads it: effect_generate_particles
+encounter_definition	platoons.count	game.wasm reads it: ai_debug_describe_actor, ai_handle_editing, ai_index_platoon_iterator_new, ai_index_to_string, encounter_attach_actor, encounter_control_actors, encounter_create, encounter_definition_fit, encounter_definition_get_platoon_by_name, encounter_new, encounter_update_follow, encounter_update_platoons
+encounter_definition	platoons.address	game.wasm reads it: ai_debug_describe_actor, ai_index_to_string, encounter_control_actors, encounter_create, encounter_definition_get_platoon_by_name, encounter_new, encounter_update_platoons
 equipment_definition	object.modifier_shader.group_tag	the original reads it nowhere
-equipment_definition	object.modifier_shader.index	owed to first_person_weapon_draw (Missing)
+equipment_definition	object.modifier_shader.index	game.wasm reads it: first_person_weapon_draw, render_object_list
 equipment_definition	object.render_bounding_radius	the original reads it nowhere
-equipment_definition	item.hud_message_index	owed to hud_messaging_update (Partial)
+equipment_definition	item.hud_message_index	game.wasm reads it: hud_messaging_update
 equipment_definition	item.inventory_sort_order	the original reads it nowhere
-equipment_definition	item.detonation_delay_timer_lower_bound	owed to item_detonate (Missing)
-equipment_definition	item.detonation_delay_timer_upper_bound	owed to item_detonate (Missing)
+equipment_definition	item.detonation_delay_timer_lower_bound	game.wasm reads it: item_detonate
+equipment_definition	item.detonation_delay_timer_upper_bound	game.wasm reads it: item_detonate
 equipment_definition	item.detonating_effect.group_tag	the original reads it nowhere
-equipment_definition	item.detonating_effect.index	owed to item_detonate (Missing)
+equipment_definition	item.detonating_effect.index	game.wasm reads it: item_detonate
 font_header	style_fonts	the original reads it nowhere
 game_globals_grenade	mp_spawn_default	the original reads it nowhere
-game_globals_player_information	stun_movement_penalty	owed to biped_update_moving (Partial)
-game_globals_player_information	stun_turning_penalty	owed to biped_jump (Partial), get_local_player_input_blob (Missing)
+game_globals_player_information	stun_movement_penalty	game.wasm reads it: biped_update_moving
+game_globals_player_information	stun_turning_penalty	game.wasm reads it: biped_jump, get_local_player_input_blob
 game_globals_player_information	stun_jumping_penalty	the original reads it nowhere
-glow_definition	percentage_edge_fade	owed to glow_normal_particle_update_color (Missing)
+glow_definition	percentage_edge_fade	game.wasm reads it: glow_normal_particle_update_color
 hud_globals_definition	multiplayer.hud_scale	the original reads it nowhere
 hud_multiplayer_parameters_definition	hud_scale	the original reads it nowhere
 item_definition	object.modifier_shader.group_tag	the original reads it nowhere
-item_definition	object.modifier_shader.index	owed to first_person_weapon_draw (Missing)
+item_definition	object.modifier_shader.index	game.wasm reads it: first_person_weapon_draw, render_object_list
 item_definition	object.render_bounding_radius	the original reads it nowhere
-item_definition	item.hud_message_index	owed to hud_messaging_update (Partial)
+item_definition	item.hud_message_index	game.wasm reads it: hud_messaging_update
 item_definition	item.inventory_sort_order	the original reads it nowhere
-item_definition	item.detonation_delay_timer_lower_bound	owed to item_detonate (Missing)
-item_definition	item.detonation_delay_timer_upper_bound	owed to item_detonate (Missing)
+item_definition	item.detonation_delay_timer_lower_bound	game.wasm reads it: item_detonate
+item_definition	item.detonation_delay_timer_upper_bound	game.wasm reads it: item_detonate
 item_definition	item.detonating_effect.group_tag	the original reads it nowhere
-item_definition	item.detonating_effect.index	owed to item_detonate (Missing)
-lens_flare_reflection	animation_flags	owed to rasterizer_lens_flares_draw (Partial)
+item_definition	item.detonating_effect.index	game.wasm reads it: item_detonate
+lens_flare_reflection	animation_flags	game.wasm reads it: rasterizer_lens_flares_draw
 machine_definition	object.modifier_shader.group_tag	the original reads it nowhere
-machine_definition	object.modifier_shader.index	owed to first_person_weapon_draw (Missing)
+machine_definition	object.modifier_shader.index	game.wasm reads it: first_person_weapon_draw, render_object_list
 machine_definition	object.render_bounding_radius	the original reads it nowhere
-machine_definition	machine.elevator_node_index	owed to biped_update_physics (Partial)
-model_node	node_distance_from_parent	owed to biped_limp_noodle_move_relax_and_constrain_positions (Missing)
-object_change_color_definition	darken_by	owed to object_compute_change_colors (Missing)
+machine_definition	machine.elevator_node_index	game.wasm reads it: biped_update_physics, machine_update
+model_node	node_distance_from_parent	game.wasm reads it: biped_limp_noodle_move_relax_and_constrain_positions
+object_change_color_definition	darken_by	game.wasm reads it: object_compute_change_colors
 object_definition	object.modifier_shader.group_tag	the original reads it nowhere
-object_definition	object.modifier_shader.index	owed to first_person_weapon_draw (Missing)
+object_definition	object.modifier_shader.index	game.wasm reads it: first_person_weapon_draw, render_object_list
 object_definition	object.render_bounding_radius	the original reads it nowhere
 object_function_definition	sawtooth_count	the original reads it nowhere
-particle_definition	minimum_pixels	read only where the engine replaced the original: render_particles
+particle_definition	minimum_pixels	game.wasm reads it: render_particles
 particle_definition	lod_falloff	the original reads it nowhere
-particle_definition	lod_cutoff	read only where the engine replaced the original: render_particles
-particle_definition	shader.primary_map_flags	read only where the engine replaced the original: particle_system_render, rasterizer_transparent_geometry_group_draw
+particle_definition	lod_cutoff	game.wasm reads it: render_particles
+particle_definition	shader.primary_map_flags	game.wasm reads it: particle_system_render, rasterizer_transparent_geometry_group_draw
 particle_system_definition	physics_flags	the original reads it nowhere
-particle_system_type	complex_sprite_render_mode	read only where the engine replaced the original: particle_system_render
+particle_system_type	complex_sprite_render_mode	game.wasm reads it: particle_system_render
 particle_system_type	physics_flags	the original reads it nowhere
-particle_system_type_particle_state	shader.primary_map_flags	read only where the engine replaced the original: particle_system_render, rasterizer_transparent_geometry_group_draw
-point_light_definition	lens_flare_radius	read only where the engine replaced the original: light_compute_bounding_sphere, render_debug_light
-point_light_definition	runtime_sine_cutoff_angle	read only where the engine replaced the original: light_compute_bounding_sphere
+particle_system_type_particle_state	shader.primary_map_flags	game.wasm reads it: particle_system_render, rasterizer_transparent_geometry_group_draw
+point_light_definition	lens_flare_radius	game.wasm reads it: light_compute_bounding_sphere, render_debug_light
+point_light_definition	runtime_sine_cutoff_angle	game.wasm reads it: light_compute_bounding_sphere
 powered_mass_point_definition	antigrav_offset	the original reads it nowhere
 projectile_definition	object.modifier_shader.group_tag	the original reads it nowhere
-projectile_definition	object.modifier_shader.index	owed to first_person_weapon_draw (Missing)
+projectile_definition	object.modifier_shader.index	game.wasm reads it: first_person_weapon_draw, render_object_list
 projectile_definition	object.render_bounding_radius	the original reads it nowhere
 projectile_definition	projectile.super_detonation.group_tag	the original reads it nowhere
-projectile_definition	projectile.super_detonation.index	owed to projectile_detonate (Partial)
-projectile_definition	projectile.danger_radius	owed to actor_perception_refresh_test_object (Missing)
-projectile_definition	projectile.guided_angular_velocity	owed to projectile_update (Partial)
+projectile_definition	projectile.super_detonation.index	game.wasm reads it: projectile_detonate
+projectile_definition	projectile.danger_radius	game.wasm reads it: actor_perception_refresh_test_object
+projectile_definition	projectile.guided_angular_velocity	game.wasm reads it: projectile_update
 projectile_definition	projectile.detonation_started.group_tag	the original reads it nowhere
-projectile_definition	projectile.detonation_started.index	owed to projectile_collision (Partial)
+projectile_definition	projectile.detonation_started.index	game.wasm reads it: projectile_collision
 projectile_material_response_definition	potential_effect.group_tag	the original reads it nowhere
-projectile_material_response_definition	potential_effect.index	owed to projectile_collision (Partial)
-projectile_material_response_definition	scale_effects_by	owed to projectile_collision (Partial)
-scenario	starting_profiles.count	owed to player_add_equipment (Missing)
-scenario	starting_profiles.address	owed to player_add_equipment (Missing)
+projectile_material_response_definition	potential_effect.index	game.wasm reads it: projectile_collision
+projectile_material_response_definition	scale_effects_by	game.wasm reads it: projectile_collision
+scenario	starting_profiles.count	game.wasm reads it: player_add_equipment
+scenario	starting_profiles.address	game.wasm reads it: player_add_equipment
 scenario	cutscene_chapter_titles.count	the original reads it nowhere
 scenario	cutscene_chapter_titles.address	the original reads it nowhere
-scenario_bsp_switch_trigger_volume	cutscene_flag_index	owed to players_reconnect_to_structure_bsp (Missing)
-shader_effect_definition	primary_map_flags	read only where the engine replaced the original: particle_system_render, rasterizer_transparent_geometry_group_draw
-shader_environment_definition	environment.diffuse.flags	read only where the engine replaced the original: _rasterizer_environment_diffuse_texture_draw
-shader_environment_definition	environment.reflection.flags	read only where the engine replaced the original: _rasterizer_environment_reflection_mirror_draw
-shader_model_definition	model.detail_map_v_scale	read only where the engine replaced the original: _rasterizer_model_draw, rasterizer_active_camouflage_draw
-shader_transparent_chicago_definition	chicago.numeric_counter_limit	read only where the engine replaced the original: rasterizer_transparent_geometry_group_draw
-shader_transparent_chicago_definition	chicago.type	read only where the engine replaced the original: rasterizer_transparent_geometry_group_draw
-shader_transparent_chicago_definition	chicago.framebuffer_fade_source	read only where the engine replaced the original: rasterizer_transparent_geometry_group_draw
+scenario_bsp_switch_trigger_volume	cutscene_flag_index	game.wasm reads it: players_reconnect_to_structure_bsp
+shader_effect_definition	primary_map_flags	game.wasm reads it: particle_system_render, rasterizer_transparent_geometry_group_draw
+shader_environment_definition	environment.diffuse.flags	game.wasm reads it: _rasterizer_environment_diffuse_texture_draw
+shader_environment_definition	environment.reflection.flags	game.wasm reads it: _rasterizer_environment_reflection_mirror_draw
+shader_model_definition	model.detail_map_v_scale	game.wasm reads it: _rasterizer_model_draw, rasterizer_active_camouflage_draw
+shader_transparent_chicago_definition	chicago.numeric_counter_limit	game.wasm reads it: rasterizer_transparent_geometry_group_draw
+shader_transparent_chicago_definition	chicago.type	game.wasm reads it: rasterizer_transparent_geometry_group_draw
+shader_transparent_chicago_definition	chicago.framebuffer_fade_source	game.wasm reads it: rasterizer_transparent_geometry_group_draw
 shader_transparent_chicago_map	mipmap_bias	the original reads it nowhere
-shader_transparent_generic_definition	generic.type	read only where the engine replaced the original: rasterizer_transparent_geometry_group_draw
+shader_transparent_generic_definition	generic.type	game.wasm reads it: rasterizer_transparent_geometry_group_draw
 shader_transparent_generic_stage	constant_color0.alpha	the original reads it nowhere
-shader_transparent_generic_stage	constant_color0.n	read only where the engine replaced the original: rasterizer_transparent_geometry_group_draw
+shader_transparent_generic_stage	constant_color0.n	game.wasm reads it: rasterizer_transparent_geometry_group_draw
 shader_transparent_generic_stage	constant_color0.rgb.n	the original reads it nowhere
 shader_transparent_generic_stage	constant_color0.rgb.red	the original reads it nowhere
 shader_transparent_generic_stage	constant_color0.rgb.green	the original reads it nowhere
 shader_transparent_generic_stage	constant_color0.rgb.blue	the original reads it nowhere
 shader_transparent_generic_stage	constant_color1.alpha	the original reads it nowhere
-shader_transparent_generic_stage	constant_color1.n	read only where the engine replaced the original: rasterizer_transparent_geometry_group_draw
+shader_transparent_generic_stage	constant_color1.n	game.wasm reads it: rasterizer_transparent_geometry_group_draw
 shader_transparent_generic_stage	constant_color1.rgb.n	the original reads it nowhere
 shader_transparent_generic_stage	constant_color1.rgb.red	the original reads it nowhere
 shader_transparent_generic_stage	constant_color1.rgb.green	the original reads it nowhere
 shader_transparent_generic_stage	constant_color1.rgb.blue	the original reads it nowhere
-shader_transparent_meter_definition	background_color.n	read only where the engine replaced the original: rasterizer_transparent_geometry_group_draw
-shader_transparent_meter_definition	background_color.red	read only where the engine replaced the original: rasterizer_transparent_geometry_group_draw
-shader_transparent_meter_definition	background_color.green	read only where the engine replaced the original: rasterizer_transparent_geometry_group_draw
-shader_transparent_meter_definition	background_color.blue	read only where the engine replaced the original: rasterizer_transparent_geometry_group_draw
-shader_transparent_meter_definition	value_source	read only where the engine replaced the original: rasterizer_transparent_geometry_group_draw
-shader_transparent_plasma_definition	intensity_exponent_source	read only where the engine replaced the original: _rasterizer_model_draw, rasterizer_plasma_energy_draw
-shader_transparent_plasma_definition	intensity_exponent	read only where the engine replaced the original: rasterizer_plasma_energy_draw
-shader_transparent_plasma_definition	offset_amount	read only where the engine replaced the original: rasterizer_plasma_energy_draw
-shader_transparent_plasma_definition	color_source	read only where the engine replaced the original: rasterizer_plasma_energy_draw
-shader_transparent_water_definition	ripple_animation_angle	read only where the engine replaced the original: rasterizer_water_draw
-shader_transparent_water_definition	ripple_animation_velocity	read only where the engine replaced the original: rasterizer_water_draw
-shader_transparent_water_definition	ripple_scale	read only where the engine replaced the original: rasterizer_water_draw
-sound_definition	inner_cone_angle	owed to update_channel_for_impulse_sound (Partial), update_channel_for_looping_sound (Partial)
-sound_definition	outer_cone_angle	owed to update_channel_for_impulse_sound (Partial), update_channel_for_looping_sound (Partial)
-sound_definition	outer_cone_gain	owed to update_channel_for_impulse_sound (Partial), update_channel_for_looping_sound (Partial)
-sound_definition	maximum_bend_per_second	owed to update_channel_for_looping_sound (Partial)
-sound_permutation	mouth_data.size	owed to sound_permutation_get_mouth_aperture (Missing), sound_permutation_get_real_mouth_aperture (Missing)
-sound_permutation	mouth_data.address	owed to sound_permutation_get_mouth_aperture (Missing)
-sound_pitch_range	natural_pitch	owed to update_channel_for_looping_sound (Partial)
-squad_definition	initial_state	owed to actor_place (Partial), ai_scripting_attach_unit (Missing)
-squad_definition	default_state	owed to actor_place (Partial), ai_scripting_attach_unit (Missing)
-structure_leaf	cluster_index	owed to players_compute_combined_pvs (Missing)
-structure_material	vertices.count	read only where the engine replaced the original: build_structure_lens_flares, structure_render_pass
+shader_transparent_meter_definition	background_color.n	game.wasm reads it: rasterizer_transparent_geometry_group_draw
+shader_transparent_meter_definition	background_color.red	game.wasm reads it: rasterizer_transparent_geometry_group_draw
+shader_transparent_meter_definition	background_color.green	game.wasm reads it: rasterizer_transparent_geometry_group_draw
+shader_transparent_meter_definition	background_color.blue	game.wasm reads it: rasterizer_transparent_geometry_group_draw
+shader_transparent_meter_definition	value_source	game.wasm reads it: rasterizer_transparent_geometry_group_draw
+shader_transparent_plasma_definition	intensity_exponent_source	game.wasm reads it: _rasterizer_model_draw, rasterizer_plasma_energy_draw
+shader_transparent_plasma_definition	intensity_exponent	game.wasm reads it: rasterizer_plasma_energy_draw
+shader_transparent_plasma_definition	offset_amount	game.wasm reads it: rasterizer_plasma_energy_draw
+shader_transparent_plasma_definition	color_source	game.wasm reads it: rasterizer_plasma_energy_draw
+shader_transparent_water_definition	ripple_animation_angle	game.wasm reads it: rasterizer_water_draw
+shader_transparent_water_definition	ripple_animation_velocity	game.wasm reads it: rasterizer_water_draw
+shader_transparent_water_definition	ripple_scale	game.wasm reads it: rasterizer_water_draw
+sound_definition	inner_cone_angle	game.wasm reads it: update_channel_for_impulse_sound, update_channel_for_looping_sound
+sound_definition	outer_cone_angle	game.wasm reads it: update_channel_for_impulse_sound, update_channel_for_looping_sound
+sound_definition	outer_cone_gain	game.wasm reads it: update_channel_for_impulse_sound, update_channel_for_looping_sound
+sound_definition	maximum_bend_per_second	game.wasm reads it: update_channel_for_looping_sound
+sound_permutation	mouth_data.size	game.wasm reads it: sound_permutation_get_mouth_aperture, sound_permutation_get_real_mouth_aperture
+sound_permutation	mouth_data.address	game.wasm reads it: sound_permutation_get_mouth_aperture
+sound_pitch_range	natural_pitch	game.wasm reads it: update_channel_for_looping_sound
+squad_definition	initial_state	game.wasm reads it: actor_place, ai_scripting_attach_unit
+squad_definition	default_state	game.wasm reads it: actor_place, ai_scripting_attach_unit
+structure_leaf	cluster_index	game.wasm reads it: players_compute_combined_pvs, structure_visibility_build_surfaces_traverse_leaf, structure_visibility_find_camera
+structure_material	vertices.count	game.wasm reads it: build_structure_lens_flares, structure_render_pass
 structure_material	lightmap_vertices.count	the original reads it nowhere
 structure_material	uncompressed_vertex_data.size	the original reads it nowhere
-structure_material	uncompressed_vertex_data.address	read only where the engine replaced the original: build_structure_lens_flares
-structure_material	compressed_vertex_data.size	read only where the engine replaced the original: structure_visibility_traverse_surface_lists
-structure_material	compressed_vertex_data.address	read only where the engine replaced the original: structure_visibility_traverse_surface_lists
+structure_material	uncompressed_vertex_data.address	game.wasm reads it: build_structure_lens_flares
+structure_material	compressed_vertex_data.size	game.wasm reads it: structure_visibility_traverse_surface_lists
+structure_material	compressed_vertex_data.address	game.wasm reads it: structure_visibility_traverse_surface_lists
 unit_camera	submerged_marker_name	the original reads it nowhere
-unit_camera	pitch_autolevel	owed to player_control_modify_desired_angles (Partial)
-unit_camera	pitch_minimum	owed to player_control_modify_desired_angles (Partial)
-unit_camera	pitch_maximum	owed to player_control_modify_desired_angles (Partial)
+unit_camera	pitch_autolevel	game.wasm reads it: player_control_modify_desired_angles
+unit_camera	pitch_minimum	game.wasm reads it: player_control_modify_desired_angles
+unit_camera	pitch_maximum	game.wasm reads it: player_control_modify_desired_angles
 unit_definition	object.modifier_shader.group_tag	the original reads it nowhere
-unit_definition	object.modifier_shader.index	owed to first_person_weapon_draw (Missing)
+unit_definition	object.modifier_shader.index	game.wasm reads it: first_person_weapon_draw, render_object_list
 unit_definition	object.render_bounding_radius	the original reads it nowhere
 unit_definition	unit.camera.submerged_marker_name	the original reads it nowhere
-unit_definition	unit.camera.pitch_autolevel	owed to player_control_modify_desired_angles (Partial)
-unit_definition	unit.camera.pitch_minimum	owed to player_control_modify_desired_angles (Partial)
-unit_definition	unit.camera.pitch_maximum	owed to player_control_modify_desired_angles (Partial)
-unit_seat	yaw_rate	owed to get_local_player_input_blob (Missing)
-unit_seat	pitch_rate	owed to get_local_player_input_blob (Missing)
+unit_definition	unit.camera.pitch_autolevel	game.wasm reads it: player_control_modify_desired_angles
+unit_definition	unit.camera.pitch_minimum	game.wasm reads it: player_control_modify_desired_angles
+unit_definition	unit.camera.pitch_maximum	game.wasm reads it: player_control_modify_desired_angles
+unit_seat	yaw_rate	game.wasm reads it: get_local_player_input_blob
+unit_seat	pitch_rate	game.wasm reads it: get_local_player_input_blob
 unit_seat	camera.submerged_marker_name	the original reads it nowhere
-unit_seat	camera.pitch_autolevel	owed to player_control_modify_desired_angles (Partial)
-unit_seat	camera.pitch_minimum	owed to player_control_modify_desired_angles (Partial)
-unit_seat	camera.pitch_maximum	owed to player_control_modify_desired_angles (Partial)
-unit_seat	yaw_minimum	owed to player_control_modify_desired_angles (Partial)
-unit_seat	yaw_maximum	owed to player_control_modify_desired_angles (Partial)
+unit_seat	camera.pitch_autolevel	game.wasm reads it: player_control_modify_desired_angles
+unit_seat	camera.pitch_minimum	game.wasm reads it: player_control_modify_desired_angles
+unit_seat	camera.pitch_maximum	game.wasm reads it: player_control_modify_desired_angles
+unit_seat	yaw_minimum	game.wasm reads it: player_control_modify_desired_angles
+unit_seat	yaw_maximum	game.wasm reads it: player_control_modify_desired_angles
 unit_seat	built_in_actor_reference.group_tag	the original reads it nowhere
-unit_seat	built_in_actor_reference.index	owed to ai_place_pending_mounted_weapons (Missing), unit_new (Partial)
+unit_seat	built_in_actor_reference.index	game.wasm reads it: ai_place_pending_mounted_weapons, unit_new
 vehicle_definition	unit.object.modifier_shader.group_tag	the original reads it nowhere
-vehicle_definition	unit.object.modifier_shader.index	owed to first_person_weapon_draw (Missing)
+vehicle_definition	unit.object.modifier_shader.index	game.wasm reads it: first_person_weapon_draw, render_object_list
 vehicle_definition	unit.object.render_bounding_radius	the original reads it nowhere
 vehicle_definition	unit.unit.camera.submerged_marker_name	the original reads it nowhere
-vehicle_definition	unit.unit.camera.pitch_autolevel	owed to player_control_modify_desired_angles (Partial)
-vehicle_definition	unit.unit.camera.pitch_minimum	owed to player_control_modify_desired_angles (Partial)
-vehicle_definition	unit.unit.camera.pitch_maximum	owed to player_control_modify_desired_angles (Partial)
-vehicle_definition	unknown318	owed to vehicle_update (Partial)
+vehicle_definition	unit.unit.camera.pitch_autolevel	game.wasm reads it: player_control_modify_desired_angles
+vehicle_definition	unit.unit.camera.pitch_minimum	game.wasm reads it: player_control_modify_desired_angles
+vehicle_definition	unit.unit.camera.pitch_maximum	game.wasm reads it: player_control_modify_desired_angles
+vehicle_definition	unknown318	game.wasm reads it: vehicle_update
 vehicle_definition	unused348	the original reads it nowhere
 vehicle_definition	suspension_sound.group_tag	the original reads it nowhere
-vehicle_definition	suspension_sound.index	owed to update_suspension (Partial)
+vehicle_definition	suspension_sound.index	game.wasm reads it: update_suspension
 vehicle_definition	crash_sound.group_tag	the original reads it nowhere
-vehicle_definition	crash_sound.index	owed to create_crashing_effects (Missing)
+vehicle_definition	crash_sound.index	game.wasm reads it: create_crashing_effects
 virtual_keyboard_definition	special_key_labels_string_list_tag.group_tag	the original reads it nowhere
-virtual_keyboard_definition	special_key_labels_string_list_tag.index	read only where the engine replaced the original: virtual_keyboard_render_internal
+virtual_keyboard_definition	special_key_labels_string_list_tag.index	game.wasm reads it: virtual_keyboard_render_internal
 weapon_definition	object.modifier_shader.group_tag	the original reads it nowhere
-weapon_definition	object.modifier_shader.index	owed to first_person_weapon_draw (Missing)
+weapon_definition	object.modifier_shader.index	game.wasm reads it: first_person_weapon_draw, render_object_list
 weapon_definition	object.render_bounding_radius	the original reads it nowhere
-weapon_definition	item.hud_message_index	owed to hud_messaging_update (Partial)
+weapon_definition	item.hud_message_index	game.wasm reads it: hud_messaging_update
 weapon_definition	item.inventory_sort_order	the original reads it nowhere
-weapon_definition	item.detonation_delay_timer_lower_bound	owed to item_detonate (Missing)
-weapon_definition	item.detonation_delay_timer_upper_bound	owed to item_detonate (Missing)
+weapon_definition	item.detonation_delay_timer_lower_bound	game.wasm reads it: item_detonate
+weapon_definition	item.detonation_delay_timer_upper_bound	game.wasm reads it: item_detonate
 weapon_definition	item.detonating_effect.group_tag	the original reads it nowhere
-weapon_definition	item.detonating_effect.index	owed to item_detonate (Missing)
-weapon_definition	weapon.maximum_alternate_shots_loaded	owed to weapon_trigger_fire (Partial), weapon_update (Partial)
-weapon_definition	weapon.heat_detonation_threshold	owed to weapon_trigger_fire (Partial)
+weapon_definition	item.detonating_effect.index	game.wasm reads it: item_detonate
+weapon_definition	weapon.maximum_alternate_shots_loaded	game.wasm reads it: weapon_trigger_fire, weapon_update
+weapon_definition	weapon.heat_detonation_threshold	game.wasm reads it: weapon_trigger_fire
 weapon_definition	weapon.melee_attack_response.group_tag	the original reads it nowhere
-weapon_definition	weapon.melee_attack_response.index	owed to unit_cause_player_melee_damage (Missing)
-weapon_definition	weapon.zoom_level_count	owed to unit_update (Partial), weapon_get_zoom_magnification (Missing), weapon_rotate_zoom_level (Missing)
-weapon_definition	weapon.zoom_magnification_minimum	owed to weapon_get_zoom_magnification (Missing)
-weapon_definition	weapon.zoom_magnification_maximum	owed to weapon_get_zoom_magnification (Missing)
-weapon_definition	weapon.aim_assist_parameters.autoaim_angle	owed to temporary_hud_draw (Missing), unit_get_aim_assist_parameters (Missing)
-weapon_definition	weapon.aim_assist_parameters.autoaim_distance	owed to unit_get_aim_assist_parameters (Missing)
-weapon_definition	weapon.aim_assist_parameters.magnetism_angle	owed to unit_get_aim_assist_parameters (Missing)
-weapon_definition	weapon.aim_assist_parameters.magnetism_distance	owed to unit_get_aim_assist_parameters (Missing)
-weapon_definition	weapon.aim_assist_parameters.deviation_angle	owed to unit_get_aim_assist_parameters (Missing)
-weapon_definition	weapon.movement_penalty_mode	owed to weapon_compute_movement_penalty (Missing)
-weapon_definition	weapon.forward_movement_penalty	owed to weapon_compute_movement_penalty (Missing)
-weapon_definition	weapon.sideways_movement_penalty	owed to weapon_compute_movement_penalty (Missing)
-weapon_trigger_definition	blurred_rate_of_fire	owed to weapon_update (Partial)
-weapon_trigger_definition	rounds_between_tracers	owed to trigger_create_projectiles (Partial)
+weapon_definition	weapon.melee_attack_response.index	game.wasm reads it: unit_cause_player_melee_damage
+weapon_definition	weapon.zoom_level_count	game.wasm reads it: unit_update, weapon_get_zoom_magnification, weapon_rotate_zoom_level
+weapon_definition	weapon.zoom_magnification_minimum	game.wasm reads it: weapon_get_zoom_magnification
+weapon_definition	weapon.zoom_magnification_maximum	game.wasm reads it: weapon_get_zoom_magnification
+weapon_definition	weapon.aim_assist_parameters.autoaim_angle	game.wasm reads it: temporary_hud_draw, unit_get_aim_assist_parameters
+weapon_definition	weapon.aim_assist_parameters.autoaim_distance	game.wasm reads it: unit_get_aim_assist_parameters
+weapon_definition	weapon.aim_assist_parameters.magnetism_angle	game.wasm reads it: unit_get_aim_assist_parameters
+weapon_definition	weapon.aim_assist_parameters.magnetism_distance	game.wasm reads it: unit_get_aim_assist_parameters
+weapon_definition	weapon.aim_assist_parameters.deviation_angle	game.wasm reads it: unit_get_aim_assist_parameters
+weapon_definition	weapon.movement_penalty_mode	game.wasm reads it: weapon_compute_movement_penalty
+weapon_definition	weapon.forward_movement_penalty	game.wasm reads it: weapon_compute_movement_penalty
+weapon_definition	weapon.sideways_movement_penalty	game.wasm reads it: weapon_compute_movement_penalty
+weapon_trigger_definition	blurred_rate_of_fire	game.wasm reads it: weapon_update
+weapon_trigger_definition	rounds_between_tracers	game.wasm reads it: trigger_create_projectiles
 weapon_trigger_definition	initial_error	the original reads it nowhere
 weapon_trigger_definition	final_error	the original reads it nowhere
-weapon_trigger_definition	overcharged_action	owed to weapon_trigger_overcharged (Missing)
-weapon_trigger_definition	charged_illumination	owed to weapon_export_function_values (Partial)
-weapon_trigger_definition	projectile_error_inner_cone_angle	owed to trigger_create_projectiles (Partial)
-weapon_trigger_definition	overloading_time	owed to weapon_trigger_overload (Missing)
-weather_particle_type_definition	runtime_one_over_sprite_width	read only where the engine replaced the original: weather_particle_system_render
-weather_particle_type_definition	shader.primary_map_flags	read only where the engine replaced the original: particle_system_render, rasterizer_transparent_geometry_group_draw
+weapon_trigger_definition	overcharged_action	game.wasm reads it: weapon_trigger_overcharged
+weapon_trigger_definition	charged_illumination	game.wasm reads it: weapon_export_function_values
+weapon_trigger_definition	projectile_error_inner_cone_angle	game.wasm reads it: trigger_create_projectiles
+weapon_trigger_definition	overloading_time	game.wasm reads it: weapon_trigger_begin_firing, weapon_trigger_overload
+weather_particle_type_definition	runtime_one_over_sprite_width	game.wasm reads it: weather_particle_system_render
+weather_particle_type_definition	shader.primary_map_flags	game.wasm reads it: particle_system_render, rasterizer_transparent_geometry_group_draw

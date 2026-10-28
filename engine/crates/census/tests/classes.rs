@@ -43,6 +43,19 @@ void unit_orphan(void)
 }
 ";
 
+const TEXT: &str = "/*
+RASTERIZER_TEXT.C
+
+symbols in this file:
+00021000 0080:
+\t_rasterizer_text_draw (0000)
+*/
+
+void rasterizer_text_draw(void)
+{
+}
+";
+
 const RASTERIZER: &str = "/*
 RASTERIZER.C
 
@@ -601,5 +614,113 @@ class = "matched"
     );
     // (a directory is a whole step of the path, not a prefix of a name)
     assert_eq!(class("x", "sound_extra/x.c"), None);
+    Ok(())
+}
+
+/// port/linux/port.json for the fake tree: every C file under `source`
+/// compiled into game.wasm, but the rasterizer's.
+const PORT: &str = r#"{
+  "game": {
+    "root": "source",
+    "exclude": ["source/rasterizer/"]
+  }
+}
+"#;
+
+#[test]
+fn functions_compiled_into_the_game_are_compiled() -> Result<(), Failure> {
+    // (no entry and no rule: what game.wasm compiles is Compiled, what a
+    // trace compiles stays Ported, and an excluded file takes its rule)
+    let manifest = "
+[[rule]]
+directory = \"rasterizer\"
+class = \"replaced\"
+because = \"renderer\"
+stands_in = \"app/Sources/Render/Frame.swift\"
+";
+    let tree = tree("compiled", manifest).with("port/linux/port.json", PORT);
+    let census = Census::read(tree.root())?;
+    let class = |name: &str| census.function(name).and_then(|f| f.class);
+    assert_eq!(class("unit_orphan"), Some(Class::Compiled));
+    assert_eq!(class("main_loop"), Some(Class::Compiled));
+    assert_eq!(class("unit_kill"), Some(Class::Ported));
+    assert_eq!(class("rasterizer_frame"), Some(Class::Replaced));
+    let found = census.problems();
+    assert!(found.is_empty(), "{found:#?}");
+    Ok(())
+}
+
+#[test]
+fn compiled_for_a_file_the_game_leaves_out_is_a_problem() -> Result<(), Failure> {
+    let manifest = "
+[function.rasterizer_frame]
+class = \"compiled\"
+";
+    let tree = tree("compiled-excluded", manifest).with("port/linux/port.json", PORT);
+    let found = Census::read(tree.root())?.problems();
+    assert!(
+        has(
+            &found,
+            "rasterizer_frame: rasterizer/rasterizer.c is not compiled into game.wasm"
+        ),
+        "{found:#?}"
+    );
+    Ok(())
+}
+
+#[test]
+fn what_stands_in_for_a_file_the_game_leaves_out_may_be_the_ports() -> Result<(), Failure> {
+    // (game.wasm's own stand-in is a C file of the port, outside engine/;
+    // one that is not there is still a problem)
+    let manifest = "
+[[rule]]
+file = \"rasterizer/rasterizer.c\"
+class = \"replaced\"
+because = \"renderer\"
+stands_in = \"port/linux/game/rasterizer.c\"
+[[rule]]
+directory = \"rasterizer\"
+class = \"replaced\"
+because = \"renderer\"
+stands_in = \"source/rasterizer/gone.c\"
+";
+    let tree = tree("compiled-port", manifest)
+        .with("port/linux/port.json", PORT)
+        .with("port/linux/game/rasterizer.c", "")
+        .with("source/rasterizer/rasterizer_text.c", TEXT);
+    let found = Census::read(tree.root())?.problems();
+    assert!(
+        !found
+            .iter()
+            .any(|p| p.contains("port/linux/game/rasterizer.c")),
+        "{found:#?}"
+    );
+    assert!(
+        found
+            .iter()
+            .any(|p| p.contains("source/rasterizer/gone.c does not exist")),
+        "{found:#?}"
+    );
+    Ok(())
+}
+
+#[test]
+fn a_traced_function_game_wasm_compiles_reads_fields_as_compiled() -> Result<(), Failure> {
+    // (a field a Ported function reads is read in game.wasm, which runs the
+    // original's function as the trace checked it)
+    let tree = tree("compiled-reader", "").with("port/linux/port.json", PORT);
+    let census = Census::read(tree.root())?;
+    assert_eq!(
+        census.function("unit_kill").and_then(|f| f.class),
+        Some(Class::Ported)
+    );
+    assert_eq!(census.reader_class("unit_kill"), Some(Class::Compiled));
+    assert_eq!(census.reader_class("unit_orphan"), Some(Class::Compiled));
+    // (what game.wasm leaves out keeps its own class)
+    assert_eq!(
+        census.reader_class("rasterizer_frame"),
+        census.function("rasterizer_frame").and_then(|f| f.class)
+    );
+    assert_eq!(census.reader_class("not_a_function"), None);
     Ok(())
 }

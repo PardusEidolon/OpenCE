@@ -1,5 +1,6 @@
-//! The real tree's reasons: what the census classes as done by a library,
-//! and as the editor and tools.
+//! The real tree's reasons: game.wasm compiles the original's own code, so
+//! its systems, its console and its debug functions are Compiled; what it
+//! leaves out is Replaced, and nothing is Missing.
 
 mod common;
 
@@ -8,33 +9,37 @@ use opence_census::Census;
 
 type Failure = Box<dyn std::error::Error>;
 
-/// The functions of `files` that are neither Replaced nor in `kept`.
-fn not_replaced(census: &Census, files: &[&str], kept: &[&str]) -> Vec<String> {
+/// The functions of `files` that `keep` does not accept.
+fn left(census: &Census, files: &[&str], keep: impl Fn(Option<Class>) -> bool) -> Vec<String> {
     census
         .functions
         .iter()
         .filter(|f| files.contains(&f.file.as_str()))
-        .filter(|f| f.class != Some(Class::Replaced) && !kept.contains(&f.name.as_str()))
+        .filter(|f| !keep(f.class))
         .map(|f| format!("{} ({}): {:?}", f.name, f.file, f.class))
         .collect()
 }
 
+/// The original's own code, in game.wasm: compiled, or traced as well.
+fn in_the_game(class: Option<Class>) -> bool {
+    matches!(class, Some(Class::Compiled | Class::Ported))
+}
+
 #[test]
-fn the_collision_bsp_walk_is_done_by_jolt() -> Result<(), Failure> {
+fn the_collision_bsp_walk_is_the_originals() -> Result<(), Failure> {
     let Some(root) = common::repository() else {
         eprintln!("skipped: no source/");
         return Ok(());
     };
     let census = Census::read(&root)?;
-    let left = not_replaced(
+    let left = left(
         &census,
         &[
             "physics/collision_bsp.c",
             "physics/bsp2d.c",
             "physics/bsp3d.c",
         ],
-        // (the point test is the engine's own, matched to the original)
-        &["bsp3d_test_point"],
+        in_the_game,
     );
     assert!(left.is_empty(), "{left:#?}");
     Ok(())
@@ -76,65 +81,49 @@ const DEBUG: &[&str] = &[
 ];
 
 #[test]
-fn the_console_and_the_debug_functions_are_the_tools() -> Result<(), Failure> {
+fn the_console_and_the_debug_functions_are_the_originals() -> Result<(), Failure> {
     let Some(root) = common::repository() else {
         eprintln!("skipped: no source/");
         return Ok(());
     };
     let census = Census::read(&root)?;
-    let mut left = not_replaced(
+    let mut left = left(
         &census,
         &["main/console.c", "interface/terminal.c", "game/cheats.c"],
-        &[],
+        in_the_game,
     );
     left.extend(
         census
             .functions
             .iter()
-            .filter(|f| DEBUG.contains(&f.name.as_str()) && f.class != Some(Class::Replaced))
+            .filter(|f| DEBUG.contains(&f.name.as_str()) && !in_the_game(f.class))
             .map(|f| format!("{}: {:?}", f.name, f.class)),
     );
     assert!(left.is_empty(), "{left:#?}");
     Ok(())
 }
 
-/// The tracks that own what is left Missing, as a note names them.
-const OWNERS: &[&str] = &[
-    "the AI track",
-    "the units track",
-    "the game loop track",
-    "the animation and world track",
-    "the interface track",
-    "the cameras track",
-    "the scripts and sounds track",
-    "the gate track",
-];
-
 #[test]
-fn every_unreached_missing_function_names_the_track_that_owns_it() -> Result<(), Failure> {
+fn what_the_game_leaves_out_is_replaced_and_nothing_is_missing() -> Result<(), Failure> {
     let Some(root) = common::repository() else {
         eprintln!("skipped: no source/");
         return Ok(());
     };
     let census = Census::read(&root)?;
-    let unowned: Vec<String> = census
+    let wrong: Vec<String> = census
         .functions
         .iter()
-        .filter(|f| f.class == Some(Class::Missing) && !f.reached)
         .filter(|f| {
-            census
-                .manifest
-                .function
-                .get(&f.name)
-                .and_then(|entry| entry.note.as_deref())
-                .is_none_or(|note| !OWNERS.iter().any(|owner| note.contains(owner)))
+            let compiled = census.game.compiles(&f.file);
+            match f.class {
+                Some(Class::Compiled) => !compiled,
+                Some(Class::Ported) => false,
+                Some(Class::Replaced) => compiled,
+                _ => true,
+            }
         })
-        .map(|f| format!("{} ({})", f.name, f.file))
+        .map(|f| format!("{} ({}): {:?}", f.name, f.file, f.class))
         .collect();
-    assert!(
-        unowned.is_empty(),
-        "{} unowned: {unowned:#?}",
-        unowned.len()
-    );
+    assert!(wrong.is_empty(), "{} wrong: {wrong:#?}", wrong.len());
     Ok(())
 }
