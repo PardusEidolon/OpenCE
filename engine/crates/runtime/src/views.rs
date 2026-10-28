@@ -23,6 +23,15 @@ const TAG_INSTANCE_SIZE: u32 = 0x20;
 const TAG_NAME_LENGTH: u32 = 256;
 /// `NONE`, as an index
 const NONE: u32 = u32::MAX;
+/// how much [`View::find_data_array`] reads at a time
+const FIND_CHUNK: u32 = 1 << 20;
+
+/// Where game.wasm's game state starts, `HALO_PORT_GAME_STATE_BASE_ADDRESS`
+/// (port/linux/include/halo_port_capacity.h): its data arrays (objects,
+/// particles, effects and the rest) are in it.
+pub const GAME_STATE_ADDRESS: u32 = 0x81A0_0000;
+/// The game state's size, `HALO_PORT_GAME_STATE_SIZE`.
+pub const GAME_STATE_SIZE: u32 = 0x13C_0000 + 0x4_0000;
 
 /// A data array's header, as `data_verify` accepts it.
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -178,6 +187,48 @@ impl View<'_> {
         })
     }
 
+    /// The first data array named `name` whose header starts in the
+    /// `length` bytes from `start` (read only as far as the memory's end),
+    /// with its address: the game keeps no list of its arrays, so a plugin
+    /// finds one by its header's name, as `data_new` wrote it. Its arrays of
+    /// the game state are in [`GAME_STATE_ADDRESS`]'s [`GAME_STATE_SIZE`].
+    #[must_use]
+    pub fn find_data_array(&self, start: u32, length: u32, name: &str) -> Option<(u32, DataArray)> {
+        let mut needle = name.as_bytes().to_vec();
+        needle.push(0);
+        let needle_length = u32::try_from(needle.len()).ok()?;
+        if needle_length > DATA_NAME_LENGTH {
+            return None;
+        }
+        let end = u64::from(start)
+            .saturating_add(u64::from(length))
+            .min(u64::try_from(self.len()).ok()?);
+        let mut at = u64::from(start);
+        while at < end {
+            // (each chunk overlaps the next by the needle, less a byte)
+            let chunk_end = at.saturating_add(u64::from(FIND_CHUNK)).min(end);
+            let read = chunk_end + u64::from(needle_length - 1);
+            let read = read.min(u64::try_from(self.len()).ok()?);
+            let address = u32::try_from(at).ok()?;
+            let bytes = self.bytes(address, u32::try_from(read - at).ok()?)?;
+            let starts = u32::try_from(chunk_end - at).ok()?;
+            let found = bytes
+                .windows(needle.len())
+                .take(usize::try_from(starts).ok()?)
+                .enumerate()
+                .filter(|(_, window)| *window == needle.as_slice())
+                .find_map(|(offset, _)| {
+                    let header = address.checked_add(u32::try_from(offset).ok()?)?;
+                    Some((header, self.data_array(header)?))
+                });
+            if found.is_some() {
+                return found;
+            }
+            at = chunk_end;
+        }
+        None
+    }
+
     /// The tag `index` in the table of `count` tags at `instances`, as
     /// `cache_get_tag_instance` finds it: by its absolute index, and its
     /// identifier too when the index has one.
@@ -264,6 +315,7 @@ pub fn walk(memory: &[u8]) -> usize {
                 found += 1 + usize::from(block.element(block.count.saturating_sub(1)).is_some());
             }
             found += usize::from(view.reference(address).is_some());
+            found += usize::from(view.find_data_array(address, word(12), "objects").is_some());
             found += usize::from(
                 view.c_string(address, 64)
                     .is_some_and(|text| !text.is_empty()),

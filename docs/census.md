@@ -2079,7 +2079,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `datum_get` | memory/data.c | Native |  | `Vec` |
 | `data_verify` | memory/data.c | Native | runtime/src/views.rs:9 | `Vec` |
 | `datum_initialize` | memory/data.c | Native |  | `Vec` |
-| `data_new` | memory/data.c | Native |  | `Vec` |
+| `data_new` | memory/data.c | Native | runtime/src/views.rs:193 | `Vec` |
 | `data_dispose` | memory/data.c | Native |  | `Vec` |
 | `data_make_invalid` | memory/data.c | Native |  | `Vec` |
 | `datum_new_at_index` | memory/data.c | Native |  | `Vec` |
@@ -2087,7 +2087,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `datum_delete` | memory/data.c | Native |  | `Vec` |
 | `data_delete_all` | memory/data.c | Native |  | `Vec` |
 | `data_iterator_new` | memory/data.c | Native |  | `Vec` |
-| `data_iterator_next` | memory/data.c | Native | runtime/src/views.rs:65 | `Vec` |
+| `data_iterator_next` | memory/data.c | Native | runtime/src/views.rs:74 | `Vec` |
 | `data_next_index` | memory/data.c | Matched | ffi/src/particles/slots.rs:4 | sim/tests/data_reference.rs (trace) |
 | `data_prev_index` | memory/data.c | Replaced |  | through its caller `ai_debug_change_selected_encounter` |
 | `data_compact` | memory/data.c | Native |  | `Vec` |

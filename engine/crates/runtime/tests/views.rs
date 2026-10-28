@@ -302,3 +302,22 @@ fn the_readers_fuzzed_answer_and_never_panic() {
     println!("{cases} cases, {found} structures found");
     assert!(found > 0);
 }
+
+#[test]
+fn a_data_array_is_found_by_its_name_in_a_range() {
+    with_memory(objects, |view| {
+        let found = view.find_data_array(0, 0x1000, "objects");
+        assert_eq!(
+            found.map(|(address, array)| (address, array.count)),
+            Some((0x100, 3))
+        );
+        // a name the array's only begins with, or a range that misses it
+        assert_eq!(view.find_data_array(0, 0x1000, "object"), None);
+        assert_eq!(view.find_data_array(0x104, 0xF00, "objects"), None);
+        assert_eq!(view.find_data_array(0, 0x100, "objects"), None);
+        // a range past the memory's end is read only as far as the end
+        let past = view.find_data_array(0x80, u32::MAX, "objects");
+        assert_eq!(past.map(|(address, _)| address), Some(0x100));
+        assert_eq!(view.find_data_array(0x2000, 0x1000, "objects"), None);
+    });
+}
