@@ -58,13 +58,18 @@ public final class LayerWindow: RenderWindow, @unchecked Sendable {
 }
 
 /// A window off the screen: one BGRA8 texture, which each frame draws over,
-/// and a count of the frames presented.
+/// and a count of the frames presented; the frame presented `capture`th is
+/// also copied aside, as it was shown, for the golden frames.
 public final class OffscreenWindow: RenderWindow, @unchecked Sendable {
     public let texture: MTLTexture
+    /// the copy of the frame presented `capture`th, once it is
+    public let captured: MTLTexture?
+    private let capture: Int?
     private let lock = NSLock()
     private var presentedFrames = 0
+    private var didCapture = false
 
-    public init?(device: MTLDevice, width: Int, height: Int) {
+    public init?(device: MTLDevice, width: Int, height: Int, capture: Int? = nil) {
         let descriptor = MTLTextureDescriptor.texture2DDescriptor(
             pixelFormat: .bgra8Unorm, width: width,
             height: height, mipmapped: false)
@@ -72,6 +77,13 @@ public final class OffscreenWindow: RenderWindow, @unchecked Sendable {
         descriptor.storageMode = .shared
         guard let texture = device.makeTexture(descriptor: descriptor) else { return nil }
         self.texture = texture
+        self.capture = capture
+        if capture != nil {
+            guard let copy = device.makeTexture(descriptor: descriptor) else { return nil }
+            captured = copy
+        } else {
+            captured = nil
+        }
     }
 
     public func nextFrame() -> WindowFrame? {
@@ -82,6 +94,21 @@ public final class OffscreenWindow: RenderWindow, @unchecked Sendable {
         lock.lock()
         defer { lock.unlock() }
         presentedFrames += 1
+        // (copied in the frame's own commands, so the next frame cannot draw
+        // over it first)
+        if presentedFrames == capture, let captured, let blit = commands.makeBlitCommandEncoder() {
+            blit.copy(from: frame.texture, to: captured)
+            blit.endEncoding()
+            didCapture = true
+        }
+    }
+
+    /// Whether the frame to capture has been presented (and copied once its
+    /// commands finish).
+    public var hasCaptured: Bool {
+        lock.lock()
+        defer { lock.unlock() }
+        return didCapture
     }
 
     /// The frames presented so far.
@@ -94,6 +121,20 @@ public final class OffscreenWindow: RenderWindow, @unchecked Sendable {
     /// The texture's pixels, RGBA, rows from the top (once the renderer has
     /// finished drawing them).
     public func pixels() -> [[UInt8]] {
+        Self.pixels(of: texture)
+    }
+
+    /// The captured frame (once the renderer has finished), or nil before
+    /// it is presented.
+    public func capturedFrame() -> CapturedFrame? {
+        guard hasCaptured, let captured else { return nil }
+        let (width, height) = (captured.width, captured.height)
+        var bytes = [UInt8](repeating: 0, count: width * height * 4)
+        captured.getBytes(&bytes, bytesPerRow: width * 4, from: MTLRegionMake2D(0, 0, width, height), mipmapLevel: 0)
+        return CapturedFrame(width: width, height: height, bytes: bytes)
+    }
+
+    private static func pixels(of texture: MTLTexture) -> [[UInt8]] {
         let (width, height) = (texture.width, texture.height)
         var bytes = [UInt8](repeating: 0, count: width * height * 4)
         texture.getBytes(&bytes, bytesPerRow: width * 4, from: MTLRegionMake2D(0, 0, width, height), mipmapLevel: 0)

@@ -34,6 +34,11 @@ public final class GameRenderer: RenderTarget, @unchecked Sendable {
         public var pipelinesMade = 0
         public var depthStencilsMade = 0
         public var samplersMade = 0
+        /// Pipelines found in the archive, not compiled.
+        public var pipelinesArchived = 0
+        /// Pipelines the archive lacked once the game was playing: each a
+        /// wait on Metal's compiler in play.
+        public var pipelinesMissedInPlay = 0
     }
 
     /// Where refusals and Metal's errors are told (none by default).
@@ -41,6 +46,12 @@ public final class GameRenderer: RenderTarget, @unchecked Sendable {
     /// Called as each Present's commands complete, in order, with the GPU's
     /// time on them in milliseconds.
     public var presented: (@Sendable (Double) -> Void)?
+    /// The archive pipelines are looked for in, and added to (none: each
+    /// is compiled when the game asks for it).
+    public var archive: PipelineArchive?
+    /// Whether the game is playing (it has ticked), not loading: a
+    /// pipeline the archive lacks then is counted and told.
+    public var playing: (@Sendable () -> Bool)?
 
     private let device: MTLDevice
     private let queue: MTLCommandQueue
@@ -189,6 +200,11 @@ public final class GameRenderer: RenderTarget, @unchecked Sendable {
         endBlit()
         commit()
         committed?.waitUntilCompleted()
+        do {
+            try archive?.save()
+        } catch {
+            tell("render: the pipeline archive could not be saved: \(error.localizedDescription)")
+        }
     }
 
     private func tell(_ message: String) {
@@ -552,7 +568,19 @@ public final class GameRenderer: RenderTarget, @unchecked Sendable {
             }
             descriptor.vertexDescriptor = vertices
         }
+        if let archive, let state = archive.find(device, descriptor) {
+            pipelinesByKey[key] = state
+            counts.pipelinesArchived += 1
+            return state
+        }
         do {
+            if let archive {
+                try archive.add(descriptor)
+                if playing?() == true {
+                    counts.pipelinesMissedInPlay += 1
+                    tell("render: a pipeline was compiled in play (not in the archive)")
+                }
+            }
             let state = try device.makeRenderPipelineState(descriptor: descriptor)
             pipelinesByKey[key] = state
             counts.pipelinesMade += 1

@@ -111,6 +111,46 @@ final class GameRendererTests: XCTestCase {
         XCTAssertEqual(renderer.statistics.pipelinesMade, 1)
     }
 
+    /// the frame that makes the one-colour pipeline, its blending on or off, and draws with it
+    func drawFrame(blending: Bool) -> RenderFrame {
+        let source = Data(Self.shader.utf8)
+        let blend = Blend(
+            enabled: blending, sourceColor: .one, destinationColor: .zero, colorOperation: .add,
+            sourceAlpha: .one, destinationAlpha: .zero, alphaOperation: .add)
+        return RenderFrame(
+            commands: [
+                .createLibrary(id: 1, address: 0x100, length: UInt32(source.count)),
+                .createPipeline(
+                    id: 2, vertexLibrary: 1, fragmentLibrary: 1, colorFormat: .rgba8, depthFormat: nil,
+                    samples: 1, blend: blend, writeMask: 15, attributes: [], layouts: []),
+                target(3), pass(3), .setPipeline(id: 2),
+                .draw(primitive: .triangle, first: 0, vertices: 3, instances: 1), .endPass,
+            ], data: source)
+    }
+
+    func testAPipelineCompiledOnceIsFoundInTheArchiveOnTheNextRun() throws {
+        let folder = FileManager.default.temporaryDirectory.appendingPathComponent(
+            "opence-archive-\(UUID().uuidString)")
+        defer { try? FileManager.default.removeItem(at: folder) }
+        let url = folder.appendingPathComponent("pipelines.metallib")
+        // the first run compiles the pipeline into the archive, and writes it
+        renderer.archive = try XCTUnwrap(PipelineArchive(device: device, url: url))
+        _ = renderer.submit(frame: drawFrame(blending: false))
+        renderer.finish()
+        XCTAssertEqual(renderer.statistics.pipelinesArchived, 0)
+        XCTAssertTrue(FileManager.default.fileExists(atPath: url.path))
+        // the next, in play from the start, finds it there; a pipeline it never made is a miss
+        let next = try XCTUnwrap(GameRenderer(device: device, window: window))
+        next.archive = try XCTUnwrap(PipelineArchive(device: device, url: url))
+        next.playing = { true }
+        _ = next.submit(frame: drawFrame(blending: false))
+        XCTAssertEqual(next.statistics.pipelinesArchived, 1)
+        XCTAssertEqual(next.statistics.pipelinesMissedInPlay, 0)
+        _ = next.submit(frame: drawFrame(blending: true))
+        XCTAssertEqual(next.statistics.pipelinesMissedInPlay, 1)
+        XCTAssertEqual(next.statistics.refused, 0)
+    }
+
     func testALibraryThatDoesNotCompileIsRefusedAndWhatFollowsStillRuns() {
         let broken = Data("not metal".utf8)
         let readbacks = renderer.submit(

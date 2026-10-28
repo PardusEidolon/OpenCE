@@ -43,20 +43,31 @@ public struct CapturedFrame {
     }
 
     /// The largest difference of a channel from `other`'s, and the share of
-    /// texels differing by more than `tolerance`.
-    public func difference(from other: CapturedFrame, tolerance: UInt8 = 8) -> (largest: Int, share: Double)? {
+    /// texels differing by more than `tolerance`, over the whole frame or
+    /// the region `columns` by `rows` (nil when the frames' sizes differ or
+    /// the region is not inside them).
+    public func difference(
+        from other: CapturedFrame, tolerance: UInt8 = 8, columns: Range<Int>? = nil, rows: Range<Int>? = nil
+    ) -> (largest: Int, share: Double)? {
         guard other.width == width, other.height == height, other.bytes.count == bytes.count else { return nil }
+        let columns = columns ?? 0..<width
+        let rows = rows ?? 0..<height
+        guard columns.lowerBound >= 0, columns.upperBound <= width, rows.lowerBound >= 0, rows.upperBound <= height
+        else { return nil }
         var largest = 0
         var differing = 0
-        for index in stride(from: 0, to: bytes.count, by: 4) {
-            var texel = 0
-            for channel in 0..<3 {
-                texel = max(texel, abs(Int(bytes[index + channel]) - Int(other.bytes[index + channel])))
+        for y in rows {
+            for x in columns {
+                let index = (y * width + x) * 4
+                var texel = 0
+                for channel in 0..<3 {
+                    texel = max(texel, abs(Int(bytes[index + channel]) - Int(other.bytes[index + channel])))
+                }
+                largest = max(largest, texel)
+                if texel > Int(tolerance) { differing += 1 }
             }
-            largest = max(largest, texel)
-            if texel > Int(tolerance) { differing += 1 }
         }
-        return (largest, Double(differing) / Double(max(width * height, 1)))
+        return (largest, Double(differing) / Double(max(columns.count * rows.count, 1)))
     }
 
     /// Writes the frame as a PNG.
