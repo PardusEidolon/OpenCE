@@ -39,6 +39,9 @@ opence_net.workspace = true
 opence_dev.workspace = true
 opence_script.workspace = true
 opence_ui.workspace = true
+# (the original game, run as game.wasm, and its render batches)
+opence_runtime.workspace = true
+opence_render.workspace = true
 serde_json = "1"
 libm.workspace = true
 rustc-hash.workspace = true
@@ -50,6 +53,8 @@ toml = "0.9"
 
 [dev-dependencies]
 divan.workspace = true
+# (the tests' small modules, written as text)
+wat = "1"
 
 [lints]
 workspace = true

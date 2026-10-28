@@ -83,3 +83,23 @@ def test_the_test_step_checks_the_licences_then_runs_nextest_optimised() -> None
     assert nextest[:3] == ["cargo", "nextest", "run"]
     assert "--workspace" in nextest
     assert nextest[nextest.index("--cargo-profile") + 1] == "test-opt"
+
+
+def test_every_crate_s_bindings_reach_the_package(tmp_path: Path) -> None:
+    bindings = tmp_path / "rust" / "bindings"
+    bindings.mkdir(parents=True)
+    for crate in ("opence_ffi", "opence_render"):
+        (bindings / f"{crate}FFI.h").write_text(f"// {crate}\n")
+        (bindings / f"{crate}.swift").write_text(f"// {crate}\n")
+    (bindings / engine_build.SNAPSHOT_HEADER).write_text("// snapshot\n")
+    package = tmp_path / "package"
+    engine_build.swift_bindings(tmp_path / "rust", package)
+    ffi = package / "Sources" / engine_build.FFI_MODULE
+    core = package / "Sources" / "OpenCEEngineCore"
+    assert sorted(path.name for path in core.iterdir()) == ["opence_ffi.swift", "opence_render.swift"]
+    assert (ffi / "opence_renderFFI.h").read_text() == "// opence_render\n"
+    modulemap = (ffi / "module.modulemap").read_text()
+    # each crate's generated Swift imports its own FFI module
+    for module in ("opence_ffiFFI", "opence_renderFFI"):
+        assert f"module {module} {{" in modulemap
+    assert f'header "{engine_build.SNAPSHOT_HEADER}"' in modulemap

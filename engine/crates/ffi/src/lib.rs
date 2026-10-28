@@ -20,6 +20,7 @@ pub mod dev_state;
 pub mod devtools;
 mod dynamic_decals;
 mod effects;
+pub mod game;
 pub mod hud;
 pub mod hud_text;
 pub mod lights;

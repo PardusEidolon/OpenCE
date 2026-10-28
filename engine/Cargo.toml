@@ -26,6 +26,7 @@ opence_ui = { path = "crates/ui" }
 opence_audio = { path = "crates/audio" }
 opence_census = { path = "crates/census" }
 opence_render = { path = "crates/render" }
+opence_runtime = { path = "crates/runtime" }
 thiserror = "2"
 bevy_ecs = { version = "0.20", default-features = false, features = ["std"] }
 rkyv = { version = "0.8", default-features = false, features = ["std", "bytecheck", "alloc"] }

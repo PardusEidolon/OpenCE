@@ -1864,7 +1864,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `main_movie_start` | main/main.c | Replaced | ui/src/loading.rs | Bink; no Bink movies; the loading screen stands in |
 | `main_framerate_render` | main/main.c | Replaced |  | through its caller `interface_draw_fullscreen_overlays` |
 | `halt_and_catch_fire` | main/main.c | Replaced |  | through its caller `main` |
-| `main_loop` | main/main.c | Partial | ffi/src/lib.rs:1133 | ffi/src/lib.rs (measure); leaves out the menu and the shell, switching maps, the network connection, the console's frame |
+| `main_loop` | main/main.c | Partial | ffi/src/lib.rs:1134 | ffi/src/lib.rs (measure); leaves out the menu and the shell, switching maps, the network connection, the console's frame |
 | `debug_keys_initialize` | main/debug_keys.c | Replaced | dev/src/control.rs | the editor and tools |
 | `debug_keys_dispose` | main/debug_keys.c | Replaced | dev/src/control.rs | the editor and tools |
 | `debug_keys_update` | main/debug_keys.c | Replaced | dev/src/control.rs | the editor and tools |
@@ -2731,7 +2731,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `objects_paparazzi` | objects/objects.c | Replaced | dev/src/logbook.rs | the editor and tools; a debug check, statistic or editor hook of the original; the dev tools stand in |
 | `object_export_function_values` | objects/objects.c | Matched | sim/src/functions.rs:228 | sim/src/functions.rs (measure) |
 | `object_compute_node_matrices` | objects/objects.c | Partial | sim/src/player.rs:811 | sim/tests/animation_reference.rs (measure); leaves out its bounding sphere's centre for objects other than bipeds |
-| `object_choose_random_change_colors` | objects/objects.c | Matched | ffi/src/lib.rs:511 | ffi/src/lib.rs (measure) |
+| `object_choose_random_change_colors` | objects/objects.c | Matched | ffi/src/lib.rs:512 | ffi/src/lib.rs (measure) |
 | `objects_scripting_detach` | objects/objects.c | Matched | campaign/src/objects.rs | campaign/tests/objects.rs (measure) |
 | `object_render_debug` | objects/objects.c | Replaced | dev/src/draw.rs | the editor and tools |
 | `object_set_position` | objects/objects.c | Matched | campaign/src/objects.rs | campaign/tests/cutscenes.rs (measure) |

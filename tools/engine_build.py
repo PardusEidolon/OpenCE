@@ -106,20 +106,26 @@ def rust_half(rust: Path) -> None:
     )
 
 
-def swift_bindings(rust: Path) -> None:
-    """Copies the Rust half's bindings where Package.swift expects them."""
+def swift_bindings(rust: Path, package: Path = PACKAGE) -> None:
+    """Copies the Rust half's bindings where Package.swift expects them:
+    every crate's generated Swift into OpenCEEngineCore, and its FFI header
+    into the one system library, whose module map declares a module for
+    each, since each crate's Swift imports its own (`<crate>FFI`)."""
     bindings = rust / "bindings"
-    ffi = PACKAGE / "Sources" / FFI_MODULE
-    core = PACKAGE / "Sources" / "OpenCEEngineCore"
+    ffi = package / "Sources" / FFI_MODULE
+    core = package / "Sources" / "OpenCEEngineCore"
     for folder in (ffi, core):
         shutil.rmtree(folder, ignore_errors=True)
         folder.mkdir(parents=True)
-    for header in (f"{FFI_MODULE}.h", SNAPSHOT_HEADER):
-        shutil.copy(bindings / header, ffi / header)
-    (ffi / "module.modulemap").write_text(
-        f'module {FFI_MODULE} {{\n    header "{FFI_MODULE}.h"\n    header "{SNAPSHOT_HEADER}"\n    export *\n}}\n'
-    )
-    shutil.copy(bindings / "opence_ffi.swift", core / "opence_ffi.swift")
+    modules = []
+    for header in sorted(bindings.glob("*FFI.h")):
+        shutil.copy(header, ffi / header.name)
+        extra = f'    header "{SNAPSHOT_HEADER}"\n' if header.stem == FFI_MODULE else ""
+        modules.append(f'module {header.stem} {{\n    header "{header.name}"\n{extra}    export *\n}}\n')
+    shutil.copy(bindings / SNAPSHOT_HEADER, ffi / SNAPSHOT_HEADER)
+    (ffi / "module.modulemap").write_text("".join(modules))
+    for swift in sorted(bindings.glob("*.swift")):
+        shutil.copy(swift, core / swift.name)
 
 
 def xcode_environment() -> dict[str, str]:
