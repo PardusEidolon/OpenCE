@@ -1,0 +1,1 @@
+Phase 1 checkpoint: census --check passes (0 owe evidence); 63 of 63 traces match in wasm; nix flake check passes. Workspace tests showed only the known flaky allocation-budget test.
