@@ -1,0 +1,1 @@
+Benchmark: --benchmark N --game; frame = max(cpu frame_ms, GPU Present time), lists end-aligned. Checked: GameBenchmarkTests 2/2.
