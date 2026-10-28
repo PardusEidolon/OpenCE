@@ -21,7 +21,7 @@ stops, except A1's go/no-go.
 - [x] Task: `--benchmark 60`: the simulation tick's p99 and the CPU frame's p99 on the M1 Max. 419951f2 (moved to Phase 2, after the threads)
   - Finding: the game does not tick with its imports stubbed, so the benchmark cannot run before A2. The proxies, measured with `tools/engine_wasm_traces.py --speed`: the 15 harnesses heavy enough to time run at 1.38× native in wasm (geometric mean, 0.97× to 1.93×, both at `-O1`); game.wasm loads in 315 ms uncached and 54 ms from its `.cwasm`; a host call costs about 51 ns.
 - [x] Task: Write the go/no-go (`a1_go_no_go.md` in this track) with the data, and bring it to the user. Stop on a no-go. efb9f12a (go; brought to the user in the overnight summary)
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: The spike' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: The spike' (Protocol in workflow.md) (automated) [checkpoint: 23167ab5]
 
 ## Phase 2: The macOS platform layer (A2)
 - [ ] Task: Memory and the map cache.
