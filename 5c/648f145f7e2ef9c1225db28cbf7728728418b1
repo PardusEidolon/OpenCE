@@ -1,0 +1,1 @@
+WasmGame: frame clock (debug.frame_clock), settings, console ask, ticks, each frame's CPU time. Checked: whole workspace tests (only allocations.rs:99, already failing), clippy -D warnings.
