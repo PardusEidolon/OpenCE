@@ -34,7 +34,8 @@ rec {
   # with its manifest and targets, which the importer's fuzz smoke test
   # reads), and what its builds read outside it: Jolt and the physics
   # wrapper (the physics crate's build.rs), the ragdolls' overrides (the
-  # sim's include_str!) and the build script
+  # sim's include_str!), the render batch's header (the render crate's
+  # tests' include_str!) and the build script
   commonFiles = fs.unions [
     (fs.difference (root + /engine) (
       fs.unions [
@@ -47,6 +48,7 @@ rec {
     (root + /engine/fuzz/fuzz_targets)
     (root + /port/third_party/jolt)
     (root + /port/macos/host/physics)
+    (root + /port/macos/include/opence_render.h)
     (root + /port/assets/ragdolls/ragdolls.txt)
     (root + /tools/engine_build.py)
   ];

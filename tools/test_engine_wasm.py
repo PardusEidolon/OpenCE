@@ -224,3 +224,30 @@ def test_the_game_s_units_find_game_wasm_s_own_profile_header_first(tmp_path):
     linux = game.index(f"-I{engine_wasm.LINUX_DIR}/include")
     assert wasmtime < linux
     assert (ROOT / engine_wasm.WASMTIME_INCLUDE / "profile_sections.h").is_file()
+
+
+def test_the_smaa_unit_defines_each_file_and_its_size(tmp_path):
+    # the Metal device's post-processing (port/macos/guest/d3d8_metal_post.c)
+    # declares SMAA's shader and lookup textures; here a shader with a byte
+    # past ASCII (the Metal compiler is handed it as text), and no textures
+    assets = tmp_path / "smaa"
+    assets.mkdir()
+    (assets / "SMAA.hlsl").write_bytes(b"float4 x;\xc3\n")
+    text = engine_wasm.smaa_unit(tmp_path, assets).read_text()
+    assert "const unsigned int xgpu_smaa_shader[] = {" in text
+    # its 11 bytes, the one past ASCII a space, and a NUL
+    assert "const unsigned long xgpu_smaa_shader_size = 12;" in text
+    assert "0x616f6c66, 0x78203474, 0x000a203b," in text
+    for symbol in ("xgpu_smaa_area_texture", "xgpu_smaa_search_texture"):
+        assert f"const unsigned int {symbol}[] = {{\n\t0,\n}};" in text
+        assert f"const unsigned long {symbol}_size = 0;" in text
+
+
+def test_the_smaa_unit_is_written_only_when_it_changes(tmp_path):
+    assets = tmp_path / "smaa"
+    assets.mkdir()
+    (assets / "area_tex.zlib").write_bytes(b"\x78\x9c")
+    written = engine_wasm.smaa_unit(tmp_path, assets).stat().st_mtime_ns
+    assert engine_wasm.smaa_unit(tmp_path, assets).stat().st_mtime_ns == written
+    (assets / "area_tex.zlib").write_bytes(b"\x78\x9c\x01")
+    assert "xgpu_smaa_area_texture_size = 3;" in engine_wasm.smaa_unit(tmp_path, assets).read_text()

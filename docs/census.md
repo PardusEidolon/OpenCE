@@ -3635,7 +3635,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `flush_hardware_character` | rasterizer/rasterizer_text.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
 | `cache_hardware_format_character` | rasterizer/rasterizer_text.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
 | `rasterizer_transparent_encloses` | rasterizer/rasterizer_transparent_enclosure.h | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
-| `rasterizer_screen_width_update` | rasterizer/xbox/rasterizer_xbox.c | Replaced | runtime/src/d3d.rs:612 | the enhanced lighting and Metal renderer |
+| `rasterizer_screen_width_update` | rasterizer/xbox/rasterizer_xbox.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
 | `rasterizer_debug_drawing_begin` | rasterizer/xbox/rasterizer_xbox_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
 | `rasterizer_debug_drawing_end` | rasterizer/xbox/rasterizer_xbox_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |
 | `_rasterizer_debug_immediate_begin` | rasterizer/xbox/rasterizer_xbox_debug.c | Replaced | app/Sources/OpenCEEngineRender/LevelRenderer.swift | the enhanced lighting and Metal renderer |

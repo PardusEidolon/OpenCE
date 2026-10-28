@@ -48,7 +48,7 @@ if __package__ in (None, ""):
     sys.path.insert(0, str(ROOT))
 
 from tools.android_build import VARIADIC_PROTOTYPE_FILES  # noqa: E402
-from tools.embed_assets import RAGDOLL_OVERRIDES, words  # noqa: E402
+from tools.embed_assets import RAGDOLL_OVERRIDES, SMAA_ASSETS, SMAA_FILES, words  # noqa: E402
 from tools.linux_build import (  # noqa: E402
     MUSL_MATH_DIR,
     STB_VORBIS_SOURCE,
@@ -79,6 +79,25 @@ PLATFORM_DATA_SOURCE = Path("port/wasmtime/platform_data.c")
 DSOUND_SOURCE = Path("port/linux/src/dsound_sdl.c")
 # the game's log lines and debug output, to standard error
 LOG_SOURCE = Path("port/wasmtime/log.c")
+# the Direct3D device: the macOS app's Metal device, whose batches the app's
+# renderer draws (host_render_submit), with the Linux port's resources,
+# textures and shader translators beside it, the web build's memory watch
+# (WebAssembly has no page protection, so it hashes pages) and game.wasm's
+# own platform for them
+METAL_SOURCES = [
+    Path("port/macos/guest/d3d8_metal_device.c"),
+    Path("port/macos/guest/d3d8_metal.c"),
+    Path("port/macos/guest/d3d8_metal_post.c"),
+    Path("port/macos/guest/opence_render_writer.c"),
+    Path("port/linux/src/xbox_textures.c"),
+    Path("port/linux/src/d3d8_resources.c"),
+    Path("port/linux/src/nv2a_vsh.c"),
+    Path("port/linux/src/nv2a_psh.c"),
+    Path("port/linux/src/xgpu_text.c"),
+    Path("port/wasmtime/metal_platform.c"),
+    Path("port/web/src/web_memory_watch.c"),
+    Path("port/android/host/host_watch_hash.c"),
+]
 # game.wasm's own headers, found before the Linux port's (profile_sections.h)
 WASMTIME_INCLUDE = Path("port/wasmtime/include")
 
@@ -201,6 +220,25 @@ def ragdoll_unit(build: Path) -> Path:
     return source
 
 
+def smaa_unit(build: Path, assets: Path = ROOT / SMAA_ASSETS) -> Path:
+    """SMAA's shader and lookup textures (port/macos/guest/d3d8_metal_post.c)
+    as a unit, laid out as tools/embed_assets.py lays them out: the shader
+    as text, each byte past ASCII a space, with a NUL; size 0 for a file the
+    checkout lacks. Written only when it changes, so it isn't rebuilt"""
+    source = build / "smaa_assets.c"
+    lines: List[str] = []
+    for name, symbol in SMAA_FILES:
+        data = (assets / name).read_bytes() if (assets / name).is_file() else b""
+        if data and name.endswith(".hlsl"):
+            data = bytes(byte if byte < 0x80 else 0x20 for byte in data) + b"\0"
+        lines += [f"const unsigned int {symbol}[] = {{", *(words(data) if data else ["\t0,"]), "};"]
+        lines.append(f"const unsigned long {symbol}_size = {len(data)};")
+    text = "\n".join(lines) + "\n"
+    if not source.exists() or source.read_text() != text:
+        source.write_text(text)
+    return source
+
+
 def units(config: Dict[str, object], build: Path, include: Path) -> List[Tuple[Path, List[str]]]:
     """every unit of the module, with its flags"""
     prefix = LINUX_DIR / "include" / "halo_linux_prefix.h"
@@ -269,6 +307,24 @@ def units(config: Dict[str, object], build: Path, include: Path) -> List[Tuple[P
     result.append((PLATFORM_DATA_SOURCE, platform))
     result.append((DSOUND_SOURCE, platform))
     result.append((LOG_SOURCE, platform))
+    metal = [
+        *platform,
+        "-DHALO_METAL",
+        "-DHALO_GLES=1",
+        f"-I{os.environ.get('HALO_MACOS_GLES_INCLUDE', '')}",
+        "-Iport/android/host",
+        "-Iport/android/include",
+        "-Isource",
+        "-Isource/cseries",
+        f"-I{os.environ.get('HALO_MACOS_SDL_INCLUDE', '')}",
+        "-Iport/macos/include",
+        "-Iport/macos/guest",
+        "-Iport/third_party/zlib",
+        "-Iport/android/guest/runtime",
+    ]
+    for source in METAL_SOURCES:
+        result.append((source, list(metal)))
+    result.append((smaa_unit(build).relative_to(ROOT), [*common, "-std=gnu11", "-Wall", "-Werror"]))
     result.append((ragdoll_unit(build).relative_to(ROOT), [*common, "-std=gnu11", "-Wall", "-Werror"]))
     # the saved films' and the mods' inflate (zlib, with its names prefixed)
     for name in ZLIB_SOURCES:

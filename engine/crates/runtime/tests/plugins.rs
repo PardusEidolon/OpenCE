@@ -1,5 +1,5 @@
 //! The plugin hooks (`opence_runtime::plugins`): the game's own seams, its
-//! profile sections, its `Present` and its mixer's output, are where the
+//! profile sections, its render batches and its mixer's output, are where the
 //! runtime hands each plugin the moment and a read-only view of the game's
 //! memory. A plugin is called only for the hooks it asks for, in the order
 //! the plugins were added.
@@ -9,14 +9,13 @@ use std::sync::{Arc, Mutex, PoisonError};
 use opence_runtime::plugins::{Event, Hook, Plugin, View};
 use opence_runtime::{Error, Game, Runtime, Val};
 
-/// the module: the sections the hooks follow, `Present`, the mixer's call,
-/// and a word for the view to read
+/// the module: the sections the hooks follow, a render batch of two
+/// buffers made, the mixer's call, and a word for the view to read
 const MODULE: &str = r#"
 (module
   (import "env" "halo_profile_enter" (func $enter (param i32)))
   (import "env" "halo_profile_exit" (func $exit (param i32)))
-  (import "env" "D3DDevice_Clear" (func $clear (param i32 i32 i32 i32 f32 i32)))
-  (import "env" "D3DDevice_Present" (func $present (param i32 i32 i32 i32)))
+  (import "env" "host_render_submit" (func $submit (param i32 i32) (result i32)))
   (import "env" "halo_audio_output" (func $output (param i32 i32) (result i32)))
   (memory (export "memory") 1)
   (data (i32.const 16) "game_tick.player_effect\00")
@@ -26,12 +25,12 @@ const MODULE: &str = r#"
   (data (i32.const 96) "throttle\00")
   (data (i32.const 112) "game_tick.units\00")
   (data (i32.const 256) "\2a\00\00\00")
+  (data (i32.const 512) "\4f\43\52\42\01\00\00\00\28\00\00\00\02\00\00\00"
+    "\01\00\03\00\01\00\00\00\40\00\00\00\01\00\03\00\02\00\00\00\40\00\00\00")
   (func (export "section") (param i32)
     (call $enter (local.get 0)) (call $exit (local.get 0)))
-  (func (export "clear")
-    (call $clear (i32.const 0) (i32.const 0) (i32.const 1) (i32.const 0) (f32.const 1) (i32.const 0)))
-  (func (export "present")
-    (call $present (i32.const 0) (i32.const 0) (i32.const 0) (i32.const 0)))
+  (func (export "submit") (result i32)
+    (call $submit (i32.const 512) (i32.const 40)))
   (func (export "output") (param i32 i32) (result i32)
     (call $output (local.get 0) (local.get 1))))
 "#;
@@ -76,7 +75,7 @@ impl Plugin for Witness {
     fn on(&mut self, event: &Event<'_>, view: &View<'_>) {
         let word = view.u32(WORD).unwrap_or(0);
         let what = match event {
-            Event::Render(frame) => format!("render {} calls", frame.len()),
+            Event::Render(commands) => format!("render {} commands", commands.len()),
             Event::Sound(samples) => format!("sound {}", samples.len()),
             other => format!("{:?}", other.hook()),
         };
@@ -136,15 +135,18 @@ fn a_plugin_hears_only_its_hooks_in_the_order_the_plugins_were_added() -> Result
 }
 
 #[test]
-fn present_hands_the_render_hook_the_frame_it_ends() -> Result<(), Error> {
+fn a_render_batch_hands_the_render_hook_its_commands() -> Result<(), Error> {
     let mut game = game()?;
     let log = Seen::default();
     game.add_plugin(witness("draw", &[Hook::Render], &log));
-    game.call("clear")?;
-    game.call("present")?;
-    assert_eq!(seen(&log), ["draw render 2 calls 42"]);
-    // the frame still goes to the app as before
-    assert_eq!(game.frames().take().map(|frame| frame.len()), Some(2));
+    // none refused
+    assert_eq!(
+        game.call_with("submit", &[])?.first().and_then(Val::i32),
+        Some(0)
+    );
+    assert_eq!(seen(&log), ["draw render 2 commands 42"]);
+    // the batch still goes to the app as before
+    assert_eq!(game.render_counts().commands, 2);
     Ok(())
 }
 

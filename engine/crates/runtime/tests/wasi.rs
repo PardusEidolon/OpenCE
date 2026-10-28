@@ -1,5 +1,9 @@
 //! The part of WASI the runtime supplies itself: the game's and the
-//! reference harnesses' output (`fd_write`), read through checked ranges.
+//! reference harnesses' output (`fd_write`), its empty environment
+//! (`environ_sizes_get`, `environ_get`) and its sleeps (`poll_oneoff`, under
+//! `nanosleep`), read and written through checked ranges.
+
+use std::time::{Duration, Instant};
 
 use opence_runtime::{Error, Runtime};
 
@@ -64,5 +68,85 @@ fn a_command_s_exit_code_is_its_result() -> Result<(), Error> {
           (func (export "_start") (call $exit (i32.const 4))))"#,
     ))?;
     assert_eq!(fails.run_command()?, 4);
+    Ok(())
+}
+
+#[test]
+fn the_environment_is_empty() -> Result<(), Error> {
+    let runtime = Runtime::new(None)?;
+    let mut game = runtime.load(&module(
+        r#"(module
+          (import "wasi_snapshot_preview1" "environ_sizes_get" (func $sizes (param i32 i32) (result i32)))
+          (import "wasi_snapshot_preview1" "environ_get" (func $get (param i32 i32) (result i32)))
+          (memory (export "memory") 1)
+          (data (i32.const 0) "\ff\ff\ff\ff\ff\ff\ff\ff")
+          (func (export "sizes") (result i32) (call $sizes (i32.const 0) (i32.const 4)))
+          (func (export "sizes_outside") (result i32) (call $sizes (i32.const 65534) (i32.const 4)))
+          (func (export "get") (result i32) (call $get (i32.const 16) (i32.const 32))))"#,
+    ))?;
+    assert_eq!(game.call_i32("sizes")?, 0);
+    assert_eq!(game.read(0, 8)?, [0; 8]);
+    assert_eq!(game.call_i32("sizes_outside")?, 21);
+    assert_eq!(game.call_i32("get")?, 0);
+    Ok(())
+}
+
+/// poll_oneoff(in, out, count, events): at 0 a relative clock subscription
+/// of 20 ms on the monotonic clock, at 48 a descriptor's, at 300 one on a
+/// clock there is not; the events written at 100, their count at 200
+const POLLER: &str = r#"
+(module
+  (import "wasi_snapshot_preview1" "poll_oneoff" (func $poll (param i32 i32 i32 i32) (result i32)))
+  (memory (export "memory") 1)
+  (data (i32.const 0) "\88\77\66\55\44\33\22\11\00")
+  (data (i32.const 16) "\01\00\00\00\00\00\00\00\00\2d\31\01\00\00\00\00")
+  (data (i32.const 48) "\07\00\00\00\00\00\00\00\01")
+  (data (i32.const 300) "\09\00\00\00\00\00\00\00\00")
+  (data (i32.const 316) "\05\00\00\00")
+  (func (export "clock") (result i32) (call $poll (i32.const 0) (i32.const 100) (i32.const 1) (i32.const 200)))
+  (func (export "both") (result i32) (call $poll (i32.const 0) (i32.const 100) (i32.const 2) (i32.const 200)))
+  (func (export "no_clock") (result i32) (call $poll (i32.const 300) (i32.const 100) (i32.const 1) (i32.const 200)))
+  (func (export "none") (result i32) (call $poll (i32.const 0) (i32.const 100) (i32.const 0) (i32.const 200)))
+  (func (export "outside") (result i32) (call $poll (i32.const 65500) (i32.const 100) (i32.const 1) (i32.const 200))))
+"#;
+
+#[test]
+fn poll_oneoff_sleeps_until_its_clock_and_reports_it() -> Result<(), Error> {
+    let runtime = Runtime::new(None)?;
+    let mut game = runtime.load(&module(POLLER))?;
+    let start = Instant::now();
+    assert_eq!(game.call_i32("clock")?, 0);
+    assert!(start.elapsed() >= Duration::from_millis(20));
+    assert_eq!(game.read(200, 4)?, 1u32.to_le_bytes());
+    // the event: the subscription's userdata, no error, the clock's type
+    assert_eq!(game.read(100, 8)?, 0x1122_3344_5566_7788u64.to_le_bytes());
+    assert_eq!(game.read(108, 3)?, [0, 0, 0]);
+    Ok(())
+}
+
+#[test]
+fn poll_oneoff_answers_a_descriptor_at_once_with_enotsup() -> Result<(), Error> {
+    let runtime = Runtime::new(None)?;
+    let mut game = runtime.load(&module(POLLER))?;
+    let start = Instant::now();
+    assert_eq!(game.call_i32("both")?, 0);
+    // (the descriptor's event is ready, so the clock is not slept)
+    assert!(start.elapsed() < Duration::from_millis(20));
+    assert_eq!(game.read(200, 4)?, 1u32.to_le_bytes());
+    assert_eq!(game.read(100, 8)?, 7u64.to_le_bytes());
+    // WASI's errno 58, ENOTSUP, and the type fd_read
+    assert_eq!(game.read(108, 3)?, [58, 0, 1]);
+    Ok(())
+}
+
+#[test]
+fn poll_oneoff_refuses_what_it_cannot_read_or_wait_for() -> Result<(), Error> {
+    let runtime = Runtime::new(None)?;
+    let mut game = runtime.load(&module(POLLER))?;
+    // EINVAL for no subscriptions and for a clock there is not, EFAULT for
+    // subscriptions past the memory
+    assert_eq!(game.call_i32("none")?, 28);
+    assert_eq!(game.call_i32("no_clock")?, 28);
+    assert_eq!(game.call_i32("outside")?, 21);
     Ok(())
 }

@@ -20,23 +20,20 @@ use std::path::Path;
 use std::sync::{Arc, Mutex, MutexGuard, PoisonError};
 
 mod audio;
+mod batches;
 pub mod benchmark;
 mod config;
 pub mod control;
 mod controls;
-mod d3d;
 pub mod files;
 mod input;
 pub mod memory;
 mod net;
 pub mod plugins;
 mod profile;
-mod render;
 pub mod replay;
-mod resources;
 mod space;
 mod system;
-mod textures;
 mod threads;
 pub mod views;
 
@@ -50,10 +47,10 @@ use wasmtime::{
 pub use wasmtime::Val;
 
 pub use audio::{Speakers, SPEAKER_RATE, SPEAKER_TARGET_FRAMES};
+pub use batches::{payload, readback_fits, Readback, RenderCounts, RenderSink};
 pub use controls::{keystroke_flags, virtual_key, Controls};
 pub use net::Console;
 pub use profile::{Span, SLEEP};
-pub use render::{Command, Frame, Frames, Op, CALLS, STATES};
 
 /// the import that ends the game, with its exit code
 const PROC_EXIT: &str = "wasi_snapshot_preview1.proc_exit";
@@ -225,8 +222,6 @@ struct Shared {
     files: Mutex<files::Files>,
     /// the game's threads, the objects they wait on and the clocks
     threads: threads::Threads,
-    /// Direct3D's device, once the game has created it
-    d3d: Mutex<d3d::Device>,
     /// the game's settings, as it reads and writes them
     settings: Mutex<config::Settings>,
     /// the keyboard and mouse, and what the game has opened of them
@@ -235,8 +230,9 @@ struct Shared {
     audio: audio::Output,
     /// the profile sections' spans, while profiling is on
     profile: Mutex<profile::Profile>,
-    /// the render calls of the frame being made, and the frames made
-    render: render::Render,
+    /// the Metal device's batches: their validator, the app's renderer and
+    /// the drawable's size
+    batches: Mutex<batches::Batches>,
     /// the game's sockets, and the console's link to the host
     sockets: Mutex<net::Sockets>,
     /// the plugins, called at their hooks
@@ -316,15 +312,14 @@ impl Record {
             .unwrap_or_else(PoisonError::into_inner)
     }
 
-    /// Direct3D's device, held while the guard lives
-    fn device(&self) -> MutexGuard<'_, d3d::Device> {
+    /// the game's settings, held while the guard lives
+    fn batches(&self) -> MutexGuard<'_, batches::Batches> {
         self.shared
-            .d3d
+            .batches
             .lock()
             .unwrap_or_else(PoisonError::into_inner)
     }
 
-    /// the game's settings, held while the guard lives
     fn settings(&self) -> MutexGuard<'_, config::Settings> {
         self.shared
             .settings
@@ -451,9 +446,7 @@ pub fn answers(name: &str) -> bool {
         || threads::handler(name).is_some()
         || memory::handler(name).is_some()
         || system::handler(name).is_some()
-        || d3d::handler(name).is_some()
-        || resources::handler(name).is_some()
-        || textures::handler(name).is_some()
+        || batches::handler(name).is_some()
         || config::handler(name).is_some()
         || input::handler(name).is_some()
         || audio::handler(name).is_some()
@@ -548,16 +541,13 @@ impl Runtime {
             let threads = threads::handler(&name);
             let serves = memory::handler(&name)
                 .or_else(|| system::handler(&name))
-                .or_else(|| d3d::handler(&name))
-                .or_else(|| resources::handler(&name))
-                .or_else(|| textures::handler(&name))
+                .or_else(|| batches::handler(&name))
                 .or_else(|| config::handler(&name))
                 .or_else(|| input::handler(&name))
                 .or_else(|| audio::handler(&name))
                 .or_else(|| net::handler(&name))
                 .or_else(|| profile::handler(&name));
             let files_service = files::service(&name);
-            let draws = render::op(&name);
             let taped = replay::recorded(&name);
             let asked = name.clone();
             linker
@@ -608,9 +598,6 @@ impl Runtime {
                             }
                             if let Some(serve) = threads {
                                 return serve(caller, params, results);
-                            }
-                            if let Some(op) = draws {
-                                render::record(caller, op, params)?;
                             }
                             if let Some(serve) = serves {
                                 return serve(caller, params, results);
@@ -709,12 +696,11 @@ impl Runtime {
                     window: Mutex::new(memory::Window::new()),
                     files: Mutex::new(files::Files::default()),
                     threads: threads::Threads::new(),
-                    d3d: Mutex::new(d3d::Device::default()),
                     settings: Mutex::new(config::Settings::new(|name| std::env::var(name).ok())),
                     input: Mutex::new(input::Input::default()),
                     audio: audio::Output::default(),
                     profile: Mutex::new(profile::Profile::default()),
-                    render: render::Render::default(),
+                    batches: Mutex::default(),
                     sockets: Mutex::new(net::Sockets::default()),
                     plugins: plugins::Plugins::default(),
                 }),
@@ -972,8 +958,8 @@ impl Game {
     /// Makes the game ready to run `halo_game_main`: its data and save
     /// folders ([`Game::set_folders`]), its memory grown past the Xbox's
     /// window, where the game state and the tag cache are placed
-    /// (`memory::WINDOW_BASE`), and the display its screen is shown on
-    /// ([`Game::set_display`]).
+    /// (`memory::WINDOW_BASE`), and the drawable its screen is drawn to
+    /// ([`Game::set_drawable_size`]).
     ///
     /// # Errors
     /// [`Error::Grow`] if the memory cannot grow past the window.
@@ -985,14 +971,34 @@ impl Game {
     ) -> Result<(), Error> {
         self.set_folders(data, saves);
         self.grow_memory_to(u64::from(memory::WINDOW_BASE) + u64::from(memory::WINDOW_SIZE))?;
-        self.set_display(display.0, display.1);
+        self.set_drawable_size(display.0, display.1);
         Ok(())
     }
 
-    /// Sets the display the game's screen is shown on, in pixels: the
-    /// screen takes its shape (until then, the Xbox's 640 by 480).
-    pub fn set_display(&mut self, width: u32, height: u32) {
-        self.store.data().device().display = Some((width, height));
+    /// Installs the app's renderer: each render batch the game submits is
+    /// handed to it, checked. Without one, a batch is checked and dropped.
+    pub fn set_render_sink(&mut self, sink: Box<dyn RenderSink>) {
+        self.store.data().batches().set_sink(sink);
+    }
+
+    /// Sets the drawable's size in pixels, as the game's Metal device asks
+    /// it (`host_drawable_width`); until then, the Xbox's 640 by 480.
+    pub fn set_drawable_size(&mut self, width: u32, height: u32) {
+        self.store.data().batches().set_drawable_size(width, height);
+    }
+
+    /// How many render batches and commands the game has submitted, and
+    /// how many were refused.
+    #[must_use]
+    pub fn render_counts(&self) -> RenderCounts {
+        self.store.data().batches().counts()
+    }
+
+    /// The first refusals of the game's render batches and commands, each
+    /// as text.
+    #[must_use]
+    pub fn render_refusals(&self) -> Vec<String> {
+        self.store.data().batches().refusals()
     }
 
     /// A key going down or up: its Windows virtual key, its character (0
@@ -1048,21 +1054,6 @@ impl Game {
     /// the text is too long.
     pub fn set_setting(&mut self, name: &str, text: &str) -> bool {
         self.store.data().settings().write(name, text)
-    }
-
-    /// The frames the game presents, each its render calls, to take on
-    /// the drawing thread while `halo_game_main` keeps this game busy.
-    #[must_use]
-    pub fn frames(&self) -> Frames {
-        Frames::new(Arc::clone(&self.store.data().shared))
-    }
-
-    /// The texture and palette the game last set for the texture `stage`,
-    /// or None past the device's four stages.
-    #[must_use]
-    pub fn stage(&self, stage: usize) -> Option<(u32, u32)> {
-        let device = self.store.data().device();
-        Some((*device.textures.get(stage)?, *device.palettes.get(stage)?))
     }
 
     /// What each of the game's threads that trapped said, oldest first.

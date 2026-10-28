@@ -1,14 +1,15 @@
 /*
 CRT.C
 
-The Microsoft C runtime and D3DX helpers the game calls that are the C
-library, not the platform: the printf family with MSVC's length modifiers,
-the case-blind string compares, the floating-point control word, the x87
-rounding conversion, the compiler barrier, stdio's fopen, winsock's fd_set
-test and the D3DX maths. They are compiled into game.wasm
-(tools/engine_wasm.py), so a call to one never leaves the module. Each follows the Linux port's
-(port/linux/src/msvc_crt.c, d3d8_resources.c, xnet.c), with the structures
-the public Win32 and D3DX documentation gives.
+The Microsoft C runtime helpers the game calls that are the C library, not
+the platform: the printf family with MSVC's length modifiers, the
+case-blind string compares, the floating-point control word, the x87
+rounding conversion, the compiler barrier, stdio's fopen and winsock's
+fd_set test. They are compiled into game.wasm (tools/engine_wasm.py), so a
+call to one never leaves the module. Each follows the Linux port's
+(port/linux/src/msvc_crt.c, xnet.c), with the structures the public Win32
+documentation gives. The D3DX maths is the Metal device's
+(port/linux/src/d3d8_resources.c), compiled into game.wasm beside it.
 
 Compiled without the port's shims, so that vsnprintf here is wasi-libc's.
 */
@@ -269,72 +270,4 @@ int __WSAFDIsSet(unsigned int socket, struct winsock_fd_set *set)
 			return 1;
 	}
 	return 0;
-}
-
-/* ---------- D3DX */
-
-/* D3DXMATRIX: sixteen floats, row by row (_11 _12 _13 _14, _21 ...) */
-struct d3dx_matrix
-{
-	float m[4][4];
-};
-
-/* D3DXVECTOR4 */
-struct d3dx_vector4
-{
-	float x, y, z, w;
-};
-
-struct d3dx_matrix *D3DXMatrixPerspectiveLH(struct d3dx_matrix *out, float width, float height, float near_plane, float far_plane)
-{
-	memset(out, 0, sizeof(*out));
-	out->m[0][0] = 2.0f * near_plane / width;
-	out->m[1][1] = 2.0f * near_plane / height;
-	out->m[2][2] = far_plane / (far_plane - near_plane);
-	out->m[2][3] = 1.0f;
-	out->m[3][2] = near_plane * far_plane / (near_plane - far_plane);
-	return out;
-}
-
-struct d3dx_matrix *D3DXMatrixOrthoLH(struct d3dx_matrix *out, float width, float height, float near_plane, float far_plane)
-{
-	memset(out, 0, sizeof(*out));
-	out->m[0][0] = 2.0f / width;
-	out->m[1][1] = 2.0f / height;
-	out->m[2][2] = 1.0f / (far_plane - near_plane);
-	out->m[3][2] = near_plane / (near_plane - far_plane);
-	out->m[3][3] = 1.0f;
-	return out;
-}
-
-struct d3dx_vector4 *D3DXVec4Transform(struct d3dx_vector4 *out, const struct d3dx_vector4 *vector, const struct d3dx_matrix *matrix)
-{
-	const float (*m)[4] = matrix->m;
-	struct d3dx_vector4 result;
-
-	result.x = vector->x * m[0][0] + vector->y * m[1][0] + vector->z * m[2][0] + vector->w * m[3][0];
-	result.y = vector->x * m[0][1] + vector->y * m[1][1] + vector->z * m[2][1] + vector->w * m[3][1];
-	result.z = vector->x * m[0][2] + vector->y * m[1][2] + vector->z * m[2][2] + vector->w * m[3][2];
-	result.w = vector->x * m[0][3] + vector->y * m[1][3] + vector->z * m[2][3] + vector->w * m[3][3];
-	*out = result;
-	return out;
-}
-
-/* the HRESULTs the Win32 documentation names */
-#define HRESULT_S_OK 0x00000000L
-#define HRESULT_E_OUTOFMEMORY ((long)0x8007000EL)
-#define HRESULT_E_FAIL ((long)0x80004005L)
-
-long D3DXGetErrorStringA(long error, char *buffer, unsigned int buffer_length)
-{
-	if (buffer && buffer_length)
-	{
-		const char *text = error == HRESULT_S_OK ? "S_OK" :
-			error == HRESULT_E_OUTOFMEMORY ? "E_OUTOFMEMORY" :
-			error == HRESULT_E_FAIL ? "E_FAIL" : "Direct3D error";
-
-		strncpy(buffer, text, buffer_length - 1);
-		buffer[buffer_length - 1] = '\0';
-	}
-	return HRESULT_S_OK;
 }

@@ -48,6 +48,18 @@ const PERFORMANCE_FREQUENCY: u64 = 10_000_000;
 /// WASI's errors
 const EFAULT: u32 = 21;
 const EINVAL: u32 = 28;
+/// WASI's errno ENOTSUP
+const ENOTSUP: u16 = 58;
+/// a WASI subscription's size, and its clock's place in it: the clock's id,
+/// its timeout and its flags (`subscription_clock`)
+const SUBSCRIPTION: u32 = 48;
+const CLOCK_ID: u32 = 16;
+const CLOCK_TIMEOUT: u32 = 24;
+const CLOCK_FLAGS: u32 = 40;
+/// a clock's timeout is a time on the clock, not one from now
+const ABSTIME: u8 = 1;
+/// a WASI event's size
+const EVENT: u32 = 32;
 
 /// something the game's threads wait on
 #[derive(Debug)]
@@ -223,7 +235,15 @@ impl Threads {
             std::thread::yield_now();
             return Ok(());
         }
-        let deadline = (ms != INFINITE).then(|| Instant::now() + Duration::from_millis(ms.into()));
+        self.sleep_for((ms != INFINITE).then(|| Duration::from_millis(ms.into())))
+    }
+
+    /// sleeps `time`, or for ever if it is None (until the game goes)
+    ///
+    /// # Errors
+    /// If the game is going.
+    fn sleep_for(&self, time: Option<Duration>) -> wasmtime::Result<()> {
+        let deadline = time.map(|time| Instant::now() + time);
         let mut table = self.table();
         loop {
             if table.closing {
@@ -311,6 +331,9 @@ pub(crate) fn handler(name: &str) -> Option<Handler> {
         "wasi.thread-spawn" => thread_spawn,
         "wasi_snapshot_preview1.clock_time_get" => clock_time_get,
         "wasi_snapshot_preview1.sched_yield" => sched_yield,
+        "wasi_snapshot_preview1.poll_oneoff" => poll_oneoff,
+        "wasi_snapshot_preview1.environ_sizes_get" => environ_sizes_get,
+        "wasi_snapshot_preview1.environ_get" => environ_get,
         "env.CreateThread" => create_thread,
         "env.ResumeThread" => resume_thread,
         "env.SetThreadPriority" => set_thread_priority,
@@ -827,6 +850,120 @@ fn clock_time_get(
     let done = put64(caller, params, 2, nanos)?;
     give(results, if done { 0 } else { EFAULT });
     Ok(())
+}
+
+/// `environ_sizes_get(count, size)`: the game is given no environment
+fn environ_sizes_get(
+    caller: &mut Caller<'_, Record>,
+    params: &[Val],
+    results: &mut [Val],
+) -> wasmtime::Result<()> {
+    let (count, size) = (arg(params, 0), arg(params, 1));
+    let done = with_space(caller, |space, _| space.put(count, 0) && space.put(size, 0))?;
+    give(results, if done { 0 } else { EFAULT });
+    Ok(())
+}
+
+/// `environ_get(pointers, strings)`: no variables, so nothing is written
+fn environ_get(_: &mut Caller<'_, Record>, _: &[Val], results: &mut [Val]) -> wasmtime::Result<()> {
+    give(results, 0);
+    Ok(())
+}
+
+/// `poll_oneoff(in, out, count, events)`: the subscriptions' events. The
+/// game polls only clocks (`nanosleep`, its vertical blanks' pacing), so a
+/// descriptor's subscription is ready at once with ENOTSUP; otherwise the
+/// first clock due is slept until, and reported.
+fn poll_oneoff(
+    caller: &mut Caller<'_, Record>,
+    params: &[Val],
+    results: &mut [Val],
+) -> wasmtime::Result<()> {
+    let (input, output, count, events) = (
+        arg(params, 0),
+        arg(params, 1),
+        arg(params, 2),
+        arg(params, 3),
+    );
+    if count == 0 {
+        give(results, EINVAL);
+        return Ok(());
+    }
+    let subscriptions = match count.checked_mul(SUBSCRIPTION) {
+        Some(len) => with_space(caller, |space, _| space.read(input, len))?,
+        None => None,
+    };
+    let Some(subscriptions) = subscriptions else {
+        give(results, EFAULT);
+        return Ok(());
+    };
+    let monotonic = caller.data().shared.threads.elapsed();
+    let realtime = u64::try_from(since_1970().as_nanos()).unwrap_or(u64::MAX);
+    // the descriptors' events (userdata, type, error), or else the soonest
+    // clock's (userdata, nanoseconds to wait)
+    let mut ready: Vec<(u64, u8, u16)> = Vec::new();
+    let mut soonest: Option<(u64, u64)> = None;
+    for subscription in subscriptions.as_chunks::<{ SUBSCRIPTION as usize }>().0 {
+        let userdata = u64::from_le_bytes(field(subscription, 0));
+        let [tag] = field(subscription, 8);
+        if tag != 0 {
+            ready.push((userdata, tag, ENOTSUP));
+            continue;
+        }
+        let clock = match u32::from_le_bytes(field(subscription, CLOCK_ID)) {
+            0 => realtime,
+            1..=3 => monotonic,
+            _ => {
+                give(results, EINVAL);
+                return Ok(());
+            }
+        };
+        let timeout = u64::from_le_bytes(field(subscription, CLOCK_TIMEOUT));
+        let [flags] = field(subscription, CLOCK_FLAGS);
+        let wait = if flags & ABSTIME == 0 {
+            timeout
+        } else {
+            timeout.saturating_sub(clock)
+        };
+        if soonest.is_none_or(|(_, soonest)| wait < soonest) {
+            soonest = Some((userdata, wait));
+        }
+    }
+    if let (true, Some((userdata, wait))) = (ready.is_empty(), soonest) {
+        let start = super::profile::sleep_start(caller.data());
+        caller
+            .data()
+            .shared
+            .threads
+            .sleep_for(Some(Duration::from_nanos(wait)))?;
+        super::profile::sleep_end(caller.data(), start);
+        ready.push((userdata, 0, 0));
+    }
+    let written = with_space(caller, |space, _| {
+        let mut at = output;
+        for &(userdata, kind, error) in &ready {
+            let mut event = [0u8; EVENT as usize];
+            event[..8].copy_from_slice(&userdata.to_le_bytes());
+            event[8..10].copy_from_slice(&error.to_le_bytes());
+            event[10] = kind;
+            if !space.write(at, &event) {
+                return false;
+            }
+            at = at.wrapping_add(EVENT);
+        }
+        space.put(events, u32::try_from(ready.len()).unwrap_or(u32::MAX))
+    })?;
+    give(results, if written { 0 } else { EFAULT });
+    Ok(())
+}
+
+/// the `N` bytes at `at` in a subscription, or zeros past its end
+fn field<const N: usize>(subscription: &[u8], at: u32) -> [u8; N] {
+    usize::try_from(at)
+        .ok()
+        .and_then(|at| subscription.get(at..at.checked_add(N)?))
+        .and_then(|bytes| <[u8; N]>::try_from(bytes).ok())
+        .unwrap_or([0; N])
 }
 
 /// the year, month and day of `days` since 1970 (Howard Hinnant's

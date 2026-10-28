@@ -4,7 +4,8 @@
 //! UI and frame hooks follow the exits of the game's profile sections
 //! ([`crate::profile`]'s imports, built into game.wasm by
 //! `port/wasmtime/include/profile_sections.h`), the render hook follows
-//! `D3DDevice_Present` with the frame it ends, and the sound hook follows
+//! each batch the Metal device submits ([`crate::batches`]), with its
+//! commands, and the sound hook follows
 //! the mixer's `halo_audio_output` with its samples.
 //!
 //! A plugin is called only for the hooks it asks for, in the order the
@@ -27,7 +28,6 @@ use std::time::{Duration, Instant};
 
 use wasmtime::Caller;
 
-use super::render::Frame;
 use super::space::Space;
 use super::{with_space, Record};
 
@@ -44,7 +44,7 @@ pub enum Hook {
     Ui,
     /// the end of each pass of the main loop ("throttle"), menus included
     Frame,
-    /// a frame presented, with its render calls
+    /// a render batch submitted, with its commands
     Render,
     /// sound mixed, with its samples
     Sound,
@@ -88,8 +88,9 @@ pub enum Event<'a> {
     Ui,
     /// [`Hook::Frame`]
     Frame,
-    /// [`Hook::Render`]: the frame `Present` ended, before the app draws it
-    Render(&'a Frame),
+    /// [`Hook::Render`]: a render batch's commands that passed, after the
+    /// app's renderer was handed them
+    Render(&'a [opence_render::Command]),
     /// [`Hook::Sound`]: the frames mixed, interleaved stereo at 48 kHz
     Sound(&'a [f32]),
 }
@@ -128,7 +129,11 @@ pub struct View<'a> {
     space: &'a Space<'a>,
 }
 
-impl View<'_> {
+impl<'a> View<'a> {
+    /// a view of `space`
+    pub(crate) fn of(space: &'a Space<'a>) -> Self {
+        Self { space }
+    }
     /// Calls `read` with a view of `memory`, as a plugin would be handed
     /// the game's: for the readers' tests and fuzzing, and for testing a
     /// plugin without a game.

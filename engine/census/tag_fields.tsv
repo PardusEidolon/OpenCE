@@ -1768,7 +1768,7 @@ bitmap_data	hardware_format	40	void *	read	-	-
 bitmap_data	base_address	44	void *	read	-	-
 bitmap_group	type	0	short	read	kept	used
 bitmap_group	format	2	short	read	kept	used
-bitmap_group	usage	4	short	read	kept	unused
+bitmap_group	usage	4	short	read	kept	used
 bitmap_group	flags	6	unsigned short	read	kept	used
 bitmap_group	detail_fade	8	real	read	-	-
 bitmap_group	sharpen_amount	12	real	read	-	-
@@ -7759,10 +7759,10 @@ structure_material	uncompressed_vertex_data.pad	220	unsigned long	-	-	-
 structure_material	uncompressed_vertex_data.file_offset	224	long	-	-	-
 structure_material	uncompressed_vertex_data.address	228	void *	read	kept	unused
 structure_material	uncompressed_vertex_data.definition	232	struct tag_data_definition *	-	-	-
-structure_material	compressed_vertex_data.size	236	long	read	kept	used
+structure_material	compressed_vertex_data.size	236	long	read	kept	unused
 structure_material	compressed_vertex_data.pad	240	unsigned long	-	-	-
 structure_material	compressed_vertex_data.file_offset	244	long	-	-	-
-structure_material	compressed_vertex_data.address	248	void *	read	kept	used
+structure_material	compressed_vertex_data.address	248	void *	read	kept	unused
 structure_material	compressed_vertex_data.definition	252	struct tag_data_definition *	-	-	-
 structure_runtime_decal	position.n	0	real[3]	read	kept	used
 structure_runtime_decal	position.x	0	real	read	kept	used
