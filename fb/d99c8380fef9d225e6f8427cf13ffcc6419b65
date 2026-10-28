@@ -1,0 +1,5 @@
+Dev shell against the wasm game (native_port Phase 2).
+- opence-game --control <sock>: lines go to the original's telnet console; JSON replies. Probe: game_time and structure_bsp_index answer.
+- devgulch: maps\devgulch.map aliases maps\bloodgulch.map; header name rewritten to 'devgulch' on read (ReadFile, OVERLAPPED, ReadFileEx), because cache_files_windows.c:633 refuses a name that differs. Probe: --map devgulch bsp 0, game_time 586 (Blood Gulch 601).
+- Blocked: devgulch's stations and gathered definitions as a loadable map need a cache writer.
+- Tests: runtime files 14, console 11; workspace ok except the ai-station budget; Swift 214/51 skipped/0 failed; census --check clean.
