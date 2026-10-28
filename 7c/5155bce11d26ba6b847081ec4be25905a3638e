@@ -1,0 +1,1 @@
+Camera reader: halo_data_file_read in port/wasmtime/data_files.c (CreateFileA/GetFileSize/ReadFile), served by fmemopen. Checked: pytest test_engine_wasm.py, import list unchanged; golden frame region differences vs the VM: ground mean 0.06 / 0% over 8, cliff 0%.
