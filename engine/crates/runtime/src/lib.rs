@@ -6,19 +6,34 @@
 //! and the CPU's features, so the game compiles once per machine and build.
 //! [`Runtime::load`] instantiates a module with a stub for every function it
 //! imports: each stub records its call and returns zeros, until the platform
-//! supplies the real ones. `proc_exit` ends the call with [`Error::Exit`].
+//! supplies the real ones. `proc_exit` ends the call with [`Error::Exit`],
+//! and `fd_write` keeps what is written, per descriptor ([`Game::output`]),
+//! so the reference harnesses run as WASI commands ([`Game::run_command`]).
+//! A call budget ([`Game::set_call_budget`]) ends a game that, on stubs,
+//! never returns.
 //!
 //! The module and its memory are untrusted: a trap is an error, never a
 //! panic, and the memory is read and written only through checked ranges.
 
+use std::collections::BTreeMap;
 use std::path::Path;
 
 use wasmtime::{
-    Cache, CacheConfig, Config, Engine, ExternType, Instance, Linker, Memory, Module, Store, Val,
+    Cache, CacheConfig, Caller, Config, Engine, Extern, ExternType, Instance, Linker, Memory,
+    Module, Store, Val,
 };
 
 /// the import that ends the game, with its exit code
 const PROC_EXIT: &str = "wasi_snapshot_preview1.proc_exit";
+
+/// the import that writes to a descriptor, kept in [`Record::outputs`]
+const FD_WRITE: &str = "wasi_snapshot_preview1.fd_write";
+
+/// WASI's errno for an address outside the memory
+const EFAULT: i32 = 21;
+
+/// WASI's errno for a count too large for its type
+const EOVERFLOW: i32 = 61;
 
 /// the calls a game keeps until [`Game::set_record_limit`] says otherwise
 const DEFAULT_RECORD_LIMIT: usize = 65_536;
@@ -33,6 +48,9 @@ pub enum Error {
     /// the game called `proc_exit` with this code
     #[error("the game exited with code {0}")]
     Exit(i32),
+    /// the game made as many import calls as its budget allowed
+    #[error("the game used its budget of {0} import calls")]
+    Budget(u64),
     /// the game trapped (or a stub failed)
     #[error("the game trapped: {0}")]
     Trap(String),
@@ -115,6 +133,18 @@ impl std::fmt::Display for Exit {
 
 impl std::error::Error for Exit {}
 
+/// the call budget, carried out of the game as a trap
+#[derive(Debug)]
+struct Budget(u64);
+
+impl std::fmt::Display for Budget {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "a budget of {} import calls", self.0)
+    }
+}
+
+impl std::error::Error for Budget {}
+
 /// the record the stubs keep, in the store
 struct Record {
     /// each import's "module.name", in the module's order
@@ -124,6 +154,76 @@ struct Record {
     /// the first calls, up to `limit`
     calls: Vec<Call>,
     limit: usize,
+    /// the import calls made so far, and how many may be made
+    made: u64,
+    budget: Option<u64>,
+    /// what `fd_write` wrote, per descriptor
+    outputs: BTreeMap<i32, Vec<u8>>,
+}
+
+/// `fd_write(fd, iovs, count, written)`: gathers the `count` iovecs at
+/// `iovs` from the caller's memory, stores how many bytes they hold at
+/// `written` and keeps them; returns WASI's errno, [`EFAULT`] (with nothing
+/// written) if any of it is outside the memory
+fn fd_write(caller: &mut Caller<'_, Record>, params: &[Val]) -> i32 {
+    let [Val::I32(fd), Val::I32(iovs), Val::I32(count), Val::I32(written)] = params else {
+        return EFAULT;
+    };
+    // (the module's pointers are unsigned)
+    let (iovs, count, written) = (
+        u64::from(iovs.cast_unsigned()),
+        u64::from(count.cast_unsigned()),
+        u64::from(written.cast_unsigned()),
+    );
+    let Some(memory) = caller.get_export("memory").and_then(Extern::into_memory) else {
+        return EFAULT;
+    };
+    let data = memory.data(&*caller);
+    let at = |address: u64, len: u64| {
+        let start = usize::try_from(address).ok()?;
+        let end = usize::try_from(address.checked_add(len)?).ok()?;
+        data.get(start..end)
+    };
+    let word = |address: u64| {
+        at(address, 4)
+            .and_then(|bytes| <[u8; 4]>::try_from(bytes).ok())
+            .map(|bytes| u64::from(u32::from_le_bytes(bytes)))
+    };
+    let mut bytes = Vec::new();
+    for index in 0..count {
+        let Some(base) = index
+            .checked_mul(8)
+            .and_then(|offset| iovs.checked_add(offset))
+        else {
+            return EFAULT;
+        };
+        let Some(chunk) = word(base)
+            .zip(base.checked_add(4).and_then(word))
+            .and_then(|(address, len)| at(address, len))
+        else {
+            return EFAULT;
+        };
+        bytes.extend_from_slice(chunk);
+    }
+    let Ok(total) = u32::try_from(bytes.len()) else {
+        return EOVERFLOW;
+    };
+    let target = usize::try_from(written).ok().and_then(|start| {
+        memory
+            .data_mut(&mut *caller)
+            .get_mut(start..start.checked_add(4)?)
+    });
+    let Some(target) = target else {
+        return EFAULT;
+    };
+    target.copy_from_slice(&total.to_le_bytes());
+    caller
+        .data_mut()
+        .outputs
+        .entry(*fd)
+        .or_default()
+        .extend(bytes);
+    0
 }
 
 /// Wasmtime, set up for the game
@@ -183,13 +283,20 @@ impl Runtime {
                 return Err(Error::Import(name));
             };
             let exits = name == PROC_EXIT;
+            let writes = name == FD_WRITE;
             linker
                 .func_new(
                     import.module(),
                     import.name(),
                     ty.clone(),
-                    move |mut caller, params, results| {
+                    move |mut caller: Caller<'_, Record>, params, results| {
                         let record: &mut Record = caller.data_mut();
+                        if let Some(budget) = record.budget {
+                            if record.made >= budget {
+                                return Err(wasmtime::Error::new(Budget(budget)));
+                            }
+                        }
+                        record.made += 1;
                         if let Some(count) = record.counts.get_mut(index) {
                             *count += 1;
                         }
@@ -205,6 +312,13 @@ impl Runtime {
                                 _ => -1,
                             };
                             return Err(wasmtime::Error::new(Exit(code)));
+                        }
+                        if writes {
+                            let errno = fd_write(&mut caller, params);
+                            if let Some(result) = results.first_mut() {
+                                *result = Val::I32(errno);
+                            }
+                            return Ok(());
                         }
                         for (result, ty) in results.iter_mut().zip(ty.results()) {
                             *result = Val::default_for_ty(&ty).ok_or_else(|| {
@@ -225,6 +339,9 @@ impl Runtime {
                 counts,
                 calls: Vec::new(),
                 limit: DEFAULT_RECORD_LIMIT,
+                made: 0,
+                budget: None,
+                outputs: BTreeMap::new(),
             },
         );
         let instance = linker.instantiate(&mut store, &module).map_err(called)?;
@@ -245,8 +362,11 @@ impl Runtime {
 
 /// what a failed call means: the game's exit, or a trap
 fn called(error: wasmtime::Error) -> Error {
-    match error.downcast_ref::<Exit>() {
-        Some(Exit(code)) => Error::Exit(*code),
+    if let Some(Exit(code)) = error.downcast_ref::<Exit>() {
+        return Error::Exit(*code);
+    }
+    match error.downcast_ref::<Budget>() {
+        Some(Budget(budget)) => Error::Budget(*budget),
         None => Error::Trap(format!("{error:?}")),
     }
 }
@@ -302,6 +422,30 @@ impl Game {
         }
     }
 
+    /// Runs the module as a WASI command: calls `_start`, and returns the
+    /// code it gave `proc_exit`, or 0 if it returned.
+    ///
+    /// # Errors
+    /// [`Error::NoExport`] if it has no `_start`, and [`Error::Trap`] if it
+    /// traps.
+    pub fn run_command(&mut self) -> Result<i32, Error> {
+        match self.call("_start") {
+            Ok(()) => Ok(0),
+            Err(Error::Exit(code)) => Ok(code),
+            Err(error) => Err(error),
+        }
+    }
+
+    /// What the module has written to descriptor `fd` with `fd_write`.
+    #[must_use]
+    pub fn output(&self, fd: i32) -> &[u8] {
+        self.store
+            .data()
+            .outputs
+            .get(&fd)
+            .map_or(&[], Vec::as_slice)
+    }
+
     /// The calls recorded so far, oldest first, up to the record's limit.
     #[must_use]
     pub fn calls(&self) -> &[Call] {
@@ -314,6 +458,13 @@ impl Game {
         let record = self.store.data_mut();
         record.limit = limit;
         record.calls.truncate(limit);
+    }
+
+    /// Ends the game with [`Error::Budget`] when it makes an import call
+    /// after `budget` of them (counted from the start; `None`, the default,
+    /// for no budget).
+    pub fn set_call_budget(&mut self, budget: Option<u64>) {
+        self.store.data_mut().budget = budget;
     }
 
     /// The "module.name" of import `index` (empty if there is none).

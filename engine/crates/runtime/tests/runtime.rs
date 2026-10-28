@@ -83,6 +83,20 @@ fn the_record_keeps_a_bounded_number_of_calls_but_counts_them_all() -> Result<()
 }
 
 #[test]
+fn a_call_budget_ends_a_game_that_never_returns() -> Result<(), Error> {
+    let runtime = Runtime::new(None)?;
+    let mut game = runtime.load(&module(
+        r#"(module
+          (import "env" "f" (func $f))
+          (func (export "run") (loop $again (call $f) (br $again))))"#,
+    ))?;
+    game.set_call_budget(Some(1000));
+    assert!(matches!(game.call("run"), Err(Error::Budget(1000))));
+    assert_eq!(game.call_count("env.f"), 1000);
+    Ok(())
+}
+
+#[test]
 fn proc_exit_ends_the_call_with_its_code() -> Result<(), Error> {
     let runtime = Runtime::new(None)?;
     let mut game = runtime.load(&module(

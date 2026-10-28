@@ -57,12 +57,13 @@ static real physics_variable_position_get_seek_direction(real *limits, real posi
 """
 
 MAIN = r"""
-static unsigned long seed = 0x13579bd;
+/* (64 bits on every target, so the wasm32 build draws the same inputs) */
+static unsigned long long seed = 0x13579bd;
 
 static int next_random(int n)
 {
 	seed = seed * 1664525u + 1013904223u;
-	return (int)((seed >> 8) % (unsigned long)n);
+	return (int)((seed >> 8) % (unsigned long long)n);
 }
 
 /* a value from -range to range, a zero or a whole one now and then */
