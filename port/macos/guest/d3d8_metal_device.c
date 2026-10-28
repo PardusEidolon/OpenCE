@@ -29,6 +29,7 @@ their declarations are d3d8_gl.c's, unchanged.
 #include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 #include <string.h>
 #include <time.h>
 
@@ -126,6 +127,8 @@ static struct
 	BOOL in_pass;
 	unsigned int pass_color, pass_depth, pass_format;
 	unsigned long pass_width, pass_height;
+	/* the open pass's pixels to a unit (its target's scale) */
+	float pass_scale[2];
 	/* display.per_pixel_lighting, read when the settings change */
 	unsigned long config_serial;
 	BOOL per_pixel_lighting;
@@ -725,46 +728,84 @@ static struct vertex_shader_object *current_program(void)
 }
 
 
-/* ---------- the screen (d3d8_gl.c's, at a scale of 1)
+/* ---------- the screen (d3d8_gl.c's)
 
-The screen is 480 lines and as wide as the window's shape makes them, from
-640 to 1920 columns. Its targets are drawn at that size: Present scales the
-back buffer to the window. */
+The screen is 480 lines and as wide as the drawable's shape makes them, from
+640 to 1920 columns. Its targets, and the secondary target, are drawn at the
+drawable's pixels (screen_scale, xgpu_metal_target_scale), as d3d8_gl.c's
+are on the desktop; Present letterboxes the back buffer in the drawable. */
+
+/* the secondary target (rasterizer_xbox.c's: the reflections' and active
+camouflage's), which keeps the game's 320x240 units at the screen's scale */
+#define SECONDARY_TARGET_WIDTH 320
+#define SECONDARY_TARGET_HEIGHT 240
 
 static long screen_width;
+static float screen_scale[2] = { 1.0f, 1.0f };
 static long ui_offset;
 
-static long screen_mode_choose(void)
+static void screen_mode_choose(long *width, float scale[2])
 {
-	/* display.screen_width, or 0 for the window's shape, which the app
-	passes (as Android's does) */
+	/* display.screen_width, or 0 for the drawable's shape */
 	const char *display = getenv("HALO_DISPLAY_WIDTH");
-	long width = config_integer("display.screen_width");
+	long chosen = config_integer("display.screen_width");
+	int drawable_width = 0, drawable_height = 0;
 
-	if (width <= 0)
-		width = display ? atol(display) : 640;
-	width = width < 640 ? 640 : width > SCREEN_MAXIMUM_WIDTH ? SCREEN_MAXIMUM_WIDTH : width;
-	return width & ~1L;
+	*width = 640;
+	scale[0] = scale[1] = 1.0f;
+	if (chosen <= 0 && display)
+		chosen = atol(display);
+	platform_video_drawable_size(&drawable_width, &drawable_height);
+	if (chosen > 0)
+	{
+		*width = (chosen < 640 ? 640 : chosen > SCREEN_MAXIMUM_WIDTH ? SCREEN_MAXIMUM_WIDTH : chosen) & ~1L;
+		/* (a width chosen draws the drawable's lines: the blit
+		letterboxes what is left) */
+		if (drawable_height > 0)
+			scale[0] = scale[1] = (float)drawable_height / (float)SCREEN_HEIGHT;
+	}
+	else if (drawable_width > 0 && drawable_height > 0)
+	{
+		long wanted = (SCREEN_HEIGHT * (long)drawable_width + drawable_height / 2) / drawable_height;
+
+		*width = wanted < 640 ? 640 : wanted > SCREEN_MAXIMUM_WIDTH ? SCREEN_MAXIMUM_WIDTH : wanted & ~1L;
+		scale[0] = (float)drawable_width / (float)*width;
+		scale[1] = (float)drawable_height / (float)SCREEN_HEIGHT;
+		/* a drawable narrower or wider than the game can be: the picture
+		keeps its shape and the blit letterboxes it */
+		if (*width != wanted && *width != (wanted & ~1L))
+			scale[0] = scale[1] = scale[0] < scale[1] ? scale[0] : scale[1];
+	}
+	/* (no target larger than the ring's largest texture) */
+	if (*width * scale[0] > (float)OPENCE_RENDER_MAX_TEXTURE_SIZE)
+		scale[0] = scale[1] = (float)OPENCE_RENDER_MAX_TEXTURE_SIZE / (float)*width;
 }
 
 long halo_screen_width(void)
 {
 	if (!screen_width)
 	{
-		screen_width = screen_mode_choose();
-		platform_log("screen: %ldx%d drawn at %ldx%d", screen_width, SCREEN_HEIGHT, screen_width, SCREEN_HEIGHT);
+		screen_mode_choose(&screen_width, screen_scale);
+		platform_log("screen: %ldx%d drawn at %.0fx%.0f", screen_width, SCREEN_HEIGHT,
+			screen_width * screen_scale[0], SCREEN_HEIGHT * screen_scale[1]);
 	}
 	return screen_width;
 }
 
+/* the drawable's pixels for each of the 480 lines */
 float halo_screen_pixel_scale(void)
 {
-	return 1.0f;
+	halo_screen_width();
+	return screen_scale[1];
 }
 
+/* how many pixels the screen's targets draw to the Xbox's one, the larger
+of the two ways (the screen effects' convolutions:
+rasterizer_xbox_screen_effect.c) */
 float halo_screen_scale(void)
 {
-	return 1.0f;
+	halo_screen_width();
+	return screen_scale[0] > screen_scale[1] ? screen_scale[0] : screen_scale[1];
 }
 
 /* (display.shadow_resolution needs targets drawn larger than the game's
@@ -774,6 +815,17 @@ long halo_shadow_map_scale(void)
 	return 1;
 }
 
+void xgpu_metal_target_scale(unsigned long width, unsigned long height, BOOL depth, float scale[2])
+{
+	scale[0] = scale[1] = 1.0f;
+	if ((width == (unsigned long)halo_screen_width() && height == SCREEN_HEIGHT) ||
+		(!depth && width == SECONDARY_TARGET_WIDTH && height == SECONDARY_TARGET_HEIGHT))
+	{
+		scale[0] = screen_scale[0];
+		scale[1] = screen_scale[1];
+	}
+}
+
 void halo_screen_ui_offset(unsigned char centered)
 {
 	ui_offset = centered ? (halo_screen_width() - 640) / 2 : 0;
@@ -781,21 +833,28 @@ void halo_screen_ui_offset(unsigned char centered)
 
 long halo_screen_commit(void)
 {
+	float scale[2];
 	long width;
 
 	if (!screen_width)
 		return halo_screen_width();
-	width = screen_mode_choose();
-	if (width != screen_width)
+	screen_mode_choose(&width, scale);
+	if (width != screen_width || scale[0] != screen_scale[0] || scale[1] != screen_scale[1])
 	{
-		platform_log("screen: %ldx%d drawn at %ldx%d", width, SCREEN_HEIGHT, width, SCREEN_HEIGHT);
+		platform_log("screen: %ldx%d drawn at %.0fx%.0f", width, SCREEN_HEIGHT, width * scale[0],
+			SCREEN_HEIGHT * scale[1]);
 		screen_width = width;
+		screen_scale[0] = scale[0];
+		screen_scale[1] = scale[1];
 		if (device.created)
 		{
 			device.presentation.BackBufferWidth = (UINT)width;
 			d3d8_surface_resize(&device.back_buffer, D3DFMT_LIN_A8R8G8B8, (unsigned long)width, SCREEN_HEIGHT);
 			d3d8_surface_resize(&device.depth_buffer, D3DFMT_LIN_D24S8, (unsigned long)width, SCREEN_HEIGHT);
 		}
+		/* (the targets of the old size and scale, which nothing finds now) */
+		xgpu_metal_pass_end();
+		xgpu_metal_render_targets_evict();
 	}
 	return screen_width;
 }
@@ -1096,6 +1155,7 @@ static BOOL pass_begin_format(unsigned int color, unsigned int depth, unsigned i
 	device.pass_format = format;
 	device.pass_width = width;
 	device.pass_height = height;
+	device.pass_scale[0] = device.pass_scale[1] = 1.0f;
 	return TRUE;
 }
 
@@ -1130,8 +1190,12 @@ static BOOL pass_ensure(void)
 		depth->written++;
 	if (device.in_pass && device.pass_color == color->texture && device.pass_depth == (depth ? depth->texture : 0))
 		return TRUE;
-	return pass_begin(color->texture, depth ? depth->texture : 0, color->width, color->height,
-		OPENCE_RENDER_LOAD_LOAD);
+	if (!pass_begin(color->texture, depth ? depth->texture : 0, color->width, color->height,
+		OPENCE_RENDER_LOAD_LOAD))
+		return FALSE;
+	device.pass_scale[0] = color->scale[0];
+	device.pass_scale[1] = color->scale[1];
+	return TRUE;
 }
 
 /* ---------- textures and samplers (d3d8_gl.c's bind_textures) */
@@ -1170,7 +1234,7 @@ static unsigned int feedback_copy(const struct xgpu_render_target *target)
 	static unsigned long copied_written;
 	unsigned int *fields;
 
-	if (!copy || copy_width != target->width || copy_height != target->height)
+	if (!copy || copy_width != target->gl_width || copy_height != target->gl_height)
 	{
 		if (copy)
 			xgpu_metal_destroy(OPENCE_RENDER_OBJECT_TEXTURE, copy);
@@ -1184,14 +1248,14 @@ static unsigned int feedback_copy(const struct xgpu_render_target *target)
 		fields[0] = copy;
 		fields[1] = OPENCE_RENDER_TEXTURE_2D;
 		fields[2] = OPENCE_RENDER_FORMAT_BGRA8;
-		fields[3] = (unsigned int)target->width;
-		fields[4] = (unsigned int)target->height;
+		fields[3] = (unsigned int)target->gl_width;
+		fields[4] = (unsigned int)target->gl_height;
 		fields[5] = 1;
 		fields[6] = 1;
 		fields[7] = OPENCE_RENDER_USAGE_SAMPLED;
 		fields[8] = 1;
-		copy_width = target->width;
-		copy_height = target->height;
+		copy_width = target->gl_width;
+		copy_height = target->gl_height;
 		copied_texture = 0;
 	}
 	if (copied_texture != target->texture || copied_written != target->written)
@@ -1203,8 +1267,8 @@ static unsigned int feedback_copy(const struct xgpu_render_target *target)
 		memset(fields, 0, (OPENCE_RENDER_COPY_TEXTURE_WORDS - 1) * sizeof(*fields));
 		fields[0] = target->texture;
 		fields[5] = copy;
-		fields[10] = (unsigned int)target->width;
-		fields[11] = (unsigned int)target->height;
+		fields[10] = (unsigned int)target->gl_width;
+		fields[11] = (unsigned int)target->gl_height;
 		copied_texture = target->texture;
 		copied_written = target->written;
 	}
@@ -1435,22 +1499,33 @@ static void raster_send(void)
 
 /* the viewport, x0 to x1 and y0 to y1, and a scissor of it inside the
 pass's target */
+/* a unit's edge at s pixels to the unit (d3d8_gl.c's scaled_pixel) */
+static long scaled_pixel(float c, float s)
+{
+	return (long)floorf(c * s + 0.5f);
+}
+
+/* the viewport, in the open pass's units, with the scissor that keeps the
+draws inside it, both in its target's pixels */
 static void viewport_send(float x0, float y0, float width, float height, float near_z, float far_z)
 {
 	unsigned int fields[6];
-	long left = (long)x0, top = (long)y0, right = (long)(x0 + width), bottom = (long)(y0 + height);
+	const float sx = device.pass_scale[0], sy = device.pass_scale[1];
+	long left = scaled_pixel(x0, sx), top = scaled_pixel(y0, sy);
+	long right = scaled_pixel(x0 + width, sx), bottom = scaled_pixel(y0 + height, sy);
+	long pass_right = scaled_pixel((float)device.pass_width, sx), pass_bottom = scaled_pixel((float)device.pass_height, sy);
 
-	fields[0] = opence_render_float(x0);
-	fields[1] = opence_render_float(y0);
-	fields[2] = opence_render_float(width);
-	fields[3] = opence_render_float(height);
+	fields[0] = opence_render_float((float)left);
+	fields[1] = opence_render_float((float)top);
+	fields[2] = opence_render_float((float)(right - left));
+	fields[3] = opence_render_float((float)(bottom - top));
 	fields[4] = opence_render_float(near_z);
 	fields[5] = opence_render_float(far_z);
 	command_send(_sent_viewport, OPENCE_RENDER_OP_SET_VIEWPORT, 7, fields);
 	left = left < 0 ? 0 : left;
 	top = top < 0 ? 0 : top;
-	right = right > (long)device.pass_width ? (long)device.pass_width : right;
-	bottom = bottom > (long)device.pass_height ? (long)device.pass_height : bottom;
+	right = right > pass_right ? pass_right : right;
+	bottom = bottom > pass_bottom ? pass_bottom : bottom;
 	fields[0] = (unsigned int)left;
 	fields[1] = (unsigned int)top;
 	fields[2] = right > left ? (unsigned int)(right - left) : 0;
@@ -2300,7 +2375,7 @@ static void post_draw(unsigned int library, const unsigned int *textures, unsign
 
 /* display.anti_aliasing's pass over a window's 3D view, before the HUD and
 menus are drawn over it (source/render/render.c); the window's bounds in the
-game's units of the screen, which are the back buffer's pixels here */
+game's units of the screen, drawn at the back buffer's scale */
 void halo_screen_anti_alias(short x0, short y0, short x1, short y1)
 {
 	const unsigned int color_mask = OPENCE_RENDER_WRITE_RED | OPENCE_RENDER_WRITE_GREEN | OPENCE_RENDER_WRITE_BLUE;
@@ -2317,12 +2392,17 @@ void halo_screen_anti_alias(short x0, short y0, short x1, short y1)
 	target = xgpu_metal_render_target_get(&device.back_buffer);
 	if (!target || target->depth)
 		return;
-	width = target->width;
-	height = target->height;
-	corners[0] = x0 < 0 ? 0 : x0 > (long)width ? (long)width : x0;
-	corners[1] = y0 < 0 ? 0 : y0 > (long)height ? (long)height : y0;
-	corners[2] = x1 < corners[0] ? corners[0] : x1 > (long)width ? (long)width : x1;
-	corners[3] = y1 < corners[1] ? corners[1] : y1 > (long)height ? (long)height : y1;
+	/* (in the target's pixels: the window's units at its scale) */
+	width = target->gl_width;
+	height = target->gl_height;
+	corners[0] = scaled_pixel(x0, target->scale[0]);
+	corners[1] = scaled_pixel(y0, target->scale[1]);
+	corners[2] = scaled_pixel(x1, target->scale[0]);
+	corners[3] = scaled_pixel(y1, target->scale[1]);
+	corners[0] = corners[0] < 0 ? 0 : corners[0] > (long)width ? (long)width : corners[0];
+	corners[1] = corners[1] < 0 ? 0 : corners[1] > (long)height ? (long)height : corners[1];
+	corners[2] = corners[2] < corners[0] ? corners[0] : corners[2] > (long)width ? (long)width : corners[2];
+	corners[3] = corners[3] < corners[1] ? corners[1] : corners[3] > (long)height ? (long)height : corners[3];
 	if (corners[2] == corners[0] || corners[3] == corners[1])
 		return;
 	/* (textures are made and copied outside passes) */

@@ -17,6 +17,7 @@ xbox_textures.c's, which writes them here under HALO_METAL.
 #include "opence_render.h"
 #include "opence_render_writer.h"
 
+#include <math.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -487,9 +488,9 @@ BOOL xgpu_metal_stream(const void *data, unsigned long size, unsigned long align
 /* ---------- render targets
 
 A surface the game draws into is a texture of the ring, found by the
-surface's memory and size (d3d8_gl.c, render_target_get). Until the device
-draws at the display's resolution every target is at the game's own, a
-pixel a unit. */
+surface's memory, size and scale (d3d8_gl.c, render_target_get): the
+screen's targets and the secondary one are drawn at the drawable's pixels
+(xgpu_metal_target_scale), the others a pixel a unit. */
 
 #define RENDER_TARGET_BUCKET_COUNT 256
 
@@ -518,19 +519,25 @@ struct xgpu_render_target *xgpu_metal_render_target_get(const D3DSurface *surfac
 	struct xgpu_texture_description description;
 	struct render_target_entry *entry;
 	unsigned int *fields;
+	float scale[2];
 	BOOL depth;
+	unsigned long gl_width, gl_height;
 
 	if (!surface || !surface->Data)
 		return NULL;
 	xgpu_texture_describe(surface->Format, surface->Size, &description);
 	depth = format_is_depth(description.format);
+	xgpu_metal_target_scale(description.width, description.height, depth, scale);
 	for (entry = *render_target_bucket(surface->Data); entry; entry = entry->next_in_bucket)
 	{
 		if (entry->target.data == surface->Data && entry->target.width == description.width &&
-			entry->target.height == description.height && entry->target.depth == depth)
+			entry->target.height == description.height && entry->target.depth == depth &&
+			entry->target.scale[0] == scale[0] && entry->target.scale[1] == scale[1])
 			return &entry->target;
 	}
-	if (description.width > OPENCE_RENDER_MAX_TEXTURE_SIZE || description.height > OPENCE_RENDER_MAX_TEXTURE_SIZE)
+	gl_width = (unsigned long)floorf((float)description.width * scale[0] + 0.5f);
+	gl_height = (unsigned long)floorf((float)description.height * scale[1] + 0.5f);
+	if (!gl_width || !gl_height || gl_width > OPENCE_RENDER_MAX_TEXTURE_SIZE || gl_height > OPENCE_RENDER_MAX_TEXTURE_SIZE)
 		return NULL;
 	entry = calloc(1, sizeof(*entry));
 	if (!entry)
@@ -539,10 +546,10 @@ struct xgpu_render_target *xgpu_metal_render_target_get(const D3DSurface *surfac
 	entry->target.width = description.width;
 	entry->target.height = description.height;
 	entry->target.depth = depth;
-	entry->target.scale[0] = 1.0f;
-	entry->target.scale[1] = 1.0f;
-	entry->target.gl_width = description.width;
-	entry->target.gl_height = description.height;
+	entry->target.scale[0] = scale[0];
+	entry->target.scale[1] = scale[1];
+	entry->target.gl_width = gl_width;
+	entry->target.gl_height = gl_height;
 	entry->target.texture = xgpu_metal_new_id(OPENCE_RENDER_OBJECT_TEXTURE);
 	fields = entry->target.texture ? xgpu_metal_command(OPENCE_RENDER_OP_CREATE_TEXTURE,
 		OPENCE_RENDER_CREATE_TEXTURE_WORDS) : NULL;
@@ -554,8 +561,8 @@ struct xgpu_render_target *xgpu_metal_render_target_get(const D3DSurface *surfac
 	fields[0] = entry->target.texture;
 	fields[1] = OPENCE_RENDER_TEXTURE_2D;
 	fields[2] = depth ? OPENCE_RENDER_FORMAT_DEPTH32F_STENCIL8 : OPENCE_RENDER_FORMAT_BGRA8;
-	fields[3] = (unsigned int)description.width;
-	fields[4] = (unsigned int)description.height;
+	fields[3] = (unsigned int)gl_width;
+	fields[4] = (unsigned int)gl_height;
 	fields[5] = 1;
 	fields[6] = 1;
 	fields[7] = OPENCE_RENDER_USAGE_SAMPLED | OPENCE_RENDER_USAGE_RENDER_TARGET;
@@ -563,6 +570,34 @@ struct xgpu_render_target *xgpu_metal_render_target_get(const D3DSurface *surfac
 	entry->next_in_bucket = *render_target_bucket(surface->Data);
 	*render_target_bucket(surface->Data) = entry;
 	return &entry->target;
+}
+
+/* the targets of a scale the screen no longer has (d3d8_gl.c,
+render_targets_evict), their textures destroyed: called outside a pass */
+void xgpu_metal_render_targets_evict(void)
+{
+	unsigned long bucket;
+
+	for (bucket = 0; bucket < RENDER_TARGET_BUCKET_COUNT; bucket++)
+	{
+		struct render_target_entry **link = &render_target_buckets[bucket];
+
+		while (*link)
+		{
+			struct render_target_entry *entry = *link;
+			float scale[2];
+
+			xgpu_metal_target_scale(entry->target.width, entry->target.height, entry->target.depth, scale);
+			if (scale[0] == entry->target.scale[0] && scale[1] == entry->target.scale[1])
+			{
+				link = &entry->next_in_bucket;
+				continue;
+			}
+			*link = entry->next_in_bucket;
+			xgpu_metal_destroy(OPENCE_RENDER_OBJECT_TEXTURE, entry->target.texture);
+			free(entry);
+		}
+	}
 }
 
 /* the colour target whose memory starts at data, if it has been drawn to */

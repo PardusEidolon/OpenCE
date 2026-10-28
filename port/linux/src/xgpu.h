@@ -360,6 +360,11 @@ BOOL xgpu_metal_stream(const void *data, unsigned long size, unsigned long align
 /* the render target of a surface, made when first asked for: a BGRA8 colour
 texture, or a DEPTH32F_STENCIL8 depth one, sampled and drawn into */
 struct xgpu_render_target *xgpu_metal_render_target_get(const D3DSurface *surface);
+/* the pixels to a unit of a target of this size (d3d8_metal_device.c): the
+screen's and the secondary target's are the screen's scale, the rest 1 */
+void xgpu_metal_target_scale(unsigned long width, unsigned long height, BOOL depth, float scale[2]);
+/* the targets made at a scale the screen no longer has, destroyed */
+void xgpu_metal_render_targets_evict(void);
 
 /* display.anti_aliasing's passes in the Metal Shading Language
 (port/macos/guest/d3d8_metal_post.c): FXAA, and SMAA's three */
