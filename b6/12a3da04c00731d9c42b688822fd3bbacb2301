@@ -1,0 +1,1 @@
+Phase 4 checks: the Swift suite's source scans (ShaderLibraryTests, TimingTests) caught GameRenderer/GameWindow bypassing ShaderLibrary and the timed encoders; the flake check's llvm-cov run caught a frame-clock test bounded by a constant against a loaded builder's sleep. Both fixed; 20 of 20 Swift tests and 12 of 12 batches tests pass.
