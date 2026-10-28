@@ -1,0 +1,1 @@
+A1 task 3: 63/63 reference traces match in the wasm build (tools/engine_wasm_traces.py, ~18 s). devgulch for thousands of ticks needs A2: with stubbed imports halo_game_main loops on DmWalkModuleSections (20M calls in 1.03 s, ~51 ns a host call); game.wasm loads in 324 ms uncached.
