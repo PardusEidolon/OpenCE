@@ -23,7 +23,7 @@ stops, except A1's go/no-go.
 - [x] Task: Write the go/no-go (`a1_go_no_go.md` in this track) with the data, and bring it to the user. Stop on a no-go. efb9f12a (go; brought to the user in the overnight summary)
 - [x] Task: Conductor - User Manual Verification 'Phase 1: The spike' (Protocol in workflow.md) (automated) [checkpoint: 23167ab5]
 
-## Phase 2: The macOS platform layer (A2)
+## Phase 2: The macOS platform layer (A2) [checkpoint: a87a63ef]
 - [x] Task: Memory and the map cache. c7b3f593
   - Finding: the window (0x80000000 to 0xA0000000) holds the game state and the tag cache at their fixed addresses; game.wasm starts with 2 GB so wasi-libc's malloc takes everything below it, and the platform grows the memory past it before the game runs.
 - [x] Task: Files: the data folder, saved games, the map copies. 50101bd5
@@ -39,7 +39,7 @@ stops, except A1's go/no-go.
 - [x] Task: The render calls as one buffer per frame. c0a3fd2d
 - [x] Task: The dev shell, the control socket and the `opence` tool against the wasm game; devgulch and its stations as a map the original loads. fbd99c83
   - Finding: `opence-game --control` hands each line to the original's telnet console, so `opence run` goes through the game's own script compiler. `--map devgulch` loads Blood Gulch's map with "devgulch" written into its header as it is read, since the original refuses a header name that differs from the file's (`cache_files_windows.c`); probe: bsp 0, game time 586. Blocked: the stations and the gathered definitions as a map of their own wait on a cache writer.
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: The platform layer' (Protocol in workflow.md) (automated)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: The platform layer' (Protocol in workflow.md) (automated) a87a63ef
 
 ## Phase 3: The plugin interface (A3)
 - [ ] Task: The hooks as imports and exports: tick, frame, rendering, HUD and UI, sound, AI.
