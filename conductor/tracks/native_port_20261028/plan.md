@@ -62,9 +62,16 @@ stops, except A1's go/no-go.
   - Finding: nothing to add. The device's shaders are the game's own NV2A programs translated to MSL (nv2a_vsh/nv2a_psh), so every shader kind draws through one path; the same headless frame shows the first-person rifle (model), its ammo display and the motion tracker (transparent, chicago) and the HUD. How closely each matches is measured in the golden-frame task.
 - [x] Task: The dynamic lights and fog. d7fe6f1c
   - Finding: carried by the same translation. The device fills `fog_color` and `fog_parameters` from the fog render states and the pixel shader applies the EXP, EXP2 and LINEAR fog; the vertex and per-pixel model lighting, point lights included, are translated and compiled by Metal (`tools/test_nv2a_msl.py`, 7 passed).
-- [ ] Task: Golden frames and image differences against the original, until each shader matches; the user re-approves the golden frames.
-- [ ] Task: The pipelines in a Metal binary archive behind the loading screen; a pipeline missing during play fails a test.
-- [ ] Task: The bar end to end: p99 ≤ 8.33 ms at 4K ultra on the M1 Max.
+- [~] Task: Golden frames and image differences against the original, until each shader matches; the user re-approves the golden frames.
+  - Generated, not approved (awaiting the user): `build/engine/golden/wasm_bloodgulch_640x480.png`, frame 1500 at 640×480 from the VM's camera, the time stepped a 60th a frame (`debug.frame_clock`). 7c5155bc 2af201b3
+  - Finding: crt.c's fopen served only debug.txt and init.txt, so `d:\camera.txt` was NULL and the camera never moved; `data_files.c` now serves any read-mode file through the platform's file imports. 7c5155bc
+  - Measured against the VM's frame (largest difference; share over 8): ground 2, 0%; cliff 1, 0%; sky 49, 11.2% (the clouds scroll with the time); the VM's hint text 109, 26.7% (not drawn here); whole 123, 2.94%. The ground and the cliff are held at ≤ 1% in `GameRunTests`.
+- [x] Task: The pipelines in a Metal binary archive behind the loading screen; a pipeline missing during play fails a test. 2af201b3
+  - Blood Gulch twice: the first run compiles 28 pipelines into the archive (27 in play); the second finds all 28 there and compiles none in play (`testASecondRunOfBloodGulchCompilesNoPipelineInPlay`).
+  - Finding: the archive is filled on the first run, not compiled ahead behind the loading screen; a first run's pipelines are compiled as the game asks for them.
+- [ ] Task: The bar end to end: p99 ≤ 8.33 ms at 4K ultra on the M1 Max. b889c617 492ee877
+  - **Blocked:** `--benchmark 60 --game --size 3840x2160`, each frame the slower of its CPU frame and its GPU work: 2304 frames, p50 7.243 ms, **p99 9.198 ms**, p99.9 175 ms, 4 hitches. The GPU's p99 is 0.845 ms; the CPU frame is the whole of it, and at 640×480 it is the same (p99 8.960 ms).
+  - Where it goes (`opence-game --benchmark 30`, no screen): the frame's p50 5.25 ms, of which the profiled sections are about 1.5 ms (`game_time_update` 0.88, `present` 0.34); the rest is the game's rasterizer and the C Metal device in game.wasm, which have no profile sections. The app's sink (the runtime's check, the batch to Swift and the readbacks) adds about 2 ms more. Next: profile sections in the rasterizer and the device, then the sink. "Ultra" is the stock shaders until Phase 5, which re-runs the bar.
 - [ ] Task: Conductor - User Manual Verification 'Phase 4: Stock rendering' (Protocol in workflow.md) (automated)
 
 ## Phase 5: The presentation as plugins (A5)
