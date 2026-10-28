@@ -1,0 +1,1 @@
+Sound: the original's mixer in game.wasm -> runtime speaker ring -> GameSpeakers (uniffi) -> SoundOutput's AVAudioSourceNode. Headless test heard Blood Gulch for 22 s. The app's interactive play still uses the old Rust engine until Phase 7 moves it to WasmGame.
