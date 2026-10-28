@@ -1,0 +1,1 @@
+Golden frame (unapproved) at build/engine/golden/wasm_bloodgulch_640x480.png; regions vs VM: ground max 2 / 0%, cliff max 1 / 0%, sky max 49 / 11.2%, hint max 109 / 26.7%, whole max 123 / 2.94%. Archive: 28 compiled (27 in play) then 28 archived, 0 in play. Swift tests run on build/swiftpkg (ZZ files excluded).
