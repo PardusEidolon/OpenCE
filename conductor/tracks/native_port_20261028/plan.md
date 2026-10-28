@@ -41,7 +41,7 @@ stops, except A1's go/no-go.
   - Finding: `opence-game --control` hands each line to the original's telnet console, so `opence run` goes through the game's own script compiler. `--map devgulch` loads Blood Gulch's map with "devgulch" written into its header as it is read, since the original refuses a header name that differs from the file's (`cache_files_windows.c`); probe: bsp 0, game time 586. Blocked: the stations and the gathered definitions as a map of their own wait on a cache writer.
 - [x] Task: Conductor - User Manual Verification 'Phase 2: The platform layer' (Protocol in workflow.md) (automated) a87a63ef
 
-## Phase 3: The plugin interface (A3)
+## Phase 3: The plugin interface (A3) [checkpoint: 5a532559]
 - [x] Task: The hooks as imports and exports: tick, frame, rendering, HUD and UI, sound, AI. c8af1699
 - [x] Task: Read-only views of the game's memory through bounds-checked readers; fuzz them. c8af1699
 - [x] Task: Recorded inputs and exact replay. 8785e994
@@ -49,7 +49,7 @@ stops, except A1's go/no-go.
 - [x] Task: Per-plugin budgets logged per frame; a plugin over its share fails a test. c8af1699
 - [x] Task: With every plugin off, the run matches the traces. 8785e994
   - 63 of 63 traces match (`tools/engine_wasm_traces.py`) with the plugins off; no code change was needed.
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: The plugin interface' (Protocol in workflow.md) (automated)
+- [x] Task: Conductor - User Manual Verification 'Phase 3: The plugin interface' (Protocol in workflow.md) (automated) 5a532559
 
 ## Phase 4: Stock rendering on Metal (A4)
 - [ ] Task: `default.metallib` linked from the `.air` at build and loaded with `makeLibrary(URL:)`.
