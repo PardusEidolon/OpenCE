@@ -1,0 +1,5 @@
+_initialize: func () -> ()
+free: func (i32) -> ()
+halo_game_main: func () -> (i32)
+malloc: func (i32) -> (i32)
+memory: memory

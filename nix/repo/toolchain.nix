@@ -10,6 +10,8 @@ let
   # clang 22: the guest's compiler (its arm64_32 target), and the
   # version the profiles in pgo/ were recorded with
   llvm = pkgs.llvmPackages_22;
+  # wasm32-wasip1's C library, for game.wasm
+  wasi = pkgs.pkgsCross.wasi32;
   rust = pkgs.rust-bin.fromRustupToolchainFile (root + /rust-toolchain.toml);
   python = pkgs.python3.withPackages (ps: [
     ps.pytest
@@ -40,6 +42,14 @@ in
     HALO_MACOS_SDL_INCLUDE = "${pkgs.sdl3.dev}/include";
     HALO_MACOS_SDL_LIB = "${pkgs.sdl3}/lib";
     HALO_MACOS_CODESIGN = "${pkgs.darwin.sigtool}/bin/codesign";
+    # game.wasm (tools/engine_wasm.py): the unwrapped clang, for its wasm32
+    # target, and wasi-libc for wasm32-wasip1
+    HALO_WASM_CC = "${llvm.clang-unwrapped}/bin/clang";
+    HALO_WASI_LIBC = "${wasi.wasilibc}";
+    HALO_WASI_LIBC_DEV = "${wasi.wasilibc.dev}";
+    # (compiler-rt's builtins for wasm32, which the unwrapped clang's
+    # resource directory does not have)
+    HALO_WASM_BUILTINS = "${wasi.llvmPackages_22.compiler-rt}/lib/wasip1/libclang_rt.builtins-wasm32.a";
   };
 
   tools = [
