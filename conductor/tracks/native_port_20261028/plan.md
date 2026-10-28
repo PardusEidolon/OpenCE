@@ -54,10 +54,14 @@ stops, except A1's go/no-go.
 ## Phase 4: Stock rendering on Metal (A4)
 - [x] Task: `default.metallib` linked from the `.air` at build and loaded with `makeLibrary(URL:)`. bab7d49f
   - Finding: the bake's path tracer stays compiled per bake, with safe maths; a source whose SHA-256 differs from the one linked is compiled at run time, so the hot reload still works.
-- [~] Task: Draw the rasterizer's buffer: the environment shaders and lightmaps.
+- [x] Task: Draw the rasterizer's buffer: the environment shaders and lightmaps. 01ead901 246b8c2a d7fe6f1c
   - The game's Direct3D is the C Metal device compiled into game.wasm; its batches go to the runtime, checked, with the renderer's readbacks; the Phase 2 D3D recorder is removed. 01ead901
-- [ ] Task: The model, transparent and chicago shaders, and the rest.
-- [ ] Task: The dynamic lights and fog.
+  - The app runs game.wasm through `opence_ffi::game::WasmGame` (for a set time when asked) and carries out its batches on Metal in `GameRenderer`. 246b8c2a d7fe6f1c
+  - Blood Gulch headless for 30 s (`GameRunTests`): 902 batches, 808,946 commands, none refused by the game's check or by Metal, 902 frames presented; the environment, lightmaps and sky drawn.
+- [x] Task: The model, transparent and chicago shaders, and the rest. d7fe6f1c
+  - Finding: nothing to add. The device's shaders are the game's own NV2A programs translated to MSL (nv2a_vsh/nv2a_psh), so every shader kind draws through one path; the same headless frame shows the first-person rifle (model), its ammo display and the motion tracker (transparent, chicago) and the HUD. How closely each matches is measured in the golden-frame task.
+- [x] Task: The dynamic lights and fog. d7fe6f1c
+  - Finding: carried by the same translation. The device fills `fog_color` and `fog_parameters` from the fog render states and the pixel shader applies the EXP, EXP2 and LINEAR fog; the vertex and per-pixel model lighting, point lights included, are translated and compiled by Metal (`tools/test_nv2a_msl.py`, 7 passed).
 - [ ] Task: Golden frames and image differences against the original, until each shader matches; the user re-approves the golden frames.
 - [ ] Task: The pipelines in a Metal binary archive behind the loading screen; a pipeline missing during play fails a test.
 - [ ] Task: The bar end to end: p99 ≤ 8.33 ms at 4K ultra on the M1 Max.
