@@ -82,7 +82,7 @@ public final class UiPass {
         outputFormat: MTLPixelFormat
     ) throws -> MTLRenderPipelineState {
         do {
-            let library = try device.makeLibrary(source: source, options: nil)
+            let library = try ShaderLibrary.make(device: device, source: source)
             let descriptor = MTLRenderPipelineDescriptor()
             descriptor.vertexFunction = try library.required("ui_vertex")
             descriptor.fragmentFunction = try library.required("ui_fragment")

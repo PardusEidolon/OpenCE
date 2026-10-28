@@ -100,7 +100,7 @@ public final class LoadingPass {
         -> (MTLRenderPipelineState, MTLRenderPipelineState, MTLRenderPipelineState)
     {
         do {
-            let library = try device.makeLibrary(source: source, options: nil)
+            let library = try ShaderLibrary.make(device: device, source: source)
             func make(
                 _ vertex: String, _ fragment: String, format: MTLPixelFormat,
                 blend: (MTLBlendFactor, MTLBlendFactor)?

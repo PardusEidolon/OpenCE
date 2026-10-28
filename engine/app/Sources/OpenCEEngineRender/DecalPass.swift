@@ -132,7 +132,7 @@ public final class DecalPass {
 
     private static func pipeline(device: MTLDevice, source: String) throws -> MTLRenderPipelineState {
         do {
-            let library = try device.makeLibrary(source: source, options: nil)
+            let library = try ShaderLibrary.make(device: device, source: source)
             let descriptor = MTLRenderPipelineDescriptor()
             descriptor.vertexFunction = try library.required("decal_vertex")
             descriptor.fragmentFunction = try library.required("decal_fragment")

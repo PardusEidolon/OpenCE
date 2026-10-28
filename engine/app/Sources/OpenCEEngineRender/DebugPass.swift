@@ -64,7 +64,7 @@ public final class DebugPass {
         depthFormat: MTLPixelFormat
     ) throws -> MTLRenderPipelineState {
         do {
-            let library = try device.makeLibrary(source: source, options: nil)
+            let library = try ShaderLibrary.make(device: device, source: source)
             let descriptor = MTLRenderPipelineDescriptor()
             descriptor.vertexFunction = try library.required("debug_vertex")
             descriptor.fragmentFunction = try library.required("debug_fragment")

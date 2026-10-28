@@ -227,7 +227,7 @@ public final class TextPass {
         outputFormat: MTLPixelFormat
     ) throws -> MTLRenderPipelineState {
         do {
-            let library = try device.makeLibrary(source: source, options: nil)
+            let library = try ShaderLibrary.make(device: device, source: source)
             let descriptor = MTLRenderPipelineDescriptor()
             descriptor.vertexFunction = try library.required("text_vertex")
             descriptor.fragmentFunction = try library.required("text_fragment")

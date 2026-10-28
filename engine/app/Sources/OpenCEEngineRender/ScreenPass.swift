@@ -169,7 +169,7 @@ final class ScreenPass {
 
     private static func pipelines(device: MTLDevice, source: String) throws -> Pipelines {
         do {
-            let library = try device.makeLibrary(source: source, options: nil)
+            let library = try ShaderLibrary.make(device: device, source: source)
             func full(_ fragment: String) throws -> MTLRenderPipelineState {
                 let descriptor = MTLRenderPipelineDescriptor()
                 descriptor.vertexFunction = try library.required("screen_vertex")

@@ -126,7 +126,7 @@ public final class CameraPass {
 
     private static func pipelines(device: MTLDevice, source: String) throws -> Pipelines {
         do {
-            let library = try device.makeLibrary(source: source, options: nil)
+            let library = try ShaderLibrary.make(device: device, source: source)
             func compute(_ name: String) throws -> MTLComputePipelineState {
                 try device.makeComputePipelineState(function: try library.required(name))
             }

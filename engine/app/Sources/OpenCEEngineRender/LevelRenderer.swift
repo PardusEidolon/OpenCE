@@ -696,7 +696,7 @@ public final class LevelRenderer {
 
     private static func library(device: MTLDevice, source: String) throws -> MTLLibrary {
         do {
-            return try device.makeLibrary(source: source, options: nil)
+            return try ShaderLibrary.make(device: device, source: source)
         } catch {
             throw LevelRendererError.shaders("\(error)")
         }

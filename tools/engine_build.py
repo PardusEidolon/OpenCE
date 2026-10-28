@@ -21,6 +21,7 @@ Run it inside nix develop, or from the flake's engine package.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import os
 import plistlib
 import shutil
@@ -151,29 +152,58 @@ def metal_compiler(environment: dict[str, str]) -> list[str]:
     return [str(mounted[-1]), "-isysroot", sdk]
 
 
-def check_shaders(out: Path) -> None:
+def check_shaders(out: Path) -> Path:
     """Compiles each of the renderer's shaders as the app will at run time
-    (ShaderSources.swift), failing on the first that has an error."""
+    (ShaderSources.swift), failing on the first that has an error, and links
+    all but the bake's into default.metallib, which the app loads instead of
+    compiling (ShaderLibrary.swift); default.metallib.sources beside it names
+    each source linked by its SHA-256, so that an edited source is compiled
+    again. Returns the metallib."""
     folder = out / "shaders"
     folder.mkdir(parents=True, exist_ok=True)
     environment = xcode_environment()
     compiler = metal_compiler(environment)
+    linked = []
     for shader in sorted((PACKAGE / "Shaders").glob("*.metal")):
+        air = folder / f"{shader.stem}.air"
         made = subprocess.run(
-            [*compiler, "-c", str(shader), "-o", str(folder / f"{shader.stem}.air")],
+            [*compiler, "-c", str(shader), "-o", str(air)],
             env=environment,
             capture_output=True,
             text=True,
         )
         if made.returncode != 0:
             raise SystemExit(f"{shader.name} does not compile:\n{made.stderr}")
+        # (the bake's path tracer is compiled for each bake, with safe maths)
+        if shader.stem != "bake":
+            linked.append((shader, air))
+    # xcrun's metallib, or the mounted toolchain's beside its metal
+    linker = (
+        ["/usr/bin/xcrun", "-sdk", "macosx", "metallib"]
+        if compiler[0] == "/usr/bin/xcrun"
+        else [str(Path(compiler[0]).with_name("metallib"))]
+    )
+    metallib = folder / "default.metallib"
+    made = subprocess.run(
+        [*linker, *(str(air) for _, air in linked), "-o", str(metallib)],
+        env=environment,
+        capture_output=True,
+        text=True,
+    )
+    if made.returncode != 0:
+        raise SystemExit(f"default.metallib does not link:\n{made.stderr}")
+    (folder / "default.metallib.sources").write_text(
+        "".join(f"{hashlib.sha256(shader.read_bytes()).hexdigest()} {shader.name}\n" for shader, _ in linked)
+    )
+    return metallib
 
 
-def swift(command: str, library: Path, out: Path, extra: tuple[str, ...] = ()) -> Path:
+def swift(command: str, library: Path, out: Path, metallib: Path, extra: tuple[str, ...] = ()) -> Path:
     """Runs swift build or swift test with Xcode's Swift (nixpkgs' cannot
     link against the macOS 26 SDK); returns the build folder."""
     scratch = out / "swift"
-    environment = xcode_environment()
+    # (the tests load the linked shaders from here, ShaderLibrary.swift)
+    environment = {**xcode_environment(), "OPENCE_METALLIB": str(metallib)}
     subprocess.run(
         [
             "/usr/bin/xcrun",
@@ -225,7 +255,7 @@ def info_plist(version: str) -> bytes:
     )
 
 
-def bundle(executable: Path, codesign: str, version: str, app: Path) -> None:
+def bundle(executable: Path, metallib: Path, codesign: str, version: str, app: Path) -> None:
     """Lays out the bundle in a staging folder and renames it into place."""
     staging = app.with_name(app.name + ".partial")
     shutil.rmtree(staging, ignore_errors=True)
@@ -234,7 +264,12 @@ def bundle(executable: Path, codesign: str, version: str, app: Path) -> None:
     (staging / "Contents" / "Info.plist").write_bytes(info_plist(version))
     # the HUD's redraws (HudPass.swift)
     shutil.copytree(ROOT / "port" / "assets" / "hud", staging / "Contents" / "Resources" / "hud")
-    # the renderer's shaders, compiled at run time (ShaderSources.swift)
+    # the renderer's shaders linked at build (ShaderLibrary.swift), and their
+    # sources, compiled again when edited (ShaderSources.swift)
+    shutil.copy(metallib, staging / "Contents" / "Resources" / "default.metallib")
+    shutil.copy(
+        metallib.with_suffix(".metallib.sources"), staging / "Contents" / "Resources" / "default.metallib.sources"
+    )
     shutil.copytree(ROOT / "engine" / "app" / "Shaders", staging / "Contents" / "Resources" / "shaders")
     # the menus' fonts and the shell's, with their licences (MenuFonts.swift,
     # TextPass.swift): Overpass and OpenCE only
@@ -283,17 +318,17 @@ def main() -> None:
             return
     out = arguments.out.resolve()
     out.mkdir(parents=True, exist_ok=True)
-    check_shaders(out)
+    metallib = check_shaders(out)
     rust = arguments.rust.resolve() if arguments.rust else out / "rust"
     if not arguments.rust:
         rust_half(rust)
     swift_bindings(rust)
     library = rust / "lib" / LIBRARY
     if arguments.test:
-        swift("test", library, out, ("--filter", arguments.filter) if arguments.filter else ())
+        swift("test", library, out, metallib, ("--filter", arguments.filter) if arguments.filter else ())
         return
-    executable = swift("build", library, out) / EXECUTABLE
-    bundle(executable, arguments.codesign, arguments.version, out / f"{APP_NAME}.app")
+    executable = swift("build", library, out, metallib) / EXECUTABLE
+    bundle(executable, metallib, arguments.codesign, arguments.version, out / f"{APP_NAME}.app")
 
 
 if __name__ == "__main__":
