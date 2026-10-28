@@ -1,0 +1,1 @@
+Phase 3 (A3), task 3: recorded inputs and exact replay. Limits: main thread only, sockets not replayed, no sound on replay, call-backs into the game not made on replay. Tests as c8af1699.
