@@ -96,7 +96,7 @@ public final class OffscreenWindow: RenderWindow, @unchecked Sendable {
         presentedFrames += 1
         // (copied in the frame's own commands, so the next frame cannot draw
         // over it first)
-        if presentedFrames == capture, let captured, let blit = commands.makeBlitCommandEncoder() {
+        if presentedFrames == capture, let captured, let blit = commands.timedBlitEncoder("game capture") {
             blit.copy(from: frame.texture, to: captured)
             blit.endEncoding()
             didCapture = true

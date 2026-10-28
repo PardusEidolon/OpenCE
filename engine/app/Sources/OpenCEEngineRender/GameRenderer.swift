@@ -490,7 +490,7 @@ public final class GameRenderer: RenderTarget, @unchecked Sendable {
             return library
         }
         do {
-            let library = try device.makeLibrary(source: source, options: Self.libraryOptions)
+            let library = try ShaderLibrary.make(device: device, source: source, options: Self.libraryOptions)
             librariesBySource[source] = library
             counts.librariesCompiled += 1
             return library
@@ -658,7 +658,7 @@ public final class GameRenderer: RenderTarget, @unchecked Sendable {
         }
         guard let pass, !pass.failed, let commands = ensureCommands() else { return nil }
         endBlit()
-        guard let encoder = commands.makeRenderCommandEncoder(descriptor: pass.descriptor) else {
+        guard let encoder = commands.timedRenderEncoder("game", descriptor: pass.descriptor) else {
             self.pass?.failed = true
             return nil
         }
@@ -798,7 +798,7 @@ public final class GameRenderer: RenderTarget, @unchecked Sendable {
     private func ensureBlit() -> MTLBlitCommandEncoder? {
         endRender(final: false)
         if blit == nil {
-            blit = ensureCommands()?.makeBlitCommandEncoder()
+            blit = ensureCommands()?.timedBlitEncoder("game upload")
         }
         return blit
     }

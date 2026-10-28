@@ -366,9 +366,15 @@ fn with_the_frame_clock_each_frame_shown_is_a_60th_of_a_second() -> Result<(), E
     submit(&mut game, &batch(&[(op::CREATE_BUFFER, &[1, 64])]))?;
     assert_eq!(clock(&mut game)? - start, 30 * STEP);
     // in the dark for more than a tenth of a second, it steps with the real time
+    // (bounded by the time measured, as a loaded machine sleeps longer)
+    let before = std::time::Instant::now();
     std::thread::sleep(std::time::Duration::from_millis(200));
     let dark = clock(&mut game)? - start - 30 * STEP;
-    assert!((5 * STEP..=12 * STEP).contains(&dark), "{dark}");
+    let slept = u64::try_from(before.elapsed().as_nanos()).unwrap_or(u64::MAX);
+    assert!(
+        dark >= 5 * STEP && dark <= slept + STEP,
+        "{dark} after {slept}"
+    );
     Ok(())
 }
 

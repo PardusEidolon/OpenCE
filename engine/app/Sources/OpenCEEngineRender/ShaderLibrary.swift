@@ -36,12 +36,12 @@ public enum ShaderLibrary {
     }
 
     /// The library for `source`: the linked one when `source` is one of
-    /// those linked, else `source` compiled.
-    public static func make(device: MTLDevice, source: String) throws -> MTLLibrary {
+    /// those linked, else `source` compiled (with `options`, when given).
+    public static func make(device: MTLDevice, source: String, options: MTLCompileOptions? = nil) throws -> MTLLibrary {
         if let found = try entry(device: device, bundle: .main), found.1.contains(hash(source)) {
             return found.0
         }
-        let library = try device.makeLibrary(source: source, options: nil)
+        let library = try device.makeLibrary(source: source, options: options)
         state.lock.lock()
         state.compiled += 1
         state.lock.unlock()
