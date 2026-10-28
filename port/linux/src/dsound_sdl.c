@@ -33,14 +33,24 @@ audio.volume sets the master volume (default 1.0); audio.reverb = false
 turns the reverb off; audio.resampler = "linear" resamples between
 neighbouring frames instead of with the sinc low pass; audio.enabled = false
 skips opening a device (port_config.c).
+
+In game.wasm (HALO_WASMTIME, tools/engine_wasm.py) there is no SDL: a thread
+of the game's mixes into the runtime's ring through halo_audio_output, which
+waits until the ring has room and answers how many frames to mix next; the
+app pulls the ring onto Core Audio (opence_runtime's audio module). There is
+no voice chat there, so no players' voices are mixed.
 */
 
 #include "platform.h"
+#ifndef HALO_WASMTIME
 #include "sdl_platform.h"
+#endif
 #include "port_config.h"
+#ifndef HALO_WASMTIME
 #include "voice_audio.h"
 
 #include <SDL3/SDL.h>
+#endif
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -1316,12 +1326,56 @@ static void mix(float *output, unsigned long frames)
 		if ((!enabled && reverb.level <= 0.0f) || reverb.quiet > REVERB_QUIET_FRAMES)
 			reverb_clear();
 	}
+#ifndef HALO_WASMTIME
 	/* the players' voices (voice_audio.c), dry, under the limiter */
 	voice_audio_mix(output, frames);
+#endif
 	limit(output, frames);
 }
 
 /* ---------- output */
+
+#ifdef HALO_WASMTIME
+/* the runtime's ring: keeps the frames, waits until it has room, and
+answers how many frames to mix next */
+extern unsigned long halo_audio_output(const float *frames, unsigned long count);
+
+static BOOL audio_started = FALSE;
+
+static void *audio_thread(void *parameter)
+{
+	static float buffer[MIX_CHUNK_FRAMES * OUTPUT_CHANNELS];
+	unsigned long frames = 0;
+
+	(void)parameter;
+	for (;;)
+	{
+		frames = halo_audio_output(buffer, frames);
+		if (frames > MIX_CHUNK_FRAMES)
+			frames = MIX_CHUNK_FRAMES;
+		if (frames)
+			mix(buffer, frames);
+	}
+	return NULL;
+}
+
+static void audio_start(void)
+{
+	pthread_t thread;
+
+	if (audio_started)
+		return;
+	audio_started = TRUE;
+	master_volume = (float)config_real("audio.volume");
+	reverb_enabled = config_boolean("audio.reverb");
+	resampler_mode = resampler_mode_read();
+	resampler_initialize();
+	resampler_phases_initialize();
+	reverb_initialize();
+	pthread_create(&thread, NULL, audio_thread, NULL);
+	pthread_detach(thread);
+}
+#else
 
 static SDL_AudioStream *audio_stream;
 static BOOL audio_started = FALSE;
@@ -1467,6 +1521,7 @@ void dsound_sdl_output_device_check(void)
 		pthread_detach(thread);
 	}
 }
+#endif
 
 /* ---------- completion */
 

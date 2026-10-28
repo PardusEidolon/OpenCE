@@ -10,8 +10,9 @@ without a prototype get one (tools/android_build.py VARIADIC_PROTOTYPE_FILES).
 What goes into the module is the game: source/ less what port.json excludes,
 the port's own game units (port/linux/game), stb_vorbis and musl's maths, so
 every run computes the same results, and the C library's helpers and the
-platform's variables and objects (port/wasmtime/crt.c, platform_data.c,
-dsound.c; the Linux port's wide strings and pooled globals). The C library is wasi-libc. Every
+platform's variables and objects (port/wasmtime/crt.c, platform_data.c; the
+Linux port's wide strings, pooled globals and sound mixer, dsound_sdl.c, which
+hands its mixed frames to the runtime). The C library is wasi-libc. Every
 function the game calls that none of these defines is left undefined and
 becomes an import from "env": that set is the platform layer, which the Rust
 runtime provides (engine/crates/runtime). tools/engine_wasm_imports.txt lists
@@ -72,9 +73,10 @@ COMMON_SOURCE = Path("port/linux/src/halo_linker_common.c")
 # the Xbox libraries' variables the game uses directly (Direct3D's states,
 # the input device types), which can't be imported
 PLATFORM_DATA_SOURCE = Path("port/wasmtime/platform_data.c")
-# DirectSound's streams, whose methods the game calls through a vtable of
-# the module's functions
-DSOUND_SOURCE = Path("port/wasmtime/dsound.c")
+# DirectSound: the Linux port's mixer, its voices, streams, reverb and
+# resampler, without SDL (HALO_WASMTIME): a thread of the game's mixes into
+# the runtime's ring (halo_audio_output)
+DSOUND_SOURCE = Path("port/linux/src/dsound_sdl.c")
 # the game's log lines and debug output, to standard error
 LOG_SOURCE = Path("port/wasmtime/log.c")
 # game.wasm's own headers, found before the Linux port's (profile_sections.h)
@@ -141,7 +143,6 @@ EXPORTS = [
     "console_is_active",
     "network_chat_typing",
     "network_chat_keyboard_open",
-    "halo_dsound_complete",
 ]
 
 # wasi-libc for each target, as nix develop names it

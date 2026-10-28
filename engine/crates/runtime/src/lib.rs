@@ -19,11 +19,11 @@ use std::collections::BTreeMap;
 use std::path::Path;
 use std::sync::{Arc, Mutex, MutexGuard, PoisonError};
 
+mod audio;
 pub mod benchmark;
 mod config;
 mod controls;
 mod d3d;
-mod dsound;
 pub mod files;
 mod input;
 pub mod memory;
@@ -44,6 +44,7 @@ use wasmtime::{
 /// a wasm value, as the game's functions take and return them
 pub use wasmtime::Val;
 
+pub use audio::{Speakers, SPEAKER_RATE, SPEAKER_TARGET_FRAMES};
 pub use controls::{keystroke_flags, virtual_key, Controls};
 pub use profile::{Span, SLEEP};
 
@@ -208,8 +209,8 @@ struct Shared {
     settings: Mutex<config::Settings>,
     /// the keyboard and mouse, and what the game has opened of them
     input: Mutex<input::Input>,
-    /// DirectSound's streams, device and buffers
-    dsound: Mutex<dsound::Sound>,
+    /// the mixed sound, on its way to the speakers
+    audio: audio::Output,
     /// the profile sections' spans, while profiling is on
     profile: Mutex<profile::Profile>,
 }
@@ -296,14 +297,6 @@ impl Record {
     fn input(&self) -> MutexGuard<'_, input::Input> {
         self.shared
             .input
-            .lock()
-            .unwrap_or_else(PoisonError::into_inner)
-    }
-
-    /// DirectSound's state, held while the guard lives
-    fn sound(&self) -> MutexGuard<'_, dsound::Sound> {
-        self.shared
-            .dsound
             .lock()
             .unwrap_or_else(PoisonError::into_inner)
     }
@@ -405,7 +398,7 @@ pub fn answers(name: &str) -> bool {
         || textures::handler(name).is_some()
         || config::handler(name).is_some()
         || input::handler(name).is_some()
-        || dsound::handler(name).is_some()
+        || audio::handler(name).is_some()
         || net::handler(name).is_some()
         || profile::handler(name).is_some()
         || files::service(name).is_some()
@@ -502,7 +495,7 @@ impl Runtime {
                 .or_else(|| textures::handler(&name))
                 .or_else(|| config::handler(&name))
                 .or_else(|| input::handler(&name))
-                .or_else(|| dsound::handler(&name))
+                .or_else(|| audio::handler(&name))
                 .or_else(|| net::handler(&name))
                 .or_else(|| profile::handler(&name));
             let files_service = files::service(&name);
@@ -590,7 +583,7 @@ impl Runtime {
                     d3d: Mutex::new(d3d::Device::default()),
                     settings: Mutex::new(config::Settings::new(|name| std::env::var(name).ok())),
                     input: Mutex::new(input::Input::default()),
-                    dsound: Mutex::new(dsound::Sound::default()),
+                    audio: audio::Output::default(),
                     profile: Mutex::new(profile::Profile::default()),
                 }),
                 thread: 0,
@@ -845,6 +838,13 @@ impl Game {
     #[must_use]
     pub fn controls(&self) -> Controls {
         Controls::new(Arc::clone(&self.store.data().shared))
+    }
+
+    /// The game's speakers, to pull its mixed sound from on the audio
+    /// device's thread while `halo_game_main` keeps this game busy.
+    #[must_use]
+    pub fn speakers(&self) -> Speakers {
+        Speakers::new(Arc::clone(&self.store.data().shared))
     }
 
     /// The texture and palette the game last set for the texture `stage`,

@@ -1884,8 +1884,8 @@ collision_bsp	bsp3d.planes.definition	20	struct tag_block_definition *	read	-	-
 collision_bsp	leaves.count	24	long	read	kept	walked
 collision_bsp	leaves.address	28	void *	read	kept	walked
 collision_bsp	leaves.definition	32	struct tag_block_definition *	read	-	-
-collision_bsp	bsp2d_references.count	36	long	read	kept	used
-collision_bsp	bsp2d_references.address	40	void *	read	kept	used
+collision_bsp	bsp2d_references.count	36	long	read	kept	unused
+collision_bsp	bsp2d_references.address	40	void *	read	kept	unused
 collision_bsp	bsp2d_references.definition	44	struct tag_block_definition *	read	-	-
 collision_bsp	bsp2d.nodes.count	48	long	read	kept	unused
 collision_bsp	bsp2d.nodes.address	52	void *	read	kept	unused
@@ -5831,8 +5831,8 @@ scenario	bad_sky.group_tag	32	unsigned long	-	-	-
 scenario	bad_sky.name	36	char *	-	-	-
 scenario	bad_sky.name_length	40	long	-	-	-
 scenario	bad_sky.index	44	long	-	-	-
-scenario	sky_references.count	48	long	read	kept	used
-scenario	sky_references.address	52	void *	read	kept	used
+scenario	sky_references.count	48	long	read	kept	walked
+scenario	sky_references.address	52	void *	read	kept	walked
 scenario	sky_references.definition	56	struct tag_block_definition *	read	-	-
 scenario	type	60	short	read	-	-
 scenario	flags	62	word	-	-	-
