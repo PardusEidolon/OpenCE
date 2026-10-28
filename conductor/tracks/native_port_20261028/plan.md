@@ -52,7 +52,8 @@ stops, except A1's go/no-go.
 - [x] Task: Conductor - User Manual Verification 'Phase 3: The plugin interface' (Protocol in workflow.md) (automated) 5a532559
 
 ## Phase 4: Stock rendering on Metal (A4)
-- [ ] Task: `default.metallib` linked from the `.air` at build and loaded with `makeLibrary(URL:)`.
+- [x] Task: `default.metallib` linked from the `.air` at build and loaded with `makeLibrary(URL:)`. bab7d49f
+  - Finding: the bake's path tracer stays compiled per bake, with safe maths; a source whose SHA-256 differs from the one linked is compiled at run time, so the hot reload still works.
 - [ ] Task: Draw the rasterizer's buffer: the environment shaders and lightmaps.
 - [ ] Task: The model, transparent and chicago shaders, and the rest.
 - [ ] Task: The dynamic lights and fog.
