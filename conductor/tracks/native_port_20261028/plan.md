@@ -54,7 +54,8 @@ stops, except A1's go/no-go.
 ## Phase 4: Stock rendering on Metal (A4)
 - [x] Task: `default.metallib` linked from the `.air` at build and loaded with `makeLibrary(URL:)`. bab7d49f
   - Finding: the bake's path tracer stays compiled per bake, with safe maths; a source whose SHA-256 differs from the one linked is compiled at run time, so the hot reload still works.
-- [ ] Task: Draw the rasterizer's buffer: the environment shaders and lightmaps.
+- [~] Task: Draw the rasterizer's buffer: the environment shaders and lightmaps.
+  - The game's Direct3D is the C Metal device compiled into game.wasm; its batches go to the runtime, checked, with the renderer's readbacks; the Phase 2 D3D recorder is removed. 01ead901
 - [ ] Task: The model, transparent and chicago shaders, and the rest.
 - [ ] Task: The dynamic lights and fog.
 - [ ] Task: Golden frames and image differences against the original, until each shader matches; the user re-approves the golden frames.
