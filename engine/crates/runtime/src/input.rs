@@ -762,8 +762,9 @@ fn get_device_changes(
 }
 
 /// `XInputOpen(type, port, slot, parameters)`: the keyboard's controller
-/// on any of the four ports, the debug keyboard on the first; else NULL,
-/// with the last error ERROR_DEVICE_NOT_CONNECTED
+/// and the debug keyboard, each on the first port; else NULL, with the
+/// last error ERROR_DEVICE_NOT_CONNECTED. The Linux port gave the other
+/// three ports to gamepads; here there are none, so they never open.
 fn open(
     caller: &mut Caller<'_, Record>,
     params: &[Val],
@@ -775,11 +776,11 @@ fn open(
     let handle = {
         let mut input = record.input();
         match (device, usize::try_from(port)) {
-            (Device::Gamepad, Ok(index)) if index < PORTS => {
-                input.open[index] = true;
-                input.packets[index] = 0;
-                input.previous[index] = [0; GAMEPAD_BYTES];
-                GAMEPAD_HANDLE + port * GAMEPAD_HANDLE_STEP
+            (Device::Gamepad, Ok(0)) => {
+                input.open[0] = true;
+                input.packets[0] = 0;
+                input.previous[0] = [0; GAMEPAD_BYTES];
+                GAMEPAD_HANDLE
             }
             (Device::DebugKeyboard, Ok(0)) => {
                 input.keyboard_open = true;
@@ -832,12 +833,8 @@ fn get_state(
             give(results, ERROR_DEVICE_NOT_CONNECTED);
             return Ok(());
         };
-        let pad = if port == 0 {
-            input.keyboard_state(&bindings, game, now)
-        } else {
-            Gamepad::default()
-        };
-        let bytes = pad.bytes();
+        // (only the first port opens: the keyboard and mouse)
+        let bytes = input.keyboard_state(&bindings, game, now).bytes();
         if bytes != input.previous[port] {
             input.packets[port] = input.packets[port].wrapping_add(1);
             input.previous[port] = bytes;

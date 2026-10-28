@@ -21,6 +21,7 @@ use std::sync::{Arc, Mutex, MutexGuard, PoisonError};
 
 pub mod benchmark;
 mod config;
+mod controls;
 mod d3d;
 mod dsound;
 pub mod files;
@@ -43,6 +44,7 @@ use wasmtime::{
 /// a wasm value, as the game's functions take and return them
 pub use wasmtime::Val;
 
+pub use controls::{keystroke_flags, virtual_key, Controls};
 pub use profile::{Span, SLEEP};
 
 /// the import that ends the game, with its exit code
@@ -836,6 +838,13 @@ impl Game {
     /// The screenshots the player has asked for since the last call.
     pub fn take_screenshots(&mut self) -> u32 {
         self.store.data().input().take_screenshots()
+    }
+
+    /// The game's keyboard and mouse, to hand input to from another thread
+    /// while `halo_game_main` keeps this game busy.
+    #[must_use]
+    pub fn controls(&self) -> Controls {
+        Controls::new(Arc::clone(&self.store.data().shared))
     }
 
     /// The texture and palette the game last set for the texture `stage`,
