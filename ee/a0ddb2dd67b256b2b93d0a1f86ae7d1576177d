@@ -1,0 +1,1 @@
+Startup imports: system, D3D device/state/resources/textures, config, input, DirectSound, net; CRT debug.txt/init.txt; Game::prepare. Checked: runtime tests, clippy, fmt, pytest 27, 63 traces, census, workspace (known flaky AI-station budget only), Swift 214/51 skipped.
