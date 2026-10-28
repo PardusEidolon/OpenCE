@@ -1,0 +1,1 @@
+Task: the app plays game.wasm (GamePlayer, GameInput, SoundOutput, bundled game.wasm). Swift: 238 tests, only the old engine's known failures. Not run on the desktop (headless only).
