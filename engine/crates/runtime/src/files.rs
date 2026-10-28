@@ -170,6 +170,8 @@ pub struct Files {
     /// each thread's last error
     last_errors: BTreeMap<u32, u32>,
     completions: Vec<Completion>,
+    /// the console's init script, `d:\init.txt` (`halo_init_text`)
+    init: Vec<u8>,
 }
 
 impl Files {
@@ -177,6 +179,28 @@ impl Files {
     pub fn set_folders(&mut self, data: &Path, saves: &Path) {
         self.data = Some(data.to_path_buf());
         self.saves = Some(saves.to_path_buf());
+    }
+
+    /// Sets the console's init script, the commands `console_startup` runs
+    /// as the game starts (`source/main/console.c`), one to a line: the
+    /// original's own way to start on a map (`map_name`).
+    pub fn set_init_commands(&mut self, text: &str) {
+        self.init = text.as_bytes().to_vec();
+    }
+
+    /// `halo_init_text(buffer, size)`: the init script's length, its first
+    /// `size` bytes written to `buffer` (none past the memory)
+    fn init_text(&mut self, data: &mut Space<'_>, a: &[u32; 8]) -> u32 {
+        let size = usize::try_from(a[1]).unwrap_or(usize::MAX);
+        if a[0] != 0 {
+            data.write(
+                a[0],
+                self.init
+                    .get(..size.min(self.init.len()))
+                    .unwrap_or_default(),
+            );
+        }
+        u32::try_from(self.init.len()).unwrap_or(u32::MAX)
     }
 
     /// The completion routines waiting for an alertable wait, oldest first.
@@ -197,6 +221,12 @@ impl Files {
     /// whether any completion routine waits for `thread`
     pub(crate) fn has_completions(&self, thread: u32) -> bool {
         self.completions.iter().any(|done| done.thread == thread)
+    }
+
+    /// sets the game's thread `thread`'s last error, as another module's
+    /// import fails
+    pub(crate) fn fail_for(&mut self, thread: u32, error: u32) {
+        self.last_errors.insert(thread, error);
     }
 
     /// sets the last error and gives `value`
@@ -938,6 +968,7 @@ pub(crate) fn service(name: &str) -> Option<Service> {
         "XCalculateSignatureEnd" => Files::signature_end,
         "XSetNicknameW" => Files::set_nickname,
         "XFindFirstNicknameW" => Files::find_first_nickname,
+        "halo_init_text" => Files::init_text,
         _ => return None,
     };
     Some(service)

@@ -9,7 +9,9 @@ without a prototype get one (tools/android_build.py VARIADIC_PROTOTYPE_FILES).
 
 What goes into the module is the game: source/ less what port.json excludes,
 the port's own game units (port/linux/game), stb_vorbis and musl's maths, so
-every run computes the same results. The C library is wasi-libc. Every
+every run computes the same results, and the C library's helpers and the
+platform's variables and objects (port/wasmtime/crt.c, platform_data.c,
+dsound.c; the Linux port's wide strings and pooled globals). The C library is wasi-libc. Every
 function the game calls that none of these defines is left undefined and
 becomes an import from "env": that set is the platform layer, which the Rust
 runtime provides (engine/crates/runtime). tools/engine_wasm_imports.txt lists
@@ -45,14 +47,36 @@ if __package__ in (None, ""):
     sys.path.insert(0, str(ROOT))
 
 from tools.android_build import VARIADIC_PROTOTYPE_FILES  # noqa: E402
+from tools.embed_assets import RAGDOLL_OVERRIDES, words  # noqa: E402
 from tools.linux_build import (  # noqa: E402
     MUSL_MATH_DIR,
     STB_VORBIS_SOURCE,
     XDK_INCLUDE,
+    ZLIB_DEFINES,
+    ZLIB_DIR,
+    ZLIB_SOURCES,
     game_sources,
     musl_math_sources,
 )
 from tools.web_build import GAME_FLAGS, PROTOTYPE_FILES, WEB_CODE_FLAGS  # noqa: E402
+
+# the C library helpers the game calls that are not the platform (the printf
+# family, the case-blind compares, the D3DX maths and the rest): compiled
+# into the module, so that none is a call out to the runtime
+CRT_SOURCE = Path("port/wasmtime/crt.c")
+# the 16-bit wide string functions (-fshort-wchar), the Linux port's
+WIDE_SOURCE = Path("port/linux/src/msvc_wide.c")
+# the game's pooled COMMON globals no unit of source/ defines (weak, zeroed:
+# the Linux port's)
+COMMON_SOURCE = Path("port/linux/src/halo_linker_common.c")
+# the Xbox libraries' variables the game uses directly (Direct3D's states,
+# the input device types), which can't be imported
+PLATFORM_DATA_SOURCE = Path("port/wasmtime/platform_data.c")
+# DirectSound's streams, whose methods the game calls through a vtable of
+# the module's functions
+DSOUND_SOURCE = Path("port/wasmtime/dsound.c")
+# the game's log lines and debug output, to standard error
+LOG_SOURCE = Path("port/wasmtime/log.c")
 
 LINUX_DIR = Path("port/linux")
 ANDROID_DIR = Path("port/android")
@@ -96,14 +120,40 @@ ABI_FLAGS = [
 # what the module exports to the runtime: the game's entry point, the C
 # heap, which the platform layer allocates the game's buffers from, and what
 # its threads need (CreateThread calls the game's pthread_create, and a new
-# thread starts at wasi_thread_start)
-EXPORTS = ["halo_game_main", "malloc", "free", "pthread_create", "pthread_detach", "wasi_thread_start"]
+# thread starts at wasi_thread_start), and the addresses of Direct3D's
+# render and texture states, whose defaults the device writes; and for the
+# input, the device types the game opens and whether its console or chat
+# takes the keys; and the call through which the runtime completes a sound
+# packet, to the stream's callback
+EXPORTS = [
+    "halo_game_main",
+    "malloc",
+    "free",
+    "pthread_create",
+    "pthread_detach",
+    "wasi_thread_start",
+    "D3D__RenderState",
+    "D3D__TextureState",
+    "XDEVICE_TYPE_GAMEPAD_TABLE",
+    "XDEVICE_TYPE_DEBUG_KEYBOARD_TABLE",
+    "console_is_active",
+    "network_chat_typing",
+    "network_chat_keyboard_open",
+    "halo_dsound_complete",
+]
 
 # wasi-libc for each target, as nix develop names it
 WASI_LIBC = {
     "wasm32-wasip1-threads": "HALO_WASI_LIBC_THREADS",
     "wasm32-wasip1": "HALO_WASI_LIBC",
 }
+
+
+# the platform layer: every function the game calls that the module does not
+# define is imported from "env". A variable can't be imported, and
+# --allow-undefined would place an undefined one at address 0, so the link
+# refuses one instead.
+UNDEFINED_FLAGS = ["-Wl,--import-undefined"]
 
 
 def wasi_paths(target: str = TARGET) -> Tuple[Path, Path]:
@@ -132,6 +182,20 @@ def semantics_header(build: Path) -> Path:
         cwd=ROOT,
     )
     return header
+
+
+def ragdoll_unit(build: Path) -> Path:
+    """the ragdolls' overrides (port/linux/game/ragdoll_bodies.c) as a unit,
+    laid out as tools/embed_assets.py lays them out, size 0 where the
+    checkout has none; written only when it changes, so it isn't rebuilt"""
+    source = build / "ragdoll_overrides.c"
+    data = (ROOT / RAGDOLL_OVERRIDES).read_bytes() if (ROOT / RAGDOLL_OVERRIDES).is_file() else b""
+    lines = ["const unsigned int ragdoll_overrides_embedded[] = {", *(words(data) if data else ["\t0,"]), "};"]
+    lines.append(f"const unsigned long ragdoll_overrides_embedded_size = {len(data)};")
+    text = "\n".join(lines) + "\n"
+    if not source.exists() or source.read_text() != text:
+        source.write_text(text)
+    return source
 
 
 def units(config: Dict[str, object], build: Path, include: Path) -> List[Tuple[Path, List[str]]]:
@@ -175,6 +239,35 @@ def units(config: Dict[str, object], build: Path, include: Path) -> List[Tuple[P
     for source in sorted(Path(str(config["game_sources"])).glob("*.c")):
         result.append((source, list(game)))
     result.append((STB_VORBIS_SOURCE, list(game)))
+    result.append((CRT_SOURCE, [*common, "-std=gnu11", "-Wall", "-Werror"]))
+    platform = [
+        *common,
+        *("-fno-common" if flag == "-fcommon" else flag for flag in WEB_CODE_FLAGS),
+        "-std=gnu11",
+        "-D_GNU_SOURCE",
+        "-DHALO_LINUX_PLATFORM_LAYER",
+        # WASI has no temporary names (its tmpnam is declared, never
+        # defined): msvc_wide.c's _wtmpnam only needs the buffer's length
+        "-DL_tmpnam=20",
+        "-w",
+        "-include",
+        str(prefix),
+        "-include",
+        str(build / "halo_msvc_semantics.h"),
+        f"-I{LINUX_DIR}/src",
+        f"-I{LINUX_DIR}/include",
+        "-idirafter",
+        str(XDK_INCLUDE),
+    ]
+    result.append((WIDE_SOURCE, platform))
+    result.append((COMMON_SOURCE, platform))
+    result.append((PLATFORM_DATA_SOURCE, platform))
+    result.append((DSOUND_SOURCE, platform))
+    result.append((LOG_SOURCE, platform))
+    result.append((ragdoll_unit(build).relative_to(ROOT), [*common, "-std=gnu11", "-Wall", "-Werror"]))
+    # the saved films' and the mods' inflate (zlib, with its names prefixed)
+    for name in ZLIB_SOURCES:
+        result.append((ZLIB_DIR / name, [*common, "-std=gnu11", *ZLIB_DEFINES, "-w"]))
     musl = [*common, "-std=gnu11", "-w", f"-I{MUSL_MATH_DIR}/include", "-include", f"{MUSL_MATH_DIR}/include/libm.h"]
     for source in musl_math_sources():
         result.append((source, list(musl)))
@@ -227,9 +320,7 @@ def link(objects: Sequence[Path], lib: Path, output: Path) -> None:
         str(lib / "crt1-reactor.o"),
         f"-L{lib}",
         "-Wl,--fatal-warnings",
-        # the platform layer: every function the game calls that the module
-        # does not define is imported from "env"
-        "-Wl,--allow-undefined",
+        *UNDEFINED_FLAGS,
         f"-Wl,--initial-memory={MEMORY_BYTES}",
         f"-Wl,--max-memory={MAXIMUM_MEMORY_BYTES}",
         f"-Wl,-z,stack-size={STACK_BYTES}",

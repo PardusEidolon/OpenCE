@@ -19,9 +19,17 @@ use std::collections::BTreeMap;
 use std::path::Path;
 use std::sync::{Arc, Mutex, MutexGuard, PoisonError};
 
+mod config;
+mod d3d;
+mod dsound;
 pub mod files;
+mod input;
 pub mod memory;
+mod net;
+mod resources;
 mod space;
+mod system;
+mod textures;
 mod threads;
 
 use space::Space;
@@ -173,6 +181,14 @@ struct Shared {
     files: Mutex<files::Files>,
     /// the game's threads, the objects they wait on and the clocks
     threads: threads::Threads,
+    /// Direct3D's device, once the game has created it
+    d3d: Mutex<d3d::Device>,
+    /// the game's settings, as it reads and writes them
+    settings: Mutex<config::Settings>,
+    /// the keyboard and mouse, and what the game has opened of them
+    input: Mutex<input::Input>,
+    /// DirectSound's streams, device and buffers
+    dsound: Mutex<dsound::Sound>,
 }
 
 /// the record the stubs keep, in the store
@@ -230,6 +246,38 @@ impl Record {
     fn files(&self) -> MutexGuard<'_, files::Files> {
         self.shared
             .files
+            .lock()
+            .unwrap_or_else(PoisonError::into_inner)
+    }
+
+    /// Direct3D's device, held while the guard lives
+    fn device(&self) -> MutexGuard<'_, d3d::Device> {
+        self.shared
+            .d3d
+            .lock()
+            .unwrap_or_else(PoisonError::into_inner)
+    }
+
+    /// the game's settings, held while the guard lives
+    fn settings(&self) -> MutexGuard<'_, config::Settings> {
+        self.shared
+            .settings
+            .lock()
+            .unwrap_or_else(PoisonError::into_inner)
+    }
+
+    /// the keyboard and mouse, held while the guard lives
+    fn input(&self) -> MutexGuard<'_, input::Input> {
+        self.shared
+            .input
+            .lock()
+            .unwrap_or_else(PoisonError::into_inner)
+    }
+
+    /// DirectSound's state, held while the guard lives
+    fn sound(&self) -> MutexGuard<'_, dsound::Sound> {
+        self.shared
+            .dsound
             .lock()
             .unwrap_or_else(PoisonError::into_inner)
     }
@@ -317,6 +365,14 @@ pub fn answers(name: &str) -> bool {
         || name == FD_WRITE
         || threads::handler(name).is_some()
         || memory::handler(name).is_some()
+        || system::handler(name).is_some()
+        || d3d::handler(name).is_some()
+        || resources::handler(name).is_some()
+        || textures::handler(name).is_some()
+        || config::handler(name).is_some()
+        || input::handler(name).is_some()
+        || dsound::handler(name).is_some()
+        || net::handler(name).is_some()
         || files::service(name).is_some()
 }
 
@@ -404,7 +460,15 @@ impl Runtime {
             let exits = name == PROC_EXIT;
             let writes = name == FD_WRITE;
             let threads = threads::handler(&name);
-            let serves = memory::handler(&name);
+            let serves = memory::handler(&name)
+                .or_else(|| system::handler(&name))
+                .or_else(|| d3d::handler(&name))
+                .or_else(|| resources::handler(&name))
+                .or_else(|| textures::handler(&name))
+                .or_else(|| config::handler(&name))
+                .or_else(|| input::handler(&name))
+                .or_else(|| dsound::handler(&name))
+                .or_else(|| net::handler(&name));
             let files_service = files::service(&name);
             linker
                 .func_new(
@@ -480,6 +544,10 @@ impl Runtime {
                     window: Mutex::new(memory::Window::new()),
                     files: Mutex::new(files::Files::default()),
                     threads: threads::Threads::new(),
+                    d3d: Mutex::new(d3d::Device::default()),
+                    settings: Mutex::new(config::Settings::new(|name| std::env::var(name).ok())),
+                    input: Mutex::new(input::Input::default()),
+                    dsound: Mutex::new(dsound::Sound::default()),
                 }),
                 thread: 0,
                 pending: None,
@@ -645,6 +713,73 @@ impl Game {
     /// other drives); until then no path is found.
     pub fn set_folders(&mut self, data: &std::path::Path, saves: &std::path::Path) {
         self.store.data().files().set_folders(data, saves);
+    }
+
+    /// Sets the console commands the game runs as it starts, as its
+    /// `d:\init.txt` ([`files::Files::set_init_commands`]).
+    pub fn set_init_commands(&mut self, text: &str) {
+        self.store.data().files().set_init_commands(text);
+    }
+
+    /// Makes the game ready to run `halo_game_main`: its data and save
+    /// folders ([`Game::set_folders`]), its memory grown past the Xbox's
+    /// window, where the game state and the tag cache are placed
+    /// (`memory::WINDOW_BASE`), and the display its screen is shown on
+    /// ([`Game::set_display`]).
+    ///
+    /// # Errors
+    /// [`Error::Grow`] if the memory cannot grow past the window.
+    pub fn prepare(
+        &mut self,
+        data: &std::path::Path,
+        saves: &std::path::Path,
+        display: (u32, u32),
+    ) -> Result<(), Error> {
+        self.set_folders(data, saves);
+        self.grow_memory_to(u64::from(memory::WINDOW_BASE) + u64::from(memory::WINDOW_SIZE))?;
+        self.set_display(display.0, display.1);
+        Ok(())
+    }
+
+    /// Sets the display the game's screen is shown on, in pixels: the
+    /// screen takes its shape (until then, the Xbox's 640 by 480).
+    pub fn set_display(&mut self, width: u32, height: u32) {
+        self.store.data().device().display = Some((width, height));
+    }
+
+    /// A key going down or up: its Windows virtual key, its character (0
+    /// if none) and its keystroke flags (shift, control, alt and so on).
+    pub fn key(&mut self, vk: u8, ascii: u8, flags: u8, down: bool) {
+        self.store.data().input().key(vk, ascii, flags, down);
+    }
+
+    /// The mouse moving by `dx` and `dy` pixels, right and down.
+    pub fn mouse_motion(&mut self, dx: f32, dy: f32) {
+        self.store.data().input().motion(dx, dy);
+    }
+
+    /// A mouse button going down or up, numbered as SDL numbers them: 1
+    /// the left, 2 the middle, 3 the right, 4 and on the side buttons.
+    pub fn mouse_button(&mut self, button: u8, down: bool) {
+        self.store.data().input().button(button, down);
+    }
+
+    /// The mouse's wheel turning by `notches`, up positive.
+    pub fn mouse_wheel(&mut self, notches: f32) {
+        self.store.data().input().wheel(notches);
+    }
+
+    /// The screenshots the player has asked for since the last call.
+    pub fn take_screenshots(&mut self) -> u32 {
+        self.store.data().input().take_screenshots()
+    }
+
+    /// The texture and palette the game last set for the texture `stage`,
+    /// or None past the device's four stages.
+    #[must_use]
+    pub fn stage(&self, stage: usize) -> Option<(u32, u32)> {
+        let device = self.store.data().device();
+        Some((*device.textures.get(stage)?, *device.palettes.get(stage)?))
     }
 
     /// What each of the game's threads that trapped said, oldest first.

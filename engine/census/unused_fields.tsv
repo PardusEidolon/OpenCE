@@ -67,8 +67,6 @@ biped_definition	biped.death_hard_landing_velocity	the original reads it nowhere
 bitmap_data	mipmap_count	read only where the engine replaced the original: _rasterizer_present, bitmap_2d_address, bitmap_2d_compress_to_mipmap, bitmap_2d_get_pixel, bitmap_2d_new, bitmap_2d_uncompress_from_mipmap, bitmap_3d_address, bitmap_3d_compress_to_mipmap, bitmap_3d_new, bitmap_3d_slice_extract, bitmap_3d_slice_insert, bitmap_3d_uncompress_from_mipmap, bitmap_clone, bitmap_cm_compress_to_mipmap, bitmap_cm_uncompress_from_mipmap, bitmap_compress_to_mipmap, bitmap_cube_map_address, bitmap_cube_map_face_extract, bitmap_cube_map_face_insert, bitmap_cube_map_new, bitmap_get_pixel_count, bitmap_mipmap_get_depth, bitmap_mipmap_get_height, bitmap_mipmap_get_pixel_count, bitmap_mipmap_get_pixel_data_size, bitmap_mipmap_get_row_pitch, bitmap_mipmap_get_width, bitmap_uncompress_from_mipmap, bitmap_verify, extract_build_debug_plate, extract_mipmaps_to_bitmap, extract_pixels_from_mipmap, extract_pixels_to_mipmap, rasterizer_bitmap_2d_changed, rasterizer_bitmap_3d_changed, rasterizer_bitmap_cm_changed, rasterizer_bitmap_new, rasterizer_xbox_bitmap_get_max_mipmap_count, rasterizer_xbox_bitmap_swizzle, texture_cache_bitmap_valid
 bitmap_group	usage	read only where the engine replaced the original: bitmaps_extract, extract_add_bitmap, extract_bitmap, extract_find_bitmap_bounds, extract_get_bitmap_format, extract_mipmaps_to_bitmap
 bitmap_group	bump_height	read only where the engine replaced the original: extract_mipmaps_to_bitmap
-collision_bsp	bsp2d_references.count	read only where the engine replaced the original or outside it: bsp3d_test_pill_recursive (Replaced), bsp3d_test_sphere_recursive (Replaced), collision_bsp_valid_leaf (not the original's), collision_leaf_test_vector (Replaced)
-collision_bsp	bsp2d_references.address	read only where the engine replaced the original: bsp3d_test_pill_recursive, bsp3d_test_sphere_recursive, collision_leaf_test_vector
 collision_bsp	bsp2d.nodes.count	read only where the engine replaced the original or outside it: bsp2d_test_pill_recursive (Replaced), bsp2d_test_sphere_recursive (Replaced), bsp3d_test_pill_recursive (Replaced), bsp3d_test_sphere_recursive (Replaced), collision_bsp2d_enter_node (not the original's), collision_leaf_test_vector (Replaced)
 collision_bsp	bsp2d.nodes.address	read only where the engine replaced the original: bsp2d_test_pill_recursive, bsp2d_test_sphere_recursive, bsp3d_test_pill_recursive, collision_leaf_test_vector
 collision_model	resistance.body_damaged_effect_threshold	owed to object_cause_damage (Partial)
@@ -218,8 +216,6 @@ structure_material	vertices.count	read only where the engine replaced the origin
 structure_material	lightmap_vertices.count	the original reads it nowhere
 structure_material	uncompressed_vertex_data.size	the original reads it nowhere
 structure_material	uncompressed_vertex_data.address	read only where the engine replaced the original: build_structure_lens_flares
-structure_material	compressed_vertex_data.size	read only where the engine replaced the original: structure_visibility_traverse_surface_lists
-structure_material	compressed_vertex_data.address	read only where the engine replaced the original: structure_visibility_traverse_surface_lists
 unit_camera	submerged_marker_name	the original reads it nowhere
 unit_camera	pitch_autolevel	owed to player_control_modify_desired_angles (Partial)
 unit_camera	pitch_minimum	owed to player_control_modify_desired_angles (Partial)

@@ -27,7 +27,7 @@ const PAGE: u32 = 0x1000;
 const PAGES: u32 = WINDOW_SIZE / PAGE;
 /// an `XPhysicalAlloc` physical address at or above the window's size asks
 /// for a block anywhere (the game passes -1)
-const ANYWHERE: u32 = WINDOW_SIZE;
+pub(crate) const ANYWHERE: u32 = WINDOW_SIZE;
 
 /// Win32's page protections, as the game passes them
 pub const PAGE_NOACCESS: u32 = 0x01;
@@ -262,7 +262,22 @@ pub(crate) fn x_physical_alloc(
         arg(params, 2),
         arg(params, 3),
     );
-    let block = with_space(caller, |space, record| {
+    let block = window_block(caller, size, physical, alignment, protect)?;
+    give(results, block.unwrap_or(0));
+    Ok(())
+}
+
+/// a cleared block of `size` bytes from the window, as [`Window::allocate`]
+/// places it; `None` if there is no room, or the memory does not cover the
+/// window
+pub(crate) fn window_block(
+    caller: &mut Caller<'_, Record>,
+    size: u32,
+    physical: u32,
+    alignment: u32,
+    protect: u32,
+) -> wasmtime::Result<Option<u32>> {
+    with_space(caller, |space, record| {
         // (the window must be in the memory: the platform grows it so)
         let covered = space.len() as u64 >= u64::from(WINDOW_BASE) + u64::from(WINDOW_SIZE);
         let block = covered
@@ -270,9 +285,7 @@ pub(crate) fn x_physical_alloc(
             .flatten()?;
         space.fill(block, size.div_ceil(PAGE).max(1) * PAGE, 0);
         Some(block)
-    })?;
-    give(results, block.unwrap_or(0));
-    Ok(())
+    })
 }
 
 /// `XPhysicalFree(address)`

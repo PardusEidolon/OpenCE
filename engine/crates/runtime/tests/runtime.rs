@@ -212,7 +212,17 @@ fn game_wasm_loads_with_a_stub_for_every_import() -> Result<(), Error> {
     let game = runtime.load(&wasm)?;
     // the C heap's first region, below the Xbox's window
     assert!(game.memory_size() >= 0x8000_0000);
-    assert!(game.import_count() > 400);
+    // every import the reviewed list names (tools/engine_wasm_imports.txt)
+    let root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../..");
+    let listed =
+        std::fs::read_to_string(root.join("tools/engine_wasm_imports.txt")).unwrap_or_default();
+    assert_eq!(
+        game.import_count(),
+        listed
+            .lines()
+            .filter(|line| !line.trim().is_empty())
+            .count()
+    );
     for export in ["halo_game_main", "malloc", "free", "_initialize"] {
         assert!(game.has_export(export), "game.wasm has no {export}");
     }
@@ -359,5 +369,22 @@ fn the_c_heap_never_hands_out_the_xbox_window() -> Result<(), Error> {
             "malloc({size:#x}) gave {block:#x}..{end:#x}, inside the window"
         );
     }
+    Ok(())
+}
+
+#[test]
+fn preparing_the_game_grows_its_memory_past_the_window() -> Result<(), Error> {
+    let Some(wasm) = game_wasm() else {
+        eprintln!("skipped: no build/engine/wasm/game.wasm (python tools/engine_wasm.py)");
+        return Ok(());
+    };
+    let runtime = Runtime::new(None)?;
+    let mut game = runtime.load(&wasm)?;
+    let saves = std::env::temp_dir().join("opence_runtime_prepare");
+    game.prepare(std::path::Path::new("assets"), &saves, (3840, 2160))?;
+    assert_eq!(game.memory_size(), WINDOW.end);
+    // a second time changes nothing
+    game.prepare(std::path::Path::new("assets"), &saves, (3840, 2160))?;
+    assert_eq!(game.memory_size(), WINDOW.end);
     Ok(())
 }

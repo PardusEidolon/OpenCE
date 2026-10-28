@@ -744,3 +744,37 @@ fn nicknames_are_kept_in_the_save_folder_newest_first() -> Result<(), Error> {
     call(&mut again, "find_close", &[find])?;
     Ok(())
 }
+
+/// a module asking for the init script (`halo_init_text`)
+const INIT: &str = r#"
+(module
+  (import "env" "halo_init_text" (func $init (param i32 i32) (result i32)))
+  (memory (export "memory") 1)
+  (func (export "init") (param i32 i32) (result i32) (call $init (local.get 0) (local.get 1)))
+  (data (i32.const 0x100) "\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff"))
+"#;
+
+#[test]
+fn the_init_script_is_what_the_platform_was_given() -> Result<(), Error> {
+    let runtime = Runtime::new(None)?;
+    let mut game = runtime.load(&wat::parse_str(INIT).unwrap_or_default())?;
+    let init = |game: &mut Game, buffer: i32, size: i32| -> Result<Option<i32>, Error> {
+        Ok(game
+            .call_with("init", &[Val::I32(buffer), Val::I32(size)])?
+            .first()
+            .and_then(Val::i32))
+    };
+    // none at first
+    assert_eq!(init(&mut game, 0x100, 16)?, Some(0));
+    game.set_init_commands("map_name a\\b\n");
+    // its length, asked with no buffer
+    assert_eq!(init(&mut game, 0, 0)?, Some(13));
+    assert_eq!(init(&mut game, 0x100, 16)?, Some(13));
+    assert_eq!(game.read(0x100, 14)?, b"map_name a\\b\n\xff".to_vec());
+    // cut to the buffer's size, still giving the whole length
+    assert_eq!(init(&mut game, 0x200, 4)?, Some(13));
+    assert_eq!(game.read(0x200, 5)?, b"map_\0".to_vec());
+    // past the memory, nothing is written
+    assert_eq!(init(&mut game, 0x1_0000 - 2, 16)?, Some(13));
+    Ok(())
+}

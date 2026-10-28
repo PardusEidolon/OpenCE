@@ -1884,8 +1884,8 @@ collision_bsp	bsp3d.planes.definition	20	struct tag_block_definition *	read	-	-
 collision_bsp	leaves.count	24	long	read	kept	walked
 collision_bsp	leaves.address	28	void *	read	kept	walked
 collision_bsp	leaves.definition	32	struct tag_block_definition *	read	-	-
-collision_bsp	bsp2d_references.count	36	long	read	kept	unused
-collision_bsp	bsp2d_references.address	40	void *	read	kept	unused
+collision_bsp	bsp2d_references.count	36	long	read	kept	used
+collision_bsp	bsp2d_references.address	40	void *	read	kept	used
 collision_bsp	bsp2d_references.definition	44	struct tag_block_definition *	read	-	-
 collision_bsp	bsp2d.nodes.count	48	long	read	kept	unused
 collision_bsp	bsp2d.nodes.address	52	void *	read	kept	unused
@@ -5831,8 +5831,8 @@ scenario	bad_sky.group_tag	32	unsigned long	-	-	-
 scenario	bad_sky.name	36	char *	-	-	-
 scenario	bad_sky.name_length	40	long	-	-	-
 scenario	bad_sky.index	44	long	-	-	-
-scenario	sky_references.count	48	long	read	kept	walked
-scenario	sky_references.address	52	void *	read	kept	walked
+scenario	sky_references.count	48	long	read	kept	used
+scenario	sky_references.address	52	void *	read	kept	used
 scenario	sky_references.definition	56	struct tag_block_definition *	read	-	-
 scenario	type	60	short	read	-	-
 scenario	flags	62	word	-	-	-
@@ -7759,10 +7759,10 @@ structure_material	uncompressed_vertex_data.pad	220	unsigned long	-	-	-
 structure_material	uncompressed_vertex_data.file_offset	224	long	-	-	-
 structure_material	uncompressed_vertex_data.address	228	void *	read	kept	unused
 structure_material	uncompressed_vertex_data.definition	232	struct tag_data_definition *	-	-	-
-structure_material	compressed_vertex_data.size	236	long	read	kept	unused
+structure_material	compressed_vertex_data.size	236	long	read	kept	used
 structure_material	compressed_vertex_data.pad	240	unsigned long	-	-	-
 structure_material	compressed_vertex_data.file_offset	244	long	-	-	-
-structure_material	compressed_vertex_data.address	248	void *	read	kept	unused
+structure_material	compressed_vertex_data.address	248	void *	read	kept	used
 structure_material	compressed_vertex_data.definition	252	struct tag_data_definition *	-	-	-
 structure_runtime_decal	position.n	0	real[3]	read	kept	used
 structure_runtime_decal	position.x	0	real	read	kept	used
@@ -8608,8 +8608,8 @@ virtual_keyboard_definition	special_key_labels_string_list_tag.group_tag	32	unsi
 virtual_keyboard_definition	special_key_labels_string_list_tag.name	36	char *	-	-	-
 virtual_keyboard_definition	special_key_labels_string_list_tag.name_length	40	long	-	-	-
 virtual_keyboard_definition	special_key_labels_string_list_tag.index	44	long	read	kept	unused
-virtual_keyboard_definition	keys.count	48	long	-	kept	walked
-virtual_keyboard_definition	keys.address	52	void *	read	kept	walked
+virtual_keyboard_definition	keys.count	48	long	-	kept	used
+virtual_keyboard_definition	keys.address	52	void *	read	kept	used
 virtual_keyboard_definition	keys.definition	56	struct tag_block_definition *	-	-	-
 water_ripple	reserved00	0	byte[4]	-	-	-
 water_ripple	contibution_factor	4	real	-	-	-

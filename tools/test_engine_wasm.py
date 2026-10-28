@@ -9,6 +9,7 @@ The built module's test needs the wasm toolchain nix develop provides
 """
 
 import os
+import subprocess
 import sys
 from pathlib import Path
 
@@ -149,11 +150,62 @@ def test_game_wasm_imports_and_exports_are_the_reviewed_lists():
     exports = (ROOT / engine_wasm.EXPORTS_LIST).read_text().splitlines()
     assert engine_wasm.module_imports(output) == imports
     assert engine_wasm.module_exports(output) == exports
-    # the game's entry point and the heap the platform allocates from
+    # the game's entry point, the heap the platform allocates from, and
+    # the globals the platform reads (the D3D state tables, the pads)
     for export in engine_wasm.EXPORTS:
-        assert any(line.startswith(f"{export}: func") for line in exports)
+        assert any(line.startswith(f"{export}: ") for line in exports)
     # the game reaches the platform through "env" and wasi only (wasi's
     # thread-spawn starts its threads), and imports its shared memory
     assert {line.split(".", 1)[0] for line in imports} <= {"env", "wasi", "wasi_snapshot_preview1"}
     assert "env.memory: memory" in imports
     assert not any(line.endswith(": memory") for line in exports)
+    # the C library's stdio is the module's own (port/wasmtime/crt.c)
+    assert not any(line.startswith("env.halo_linux_fopen:") for line in imports)
+
+
+@pytest.mark.skipif(not os.environ.get("HALO_WASM_CC"), reason="needs the wasm toolchain (nix develop)")
+def test_the_link_imports_undefined_functions_and_refuses_undefined_data(tmp_path):
+    # a function the module does not define is the platform's, imported
+    # from "env"; a variable it does not define has no platform to come
+    # from, and left undefined it would be placed at address 0
+    include, lib = engine_wasm.wasi_paths()
+
+    def link(source):
+        unit = tmp_path / "unit.c"
+        unit.write_text(source)
+        compiled = subprocess.run(
+            [
+                engine_wasm.clang(),
+                f"--target={engine_wasm.TARGET}",
+                f"-isystem{include}",
+                "-c",
+                str(unit),
+                "-o",
+                str(tmp_path / "unit.o"),
+            ],
+            capture_output=True,
+            text=True,
+        )
+        assert compiled.returncode == 0, compiled.stderr
+        return subprocess.run(
+            [
+                engine_wasm.clang(),
+                f"--target={engine_wasm.TARGET}",
+                "-nostdlib",
+                "-Wl,--no-entry",
+                "-Wl,--export=entry",
+                *engine_wasm.UNDEFINED_FLAGS,
+                str(tmp_path / "unit.o"),
+                "-o",
+                str(tmp_path / "unit.wasm"),
+            ],
+            capture_output=True,
+            text=True,
+        )
+
+    imported = link("int platform(int); int entry(int x) { return platform(x); }\n")
+    assert imported.returncode == 0, imported.stderr
+    assert "env.platform: func (i32) -> (i32)" in engine_wasm.module_imports(tmp_path / "unit.wasm")
+    refused = link("extern int missing; int entry(int x) { return missing + x; }\n")
+    assert refused.returncode != 0
+    assert "undefined symbol: missing" in refused.stderr

@@ -176,6 +176,18 @@ impl Threads {
         result
     }
 
+    /// sets the event `handle`: true if it is one
+    pub(crate) fn set_event(&self, handle: u32) -> bool {
+        self.change(handle, |object| match object {
+            Object::Event { set, .. } => {
+                *set = true;
+                true
+            }
+            _ => false,
+        })
+        .unwrap_or(false)
+    }
+
     /// waits up to `ms` for `handle` and takes it for `thread`
     ///
     /// # Errors
@@ -300,7 +312,7 @@ impl Threads {
     }
 
     /// the nanoseconds since the game was loaded
-    fn elapsed(&self) -> u64 {
+    pub(crate) fn elapsed(&self) -> u64 {
         u64::try_from(self.start.elapsed().as_nanos()).unwrap_or(u64::MAX)
     }
 }
