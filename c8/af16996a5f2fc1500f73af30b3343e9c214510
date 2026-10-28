@@ -1,0 +1,1 @@
+Phase 3 (A3), tasks 1, 2 and 4: hooks, bounds-checked views (fuzzed), per-plugin budgets (SHARE 416 us; 3600 frames). Tests: workspace green but allocations.rs:99 (known); Swift 214, 0 failures; census --check passes.
