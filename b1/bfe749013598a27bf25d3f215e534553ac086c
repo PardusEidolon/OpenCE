@@ -1,0 +1,1 @@
+Sound: dsound_sdl.c mixer compiled into game.wasm; runtime audio ring; 363 s probe 97% non-silent, peak 0.87; census lost two false uses from dsound.rs; workspace + Swift (214/51 skipped) tests pass.
