@@ -7,8 +7,10 @@ automated checks: the workspace tests, the reference traces, `census
 stops, except A1's go/no-go.
 
 ## Phase 1: The spike, then go or no-go (A1)
-- [ ] Task: Build `source/` as `game.wasm` from the web build's flags, in Nix; a test that the module's imports and exports are the expected list.
-- [ ] Task: The runtime crate: Wasmtime with Cranelift, the `.cwasm` cached by Wasmtime's version and the CPU, the 4 GB memory with the Xbox's window; stub imports that record their calls.
+- [x] Task: Build `source/` as `game.wasm` from the web build's flags, in Nix; a test that the module's imports and exports are the expected list. a3af5a92
+  - Finding: `a_frame_of_the_ai_station_keeps_to_its_budget` (`engine/crates/ffi/tests/allocations.rs`) fails at HEAD as well, with 279.5–279.7 allocations a frame against a budget of 200; it passed once in a fresh worktree, so it is flaky, and older than this track. The Rust simulation it measures goes in Phase 7.
+- [x] Task: The runtime crate: Wasmtime with Cranelift, the `.cwasm` cached by Wasmtime's version and the CPU, the 4 GB memory with the Xbox's window; stub imports that record their calls. d9591186
+  - Finding: `cargo deny check advisories` reports zstd 0.13.3 and zstd-safe 7.3.0 (RUSTSEC-2026-0391, 0398, 0403), pinned by Wasmtime's cache, which decompresses only the files it wrote itself; basic-toml (RUSTSEC-2026-0374) predates this track. The gate the flake runs (licences, bans, sources) passes.
 - [ ] Task: Run devgulch headless for some thousands of ticks; record the reference traces from the wasm build and compare them with the native reference.
 - [ ] Task: Check the threads on shared memory and atomics, `setjmp` and `longjmp`, and deterministic floating point across runs.
 - [ ] Task: `--benchmark 60`: the simulation tick's p99 and the CPU frame's p99 on the M1 Max.
