@@ -63,11 +63,14 @@ EXPORTS_LIST = Path("tools/engine_wasm_exports.txt")
 
 TARGET = "wasm32-wasip1"
 
-# The game's address space: 0x80000000 to 0x88000000 is the Xbox's window
-# (port/linux/src/platform.h), the top 128 MB of the memory the module
-# starts with; the C heap has everything below it. The memory may grow to
-# wasm32's 4 GB.
-MEMORY_BYTES = 0x88000000
+# The game's address space. The module starts with 2 GB, which wasi-libc's
+# malloc takes as its first region (__heap_base to __heap_end, the end of
+# the initial memory). The platform then grows the memory past the Xbox's
+# window, 0x80000000 to 0xA0000000 (port/linux/src/platform.h, at the
+# desktop sizes), before the game runs, so the heap's later growth lands
+# above it and the window's pages are the game's alone. The memory may grow
+# to wasm32's 4 GB.
+MEMORY_BYTES = 0x80000000
 MAXIMUM_MEMORY_BYTES = 0x100000000
 # (the game recurses deeply in places: scripts, the BSP's walks)
 STACK_BYTES = 8 * 1024 * 1024

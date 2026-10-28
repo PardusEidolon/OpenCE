@@ -3,7 +3,7 @@
 
 use std::path::PathBuf;
 
-use opence_runtime::{Error, Runtime, Value};
+use opence_runtime::{Error, Runtime, Val, Value};
 
 fn module(text: &str) -> Vec<u8> {
     wat::parse_str(text).unwrap_or_default()
@@ -210,8 +210,8 @@ fn game_wasm_loads_with_a_stub_for_every_import() -> Result<(), Error> {
     };
     let runtime = Runtime::new(None)?;
     let game = runtime.load(&wasm)?;
-    // the Xbox's window, 0x80000000 to 0x88000000, is inside the memory
-    assert!(game.memory_size() >= 0x8800_0000);
+    // the C heap's first region, below the Xbox's window
+    assert!(game.memory_size() >= 0x8000_0000);
     assert!(game.import_count() > 400);
     for export in ["halo_game_main", "malloc", "free", "_initialize"] {
         assert!(game.has_export(export), "game.wasm has no {export}");
@@ -299,5 +299,45 @@ fn relaxed_simd_whose_results_differ_by_machine_is_refused() -> Result<(), Error
         "{:?}",
         result.err()
     );
+    Ok(())
+}
+
+/// the Xbox's contiguous window, as the desktop sizes need it
+/// (`port/linux/src/platform.h`): 0x80000000 to 0xA0000000
+const WINDOW: std::ops::Range<u64> = 0x8000_0000..0xA000_0000;
+
+#[test]
+fn the_c_heap_never_hands_out_the_xbox_window() -> Result<(), Error> {
+    let Some(wasm) = game_wasm() else {
+        eprintln!("skipped: no build/engine/wasm/game.wasm (python tools/engine_wasm.py)");
+        return Ok(());
+    };
+    let runtime = Runtime::new(None)?;
+    let mut game = runtime.load(&wasm)?;
+    // the module starts with the heap's 2 GB, and the platform grows it
+    // past the window before the game runs
+    assert_eq!(game.memory_size(), WINDOW.start);
+    game.grow_memory_to(WINDOW.end)?;
+    assert_eq!(game.memory_size(), WINDOW.end);
+    game.call("_initialize")?;
+    // the window's pages are the game's: the game state and the tag cache
+    // are placed at fixed addresses in it, so the C heap (malloc, and
+    // GlobalAlloc over it) must lie wholly outside. 2 GB of blocks fill the
+    // first region and make it grow.
+    let sizes = [16, 4096, 1 << 20, 64 << 20]
+        .into_iter()
+        .chain([256 << 20; 8]);
+    for size in sizes {
+        let block = match game.call_with("malloc", &[Val::I32(size)])?.as_slice() {
+            [Val::I32(block)] => u64::from(block.cast_unsigned()),
+            other => panic!("malloc returned {other:?}"),
+        };
+        assert_ne!(block, 0, "malloc({size:#x}) failed");
+        let end = block + u64::from(size.cast_unsigned());
+        assert!(
+            end <= WINDOW.start || block >= WINDOW.end,
+            "malloc({size:#x}) gave {block:#x}..{end:#x}, inside the window"
+        );
+    }
     Ok(())
 }

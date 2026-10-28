@@ -18,10 +18,15 @@
 use std::collections::BTreeMap;
 use std::path::Path;
 
+pub mod memory;
+
 use wasmtime::{
     Cache, CacheConfig, Caller, Config, Engine, Extern, ExternType, Instance, Linker, Memory,
-    Module, Store, Val,
+    Module, Store,
 };
+
+/// a wasm value, as the game's functions take and return them
+pub use wasmtime::Val;
 
 /// the import that ends the game, with its exit code
 const PROC_EXIT: &str = "wasi_snapshot_preview1.proc_exit";
@@ -39,7 +44,7 @@ const EOVERFLOW: i32 = 61;
 const DEFAULT_RECORD_LIMIT: usize = 65_536;
 
 /// the address space a 32-bit module can reach: the whole of it is reserved,
-/// so the Xbox's window (0x80000000 to 0x88000000) needs no bounds checks
+/// so the Xbox's window (0x80000000 to 0xA0000000) needs no bounds checks
 const MEMORY_RESERVATION: u64 = 1 << 32;
 
 /// what went wrong
@@ -79,6 +84,9 @@ pub enum Error {
     /// Wasmtime could not be set up
     #[error("the runtime could not be set up: {0}")]
     Setup(String),
+    /// the memory could not grow to this many bytes
+    #[error("the memory could not grow to {0:#x} bytes")]
+    Grow(u64),
 }
 
 /// a value passed to an import; floats are kept as their bits, so that a
@@ -159,6 +167,8 @@ struct Record {
     budget: Option<u64>,
     /// what `fd_write` wrote, per descriptor
     outputs: BTreeMap<i32, Vec<u8>>,
+    /// the Xbox's contiguous window, as `XPhysicalAlloc` hands it out
+    window: memory::Window,
 }
 
 /// `fd_write(fd, iovs, count, written)`: gathers the `count` iovecs at
@@ -294,6 +304,7 @@ impl Runtime {
             };
             let exits = name == PROC_EXIT;
             let writes = name == FD_WRITE;
+            let serves = memory::handler(&name);
             linker
                 .func_new(
                     import.module(),
@@ -330,6 +341,9 @@ impl Runtime {
                             }
                             return Ok(());
                         }
+                        if let Some(serve) = serves {
+                            return serve(&mut caller, params, results);
+                        }
                         for (result, ty) in results.iter_mut().zip(ty.results()) {
                             *result = Val::default_for_ty(&ty).ok_or_else(|| {
                                 wasmtime::format_err!("no zero value for a result of type {ty}")
@@ -352,6 +366,7 @@ impl Runtime {
                 made: 0,
                 budget: None,
                 outputs: BTreeMap::new(),
+                window: memory::Window::new(),
             },
         );
         let instance = linker.instantiate(&mut store, &module).map_err(called)?;
@@ -398,6 +413,16 @@ impl Game {
     /// [`Error::NoExport`] if there is no such function, [`Error::Exit`] if
     /// the game exits during the call and [`Error::Trap`] if it traps.
     pub fn call_results(&mut self, name: &str) -> Result<Vec<Val>, Error> {
+        self.call_with(name, &[])
+    }
+
+    /// Calls the exported function `name` with `args` and returns its
+    /// results.
+    ///
+    /// # Errors
+    /// As [`Game::call_results`], and [`Error::Trap`] if `args` do not fit
+    /// the function's parameters.
+    pub fn call_with(&mut self, name: &str, args: &[Val]) -> Result<Vec<Val>, Error> {
         let func = self
             .instance
             .get_func(&mut self.store, name)
@@ -407,7 +432,7 @@ impl Game {
             .results()
             .map(|ty| Val::default_for_ty(&ty).unwrap_or(Val::I32(0)))
             .collect();
-        func.call(&mut self.store, &[], &mut results)
+        func.call(&mut self.store, args, &mut results)
             .map_err(called)?;
         Ok(results)
     }
@@ -518,6 +543,25 @@ impl Game {
     pub fn memory_size(&self) -> u64 {
         self.memory
             .map_or(0, |memory| memory.data_size(&self.store) as u64)
+    }
+
+    /// Grows the exported memory to at least `bytes` (rounded up to whole
+    /// wasm pages); does nothing if it is that large already.
+    ///
+    /// # Errors
+    /// [`Error::Grow`] if there is no memory, or it cannot grow that far
+    /// (its maximum, or the host's).
+    pub fn grow_memory_to(&mut self, bytes: u64) -> Result<(), Error> {
+        let memory = self.memory.ok_or(Error::Grow(bytes))?;
+        let page = memory.page_size(&self.store);
+        let want = bytes.div_ceil(page);
+        let have = memory.size(&self.store);
+        if want > have {
+            memory
+                .grow(&mut self.store, want - have)
+                .map_err(|_| Error::Grow(bytes))?;
+        }
+        Ok(())
     }
 
     /// The memory's bytes from `address` to `address + len`, checked

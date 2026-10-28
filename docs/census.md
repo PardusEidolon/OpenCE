@@ -747,7 +747,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `cache_file_windows_thread_create` | cache/cache_files_windows.c | Replaced |  | through its caller `cache_files_initialize` |
 | `cache_files_initialize` | cache/cache_files_windows.c | Replaced |  | through its caller `tag_files_open` |
 | `physical_memory_allocate` | cache/physical_memory_map.c | Replaced |  | through its caller `main` |
-| `physical_memory_verify` | cache/physical_memory_map.c | Replaced |  | through its caller `shell_platform_verify` |
+| `physical_memory_verify` | cache/physical_memory_map.c | Replaced | runtime/src/memory.rs:13 | through its caller `shell_platform_verify` |
 | `physical_memory_free` | cache/physical_memory_map.c | Replaced | import/src/lib.rs | Xbox-only hardware |
 | `physical_memory_get_game_state_base_address` | cache/physical_memory_map.c | Replaced |  | through its caller `game_state_allocate_buffer` |
 | `physical_memory_get_tag_cache_base_address` | cache/physical_memory_map.c | Replaced | import/src/lib.rs | Xbox-only hardware |
@@ -910,7 +910,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `system_seconds` | cseries/cseries_windows.c | Replaced |  | through its caller `get_number_suitable_for_initializing_random_seed` |
 | `system_get_user_name` | cseries/cseries_windows.c | Replaced | app/Sources/OpenCEEngineKit/PlayControls.swift | Xbox-only hardware |
 | `system_calloc` | cseries/cseries_windows.c | Native |  | `Vec` |
-| `system_malloc` | cseries/cseries_windows.c | Native |  | `Vec` |
+| `system_malloc` | cseries/cseries_windows.c | Native | runtime/src/memory.rs:3 | `Vec` |
 | `system_free` | cseries/cseries_windows.c | Native |  | `Vec` |
 | `system_realloc` | cseries/cseries_windows.c | Native |  | `Vec` |
 | `system_get_used_memory_size` | cseries/cseries_windows.c | Replaced | ffi/src/allocations.rs | the editor and tools |
