@@ -14,7 +14,10 @@ stops, except A1's go/no-go.
 - [x] Task: Run devgulch headless for some thousands of ticks; record the reference traces from the wasm build and compare them with the native reference. 692250d8
   - Finding: all 63 reference traces match in the wasm build (`tools/engine_wasm_traces.py`, about 18 s), each harness built with the game's ABI flags and run in the runtime. The wasm build found one harness bug: the physics_variable LCG kept its seed in `unsigned long`, 32 bits on wasm32.
   - Finding: devgulch for thousands of ticks needs the platform layer, so it moves to Phase 2's dev shell task. With every import stubbed, `halo_game_main` first walks the debug monitor's modules and loops on `DmWalkModuleSections`, which never reports the end of the list; a call budget stops it (20 million calls in 1.03 s, about 51 ns a host call). game.wasm compiles and loads in 324 ms without the cache.
-- [ ] Task: Check the threads on shared memory and atomics, `setjmp` and `longjmp`, and deterministic floating point across runs.
+- [x] Task: Check the threads on shared memory and atomics, `setjmp` and `longjmp`, and deterministic floating point across runs. 3ebac490
+  - Finding: two host threads, each with its own store and instance on one `SharedMemory` and the runtime's engine, share atomics exactly (200,000 from 2 × 100,000), so A2 maps the Win32 thread imports onto Wasmtime threads that way.
+  - Finding: game.wasm imports no `setjmp` or `longjmp` (`source/` has none), so it needs neither wasm exceptions nor unwinding.
+  - Finding: NaNs come out canonical, relaxed SIMD is refused at compile, and the game is built with `-ffp-contract=off`; the 63 wasm traces ran twice with identical output.
 - [ ] Task: `--benchmark 60`: the simulation tick's p99 and the CPU frame's p99 on the M1 Max.
 - [ ] Task: Write the go/no-go (`a1_go_no_go.md` in this track) with the data, and bring it to the user. Stop on a no-go.
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: The spike' (Protocol in workflow.md)
