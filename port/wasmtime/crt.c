@@ -136,49 +136,65 @@ int _stricmp(const char *string1, const char *string2);
 
 extern unsigned long halo_init_text(char *buffer, unsigned long size);
 
-/* the game opens stdio files only for its debug logs (gamestate.txt, the
-rasterizer's profile, the lruv caches' dumps) and optional overrides (the
-automation files, bypass_security.txt, a map pack's loading picture), and
-every caller goes on without the file; its own files go through the
-platform's file imports. So there are none (the Linux port translates the
-path and opens it, port/linux/src/msvc_crt.c), but for two: the error log,
-d:\\debug.txt, which goes to the module's standard error with the other
-log lines (errors.c keeps it open for the whole run and never closes it),
-and the console's init script, d:\\init.txt, which is the text the
-platform was given (halo_init_text), read from memory: console_startup
-runs it as the game starts, and a map_name line starts it on that map */
+/* stdio's fopen. The game opens a few files through the C library, not the
+platform: some it writes (gamestate.txt, the rasterizer's profile,
+the lruv caches' dumps), which are dropped, and some it reads (the
+director's d:\\camera.txt, the automation files, bypass_security.txt, a map
+pack's loading picture), each of which every caller goes on without. A file
+opened to read is read whole through the platform's file imports
+(data_files.c), as the Linux port translates the path and opens it
+(port/linux/src/msvc_crt.c), and served from memory. Two are the
+platform's own: the error log, d:\\debug.txt, which goes to the module's
+standard error with the other log lines (errors.c keeps it open for the
+whole run and never closes it), and the console's init script,
+d:\\init.txt, which is the text the platform was given (halo_init_text):
+console_startup runs it as the game starts, and a map_name line starts it
+on that map */
+char *halo_data_file_read(const char *path, unsigned long *length);
+
+/* a read-only file over a copy of text, in a buffer of fmemopen's own,
+freed when the file is closed */
+static FILE *memory_file(const char *text, unsigned long length)
+{
+	FILE *file = fmemopen(NULL, length + 1, "w+");
+
+	if (!file)
+		return NULL;
+	fwrite(text, 1, length, file);
+	rewind(file);
+	return file;
+}
+
 FILE *halo_linux_fopen(const char *path, const char *mode)
 {
 	unsigned long length;
+	char *text;
 	FILE *file;
 
-	(void)mode;
-	if (!path)
+	if (!path || !mode)
 		return NULL;
 	if (_stricmp(path, "d:\\debug.txt") == 0)
 		return stderr;
-	if (_stricmp(path, "d:\\init.txt") != 0)
-		return NULL;
-	length = halo_init_text(NULL, 0);
-	if (!length)
-		return NULL;
-	/* a buffer of fmemopen's own, freed when the file is closed */
-	file = fmemopen(NULL, length, "w+");
-	if (!file)
-		return NULL;
+	if (_stricmp(path, "d:\\init.txt") == 0)
 	{
-		char *text = malloc(length);
-
-		if (!text)
-		{
-			fclose(file);
+		length = halo_init_text(NULL, 0);
+		if (!length)
 			return NULL;
-		}
+		text = malloc(length);
+		if (!text)
+			return NULL;
 		halo_init_text(text, length);
-		fwrite(text, 1, length, file);
+		file = memory_file(text, length);
 		free(text);
+		return file;
 	}
-	rewind(file);
+	if (mode[0] != 'r' || strchr(mode, '+'))
+		return NULL;
+	text = halo_data_file_read(path, &length);
+	if (!text)
+		return NULL;
+	file = memory_file(text, length);
+	free(text);
 	return file;
 }
 

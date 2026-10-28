@@ -79,6 +79,8 @@ PLATFORM_DATA_SOURCE = Path("port/wasmtime/platform_data.c")
 DSOUND_SOURCE = Path("port/linux/src/dsound_sdl.c")
 # the game's log lines and debug output, to standard error
 LOG_SOURCE = Path("port/wasmtime/log.c")
+# a file read whole through the platform's file imports, for crt.c's fopen
+DATA_FILES_SOURCE = Path("port/wasmtime/data_files.c")
 # the Direct3D device: the macOS app's Metal device, whose batches the app's
 # renderer draws (host_render_submit), with the Linux port's resources,
 # textures and shader translators beside it, the web build's memory watch
@@ -307,6 +309,7 @@ def units(config: Dict[str, object], build: Path, include: Path) -> List[Tuple[P
     result.append((PLATFORM_DATA_SOURCE, platform))
     result.append((DSOUND_SOURCE, platform))
     result.append((LOG_SOURCE, platform))
+    result.append((DATA_FILES_SOURCE, platform))
     metal = [
         *platform,
         "-DHALO_METAL",

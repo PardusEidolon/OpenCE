@@ -161,6 +161,9 @@ def test_game_wasm_imports_and_exports_are_the_reviewed_lists():
     assert not any(line.endswith(": memory") for line in exports)
     # the C library's stdio is the module's own (port/wasmtime/crt.c)
     assert not any(line.startswith("env.halo_linux_fopen:") for line in imports)
+    # and so is the reader it opens the game's files to read with
+    # (port/wasmtime/data_files.c, through the platform's file imports)
+    assert not any(line.startswith("env.halo_data_file_read:") for line in imports)
 
 
 @pytest.mark.skipif(not os.environ.get("HALO_WASM_CC"), reason="needs the wasm toolchain (nix develop)")
