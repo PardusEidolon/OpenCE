@@ -1,0 +1,1 @@
+Phase 6 task 1: PC-port catalogue. pc_port.rs: 9 of 23 rasterizer_* effects drawn in Blood Gulch's frames (switch off saves >= half a draw a frame); docs/pc_port.md; README reverb line fixed. Checked: pc_port.rs ok (300 s), clippy clean.
