@@ -76,7 +76,7 @@ stops, except A1's go/no-go.
 
 ## Phase 5: The presentation as plugins (A5)
 - [ ] Task: The lighting extended from the original: bakes, probes and ray tracing on the original's lightmaps, shader tags and lights; each switchable to stock.
-- [ ] Task: The particles; the weapons station draws every particle the game makes.
+- [x] Task: The particles; the weapons station draws every particle the game makes. d85cfd00 (Blood Gulch under fire stands in for the station, which the wasm path lacks)
 - [ ] Task: The HUD at 4K; the grenade count and every element measured against the original.
 - [ ] Task: The first-person rifle and hand where the original puts them.
 - [x] Task: The sound. b57ed742 (game.wasm's mixer heard headless through GameSpeakers; the app's interactive play moves to WasmGame in Phase 7)
