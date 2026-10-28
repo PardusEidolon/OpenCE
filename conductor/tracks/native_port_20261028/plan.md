@@ -34,7 +34,8 @@ stops, except A1's go/no-go.
   - Finding: Go. On Blood Gulch (devgulch is the dev shell's task, below) for 60 s at 3840×2160, the CPU frame's p99 is 7.113 ms against 8.33 ms; the draws are stubbed until Phase 4, which measures the bar end to end. The tick misses its aim at p99, 2.988 ms, nearly all `game_tick.objects`; recorded, not a stop. The census counts any backticked engine name in a comment as a citation, so a comment may cite only functions it classes.
 - [x] Task: Keyboard and mouse as the game's input, pad events filtered. dd99bc0a
   - Finding: the runtime's `Controls` handle takes keys, mouse motion, buttons and the wheel from the app's thread while the game runs on its own; only port 0 opens, and its state is always the keyboard's, so no pad reaches the game. The Swift app still follows `GCMouse` and links `opence_ffi`; it moves onto `Controls` when the app runs `game.wasm`.
-- [ ] Task: Sound output from the game's mixer to Core Audio.
+- [x] Task: Sound output from the game's mixer to Core Audio. b1bfe749
+  - Finding: the Linux port's mixer (`port/linux/src/dsound_sdl.c`) runs inside game.wasm with no SDL and no voice chat, so the 51 DirectSound imports are gone; the runtime only takes mixed float frames into a ring the speakers drain. Probe: 363 s of play, 12.6 M frames, 97% of samples not silent, peak 0.87, the menu music looped 9 times, no faults. The Swift `SoundOutput` pulls `Speakers` once the app runs game.wasm. With the old `dsound.rs` gone, the census marks `collision_bsp.bsp2d_references` and `scenario.sky_references` unused (its `.references` had counted as a use).
 - [ ] Task: The render calls as one buffer per frame.
 - [ ] Task: The dev shell, the control socket and the `opence` tool against the wasm game; devgulch and its stations as a map the original loads.
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: The platform layer' (Protocol in workflow.md) (automated)
