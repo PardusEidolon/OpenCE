@@ -1,0 +1,1 @@
+Phase 4 (stock rendering on Metal) checks: the workspace's tests (only allocations.rs:99, already failing), the Swift tests on build/swiftpkg (20 of 20 source scans; 5 failures already there), 63 of 63 traces, census --check, nix flake check 0. Blocked: the 4K bar end to end (p99 9.198 ms, the CPU frame). Awaiting approval: the Blood Gulch golden frame (on this machine only).
