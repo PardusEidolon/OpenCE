@@ -24,8 +24,10 @@ stops, except A1's go/no-go.
 - [x] Task: Conductor - User Manual Verification 'Phase 1: The spike' (Protocol in workflow.md) (automated) [checkpoint: 23167ab5]
 
 ## Phase 2: The macOS platform layer (A2)
-- [ ] Task: Memory and the map cache.
-- [ ] Task: Files: the data folder, saved games, the map copies.
+- [x] Task: Memory and the map cache. c7b3f593
+  - Finding: the window (0x80000000 to 0xA0000000) holds the game state and the tag cache at their fixed addresses; game.wasm starts with 2 GB so wasi-libc's malloc takes everything below it, and the platform grows the memory past it before the game runs.
+- [x] Task: Files: the data folder, saved games, the map copies. 50101bd5
+  - Finding: `d:\` is the data folder where the maps are read in place, every other drive a folder of the save folder; `ReadFileEx` completions wait for the next alertable wait, which the threads task delivers.
 - [ ] Task: Threads, timers and the clock.
 - [ ] Task: `--benchmark 60` on devgulch, the A1 bar moved here: the simulation tick's p99 within about 1 ms and the CPU frame's p99 at most 8.33 ms on the M1 Max. A miss stops the track with the measurements (the go/no-go's condition).
 - [ ] Task: Keyboard and mouse as the game's input, pad events filtered.
