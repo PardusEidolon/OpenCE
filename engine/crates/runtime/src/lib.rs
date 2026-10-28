@@ -32,6 +32,7 @@ mod net;
 pub mod plugins;
 mod profile;
 mod render;
+pub mod replay;
 mod resources;
 mod space;
 mod system;
@@ -116,6 +117,21 @@ pub enum Error {
     /// the memory could not grow to this many bytes
     #[error("the memory could not grow to {0:#x} bytes")]
     Grow(u64),
+    /// a recording's bytes could not be read ([`replay::Recording::from_bytes`])
+    #[error("the recording could not be read: {0}")]
+    Recording(String),
+    /// a replayed run asked for another import than the recording answers
+    #[error(
+        "the replay diverged at answer {at}: it answers {recorded}, and {asked} was asked for"
+    )]
+    Diverged {
+        /// the answer's place in the recording
+        at: usize,
+        /// the import it answers
+        recorded: String,
+        /// the import the game asked for
+        asked: String,
+    },
 }
 
 /// a value passed to an import; floats are kept as their bits, so that a
@@ -251,6 +267,14 @@ struct Record {
     thread: u32,
     /// the handle of the thread `CreateThread` is starting
     pending: Option<u32>,
+    /// the main thread's inputs recorded or replayed ([`replay`])
+    tape: replay::Tape,
+    /// how deep in recorded answers the call is: an answer's own calls back
+    /// into the game are not answers of their own
+    depth: u32,
+    /// the writes of the answer being recorded, moved into each
+    /// [`Space`] it writes through
+    journal: Option<Vec<(u32, Vec<u8>)>>,
 }
 
 impl Record {
@@ -270,6 +294,9 @@ impl Record {
             shared: Arc::clone(&self.shared),
             thread,
             pending: None,
+            tape: replay::Tape::Off,
+            depth: 0,
+            journal: None,
         }
     }
 
@@ -349,9 +376,20 @@ fn with_space<R>(
     Ok(match memory {
         Mem::Own(memory) => {
             let (data, record) = memory.data_and_store_mut(&mut *caller);
-            use_space(&mut Space::own(data), record)
+            let mut space = Space::own(data);
+            space.journal = record.journal.take();
+            let used = use_space(&mut space, record);
+            record.journal = space.journal.take();
+            used
         }
-        Mem::Shared(memory) => use_space(&mut Space::shared(memory.data()), caller.data_mut()),
+        Mem::Shared(memory) => {
+            let record = caller.data_mut();
+            let mut space = Space::shared(memory.data());
+            space.journal = record.journal.take();
+            let used = use_space(&mut space, record);
+            record.journal = space.journal.take();
+            used
+        }
     })
 }
 
@@ -520,6 +558,8 @@ impl Runtime {
                 .or_else(|| profile::handler(&name));
             let files_service = files::service(&name);
             let draws = render::op(&name);
+            let taped = replay::recorded(&name);
+            let asked = name.clone();
             linker
                 .func_new(
                     import.module(),
@@ -555,29 +595,94 @@ impl Runtime {
                             };
                             return Err(wasmtime::Error::new(Exit(code)));
                         }
-                        if writes {
-                            let errno = fd_write(&mut caller, params);
-                            if let Some(result) = results.first_mut() {
-                                *result = Val::I32(errno);
+                        let live = |caller: &mut Caller<'_, Record>,
+                                    params: &[Val],
+                                    results: &mut [Val]|
+                         -> wasmtime::Result<()> {
+                            if writes {
+                                let errno = fd_write(caller, params);
+                                if let Some(result) = results.first_mut() {
+                                    *result = Val::I32(errno);
+                                }
+                                return Ok(());
+                            }
+                            if let Some(serve) = threads {
+                                return serve(caller, params, results);
+                            }
+                            if let Some(op) = draws {
+                                render::record(caller, op, params)?;
+                            }
+                            if let Some(serve) = serves {
+                                return serve(caller, params, results);
+                            }
+                            if let Some(service) = files_service {
+                                return files::serve(caller, service, params, results);
+                            }
+                            for (result, ty) in results.iter_mut().zip(ty.results()) {
+                                *result = Val::default_for_ty(&ty).ok_or_else(|| {
+                                    wasmtime::format_err!("no zero value for a result of type {ty}")
+                                })?;
+                            }
+                            Ok(())
+                        };
+                        let record = caller.data_mut();
+                        let answered = taped && record.thread == 0 && record.depth == 0;
+                        if !answered || matches!(record.tape, replay::Tape::Off) {
+                            // (an answer's own calls write nothing into it)
+                            let journal = record.journal.take();
+                            let served = live(&mut caller, params, results);
+                            caller.data_mut().journal = journal;
+                            return served;
+                        }
+                        if let replay::Tape::Replaying { recording, next } = &mut record.tape {
+                            let Some(answer) = recording.answers.get(*next) else {
+                                return live(&mut caller, params, results);
+                            };
+                            if answer.import != asked {
+                                return Err(wasmtime::Error::new(replay::Diverged {
+                                    at: *next,
+                                    recorded: answer.import.clone(),
+                                    asked: asked.clone(),
+                                }));
+                            }
+                            let answer = answer.clone();
+                            *next += 1;
+                            for ((result, value), ty) in
+                                results.iter_mut().zip(&answer.results).zip(ty.results())
+                            {
+                                let expected = Val::default_for_ty(&ty).ok_or_else(|| {
+                                    wasmtime::format_err!("no zero value for a result of type {ty}")
+                                })?;
+                                *result = replay::val(value, &expected).ok_or_else(|| {
+                                    wasmtime::format_err!("{asked}'s recorded result is not a {ty}")
+                                })?;
+                            }
+                            let wrote = with_space(&mut caller, |space, _| {
+                                answer
+                                    .writes
+                                    .iter()
+                                    .all(|(address, bytes)| space.write(*address, bytes))
+                            })?;
+                            if !wrote {
+                                return Err(wasmtime::format_err!(
+                                    "{asked}'s recorded writes are outside the memory"
+                                ));
                             }
                             return Ok(());
                         }
-                        if let Some(serve) = threads {
-                            return serve(&mut caller, params, results);
-                        }
-                        if let Some(op) = draws {
-                            render::record(&mut caller, op, params)?;
-                        }
-                        if let Some(serve) = serves {
-                            return serve(&mut caller, params, results);
-                        }
-                        if let Some(service) = files_service {
-                            return files::serve(&mut caller, service, params, results);
-                        }
-                        for (result, ty) in results.iter_mut().zip(ty.results()) {
-                            *result = Val::default_for_ty(&ty).ok_or_else(|| {
-                                wasmtime::format_err!("no zero value for a result of type {ty}")
-                            })?;
+                        record.journal = Some(Vec::new());
+                        record.depth += 1;
+                        let served = live(&mut caller, params, results);
+                        let record = caller.data_mut();
+                        record.depth -= 1;
+                        let writes = record.journal.take().unwrap_or_default();
+                        served?;
+                        if let replay::Tape::Recording(recording) = &mut record.tape {
+                            recording.answers.push(replay::Answer {
+                                import: asked.clone(),
+                                results: results.iter().map(Value::from).collect(),
+                                writes,
+                            });
                         }
                         Ok(())
                     },
@@ -615,6 +720,9 @@ impl Runtime {
                 }),
                 thread: 0,
                 pending: None,
+                tape: replay::Tape::Off,
+                depth: 0,
+                journal: None,
             },
         );
         if let Some((module_name, name, memory)) = &shared {
@@ -663,6 +771,13 @@ fn called(error: wasmtime::Error) -> Error {
     }
     if error.downcast_ref::<Deadline>().is_some() {
         return Error::Deadline;
+    }
+    if let Some(diverged) = error.downcast_ref::<replay::Diverged>() {
+        return Error::Diverged {
+            at: diverged.at,
+            recorded: diverged.recorded.clone(),
+            asked: diverged.asked.clone(),
+        };
     }
     match error.downcast_ref::<Budget>() {
         Some(Budget(budget)) => Error::Budget(*budget),
@@ -801,6 +916,39 @@ impl Game {
     #[must_use]
     pub fn take_plugin_frames(&self) -> Vec<Vec<plugins::PluginTime>> {
         self.store.data().shared.plugins.take_frames()
+    }
+
+    /// Records the answers to the main thread's inputs from now on (its
+    /// clocks, keyboard and mouse, file times and random bytes: see
+    /// [`replay`]), ending any replay.
+    pub fn record_inputs(&mut self) {
+        self.store.data_mut().tape = replay::Tape::Recording(replay::Recording::default());
+    }
+
+    /// The answers recorded since [`Game::record_inputs`], ending the
+    /// recording; none if nothing is being recorded.
+    pub fn take_recording(&mut self) -> replay::Recording {
+        let record = self.store.data_mut();
+        match std::mem::take(&mut record.tape) {
+            replay::Tape::Recording(recording) => recording,
+            other => {
+                record.tape = other;
+                replay::Recording::default()
+            }
+        }
+    }
+
+    /// Answers the main thread's inputs from `recording`, in order, until
+    /// it runs out; then they are answered live again. An input asked for
+    /// out of order ends the call with [`Error::Diverged`].
+    pub fn replay(&mut self, recording: replay::Recording) {
+        self.store.data_mut().tape = replay::Tape::Replaying { recording, next: 0 };
+    }
+
+    /// How many answers the replay has still to hand out.
+    #[must_use]
+    pub fn replay_left(&self) -> usize {
+        self.store.data().tape.left()
     }
 
     /// The profile sections' spans ended since they were last taken, in

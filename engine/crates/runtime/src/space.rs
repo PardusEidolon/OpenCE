@@ -19,6 +19,9 @@ const FILL_CHUNK: u32 = 1 << 16;
 pub(crate) struct Space<'a> {
     memory: GuestMemory<'a>,
     len: usize,
+    /// while an import's answer is being recorded, each write it makes
+    /// ([`crate::replay`])
+    pub(crate) journal: Option<Vec<(u32, Vec<u8>)>>,
 }
 
 /// `len` bytes at `address`, as wiggle names them
@@ -33,6 +36,7 @@ impl<'a> Space<'a> {
         Self {
             memory: GuestMemory::Unshared(data),
             len,
+            journal: None,
         }
     }
 
@@ -41,6 +45,7 @@ impl<'a> Space<'a> {
         Self {
             memory: GuestMemory::Shared(data),
             len: data.len(),
+            journal: None,
         }
     }
 
@@ -75,9 +80,21 @@ impl<'a> Space<'a> {
         let Ok(len) = u32::try_from(bytes.len()) else {
             return false;
         };
-        self.memory
+        let written = self
+            .memory
             .copy_from_slice(bytes, span(address, len))
-            .is_ok()
+            .is_ok();
+        if written {
+            self.note(address, bytes);
+        }
+        written
+    }
+
+    /// keeps the write of `bytes` at `address` in the journal, if one is kept
+    fn note(&mut self, address: u32, bytes: &[u8]) {
+        if let Some(journal) = &mut self.journal {
+            journal.push((address, bytes.to_vec()));
+        }
     }
 
     /// sets `len` bytes at `address` to `byte`; false (and nothing set) if
@@ -88,10 +105,14 @@ impl<'a> Space<'a> {
         }
         if let GuestMemory::Unshared(data) = &mut self.memory {
             let start = address as usize;
-            return data
+            let filled = data
                 .get_mut(start..start + len as usize)
                 .map(|bytes| bytes.fill(byte))
                 .is_some();
+            if filled && self.journal.is_some() {
+                self.note(address, &vec![byte; len as usize]);
+            }
+            return filled;
         }
         let chunk = vec![byte; len.min(FILL_CHUNK) as usize];
         let mut done = 0;
@@ -115,9 +136,13 @@ impl<'a> Space<'a> {
     ) -> Option<R> {
         if let GuestMemory::Unshared(data) = &mut self.memory {
             let start = address as usize;
-            return data
-                .get_mut(start..start.checked_add(len as usize)?)
-                .map(change);
+            let bytes = data.get_mut(start..start.checked_add(len as usize)?)?;
+            let result = change(bytes);
+            if self.journal.is_some() {
+                let left = bytes.to_vec();
+                self.note(address, &left);
+            }
+            return Some(result);
         }
         let mut bytes = self.read(address, len)?;
         let result = change(&mut bytes);
