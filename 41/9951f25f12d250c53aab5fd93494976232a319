@@ -1,0 +1,1 @@
+Task: time the harnesses natively and in wasm (--speed). 15 heavy harnesses: wasm 1.38x native (geomean, 0.97-1.93x). Load 315 ms uncached, 54 ms cached. Checked: 9 tool tests, workspace tests (only the known flaky allocations test fails), Swift 214/0.
