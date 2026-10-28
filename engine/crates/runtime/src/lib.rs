@@ -19,6 +19,7 @@ use std::collections::BTreeMap;
 use std::path::Path;
 use std::sync::{Arc, Mutex, MutexGuard, PoisonError};
 
+pub mod benchmark;
 mod config;
 mod d3d;
 mod dsound;
@@ -26,6 +27,7 @@ pub mod files;
 mod input;
 pub mod memory;
 mod net;
+mod profile;
 mod resources;
 mod space;
 mod system;
@@ -40,6 +42,8 @@ use wasmtime::{
 
 /// a wasm value, as the game's functions take and return them
 pub use wasmtime::Val;
+
+pub use profile::{Span, SLEEP};
 
 /// the import that ends the game, with its exit code
 const PROC_EXIT: &str = "wasi_snapshot_preview1.proc_exit";
@@ -69,6 +73,9 @@ pub enum Error {
     /// the game made as many import calls as its budget allowed
     #[error("the game used its budget of {0} import calls")]
     Budget(u64),
+    /// the game made an import call after its deadline
+    #[error("the game ran past its deadline")]
+    Deadline,
     /// the game trapped (or a stub failed)
     #[error("the game trapped: {0}")]
     Trap(String),
@@ -166,6 +173,18 @@ impl std::fmt::Display for Budget {
 
 impl std::error::Error for Budget {}
 
+/// the deadline, carried out of the game as a trap
+#[derive(Debug)]
+struct Deadline;
+
+impl std::fmt::Display for Deadline {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "a deadline")
+    }
+}
+
+impl std::error::Error for Deadline {}
+
 /// the game's memory: its own, or shared between its threads
 #[derive(Clone)]
 enum Mem {
@@ -189,6 +208,8 @@ struct Shared {
     input: Mutex<input::Input>,
     /// DirectSound's streams, device and buffers
     dsound: Mutex<dsound::Sound>,
+    /// the profile sections' spans, while profiling is on
+    profile: Mutex<profile::Profile>,
 }
 
 /// the record the stubs keep, in the store
@@ -203,6 +224,8 @@ struct Record {
     /// the import calls made so far, and how many may be made
     made: u64,
     budget: Option<u64>,
+    /// when the game's import calls end ([`Game::set_deadline`])
+    deadline: Option<std::time::Instant>,
     /// what `fd_write` wrote, per descriptor
     outputs: BTreeMap<i32, Vec<u8>>,
     /// the game's memory, once there is one (until then, its export)
@@ -226,6 +249,7 @@ impl Record {
             limit: 0,
             made: 0,
             budget: None,
+            deadline: None,
             outputs: BTreeMap::new(),
             memory: self.memory.clone(),
             shared: Arc::clone(&self.shared),
@@ -278,6 +302,14 @@ impl Record {
     fn sound(&self) -> MutexGuard<'_, dsound::Sound> {
         self.shared
             .dsound
+            .lock()
+            .unwrap_or_else(PoisonError::into_inner)
+    }
+
+    /// the profile sections, held while the guard lives
+    fn profile(&self) -> MutexGuard<'_, profile::Profile> {
+        self.shared
+            .profile
             .lock()
             .unwrap_or_else(PoisonError::into_inner)
     }
@@ -373,6 +405,7 @@ pub fn answers(name: &str) -> bool {
         || input::handler(name).is_some()
         || dsound::handler(name).is_some()
         || net::handler(name).is_some()
+        || profile::handler(name).is_some()
         || files::service(name).is_some()
 }
 
@@ -468,7 +501,8 @@ impl Runtime {
                 .or_else(|| config::handler(&name))
                 .or_else(|| input::handler(&name))
                 .or_else(|| dsound::handler(&name))
-                .or_else(|| net::handler(&name));
+                .or_else(|| net::handler(&name))
+                .or_else(|| profile::handler(&name));
             let files_service = files::service(&name);
             linker
                 .func_new(
@@ -481,6 +515,12 @@ impl Runtime {
                             if record.made >= budget {
                                 return Err(wasmtime::Error::new(Budget(budget)));
                             }
+                        }
+                        if record
+                            .deadline
+                            .is_some_and(|deadline| std::time::Instant::now() >= deadline)
+                        {
+                            return Err(wasmtime::Error::new(Deadline));
                         }
                         record.made += 1;
                         if let Some(count) = record.counts.get_mut(index) {
@@ -536,6 +576,7 @@ impl Runtime {
                 limit: DEFAULT_RECORD_LIMIT,
                 made: 0,
                 budget: None,
+                deadline: None,
                 outputs: BTreeMap::new(),
                 memory: shared
                     .as_ref()
@@ -548,6 +589,7 @@ impl Runtime {
                     settings: Mutex::new(config::Settings::new(|name| std::env::var(name).ok())),
                     input: Mutex::new(input::Input::default()),
                     dsound: Mutex::new(dsound::Sound::default()),
+                    profile: Mutex::new(profile::Profile::default()),
                 }),
                 thread: 0,
                 pending: None,
@@ -596,6 +638,9 @@ impl Drop for Game {
 fn called(error: wasmtime::Error) -> Error {
     if let Some(Exit(code)) = error.downcast_ref::<Exit>() {
         return Error::Exit(*code);
+    }
+    if error.downcast_ref::<Deadline>().is_some() {
+        return Error::Deadline;
     }
     match error.downcast_ref::<Budget>() {
         Some(Budget(budget)) => Error::Budget(*budget),
@@ -707,6 +752,25 @@ impl Game {
     /// for no budget).
     pub fn set_call_budget(&mut self, budget: Option<u64>) {
         self.store.data_mut().budget = budget;
+    }
+
+    /// Ends the game with [`Error::Deadline`] when it makes an import call
+    /// at or after `deadline` (`None`, the default, for none): a benchmark
+    /// runs the game for a time, not a count.
+    pub fn set_deadline(&mut self, deadline: Option<std::time::Instant>) {
+        self.store.data_mut().deadline = deadline;
+    }
+
+    /// Turns the timing of the game's profile sections on (from now) or
+    /// off ([`profile`]'s module documentation).
+    pub fn set_profiling(&mut self, on: bool) {
+        self.store.data().profile().set(on);
+    }
+
+    /// The profile sections' spans ended since they were last taken, in
+    /// the order they ended.
+    pub fn take_profile_spans(&mut self) -> Vec<Span> {
+        self.store.data().profile().take()
     }
 
     /// Sets the game's data folder (`d:\`, the maps) and save folder (the

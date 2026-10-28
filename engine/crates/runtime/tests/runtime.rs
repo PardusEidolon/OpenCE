@@ -97,6 +97,22 @@ fn a_call_budget_ends_a_game_that_never_returns() -> Result<(), Error> {
 }
 
 #[test]
+fn a_deadline_ends_a_game_that_never_returns() -> Result<(), Error> {
+    let runtime = Runtime::new(None)?;
+    let mut game = runtime.load(&module(
+        r#"(module
+          (import "env" "f" (func $f))
+          (func (export "run") (loop $again (call $f) (br $again))))"#,
+    ))?;
+    let start = std::time::Instant::now();
+    game.set_deadline(Some(start + std::time::Duration::from_millis(50)));
+    assert!(matches!(game.call("run"), Err(Error::Deadline)));
+    assert!(start.elapsed() >= std::time::Duration::from_millis(50));
+    assert!(game.call_count("env.f") > 0);
+    Ok(())
+}
+
+#[test]
 fn proc_exit_ends_the_call_with_its_code() -> Result<(), Error> {
     let runtime = Runtime::new(None)?;
     let mut game = runtime.load(&module(

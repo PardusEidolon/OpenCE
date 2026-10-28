@@ -77,6 +77,8 @@ PLATFORM_DATA_SOURCE = Path("port/wasmtime/platform_data.c")
 DSOUND_SOURCE = Path("port/wasmtime/dsound.c")
 # the game's log lines and debug output, to standard error
 LOG_SOURCE = Path("port/wasmtime/log.c")
+# game.wasm's own headers, found before the Linux port's (profile_sections.h)
+WASMTIME_INCLUDE = Path("port/wasmtime/include")
 
 LINUX_DIR = Path("port/linux")
 ANDROID_DIR = Path("port/android")
@@ -214,6 +216,8 @@ def units(config: Dict[str, object], build: Path, include: Path) -> List[Tuple[P
         str(prefix),
         "-include",
         str(build / "halo_msvc_semantics.h"),
+        # game.wasm's own profile_sections.h, before the Linux port's
+        f"-I{WASMTIME_INCLUDE}",
         f"-I{LINUX_DIR}/include",
         "-iquote",
         str(config["game_sources"]),

@@ -724,7 +724,10 @@ fn wait_for_single_object_ex(
 
 /// `Sleep(ms)`
 fn sleep(caller: &mut Caller<'_, Record>, params: &[Val], _: &mut [Val]) -> wasmtime::Result<()> {
-    caller.data().shared.threads.sleep(arg(params, 0))
+    let start = super::profile::sleep_start(caller.data());
+    caller.data().shared.threads.sleep(arg(params, 0))?;
+    super::profile::sleep_end(caller.data(), start);
+    Ok(())
 }
 
 /// `SleepEx(ms, alertable)`: an alertable sleep runs the caller's
@@ -738,7 +741,9 @@ fn sleep_ex(
         give(results, WAIT_IO_COMPLETION);
         return Ok(());
     }
+    let start = super::profile::sleep_start(caller.data());
     caller.data().shared.threads.sleep(arg(params, 0))?;
+    super::profile::sleep_end(caller.data(), start);
     give(results, 0);
     Ok(())
 }

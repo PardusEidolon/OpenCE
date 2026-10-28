@@ -209,3 +209,18 @@ def test_the_link_imports_undefined_functions_and_refuses_undefined_data(tmp_pat
     refused = link("extern int missing; int entry(int x) { return missing + x; }\n")
     assert refused.returncode != 0
     assert "undefined symbol: missing" in refused.stderr
+
+
+def test_the_game_s_units_find_game_wasm_s_own_profile_header_first(tmp_path):
+    # profile_sections.h in port/wasmtime/include makes the game's sections
+    # imports the runtime times; the Linux port's header of the same name
+    # must not be found first
+    import json
+
+    config = json.loads((ROOT / engine_wasm.PORT_CONFIG).read_text(encoding="utf-8"))
+    work = engine_wasm.units(config, ROOT / engine_wasm.BUILD, tmp_path)
+    game = dict(work)[Path("source/shell/shell_xbox.c")]
+    wasmtime = game.index(f"-I{engine_wasm.WASMTIME_INCLUDE}")
+    linux = game.index(f"-I{engine_wasm.LINUX_DIR}/include")
+    assert wasmtime < linux
+    assert (ROOT / engine_wasm.WASMTIME_INCLUDE / "profile_sections.h").is_file()

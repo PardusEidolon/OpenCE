@@ -128,3 +128,46 @@ to the debug monitor's walk. The benchmark is A2's measurement to make.
 - **The known flaky test** `a_frame_of_the_ai_station_keeps_to_its_budget`
   (279.5–279.7 allocations a frame against 200) fails at HEAD as before
   this track. It measures the Rust simulation, which Phase 7 removes.
+
+## The bar, measured in A2 (28 October 2026)
+
+`opence-game --map 'levels\test\bloodgulch\bloodgulch' --benchmark 60`,
+release build, on the Apple M1 Max (10 cores, 64 GB), headless, at
+3840×2160. The game's own `profile_scope` sections are imports
+(`port/wasmtime/include/profile_sections.h`), so each span is the game's
+step as `source/` names it. A frame runs from one `input` section to the
+next, less the vblank throttle and the first thread's `Sleep`: headless,
+the stock game paces itself at 30 Hz with `Sleep(33 - elapsed)` in
+`main_update_time` (`source/main/main.c`), which is waiting, not work. A
+tick runs from `game_tick.cheats_enforce`'s entry to
+`game_tick.player_effect`'s exit. The load (1.09 s) is left out.
+
+| Measure | Count | p50 | p99 | max |
+|---|---:|---:|---:|---:|
+| CPU frame, less throttle and sleeps | 1,477 | 4.425 ms | **7.113 ms** | 16.529 ms |
+| Simulation tick | 1,800 | 0.818 ms | 2.988 ms | 8.556 ms |
+| `game_tick.objects` | 1,800 | 0.757 ms | 2.850 ms | 8.488 ms |
+| `game_time_update` | 1,476 | 0.993 ms | 3.511 ms | 8.651 ms |
+| `Sleep` (30 Hz pacing) | 1,476 | 37.499 ms | 42.044 ms | 56.264 ms |
+
+**Go.** The CPU frame's p99, 7.113 ms, is under the 8.33 ms bar, so the
+track continues.
+
+What the number leaves open, each measured again where it is due:
+
+- **The draws are stubbed.** Until Phase 4 the rasterizer's calls go to
+  the D3D stubs and no Metal work is done; the end-to-end bar is Phase 4's
+  task. About 3.4 ms of the 4.4 ms median frame falls outside every
+  profile section; the only step of the frame without one is
+  `main_game_render` (between `non_deterministic_update` and `throttle`
+  in `main_loop`), so that is the render's CPU work feeding the stubs,
+  by elimination rather than by its own section.
+- **The tick misses its "about 1 ms" aim at p99**: 2.988 ms, nearly all
+  `game_tick.objects`. Its median, 0.818 ms, is inside the aim. The tick
+  runs at 30 Hz here, so it fits its 33 ms period many times over; the
+  objects step is the place to look when the aim is chased.
+- **Blood Gulch, not devgulch.** devgulch is made at import from the
+  user's map, and its import into a map the original loads is Phase 2's
+  dev shell task; the run is on the stock map it is made from.
+- **Wall clock against CPU.** The process used 8.66 s of CPU over 90.7 s,
+  about 10 %: most of every frame is the 30 Hz sleep.
