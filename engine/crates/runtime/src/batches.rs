@@ -247,6 +247,16 @@ fn submit(
         return Ok(());
     };
     let refused = u32::try_from(batch.rejected.len()).unwrap_or(u32::MAX);
+    if batch.commands.contains(&Command::Present) {
+        shared.threads.frame_shown(|| {
+            shared
+                .settings
+                .lock()
+                .unwrap_or_else(PoisonError::into_inner)
+                .boolean("debug.frame_clock")
+                .unwrap_or(false)
+        });
+    }
     fire(caller, &batch.commands)?;
     give(results, refused);
     Ok(())

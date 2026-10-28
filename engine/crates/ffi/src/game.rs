@@ -13,14 +13,15 @@
 //! ([`opence_runtime::readback_fits`]).
 
 use std::path::PathBuf;
+use std::sync::atomic::{AtomicU64, Ordering};
 use std::sync::{Arc, Mutex, PoisonError};
 use std::thread::JoinHandle;
 use std::time::{Duration, Instant};
 
 use opence_render::{Command, DecodedBatch};
-use opence_runtime::plugins::View;
+use opence_runtime::plugins::{Event, Hook, Plugin, View};
 use opence_runtime::{
-    keystroke_flags, payload, virtual_key, Controls, Game, Readback, RenderSink, Runtime,
+    keystroke_flags, payload, virtual_key, Console, Controls, Game, Readback, RenderSink, Runtime,
 };
 
 /// One render batch as the renderer carries it out: the commands that
@@ -82,6 +83,24 @@ pub fn render_sink(target: Arc<dyn RenderTarget>) -> Box<dyn RenderSink> {
     Box::new(TargetSink(target))
 }
 
+/// Counts the game's ticks: none while it loads or sits at its menus, so
+/// the app can tell loading from play.
+struct TickCounter(Arc<AtomicU64>);
+
+impl Plugin for TickCounter {
+    fn name(&self) -> &str {
+        "ticks"
+    }
+
+    fn hooks(&self) -> &[Hook] {
+        &[Hook::Tick]
+    }
+
+    fn on(&mut self, _: &Event<'_>, _: &View<'_>) {
+        self.0.fetch_add(1, Ordering::Relaxed);
+    }
+}
+
 /// Where the game and its files are, and what it draws to.
 #[derive(Debug, Clone, PartialEq, Eq, uniffi::Record)]
 pub struct WasmGameOptions {
@@ -102,6 +121,9 @@ pub struct WasmGameOptions {
     /// the seconds to run for once started (a headless run), or none to
     /// run until the game quits
     pub seconds: Option<u32>,
+    /// settings for the game, each `section.key=value` as the settings
+    /// file would have it
+    pub settings: Vec<String>,
 }
 
 /// Why the game could not be loaded or started.
@@ -119,7 +141,7 @@ pub enum WasmGameError {
 }
 
 /// How the game ended, and what it drew.
-#[derive(Debug, Clone, PartialEq, Eq, uniffi::Record)]
+#[derive(Debug, Clone, PartialEq, uniffi::Record)]
 pub struct GameEnd {
     /// why it stopped, if not by returning from its main
     pub error: Option<String>,
@@ -135,6 +157,10 @@ pub struct GameEnd {
     pub refusals: Vec<String>,
     /// whether it stopped because its seconds were up
     pub timed_out: bool,
+    /// each frame's CPU time in milliseconds from the first tick on, less
+    /// its throttle and sleeps (`opence_runtime::benchmark::frames`); none
+    /// unless [`WasmGame::profile`] was asked
+    pub frame_ms: Vec<f64>,
 }
 
 /// the game's thread: it hands the game back, with how it stopped
@@ -150,6 +176,9 @@ pub struct WasmGame {
     /// its thread, which hands the game back when its main returns
     thread: Mutex<Option<Running>>,
     controls: Controls,
+    console: Console,
+    /// the game's ticks so far ([`TickCounter`])
+    ticks: Arc<AtomicU64>,
 }
 
 #[uniffi::export]
@@ -176,10 +205,21 @@ impl WasmGame {
             (options.width, options.height),
         )
         .map_err(|error| fail(error.to_string()))?;
+        for setting in &options.settings {
+            let set = setting
+                .split_once('=')
+                .is_some_and(|(name, text)| game.set_setting(name, text));
+            if !set {
+                return Err(fail(format!("no setting {setting}")));
+            }
+        }
         if let Some(map) = &options.map {
             game.set_init_commands(&format!("map_name {map}\n"));
         }
+        let ticks = Arc::new(AtomicU64::new(0));
+        game.add_plugin(Box::new(TickCounter(Arc::clone(&ticks))));
         let controls = game.controls();
+        let console = game.console();
         let seconds = options
             .seconds
             .map(|seconds| Duration::from_secs(u64::from(seconds)));
@@ -188,6 +228,8 @@ impl WasmGame {
             seconds,
             thread: Mutex::new(None),
             controls,
+            console,
+            ticks,
         }))
     }
 
@@ -218,6 +260,17 @@ impl WasmGame {
         Ok(())
     }
 
+    /// Times the game's profile sections from its start, for
+    /// [`GameEnd::frame_ms`]; false once it has been started.
+    pub fn profile(&self) -> bool {
+        let mut game = self.game.lock().unwrap_or_else(PoisonError::into_inner);
+        let Some(game) = game.as_mut() else {
+            return false;
+        };
+        game.set_profiling(true);
+        true
+    }
+
     /// Waits for the game's main to return, and answers how it ended.
     pub fn wait(&self) -> GameEnd {
         let thread = self
@@ -232,8 +285,12 @@ impl WasmGame {
             None => Err("the game was not started".to_owned()),
         };
         match ended {
-            Ok((game, ended)) => {
+            Ok((mut game, ended)) => {
                 let counts = game.render_counts();
+                let frame_ms = opence_runtime::benchmark::frames(&game.take_profile_spans())
+                    .into_iter()
+                    .map(|ns| Duration::from_nanos(ns).as_secs_f64() * 1000.0)
+                    .collect();
                 let timed_out = matches!(ended, Err(opence_runtime::Error::Deadline));
                 GameEnd {
                     error: ended
@@ -246,6 +303,7 @@ impl WasmGame {
                     refused_batches: counts.refused_batches,
                     refusals: game.render_refusals(),
                     timed_out,
+                    frame_ms,
                 }
             }
             Err(error) => GameEnd {
@@ -256,6 +314,7 @@ impl WasmGame {
                 refused_batches: 0,
                 refusals: Vec::new(),
                 timed_out: false,
+                frame_ms: Vec::new(),
             },
         }
     }
@@ -287,6 +346,19 @@ impl WasmGame {
     /// right, 4 and on the side buttons.
     pub fn mouse_button(&self, button: u8, down: bool) {
         self.controls.mouse_button(button, down);
+    }
+
+    /// Hands the game's console `line` (`debug.telnet_console` on) and
+    /// gives what it writes back within `milliseconds`; none if the
+    /// console is not listening.
+    pub fn ask(&self, line: String, milliseconds: u32) -> Option<String> {
+        self.console
+            .ask(&line, Duration::from_millis(u64::from(milliseconds)))
+    }
+
+    /// The game's ticks so far: none while it loads or sits at its menus.
+    pub fn ticks(&self) -> u64 {
+        self.ticks.load(Ordering::Relaxed)
     }
 
     /// The wheel turning by `notches`, up positive.

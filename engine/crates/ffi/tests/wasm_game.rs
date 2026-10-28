@@ -6,7 +6,8 @@
 use std::sync::{Arc, Mutex, PoisonError};
 
 use opence_ffi::game::{
-    render_sink, RenderFrame, RenderReadback, RenderTarget, WasmGame, WasmGameOptions,
+    render_sink, GameEnd, RenderFrame, RenderReadback, RenderTarget, WasmGame, WasmGameError,
+    WasmGameOptions,
 };
 use opence_render::{op, Command, PixelFormat, TextureKind, MAGIC, USAGE_RENDER_TARGET, VERSION};
 use opence_runtime::{Error, Runtime, Val};
@@ -161,6 +162,7 @@ fn the_game_runs_on_its_own_thread_and_draws_to_the_target() {
         height: 720,
         map: None,
         seconds: None,
+        settings: Vec::new(),
     });
     let game = match game {
         Ok(game) => game,
@@ -210,6 +212,7 @@ fn a_game_given_seconds_ends_when_they_are_up() {
         height: 480,
         map: None,
         seconds: Some(1),
+        settings: Vec::new(),
     }) {
         Ok(game) => game,
         Err(error) => panic!("{error}"),
@@ -223,4 +226,120 @@ fn a_game_given_seconds_ends_when_they_are_up() {
     assert_eq!(end.error, None);
     assert!(end.timed_out);
     assert!(started.elapsed() < std::time::Duration::from_secs(10));
+}
+
+/// options for the never-ending game in `folder`, with `settings`
+fn forever(folder: &str, settings: &[&str]) -> WasmGameOptions {
+    let folder = std::path::Path::new(env!("CARGO_TARGET_TMPDIR")).join(folder);
+    let _ = std::fs::create_dir_all(folder.join("saves"));
+    let wasm = folder.join("game.wasm");
+    let _ = std::fs::write(&wasm, wat::parse_str(FOREVER).unwrap_or_default());
+    let display = |path: &std::path::Path| path.display().to_string();
+    WasmGameOptions {
+        wasm: display(&wasm),
+        data: display(&folder),
+        saves: display(&folder.join("saves")),
+        cache: None,
+        width: 640,
+        height: 480,
+        map: None,
+        seconds: Some(1),
+        settings: settings.iter().map(|&setting| setting.to_owned()).collect(),
+    }
+}
+
+#[test]
+fn the_game_is_given_the_settings_it_names() {
+    assert!(WasmGame::new(forever("wasm_game_settings", &["debug.frame_clock=true"])).is_ok());
+    // a setting the game does not have, or one not written name=value, is refused
+    for wrong in ["debug.no_such_setting=1", "debug.frame_clock"] {
+        assert!(matches!(
+            WasmGame::new(forever("wasm_game_settings", &[wrong])),
+            Err(WasmGameError::Load { .. })
+        ));
+    }
+}
+
+#[test]
+fn a_game_without_its_console_answers_nothing() {
+    let game = match WasmGame::new(forever("wasm_game_console", &[])) {
+        Ok(game) => game,
+        Err(error) => panic!("{error}"),
+    };
+    assert_eq!(game.ask("debug_camera_load".to_owned(), 100), None);
+}
+
+/// a game whose main ends three ticks (the section a tick ends with)
+const TICKING: &str = r#"
+(module
+  (import "env" "halo_profile_exit" (func $exit (param i32)))
+  (memory (export "memory") 1)
+  (data (i32.const 0x100) "game_tick.player_effect\00")
+  (func (export "halo_game_main")
+    (call $exit (i32.const 0x100)) (call $exit (i32.const 0x100)) (call $exit (i32.const 0x100))))
+"#;
+
+#[test]
+fn the_game_s_ticks_are_counted_from_the_first() {
+    // (the never-ending game's folder, its game.wasm replaced by the ticking one)
+    let options = forever("wasm_game_ticks", &[]);
+    let _ = std::fs::write(&options.wasm, wat::parse_str(TICKING).unwrap_or_default());
+    let game = match WasmGame::new(options) {
+        Ok(game) => game,
+        Err(error) => panic!("{error}"),
+    };
+    // (loading, or at the menus, the game has not ticked)
+    assert_eq!(game.ticks(), 0);
+    assert!(game
+        .start(Arc::new(Target::default()) as Arc<dyn RenderTarget>)
+        .is_ok());
+    let end = game.wait();
+    assert_eq!(end.error, None);
+    assert!(!end.timed_out);
+    assert_eq!(game.ticks(), 3);
+}
+
+/// a game whose main runs three frames, each its input and a tick
+const FRAMES: &str = r#"
+(module
+  (import "env" "halo_profile_enter" (func $enter (param i32)))
+  (import "env" "halo_profile_exit" (func $exit (param i32)))
+  (memory (export "memory") 1)
+  (data (i32.const 0x100) "input\00")
+  (data (i32.const 0x110) "game_tick.cheats_enforce\00")
+  (data (i32.const 0x130) "game_tick.player_effect\00")
+  (func $section (param i32) (call $enter (local.get 0)) (call $exit (local.get 0)))
+  (func $frame (call $section (i32.const 0x100)) (call $section (i32.const 0x110)) (call $section (i32.const 0x130)))
+  (func (export "halo_game_main") (call $frame) (call $frame) (call $frame)))
+"#;
+
+/// the frames game run to its end, profiled or not
+fn frames_run(folder: &str, profiled: bool) -> GameEnd {
+    let options = forever(folder, &[]);
+    let _ = std::fs::write(&options.wasm, wat::parse_str(FRAMES).unwrap_or_default());
+    let game = match WasmGame::new(options) {
+        Ok(game) => game,
+        Err(error) => panic!("{error}"),
+    };
+    if profiled {
+        assert!(game.profile());
+    }
+    assert!(game
+        .start(Arc::new(Target::default()) as Arc<dyn RenderTarget>)
+        .is_ok());
+    // (too late once it has started)
+    assert!(!game.profile());
+    game.wait()
+}
+
+#[test]
+fn a_profiled_game_s_frames_are_timed_from_its_first_tick() {
+    let end = frames_run("wasm_game_frames", true);
+    assert_eq!(end.error, None);
+    // (three inputs: two frames, each to the next input)
+    assert_eq!(end.frame_ms.len(), 2);
+    assert!(end.frame_ms.iter().all(|ms| (0.0..1000.0).contains(ms)));
+    assert!(frames_run("wasm_game_unprofiled", false)
+        .frame_ms
+        .is_empty());
 }

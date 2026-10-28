@@ -106,17 +106,17 @@ fn ticks(spans: &[Span]) -> Vec<(u64, u64)> {
     ticks
 }
 
-/// the frame's and the tick's spread over `spans`
-pub fn report(spans: &[Span]) -> Report {
-    let ticks = ticks(spans);
-    let first_tick = ticks.first().map_or(u64::MAX, |tick| tick.0);
+/// each frame's length over `spans`, less its throttle and sleeps, in the
+/// order they ran, from the first tick on
+pub fn frames(spans: &[Span]) -> Vec<u64> {
+    let first_tick = ticks(spans).first().map_or(u64::MAX, |tick| tick.0);
     let inputs = starts(spans, FRAME);
     let mut throttles: Vec<&Span> = spans
         .iter()
         .filter(|span| WAITS.contains(&span.name.as_str()))
         .collect();
     throttles.sort_unstable_by_key(|span| span.start_ns);
-    let frames = inputs
+    inputs
         .windows(2)
         .filter_map(|pair| match *pair {
             [start, end] => Some((start, end)),
@@ -132,9 +132,14 @@ pub fn report(spans: &[Span]) -> Report {
                 waits.map(|span| (span.start_ns, span.end_ns.min(end))),
             ))
         })
-        .collect();
+        .collect()
+}
+
+/// the frame's and the tick's spread over `spans`
+pub fn report(spans: &[Span]) -> Report {
+    let ticks = ticks(spans);
     Report {
-        frame: summary(frames),
+        frame: summary(frames(spans)),
         tick: summary(ticks.iter().map(|&(start, end)| end - start).collect()),
     }
 }

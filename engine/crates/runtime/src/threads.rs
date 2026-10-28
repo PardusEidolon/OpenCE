@@ -126,6 +126,40 @@ pub(crate) struct Threads {
     spawner: OnceLock<InstancePre<Record>>,
     /// when the game was loaded: the clocks count from it
     start: Instant,
+    /// `debug.frame_clock`'s steps
+    frame_clock: Mutex<FrameClock>,
+}
+
+/// a 60th of a second, the frame clock's step
+const FRAME_STEP: u64 = 16_666_667;
+/// how long without a frame shown before the frame clock steps with the
+/// real time (a map loading)
+const FRAME_DARK: u64 = 100_000_000;
+
+/// `debug.frame_clock` (as `port/linux`'s): from the first frame shown the
+/// clocks step a 60th of a second a frame, whatever the time between them,
+/// so that frames captured for tests are the same run to run; while no
+/// frame is shown for more than a tenth of a second they step with the real
+/// time, so that the game's waits end.
+#[derive(Debug, Default)]
+struct FrameClock {
+    /// None until the first frame shown reads the setting; then whether on
+    on: Option<bool>,
+    /// the real time of the first frame shown
+    start: u64,
+    /// the steps taken since
+    steps: u64,
+    /// the real time of the last frame shown
+    shown_at: u64,
+}
+
+impl FrameClock {
+    /// the steps taken in the dark since the last frame shown, at `now`
+    fn dark_steps(&self, now: u64) -> u64 {
+        now.saturating_sub(self.shown_at)
+            .checked_sub(FRAME_DARK)
+            .map_or(0, |dark| dark / FRAME_STEP)
+    }
 }
 
 impl Threads {
@@ -141,6 +175,7 @@ impl Threads {
             faults: Mutex::new(Vec::new()),
             spawner: OnceLock::new(),
             start: Instant::now(),
+            frame_clock: Mutex::default(),
         }
     }
 
@@ -319,9 +354,51 @@ impl Threads {
         closed
     }
 
-    /// the nanoseconds since the game was loaded
-    pub(crate) fn elapsed(&self) -> u64 {
+    /// the real nanoseconds since the game was loaded
+    fn real(&self) -> u64 {
         u64::try_from(self.start.elapsed().as_nanos()).unwrap_or(u64::MAX)
+    }
+
+    /// the nanoseconds since the game was loaded, by the frame clock when
+    /// it is on
+    pub(crate) fn elapsed(&self) -> u64 {
+        let now = self.real();
+        let clock = self
+            .frame_clock
+            .lock()
+            .unwrap_or_else(PoisonError::into_inner);
+        if clock.on != Some(true) {
+            return now;
+        }
+        let steps = clock.steps.saturating_add(clock.dark_steps(now));
+        clock.start.saturating_add(steps.saturating_mul(FRAME_STEP))
+    }
+
+    /// a frame was shown: steps the frame clock, which the first frame
+    /// turns on if `on` says so
+    pub(crate) fn frame_shown(&self, on: impl FnOnce() -> bool) {
+        let now = self.real();
+        let mut clock = self
+            .frame_clock
+            .lock()
+            .unwrap_or_else(PoisonError::into_inner);
+        match clock.on {
+            None => {
+                let on = on();
+                *clock = FrameClock {
+                    on: Some(on),
+                    start: now,
+                    steps: 0,
+                    shown_at: now,
+                };
+            }
+            Some(true) => {
+                let steps = clock.dark_steps(now) + 1;
+                clock.steps = clock.steps.saturating_add(steps);
+                clock.shown_at = now;
+            }
+            Some(false) => {}
+        }
     }
 }
 

@@ -328,3 +328,59 @@ fn a_texture_read_back_is_written_where_its_command_names() -> Result<(), Error>
     assert_eq!(game.read(0x800, 4)?, vec![1, 2, 3, 4]);
     Ok(())
 }
+
+/// a device that also reads the monotonic clock
+const CLOCKED: &str = r#"
+(module
+  (import "env" "host_render_submit" (func $submit (param i32 i32) (result i32)))
+  (import "wasi_snapshot_preview1" "clock_time_get" (func $clock (param i32 i64 i32) (result i32)))
+  (memory (export "memory") 1)
+  (func (export "submit") (param i32 i32) (result i32) (call $submit (local.get 0) (local.get 1)))
+  (func (export "clock") (result i64) (drop (call $clock (i32.const 1) (i64.const 1) (i32.const 0x80))) (i64.load (i32.const 0x80))))
+"#;
+
+fn clock(game: &mut opence_runtime::Game) -> Result<u64, Error> {
+    let results = game.call_with("clock", &[])?;
+    Ok(match results.first() {
+        Some(Val::I64(value)) => value.cast_unsigned(),
+        _ => 0,
+    })
+}
+
+/// a 60th of a second, as the frame clock steps
+const STEP: u64 = 16_666_667;
+
+#[test]
+fn with_the_frame_clock_each_frame_shown_is_a_60th_of_a_second() -> Result<(), Error> {
+    let mut game = Runtime::new(None)?.load(&module(CLOCKED))?;
+    assert!(game.set_setting("debug.frame_clock", "true"));
+    let present = batch(&[(op::PRESENT, &[])]);
+    // (the first frame shown starts the clock)
+    submit(&mut game, &present)?;
+    let start = clock(&mut game)?;
+    for _ in 0..30 {
+        submit(&mut game, &present)?;
+    }
+    assert_eq!(clock(&mut game)? - start, 30 * STEP);
+    // a batch that shows nothing does not step it
+    submit(&mut game, &batch(&[(op::CREATE_BUFFER, &[1, 64])]))?;
+    assert_eq!(clock(&mut game)? - start, 30 * STEP);
+    // in the dark for more than a tenth of a second, it steps with the real time
+    std::thread::sleep(std::time::Duration::from_millis(200));
+    let dark = clock(&mut game)? - start - 30 * STEP;
+    assert!((5 * STEP..=12 * STEP).contains(&dark), "{dark}");
+    Ok(())
+}
+
+#[test]
+fn without_the_frame_clock_the_clock_is_the_real_time() -> Result<(), Error> {
+    let mut game = Runtime::new(None)?.load(&module(CLOCKED))?;
+    let present = batch(&[(op::PRESENT, &[])]);
+    submit(&mut game, &present)?;
+    let start = clock(&mut game)?;
+    for _ in 0..30 {
+        submit(&mut game, &present)?;
+    }
+    assert!(clock(&mut game)? - start < 30 * STEP);
+    Ok(())
+}

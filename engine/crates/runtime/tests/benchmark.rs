@@ -1,7 +1,7 @@
 //! The benchmark's numbers (`opence_runtime::benchmark`): the CPU frame and
 //! the simulation tick, measured from the game's own profile sections.
 
-use opence_runtime::benchmark::{percentile, report};
+use opence_runtime::benchmark::{frames, percentile, report};
 use opence_runtime::Span;
 
 fn span(name: &str, start_ns: u64, end_ns: u64) -> Span {
@@ -117,4 +117,15 @@ fn the_first_thread_s_sleeps_are_left_out_of_its_frame_once() {
     let report = report(&spans);
     // 2000 - 500 slept - 200 throttled (the sleep inside it once)
     assert_eq!(report.frame.map(|summary| summary.max_ns), Some(1_300));
+}
+
+#[test]
+fn each_frame_s_length_is_kept_in_order() {
+    let mut spans = Vec::new();
+    spans.extend(frame(0, 1_000, 500));
+    spans.extend(frame(2_000, 3_000, 100));
+    spans.extend(frame(6_000, 1_000, 0));
+    // (in the order they ran, as the renderer's GPU times are)
+    assert_eq!(frames(&spans), [1_500, 3_900]);
+    assert!(frames(&[]).is_empty());
 }
