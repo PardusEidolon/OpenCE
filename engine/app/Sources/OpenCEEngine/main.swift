@@ -24,7 +24,8 @@
 // (--baseline with a report kept before, to fail on a regression; --off
 // with the render switches it draws without, e.g. render.gtao,render.ssr;
 // --quality saved, low, medium, high or ultra for the saved graphics or a
-// tier's, else the stock video settings alone). --headless runs
+// tier's, else the stock video settings alone; --game plays game.wasm
+// itself through GameRenderer instead). --headless runs
 // the world with no window, answering the control socket (Control.swift);
 // --control (or --socket PATH) opens the socket beside the window. ~ (the
 // key left of 1) opens the developer shell over the game.
@@ -1169,6 +1170,7 @@ extension AppDelegate: GameActions {
 /// the saved graphics settings or a tier's.
 func benchmark(seconds: String) -> Never {
     guard let time = Double(seconds), time.isFinite, time > 0 else { fail("--benchmark is seconds, not \(seconds)") }
+    if launchArguments.contains("--game") { gameBenchmark(seconds: time) }
     let named = argument("--path") ?? "bloodgulch"
     guard let path = benchmarkPathNamed(name: named) else {
         fail("--path is devgulch, bloodgulch or bloodgulch16, not \(named)")
@@ -1229,6 +1231,75 @@ func benchmark(seconds: String) -> Never {
         exit(0)
     } catch {
         fail("\(map): \(error)")
+    }
+}
+
+/// The benchmark of game.wasm itself (--benchmark SECONDS --game): --map
+/// (bloodgulch when none is named) loaded from assets by --wasm (the build's
+/// game.wasm when none is named) and played for --load-seconds (20) and then
+/// SECONDS, drawn through GameRenderer offscreen at --size (3840x2160), its
+/// pipelines from the archive in the wasm cache. Each frame is the slower of
+/// the game's CPU frame and its GPU work (BenchmarkResult.game); the report
+/// is printed as JSON, as the other benchmark's.
+func gameBenchmark(seconds: Double) -> Never {
+    let size = (argument("--size") ?? "3840x2160").split(separator: "x").compactMap { Int($0) }
+    guard size.count == 2, size.allSatisfy({ (1...16384).contains($0) }) else { fail("--size is WIDTHxHEIGHT") }
+    guard let load = Double(argument("--load-seconds") ?? "20"), load.isFinite, load >= 0 else {
+        fail("--load-seconds is seconds")
+    }
+    let wasm = argument("--wasm") ?? "build/engine/wasm/game.wasm"
+    let cache = argument("--cache") ?? "build/engine/wasm/cache"
+    let map = argument("--map") ?? "bloodgulch"
+    guard let device = MTLCreateSystemDefaultDevice() else { fail("no Metal device") }
+    guard let window = OffscreenWindow(device: device, width: size[0], height: size[1]),
+        let renderer = GameRenderer(device: device, window: window)
+    else { fail("no offscreen window at \(size[0])x\(size[1])") }
+    let saves = FileManager.default.temporaryDirectory.appendingPathComponent("opence-benchmark-\(UUID().uuidString)")
+    do {
+        try FileManager.default.createDirectory(at: saves, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: saves) }
+        let game = try WasmGame(
+            options: WasmGameOptions(
+                wasm: wasm, data: argument("--data") ?? "assets", saves: saves.path, cache: cache,
+                width: UInt32(size[0]), height: UInt32(size[1]), map: map,
+                seconds: UInt32((load + seconds).rounded(.up)), settings: []))
+        let gpu = GPUTimes()
+        renderer.presented = { gpu.append($0) }
+        renderer.archive = PipelineArchive(
+            device: device, url: URL(fileURLWithPath: cache).appendingPathComponent("pipelines.metallib"))
+        renderer.playing = { game.ticks() > 0 }
+        guard game.profile() else { fail("game.wasm started before it was profiled") }
+        try game.start(target: renderer)
+        let end = game.wait()
+        renderer.finish()
+        if let error = end.error { fail("\(wasm): \(error)") }
+        // (the frames of the last SECONDS, the load and the first frames left out)
+        let frames = Int(seconds * 60)
+        let result = BenchmarkResult.game(
+            width: size[0], height: size[1], seconds: seconds, cpuTimes: Array(end.frameMs.suffix(frames)),
+            gpuTimes: gpu.times)
+        print(result.json(path: "wasm_\(map)", targetMs: 1000.0 / 120))
+        exit(0)
+    } catch {
+        fail("\(wasm): \(error)")
+    }
+}
+
+/// The GPU times GameRenderer hands back as each frame completes, in order.
+final class GPUTimes: @unchecked Sendable {
+    private let lock = NSLock()
+    private var kept: [Double] = []
+
+    func append(_ milliseconds: Double) {
+        lock.lock()
+        kept.append(milliseconds)
+        lock.unlock()
+    }
+
+    var times: [Double] {
+        lock.lock()
+        defer { lock.unlock() }
+        return kept
     }
 }
 
