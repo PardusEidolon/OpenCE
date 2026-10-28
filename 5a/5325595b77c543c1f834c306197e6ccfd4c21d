@@ -1,0 +1,1 @@
+Phase 3 (the plugin interface) checked: wasm traces 63/63 match with --check; census --check current; the workspace's tests pass but for the known ai-station allocation budget (crates/ffi/tests/allocations.rs:99); Swift tests pass; nix flake check passes on the committed branch (treefmt, coverage, deny, fmt and the rest).
