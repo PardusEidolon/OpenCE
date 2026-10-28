@@ -63,6 +63,35 @@ def test_the_executable_runs_the_module_in_the_runner(toolchain, monkeypatch):
     assert os.access(executable, os.X_OK)
 
 
+def test_the_speed_mode_builds_the_harness_natively_too_and_times_both(toolchain, monkeypatch):
+    built = []
+    monkeypatch.setattr(
+        subprocess, "run", lambda command: built.append(command) or subprocess.CompletedProcess(command, 0)
+    )
+    monkeypatch.setenv("OPENCE_WASM_RUN", "runner")
+    monkeypatch.setenv("OPENCE_WASM_SPEED", str(toolchain / "speed"))
+    monkeypatch.setenv("OPENCE_NATIVE_CC", "clang-native")
+    executable = toolchain / "facing-reference-x" / "trace"
+    executable.parent.mkdir()
+    assert engine_wasm_cc.main(["-O1", "h.c", "-o", str(executable), "-lm"]) == 0
+    native = [command for command in built if command[0] == "clang-native"]
+    assert native == [["clang-native", "-O1", "h.c", "-o", str(executable.with_suffix(".native")), "-lm"]]
+    script = executable.read_text()
+    assert script.startswith(f"#!{sys.executable}\n")
+    assert str(toolchain / "speed") in script and "facing-reference-x" in script
+
+
+def test_the_speed_summary_compares_the_run_alone_with_native():
+    rows = [
+        {"script": "a", "native": 0.110, "baseline": 0.010, "wasm": 0.400, "load": 0.150, "run": 0.200},
+        {"script": "b", "native": 0.012, "baseline": 0.010, "wasm": 0.100, "load": 0.090, "run": 0.004},
+    ]
+    summary = engine_wasm_traces.speed_summary(rows, floor=0.050)
+    assert summary["timed"] == ["a"]
+    assert summary["ratios"]["a"] == pytest.approx(2.0)
+    assert summary["geometric_mean"] == pytest.approx(2.0)
+
+
 def test_a_failed_compile_writes_no_executable(toolchain, monkeypatch):
     monkeypatch.setattr(subprocess, "run", lambda command: subprocess.CompletedProcess(command, 1))
     monkeypatch.setenv("OPENCE_WASM_RUN", "runner")
