@@ -30,7 +30,8 @@ stops, except A1's go/no-go.
   - Finding: `d:\` is the data folder where the maps are read in place, every other drive a folder of the save folder; `ReadFileEx` completions wait for the next alertable wait, which the threads task delivers.
 - [x] Task: Threads, timers and the clock. cbd86a0f
   - Finding: game.wasm is built for wasm32-wasip1-threads (an imported shared memory, wasi-libc's pthreads); `CreateThread` calls the game's `pthread_create`, and each thread is the module instantiated again over the same memory. The reference harnesses stay on wasm32-wasip1, and all 63 traces still match.
-- [ ] Task: `--benchmark 60` on devgulch, the A1 bar moved here: the simulation tick's p99 within about 1 ms and the CPU frame's p99 at most 8.33 ms on the M1 Max. A miss stops the track with the measurements (the go/no-go's condition).
+- [x] Task: `--benchmark 60` on devgulch, the A1 bar moved here: the simulation tick's p99 within about 1 ms and the CPU frame's p99 at most 8.33 ms on the M1 Max. A miss stops the track with the measurements (the go/no-go's condition). e2ff0ba1
+  - Finding: Go. On Blood Gulch (devgulch is the dev shell's task, below) for 60 s at 3840×2160, the CPU frame's p99 is 7.113 ms against 8.33 ms; the draws are stubbed until Phase 4, which measures the bar end to end. The tick misses its aim at p99, 2.988 ms, nearly all `game_tick.objects`; recorded, not a stop. The census counts any backticked engine name in a comment as a citation, so a comment may cite only functions it classes.
 - [ ] Task: Keyboard and mouse as the game's input, pad events filtered.
 - [ ] Task: Sound output from the game's mixer to Core Audio.
 - [ ] Task: The render calls as one buffer per frame.
