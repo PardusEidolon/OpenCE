@@ -85,8 +85,10 @@ stops, except A1's go/no-go.
 - [ ] Task: Conductor - User Manual Verification 'Phase 5: The presentation' (Protocol in workflow.md) (automated)
 
 ## Phase 6: What the PC port left out (A6)
-- [ ] Task: Catalogue what the Gearbox PC port lost or broke, each with how it is measured.
-- [ ] Task: Measure and fix each one that falls to the presentation.
+- [x] Task: Catalogue what the Gearbox PC port lost or broke, each with how it is measured. 0220522d
+  - `docs/pc_port.md`: 23 effects switched off in turn by the original's `rasterizer_*` globals on Blood Gulch; 9 drawn by those frames and held by `tests/pc_port.rs`, 14 not in them (no flash, camouflage, water or flare in the spawn's view). Gearbox's own behaviours (Chimera's list): five followed, five not yet (they change only listed maps), Lua not followed.
+- [x] Task: Measure and fix each one that falls to the presentation. 0220522d
+  - Finding: nothing to fix. What falls to the presentation is the screen (scaled as the GL port, 265b437a, `HudScreenTests`), the sound (dsound_sdl's I3DL2 reverb, occlusion and obstruction, `test_mixer.py`; README corrected) and the draws (every effect's commands drawn, none refused).
 - [ ] Task: Conductor - User Manual Verification 'Phase 6: The PC port' (Protocol in workflow.md) (automated)
 
 ## Phase 7: Removals and checks (A7)
