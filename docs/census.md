@@ -1852,7 +1852,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `console_process_command` | main/console.c | Replaced | dev/src/script.rs | the editor and tools |
 | `console_get_text_to_autocomplete` | main/console.c | Replaced | dev/src/script.rs | the editor and tools |
 | `console_complete` | main/console.c | Replaced | dev/src/script.rs | the editor and tools |
-| `console_startup` | main/console.c | Replaced | runtime/src/files.rs:184 | the editor and tools |
+| `console_startup` | main/console.c | Replaced | runtime/src/files.rs:189 | the editor and tools |
 | `console_dispose` | main/console.c | Replaced | dev/src/script.rs | the editor and tools |
 | `console_update` | main/console.c | Replaced | dev/src/script.rs | the editor and tools |
 | `gamepad_button_is_down` | main/main.c | Replaced | app/Sources/OpenCEEngineKit/PlayControls.swift | keyboard and mouse only; pad events are filtered out |

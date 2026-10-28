@@ -254,7 +254,7 @@ impl Settings {
     }
 
     /// `config_write`: sets `name` from `text`; whether it was set
-    fn write(&mut self, name: &str, text: &str) -> bool {
+    pub(crate) fn write(&mut self, name: &str, text: &str) -> bool {
         if !name.contains('.') || text.len() > LONGEST_VALUE {
             return false;
         }

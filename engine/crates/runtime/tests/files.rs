@@ -778,3 +778,109 @@ fn the_init_script_is_what_the_platform_was_given() -> Result<(), Error> {
     assert_eq!(init(&mut game, 0x1_0000 - 2, 16)?, Some(13));
     Ok(())
 }
+
+#[test]
+fn devgulch_is_read_from_blood_gulchs_map_when_it_has_none_of_its_own() -> Result<(), Error> {
+    let folders = folders("devgulch")?;
+    fs::create_dir_all(folders.data.join("maps")).map_err(io)?;
+    fs::write(folders.data.join("maps/bloodgulch.map"), b"gulch").map_err(io)?;
+    let mut game = game(&folders)?;
+
+    let file = open(&mut game, r"maps\DevGulch.map", GENERIC_READ, OPEN_EXISTING)?;
+    assert_ne!(file, INVALID);
+    assert_eq!(call(&mut game, "read", &[file, BUFFER, 5, DONE, 0])?, 1);
+    assert_eq!(game.read(u64::from(BUFFER), 5)?, b"gulch".to_vec());
+    assert_eq!(call(&mut game, "close", &[file])?, 1);
+    assert!(!folders.data.join("maps/devgulch.map").exists());
+
+    // a devgulch.map of its own is read instead
+    fs::write(folders.data.join("maps/devgulch.map"), b"own").map_err(io)?;
+    let file = open(
+        &mut game,
+        r"d:\maps\devgulch.map",
+        GENERIC_READ,
+        OPEN_EXISTING,
+    )?;
+    assert_eq!(call(&mut game, "read", &[file, BUFFER, 3, DONE, 0])?, 1);
+    assert_eq!(game.read(u64::from(BUFFER), 3)?, b"own".to_vec());
+    assert_eq!(call(&mut game, "close", &[file])?, 1);
+
+    // and no other map is taken for another's
+    assert_eq!(
+        open(&mut game, r"maps\other.map", GENERIC_READ, OPEN_EXISTING)?,
+        INVALID
+    );
+    Ok(())
+}
+
+/// a cache file's header (`source/cache/cache_files.c`) as far as its name,
+/// which is at 0x20 and 0x20 long, then `tail`
+fn map_named(name: &[u8], tail: &[u8]) -> Vec<u8> {
+    let mut map = vec![0xAB; 0x20];
+    let mut field = name.to_vec();
+    field.resize(0x20, 0);
+    map.extend(field);
+    map.extend(tail);
+    map
+}
+
+#[test]
+fn devgulchs_header_names_devgulch_as_the_original_asks_of_a_map() -> Result<(), Error> {
+    let folders = folders("devgulch_name")?;
+    fs::create_dir_all(folders.data.join("maps")).map_err(io)?;
+    fs::write(
+        folders.data.join("maps/bloodgulch.map"),
+        map_named(b"bloodgulch", b"tags"),
+    )
+    .map_err(io)?;
+    let mut game = game(&folders)?;
+    let devgulch = map_named(b"devgulch", b"tags");
+    let file = open(&mut game, r"maps\devgulch.map", GENERIC_READ, OPEN_EXISTING)?;
+    assert_ne!(file, INVALID);
+
+    // read at its position, in two reads that split the name
+    assert_eq!(call(&mut game, "read", &[file, BUFFER, 0x28, DONE, 0])?, 1);
+    assert_eq!(
+        call(&mut game, "read", &[file, BUFFER + 0x28, 0x40, DONE, 0])?,
+        1
+    );
+    assert_eq!(game.read(u64::from(BUFFER), 0x44)?, devgulch);
+
+    // at an OVERLAPPED's offset, by ReadFile and by ReadFileEx
+    game.write(u64::from(OVERLAPPED), &[0; 20])?;
+    game.write(u64::from(OVERLAPPED + 8), &0x1Eu32.to_le_bytes())?;
+    assert_eq!(
+        call(&mut game, "read", &[file, BUFFER, 8, DONE, OVERLAPPED])?,
+        1
+    );
+    assert_eq!(
+        game.read(u64::from(BUFFER), 8)?,
+        devgulch[0x1E..0x26].to_vec()
+    );
+    game.write(u64::from(OVERLAPPED), &[0; 20])?;
+    game.write(u64::from(OVERLAPPED + 8), &0x24u32.to_le_bytes())?;
+    assert_eq!(
+        call(&mut game, "read_ex", &[file, BUFFER, 0x20, OVERLAPPED, 7])?,
+        1
+    );
+    assert_eq!(
+        game.read(u64::from(BUFFER), 0x20)?,
+        devgulch[0x24..0x44].to_vec()
+    );
+    assert_eq!(call(&mut game, "close", &[file])?, 1);
+
+    // Blood Gulch's own map keeps its own name
+    let file = open(
+        &mut game,
+        r"maps\bloodgulch.map",
+        GENERIC_READ,
+        OPEN_EXISTING,
+    )?;
+    assert_eq!(call(&mut game, "read", &[file, BUFFER, 0x44, DONE, 0])?, 1);
+    assert_eq!(
+        game.read(u64::from(BUFFER), 0x44)?,
+        map_named(b"bloodgulch", b"tags")
+    );
+    assert_eq!(call(&mut game, "close", &[file])?, 1);
+    Ok(())
+}

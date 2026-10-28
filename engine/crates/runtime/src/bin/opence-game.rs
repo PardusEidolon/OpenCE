@@ -8,13 +8,19 @@
 //! The game is `build/engine/wasm/game.wasm` (`--wasm` names another), its
 //! data `assets/` (`--data`), its saves a folder under `build/engine/`, and
 //! its screen 3840 by 2160.
+//!
+//! `opence-game --map <scenario> --control <socket>` runs the game headless
+//! with no time limit and its telnet console on, and answers the dev shell's
+//! control socket at `<socket>` from that console
+//! ([`opence_runtime::control`]): `opence --socket <socket> run <line>` runs
+//! the line in the game.
 
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::process::ExitCode;
 use std::time::{Duration, Instant};
 
 use opence_runtime::benchmark::{report, sections, Summary};
-use opence_runtime::{Error, Runtime};
+use opence_runtime::{control, Error, Game, Runtime};
 
 /// the screen the benchmark is drawn for
 const DISPLAY: (u32, u32) = (3840, 2160);
@@ -25,6 +31,7 @@ struct Options {
     map: String,
     seconds: u64,
     load_seconds: u64,
+    control: Option<PathBuf>,
 }
 
 fn options() -> Result<Options, String> {
@@ -34,6 +41,7 @@ fn options() -> Result<Options, String> {
         map: String::new(),
         seconds: 60,
         load_seconds: 120,
+        control: None,
     };
     let mut arguments = std::env::args().skip(1);
     while let Some(flag) = arguments.next() {
@@ -51,6 +59,7 @@ fn options() -> Result<Options, String> {
             "--map" => options.map.clone_from(&value),
             "--benchmark" => options.seconds = number()?,
             "--load-seconds" => options.load_seconds = number()?,
+            "--control" => options.control = Some(PathBuf::from(&value)),
             _ => return Err(format!("unknown flag {flag}")),
         }
     }
@@ -89,6 +98,9 @@ fn run(options: &Options) -> Result<(), String> {
     std::fs::create_dir_all(&saves).map_err(|error| format!("{}: {error}", saves.display()))?;
     game.prepare(&options.data, &saves, DISPLAY).map_err(text)?;
     game.set_init_commands(&format!("map_name {}\n", options.map));
+    if let Some(path) = &options.control {
+        return control(game, path);
+    }
     game.set_profiling(true);
     let started = Instant::now();
     game.set_deadline(Some(
@@ -129,6 +141,21 @@ fn run(options: &Options) -> Result<(), String> {
         println!("  {}", line(&name, Some(summary)));
     }
     Ok(())
+}
+
+/// Runs the game until it quits, its console answering the control socket.
+fn control(mut game: Game, path: &Path) -> Result<(), String> {
+    if !game.set_setting("debug.telnet_console", "true") {
+        return Err("the game has no setting debug.telnet_console".to_owned());
+    }
+    let listener = control::bind(path).map_err(|error| format!("{}: {error}", path.display()))?;
+    control::serve(listener, game.console());
+    eprintln!("opence-game: the control socket is {}", path.display());
+    let ran = game
+        .call("halo_game_main")
+        .map_err(|error| error.to_string());
+    let _ = std::fs::remove_file(path);
+    ran
 }
 
 fn main() -> ExitCode {

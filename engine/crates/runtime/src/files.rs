@@ -17,7 +17,9 @@
 //! component is matched without regard to case, an exact match first, as
 //! FATX matches them, and a component that is empty or only dots and spaces
 //! is skipped, which also keeps every path inside its folder. With no
-//! folders set, no path is found.
+//! folders set, no path is found. `maps\devgulch.map`, with no file of its
+//! own, is Blood Gulch's map (`DONORS`), read with devgulch's name in its
+//! header, as the original asks of a map.
 //!
 //! `ReadFileEx` and `WriteFileEx` complete at once; their completion
 //! routines wait in [`Files::completions`] for the game's next alertable
@@ -170,6 +172,9 @@ pub struct Files {
     /// each thread's last error
     last_errors: BTreeMap<u32, u32>,
     completions: Vec<Completion>,
+    /// the name each handle of a map read from another's reads in its
+    /// header
+    renamed: BTreeMap<u32, [u8; NAME_LEN]>,
     /// the console's init script, `d:\init.txt` (`halo_init_text`)
     init: Vec<u8>,
 }
@@ -256,6 +261,12 @@ impl Files {
     }
 
     fn resolve(&self, path: &str) -> Option<PathBuf> {
+        self.locate(path).map(|(host, _)| host)
+    }
+
+    /// [`Files::resolve`], with the name in its header of a map read from
+    /// another's (`DONORS`)
+    fn locate(&self, path: &str) -> Option<(PathBuf, Option<&'static str>)> {
         let bytes = path.as_bytes();
         let (drive, rest) = match bytes {
             [letter, b':', ..] if letter.is_ascii_alphabetic() => {
@@ -277,12 +288,17 @@ impl Files {
             let found = matching(&host, component);
             host.push(found.as_deref().unwrap_or(component));
         }
-        Some(host)
+        if drive == b'd' && !host.exists() {
+            if let Some((donor, name)) = donor_of(rest) {
+                return Some((self.resolve(donor)?, Some(name)));
+            }
+        }
+        Some((host, None))
     }
 
     fn create_file(&mut self, data: &mut Space<'_>, a: &[u32; 8]) -> u32 {
         let (access, disposition) = (a[1], a[4]);
-        let Some(path) = self.path(data, a[0]) else {
+        let Some((path, name)) = string(data, a[0]).and_then(|path| self.locate(&path)) else {
             return self.fail(ERROR_PATH_NOT_FOUND, INVALID_HANDLE_VALUE);
         };
         if path.is_dir() {
@@ -306,6 +322,9 @@ impl Files {
         match options.open(&path) {
             Ok(file) => {
                 let handle = self.add(Open::File(file));
+                if let Some(name) = name {
+                    self.renamed.insert(handle, header_name(name));
+                }
                 let replaced = existed && matches!(disposition, OPEN_ALWAYS | CREATE_ALWAYS);
                 self.fail(
                     if replaced {
@@ -330,6 +349,7 @@ impl Files {
         if overlapped != 0 && offset.is_none() {
             return self.fail(ERROR_INVALID_PARAMETER, 0);
         }
+        let name = self.renamed.get(&handle).copied();
         let Some(file) = self.file(handle) else {
             return self.fail(ERROR_INVALID_HANDLE, 0);
         };
@@ -343,9 +363,21 @@ impl Files {
             }
             .map(|()| buffer.len())
         } else {
-            let read = data.update(buffer, count, |buffer| match offset {
-                Some(at) => read_at(file, buffer, at),
-                None => read_all(file, buffer),
+            let read = data.update(buffer, count, |buffer| {
+                let at = match offset {
+                    Some(at) => at,
+                    None => file.stream_position()?,
+                };
+                let read = match offset {
+                    Some(at) => read_at(file, buffer, at),
+                    None => read_all(file, buffer),
+                }?;
+                rename(
+                    buffer.get_mut(..read).unwrap_or_default(),
+                    at,
+                    name.as_ref(),
+                );
+                Ok(read)
             });
             let Some(read) = read else {
                 return self.fail(ERROR_INVALID_PARAMETER, 0);
@@ -384,6 +416,7 @@ impl Files {
         else {
             return self.fail(ERROR_INVALID_PARAMETER, 0);
         };
+        let name = self.renamed.get(&handle).copied();
         let Some(file) = self.file(handle) else {
             return self.fail(ERROR_INVALID_HANDLE, 0);
         };
@@ -391,7 +424,15 @@ impl Files {
             data.read(buffer, count)
                 .map(|buffer| file.write_all_at(&buffer, at).map(|()| buffer.len()))
         } else {
-            data.update(buffer, count, |buffer| read_at(file, buffer, at))
+            data.update(buffer, count, |buffer| {
+                let read = read_at(file, buffer, at)?;
+                rename(
+                    buffer.get_mut(..read).unwrap_or_default(),
+                    at,
+                    name.as_ref(),
+                );
+                Ok(read)
+            })
         };
         let Some(moved) = moved else {
             return self.fail(ERROR_INVALID_PARAMETER, 0);
@@ -502,6 +543,7 @@ impl Files {
     }
 
     fn close_handle(&mut self, _: &mut Space<'_>, a: &[u32; 8]) -> u32 {
+        self.renamed.remove(&a[0]);
         match self.handles.remove(&a[0]) {
             Some(_) => 1,
             None => self.fail(ERROR_INVALID_HANDLE, 0),
@@ -1017,6 +1059,58 @@ fn matching(folder: &Path, component: &str) -> Option<String> {
         .find(|name| *name == component)
         .or_else(|| names.first())
         .cloned()
+}
+
+/// The map a map with no file of its own is read from: devgulch, the test
+/// level, is Blood Gulch's map under its own name
+/// (`engine/crates/content/src/devgulch.rs`), made from the player's map and
+/// never a file of the repository. Each is read with its own name in its
+/// header, which the original checks against the file's
+/// (`cache_files_windows.c`); the rest is the donor's as it is.
+const DONORS: [(&str, &str, &str); 1] =
+    [(r"maps\devgulch.map", r"maps\bloodgulch.map", "devgulch")];
+
+/// where a cache file's header keeps its name, and the field's length
+/// (`struct cache_file_header`)
+const NAME_AT: u64 = 0x20;
+const NAME_LEN: usize = 0x20;
+
+/// the donor of the data folder's path `rest` and the name its header is
+/// read with, if it has one
+fn donor_of(rest: &str) -> Option<(&'static str, &'static str)> {
+    let rest = rest.trim_start_matches(['\\', '/']).replace('/', "\\");
+    DONORS
+        .iter()
+        .find(|(path, _, _)| path.eq_ignore_ascii_case(&rest))
+        .map(|&(_, donor, name)| (donor, name))
+}
+
+/// `name` as a header's name field, NUL-padded
+fn header_name(name: &str) -> [u8; NAME_LEN] {
+    let mut field = [0; NAME_LEN];
+    for (to, from) in field.iter_mut().zip(name.bytes().take(NAME_LEN - 1)) {
+        *to = from;
+    }
+    field
+}
+
+/// writes `name` over the header's name field in `read`, the bytes read
+/// from the file at `at`
+fn rename(read: &mut [u8], at: u64, name: Option<&[u8; NAME_LEN]>) {
+    let Some(name) = name else {
+        return;
+    };
+    for (place, &byte) in (NAME_AT..).zip(name) {
+        let Some(index) = place
+            .checked_sub(at)
+            .and_then(|index| usize::try_from(index).ok())
+        else {
+            continue;
+        };
+        if let Some(to) = read.get_mut(index) {
+            *to = byte;
+        }
+    }
 }
 
 /// `*` and `?` against a name, both lowercase

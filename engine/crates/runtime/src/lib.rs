@@ -22,6 +22,7 @@ use std::sync::{Arc, Mutex, MutexGuard, PoisonError};
 mod audio;
 pub mod benchmark;
 mod config;
+pub mod control;
 mod controls;
 mod d3d;
 pub mod files;
@@ -47,6 +48,7 @@ pub use wasmtime::Val;
 
 pub use audio::{Speakers, SPEAKER_RATE, SPEAKER_TARGET_FRAMES};
 pub use controls::{keystroke_flags, virtual_key, Controls};
+pub use net::Console;
 pub use profile::{Span, SLEEP};
 pub use render::{Command, Frame, Frames, Op, CALLS, STATES};
 
@@ -217,6 +219,8 @@ struct Shared {
     profile: Mutex<profile::Profile>,
     /// the render calls of the frame being made, and the frames made
     render: render::Render,
+    /// the game's sockets, and the console's link to the host
+    sockets: Mutex<net::Sockets>,
 }
 
 /// the record the stubs keep, in the store
@@ -301,6 +305,14 @@ impl Record {
     fn input(&self) -> MutexGuard<'_, input::Input> {
         self.shared
             .input
+            .lock()
+            .unwrap_or_else(PoisonError::into_inner)
+    }
+
+    /// the game's sockets, held while the guard lives
+    fn sockets(&self) -> MutexGuard<'_, net::Sockets> {
+        self.shared
+            .sockets
             .lock()
             .unwrap_or_else(PoisonError::into_inner)
     }
@@ -594,6 +606,7 @@ impl Runtime {
                     audio: audio::Output::default(),
                     profile: Mutex::new(profile::Profile::default()),
                     render: render::Render::default(),
+                    sockets: Mutex::new(net::Sockets::default()),
                 }),
                 thread: 0,
                 pending: None,
@@ -854,6 +867,20 @@ impl Game {
     #[must_use]
     pub fn speakers(&self) -> Speakers {
         Speakers::new(Arc::clone(&self.store.data().shared))
+    }
+
+    /// The game's telnet console, to hand it lines and take its replies
+    /// from another thread while `halo_game_main` keeps this game busy.
+    #[must_use]
+    pub fn console(&self) -> Console {
+        Console::new(Arc::clone(&self.store.data().shared))
+    }
+
+    /// Sets the game's setting `name` (as `section.key`) to `text`, as the
+    /// settings file would have it; false if there is no such setting or
+    /// the text is too long.
+    pub fn set_setting(&mut self, name: &str, text: &str) -> bool {
+        self.store.data().settings().write(name, text)
     }
 
     /// The frames the game presents, each its render calls, to take on

@@ -1730,6 +1730,8 @@ dependencies = [
 name = "opence_runtime"
 version = "0.1.0"
 dependencies = [
+ "opence_dev",
+ "serde_json",
  "sha2",
  "thiserror 2.0.21",
  "wasmtime",
