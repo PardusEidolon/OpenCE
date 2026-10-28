@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Builds OpenCE Engine.app, the new engine (conductor/archive/native_engine_20261021).
 
-  engine_build.py [--out build/engine] [--codesign codesign] [--rust folder]
+  engine_build.py [--out build/engine] [--codesign codesign] [--rust folder] [--wasm game.wasm]
   engine_build.py --rust-only folder
 
 The Rust workspace in engine/ is built as a static library (the ffi crate)
@@ -10,7 +10,9 @@ bindings are copied into the Swift package in engine/app, Xcode's Swift
 builds the package against the library, and the executable is laid out in a
 bundle signed ad hoc. --rust-only builds the Rust half alone, as the flake's
 engine-rust package does with crane; --rust takes a Rust half built already
-(nix build .#engine-rust) instead of running cargo. The shaders are compiled first with Xcode's Metal
+(nix build .#engine-rust) instead of running cargo. The game, game.wasm, is
+compiled from source/ (tools/engine_wasm.py) into the bundle's resources;
+--wasm takes one built already. The shaders are compiled first with Xcode's Metal
 toolchain (xcodebuild -downloadComponent MetalToolchain), so that an error in
 one stops the build rather than the app's start. With --test, the tests run
 instead: cargo deny and the workspace's tests under nextest, then the
@@ -27,6 +29,8 @@ import plistlib
 import shutil
 import subprocess
 from pathlib import Path
+
+import engine_wasm
 
 ROOT = Path(__file__).resolve().parent.parent
 ENGINE = ROOT / "engine"
@@ -261,7 +265,7 @@ def info_plist(version: str) -> bytes:
     )
 
 
-def bundle(executable: Path, metallib: Path, codesign: str, version: str, app: Path) -> None:
+def bundle(executable: Path, metallib: Path, wasm: Path, codesign: str, version: str, app: Path) -> None:
     """Lays out the bundle in a staging folder and renames it into place."""
     staging = app.with_name(app.name + ".partial")
     shutil.rmtree(staging, ignore_errors=True)
@@ -277,6 +281,8 @@ def bundle(executable: Path, metallib: Path, codesign: str, version: str, app: P
         metallib.with_suffix(".metallib.sources"), staging / "Contents" / "Resources" / "default.metallib.sources"
     )
     shutil.copytree(ROOT / "engine" / "app" / "Shaders", staging / "Contents" / "Resources" / "shaders")
+    # the game: the original's code as wasm32 (GamePlayer.swift)
+    shutil.copy(wasm, staging / "Contents" / "Resources" / "game.wasm")
     # the menus' fonts and the shell's, with their licences (MenuFonts.swift,
     # TextPass.swift): Overpass and OpenCE only
     fonts = staging / "Contents" / "Resources" / "fonts"
@@ -313,6 +319,7 @@ def main() -> None:
     )
     parser.add_argument("--rust", type=Path, help="the Rust half built already, instead of running cargo")
     parser.add_argument("--rust-only", type=Path, help="build only the Rust half, into this folder")
+    parser.add_argument("--wasm", type=Path, help="game.wasm built already, instead of compiling source/")
     arguments = parser.parse_args()
     if arguments.rust_only:
         rust_half(arguments.rust_only.resolve())
@@ -334,7 +341,8 @@ def main() -> None:
         swift("test", library, out, metallib, ("--filter", arguments.filter) if arguments.filter else ())
         return
     executable = swift("build", library, out, metallib) / EXECUTABLE
-    bundle(executable, metallib, arguments.codesign, arguments.version, out / f"{APP_NAME}.app")
+    wasm = arguments.wasm.resolve() if arguments.wasm else engine_wasm.build(os.cpu_count() or 4)
+    bundle(executable, metallib, wasm, arguments.codesign, arguments.version, out / f"{APP_NAME}.app")
 
 
 if __name__ == "__main__":

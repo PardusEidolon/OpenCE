@@ -24,7 +24,10 @@ def app(tmp_path_factory: pytest.TempPathFactory) -> Path:
     if shutil.which("cargo") is None or not Path("/usr/bin/xcrun").exists():
         pytest.skip("needs nix develop's cargo and Xcode's Swift")
     out = tmp_path_factory.mktemp("engine")
-    subprocess.run(["python3", str(ROOT / "tools" / "engine_build.py"), "--out", str(out)], check=True)
+    # (game.wasm built already, when it is: compiling source/ takes minutes)
+    wasm = ROOT / "build" / "engine" / "wasm" / "game.wasm"
+    given = ["--wasm", str(wasm)] if wasm.is_file() else []
+    subprocess.run(["python3", str(ROOT / "tools" / "engine_build.py"), "--out", str(out), *given], check=True)
     return out / "OpenCE Engine.app"
 
 
@@ -33,6 +36,12 @@ def test_the_bundle_holds_the_executable_and_its_plist(app: Path) -> None:
     assert info["CFBundleExecutable"] == "OpenCEEngine"
     assert info["LSMinimumSystemVersion"] == "26.0"
     assert (app / "Contents" / "MacOS" / "OpenCEEngine").is_file()
+
+
+def test_the_bundle_holds_the_game(app: Path) -> None:
+    # (the original's code as wasm32, which the app plays: GamePlayer.swift)
+    wasm = app / "Contents" / "Resources" / "game.wasm"
+    assert wasm.read_bytes()[:4] == b"\0asm"
 
 
 def test_the_executable_links_the_rust_library(app: Path) -> None:

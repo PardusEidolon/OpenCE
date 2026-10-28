@@ -1363,7 +1363,7 @@ if CommandLine.arguments.contains("--headless") {
 }
 
 let app = NSApplication.shared
-let delegate = AppDelegate()
+let delegate = GamePlayer()
 app.delegate = delegate
 app.setActivationPolicy(.regular)
 app.run()
