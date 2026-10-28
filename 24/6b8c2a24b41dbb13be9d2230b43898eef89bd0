@@ -1,0 +1,1 @@
+Task: native_port Phase 4 Task 2 (runtime side). WasmGame runs game.wasm on its own thread; RenderTarget receives frames; seconds -> runtime deadline -> timed_out. Multi-crate Swift modulemap. Checks: ffi tests 4/4, workspace (only allocations.rs:99 known), clippy, census --check, pytest.
