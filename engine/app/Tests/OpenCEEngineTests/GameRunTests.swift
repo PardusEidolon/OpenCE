@@ -49,6 +49,51 @@ final class GameRunTests: XCTestCase {
         }
     }
 
+    /// Blood Gulch heard headless: its mixed sound pulled from game.wasm's speakers as the audio device
+    /// would pull it, a 48th of a second at a time, and not silent once the level plays.
+    func testBloodGulchIsHeardHeadless() throws {
+        let root = StockLevel.root
+        let wasm = root.appendingPathComponent("build/engine/wasm/game.wasm")
+        let files = FileManager.default
+        guard files.fileExists(atPath: wasm.path) else { throw XCTSkip("no build/engine/wasm/game.wasm") }
+        guard files.fileExists(atPath: root.appendingPathComponent("assets/maps/bloodgulch.map").path) else {
+            throw XCTSkip("no assets/maps/bloodgulch.map")
+        }
+        let saves = files.temporaryDirectory.appendingPathComponent("opence-game-sound-\(UUID().uuidString)")
+        try files.createDirectory(at: saves, withIntermediateDirectories: true)
+        defer { try? files.removeItem(at: saves) }
+        let device = try XCTUnwrap(MTLCreateSystemDefaultDevice())
+        let window = try XCTUnwrap(OffscreenWindow(device: device, width: 320, height: 240))
+        let renderer = try XCTUnwrap(GameRenderer(device: device, window: window))
+        let game = try WasmGame(
+            options: WasmGameOptions(
+                wasm: wasm.path, data: root.appendingPathComponent("assets").path, saves: saves.path,
+                cache: root.appendingPathComponent("build/engine/wasm/cache").path, width: 320, height: 240,
+                map: "bloodgulch", seconds: 25, settings: []))
+        let speakers = game.speakers()
+        XCTAssertEqual(speakers.sampleRate(), 48_000)
+        try game.start(target: renderer)
+        var heard = 0
+        var loudest: Float = 0
+        let started = Date()
+        while Date().timeIntervalSince(started) < 22 {
+            let samples = speakers.pull(frames: 1000)
+            XCTAssertEqual(samples.count, 2000)
+            if game.ticks() > 0 {
+                heard += samples.filter { $0 != 0 }.count
+                loudest = max(loudest, samples.map(abs).max() ?? 0)
+            }
+            Thread.sleep(forTimeInterval: 1.0 / 48)
+        }
+        let end = game.wait()
+        renderer.finish()
+        print("game sound: \(heard) samples heard in play, loudest \(loudest)")
+        XCTAssertNil(end.error)
+        XCTAssertGreaterThan(game.ticks(), 0, "the game never played")
+        XCTAssertGreaterThan(heard, 48_000, "under half a second of sound in play")
+        XCTAssertLessThanOrEqual(loudest, 1.5)
+    }
+
     /// The pipeline archive across two runs of Blood Gulch: the first compiles each pipeline into it, the
     /// second, in play, finds every one there and never waits on Metal's compiler.
     func testASecondRunOfBloodGulchCompilesNoPipelineInPlay() throws {

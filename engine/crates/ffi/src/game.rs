@@ -22,6 +22,7 @@ use opence_render::{Command, DecodedBatch};
 use opence_runtime::plugins::{Event, Hook, Plugin, View};
 use opence_runtime::{
     keystroke_flags, payload, virtual_key, Console, Controls, Game, Readback, RenderSink, Runtime,
+    Speakers, SPEAKER_RATE,
 };
 
 /// One render batch as the renderer carries it out: the commands that
@@ -177,6 +178,7 @@ pub struct WasmGame {
     thread: Mutex<Option<Running>>,
     controls: Controls,
     console: Console,
+    speakers: Speakers,
     /// the game's ticks so far ([`TickCounter`])
     ticks: Arc<AtomicU64>,
 }
@@ -220,6 +222,7 @@ impl WasmGame {
         game.add_plugin(Box::new(TickCounter(Arc::clone(&ticks))));
         let controls = game.controls();
         let console = game.console();
+        let speakers = game.speakers();
         let seconds = options
             .seconds
             .map(|seconds| Duration::from_secs(u64::from(seconds)));
@@ -229,6 +232,7 @@ impl WasmGame {
             thread: Mutex::new(None),
             controls,
             console,
+            speakers,
             ticks,
         }))
     }
@@ -364,5 +368,33 @@ impl WasmGame {
     /// The wheel turning by `notches`, up positive.
     pub fn mouse_wheel(&self, notches: f32) {
         self.controls.mouse_wheel(notches);
+    }
+
+    /// The game's speakers, for the app's audio device to pull its mixed
+    /// sound from.
+    pub fn speakers(&self) -> Arc<GameSpeakers> {
+        Arc::new(GameSpeakers(self.speakers.clone()))
+    }
+}
+
+/// The mixed sound of a running game.wasm (its own mixer's, 48 kHz
+/// stereo), pulled on the audio device's thread.
+#[derive(uniffi::Object)]
+pub struct GameSpeakers(Speakers);
+
+#[uniffi::export]
+impl GameSpeakers {
+    /// The sound's sample rate.
+    pub fn sample_rate(&self) -> u32 {
+        SPEAKER_RATE
+    }
+
+    /// The next `frames` frames, interleaved stereo: what the game has
+    /// mixed, then silence. At most a second is pulled at once.
+    pub fn pull(&self, frames: u32) -> Vec<f32> {
+        let frames = frames.min(SPEAKER_RATE) as usize;
+        let mut samples = vec![0.0; frames * 2];
+        self.0.pull(&mut samples);
+        samples
     }
 }

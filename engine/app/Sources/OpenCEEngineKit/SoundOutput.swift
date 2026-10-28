@@ -1,23 +1,30 @@
-// The level's sounds (engine/crates/ffi/src/audio.rs): an AVAudioSourceNode
-// pulls the engine's mix, interleaved stereo at 48 kHz, on the audio
-// thread. Without an output device the game is silent.
+// The level's sounds: an AVAudioSourceNode pulls a mix, interleaved stereo,
+// on the audio thread, from the engine (engine/crates/ffi/src/audio.rs) or
+// from game.wasm's own mixer (GameSpeakers). Without an output device the
+// game is silent.
 import AVFoundation
 import Foundation
 import OpenCEEngineCore
 
 public final class SoundOutput {
     private let engine = AVAudioEngine()
-    private let output: AudioOutput
     private var node: AVAudioSourceNode?
 
     /// An output of `output`'s mix; it starts playing at once.
-    public init(output: AudioOutput) {
-        self.output = output
-        let rate = Double(output.sampleRate())
+    public convenience init(output: AudioOutput) {
+        self.init(rate: Double(output.sampleRate())) { output.pull(frames: $0) }
+    }
+
+    /// An output of game.wasm's mix; it starts playing at once.
+    public convenience init(speakers: GameSpeakers) {
+        self.init(rate: Double(speakers.sampleRate())) { speakers.pull(frames: $0) }
+    }
+
+    /// An output of what `pull` gives for so many frames, at `rate`.
+    public init(rate: Double, pull: @escaping (UInt32) -> [Float]) {
         guard let format = AVAudioFormat(standardFormatWithSampleRate: rate, channels: 2) else { return }
-        let source = output
         let node = AVAudioSourceNode(format: format) { _, _, frameCount, buffers -> OSStatus in
-            let mixed = source.pull(frames: frameCount)
+            let mixed = pull(frameCount)
             let channels = UnsafeMutableAudioBufferListPointer(buffers)
             // (the standard format is deinterleaved: one buffer a channel)
             for (channel, buffer) in channels.enumerated() {
