@@ -72,6 +72,7 @@ stops, except A1's go/no-go.
 - [ ] Task: The bar end to end: p99 ≤ 8.33 ms at 4K ultra on the M1 Max. b889c617 492ee877
   - **Blocked:** `--benchmark 60 --game --size 3840x2160`, each frame the slower of its CPU frame and its GPU work: 2304 frames, p50 7.243 ms, **p99 9.198 ms**, p99.9 175 ms, 4 hitches. The GPU's p99 is 0.845 ms; the CPU frame is the whole of it, and at 640×480 it is the same (p99 8.960 ms).
   - Where it goes (`opence-game --benchmark 30`, no screen): the frame's p50 5.25 ms, of which the profiled sections are about 1.5 ms (`game_time_update` 0.88, `present` 0.34); the rest is the game's rasterizer and the C Metal device in game.wasm, which have no profile sections. The app's sink (the runtime's check, the batch to Swift and the readbacks) adds about 2 ms more. Next: profile sections in the rasterizer and the device, then the sink. "Ultra" is the stock shaders until Phase 5, which re-runs the bar.
+  - Re-run at Phase 5's end, at real 4K (265b437a draws at the drawable's resolution; the earlier GPU numbers were of a 640×480 frame): 2378 frames, p50 7.022 ms, **p99 9.096 ms**, p99.9 35.7 ms, 3 hitches; the GPU p50 5.434 ms, p99 5.660 ms. The GPU now meets the bar with 2.7 ms to spare; the CPU frame (the game's rasterizer and the device in game.wasm) is still the whole of the miss. Stays blocked.
 - [x] Task: Conductor - User Manual Verification 'Phase 4: Stock rendering' (Protocol in workflow.md) (automated) fcde94ab (the bar stays blocked; the golden frame awaits approval)
 
 ## Phase 5: The presentation as plugins (A5)
@@ -92,7 +93,8 @@ stops, except A1's go/no-go.
 - [ ] Task: Conductor - User Manual Verification 'Phase 6: The PC port' (Protocol in workflow.md) (automated)
 
 ## Phase 7: Removals and checks (A7)
-- [ ] Task: Reclass the census for the new direction, with its `--check`.
+- [x] Task: Reclass the census for the new direction, with its `--check`. 887eef2a
+  - A function in a file game.wasm compiles (port/linux/port.json) is Compiled; the manifest keeps rules only for the excluded files. 558 Ported, 6985 Compiled, 84 Replaced, 0 Missing, 0 owed. A Ported twin in a compiled file reads its fields as Compiled.
 - [ ] Task: Remove the Rust simulation and `bevy_ecs`.
 - [ ] Task: Remove the presentation code the plugins replace, and the `net` crate.
 - [ ] Task: Remove `port/macos` and its VM.
