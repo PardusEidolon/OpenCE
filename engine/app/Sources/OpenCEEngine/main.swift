@@ -1247,8 +1247,10 @@ func gameBenchmark(seconds: Double) -> Never {
     guard let load = Double(argument("--load-seconds") ?? "20"), load.isFinite, load >= 0 else {
         fail("--load-seconds is seconds")
     }
-    let wasm = argument("--wasm") ?? "build/engine/wasm/game.wasm"
-    let cache = argument("--cache") ?? "build/engine/wasm/cache"
+    // (each folder made absolute: Wasmtime's cache takes no relative path)
+    let absolute = { (path: String) in URL(fileURLWithPath: path).standardizedFileURL.path }
+    let wasm = absolute(argument("--wasm") ?? "build/engine/wasm/game.wasm")
+    let cache = absolute(argument("--cache") ?? "build/engine/wasm/cache")
     let map = argument("--map") ?? "bloodgulch"
     guard let device = MTLCreateSystemDefaultDevice() else { fail("no Metal device") }
     guard let window = OffscreenWindow(device: device, width: size[0], height: size[1]),
@@ -1260,7 +1262,7 @@ func gameBenchmark(seconds: Double) -> Never {
         defer { try? FileManager.default.removeItem(at: saves) }
         let game = try WasmGame(
             options: WasmGameOptions(
-                wasm: wasm, data: argument("--data") ?? "assets", saves: saves.path, cache: cache,
+                wasm: wasm, data: absolute(argument("--data") ?? "assets"), saves: saves.path, cache: cache,
                 width: UInt32(size[0]), height: UInt32(size[1]), map: map,
                 seconds: UInt32((load + seconds).rounded(.up)), settings: []))
         let gpu = GPUTimes()
