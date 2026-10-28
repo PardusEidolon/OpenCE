@@ -1,0 +1,1 @@
+Task: the runtime crate. Wasmtime 50 with Cranelift, the cache keyed by version, settings and CPU, 4 GB reserved, recording stubs for every import. 9 tests; workspace 199/200 as before; Swift passes.
