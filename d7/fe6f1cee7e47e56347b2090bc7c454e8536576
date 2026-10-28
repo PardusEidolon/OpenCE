@@ -1,0 +1,1 @@
+Task: native_port Phase 4 Task 2 (app side). GameRenderer (Swift RenderTarget on Metal), WindowFrame rename, GameRunTests: Blood Gulch 30 s headless, 902 batches / 808,946 commands / 0 refused / 902 presented (a later run 832/747,175/0/832). Model, transparent, chicago draw via NV2A->MSL.
