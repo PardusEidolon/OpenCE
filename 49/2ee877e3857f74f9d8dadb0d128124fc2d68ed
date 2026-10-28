@@ -1,0 +1,1 @@
+Task: the bar end to end (native_port Phase 4). Fix: absolute paths for --benchmark --game. Result: p99 9.198 ms at 3840x2160 over 60 s (GPU p99 0.845 ms; CPU frame is the cost, same at 640x480: 8.960 ms). Task blocked in the plan with the section breakdown.
