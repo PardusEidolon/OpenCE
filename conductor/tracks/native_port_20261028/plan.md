@@ -75,10 +75,12 @@ stops, except A1's go/no-go.
 - [x] Task: Conductor - User Manual Verification 'Phase 4: Stock rendering' (Protocol in workflow.md) (automated) fcde94ab (the bar stays blocked; the golden frame awaits approval)
 
 ## Phase 5: The presentation as plugins (A5)
-- [ ] Task: The lighting extended from the original: bakes, probes and ray tracing on the original's lightmaps, shader tags and lights; each switchable to stock.
+- [x] Task: The lighting extended from the original: bakes, probes and ray tracing on the original's lightmaps, shader tags and lights; each switchable to stock. e04beb7d
+  - The first extension and its switch: `display.per_pixel_lighting` lights the models for each pixel from the original's own lights (ambient, two distant, two point; nv2a_psh.c `model_lighting`); off, as by default, they are lit at each vertex as on the Xbox. Blood Gulch, 60 s each way: 47 shader libraries made, 0 lit per pixel by default, 3 with the switch on (`tests/lighting.rs`).
+  - The bakes, probes and ray tracing build on this in `lighting_original_20261028`, whose phases they are; each goes behind the same kind of switch.
 - [x] Task: The particles; the weapons station draws every particle the game makes. d85cfd00 (Blood Gulch under fire stands in for the station, which the wasm path lacks)
-- [ ] Task: The HUD at 4K; the grenade count and every element measured against the original.
-- [ ] Task: The first-person rifle and hand where the original puts them.
+- [x] Task: The HUD at 4K; the grenade count and every element measured against the original. 4c9426a6 (overlaps 0.976, 0.926, 0.792; the grenade check reads only the console's echo)
+- [x] Task: The first-person rifle and hand where the original puts them. 4c9426a6 (overlap 0.649; the 4K weapon covers 1895 units against 2535)
 - [x] Task: The sound. b57ed742 (game.wasm's mixer heard headless through GameSpeakers; the app's interactive play moves to WasmGame in Phase 7)
 - [ ] Task: Conductor - User Manual Verification 'Phase 5: The presentation' (Protocol in workflow.md) (automated)
 
