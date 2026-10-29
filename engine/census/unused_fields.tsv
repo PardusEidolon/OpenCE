@@ -282,6 +282,7 @@ auxilary_meter_definition	panel.meter.alpha_multiplier	game.wasm reads it: hud_d
 auxilary_meter_definition	panel.meter.alpha_bias	game.wasm reads it: hud_draw_meter
 auxilary_meter_definition	panel.meter.value_scale	game.wasm reads it: hud_render_unit_interface
 auxilary_meter_definition	panel.meter.opacity	game.wasm reads it: hud_draw_meter
+auxilary_meter_definition	panel.meter.fade	game.wasm reads it: hud_draw_meter
 auxilary_meter_definition	panel.shield_extras.overcharge_min_color	the original reads it nowhere
 auxilary_meter_definition	panel.shield_extras.overcharge_max_color	the original reads it nowhere
 auxilary_meter_definition	panel.shield_extras.overcharge_flash_color	the original reads it nowhere
@@ -397,6 +398,8 @@ continuous_damage_effect_definition	damage.instantaneous_acceleration	game.wasm 
 continuous_damage_effect_definition	damage.material_modifiers	game.wasm reads it: breakable_surface_damage, object_damage_body, object_damage_shield
 contrail_definition	scale_flags	game.wasm reads it: contrail_add_points, contrail_compute_new_point_count, contrails_update, render_contrail
 contrail_definition	point_generation_rate	game.wasm reads it: contrail_compute_new_point_count
+contrail_definition	point_velocity_lower_bound	game.wasm reads it: contrail_add_points
+contrail_definition	point_velocity_upper_bound	game.wasm reads it: contrail_add_points
 contrail_definition	point_velocity_cone_angle	game.wasm reads it: contrail_add_points
 contrail_definition	point_inherited_velocity_fraction	game.wasm reads it: contrail_add_points
 contrail_definition	render_type	game.wasm reads it: render_contrail, render_contrails
@@ -492,6 +495,8 @@ decal_definition	animation_loop_frame_index	the original reads it nowhere
 decal_definition	animation_speed	the original reads it nowhere
 decal_definition	lifetime_lower_bound	game.wasm reads it: decal_new_from_collision
 decal_definition	lifetime_upper_bound	game.wasm reads it: decal_new_from_collision
+decal_definition	decay_time_lower_bound	game.wasm reads it: decal_new_from_collision
+decal_definition	decay_time_upper_bound	game.wasm reads it: decal_new_from_collision
 decal_definition	shader.shader.base.radiosity.tint_color.n	the original reads it nowhere
 decal_definition	shader.shader.base.radiosity.tint_color.red	the original reads it nowhere
 decal_definition	shader.shader.base.radiosity.tint_color.green	the original reads it nowhere
@@ -545,12 +550,19 @@ device_definition	device.runtime_maximum_powered_position_acceleration	game.wasm
 device_definition	device.runtime_maximum_powered_position_velocity	game.wasm reads it: device_export_function_values, device_update, machine_update
 device_definition	device.runtime_delay_ticks	game.wasm reads it: device_export_function_values, device_update
 effect_definition	loop_start_index	game.wasm reads it: effect_update
+effect_event_definition	skip_fraction	the original reads it nowhere
+effect_event_definition	delay_lower_bound	game.wasm reads it: effect_set_event
+effect_event_definition	delay_upper_bound	game.wasm reads it: effect_set_event
 effect_location_definition	marker_name	game.wasm reads it: effect_build_locations
+effect_particles_definition	environment	game.wasm reads it: effect_generate_particles
+effect_particles_definition	disposition	game.wasm reads it: effect_generate_particles
 effect_particles_definition	camera_mode	game.wasm reads it: effect_generate_particles
 effect_particles_definition	location_index	game.wasm reads it: effect_generate_particles
 effect_particles_definition	distribution_function	game.wasm reads it: effect_generate_particles
 effect_particles_definition	distribution_radius_lower_bound	game.wasm reads it: effect_generate_particles
 effect_particles_definition	distribution_radius_upper_bound	game.wasm reads it: effect_generate_particles
+effect_particles_definition	velocity_lower_bound	game.wasm reads it: effect_generate_particles
+effect_particles_definition	velocity_upper_bound	game.wasm reads it: effect_generate_particles
 effect_particles_definition	velocity_cone_angle	game.wasm reads it: effect_generate_particles
 effect_particles_definition	angular_velocity_lower_bound	game.wasm reads it: effect_generate_particles
 effect_particles_definition	angular_velocity_upper_bound	game.wasm reads it: effect_generate_particles
@@ -767,6 +779,18 @@ lens_flare_reflection	animation_flags	game.wasm reads it: rasterizer_lens_flares
 lens_flare_reflection	animation_function	game.wasm reads it: rasterizer_lens_flares_draw
 lens_flare_reflection	animation_period	game.wasm reads it: rasterizer_lens_flares_draw
 lens_flare_reflection	animation_phase	game.wasm reads it: rasterizer_lens_flares_draw
+looping_sound_definition	scale_lower_bound.detail_period	game.wasm reads it: looping_sound_new, process_looping_sounds
+looping_sound_definition	scale_upper_bound.detail_period	game.wasm reads it: looping_sound_new, process_looping_sounds
+looping_sound_detail	period_bounds.lower	game.wasm reads it: detail_sound_random_offset, looping_sound_new, process_looping_sounds, sound_definition_find_pitch_range_by_pitch, sound_new_impulse, update_potentially_audible_looping_sound
+looping_sound_detail	period_bounds.upper	game.wasm reads it: detail_sound_random_offset, looping_sound_new, process_looping_sounds, sound_definition_find_pitch_range_by_pitch, sound_new_impulse, update_potentially_audible_looping_sound
+looping_sound_detail	gain	game.wasm reads it: process_looping_sounds
+looping_sound_detail	theta_bounds.lower	game.wasm reads it: detail_sound_random_offset, looping_sound_new, process_looping_sounds, sound_definition_find_pitch_range_by_pitch, sound_new_impulse, update_potentially_audible_looping_sound
+looping_sound_detail	theta_bounds.upper	game.wasm reads it: detail_sound_random_offset, looping_sound_new, process_looping_sounds, sound_definition_find_pitch_range_by_pitch, sound_new_impulse, update_potentially_audible_looping_sound
+looping_sound_detail	phi_bounds.lower	game.wasm reads it: detail_sound_random_offset, looping_sound_new, process_looping_sounds, sound_definition_find_pitch_range_by_pitch, sound_new_impulse, update_potentially_audible_looping_sound
+looping_sound_detail	phi_bounds.upper	game.wasm reads it: detail_sound_random_offset, looping_sound_new, process_looping_sounds, sound_definition_find_pitch_range_by_pitch, sound_new_impulse, update_potentially_audible_looping_sound
+looping_sound_detail	distance_bounds.lower	game.wasm reads it: detail_sound_random_offset, looping_sound_new, process_looping_sounds, sound_definition_find_pitch_range_by_pitch, sound_new_impulse, update_potentially_audible_looping_sound
+looping_sound_detail	distance_bounds.upper	game.wasm reads it: detail_sound_random_offset, looping_sound_new, process_looping_sounds, sound_definition_find_pitch_range_by_pitch, sound_new_impulse, update_potentially_audible_looping_sound
+looping_sound_scale_modifiers	detail_period	game.wasm reads it: looping_sound_new, process_looping_sounds
 machine_definition	object.acceleration_scale	game.wasm reads it: object_damage_aftermath, unit_cause_player_melee_damage
 machine_definition	object.model.group_tag	the original reads it nowhere
 machine_definition	object.model.index	game.wasm reads it: biped_limp_noodle_move_relax_and_constrain_positions, biped_update_moving, hs_object_set_permutation, object_choose_random_region_permutations, object_compute_node_matrices, object_get_marker_by_name, object_inverse_kinematics, object_new, object_permute_region, object_postprocess_node_matrices, object_render_debug, object_set_visibility, object_start_interpolation, render_object_list, unit_exit_seat_end, unit_get_melee_range_and_ticks, unit_get_seat_entrance_point, unit_grenade_throw_keep_legs_moving, unit_update_animation
@@ -824,6 +848,7 @@ meter_hud_element_definition	alpha_multiplier	game.wasm reads it: hud_draw_meter
 meter_hud_element_definition	alpha_bias	game.wasm reads it: hud_draw_meter
 meter_hud_element_definition	value_scale	game.wasm reads it: hud_render_unit_interface
 meter_hud_element_definition	opacity	game.wasm reads it: hud_draw_meter
+meter_hud_element_definition	fade	game.wasm reads it: hud_draw_meter
 metered_panel_definition	background.interface_bitmap.group_tag	game.wasm reads it: hud_draw_static_element, hud_render_unit_interface
 metered_panel_definition	background.interface_bitmap.index	game.wasm reads it: hud_draw_static_element, hud_render_unit_interface, render_grenade_hud
 metered_panel_definition	background.colors.flash_color	game.wasm reads it: get_flash_color
@@ -838,6 +863,7 @@ metered_panel_definition	meter.alpha_multiplier	game.wasm reads it: hud_draw_met
 metered_panel_definition	meter.alpha_bias	game.wasm reads it: hud_draw_meter
 metered_panel_definition	meter.value_scale	game.wasm reads it: hud_render_unit_interface
 metered_panel_definition	meter.opacity	game.wasm reads it: hud_draw_meter
+metered_panel_definition	meter.fade	game.wasm reads it: hud_draw_meter
 metered_panel_definition	shield_extras.overcharge_min_color	the original reads it nowhere
 metered_panel_definition	shield_extras.overcharge_max_color	the original reads it nowhere
 metered_panel_definition	shield_extras.overcharge_flash_color	the original reads it nowhere
@@ -956,6 +982,8 @@ particle_definition	collision_material_effects.group_tag	the original reads it n
 particle_definition	collision_material_effects.index	game.wasm reads it: particle_update_physics
 particle_definition	life_span_lower_bound	game.wasm reads it: particle_new
 particle_definition	life_span_upper_bound	game.wasm reads it: particle_new
+particle_definition	fade_in_time	game.wasm reads it: render_particles
+particle_definition	fade_out_time	game.wasm reads it: render_particles
 particle_definition	minimum_pixels	game.wasm reads it: render_particles
 particle_definition	frames_per_second_contact_deterioration	game.wasm reads it: particle_update_physics
 particle_definition	lod_falloff	the original reads it nowhere
@@ -1017,7 +1045,9 @@ physics_definition	center_of_mass.z	game.wasm reads it: object_compute_node_matr
 physics_definition	center_of_mass.u	the original reads it nowhere
 physics_definition	center_of_mass.v	the original reads it nowhere
 physics_definition	center_of_mass.w	the original reads it nowhere
+physics_definition	density	the original reads it nowhere
 physics_definition	gravity_scale	game.wasm reads it: physics_compute_new, physics_update_old
+physics_definition	ground_friction	game.wasm reads it: physics_compute_new, physics_update_old
 physics_definition	ground_depth	game.wasm reads it: physics_compute_new, physics_update_old
 physics_definition	ground_damp_fraction	game.wasm reads it: physics_compute_new, physics_update_old
 physics_definition	ground_normal_k1	game.wasm reads it: physics_compute_new, physics_update_old
@@ -1096,6 +1126,7 @@ projectile_material_response_definition	default_effect.group_tag	the original re
 projectile_material_response_definition	default_effect.index	game.wasm reads it: projectile_collision
 projectile_material_response_definition	potential_response	game.wasm reads it: projectile_collision
 projectile_material_response_definition	potential_flags	game.wasm reads it: projectile_collision
+projectile_material_response_definition	potential_skip_fraction	game.wasm reads it: projectile_collision
 projectile_material_response_definition	potential_angle_lower_bound	game.wasm reads it: projectile_collision
 projectile_material_response_definition	potential_angle_upper_bound	game.wasm reads it: projectile_collision
 projectile_material_response_definition	potential_velocity_lower_bound	game.wasm reads it: projectile_collision
@@ -1108,8 +1139,11 @@ projectile_material_response_definition	velocity_noise	game.wasm reads it: proje
 projectile_material_response_definition	detonation_effect.group_tag	the original reads it nowhere
 projectile_material_response_definition	detonation_effect.index	game.wasm reads it: projectile_detonate
 projectile_material_response_definition	initial_friction	game.wasm reads it: projectile_collision
+projectile_material_response_definition	maximum_distance	the original reads it nowhere
 projectile_material_response_definition	parallel_friction	game.wasm reads it: projectile_collision
 projectile_material_response_definition	perpendicular_friction	game.wasm reads it: projectile_collision
+real_bounds	lower	game.wasm reads it: detail_sound_random_offset, looping_sound_new, process_looping_sounds, sound_definition_find_pitch_range_by_pitch, sound_new_impulse, update_potentially_audible_looping_sound
+real_bounds	upper	game.wasm reads it: detail_sound_random_offset, looping_sound_new, process_looping_sounds, sound_definition_find_pitch_range_by_pitch, sound_new_impulse, update_potentially_audible_looping_sound
 scenario	device_groups.count	game.wasm reads it: create_initial_device_groups
 scenario	device_groups.address	game.wasm reads it: create_initial_device_groups
 scenario	starting_profiles.count	game.wasm reads it: player_add_equipment
@@ -1148,6 +1182,7 @@ scenario_control_datum	object.rotation.yaw	game.wasm reads it: object_new_from_s
 scenario_control_datum	object.rotation.pitch	game.wasm reads it: object_new_from_scenario, object_type_synchronize, object_types_place_objects
 scenario_control_datum	object.rotation.roll	game.wasm reads it: object_new_from_scenario, object_type_synchronize, object_types_place_objects
 scenario_conversation_line_view	participant_index	game.wasm reads it: ai_conversation_line_begin
+scenario_conversation_line_view	delay_time	game.wasm reads it: ai_conversation_line_begin
 scenario_conversation_line_view	dialogue	game.wasm reads it: ai_conversation_line_begin
 scenario_conversation_participant_view	selection_type	game.wasm reads it: ai_conversation_find_participant, ai_conversation_line_begin
 scenario_conversation_participant_view	preexisting_object_name_index	game.wasm reads it: ai_conversation_begin, ai_conversation_find_participant
@@ -1244,6 +1279,17 @@ shader_environment_definition	diffuse.v_animation_function	the original reads it
 shader_environment_definition	diffuse.v_animation_period	the original reads it nowhere
 shader_environment_definition	diffuse.v_animation_scale	the original reads it nowhere
 shader_environment_definition	environment.self_illumination.flags	game.wasm reads it: _rasterizer_environment_lightmap_draw
+shader_environment_definition	environment.self_illumination.primary_on_color.n	game.wasm reads it: _rasterizer_environment_lightmap_draw
+shader_environment_definition	environment.self_illumination.primary_on_color.red	game.wasm reads it: _rasterizer_environment_lightmap_draw
+shader_environment_definition	environment.self_illumination.primary_on_color.green	game.wasm reads it: _rasterizer_environment_lightmap_draw
+shader_environment_definition	environment.self_illumination.primary_on_color.blue	game.wasm reads it: _rasterizer_environment_lightmap_draw
+shader_environment_definition	environment.self_illumination.primary_off_color.n	game.wasm reads it: _rasterizer_environment_lightmap_draw
+shader_environment_definition	environment.self_illumination.primary_off_color.red	game.wasm reads it: _rasterizer_environment_lightmap_draw
+shader_environment_definition	environment.self_illumination.primary_off_color.green	game.wasm reads it: _rasterizer_environment_lightmap_draw
+shader_environment_definition	environment.self_illumination.primary_off_color.blue	game.wasm reads it: _rasterizer_environment_lightmap_draw
+shader_environment_definition	environment.self_illumination.primary_animation_function	game.wasm reads it: _rasterizer_environment_lightmap_draw
+shader_environment_definition	environment.self_illumination.primary_animation_period	game.wasm reads it: _rasterizer_environment_lightmap_draw
+shader_environment_definition	environment.self_illumination.primary_animation_phase	game.wasm reads it: _rasterizer_environment_lightmap_draw
 shader_environment_definition	environment.self_illumination.secondary_on_color.n	game.wasm reads it: _rasterizer_environment_lightmap_draw
 shader_environment_definition	environment.self_illumination.secondary_on_color.red	game.wasm reads it: _rasterizer_environment_lightmap_draw
 shader_environment_definition	environment.self_illumination.secondary_on_color.green	game.wasm reads it: _rasterizer_environment_lightmap_draw
@@ -1296,6 +1342,7 @@ shader_model_definition	shader.base.radiosity.tint_color.red	the original reads 
 shader_model_definition	shader.base.radiosity.tint_color.green	the original reads it nowhere
 shader_model_definition	shader.base.radiosity.tint_color.blue	the original reads it nowhere
 shader_model_definition	shader.base.physics.material_type	the original reads it nowhere
+shader_model_definition	model.translucency	game.wasm reads it: _rasterizer_model_draw
 shader_model_definition	model.change_color_source	game.wasm reads it: _rasterizer_model_draw
 shader_model_definition	model.self_illumination_flags	game.wasm reads it: _rasterizer_model_draw
 shader_model_definition	model.self_illumination_color_source	game.wasm reads it: _rasterizer_model_draw
@@ -1452,14 +1499,39 @@ sky_atmospheric_fog	color.blue	game.wasm reads it: scenario_get_atmospheric_fog
 sky_atmospheric_fog	maximum_density	game.wasm reads it: scenario_get_atmospheric_fog
 sky_atmospheric_fog	start_distance	game.wasm reads it: scenario_get_atmospheric_fog
 sky_atmospheric_fog	opaque_distance	game.wasm reads it: scenario_get_atmospheric_fog
+sound_definition	sample_rate	game.wasm reads it: prioritize_sounds, sound_channel_summary_build, sound_find_best_channel, sound_new_impulse
+sound_definition	minimum_distance	game.wasm reads it: sound_definition_get_minimum_distance
+sound_definition	maximum_distance	game.wasm reads it: sound_definition_get_maximum_distance
+sound_definition	skip_fraction	game.wasm reads it: sound_new_impulse
+sound_definition	random_pitch_bounds.lower	game.wasm reads it: detail_sound_random_offset, looping_sound_new, process_looping_sounds, sound_definition_find_pitch_range_by_pitch, sound_new_impulse, update_potentially_audible_looping_sound
+sound_definition	random_pitch_bounds.upper	game.wasm reads it: detail_sound_random_offset, looping_sound_new, process_looping_sounds, sound_definition_find_pitch_range_by_pitch, sound_new_impulse, update_potentially_audible_looping_sound
 sound_definition	inner_cone_angle	game.wasm reads it: update_channel_for_impulse_sound, update_channel_for_looping_sound
 sound_definition	outer_cone_angle	game.wasm reads it: update_channel_for_impulse_sound, update_channel_for_looping_sound
 sound_definition	outer_cone_gain	game.wasm reads it: update_channel_for_impulse_sound, update_channel_for_looping_sound
+sound_definition	gain_modifier	game.wasm reads it: update_channel_for_impulse_sound, update_channel_for_looping_sound
 sound_definition	maximum_bend_per_second	game.wasm reads it: update_channel_for_looping_sound
+sound_definition	zero_skip_fraction_modifier	game.wasm reads it: sound_new_impulse
+sound_definition	zero_gain_modifier	game.wasm reads it: sound_new_impulse, update_channel_for_impulse_sound, update_channel_for_looping_sound
+sound_definition	zero_pitch_modifier	game.wasm reads it: sound_new_impulse, update_channel_for_looping_sound, update_potentially_audible_looping_sound
+sound_definition	one_skip_fraction_modifier	game.wasm reads it: sound_new_impulse
+sound_definition	one_gain_modifier	game.wasm reads it: update_channel_for_impulse_sound, update_channel_for_looping_sound
+sound_definition	one_pitch_modifier	game.wasm reads it: sound_new_impulse, update_channel_for_looping_sound, update_potentially_audible_looping_sound
+sound_definition	encoding	game.wasm reads it: prioritize_sounds, sound_channel_summary_build, sound_find_best_channel, sound_new_impulse
+sound_definition	promotion_sound.group_tag	the original reads it nowhere
+sound_definition	promotion_sound.index	game.wasm reads it: sound_definition_promote, sound_new_impulse
+sound_definition	promotion_count	game.wasm reads it: sound_definition_promote
+sound_definition	longest_permutation_length	game.wasm reads it: process_looping_sounds, scripted_sound_new, sound_definition_promote, sound_new_impulse, unit_speak
 sound_environment_definition	priority	the original reads it nowhere
+sound_permutation	skip_fraction	game.wasm reads it: sound_definition_next_permutation
+sound_permutation	gain	game.wasm reads it: update_channel_for_impulse_sound, update_channel_for_looping_sound
+sound_permutation	compression	the original reads it nowhere
 sound_permutation	mouth_data.size	game.wasm reads it: sound_permutation_get_mouth_aperture, sound_permutation_get_real_mouth_aperture
 sound_permutation	mouth_data.address	game.wasm reads it: sound_permutation_get_mouth_aperture
 sound_pitch_range	natural_pitch	game.wasm reads it: update_channel_for_looping_sound
+sound_pitch_range	bend_bounds.lower	game.wasm reads it: detail_sound_random_offset, looping_sound_new, process_looping_sounds, sound_definition_find_pitch_range_by_pitch, sound_new_impulse, update_potentially_audible_looping_sound
+sound_pitch_range	bend_bounds.upper	game.wasm reads it: detail_sound_random_offset, looping_sound_new, process_looping_sounds, sound_definition_find_pitch_range_by_pitch, sound_new_impulse, update_potentially_audible_looping_sound
+sound_pitch_range	actual_permutation_count	game.wasm reads it: predicted_resources_sound_precache, sound_definition_next_permutation, try_to_reset_permutations
+sound_pitch_range	playback_rate	game.wasm reads it: update_channel_for_impulse_sound, update_channel_for_looping_sound
 squad_definition	actor_palette_index	game.wasm reads it: ai_scripting_attach_unit, ai_scripting_migrate_find_target_squad, ai_scripting_migrate_internal, squad_get_actor_type
 squad_definition	platoon_index	game.wasm reads it: ai_handle_editing, ai_index_squad_iterator_next, ai_scripting_spawn_actor, ai_scripting_vehicle_encounter, encounter_attach_actor, encounter_create, encounter_update_follow
 squad_definition	initial_state	game.wasm reads it: actor_place, ai_scripting_attach_unit
@@ -1484,6 +1556,7 @@ structure_material	compressed_vertex_data.size	game.wasm reads it: structure_vis
 structure_material	compressed_vertex_data.address	game.wasm reads it: structure_visibility_traverse_surface_lists
 structure_runtime_decal	palette_index	game.wasm reads it: render_debug_structure_decals, structure_decals_update
 structure_runtime_decal	yaw	game.wasm reads it: render_debug_structure_decals, structure_decals_update
+structure_runtime_decal	pitch	game.wasm reads it: render_debug_structure_decals, structure_decals_update
 structure_visibility_shader_environment	shader.base.radiosity.tint_color.n	the original reads it nowhere
 structure_visibility_shader_environment	shader.base.radiosity.tint_color.red	the original reads it nowhere
 structure_visibility_shader_environment	shader.base.radiosity.tint_color.green	the original reads it nowhere
@@ -1544,6 +1617,7 @@ unit_hud_interface_definition	shield_meter.meter.alpha_multiplier	game.wasm read
 unit_hud_interface_definition	shield_meter.meter.alpha_bias	game.wasm reads it: hud_draw_meter
 unit_hud_interface_definition	shield_meter.meter.value_scale	game.wasm reads it: hud_render_unit_interface
 unit_hud_interface_definition	shield_meter.meter.opacity	game.wasm reads it: hud_draw_meter
+unit_hud_interface_definition	shield_meter.meter.fade	game.wasm reads it: hud_draw_meter
 unit_hud_interface_definition	shield_meter.shield_extras.overcharge_min_color	the original reads it nowhere
 unit_hud_interface_definition	shield_meter.shield_extras.overcharge_max_color	the original reads it nowhere
 unit_hud_interface_definition	shield_meter.shield_extras.overcharge_flash_color	the original reads it nowhere
@@ -1567,6 +1641,7 @@ unit_hud_interface_definition	health_meter.meter.alpha_multiplier	game.wasm read
 unit_hud_interface_definition	health_meter.meter.alpha_bias	game.wasm reads it: hud_draw_meter
 unit_hud_interface_definition	health_meter.meter.value_scale	game.wasm reads it: hud_render_unit_interface
 unit_hud_interface_definition	health_meter.meter.opacity	game.wasm reads it: hud_draw_meter
+unit_hud_interface_definition	health_meter.meter.fade	game.wasm reads it: hud_draw_meter
 unit_hud_interface_definition	health_meter.shield_extras.overcharge_min_color	the original reads it nowhere
 unit_hud_interface_definition	health_meter.shield_extras.overcharge_max_color	the original reads it nowhere
 unit_hud_interface_definition	health_meter.shield_extras.overcharge_flash_color	the original reads it nowhere
@@ -1736,6 +1811,7 @@ weapon_hud_meter_element	meter_element.alpha_multiplier	game.wasm reads it: hud_
 weapon_hud_meter_element	meter_element.alpha_bias	game.wasm reads it: hud_draw_meter
 weapon_hud_meter_element	meter_element.value_scale	game.wasm reads it: hud_render_unit_interface
 weapon_hud_meter_element	meter_element.opacity	game.wasm reads it: hud_draw_meter
+weapon_hud_meter_element	meter_element.fade	game.wasm reads it: hud_draw_meter
 weapon_hud_number_element	number_element.colors.flash_color	game.wasm reads it: get_flash_color
 weapon_hud_number_element	number_element.digits	game.wasm reads it: hud_draw_numbers, render_grenade_hud
 weapon_hud_number_element	number_element.fractional_digits	game.wasm reads it: hud_draw_numbers, render_weapon_hud
@@ -1804,6 +1880,8 @@ weather_particle_type_definition	height_fadein_start	game.wasm reads it: weather
 weather_particle_type_definition	height_fadein_end	game.wasm reads it: weather_particle_system_update
 weather_particle_type_definition	height_fadeout_start	game.wasm reads it: weather_particle_system_update
 weather_particle_type_definition	height_fadeout_end	game.wasm reads it: weather_particle_system_update
+weather_particle_type_definition	particle_count_lower_bound	game.wasm reads it: weather_particle_system_new
+weather_particle_type_definition	particle_count_upper_bound	game.wasm reads it: weather_particle_system_new
 weather_particle_type_definition	acceleration_lower_bound	game.wasm reads it: weather_particle_system_new_particle, weather_particle_update_physics
 weather_particle_type_definition	acceleration_upper_bound	game.wasm reads it: weather_particle_system_new_particle, weather_particle_update_physics
 weather_particle_type_definition	acceleration_turning_rate	game.wasm reads it: weather_particle_update_physics
@@ -1824,6 +1902,8 @@ weather_particle_type_definition	shader.primary_map_flags	game.wasm reads it: pa
 weather_particle_type_definition	shader.secondary_map.group_tag	the original reads it nowhere
 weather_particle_type_definition	shader.secondary_map.index	game.wasm reads it: rasterizer_transparent_geometry_group_draw
 weather_particle_type_definition	shader.secondary_map_anchor	game.wasm reads it: rasterizer_transparent_geometry_group_draw
+wind_definition	velocity_lower_bound	game.wasm reads it: wind_update
+wind_definition	velocity_upper_bound	game.wasm reads it: wind_update
 wind_definition	variation_area.n	the original reads it nowhere
 wind_definition	variation_area.yaw	game.wasm reads it: wind_update
 wind_definition	variation_area.pitch	game.wasm reads it: wind_update

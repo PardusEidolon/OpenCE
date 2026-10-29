@@ -2,7 +2,6 @@
 # percent (tools/engine_coverage.py checks it; --write-floors sets it
 # a point below the day's numbers, measured with the user's maps).
 [floors]
-audio = 96.0
 bake = 95.0
 cli = 70.0
 content = 96.0

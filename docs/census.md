@@ -57,7 +57,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `vector_from_points3d` | ai/action_alert.c | Ported |  | `tools/engine_math_reference.py` |
 | `magnitude_squared3d` | ai/action_alert.c | Ported |  | `tools/engine_math_reference.py` |
 | `distance_squared3d` | ai/action_alert.c | Ported |  | `tools/engine_math_reference.py` |
-| `real_random_range` | ai/action_alert.c | Ported | audio/src/choice.rs:43 | `tools/engine_random_reference.py` |
+| `real_random_range` | ai/action_alert.c | Ported |  | `tools/engine_random_reference.py` |
 | `action_alert_update` | ai/action_alert.c | Compiled |  | compiled into game.wasm |
 | `action_alert_next_position` | ai/action_alert.c | Compiled |  | compiled into game.wasm |
 | `action_alert_perform` | ai/action_alert.c | Compiled |  | compiled into game.wasm |
@@ -4642,10 +4642,10 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `get_number_suitable_for_initializing_random_seed` | math/random_math.c | Compiled |  | compiled into game.wasm |
 | `random_math_initialize` | math/random_math.c | Compiled |  | compiled into game.wasm |
 | `random_math_dispose` | math/random_math.c | Compiled |  | compiled into game.wasm |
-| `real_seed_random` | math/random_math.c | Ported | audio/src/choice.rs:30 | `tools/engine_cause_damage_reference.py` |
+| `real_seed_random` | math/random_math.c | Ported |  | `tools/engine_cause_damage_reference.py` |
 | `real_seed_random_range` | math/random_math.c | Ported |  | `tools/engine_math_reference.py` |
-| `seed_random` | math/random_math.c | Ported | audio/src/choice.rs:24 | `tools/engine_cause_damage_reference.py` |
-| `seed_random_range` | math/random_math.c | Ported | audio/src/choice.rs:36 | `tools/engine_cause_damage_reference.py` |
+| `seed_random` | math/random_math.c | Ported |  | `tools/engine_cause_damage_reference.py` |
+| `seed_random_range` | math/random_math.c | Ported |  | `tools/engine_cause_damage_reference.py` |
 | `direction3d_from_table` | math/random_math.c | Ported |  | `tools/engine_math_reference.py` |
 | `seed_random_direction3d` | math/random_math.c | Ported |  | `tools/engine_random_reference.py` |
 | `seed_random_orientation` | math/random_math.c | Compiled |  | compiled into game.wasm |
@@ -7065,16 +7065,16 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `debug_sound_classes_set_distances` | sound/sound_classes.c | Compiled |  | compiled into game.wasm |
 | `debug_sound_classes_set_wet` | sound/sound_classes.c | Compiled |  | compiled into game.wasm |
 | `sound_classes_initialize_for_new_map` | sound/sound_classes.c | Ported |  | `tools/engine_sound_class_reference.py` |
-| `sound_classes_update` | sound/sound_classes.c | Ported | audio/src/classes.rs:579 | `tools/engine_sound_class_reference.py` |
+| `sound_classes_update` | sound/sound_classes.c | Ported |  | `tools/engine_sound_class_reference.py` |
 | `sound_class_get_gain` | sound/sound_classes.c | Ported |  | `tools/engine_sound_class_reference.py` |
-| `sound_class_set_gain` | sound/sound_classes.c | Ported | audio/src/classes.rs:4 | `tools/engine_sound_class_reference.py` |
+| `sound_class_set_gain` | sound/sound_classes.c | Ported |  | `tools/engine_sound_class_reference.py` |
 | `sound_definition_get_maximum_distance` | sound/sound_definitions.c | Compiled |  | compiled into game.wasm |
 | `sound_definition_get_minimum_distance` | sound/sound_definitions.c | Compiled |  | compiled into game.wasm |
 | `sound_permutation_get_mouth_aperture` | sound/sound_definitions.c | Compiled |  | compiled into game.wasm |
-| `sound_definition_find_pitch_range_by_pitch` | sound/sound_definitions.c | Ported | audio/src/choice.rs:80 | `tools/engine_sound_choice_reference.py` |
-| `try_to_reset_permutations` | sound/sound_definitions.c | Ported | audio/src/choice.rs:134 | `tools/engine_sound_choice_reference.py` |
+| `sound_definition_find_pitch_range_by_pitch` | sound/sound_definitions.c | Ported |  | `tools/engine_sound_choice_reference.py` |
+| `try_to_reset_permutations` | sound/sound_definitions.c | Ported |  | `tools/engine_sound_choice_reference.py` |
 | `sound_permutation_get_real_mouth_aperture` | sound/sound_definitions.c | Compiled |  | compiled into game.wasm |
-| `sound_definition_next_permutation` | sound/sound_definitions.c | Ported | audio/src/choice.rs:163 | `tools/engine_sound_choice_reference.py` |
+| `sound_definition_next_permutation` | sound/sound_definitions.c | Ported |  | `tools/engine_sound_choice_reference.py` |
 | `sound_valid_for_channel` | sound/sound_manager.c | Compiled |  | compiled into game.wasm |
 | `current_platform_definition` | sound/sound_manager.c | Compiled |  | compiled into game.wasm |
 | `sound_initialize_for_new_map` | sound/sound_manager.c | Compiled |  | compiled into game.wasm |
@@ -7088,15 +7088,15 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `sound_scripted_dialog_is_playing` | sound/sound_manager.c | Compiled |  | compiled into game.wasm |
 | `sound_manager_set_sound_environment` | sound/sound_manager.c | Compiled |  | compiled into game.wasm |
 | `sound_update_time` | sound/sound_manager.c | Compiled |  | compiled into game.wasm |
-| `sound_scale_value` | sound/sound_manager.c | Ported | audio/src/choice.rs:50 | `tools/engine_sound_choice_reference.py` |
+| `sound_scale_value` | sound/sound_manager.c | Ported |  | `tools/engine_sound_choice_reference.py` |
 | `sound_definition_is_playable` | sound/sound_manager.c | Compiled |  | compiled into game.wasm |
 | `listener_get` | sound/sound_manager.c | Compiled |  | compiled into game.wasm |
 | `sound_definition_promote` | sound/sound_manager.c | Compiled |  | compiled into game.wasm |
-| `sound_manager_master_gain` | sound/sound_manager.c | Compiled | audio/src/player.rs:236 | compiled into game.wasm |
+| `sound_manager_master_gain` | sound/sound_manager.c | Compiled |  | compiled into game.wasm |
 | `sound_delete` | sound/sound_manager.c | Compiled |  | compiled into game.wasm |
 | `sound_travel_milliseconds` | sound/sound_manager.c | Compiled |  | compiled into game.wasm |
 | `refresh_sound` | sound/sound_manager.c | Compiled |  | compiled into game.wasm |
-| `sound_channel_summary_build` | sound/sound_manager.c | Compiled | audio/src/player.rs:299 | compiled into game.wasm |
+| `sound_channel_summary_build` | sound/sound_manager.c | Compiled |  | compiled into game.wasm |
 | `channel_queue_sound` | sound/sound_manager.c | Compiled |  | compiled into game.wasm |
 | `channel_set_properties_hardware` | sound/sound_manager.c | Compiled |  | compiled into game.wasm |
 | `track_loop_track_sound` | sound/sound_manager.c | Compiled |  | compiled into game.wasm |
@@ -7105,10 +7105,10 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `looping_sound_find` | sound/sound_manager.c | Compiled |  | compiled into game.wasm |
 | `looping_sound_new` | sound/sound_manager.c | Compiled |  | compiled into game.wasm |
 | `sound_set_definition_end` | sound/sound_manager.c | Compiled |  | compiled into game.wasm |
-| `limit_pitch` | sound/sound_manager.c | Compiled | audio/src/choice.rs:68 | compiled into game.wasm |
+| `limit_pitch` | sound/sound_manager.c | Compiled |  | compiled into game.wasm |
 | `render_debug_sound` | sound/sound_manager.c | Compiled |  | compiled into game.wasm |
 | `render_debug_looping_sound` | sound/sound_manager.c | Compiled |  | compiled into game.wasm |
-| `sound_scale_random_value` | sound/sound_manager.c | Ported | audio/src/choice.rs:56 | `tools/engine_sound_choice_reference.py` |
+| `sound_scale_random_value` | sound/sound_manager.c | Ported |  | `tools/engine_sound_choice_reference.py` |
 | `sound_calculate_fade` | sound/sound_manager.c | Compiled |  | compiled into game.wasm |
 | `sound_initialize` | sound/sound_manager.c | Compiled |  | compiled into game.wasm |
 | `sound_start_fade` | sound/sound_manager.c | Compiled |  | compiled into game.wasm |
@@ -7118,10 +7118,10 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `sound_preempts_sound` | sound/sound_manager.c | Compiled |  | compiled into game.wasm |
 | `sound_find_best_channel` | sound/sound_manager.c | Compiled |  | compiled into game.wasm |
 | `sound_find_channel` | sound/sound_manager.c | Compiled |  | compiled into game.wasm |
-| `sound_find_like_channel` | sound/sound_manager.c | Compiled | audio/src/player.rs:299 | compiled into game.wasm |
+| `sound_find_like_channel` | sound/sound_manager.c | Compiled |  | compiled into game.wasm |
 | `update_channel_for_impulse_sound` | sound/sound_manager.c | Compiled |  | compiled into game.wasm |
 | `update_channel_for_looping_sound` | sound/sound_manager.c | Compiled |  | compiled into game.wasm |
-| `process_looping_sounds` | sound/sound_manager.c | Compiled | audio/src/player/looping.rs:1 | compiled into game.wasm |
+| `process_looping_sounds` | sound/sound_manager.c | Compiled |  | compiled into game.wasm |
 | `sound_stop_impulse` | sound/sound_manager.c | Compiled |  | compiled into game.wasm |
 | `sound_stop_impulse_by_source_and_definition` | sound/sound_manager.c | Compiled |  | compiled into game.wasm |
 | `sound_stop_all` | sound/sound_manager.c | Compiled |  | compiled into game.wasm |
@@ -7130,9 +7130,9 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `update_channels` | sound/sound_manager.c | Compiled |  | compiled into game.wasm |
 | `prioritize_sounds` | sound/sound_manager.c | Compiled |  | compiled into game.wasm |
 | `refresh_listener` | sound/sound_manager.c | Compiled |  | compiled into game.wasm |
-| `sound_new_impulse` | sound/sound_manager.c | Compiled | audio/src/player.rs:1 | compiled into game.wasm |
-| `sound_refresh_looping` | sound/sound_manager.c | Compiled | audio/src/player/looping.rs:1 | compiled into game.wasm |
-| `detail_sound_random_offset` | sound/sound_manager.c | Compiled | audio/src/player/looping.rs:686 | compiled into game.wasm |
+| `sound_new_impulse` | sound/sound_manager.c | Compiled |  | compiled into game.wasm |
+| `sound_refresh_looping` | sound/sound_manager.c | Compiled |  | compiled into game.wasm |
+| `detail_sound_random_offset` | sound/sound_manager.c | Compiled |  | compiled into game.wasm |
 | `code_001be6a0` | sound/sound_manager.c | Compiled |  | compiled into game.wasm |
 | `code_001be890` | sound/sound_manager.c | Compiled |  | compiled into game.wasm |
 | `code_001bebf0` | sound/sound_manager.c | Compiled |  | compiled into game.wasm |

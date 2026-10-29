@@ -13,16 +13,13 @@ let
   inherit (cell.rust) commonArgs cargoArtifacts;
 
   # the Rust half (tools/engine_build.py --rust-only): libopence_ffi.a in
-  # lib/, its UniFFI bindings and the snapshot's header in bindings/,
-  # built in the sandbox with crane
+  # lib/ and its UniFFI bindings in bindings/, built in the sandbox with
+  # crane
   engine-rust = craneLib.mkCargoDerivation (
     commonArgs
     // {
       inherit cargoArtifacts;
-      nativeBuildInputs = [
-        python
-        pkgs.rust-cbindgen
-      ];
+      nativeBuildInputs = [ python ];
       buildPhaseCargoCommand = "python ../tools/engine_build.py --rust-only $out";
       installPhaseCommand = "";
       doInstallCargoArtifacts = false;

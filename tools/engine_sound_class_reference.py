@@ -9,8 +9,8 @@ the engine's classes to match.
 The table and the functions are sound_classes.c's, compiled for this machine
 against the shared fake world (tools/harness/world.py), with a stand-in for
 the game state's allocator. The trace is written to
-tools/traces/sound_class_reference.txt, which
-engine/crates/audio/tests/sound_class_reference.rs reads.
+tools/traces/sound_class_reference.txt, which game.wasm's build must
+match (tools/engine_wasm_traces.py).
 """
 
 import argparse

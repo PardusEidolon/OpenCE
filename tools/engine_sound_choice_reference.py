@@ -11,8 +11,8 @@ The functions are source/sound/sound_definitions.c's
 (`sound_scale_value`, `sound_scale_random_value`), found by name as
 tools/harness finds them, with source/math/random_math.c's seeded numbers,
 and compiled for this machine against a small fake world. The table is
-written to tools/traces/sound_choice_reference.txt, which
-engine/crates/audio/tests/sound_choice_reference.rs reads.
+written to tools/traces/sound_choice_reference.txt, which game.wasm's build must
+match (tools/engine_wasm_traces.py).
 """
 
 import argparse

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Builds OpenCE Engine.app, the new engine (conductor/archive/native_engine_20261021).
+"""Builds OpenCE Engine.app: game.wasm played in Wasmtime under the Swift
+app (conductor/tracks/native_port_20261028).
 
   engine_build.py [--out build/engine] [--codesign codesign] [--rust folder] [--wasm game.wasm]
   engine_build.py --rust-only folder
@@ -12,9 +13,9 @@ bundle signed ad hoc. --rust-only builds the Rust half alone, as the flake's
 engine-rust package does with crane; --rust takes a Rust half built already
 (nix build .#engine-rust) instead of running cargo. The game, game.wasm, is
 compiled from source/ (tools/engine_wasm.py) into the bundle's resources;
---wasm takes one built already. The shaders are compiled first with Xcode's Metal
-toolchain (xcodebuild -downloadComponent MetalToolchain), so that an error in
-one stops the build rather than the app's start. With --test, the tests run
+--wasm takes one built already. The app has no shaders of its own: the
+game's are translated as it runs and kept in the binary archive behind the
+loading screen (GameRenderer.swift). With --test, the tests run
 instead: cargo deny and the workspace's tests under nextest, then the
 package's XCTests (--suite picks one).
 Run it inside nix develop, or from the flake's engine package.
@@ -23,7 +24,6 @@ Run it inside nix develop, or from the flake's engine package.
 from __future__ import annotations
 
 import argparse
-import hashlib
 import os
 import plistlib
 import shutil
@@ -39,9 +39,6 @@ APP_NAME = "OpenCE Engine"
 EXECUTABLE = "OpenCEEngine"
 LIBRARY = "libopence_ffi.a"
 FFI_MODULE = "opence_ffiFFI"
-SNAPSHOT_HEADER = "opence_snapshot.h"
-# where macOS mounts the Metal toolchain Xcode downloads
-CRYPTEXES = "/private/var/run/com.apple.security.cryptexd/mnt"
 
 
 def cargo(*args: str) -> None:
@@ -65,8 +62,8 @@ def rust_test_commands(profile: str = "test-opt") -> list[list[str]]:
 
 
 def rust_half(rust: Path) -> None:
-    """Builds the library into rust/lib, and writes its UniFFI bindings and
-    the snapshot's header into rust/bindings."""
+    """Builds the library into rust/lib, and writes its UniFFI bindings into
+    rust/bindings."""
     cargo("build", "--release", "--locked", "-p", "opence_ffi", "--lib")
     target = Path(os.environ.get("CARGO_TARGET_DIR", ENGINE / "target"))
     bindings = rust / "bindings"
@@ -94,20 +91,6 @@ def rust_half(rust: Path) -> None:
         "--out-dir",
         str(bindings),
     )
-    subprocess.run(
-        [
-            "cbindgen",
-            "--quiet",
-            "--config",
-            str(ENGINE / "crates" / "ffi" / "cbindgen.toml"),
-            "--crate",
-            "opence_ffi",
-            "--output",
-            str(bindings / SNAPSHOT_HEADER),
-            str(ENGINE / "crates" / "ffi"),
-        ],
-        check=True,
-    )
 
 
 def swift_bindings(rust: Path, package: Path = PACKAGE) -> None:
@@ -124,9 +107,7 @@ def swift_bindings(rust: Path, package: Path = PACKAGE) -> None:
     modules = []
     for header in sorted(bindings.glob("*FFI.h")):
         shutil.copy(header, ffi / header.name)
-        extra = f'    header "{SNAPSHOT_HEADER}"\n' if header.stem == FFI_MODULE else ""
-        modules.append(f'module {header.stem} {{\n    header "{header.name}"\n{extra}    export *\n}}\n')
-    shutil.copy(bindings / SNAPSHOT_HEADER, ffi / SNAPSHOT_HEADER)
+        modules.append(f'module {header.stem} {{\n    header "{header.name}"\n    export *\n}}\n')
     (ffi / "module.modulemap").write_text("".join(modules))
     for swift in sorted(bindings.glob("*.swift")):
         shutil.copy(swift, core / swift.name)
@@ -139,73 +120,6 @@ def xcode_environment() -> dict[str, str]:
         for key, value in os.environ.items()
         if key not in ("SDKROOT", "DEVELOPER_DIR", "MACOSX_DEPLOYMENT_TARGET", "CC", "CXX", "LD")
     }
-
-
-def metal_compiler(environment: dict[str, str]) -> list[str]:
-    """The command that compiles a shader. xcrun finds the Metal toolchain
-    only for the user who downloaded it, not for nix's build users, so
-    without it the toolchain's mounted copy is used with the SDK's root."""
-    command = ["/usr/bin/xcrun", "-sdk", "macosx", "metal"]
-    found = subprocess.run([*command, "--version"], env=environment, capture_output=True, text=True)
-    if found.returncode == 0:
-        return command
-    mounted = sorted(Path(CRYPTEXES).glob("com.apple.MobileAsset.MetalToolchain-*/Metal.xctoolchain/usr/bin/metal"))
-    if not mounted:
-        raise SystemExit("Xcode's Metal toolchain is not installed: xcodebuild -downloadComponent MetalToolchain")
-    sdk = subprocess.run(
-        ["/usr/bin/xcrun", "-sdk", "macosx", "--show-sdk-path"],
-        env=environment,
-        capture_output=True,
-        text=True,
-        check=True,
-    ).stdout.strip()
-    return [str(mounted[-1]), "-isysroot", sdk]
-
-
-def check_shaders(out: Path) -> Path:
-    """Compiles each of the renderer's shaders as the app will at run time
-    (ShaderSources.swift), failing on the first that has an error, and links
-    all but the bake's into default.metallib, which the app loads instead of
-    compiling (ShaderLibrary.swift); default.metallib.sources beside it names
-    each source linked by its SHA-256, so that an edited source is compiled
-    again. Returns the metallib."""
-    folder = out / "shaders"
-    folder.mkdir(parents=True, exist_ok=True)
-    environment = xcode_environment()
-    compiler = metal_compiler(environment)
-    linked = []
-    for shader in sorted((PACKAGE / "Shaders").glob("*.metal")):
-        air = folder / f"{shader.stem}.air"
-        made = subprocess.run(
-            [*compiler, "-c", str(shader), "-o", str(air)],
-            env=environment,
-            capture_output=True,
-            text=True,
-        )
-        if made.returncode != 0:
-            raise SystemExit(f"{shader.name} does not compile:\n{made.stderr}")
-        # (the bake's path tracer is compiled for each bake, with safe maths)
-        if shader.stem != "bake":
-            linked.append((shader, air))
-    # xcrun's metallib, or the mounted toolchain's beside its metal
-    linker = (
-        ["/usr/bin/xcrun", "-sdk", "macosx", "metallib"]
-        if compiler[0] == "/usr/bin/xcrun"
-        else [str(Path(compiler[0]).with_name("metallib"))]
-    )
-    metallib = folder / "default.metallib"
-    made = subprocess.run(
-        [*linker, *(str(air) for _, air in linked), "-o", str(metallib)],
-        env=environment,
-        capture_output=True,
-        text=True,
-    )
-    if made.returncode != 0:
-        raise SystemExit(f"default.metallib does not link:\n{made.stderr}")
-    (folder / "default.metallib.sources").write_text(
-        "".join(f"{hashlib.sha256(shader.read_bytes()).hexdigest()} {shader.name}\n" for shader, _ in linked)
-    )
-    return metallib
 
 
 def tracked_package(out: Path) -> Path:
@@ -228,14 +142,11 @@ def tracked_package(out: Path) -> Path:
     return copy
 
 
-def swift(
-    command: str, library: Path, out: Path, metallib: Path, extra: tuple[str, ...] = (), package: Path = PACKAGE
-) -> Path:
+def swift(command: str, library: Path, out: Path, extra: tuple[str, ...] = (), package: Path = PACKAGE) -> Path:
     """Runs swift build or swift test with Xcode's Swift (nixpkgs' cannot
     link against the macOS 26 SDK) on `package`; returns the build folder."""
     scratch = out / "swift"
-    # (the tests load the linked shaders from here, ShaderLibrary.swift)
-    environment = {**xcode_environment(), "OPENCE_METALLIB": str(metallib)}
+    environment = xcode_environment()
     subprocess.run(
         [
             "/usr/bin/xcrun",
@@ -255,11 +166,8 @@ def swift(
             str(scratch / "config"),
             "--security-path",
             str(scratch / "security"),
-            # (and the C++ library Jolt, the physics, needs)
             "-Xlinker",
             str(library),
-            "-Xlinker",
-            "-lc++",
             *extra,
         ],
         env=environment,
@@ -287,26 +195,19 @@ def info_plist(version: str) -> bytes:
     )
 
 
-def bundle(executable: Path, metallib: Path, wasm: Path, codesign: str, version: str, app: Path) -> None:
+def bundle(executable: Path, wasm: Path, codesign: str, version: str, app: Path) -> None:
     """Lays out the bundle in a staging folder and renames it into place."""
     staging = app.with_name(app.name + ".partial")
     shutil.rmtree(staging, ignore_errors=True)
     (staging / "Contents" / "MacOS").mkdir(parents=True)
     shutil.copy(executable, staging / "Contents" / "MacOS" / EXECUTABLE)
     (staging / "Contents" / "Info.plist").write_bytes(info_plist(version))
-    # the HUD's redraws (HudPass.swift)
+    # the HUD's redraws, for the Halo UI plugin (conductor/tracks/halo_ui_20261028)
     shutil.copytree(ROOT / "port" / "assets" / "hud", staging / "Contents" / "Resources" / "hud")
-    # the renderer's shaders linked at build (ShaderLibrary.swift), and their
-    # sources, compiled again when edited (ShaderSources.swift)
-    shutil.copy(metallib, staging / "Contents" / "Resources" / "default.metallib")
-    shutil.copy(
-        metallib.with_suffix(".metallib.sources"), staging / "Contents" / "Resources" / "default.metallib.sources"
-    )
-    shutil.copytree(ROOT / "engine" / "app" / "Shaders", staging / "Contents" / "Resources" / "shaders")
     # the game: the original's code as wasm32 (GamePlayer.swift)
     shutil.copy(wasm, staging / "Contents" / "Resources" / "game.wasm")
-    # the menus' fonts and the shell's, with their licences (MenuFonts.swift,
-    # TextPass.swift): Overpass and OpenCE only
+    # the fonts the Halo UI plugin draws with, with their licences: Overpass
+    # and OpenCE only
     fonts = staging / "Contents" / "Resources" / "fonts"
     fonts.mkdir()
     for name in (
@@ -353,7 +254,6 @@ def main() -> None:
             return
     out = arguments.out.resolve()
     out.mkdir(parents=True, exist_ok=True)
-    metallib = check_shaders(out)
     rust = arguments.rust.resolve() if arguments.rust else out / "rust"
     if not arguments.rust:
         rust_half(rust)
@@ -362,11 +262,11 @@ def main() -> None:
     if arguments.test:
         package = tracked_package(out)
         swift_bindings(rust, package)
-        swift("test", library, out, metallib, ("--filter", arguments.filter) if arguments.filter else (), package)
+        swift("test", library, out, ("--filter", arguments.filter) if arguments.filter else (), package)
         return
-    executable = swift("build", library, out, metallib) / EXECUTABLE
+    executable = swift("build", library, out) / EXECUTABLE
     wasm = arguments.wasm.resolve() if arguments.wasm else engine_wasm.build(os.cpu_count() or 4)
-    bundle(executable, metallib, wasm, arguments.codesign, arguments.version, out / f"{APP_NAME}.app")
+    bundle(executable, wasm, arguments.codesign, arguments.version, out / f"{APP_NAME}.app")
 
 
 if __name__ == "__main__":

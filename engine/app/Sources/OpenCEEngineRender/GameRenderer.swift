@@ -490,7 +490,7 @@ public final class GameRenderer: RenderTarget, @unchecked Sendable {
             return library
         }
         do {
-            let library = try ShaderLibrary.make(device: device, source: source, options: Self.libraryOptions)
+            let library = try device.makeLibrary(source: source, options: Self.libraryOptions)
             librariesBySource[source] = library
             counts.librariesCompiled += 1
             return library

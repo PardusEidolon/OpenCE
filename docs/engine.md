@@ -1,795 +1,118 @@
-# The native engine
+# The engine
 
-The native engine (`engine/`) is a new engine in Rust and Swift. It does not
-use a 32-bit VM, and it imports the user's maps into a typed 64-bit format.
-The decompilation in `source/` is a reference for how the game behaves; none
-of its code is compiled into the engine.
+OpenCE Engine is a macOS app that plays the original game's own code.
+`source/` is compiled unchanged, as wasm32, into `game.wasm`
+(`tools/engine_wasm.py`), and Wasmtime runs it inside the app. The game
+calls only the Rust import list: the macOS platform layer and the plugin
+hooks. Swift and Metal draw what the game's Direct3D 8 device asks for.
+Why the project took this direction is in
+`docs/retrospective_fork_in_the_road.md`; the plan is
+`conductor/tracks/native_port_20261028`.
 
 ## Building and testing
 
 ```sh
 nix build .#engine             # OpenCE Engine.app
-nix run .#engine               # build it and start the game on its main menu, from the folder holding assets/maps
-nix run .#engine -- --map devgulch --station vehicles   # or start a test map at a station
+nix run .#engine               # build it and start the game on its main menu, from the folder holding assets/
+nix run .#engine -- --map bloodgulch   # or start on a map
+python3 tools/engine_wasm.py   # game.wasm alone
 python3 tools/engine_build.py --out build/engine --test   # the app and its Swift tests
 cd engine && cargo test --release --workspace             # the Rust tests
 cd engine && cargo clippy --release --workspace --all-targets -- -D warnings
-cd engine && cargo deny check licenses
+python3 tools/engine_wasm_traces.py   # game.wasm against every reference trace
 ```
 
-Run the commands after the `nix` ones in `nix develop`. Tests that need game data read `assets/maps`
-and pass without it. `unsafe` code is refused, every public item needs a
-document comment, and `unwrap` and `expect` are refused outside tests.
+Run the commands after the `nix` ones in `nix develop`. Tests that need
+the user's data (`assets/maps`, `Haloce_dump`) skip themselves without it.
+`unsafe` code is refused, every public item needs a document comment, and
+`unwrap` and `expect` are refused outside tests.
 
 ## The architecture
 
-The engine is Rust crates (`engine/crates/`) under a Swift app
-(`engine/app/`). Each crate depends only on the ones above it in this table:
+`game.wasm` is the original's code with its 32-bit pointers, so every tag
+layout and every pointer in a map stays as the original has it. The Rust
+crates (`engine/crates/`) run it and answer its imports; the Swift app
+(`engine/app/`) gives it a window, input, sound and Metal.
 
 | Crate | What it does |
 | --- | --- |
-| `content` | The typed data a level is made of, and the `.ocpak` pack it is kept in |
-| `import` | Reads a stock cache (Xbox or Custom Edition) into `content`, with bounds-checked readers; keeps the cache folder |
-| `physics` | Jolt Physics, through its C interface: the level's collision mesh, bodies, rays and shape casts |
-| `script` | HaloScript's runtime: threads, special forms, and a registry of natives |
-| `sim` | The simulation: a `bevy_ecs` world on a fixed 60 Hz tick (objects, players, weapons, projectiles, damage, vehicles, ragdolls, animation) |
-| `net` | The network protocol: packets, delta-compressed snapshots, checks and rate limits |
-| `campaign` | A mission: the scenario's scripts over the simulation, the AI's actors, the game's flow and saves |
-| `ffi` | The contract with Swift: UniFFI calls and the per-frame snapshot |
+| `runtime` | Wasmtime with Cranelift: loads and caches `game.wasm`, answers its imports (files, threads, clocks, input, sound, the network, the console), runs the plugin hooks, profiles the game's own sections, records and replays a run |
+| `render` | The render commands the game's Metal device writes (`opence_render.h`), decoded and checked batch by batch (`RenderValidator`) before Metal sees them |
+| `ffi` | The contract with Swift, through UniFFI: `WasmGame` (start, input, the control socket, each frame's batches), the loading screen, the benchmark's report |
+| `census` | The coverage census (below) |
+| `content`, `import` | The importer's typed content and its bounds-checked readers of a stock cache |
+| `bake` | The level's light baked again, for the lighting track |
+| `ui` | The shell's widgets, for the Halo UI plugin |
+| `dev` | The registry of commands and variables, and the control socket's limits |
+| `cli` | The `opence` tool |
 
 The Swift app has these modules:
 
 | Module | What it does |
 | --- | --- |
 | `OpenCEEngineCore` | The UniFFI bindings (generated) |
-| `OpenCEEngineKit` | The snapshot reader, the controls, the map library |
-| `OpenCEEngineRender` | The Metal renderer: the level, models, the HUD, temporal scaling, captures, the benchmark |
+| `OpenCEEngineKit` | Keyboard and mouse input, sound output, the map library |
+| `OpenCEEngineRender` | `GameRenderer` (the game's batches on Metal), the pipeline archive, captures, GPU timings, the benchmark |
 | `OpenCEEngineWindow` | The window and its view |
-| `OpenCEEngineMenu` | The menus and settings |
-| `OpenCEEngine` | The app's entry |
-
-The simulation is deterministic: its systems run on one thread in a fixed
-order (`SimSet`), and its maths is `libm`'s and glam's, never the
-platform's. The same inputs from the same state give the same world, and
-the multiplayer and the tests rely on that.
-
-### Ticks
-
-- The simulation steps at 60 Hz (`opence_sim::clock::TICKS_PER_SECOND`).
-  Rates the tags give a second (fire rates, reloads, heat) are converted to
-  these ticks.
-- The scripts and the game's flow run at Halo's 30 Hz
-  (`opence_script::TICKS_PER_SECOND`), on every second simulation tick.
-  `Mission::game_tick` is that clock. `game_time`, `sleep`, the recordings,
-  the custom animations and the sound lengths count in it.
-
-### Frame pacing
-
-The window's frames come from a `CAMetalDisplayLink`
-(`app/Sources/OpenCEEngineWindow/EngineView.swift`), at the rate
-`FramePacing` gives (`WindowModel.swift`):
-
-- **In front:** the setting `video.frame_cap`, 60 by default. 0 means the
-  display's own rate. Other values are held to 30–360, and never go above the
-  display's rate.
-- **Behind another window or app:** 10 frames a second.
-- **Minimised, covered or on another Space:** the link is paused and nothing
-  is drawn. The first frame after a pause counts no time for the game.
-- **Out of sight but still needed:** a network game and the control socket
-  keep the capped rate, because others wait on those frames.
-
-At most two frames are in flight. The link queues two drawables at most
-(`preferredFrameLatency`). `FramesInFlight` counts the command buffers that
-the GPU has not finished, and a frame past the count is skipped rather than
-waited for. The simulation runs at most eight ticks a frame, so even at 10
-frames a second it keeps pace with its 60 Hz.
-
-## The contract
-
-`opence_ffi` is the only crate Swift sees:
-
-- **Calls** go through UniFFI: load a map, start a game, input, settings,
-  the network, the campaign. The bindings are generated into
-  `OpenCEEngineCore` and `opence_ffiFFI`.
-- **The per-frame data** is the snapshot (`ffi/src/snapshot.rs`). It is made
-  of `#[repr(C)]` types that cbindgen writes into `opence_snapshot.h`. After
-  each tick the simulation publishes a snapshot into a triple buffer, and
-  Swift reads the newest one in place. Neither side waits and nothing is
-  copied.
-- Swift never sees the simulation's world. Only the simulation's own types
-  cross into `ffi`, which turns them into the snapshot.
-
-## The content format
-
-A level is imported once and kept in the cache folder as
-`<map>-<fingerprint>.ocpak`.
-
-- **The pack:** a 40-byte header, then an rkyv archive of
-  `opence_content::Level` (its scenario, structure BSPs, object
-  definitions, models, animation graphs, shaders, bitmaps, skies, globals,
-  effects and HUDs). `content/src/pack.rs` describes the header.
-- **Checks:** a pack is checked before any of it is used: its header, its
-  length, its fingerprint, then the archive itself by bytecheck. A damaged
-  or hostile pack is an error, never a crash.
-- **References:** nothing in a level points into a cache. Every reference is
-  an index into one of the level's own lists, and the importer has checked
-  each one.
-- **Versions:** a pack records two versions. `FORMAT_VERSION`
-  (`content/src/pack.rs`) is the layout. `IMPORTER_VERSION`
-  (`import/src/level_cache.rs`) is what the importer reads. Raise the first
-  when a `content` type changes, and the second when the importer reads
-  something new. Either change makes every map be imported again.
-
-## Adding to the engine
-
-### An object kind
-
-The kinds are `ObjectKind` (`content/src/object.rs`), in the game's order
-(`ObjectKind::ALL`, the cache's type field).
-
-1. **Name it.** Add the kind to `ObjectKind` and to `ALL`, with its tag
-   group in `ObjectKind::group`.
-2. **Read its definition.** In `import/src/object.rs`, read the fields it
-   adds to an object's, through the tag's checked readers. If the scenario
-   places it, give its placement block in `PLACEMENT_BLOCKS`
-   (`import/src/level.rs`).
-3. **Make its objects.** Give it a hook in `ObjectKinds::default`
-   (`sim/src/objects.rs`): the components its objects are made with. Its
-   systems are added to the schedule in `sim/src/lib.rs` in the right
-   `SimSet`. State it keeps goes into `Simulation::world_hash`, which the
-   tests use to check that two runs give the same world.
-4. **Raise the versions** and test the importer with a fake cache
-   (`import/src/fake.rs`), and the simulation with a placed object.
-
-### A weapon behaviour
-
-- **Its fields.** A weapon is `content::Weapon`, with its triggers, its
-  magazines and their flags (`content/src/weapon.rs`), read in
-  `import/src/weapon.rs`. A behaviour the tags turn on is a flag constant
-  there or a new field. Raise the versions when you add one.
-- **What a tick does.** `WeaponState::step` (`sim/src/weapon.rs`) steps the
-  triggers, the magazines and the heat, as `weapon_update`
-  (`source/items/weapons.c`) does, and returns the tick's `Shot`s. Rates are
-  per 60 Hz tick.
-- **What a shot makes.** `shoot` (`sim/src/player.rs`) turns each `Shot`
-  into projectiles and effects. The projectiles and their impacts are in
-  `sim/src/projectile.rs`.
-- **Its tests.** Test the behaviour with a weapon built in the test, as the
-  tests at the end of `sim/src/weapon.rs` are.
-
-### A script function
-
-1. **Its signature.** Give its name, its type and its parameters' types in
-   `campaign/src/signatures.rs`, exactly as Halo declares them
-   (`source/hs/hs.c`). A scenario compiled against those declarations then
-   calls it.
-2. **Its native.** Write the native in the module of the system it
-   belongs to (`game.rs`, `objects.rs`, `units.rs`, `devices.rs`,
-   `cinematic.rs`, `ai.rs`), as a
-   `fn(&mut Mission, &[Value]) -> Value`, and list it in that module's
-   `NATIVES`. A function that only the player would see or hear is
-   listed in `presents!` in `presented.rs` instead, and becomes an `Event`
-   for the app to show.
-3. **What `registry()` does with it.** `registry()` (`campaign/src/lib.rs`)
-   registers every native that has a signature. A function the scenario
-   names but nothing registered is reported by `Runtime::missing` and
-   returns its type's default. `campaign/tests/levels.rs` requires none to
-   be missing on the first two missions.
-
-## The first two missions
-
-`campaign/tests/levels.rs` plays *The Pillar of Autumn* (`a10`) and *Halo*
-(`a30`) from start to end. The player is a pilot that does what the
-waiting scripts wait for:
-
-- it walks into each trigger volume they test;
-- it presses each button and looks around;
-- it kills the enemies they wait to see dead.
-
-The scripts must win the mission. Every function they call must be given,
-and no thread may end with a fault.
-
-### What it relies on
-
-- **Volume tests:** an object is in a trigger volume when its
-  bounding-sphere centre is (Halo's test). For a player, that centre is its
-  unit's.
-- **Sounds:** a scripted sound lasts as long as its longest permutation,
-  which the importer reads from the `snd!` tag. `sound_impulse_time` counts
-  down from that.
-- **Structures:** the structure switches when a player stands in a
-  switching volume whose source is the loaded structure
-  (`Mission::switch_structure`).
-
-## The renderer
-
-### Skies
-
-- A level's first sky is drawn first, at the far plane, centred on the camera.
-- Its shaders are drawn unlit, at the model's highest level of detail.
-- The sky has no depth test and writes no depth, so the level and the objects
-  draw over it.
-
-### Fog
-
-The engine uses the outdoor fog of the level's first sky for the whole level.
-It does not follow the fog planes and fog palettes of each cluster. Fog grows
-linearly with the distance along the view, from the fog's start to its
-opaque distance, up to the fog's maximum density.
-
-Each blend mode of a transparent shader fogs differently, so that the fog is
-not counted twice:
-
-| Blend | Fog |
-| --- | --- |
-| Alpha blend, opaque | Mixed toward the fog's colour |
-| Add | Faded toward black |
-| Multiply | Faded toward white |
-| Double multiply | Faded toward grey (0.5) |
-
-### Transparent shaders
-
-- **Transparent chicago and extended chicago** (`schi`, `scex`):
-  - Up to four maps are combined in order, each by the previous map's colour
-    function and alpha function.
-  - Maps are drawn unlit.
-  - An extended chicago is drawn the same way, from the maps the importer reads.
-- **Transparent generic** (`sotr`): not imported. Its parts are skipped in the
-  sky and drawn as plain surfaces elsewhere.
-- **Blending on models:** model parts are blended with alpha blending only.
-  The level's transparent surfaces have every blend mode.
-
-### The material model
-
-The importer writes one material record (`content/src/material.rs`) for every
-shader of every class. It is the only record the lighting reads, and its
-colours are linear.
-
-| Field | From |
-| --- | --- |
-| Albedo map and colour | The shader's base or diffuse map, and its tint |
-| Normal map and scale | The bump map's heights, with the bump map's scale |
-| Roughness | The kind of reflection: bumped cube map 0.3, flat cube map 0.15, the radiosity reflection 0.6, none 1 |
-| Specular at normal and at grazing incidence | The reflection's perpendicular and parallel brightness and tint. A tinted specular stands in for metalness |
-| Reflection map | The cube map the game reflected |
-| Emission map and colour | The self-illumination map and colour (black: none) |
-| Flags | Alpha tested, blended, two sided, decal, unlit |
-
-The game's shaders are not physically based. The record keeps what each one
-shows: environment (`senv`) and model (`soso`) shaders are lit and reflect;
-transparent ones (`schi`, `scex`, `sotr`, `sgla`, `smet`, `spla`, `swat`) keep
-their blend modes. A model shader's multipurpose map is read in the Xbox's
-channel order, and its change colours come from the object's functions in
-the snapshot.
-
-### The bake
-
-The engine bakes each structure BSP's light itself; the stock lightmaps are
-only a fallback.
-
-1. **The scene** (`crates/bake`): the BSP's triangles in a bounding-volume
-   hierarchy, their materials, the sky's lights, the sun and the shaders'
-   radiosity emitters.
-2. **The tracer** (`PathTracer.swift`): a Metal compute path tracer over the
-   hierarchy, with next-event estimation and bounced light. It traces 512 paths
-   for each lightmap texel, 256 for each probe axis and 16 for each reflection
-   probe texel. A CPU tracer checks it in the tests.
-3. **The outputs:**
-   - directional lightmaps with ambient occlusion, as half floats, with a
-     second texel for the light's direction;
-   - an irradiance probe grid over the BSP's volume, for what moves;
-   - a reflection probe for each cluster.
-
-   The probes leave out the sun's direct light and keep how much of the sun
-   each sees, because the shadow maps draw the sun on objects.
-4. **The cache:** the result is written to the cache folder. Its name is a key
-   of the importer's and the baker's versions (`FORMAT_VERSION`,
-   `BAKE_VERSION`), the settings and the scene, so a changed level or baker
-   bakes again.
-5. **At load** (`LoadedLevel.swift`, `LightBaker.swift`): a level whose bake
-   the cache lacks is baked as it loads (behind the loading screen, whose bar
-   follows the bake), so it starts lit and its light never changes in play.
-   The first load of a map bakes all its structures, so a mission's switch to
-   another structure finds its light already cached. The stock lightmaps are
-   drawn only when the bake fails, which the log reports.
-
-**The mood check** (`BakeTests.swift`, which needs `assets/maps`): each page's and
-BSP's mean brightness and colour must stay within set limits of the stock
-lightmaps. Two are listed as known colour differences: longest, and d20's
-second BSP. The check and the exposure fit average the light over squares of
-4×4 texels before showing it (`mood.rs`, `BLOCK`): the quick bake traces four
-paths a texel, and in a BSP lit by small lamps (b40's, c40's) most texels then
-meet no lamp, so that shown texel by texel, each at most white, the light
-reads far darker than it is.
-
-### Known lighting problems
-
-These were found by comparing the bake against the stock view (`view stock`)
-and the light view (`view light`). The views were Blood Gulch and devgulch's
-shader station, at 960×540, with native and temporal anti-aliasing.
-
-| Problem | What is seen | Cause |
-| --- | --- | --- |
-| Emitters glow over their whole face (lessened) | A light panel's face is lit red all over, not only its emblem. Red light spreads over the floor in front. | A shader with radiosity power makes every one of its triangles an emitter of the same brightness (`scene.rs`, `bake_material`). Nothing weighs that by where the shader's map glows. The stock lightmaps show only a faint glow. Emitters now glow from their front only, as the stock BSPs wind them (a glowing decal no longer lights the wall it lies on), and at a twelfth of the power (`EMITTER_EXPOSURE`, 0.2 from 2.5), which brings the base's glow close to stock's. |
-| Fireflies and blotches (fixed) | The light view has green and yellow specks on the cliffs. Inside the pits and on the panels there are red and green blobs. | Small, bright emitters are found by too few paths: 64 paths for each texel, and no filter afterwards. A rare path that meets a lamp leaves a speck, and nearby texels that each catch a few such paths leave a blob. Each texel's light is now held to four times the mean of its neighbours that face its way (`filter.rs`), before the exposure is fitted. A non-finite light takes their colour. |
-| Too bright and clipped (fixed) | Blood Gulch's start view had a mean of 86 against stock's 74, and 1.6% of its pixels were clipped against stock's none. | The baked light was shown past white, while each BSP's exposure is fitted with every channel held at white, as an 8-bit lightmap holds it. The level shader now holds it there too (`baked_shown`). Clipping is gone, and the sky and back views are within 6% of stock's mean. The start view was still 21% brighter. Its cause was the sky's ambient light, scaled at twice the sun's rate (`AMBIENT_EXPOSURE` 3.0 against `SKY_EXPOSURE` 1.5), which lit the shadowed faces as brightly as the sunlit ones. At 0.5, every view is within 10% of stock's mean: the start view is 8% brighter, the down view 8% darker. |
-| Lightmap seams (fixed) | On a flat floor, two triangles meet along an edge with a step in brightness. Stock shows no edge there. | Each chart's texels are traced apart, and the dilation copies only the edge's points. Two charts that meet get different light, so their edge shows. The bake now finds each seam (an edge whose two sides lie apart on the pages, `seam.rs`) and stitches it: the texels half a texel and one and a half texels in on each side are pulled toward the other side's. On Blood Gulch the mean step across its 514 seams is 0.024 against stock's 0.039, and 11% of their length steps by more than 0.05 against stock's 21% (`SeamTests`). |
-| Blocky shadow edges (fixed) | The baked shadows' edges are drawn in steps a texel wide, as if pixelated. | Each texel's paths all started at its middle, so a shadow's edge fell between two texels as a step from lit to dark. Each texel now holds its footprint on the surface (`BakePoint::footprint`, the side of its square in the level, up to 1 unit), and each path starts at a point of that disc, short of any wall within it (`trace.rs` `spread`, `bake_spread` in `bake.metal`). The light a texel holds is then its share of the edge. Neighbouring texels of one surface on Blood Gulch step by more than a quarter of the range in 2.13% of 218,405 pairs (2.34% without the footprint), against 2.17% of the stock pages' 61,591 (`ShadowEdgeTests`, full bake). The mean step is 0.036 against stock's 0.028: the sun's penumbra is still narrower than stock's. Counted band by band of texel size (`edge_bands`), the ground beside the cliffs, whose baked texels are under half a unit and its stock texels twice as wide, stepped hard on 2.6% of its pairs against stock's 1.6%, since a disc so small spreads the sun's edge over less than stock's texel does. A texel's paths now start within at least half a unit (`SPREAD_FLOOR`), a stock texel's side there. Outside the bases, texels under half a unit step hard on 0.2% of their pairs against stock's 0.5%, and those from half a unit to a unit on 1.1% against 3.4%. Inside the bases, lit by their lamps, the small texels still step on 5.2% and 3.4% against stock's 2.3% and 2.6%, so that band as a whole stepped on 2.5% against stock's 1.6%, until the bunker interiors were fixed (below). At 512 paths a texel, Blood Gulch's pairs step hard on 0.49% of 218,405 against stock's 2.17%, mean 0.019 against 0.028; band by band 0.19%, 1.11% and 0 against stock's 1.64%, 3.37% and 0.66%. |
-| Far hills drawn in black triangles (fixed) | The far hills and the cliffs show dark, flat triangles, as if each were shaded by its own facing. | Not the light: the albedo view showed them, and they went with the micro detail map turned off. A compressed texture's chain was kept down to 1×1, but the stock maps hold the levels smaller than a 4×4 block as zeros, since the original ends a compressed chain at a block along its longer side (`rasterizer_xbox_bitmap_get_max_mipmap_count`). A zero block is black, and the steep and distant triangles that sample the micro map's smallest levels drew black. The importer now ends the chain there too (`texture.rs`, `IMPORTER_VERSION` 37). Of four views of the hills and cliffs, 3.1% of the albedo's pixels were all but black; now none are (`FarHillsTests`). |
-| Blotched bunker interiors (fixed) | The bases' insides are lit coarsely, with blotches on the walls and what look like leaks. | Noise, not leaks. Under the roofs (`BakePlan::sheltered`: texels in a box about each base with a surface within 20 units over them), 64 paths a texel left the lamps' and the doors' light blotched: neighbouring texels stepped hard on 7.2% (red) and 5.3% (blue) of their pairs, against stock's 2.2% and 2.6%. At 256 paths they stepped on 0.64% and 0.58%, but the red base's mean step was still 0.051 against stock's 0.042; at 512 (`BakeSettings::lightmap_samples`, `BAKE_VERSION` 10) it is 0.039, and the steps are 0.21% and 0.40% of 31,428 and 21,270 pairs, means 0.039 and 0.038 against stock's 0.042 and 0.049. No light comes through the walls: of the texels only the bases' own surfaces can light (out of the sun, blind to the sky over 64 directions of the hemisphere, and over 2 units from any lamp), 0 of 458 (red) and 2 of 465 (blue) are lit past the stock texels over them by more than a quarter of the range (`edge::Brighter`). The texels out of the sun that are brighter than stock are lamp glow (418 of 552 within a unit of a lamp) and the light bounced in at the doors. Doubling the paths doubles the lightmaps' bake, which runs at import and is cached. Each base's inside is drawn to build/engine/golden beside the stock view (`BunkerTests`). |
-| Lightmap density | The far hills and the cliffs look coarser than the bases. | Measured (`lightmap_density`): each baked page is twice stock's size each way (`PAGE_SCALE`), so on every shader of Blood Gulch a baked texel is half a stock texel's side; the far hills' texels are the largest because their stock texels are, and they are held to a unit's footprint (`MAX_FOOTPRINT`). No surface is coarser than stock. |
-| Settling under temporal AA | With the camera still, the first frames under temporal anti-aliasing differ by up to 109 (of 255) from one to the next. By the twelfth frame they differ by under 25, and only in a few pixels. | The temporal upscaler gathers its history after a cut. The difference is not a flicker in the shaders: the same frame drawn twice is identical, and native anti-aliasing shows no change between ticks. |
-| The caves are dark | The caves under Blood Gulch's cliffs, lit by their glowing fungus, have a mean of 34–56 against stock's 57–98. Their corners are up to 0.35% black against stock's none (`ShaderClassTests`, full bake). | The BSP has one exposure, fitted to the stock lightmaps' mean over every texel. At five times the emitters' power (`EMITTER_EXPOSURE` 1.0), the caves come to stock's brightness, but the base's lamps brighten too, and the fit takes it back from the outdoors: the down view falls to 14% under stock. Blood Gulch has no cluster without a sky, so the sky's indoor ambient light (strong and blue in its tag) does not reach the caves either. Open: the emitters' power would need fitting apart from the sun's. |
-| Floor darker than stock | Looking down at the floor from Blood Gulch's start (`ExposureTests`' down view), the bake's mean is 102 against stock's 116 on the full bake: 12% under, past the 10% the other views keep. The quick bake reads 103 to 106, around the limit. | The shortfall is the same with each texel's paths spread over its footprint and without it (102 both ways), so it predates the shadow edges' change; the quick bake's noise had hidden it. The stock pages carry a green glow over the floor and the pillar's base from the pillar's green light, which the bake lacks, while the start view is 5% over: one exposure for the BSP cannot meet both. The test expects this assertion to fail (`XCTExpectFailure`, not strict) until it is fixed. Open: the emitters' colour and reach on nearby floors. |
-| The weapon's idle pose steps | Every second tick, the first-person weapon moves by a few pixels. | The weapon's idle animation advances at 15 Hz. Phase 6, the animation work, takes this. |
-
-Black pixels match stock in every view but the caves' (about 0.2–0.4%, in the
-weapon's dark parts). No view showed NaNs. Each shader class on Blood Gulch
-(chicago, environment) and the three brightest glowing surfaces are checked close
-up against stock by `ShaderClassTests`.
-
-### The passes
-
-A frame is drawn in this order. Each switch is a shell variable
-(`set render.bloom 0`). `render.view` shows one buffer alone: `frame`, `depth`,
-`normals`, `ao`, `contact`, `ssr`, `luminance` or `bloom`. Three more views come
-from the level's shader:
-
-- `albedo`: the level's surfaces unlit.
-- `light`: their lightmaps' or probes' light alone, on white.
-- `stock`: a baked level lit by the map's own lightmaps, without the bake's
-  probes and sun. This is the reference to compare the bake with; on an unbaked
-  level it is the frame.
-
-`render.lightmaps 0` lights the level flat, `render.wireframe 1` draws the level
-and the objects as their triangles' edges, `render.objects 0` leaves out the
-objects but not the sky, and `render.hud 0` leaves out the HUD. The objects'
-own shader ignores the three views. `ViewModeTests.swift` (which needs
-`assets/maps`) checks that each view and each switch draws its own frame, and
-writes the frames to `build/engine/golden`.
-
-| Pass | Does | Switch |
-| --- | --- | --- |
-| Sun shadows | Cascaded shadow maps for objects, matched to the baked shadows, at 1024, 2048 or 4096 a cascade; spot and cube shadows for the nearest dynamic lights | `render.sun_shadows`, `render.shadow_resolution` |
-| Sky | The first sky, unlit, at the far plane | |
-| Level and objects, opaque | Baked light, or probes and the sun for objects; clustered dynamic lights from weapons, projectiles, effects, the flashlight and scenery | `render.lightmaps`, `render.lights`, `render.objects`, `render.wireframe` |
-| Decals | The scenario's decals and those that shots and explosions lay, deferred onto the level and objects | `render.decals` |
-| Screen-space effects | Ambient occlusion (GTAO) and contact shadows, at half resolution by default, brought up with depth weights; reflections over the reflection probes | `render.gtao`, `render.ssr`, `render.contact_shadows`, `render.ao_quality` (`half`, `full`) |
-| Blended | The level's transparent surfaces, the models' blended parts, glows and light volumes, the first-person weapon | `render.glows` |
-| Particles | Particles, contrails, weather and detail objects, blended in the shader by each one's blend function | `render.particles` |
-| Temporal | MetalFX's temporal scaler, from the motion vectors | |
-| Camera | Auto exposure, bloom and lens flares | `render.exposure`, `render.bloom`, `render.lens_flares` |
-| Tone map and HUD | To the display, then the HUD over it | `render.hud` |
-
-### Effects and particles
-
-- **Effects** (`effe`) run in `sim` (`crates/sim/src/effects.rs`). Weapons,
-  projectiles, explosions, scenery and vehicles start them; an impact picks its
-  effect by the material it strikes. Each event fires its parts (lights,
-  decals, particles, particle systems, contrails, other effects) at its time,
-  at the effect's markers.
-- **Particles** (`part`) follow their sequence, colour and size over their
-  lives. They move by their physics (`pphy`) and the winds (`wind`), collide
-  with the level and objects, and make their collision and death effects. An
-  effect's particles are lit by the level's probes, the sun and the frame's
-  dynamic lights, unless they light themselves.
-- **Particle systems** (`pctl`) run their emitters and type states, from
-  effects or carried by objects.
-- **Contrails** (`cont`) are strips of points that take on the velocity of
-  what leaves them. Each segment is a quad along it that turns to face the
-  camera.
-- **Weather** (`rain`) drifts in boxes tiled about the camera, in the clusters
-  that have it, faded by depth and height and kept out of its polyhedra.
-- **Detail objects** (`dobc`) are placed by the importer and drawn with the
-  frame's particles.
-
-The effects keep at most 1024 particles alive (Halo's limit); past it the
-oldest makes way. The setting `particles.limit` raises it up to 2048, the most
-the snapshot carries a frame.
-
-These are not done yet:
-
-- particles are not updated on the GPU, and water is not detected;
-- an effect's particles are lit every frame at their centre, not once when
-  made; the particle systems', contrails, weather and detail objects are
-  unlit;
-- some part fields: starters' scale and colour, HSV colours, camera modes,
-  the nonviolent mode;
-- detail objects are blended and not sorted;
-- particles are drawn after the first-person weapon, so they can draw over it.
-
-## Animation
-
-### The graph
-
-An animation graph (`antr`) is imported whole into `content`: its nodes,
-its animations with their frame data, and the lists that name them by
-seat, weapon class, weapon type, weapon, vehicle and device. Halo's graphs
-inherit nothing from one another (the inheritance block came with Halo 2),
-so a missing animation falls back only within its own graph, as
-`sim/src/animation_graph.rs` finds it: by the unit's seat, then its weapon
-class, then its weapon type, each list's entry checked against the graph.
-With `game.enhanced_animations` a reload a weapon type lacks is borrowed
-from the standing seat's same class and type. An animation is refused, and
-the pose left as it was, when it has no frames, is of another kind than
-asked, or moves other nodes than the model has.
-
-An animation's frames are read as the game reads them
-(`model_animations.c`): a base frame into each node's orientation (a
-rotation, a translation and a scale), then replacement and overlay
-animations over it. Every offset and count comes from the map and is
-checked, so a broken animation draws the rest pose and never reads past
-its data.
-
-### The blender
-
-`sim/src/animation_blend.rs` builds an object's pose in the order
-`object_get_node_orientations` takes it:
-
-1. the base animation's frame;
-2. the graph's object overlays, by the object's functions;
-3. a unit's layers, in `unit_preprocess_node_orientations`'s order: the
-   aiming and looking screens, the action and ping animations, a
-   vehicle's steering, throttle, wheels and suspension
-   (`vehicle_animation.rs`), a device's position and power
-   (`device_animation.rs`);
-4. the blend from the last pose, over the frames a change asked for;
-5. the nodes' matrices, from the root's transform down.
-
-What a unit plays is chosen by `unit_states.rs` (the biped's state, by its
-seat and weapon class), `first_person_states.rs` (the first-person arms
-and weapon), `seats.rs` (entering, riding and leaving) and
-`ai_impulse.rs` (an actor's alerts, dives, evades and berserk). A
-cutscene's `custom_animation` starts at a frame (or the first) and may
-blend in from the pose before it. The scripts' camera follows the root
-node of a one-node graph's animation, at the frame its timer has reached
-(`camera_set_animation`).
-
-The test map's `animation` station plays every animation of the player
-biped's graph in turn, named; `ffi/tests/stations.rs` checks that each
-one plays.
-
-## Sound
-
-The `audio` crate plays a level's sounds; nothing of Bungie's audio is
-shipped, and every sound is read from the player's maps. A sound's
-permutations are decoded on their first play and kept: Xbox ADPCM (the
-stock maps'), 16-bit PCM and Ogg Vorbis (Custom Edition's). What plays each
-time is chosen as `sound_definitions.c` chooses it (`audio/src/choice.rs`):
-the pitch range nearest the sound's pitch, a permutation of it not repeated
-until every other has played, and the gain and pitch its scale gives. The
-51 sound classes (`classes.rs`) limit how many of a sound play at once and
-set its priority, its distances and how much reverb it takes.
-
-The mixer (`mixer.rs`) resamples each voice to 48 kHz at its pitch,
-attenuates it by its distance, pans it with equal power as the port's
-DirectSound voices are panned, bends it by its motion (Doppler), delays it
-by the speed of sound and muffles it by what stands between it and the
-listener. The voices in the world are sent on to the room's reverb
-(`reverb.rs`), a Schroeder and Moorer reverb standing in for the Xbox's
-I3DL2 one. The app's Core Audio node pulls the mix on its own thread,
-behind a lock of its own (`ffi/src/audio.rs`), so that a tick never waits
-for it.
-
-### The world's sounds
-
-A tick queues the sounds it makes (`ffi/src/sound_events.rs`): its
-effects' sound parts, the sounds its animations reach, and its footsteps,
-by the material underfoot. They are played after the tick. Around the
-camera (`ffi/src/sound_world.rs`), the objects' looping sounds and the
-rooms' backgrounds are refreshed each frame, each heard through the walls
-between it and the camera, and the room's sound environment is glided to.
-A looping sound (`audio/src/player/looping.rs`) plays its tracks' starts,
-loops and stops, switches to their alternates, and plays its details now
-and again around its source; it stops when a frame does not refresh it.
-
-### Music and dialogue
-
-The scripts' sounds are kept by the mission (`campaign/src/sounds.rs`) and
-played by the app after the ticks (`ffi/src/campaign.rs`):
-
-- `sound_impulse_start` starts an impulse from an object, or heard
-  everywhere alike, and starting one again stops the first. It ends, for
-  the scripts, after its longest permutation, counted in game ticks as
-  `scripted_sound_time` counts it, so `sound_impulse_time` and the waits on
-  it last as the original's do. `sound_impulse_stop` stops it.
-- `sound_looping_start` starts the music, which the app refreshes each
-  frame until `sound_looping_stop`; `sound_looping_set_alternate` switches
-  its tracks to their alternates.
-- `sound_class_set_gain` fades a class over the ticks given.
-
-A revert to the last save silences the impulses started before it.
-
-While a line of the scripted dialogue plays (classes 44, 46 and 47), every
-other sound glides down to 70% of its gain, and back after it.
-Conversations (`campaign/src/conversations.rs`, `ai_conversation`) speak
-their lines in turn as `ai_conversation.c` does: each line waits for the
-dialogue before it and a pause, or for `ai_conversation_advance` where it
-is marked to, and plays from its participant's object, or heard everywhere
-for the participants the original plays unspatialized. A participant's
-speaker is found by its object's name, and a line's variant by the
-original's rules.
-
-The settings' master, effects and music volumes are applied by the app
-(`setVolumes`). `campaign/tests/sounds.rs` checks, on *The Pillar of
-Autumn* and *Halo*, that every sound the scripts start or wait on has its
-length, that a wait lasts its longest permutation to the tick, and that
-the music loops until it is stopped.
-
-## Physics
-
-The `physics` crate is Jolt Physics (`port/third_party/jolt`) through the
-C interface in `port/macos/host/physics`. Jolt is built in its
-cross-platform deterministic mode, without fused multiply-add, so the same
-calls give the same results on every run and every machine. A `World`
-holds a level's collision mesh, made from its collision BSP, and bodies in
-layers: the level, the platforms (kinematic bodies the simulation moves)
-and the bodies (dynamic ones Jolt moves). Rays and shape casts name the
-layers they look for; `Layers::GROUND`, the level and the platforms, is
-what stands under a player. Everything is in world units, converted to
-metres at the boundary, and the level's materials are found by a point on
-them (`ground.rs`), since Jolt's mesh does not carry them.
-
-What moves in it, and by whose rules:
-
-- **The player** walks, runs, crouches and jumps by Halo's biped rules
-  (`movement.rs`), converted from its 30 Hz to the engine's 60, and its
-  character collides with the level. Standing on a platform, it is carried
-  at the platform's velocity.
-- **Vehicles** move by Halo's mass points (`sim/src/vehicle.rs`), not
-  Jolt's vehicle constraints, so that they handle as they did; they step
-  at 30 Hz, on every other tick. A vehicle on its back is turned over when
-  the player acts by it.
-- **Items** lying about move as `items.c` moves them
-  (`sim/src/item_physics.rs`): a point that falls, bounces and rests.
-- **Ragdolls** are bodies of parts joined by swing-twist joints
-  (`ragdoll.rs`), following the death animation for a moment before they
-  go limp. **Debris** (spent casings) and the test map's **crates** are
-  plain dynamic bodies.
-- **Platforms** are the machines (lifts, doors, gates): a box for each
-  node of their collision models, moved each tick to where the machine's
-  animation put it (`sim/src/platforms.rs`). What stands on one is carried,
-  and what one meets is pushed ahead.
-- **Forces**: damage pushes what it strikes by its effect's acceleration
-  (`sim/src/forces.rs`), and grenades bounce and detonate by their
-  projectile's rules.
-
-The particles ask `Simulation::collide_point` where a point's path meets
-the level or a platform, and `particle_collision::rebound` puts the point
-just off the surface with its velocity bounced by the particle's
-elasticity and friction.
-
-The physics station's tests (`physics/tests/station.rs`) check that a pile
-of crates on the slope rests without jitter, settles again after
-explosions and never sinks through the ground; that two runs with a lift
-and explosions agree to the bit; and, in a release build, that 500 bodies
-tumbling together step in under 2 ms. `sim/tests/crates.rs` checks that
-two simulations given the same inputs agree, a player throwing a frag into
-the pile.
-
-## The Halo UI
-
-The menus are the game's own: the widget definitions, bitmaps, fonts and
-strings of the player's `ui.map` (and the pause menu every map carries),
-imported into the cache as the levels are. Nothing from `ui.map` is
-shipped. Fonts get a signed distance field each at import, so text stays
-sharp at any window size.
-
-`crates/ui` (`opence_ui`) is the widget code (`source/interface/ui_widget.c`):
-
-- one tree of widgets for each local player, in an arena named by `Id`,
-  with the history of screens each came from;
-- focus moved through children and list items, and the handlers' functions
-  run; the ones that reach the game (start a level, set the difficulty,
-  host or join) are the `Host`'s, and the ones the engine has no use for
-  return `Outcome::Unwired`;
-- `draw.rs` lays each screen out at the game's 640×480 and scales it to the
-  window; `pointer.rs` maps keys to the pad's buttons and gives the mouse
-  hover, click, the wheel and right-click (back). There is no gamepad.
-
-`OpenCEEngineMenu` holds the app's side: `HaloMenu` (the actions the
-widgets run, and the next mission after each), the settings, the fonts and
-the server list.
-
-### The graphics tiers
-
-The app starts the game directly, on its main menu, or on the map `--map`
-names. The data folders come from `--maps` or `settings.toml`, and the
-display and window mode from `settings.toml` or `--full-screen`.
-
-The tiers are one table (`QualityTier.preset`), and the app picks one for
-the Mac at its first start from the GPU's cores and memory
-(`QualityTier.detect`). Every tier draws with temporal scaling and
-dynamic resolution holding the display's frame rate.
-
-| Tier | Ambient occlusion | Reflections | Contact shadows | Shadows | Upscale height | Render scale |
-| --- | --- | --- | --- | --- | --- | --- |
-| Low | Off | Off | Off | 1024 | 1080 | 0.67 |
-| Medium | Half | Off | On | 2048 | 1440 | 0.67 |
-| High | Half | On | On | 2048 | 1440 | 0.67 |
-| Ultra | Full | On | On | 2048 | 1440 | 1 |
-
-The upscale height is the most the temporal scaler gathers into; MetalFX's
-spatial scaler takes the frame the rest of the way to the display.
-A setting changed by hand makes the set custom. They are saved in
-`settings.toml`'s `[graphics]`; the benchmark's `--quality` measures a
-tier, or the saved settings.
-
-What each costs, in GPU time a frame on Blood Gulch at 4K on an M1 Max:
-
-| Setting | Cost |
-| --- | --- |
-| Ambient occlusion at full resolution | +1.5 ms |
-| Reflections | +0.17 ms |
-| Contact shadows | under 0.05 ms |
-| Shadows at 4096 | +1.56 ms |
-| Native upscale height | +2.4 ms at scale 0.67, +5.5 ms at 1 |
-
-The memory meter is a fit (`GraphicsMemory.estimate`) to Blood Gulch's
-measured allocation at each tier, and with each setting changed alone, at
-1080p, 1440p and 4K, within 6% of each, against the GPU's recommended
-working set:
-
-| Tier | 1080p | 1440p | 4K |
-| --- | --- | --- | --- |
-| Low | 371 MB | 507 MB | 650 MB |
-| Medium | 458 MB | 681 MB | 985 MB |
-| Ultra | 698 MB | 1096 MB | 1566 MB |
-
-`--benchmark 10 --path bloodgulch --quality saved` measures the saved
-settings at the display's size.
-
-### The loading screen
-
-`crates/ui/src/loading.rs` is `source/interface/progress_bar.c`: a band of
-light pans across the screen as the map loads, its last frames left in a
-fading trail, while the chant's four voices swell with the progress. The
-game stepped it at 30 frames a second; here a frame of any length moves it
-as many thirtieths of a second would (a frame over 0.25 s counts as 0.25 s).
-
-It goes through four stages:
-
-1. **Loading:** the map loads on another thread (16 MB of stack), and the
-   loader reports its progress.
-2. **Settling:** the map is ready, and the light finishes its sweep, for 3 s
-   at most. Any key skips it.
-3. **Crossfade:** the screen fades over the mission's frames for 0.5 s.
-4. **Done:** the mission shows alone.
-
-The world is held until the screen is done. With `ui.loading_screen` off,
-the screen is plain: no light and no chant, and it fades as soon as the map
-is ready. `ui.map` has no `loading.tga`, so the light pans over a white
-field.
-
-The chant is a tone of 511 blocks of Xbox ADPCM that the game carries in
-its executable. The engine ships none of it. `ChantPlayer` looks for the
-player's `default.xbe` beside each data folder. `opence_ui::chant` finds
-the tone among the executable's sections by the shape of its blocks, and
-knows it by its SHA-256. It decodes the tone into the cache's `chant.wav`
-once. Each voice plays it at its own pitch. Without the executable the
-screen is silent.
-
-So that the first frame of a mission is no longer than the rest,
-`LoadedLevel` draws one frame from the start camera at the window's size on
-the loader's thread. That makes the size's targets and the temporal scaler
-before the mission shows. `TransitionTests` draws a10, loads a30 behind the
-screen, fades into it and draws a30, pacing each frame to 1/60 s. It fails
-if any frame takes over 33 ms; the worst so far is 14.2 ms. It needs
-`assets/maps`.
-
-### Golden frames
-
-`UiTests` writes the main menu at 1920×1080
-(`build/engine/golden/ui_main_menu_1920x1080.png`), and `LoadingTests`
-writes the loading screen half-way through its load at 1280×720
-(`loading_screen_1280x720.png`). Each is compared with an approved frame in
-`assets/golden/engine` when there is one. They are made from the player's
-maps, so none is committed.
-
-These are not done yet:
-
-- fonts have no kerning, and text does not wrap;
-- UI sounds are queued but not played;
-- generated list items draw no background;
-- profile editing and the controller settings are unwired;
-- co-op, split-screen and the demos are disabled.
+| `OpenCEEngine` | The app's entry and `GamePlayer` |
+
+The game runs as the original does: its simulation at 60 Hz and its
+scripts at 30 Hz. `game.wasm` uses musl's maths and no fused
+multiply-add, so the same inputs from the same state give the same world.
+
+### Plugins
+
+A plugin is Rust, called at hooks the game's own code already marks: the
+tick, AI, HUD, UI and frame hooks follow the exits of the game's profile
+sections, the render hook follows each batch the Metal device submits,
+and the sound hook follows the mixer's output (`runtime/src/plugins.rs`).
+No line of `source/` changes for them. A plugin reads the game's memory
+only through read-only, bounds-checked views of its data arrays, its tag
+table and its tag blocks (`runtime/src/views.rs`), which answer `None`
+wherever the game's own checks would refuse; the views are fuzzed. A
+plugin's share of the frame is kept within its budget, and with every
+plugin off the reference traces match as they do without plugins.
+
+## Drawing
+
+`game.wasm` keeps the original's rasterizer and draws through a Direct3D 8
+device written for it in C (`port/macos/guest/d3d8_metal_device.c`). The
+device writes Metal-shaped commands into batches; the runtime decodes and
+checks each batch, and `GameRenderer` carries it out.
+
+The game's shaders are the original's, translated as they are met: the
+vertex and pixel shader microcode becomes Metal Shading Language
+(`nv2a_vsh.c`, `nv2a_psh.c`), per program and per map. So no shader can be
+compiled when the app is built. Instead each pipeline is compiled once and
+kept in a Metal binary archive (`pipelines.metallib` in the cache), and a
+later run finds it there, so play never waits on Metal's compiler. The
+Wasmtime cache keeps the compiled `game.wasm` the same way.
+
+The lighting is the original's first. Each extension of it (the
+`lighting_original` track) is switchable back to stock.
 
 ## The benchmark
 
-`tools/test_engine_benchmark.py` runs `OpenCEEngine --benchmark 60`. The
-engine flies a fixed path through bloodgulch for 60 seconds: a loop around the
-first player start, rising and falling, looking ahead and down and up. It
-draws offscreen at 3840×2160 with temporal anti-aliasing at full scale, with
-the scenario's objects and the sky. No window opens.
+`OpenCEEngine --benchmark SECONDS` plays `--map` (bloodgulch) offscreen
+at `--size` (3840×2160) for `--load-seconds` (20) and then SECONDS, and
+prints a JSON report. A frame's time is the slower of the game's CPU
+frame (from its own profile sections, the 30 Hz throttle left out) and
+its GPU work. `--baseline` with a report kept before fails on a
+regression. The bar is p99 ≤ 8.33 ms on the M1 Max at 3840×2160, ultra.
 
-- **Frames in flight:** up to three. The window has two (Frame pacing).
-- **Frame time:** the time between the ends of two frames' GPU work. It counts
-  whichever of the CPU and the GPU is slower.
-- **The bar:** p99 must be at most 8.33 ms (120 frames a second).
-- **`--quality`:** `saved` draws with the saved graphics settings, and
-  `low`, `medium`, `high` or `ultra` with a tier's, dynamic resolution
-  holding the bar. Without it the run draws with the stock video settings.
-  `--off` turns switches off over either.
+## The control socket
 
-| Machine | Date | Frames | p50 | p99 |
-| --- | --- | --- | --- | --- |
-| M1 Max | 2026-10-21 | 8235 | 7.28 ms | 7.94 ms |
-| M1 Max | 2026-10-23 | 5416 | 11.78 ms | 14.19 ms |
+With `--control` (beside the window) or `--headless` (with no window, drawn
+offscreen at `--size`), the app listens on a Unix socket, `opence/control.sock`
+in the user's runtime folder, or at `--socket PATH`. Each command line a
+client sends is handed to the game's own telnet console, so `opence run
+<line>` reaches the original's script compiler as a line typed at its
+console does. A request is one JSON line and so is each reply.
 
-The first row was taken before the screen-space effects, the lights, the
-exposure, bloom, decals and particles were drawn. The second has them all on,
-as they start, and is **above the bar**. Its frame's own GPU time is 13.97 ms
-at p50 and 17.06 ms at p99; the GPU overlaps one frame's work with the next.
-
-Where a frame's GPU time goes, from a Metal System Trace of the second row:
-
-| Work | ms per frame |
-| --- | --- |
-| MetalFX temporal anti-aliasing (its three passes) | 6.4 |
-| The screen pass (occlusion, contact shadows, reflections, the resolve) | 2.9 |
-| The level's opaque draws | 1.7 |
-| The level's blended draws | 0.95 |
-| Decals | 0.5 |
-| Luminance and bloom | 0.5 |
-| Tone map, motion | 0.75 |
-
-MetalFX alone at 3840×2160 and full scale is most of the budget. With every
-switch off (`--off render.gtao,render.ssr,render.contact_shadows,render.sun_shadows,render.lights,render.exposure,render.bloom,render.lens_flares,render.glows,render.decals,render.particles`)
-p99 is still 9.1 ms. With every effect on, a lower render scale (which
-MetalFX brings up to the window's size) comes near the bar: p99 is 10.54 ms
-at `--render-scale 0.75` and 8.34 ms at 0.5 (12-second runs).
-
-The tiers meet the bar with dynamic resolution holding it. Ultra at
-3840×2160 on the M1 Max (2026-10-26, 10-second runs):
-
-| Path | `--benchmark` p99 | Tier test p99 | Settled scale |
-| --- | --- | --- | --- |
-| devgulch | 7.0 ms | 6.78 ms | 0.67 |
-| bloodgulch | 7.0–8.3 ms | 6.75 ms | 0.67 |
-| bloodgulch16 | 7.86–8.29 ms | 6.72 ms | 0.67 |
-
-`QualityTierTests.testEachPathAtUltraMeets120HzAt4K` runs the same
-`LoadedLevel.benchmark` as `--benchmark` and keeps the best of three runs.
-Other work on the Mac (mediaanalysisd, WindowServer) only ever slows a
-frame: with it busy, the same runs measured 8.3–8.7 ms and settled at 0.5.
-bloodgulch16 has the least room.
-
-### Timings and hitches
-
-The app measures each frame itself, with no trace running:
-
-- **GPU time per pass.** Every encoder of play is made through
-  `timedRenderEncoder`, `timedComputeEncoder` or `timedBlitEncoder`
-  (`GpuTimings.swift`). They name the encoder and sample the GPU's
-  timestamps into a counter sample buffer: at the start and end of the
-  vertex and fragment stages for a render pass, of the encoder for the
-  others. Apple's GPUs sample only at stage boundaries. The times are read
-  when the command buffer completes. Four command buffers can be timed at
-  once, with up to 256 passes each. A test fails if an encoder is made
-  directly, except by the captures, the HUD's loader and the path tracer,
-  which are not part of play. MetalFX encodes its own passes, which are not
-  timed.
-- **CPU scopes.** `profiled(name, timer)` marks a scope in the engine's
-  profiler (`stat frame`, `trace`). The app marks shell, snapshot,
-  objects, hud, ui, encode and text. Inside encode, the renderer marks
-  level, and inside that shadows, lights, screen and particles. Each is
-  nested in the scope that encloses it.
-- **The hitch log.** Each place the renderer compiles a pipeline, uploads
-  a texture or allocates a buffer or target is wrapped in
-  `HitchLog.shared.note(kind, cause)`. It is timed only while a level
-  plays, not while one loads. Hitches are kept by kind and cause, and
-  counted again from each level's start. Phase 10 removes those that happen
-  in play. The light lists are still allocated each frame, and a change of
-  window size makes the temporal scaler again (about 0.6 s, its first
-  time).
-- **perf.log** (Application Support/OpenCE Engine/perf.log, started again at
-  each launch) has a line a second. Each line gives the frames' mean and
-  longest CPU time, the last frame's GPU time with its five costliest
-  passes (a light's faces added together), and that second's hitches:
-
-  `12.0 s  cpu 8.31 mean 12.40 max (60 frames)  gpu 6.20: level opaque 2.10, …  hitches: allocation light lists 60× 0.02 (longest 0.05)`
-
-The frame-time overlay adds the last frame's GPU time.
+```sh
+opence run '(game_speed 2)'   # one line (--json for the data)
+opence shell                  # an interactive shell
+```
 
 ## The coverage census
 
@@ -800,50 +123,23 @@ needs:
 - **Ported**: line for line, compiled into a reference trace by a
   `tools/engine_*_reference.py` script (listed in `engine/census/traced.tsv`),
   or with the reason it has none and a traced caller that covers it.
-- **Matched**: rewritten, with a test that checks it against the original
-  (a reference trace, a golden frame or a measurement), not only an engine
-  test.
-- **Native**: a helper whose job a Rust primitive does (`libm`, `glam`,
-  `Vec`), named; the engine uses it, and it keeps a fixed order.
-- **Partial**: what is done has Ported or Matched evidence, and what it
-  leaves out is listed.
-- **Replaced**: on purpose, for a listed reason (the renderer, Xbox-only
-  hardware, keyboard and mouse, the importer, the tools, the network or
-  Bink), with the engine's code that stands in for it named; a function
-  reached only through Replaced ones is Replaced through its caller,
-  except in the systems that are ported and matched (their rules set
-  `through_callers = false`, since the original's renderer drives its
-  weather, decals, HUD and score screens).
-- **Missing**: not started. A function the engine cites cannot be Missing.
+- **Compiled**: compiled unchanged into `game.wasm`: its file is one the
+  game's build compiles (`port/linux/port.json`).
+- **Matched**: rewritten, with a check against the original (a reference
+  trace, a golden frame or a measurement).
+- **Native**: a helper whose job a Rust primitive does, named.
+- **Partial**: what is done has evidence, and what it leaves out is listed.
+- **Replaced**: on purpose, for a listed reason (Xbox-only hardware,
+  keyboard and mouse, the tools), with what stands in for it named.
+- **Missing**: not started.
 
-`engine/census/census.toml` holds the rules and entries; an `owed` reason
-accepts evidence still lacking and is listed for the completion track.
-`opence census --write` writes `traced.tsv`, `docs/census.md` (every
-function, by system) and the table below; `opence census --check` fails
-when a class lacks its evidence, when a doc or `traced.tsv` is stale, and
-when any trace is stale (each script's own `--check`).
-
-The census also marks each tag structure's fields (`engine/census/tag_fields.tsv`)
-with whether the original reads them, whether the importer keeps them, and
-whether the engine uses what the importer keeps. A kept field the engine
-uses nowhere, read by a finished function (Ported, Matched or Native) and
-by none still to finish, fails `--check`: the function is Partial, and its
-`leaves_out` names the field. Where the census cannot follow a read to
-its use (an offset handed to a helper, a count checked where it is read),
-`engine/census/field_traces.tsv` names the use by hand: the engine file and
-the text of the use, which `--check` finds in that file. A trace whose use
-is gone, or that the census no longer needs, fails `--check` too.
-Every other kept field the engine uses nowhere is listed in
-`engine/census/unused_fields.tsv` with its reason: the original reads it
-nowhere, it is owed to the Missing or Partial functions that read it, or
-it is read only where the engine replaced the original (and perhaps by
-the old port's own checks, which are not the original's). `--write`
-writes it and `--check` fails when it is stale.
-
-Moving a function to Partial raises its system's Partial count, which
-the ratchet (`engine/census/ratchet.tsv`) refuses; it is raised by hand,
-with the reason in the commit. The data track raised it once, for the
-13 functions the tag-field check found reading fields the engine drops.
+`engine/census/census.toml` holds the rules and entries. `opence census
+--write` writes `traced.tsv`, `docs/census.md` (every function, by
+system) and the table below; `opence census --check` fails when a class
+lacks its evidence, when a doc or `traced.tsv` is stale, and when any
+trace is stale. The census also marks each tag structure's fields
+(`engine/census/tag_fields.tsv`) with whether the original reads them and
+whether the importer keeps them.
 
 <!-- coverage census: opence census --write writes this table -->
 | System | Ported | Compiled | Matched | Native | Partial | Replaced | Missing | Owed |
@@ -886,248 +182,3 @@ with the reason in the commit. The data track raised it once, for the
 | `units` | 165 (26944 B) | 164 (80576 B) | | | | | | 0 |
 | **all** | 558 (100880 B) | 6985 (1507730 B) | | | | 84 (2512 B) | | 0 |
 <!-- end of the coverage census -->
-
-### The divergences
-
-Of the 143 functions ported, 56 are traced: animation 15 of 19, gameplay
-40 of 103, sound 5 of 15, and AI (4), particles (1) and scripts (1) none.
-The new traces (`engine_math_reference.py`, `engine_periodic_reference.py`,
-`engine_sound_choice_reference.py`) found four functions that differed;
-each now matches its trace bit for bit. Measured with the engine's old
-code against the traces:
-
-| Function | Used by | Values that differed | Largest difference |
-| --- | --- | --- | --- |
-| `transition_function_evaluate` (functions 1 to 5) | particles, contrails, lights, object functions, damage | 2056 of 2065 each | 0.060 (function 2), 0.002 to 0.008 for the rest |
-| `angle_between_vectors3d` | vehicles, projectiles | 108 of 400 | 2.4e-4 rad |
-| `euler_angles2d_from_vector3d` in a frame | aiming and looking | yaw 50, pitch 77 of 400 | 2.4e-7 rad |
-| `seed_random_vector_in_cone3d` | the Banshee's and Ghost's thrusters | 160 of 240 draws | 3.1 rad (a different algorithm; mean 0.64) |
-
-The transitions were curves where the game reads byte tables built from
-its seed, and the cone spread drew its own way rather than from the
-geosphere's 1026 directions; the angles differed only in rounding, since
-the game works them in double. Sound's pitch ranges, permutations and
-scaled values matched from the start.
-
-Phases 12 to 15 take their order from this: Phase 12 (weapons, particles
-and effects) first, since particles have no trace and the transitions they
-read were the widest divergence; Phase 13 (vehicles) next, home of two of
-the four; then Phase 14 (death and ragdolls, gameplay and animation) and
-Phase 15 (sound), whose untraced functions are the sound manager's and are
-checked by playing every sound Blood Gulch names.
-
-## The developer tools
-
-The engine's tools reach into a running world: a shell in the game, the
-same commands over a local socket, debug drawing, a test driver and a
-generated test map. They are made in `opence_dev` (the registry, the
-socket's limits, the scripts, the profiler, the debug shapes) and
-`opence_ffi` (the engine's own commands, in `devtools.rs`), and drawn by
-the app.
-
-### The shell
-
-`~` (the key left of 1) slides the shell down over the game. The world
-keeps running unless it is paused, and keys go to the shell while it is
-open. The prompt has line editing (word jumps, kill and yank), history
-kept between runs in `shell_history.txt` in the app's support folder
-(Up, Down, Control-R), Tab completion of commands, variables, tag paths,
-objects and HaloScript's functions and globals, and scrollback with the
-wheel. The engine's log, Rust's and Swift's, streams into it. Text is
-drawn in Overpass Mono from a glyph atlas at the display's scale.
-
-A line that is not a command is HaloScript, run against the mission:
-`(ai_place x30_marines)` works as `spawn` does. `watch <expression>` puts
-a variable or an expression on a line that stays on screen when the shell
-is closed.
-
-### Commands and variables
-
-Every crate adds to the registry; `help [name]` lists them and their
-arguments, and `vars [filter]` the variables.
-
-| Command | Does |
-| --- | --- |
-| `map <name> [bsp]`, `bsp <index>` | Loads a map, or moves to a structure BSP with its scenery |
-| `spawn <tag> [count]`, `kill [object\|all]` | Makes or kills objects |
-| `teleport <x y z>\|<object>`, `noclip`, `god` | Moves and protects the player |
-| `give <weapon>`, `enter <vehicle> [seat]` | Arms the player, seats them |
-| `time <scale>`, `pause`, `step [ticks]` | The world's clock |
-| `objects [filter]`, `inspect <id>`, `tags [filter]` | The world's objects and the level's tags |
-| `frame <path> [width] [height]` | Saves the next frame to a PNG (1280 by 720 unless told; a relative path is the working folder's) |
-| `log [filter]` | `render=debug,warn` sets the levels kept; alone, the last lines |
-| `watch`, `unwatch` | The watch line |
-| `debug_line`, `debug_box`, `debug_sphere`, `debug_text`, `debug_clear` | Shapes, each for some ticks |
-| `stat frame [off]`, `trace <frames>\|stop` | The profiler's breakdown, and a Chrome trace for Perfetto |
-| `script <file>\|stop` | Runs a test script in the window |
-| `station [name]\|stop` | Runs a test map station |
-| `set`, `vars`, `bind`, `unbind`, `exec`, `help`, `clear`, `quit` | The registry's own |
-
-Variables are typed (bool, int, float, text, a choice) and some are saved
-to the settings. The drawing switches are listed in "The
-passes" above; the debug layers are `debug.draw.<layer>`.
-
-### The socket and `opence`
-
-With `--control` (beside the window) or `--headless` (with no window), the
-engine listens on a Unix socket, `opence/control.sock` in the user's
-runtime folder (`XDG_RUNTIME_DIR`, else `TMPDIR`), or at
-`OPENCE_CONTROL_SOCKET`. The folder is the user's alone, and the engine
-never listens on a network address. A request is one JSON line, a command
-line or a structured request (`state`, `objects`, `frame`, `subscribe
-log`), and each reply is one JSON line carrying the text the shell shows
-and the same result as data. A request is at most 64 KiB and 16 levels
-deep, a connection may send 200 a second (400 at once), and eight
-connections are served.
-
-```sh
-opence run 'spawn warthog 2'          # one line (--json for the data)
-opence state                          # the world's state
-opence frame out.png --size 1920x1080 # the view, drawn offscreen
-opence watch                          # the log as it is written
-opence script check.ocs               # a script, stopping at a failure
-opence shell                          # an interactive shell, completed by the engine
-```
-
-It exits 0 when everything worked, 1 when the engine refused something
-and 2 when it could not reach the engine. `--headless` takes `--map`,
-`--bsp`, `--maps`, `--cache` and `--tick-rate`, and draws a frame only
-when one is asked for.
-
-### The dev state and the lighting controls
-
-The shell's variables are the one developer state that the dev panel,
-the shell, the socket and scripts share
-(`dev_state.rs`, `DevState.swift`). The engine counts each change of a
-variable, and the app reads the state again only when the count moves:
-a frame nobody tuned reads nothing and draws the stock frame. `dev.panel`
-shows the dev panel.
-
-The lighting controls are floats, at the stock frame's values by default:
-
-| Variable | Default | Range | Scales |
-| --- | --- | --- | --- |
-| `tune.exposure` | 0 | −4 to 4 | Stops before the tone map |
-| `tune.sun`, `tune.sun_red`, `tune.sun_green`, `tune.sun_blue` | 1 | 0 to 4 (a channel 0 to 2) | The sun's light and its colour |
-| `tune.bounce`, `tune.probes` | 1 | 0 to 4 | The baked bounced light; the probes' light on the objects |
-| `tune.ao` | 1 | 0 to 2 | How much the ambient occlusion darkens |
-| `tune.emissive`, `tune.bloom` | 1 | 0 to 4 | The shaders' own light; the bloom |
-| `tune.tone_curve` | 1 | 0.5 to 2 | The tone curve's contrast |
-
-They are tuned per map: as a map loads its file, `tuning/<map>.toml` in
-the app's support folder, is read (the controls not in it at their
-defaults), and `tune save` writes the controls not at their defaults to
-it (removing it when every one is). `tune load` reads it again, `tune
-reset` sets the defaults, and `tune` alone lists the controls, as data
-over the socket. A file is untrusted: a name that is not a control, or a
-value out of its range, is refused and logged. The Developer tab's
-Lighting section has a slider for each, launched as `--set` values that
-win over the map's file.
-
-The renderer applies them only while one is off its default (a flag in
-the frame's uniforms), so an untouched state is the stock frame to the
-byte. Exposure, bloom and the tone curve act in the tone pass (the curve
-a power about the middle grey); the occlusion in the screen pass's
-resolve. On a baked surface the light is split by the sun's share, as the
-sun's shadows see it: that share is scaled by `tune.sun` and its colour,
-the rest by `tune.bounce` (where the sun's shadows are off the share is
-not known, and all of it is the bounce's). The map's own lightmaps keep
-the sun with the rest, so on them `tune.bounce` scales all their light
-and `tune.sun` does nothing. `tune.probes` and `tune.sun` light the
-objects and the surfaces the probes light; `tune.emissive` scales the
-level's and the models' self-illumination. Particles are lit as they
-are.
-
-### The dev panel
-
-`dev.panel` shows the dev panel over the game's right side
-(`DevPanel.swift`), with the mouse free while it shows. It is read again
-four times a second:
-
-- **Object.** A click in the frame inspects the object under the cursor,
-  as `inspect object=<id>` gives it: its tag, kind and place, its shader
-  and permutation, its animation, its motion and physics, the light it
-  casts and the sounds it plays. The pick (`PickPass.swift`) draws the
-  last frame's objects again, each as its snapshot id, into a target of
-  one pixel through the view narrowed to the cursor's pixel. The level's
-  surfaces are drawn as no object, so that a wall hides what is behind it;
-  the sky and the first-person weapon are not drawn. The object is
-  inspected again as it plays, until it is gone; a new level forgets it.
-- **Frame.** The GPU's passes, from the timestamp counters. The CPU's
-  scopes, the engine's and the app's: the panel measures frames while it
-  shows (`measure_frames`, as `stat frame` does), and turns that off as
-  it closes. The hitches since the level started.
-- **Sounds.** The voices playing in each sound class, and the sounds
-  culled (skipped, out of hearing or silent) and those with nothing to
-  play since the level started (`audio_census`).
-
-### Debug drawing
-
-Any system calls the immediate-mode shapes (a line, a box, a sphere, text
-in the world, each for some ticks); the renderer draws them after the
-world. The layers are switched with `debug.draw.<layer>`: `general` (the
-commands' and systems' shapes), `collision` (the level's near the camera),
-`bodies`, `ai` (firing positions and paths), `triggers`, `markers`,
-`lights`, `sounds` and `labels` (the test map's headings). When every
-layer is off, nothing is kept or drawn.
-
-A build run from the checkout watches `engine/app/Shaders`: an edited
-shader is compiled again while the game runs, and one that fails keeps the
-old pipeline and prints the error to the shell.
-
-### The test driver
-
-A command script (`.ocs`) is a list of shell lines with four of its own:
-
-| Line | Does |
-| --- | --- |
-| `wait <ticks>` | Lets the world run |
-| `wait_until <expression> [timeout]` | Lets it run until the expression holds (ten seconds without a timeout) |
-| `expect <expression>` | Fails unless the expression holds |
-| `frame <name>` | Takes a frame |
-
-An expression is a value (a variable, the world's state, HaloScript),
-compared or not with `==`, `!=`, `<`, `<=`, `>` or `>=`. A failure stops
-the script and reports its line, its expression and the state. A script
-runs headless as fast as the world ticks (`opence script`), or in the
-window at its pace (`script`).
-
-### The test map
-
-`devmap` (`--map devmap`, `map devmap`) is made by the engine: a flat
-plane with collision, a grid and a sky, and galleries of every object
-definition in the user's maps, each placed once from the map that holds
-it, with a label: weapons on racks, vehicles in bays, bipeds on pedestals,
-devices, scenery, equipment and projectiles. The menus do not offer it.
-
-Its stations run a test on the spot, from a pad or `station <name>`:
-`weapons` fires each weapon at targets and shows its shots, damage and
-heat; `vehicles` drives a course with corners and ramps; `animation` plays
-each of a biped's animations with its name; `doors` cycles every device;
-`physics` drops a pile of crates on a slope; `particles` starts each effect
-that makes particles and counts the most it keeps alive. Their results are data, so
-`ffi/tests/stations.rs` checks them.
-
-### Placement checks
-
-`tools/engine_placement_traces.py` runs the reference app headless on each
-stock map and records its objects after spawning (tag, position, rotation,
-permutation, BSP and parent) in `build/placement_traces`, never committed,
-with the structure BSP each run ended in. `ffi/tests/placements.rs` starts
-each map in the engine, switches to that BSP as the mission's scripts did,
-and requires each object's place within 1 mm and its facing within 0.01°.
-
-The engine places objects as the reference's `object_types.c` does:
-
-- the kinds other than scenery and light fixtures first, in type order;
-- then the scenery and lights whose origin, or bounding offset, is in a
-  leaf of the structure BSP;
-- a name already placed is skipped, and placements that are not automatic
-  are left out; the difficulty bits are never read;
-- a vehicle with physics is raised by half its bounding radius, and an
-  item not at rest or levitating by 0.05;
-- missions start in BSP 0, and a switch removes the unnamed scenery and
-  lights and places the new BSP's, but not a named one that is there.
-
-Multiplayer vehicles are left out of the comparison, because the
-gametype, not the scenario, decides which are made.

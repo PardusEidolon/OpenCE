@@ -44,6 +44,14 @@ def test_the_bundle_holds_the_game(app: Path) -> None:
     assert wasm.read_bytes()[:4] == b"\0asm"
 
 
+def test_the_bundle_holds_no_shaders_of_its_own(app: Path) -> None:
+    # (the game's shaders are its own, translated as it runs and compiled into
+    # the binary archive behind the loading screen: GameRenderer.swift)
+    resources = app / "Contents" / "Resources"
+    assert not (resources / "default.metallib").exists()
+    assert not (resources / "shaders").exists()
+
+
 def test_the_executable_links_the_rust_library(app: Path) -> None:
     result = subprocess.run(
         [str(app / "Contents" / "MacOS" / "OpenCEEngine"), "--version"],
@@ -116,7 +124,6 @@ def test_every_crate_s_bindings_reach_the_package(tmp_path: Path) -> None:
     for crate in ("opence_ffi", "opence_render"):
         (bindings / f"{crate}FFI.h").write_text(f"// {crate}\n")
         (bindings / f"{crate}.swift").write_text(f"// {crate}\n")
-    (bindings / engine_build.SNAPSHOT_HEADER).write_text("// snapshot\n")
     package = tmp_path / "package"
     engine_build.swift_bindings(tmp_path / "rust", package)
     ffi = package / "Sources" / engine_build.FFI_MODULE
@@ -127,4 +134,9 @@ def test_every_crate_s_bindings_reach_the_package(tmp_path: Path) -> None:
     # each crate's generated Swift imports its own FFI module
     for module in ("opence_ffiFFI", "opence_renderFFI"):
         assert f"module {module} {{" in modulemap
-    assert f'header "{engine_build.SNAPSHOT_HEADER}"' in modulemap
+    # (and nothing but the crates' own headers: cbindgen's snapshot went with the old renderer)
+    assert sorted(path.name for path in ffi.iterdir()) == [
+        "module.modulemap",
+        "opence_ffiFFI.h",
+        "opence_renderFFI.h",
+    ]

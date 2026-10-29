@@ -1240,8 +1240,8 @@ animation_graph	unit_damage_animations.definition	68	struct tag_block_definition
 animation_graph	first_person_weapon_animations.count	72	long	read	kept	walked
 animation_graph	first_person_weapon_animations.address	76	void *	read	kept	walked
 animation_graph	first_person_weapon_animations.definition	80	struct tag_block_definition *	read	-	-
-animation_graph	sound_references.count	84	long	read	kept	used
-animation_graph	sound_references.address	88	void *	read	kept	used
+animation_graph	sound_references.count	84	long	read	kept	walked
+animation_graph	sound_references.address	88	void *	read	kept	walked
 animation_graph	sound_references.definition	92	struct tag_block_definition *	read	-	-
 animation_graph	limp_body_node_collision_radius	96	real	read	kept	unused
 animation_graph	flags	100	word	-	kept	used
@@ -1473,7 +1473,7 @@ auxilary_meter_definition	panel.meter.alpha_multiplier	196	byte	read	kept	unused
 auxilary_meter_definition	panel.meter.alpha_bias	197	byte	read	kept	unused
 auxilary_meter_definition	panel.meter.value_scale	198	short	read	kept	unused
 auxilary_meter_definition	panel.meter.opacity	200	real	read	kept	unused
-auxilary_meter_definition	panel.meter.fade	204	real	read	kept	used
+auxilary_meter_definition	panel.meter.fade	204	real	read	kept	unused
 auxilary_meter_definition	panel.meter.disabled_color	208	unsigned long	-	-	-
 auxilary_meter_definition	panel.meter.multitexture_overlays.count	212	long	read	-	-
 auxilary_meter_definition	panel.meter.multitexture_overlays.address	216	void *	read	-	-
@@ -2080,8 +2080,8 @@ continuous_vibrate_definition	unused	8	unsigned long[6]	-	-	-
 contrail_definition	flags	0	word	read	kept	used
 contrail_definition	scale_flags	2	word	read	kept	unused
 contrail_definition	point_generation_rate	4	real	read	kept	unused
-contrail_definition	point_velocity_lower_bound	8	real	read	kept	used
-contrail_definition	point_velocity_upper_bound	12	real	read	kept	used
+contrail_definition	point_velocity_lower_bound	8	real	read	kept	unused
+contrail_definition	point_velocity_upper_bound	12	real	read	kept	unused
 contrail_definition	point_velocity_cone_angle	16	real	read	kept	unused
 contrail_definition	point_inherited_velocity_fraction	20	real	read	kept	unused
 contrail_definition	render_type	24	short	read	kept	unused
@@ -2512,8 +2512,8 @@ damage_region	destroyed_effect.group_tag	56	unsigned long	-	-	-
 damage_region	destroyed_effect.name	60	char *	-	-	-
 damage_region	destroyed_effect.name_length	64	long	-	-	-
 damage_region	destroyed_effect.index	68	long	read	-	-
-damage_region	permutations.count	72	long	read	kept	used
-damage_region	permutations.address	76	void *	-	kept	used
+damage_region	permutations.count	72	long	read	kept	walked
+damage_region	permutations.address	76	void *	-	kept	walked
 damage_region	permutations.definition	80	struct tag_block_definition *	-	-	-
 decal_definition	flags	0	word	read	kept	used
 decal_definition	type	2	short	read	kept	used
@@ -2542,8 +2542,8 @@ decal_definition	animation_speed	90	short	-	kept	unused
 decal_definition	unused05C	92	long[7]	-	-	-
 decal_definition	lifetime_lower_bound	120	real	read	kept	unused
 decal_definition	lifetime_upper_bound	124	real	read	kept	unused
-decal_definition	decay_time_lower_bound	128	real	read	kept	used
-decal_definition	decay_time_upper_bound	132	real	read	kept	used
+decal_definition	decay_time_lower_bound	128	real	read	kept	unused
+decal_definition	decay_time_upper_bound	132	real	read	kept	unused
 decal_definition	unused088	136	long[3]	-	-	-
 decal_definition	shader.shader.base.radiosity.flags	148	unsigned short	read	kept	used
 decal_definition	shader.shader.base.radiosity.detail_level	150	short	-	-	-
@@ -2769,9 +2769,9 @@ effect_definition	events.count	52	long	read	kept	used
 effect_definition	events.address	56	void *	read	kept	used
 effect_definition	events.definition	60	struct tag_block_definition *	read	-	-
 effect_event_definition	flags	0	long	-	-	-
-effect_event_definition	skip_fraction	4	real	-	kept	used
-effect_event_definition	delay_lower_bound	8	real	read	kept	used
-effect_event_definition	delay_upper_bound	12	real	read	kept	used
+effect_event_definition	skip_fraction	4	real	-	kept	unused
+effect_event_definition	delay_lower_bound	8	real	read	kept	unused
+effect_event_definition	delay_upper_bound	12	real	read	kept	unused
 effect_event_definition	duration_lower_bound	16	real	read	kept	used
 effect_event_definition	duration_upper_bound	20	real	read	kept	used
 effect_event_definition	unused018	24	real[5]	-	-	-
@@ -2803,8 +2803,8 @@ effect_part_definition	radius_modifier_upper_bound	88	real	read	-	-
 effect_part_definition	unused05c	92	long	-	-	-
 effect_part_definition	scale_a_flags	96	unsigned long	read	-	-
 effect_part_definition	scale_b_flags	100	unsigned long	read	-	-
-effect_particles_definition	environment	0	short	read	kept	used
-effect_particles_definition	disposition	2	short	read	kept	used
+effect_particles_definition	environment	0	short	read	kept	unused
+effect_particles_definition	disposition	2	short	read	kept	unused
 effect_particles_definition	camera_mode	4	short	read	kept	unused
 effect_particles_definition	unused006	6	short	-	-	-
 effect_particles_definition	location_index	8	short	read	kept	unused
@@ -2833,8 +2833,8 @@ effect_particles_definition	count_upper_bound	110	short	read	kept	used
 effect_particles_definition	distribution_radius_lower_bound	112	real	read	kept	unused
 effect_particles_definition	distribution_radius_upper_bound	116	real	read	kept	unused
 effect_particles_definition	unused078	120	long[3]	-	-	-
-effect_particles_definition	velocity_lower_bound	132	real	read	kept	used
-effect_particles_definition	velocity_upper_bound	136	real	read	kept	used
+effect_particles_definition	velocity_lower_bound	132	real	read	kept	unused
+effect_particles_definition	velocity_upper_bound	136	real	read	kept	unused
 effect_particles_definition	velocity_cone_angle	140	real	read	kept	unused
 effect_particles_definition	angular_velocity_lower_bound	144	real	read	kept	unused
 effect_particles_definition	angular_velocity_upper_bound	148	real	read	kept	unused
@@ -4018,8 +4018,8 @@ icon_hud_element_definition	color	8	unsigned long	read	kept	used
 icon_hud_element_definition	frame_rate	12	char	read	kept	unused
 icon_hud_element_definition	flags	13	byte	read	kept	used
 icon_hud_element_definition	text_index	14	short	read	kept	unused
-item_collection_definition	permutations.count	0	long	read	kept	used
-item_collection_definition	permutations.address	4	void *	read	kept	used
+item_collection_definition	permutations.count	0	long	read	kept	walked
+item_collection_definition	permutations.address	4	void *	read	kept	walked
 item_collection_definition	permutations.definition	8	struct tag_block_definition *	read	-	-
 item_collection_definition	spawn_time	12	short	read	kept	unused
 item_collection_definition	pad	14	short	-	-	-
@@ -4341,9 +4341,9 @@ lightning_marker_definition	tint.rgb.green	144	real	read	-	-
 lightning_marker_definition	tint.rgb.blue	148	real	read	-	-
 lightning_marker_definition	reserved98	152	byte[76]	-	-	-
 looping_sound_definition	flags	0	unsigned long	read	kept	used
-looping_sound_definition	scale_lower_bound.detail_period	4	real	read	kept	used
+looping_sound_definition	scale_lower_bound.detail_period	4	real	read	kept	unused
 looping_sound_definition	scale_lower_bound.unused0	8	long[2]	-	-	-
-looping_sound_definition	scale_upper_bound.detail_period	16	real	read	kept	used
+looping_sound_definition	scale_upper_bound.detail_period	16	real	read	kept	unused
 looping_sound_definition	scale_upper_bound.unused0	20	long[2]	-	-	-
 looping_sound_definition	runtime_scripting_sound_index	28	long	read	-	-
 looping_sound_definition	runtime_maximum_distance	32	real	read	-	-
@@ -4352,28 +4352,28 @@ looping_sound_definition	continuous_damage_effect.group_tag	44	unsigned long	-	-
 looping_sound_definition	continuous_damage_effect.name	48	char *	-	-	-
 looping_sound_definition	continuous_damage_effect.name_length	52	long	-	-	-
 looping_sound_definition	continuous_damage_effect.index	56	long	read	-	-
-looping_sound_definition	tracks.count	60	long	read	kept	used
-looping_sound_definition	tracks.address	64	void *	read	kept	used
+looping_sound_definition	tracks.count	60	long	read	kept	walked
+looping_sound_definition	tracks.address	64	void *	read	kept	walked
 looping_sound_definition	tracks.definition	68	struct tag_block_definition *	read	-	-
-looping_sound_definition	details.count	72	long	read	kept	used
-looping_sound_definition	details.address	76	void *	read	kept	used
+looping_sound_definition	details.count	72	long	read	kept	walked
+looping_sound_definition	details.address	76	void *	read	kept	walked
 looping_sound_definition	details.definition	80	struct tag_block_definition *	read	-	-
 looping_sound_detail	sound.group_tag	0	unsigned long	-	kept	used
 looping_sound_detail	sound.name	4	char *	-	-	-
 looping_sound_detail	sound.name_length	8	long	-	-	-
 looping_sound_detail	sound.index	12	long	read	kept	used
-looping_sound_detail	period_bounds.lower	16	real	read	kept	used
-looping_sound_detail	period_bounds.upper	20	real	read	kept	used
-looping_sound_detail	gain	24	real	read	kept	used
+looping_sound_detail	period_bounds.lower	16	real	read	kept	unused
+looping_sound_detail	period_bounds.upper	20	real	read	kept	unused
+looping_sound_detail	gain	24	real	read	kept	unused
 looping_sound_detail	flags	28	unsigned long	read	kept	used
 looping_sound_detail	unused0	32	long[12]	-	-	-
-looping_sound_detail	theta_bounds.lower	80	real	read	kept	used
-looping_sound_detail	theta_bounds.upper	84	real	read	kept	used
-looping_sound_detail	phi_bounds.lower	88	real	read	kept	used
-looping_sound_detail	phi_bounds.upper	92	real	read	kept	used
-looping_sound_detail	distance_bounds.lower	96	real	read	kept	used
-looping_sound_detail	distance_bounds.upper	100	real	read	kept	used
-looping_sound_scale_modifiers	detail_period	0	real	read	kept	used
+looping_sound_detail	theta_bounds.lower	80	real	read	kept	unused
+looping_sound_detail	theta_bounds.upper	84	real	read	kept	unused
+looping_sound_detail	phi_bounds.lower	88	real	read	kept	unused
+looping_sound_detail	phi_bounds.upper	92	real	read	kept	unused
+looping_sound_detail	distance_bounds.lower	96	real	read	kept	unused
+looping_sound_detail	distance_bounds.upper	100	real	read	kept	unused
+looping_sound_scale_modifiers	detail_period	0	real	read	kept	unused
 looping_sound_scale_modifiers	unused0	4	long[2]	-	-	-
 looping_sound_track	flags	0	unsigned long	read	-	-
 looping_sound_track	gain	4	real	read	-	-
@@ -4634,7 +4634,7 @@ meter_hud_element_definition	alpha_multiplier	72	byte	read	kept	unused
 meter_hud_element_definition	alpha_bias	73	byte	read	kept	unused
 meter_hud_element_definition	value_scale	74	short	read	kept	unused
 meter_hud_element_definition	opacity	76	real	read	kept	unused
-meter_hud_element_definition	fade	80	real	read	kept	used
+meter_hud_element_definition	fade	80	real	read	kept	unused
 meter_hud_element_definition	disabled_color	84	unsigned long	-	-	-
 meter_hud_element_definition	multitexture_overlays.count	88	long	read	-	-
 meter_hud_element_definition	multitexture_overlays.address	92	void *	read	-	-
@@ -4694,7 +4694,7 @@ metered_panel_definition	meter.alpha_multiplier	176	byte	read	kept	unused
 metered_panel_definition	meter.alpha_bias	177	byte	read	kept	unused
 metered_panel_definition	meter.value_scale	178	short	read	kept	unused
 metered_panel_definition	meter.opacity	180	real	read	kept	unused
-metered_panel_definition	meter.fade	184	real	read	kept	used
+metered_panel_definition	meter.fade	184	real	read	kept	unused
 metered_panel_definition	meter.disabled_color	188	unsigned long	-	-	-
 metered_panel_definition	meter.multitexture_overlays.count	192	long	read	-	-
 metered_panel_definition	meter.multitexture_overlays.address	196	void *	read	-	-
@@ -4837,8 +4837,8 @@ model_node	runtime_default_inverse_matrix.position.v	148	real	read	kept	unused
 model_node	runtime_default_inverse_matrix.position.w	152	real	read	kept	unused
 model_region	name	0	char[32]	read	kept	used
 model_region	unused	32	long[8]	-	-	-
-model_region	permutations.count	64	long	read	kept	used
-model_region	permutations.address	68	void *	read	kept	used
+model_region	permutations.count	64	long	read	kept	walked
+model_region	permutations.address	68	void *	read	kept	walked
 model_region	permutations.definition	72	struct tag_block_definition *	read	-	-
 model_region_permutation	name	0	char[32]	read	kept	used
 model_region_permutation	flags	32	long	read	kept	used
@@ -5052,8 +5052,8 @@ object_change_color_definition	color_upper_bound.n	20	real[3]	read	kept	used
 object_change_color_definition	color_upper_bound.red	20	real	read	kept	used
 object_change_color_definition	color_upper_bound.green	24	real	read	kept	used
 object_change_color_definition	color_upper_bound.blue	28	real	read	kept	used
-object_change_color_definition	permutations.count	32	long	read	kept	used
-object_change_color_definition	permutations.address	36	void *	read	kept	used
+object_change_color_definition	permutations.count	32	long	read	kept	walked
+object_change_color_definition	permutations.address	36	void *	read	kept	walked
 object_change_color_definition	permutations.definition	40	struct tag_block_definition *	read	-	-
 object_change_color_permutation	weight	0	real	read	kept	unused
 object_change_color_permutation	color_lower_bound.n	4	real[3]	read	kept	used
@@ -5226,8 +5226,8 @@ particle_definition	collision_material_effects.index	48	long	read	kept	unused
 particle_definition	reserved34	52	long	-	-	-
 particle_definition	life_span_lower_bound	56	real	read	kept	unused
 particle_definition	life_span_upper_bound	60	real	read	kept	unused
-particle_definition	fade_in_time	64	real	read	kept	used
-particle_definition	fade_out_time	68	real	read	kept	used
+particle_definition	fade_in_time	64	real	read	kept	unused
+particle_definition	fade_out_time	68	real	read	kept	unused
 particle_definition	collision_effect.group_tag	72	unsigned long	read	kept	used
 particle_definition	collision_effect.name	76	char *	-	-	-
 particle_definition	collision_effect.name_length	80	long	-	-	-
@@ -5507,9 +5507,9 @@ physics_definition	center_of_mass.z	20	real	read	kept	unused
 physics_definition	center_of_mass.u	12	real	-	kept	unused
 physics_definition	center_of_mass.v	16	real	-	kept	unused
 physics_definition	center_of_mass.w	20	real	-	kept	unused
-physics_definition	density	24	real	-	kept	used
+physics_definition	density	24	real	-	kept	unused
 physics_definition	gravity_scale	28	real	read	kept	unused
-physics_definition	ground_friction	32	real	read	kept	used
+physics_definition	ground_friction	32	real	read	kept	unused
 physics_definition	ground_depth	36	real	read	kept	unused
 physics_definition	ground_damp_fraction	40	real	read	kept	unused
 physics_definition	ground_normal_k1	44	real	read	kept	unused
@@ -5781,7 +5781,7 @@ projectile_material_response_definition	default_effect.index	16	long	read	kept	u
 projectile_material_response_definition	pad0	20	byte[16]	-	-	-
 projectile_material_response_definition	potential_response	36	short	read	kept	unused
 projectile_material_response_definition	potential_flags	38	word	read	kept	unused
-projectile_material_response_definition	potential_skip_fraction	40	real	read	kept	used
+projectile_material_response_definition	potential_skip_fraction	40	real	read	kept	unused
 projectile_material_response_definition	potential_angle_lower_bound	44	real	read	kept	unused
 projectile_material_response_definition	potential_angle_upper_bound	48	real	read	kept	unused
 projectile_material_response_definition	potential_velocity_lower_bound	52	real	read	kept	unused
@@ -5801,11 +5801,11 @@ projectile_material_response_definition	detonation_effect.name_length	112	long	-
 projectile_material_response_definition	detonation_effect.index	116	long	read	kept	unused
 projectile_material_response_definition	pad3	120	byte[24]	-	-	-
 projectile_material_response_definition	initial_friction	144	real	read	kept	unused
-projectile_material_response_definition	maximum_distance	148	real	-	kept	used
+projectile_material_response_definition	maximum_distance	148	real	-	kept	unused
 projectile_material_response_definition	parallel_friction	152	real	read	kept	unused
 projectile_material_response_definition	perpendicular_friction	156	real	read	kept	unused
-real_bounds	lower	0	real	read	kept	used
-real_bounds	upper	4	real	read	kept	used
+real_bounds	lower	0	real	read	kept	unused
+real_bounds	upper	4	real	read	kept	unused
 recorded_animation_definition	name	0	char[32]	read	kept	used
 recorded_animation_definition	version	32	byte	read	-	-
 recorded_animation_definition	raw_animation_data	33	char	-	-	-
@@ -6071,7 +6071,7 @@ scenario_conversation_line_view	participant_index	2	short	read	kept	unused
 scenario_conversation_line_view	address_type	4	short	read	-	-
 scenario_conversation_line_view	address_participant_index	6	short	read	-	-
 scenario_conversation_line_view	unknown08	8	long	-	-	-
-scenario_conversation_line_view	delay_time	12	real	read	kept	used
+scenario_conversation_line_view	delay_time	12	real	read	kept	unused
 scenario_conversation_line_view	__unknown10	16	byte[12]	-	-	-
 scenario_conversation_line_view	dialogue	28	struct tag_reference[6]	read	kept	unused
 scenario_conversation_participant_view	pad00	0	word	-	-	-
@@ -6539,18 +6539,18 @@ shader_environment_definition	environment.diffuse.unknown168	360	byte[24]	-	-	-
 shader_environment_definition	environment.self_illumination.flags	384	word	read	kept	unused
 shader_environment_definition	environment.self_illumination.pad02	386	short	read	-	-
 shader_environment_definition	environment.self_illumination.reserved04	388	byte[24]	read	-	-
-shader_environment_definition	environment.self_illumination.primary_on_color.n	412	real[3]	read	kept	used
-shader_environment_definition	environment.self_illumination.primary_on_color.red	412	real	read	kept	used
-shader_environment_definition	environment.self_illumination.primary_on_color.green	416	real	read	kept	used
-shader_environment_definition	environment.self_illumination.primary_on_color.blue	420	real	read	kept	used
-shader_environment_definition	environment.self_illumination.primary_off_color.n	424	real[3]	read	kept	used
-shader_environment_definition	environment.self_illumination.primary_off_color.red	424	real	read	kept	used
-shader_environment_definition	environment.self_illumination.primary_off_color.green	428	real	read	kept	used
-shader_environment_definition	environment.self_illumination.primary_off_color.blue	432	real	read	kept	used
-shader_environment_definition	environment.self_illumination.primary_animation_function	436	short	read	kept	used
+shader_environment_definition	environment.self_illumination.primary_on_color.n	412	real[3]	read	kept	unused
+shader_environment_definition	environment.self_illumination.primary_on_color.red	412	real	read	kept	unused
+shader_environment_definition	environment.self_illumination.primary_on_color.green	416	real	read	kept	unused
+shader_environment_definition	environment.self_illumination.primary_on_color.blue	420	real	read	kept	unused
+shader_environment_definition	environment.self_illumination.primary_off_color.n	424	real[3]	read	kept	unused
+shader_environment_definition	environment.self_illumination.primary_off_color.red	424	real	read	kept	unused
+shader_environment_definition	environment.self_illumination.primary_off_color.green	428	real	read	kept	unused
+shader_environment_definition	environment.self_illumination.primary_off_color.blue	432	real	read	kept	unused
+shader_environment_definition	environment.self_illumination.primary_animation_function	436	short	read	kept	unused
 shader_environment_definition	environment.self_illumination.pad36	438	short	read	-	-
-shader_environment_definition	environment.self_illumination.primary_animation_period	440	real	read	kept	used
-shader_environment_definition	environment.self_illumination.primary_animation_phase	444	real	read	kept	used
+shader_environment_definition	environment.self_illumination.primary_animation_period	440	real	read	kept	unused
+shader_environment_definition	environment.self_illumination.primary_animation_phase	444	real	read	kept	unused
 shader_environment_definition	environment.self_illumination.reserved40	448	byte[24]	read	-	-
 shader_environment_definition	environment.self_illumination.secondary_on_color.n	472	real[3]	read	kept	unused
 shader_environment_definition	environment.self_illumination.secondary_on_color.red	472	real	read	kept	unused
@@ -6707,7 +6707,7 @@ shader_model_definition	shader.base.pad	38	short	-	-	-
 shader_model_definition	model.flags	40	word	read	kept	used
 shader_model_definition	model.type	42	short	-	-	-
 shader_model_definition	model.reserved04	44	byte[12]	-	-	-
-shader_model_definition	model.translucency	56	real	read	kept	used
+shader_model_definition	model.translucency	56	real	read	kept	unused
 shader_model_definition	model.reserved14	60	byte[16]	-	-	-
 shader_model_definition	model.change_color_source	76	short	read	kept	unused
 shader_model_definition	model.reserved26	78	byte[30]	-	-	-
@@ -7259,41 +7259,41 @@ sky_light	pad70	112	byte[4]	-	-	-
 sky_render_model_region	unused	0	byte[36]	-	-	-
 sound_definition	flags	0	unsigned long	read	kept	used
 sound_definition	sound_class	4	short	read	kept	used
-sound_definition	sample_rate	6	short	read	kept	used
-sound_definition	minimum_distance	8	real	read	kept	used
-sound_definition	maximum_distance	12	real	read	kept	used
-sound_definition	skip_fraction	16	real	read	kept	used
-sound_definition	random_pitch_bounds.lower	20	real	read	kept	used
-sound_definition	random_pitch_bounds.upper	24	real	read	kept	used
+sound_definition	sample_rate	6	short	read	kept	unused
+sound_definition	minimum_distance	8	real	read	kept	unused
+sound_definition	maximum_distance	12	real	read	kept	unused
+sound_definition	skip_fraction	16	real	read	kept	unused
+sound_definition	random_pitch_bounds.lower	20	real	read	kept	unused
+sound_definition	random_pitch_bounds.upper	24	real	read	kept	unused
 sound_definition	inner_cone_angle	28	real	read	kept	unused
 sound_definition	outer_cone_angle	32	real	read	kept	unused
 sound_definition	outer_cone_gain	36	real	read	kept	unused
-sound_definition	gain_modifier	40	real	read	kept	used
+sound_definition	gain_modifier	40	real	read	kept	unused
 sound_definition	maximum_bend_per_second	44	real	read	kept	unused
 sound_definition	unused0	48	byte[12]	-	-	-
-sound_definition	zero_skip_fraction_modifier	60	real	read	kept	used
-sound_definition	zero_gain_modifier	64	real	read	kept	used
-sound_definition	zero_pitch_modifier	68	real	read	kept	used
+sound_definition	zero_skip_fraction_modifier	60	real	read	kept	unused
+sound_definition	zero_gain_modifier	64	real	read	kept	unused
+sound_definition	zero_pitch_modifier	68	real	read	kept	unused
 sound_definition	unused1	72	byte[12]	-	-	-
-sound_definition	one_skip_fraction_modifier	84	real	read	kept	used
-sound_definition	one_gain_modifier	88	real	read	kept	used
-sound_definition	one_pitch_modifier	92	real	read	kept	used
+sound_definition	one_skip_fraction_modifier	84	real	read	kept	unused
+sound_definition	one_gain_modifier	88	real	read	kept	unused
+sound_definition	one_pitch_modifier	92	real	read	kept	unused
 sound_definition	unused2	96	byte[12]	-	-	-
-sound_definition	encoding	108	short	read	kept	used
+sound_definition	encoding	108	short	read	kept	unused
 sound_definition	compression	110	short	read	-	-
-sound_definition	promotion_sound.group_tag	112	unsigned long	-	kept	used
+sound_definition	promotion_sound.group_tag	112	unsigned long	-	kept	unused
 sound_definition	promotion_sound.name	116	char *	-	-	-
 sound_definition	promotion_sound.name_length	120	long	-	-	-
-sound_definition	promotion_sound.index	124	long	read	kept	used
-sound_definition	promotion_count	128	short	read	kept	used
+sound_definition	promotion_sound.index	124	long	read	kept	unused
+sound_definition	promotion_count	128	short	read	kept	unused
 sound_definition	unknown0	130	short	-	-	-
-sound_definition	longest_permutation_length	132	long	read	kept	used
+sound_definition	longest_permutation_length	132	long	read	kept	unused
 sound_definition	promotion_counter	136	long	read	-	-
 sound_definition	promotion_time	140	long	read	-	-
 sound_definition	scripting_time	144	unsigned long	read	-	-
 sound_definition	scripting_sound_index	148	long	read	-	-
-sound_definition	pitch_ranges.count	152	long	read	kept	used
-sound_definition	pitch_ranges.address	156	void *	read	kept	used
+sound_definition	pitch_ranges.count	152	long	read	kept	walked
+sound_definition	pitch_ranges.address	156	void *	read	kept	walked
 sound_definition	pitch_ranges.definition	160	struct tag_block_definition *	read	-	-
 sound_environment_definition	unknown	0	long	-	-	-
 sound_environment_definition	priority	4	short	-	kept	unused
@@ -7312,9 +7312,9 @@ sound_environment_definition	density	48	real	read	kept	used
 sound_environment_definition	hf_reference	52	real	read	kept	used
 sound_environment_definition	unused1	56	byte[16]	-	-	-
 sound_permutation	name	0	char[32]	read	kept	used
-sound_permutation	skip_fraction	32	real	read	kept	used
-sound_permutation	gain	36	real	read	kept	used
-sound_permutation	compression	40	short	-	kept	used
+sound_permutation	skip_fraction	32	real	read	kept	unused
+sound_permutation	gain	36	real	read	kept	unused
+sound_permutation	compression	40	short	-	kept	unused
 sound_permutation	next_permutation_index	42	short	read	kept	used
 sound_permutation	unknown0	44	long	-	-	-
 sound_permutation	unknown1	48	unsigned long	-	-	-
@@ -7338,16 +7338,16 @@ sound_permutation	subtitle_data.address	116	void *	-	-	-
 sound_permutation	subtitle_data.definition	120	struct tag_data_definition *	-	-	-
 sound_pitch_range	name	0	char[32]	read	kept	used
 sound_pitch_range	natural_pitch	32	real	read	kept	unused
-sound_pitch_range	bend_bounds.lower	36	real	read	kept	used
-sound_pitch_range	bend_bounds.upper	40	real	read	kept	used
-sound_pitch_range	actual_permutation_count	44	short	read	kept	used
+sound_pitch_range	bend_bounds.lower	36	real	read	kept	unused
+sound_pitch_range	bend_bounds.upper	40	real	read	kept	unused
+sound_pitch_range	actual_permutation_count	44	short	read	kept	unused
 sound_pitch_range	unused	46	short	-	-	-
-sound_pitch_range	playback_rate	48	real	read	kept	used
+sound_pitch_range	playback_rate	48	real	read	kept	unused
 sound_pitch_range	played_permutation_mask	52	unsigned long	read	-	-
 sound_pitch_range	previous_permutation_index	56	short	read	-	-
 sound_pitch_range	forced_permutation_index	58	short	read	-	-
-sound_pitch_range	permutations.count	60	long	read	kept	used
-sound_pitch_range	permutations.address	64	void *	read	kept	used
+sound_pitch_range	permutations.count	60	long	read	kept	walked
+sound_pitch_range	permutations.address	64	void *	read	kept	walked
 sound_pitch_range	permutations.definition	68	struct tag_block_definition *	read	-	-
 squad_definition	name	0	char[32]	read	kept	used
 squad_definition	actor_palette_index	32	short	read	kept	unused
@@ -7774,7 +7774,7 @@ structure_runtime_decal	position.w	8	real	read	kept	used
 structure_runtime_decal	palette_index	12	byte	read	kept	unused
 structure_runtime_decal	unused	13	byte	-	-	-
 structure_runtime_decal	yaw	14	char	read	kept	unused
-structure_runtime_decal	pitch	15	char	read	kept	used
+structure_runtime_decal	pitch	15	char	read	kept	unused
 structure_sound_environment_palette_entry	unused0	0	byte[32]	-	-	-
 structure_sound_environment_palette_entry	sound_environment.group_tag	32	unsigned long	-	kept	used
 structure_sound_environment_palette_entry	sound_environment.name	36	char *	-	-	-
@@ -8162,7 +8162,7 @@ unit_hud_interface_definition	shield_meter.meter.alpha_multiplier	316	byte	read	
 unit_hud_interface_definition	shield_meter.meter.alpha_bias	317	byte	read	kept	unused
 unit_hud_interface_definition	shield_meter.meter.value_scale	318	short	read	kept	unused
 unit_hud_interface_definition	shield_meter.meter.opacity	320	real	read	kept	unused
-unit_hud_interface_definition	shield_meter.meter.fade	324	real	read	kept	used
+unit_hud_interface_definition	shield_meter.meter.fade	324	real	read	kept	unused
 unit_hud_interface_definition	shield_meter.meter.disabled_color	328	unsigned long	-	-	-
 unit_hud_interface_definition	shield_meter.meter.multitexture_overlays.count	332	long	read	-	-
 unit_hud_interface_definition	shield_meter.meter.multitexture_overlays.address	336	void *	read	-	-
@@ -8234,7 +8234,7 @@ unit_hud_interface_definition	health_meter.meter.alpha_multiplier	556	byte	read	
 unit_hud_interface_definition	health_meter.meter.alpha_bias	557	byte	read	kept	unused
 unit_hud_interface_definition	health_meter.meter.value_scale	558	short	read	kept	unused
 unit_hud_interface_definition	health_meter.meter.opacity	560	real	read	kept	unused
-unit_hud_interface_definition	health_meter.meter.fade	564	real	read	kept	used
+unit_hud_interface_definition	health_meter.meter.fade	564	real	read	kept	unused
 unit_hud_interface_definition	health_meter.meter.disabled_color	568	unsigned long	-	-	-
 unit_hud_interface_definition	health_meter.meter.multitexture_overlays.count	572	long	read	-	-
 unit_hud_interface_definition	health_meter.meter.multitexture_overlays.address	576	void *	read	-	-
@@ -8902,7 +8902,7 @@ weapon_hud_meter_element	meter_element.alpha_multiplier	108	byte	read	kept	unuse
 weapon_hud_meter_element	meter_element.alpha_bias	109	byte	read	kept	unused
 weapon_hud_meter_element	meter_element.value_scale	110	short	read	kept	unused
 weapon_hud_meter_element	meter_element.opacity	112	real	read	kept	unused
-weapon_hud_meter_element	meter_element.fade	116	real	read	kept	used
+weapon_hud_meter_element	meter_element.fade	116	real	read	kept	unused
 weapon_hud_meter_element	meter_element.disabled_color	120	unsigned long	-	-	-
 weapon_hud_meter_element	meter_element.multitexture_overlays.count	124	long	read	-	-
 weapon_hud_meter_element	meter_element.multitexture_overlays.address	128	void *	read	-	-
@@ -9134,8 +9134,8 @@ weather_particle_type_definition	height_fadein_end	56	real	read	kept	unused
 weather_particle_type_definition	height_fadeout_start	60	real	read	kept	unused
 weather_particle_type_definition	height_fadeout_end	64	real	read	kept	unused
 weather_particle_type_definition	unused	68	long[24]	-	-	-
-weather_particle_type_definition	particle_count_lower_bound	164	real	read	kept	used
-weather_particle_type_definition	particle_count_upper_bound	168	real	read	kept	used
+weather_particle_type_definition	particle_count_lower_bound	164	real	read	kept	unused
+weather_particle_type_definition	particle_count_upper_bound	168	real	read	kept	unused
 weather_particle_type_definition	physics.group_tag	172	unsigned long	-	kept	used
 weather_particle_type_definition	physics.name	176	char *	-	-	-
 weather_particle_type_definition	physics.name_length	180	long	-	-	-
@@ -9220,8 +9220,8 @@ weather_particle_type_definition	shader.secondary_map_animation.r_center.y	572	r
 weather_particle_type_definition	shader.secondary_map_radius	576	real	read	kept	used
 weather_particle_type_definition	shader.secondary_map_zsprite_radius_scale	580	real	read	-	-
 weather_particle_type_definition	shader.reserved_after_secondary_map_zsprite_radius_scale	584	byte[20]	-	-	-
-wind_definition	velocity_lower_bound	0	real	read	kept	used
-wind_definition	velocity_upper_bound	4	real	read	kept	used
+wind_definition	velocity_lower_bound	0	real	read	kept	unused
+wind_definition	velocity_upper_bound	4	real	read	kept	unused
 wind_definition	variation_area.n	8	real[2]	-	kept	unused
 wind_definition	variation_area.yaw	8	real	read	kept	unused
 wind_definition	variation_area.pitch	12	real	read	kept	unused
