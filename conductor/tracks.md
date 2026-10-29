@@ -14,7 +14,7 @@ what became of each in [./archive/README.md](./archive/README.md).
 - [~] **Track: The native port: source/ as wasm32 in Wasmtime, under one typed import list, drawn by Swift and Metal; A1's go/no-go at p99 ≤ 8.33 ms at 4K**
   *Link: [./tracks/native_port_20261028/](./tracks/native_port_20261028/)*
 
-- [ ] **Track: The Halo UI rewrite: the original's UI redrawn as a Rust plugin at 4K from ui.map, designed first, with keyboard, mouse and the loading screen**
+- [~] **Track: The Halo UI rewrite: the original's UI redrawn as a Rust plugin at 4K from ui.map, designed first, with keyboard, mouse and the loading screen**
   *Link: [./tracks/halo_ui_20261028/](./tracks/halo_ui_20261028/)*
 
 - [ ] **Track: The map and cutscene audit: every map and cutscene played headless against stock, fixed and iterated until clean**

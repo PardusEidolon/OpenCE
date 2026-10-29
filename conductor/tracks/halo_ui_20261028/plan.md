@@ -6,12 +6,12 @@ automated checks: the workspace tests, golden frames, `census --check` and
 the design approval, which the user gives.
 
 ## Phase 1: Design
-- [ ] Task: Redraw the existing mockups as static prototypes in a design artifact, without the launcher boards; add the pause, post-game and loading screens.
-- [ ] Task: The user's approval of every screen.
+- [x] Task: Redraw the existing mockups as static prototypes in a design artifact, without the launcher boards; add the pause, post-game and loading screens. (canvas v43, https://claude.ai/artifact/MqqSyPQ8J4pcW7i9LwRbk1)
+- [ ] Task: The user's approval of every screen. (waiting on the user: the drawing against the prototypes, Phase 3 tasks 1, 3 and 4, waits on it)
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Design' (Protocol in workflow.md)
 
 ## Phase 2: Reading the game's UI
-- [ ] Task: Read the widget tree from the game's memory through the read-only views; fuzz the reader.
+- [x] Task: Read the widget tree from the game's memory through the read-only views; fuzz the reader. fde71a8e
 - [ ] Task: Signed distance field fonts from the font tags, built behind the loading screen.
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Reading the UI' (Protocol in workflow.md) (automated)
 
