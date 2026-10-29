@@ -1,0 +1,1 @@
+Task: Phase 2 'Read the widget tree from the game's memory through the read-only views; fuzz the reader'. widgets.rs reader, View::export from game.wasm's data exports, views::walk fuzz entry. Workspace tests, clippy, Swift 35/0, census, traces 63/63 pass.
