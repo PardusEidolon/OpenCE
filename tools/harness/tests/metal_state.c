@@ -2,7 +2,7 @@
 METAL_STATE.C (test)
 
 The Metal device's real translations of Direct3D 8 state into the render
-ring's values (port/macos/guest/d3d8_metal_device.c): compare functions,
+ring's values (port/wasmtime/metal/d3d8_metal_device.c): compare functions,
 blending, stencil operations, sampler addressing and filters, border
 colours, culling, write masks, and the primitives Metal has no equal of
 drawn through indices. They are the pipeline's and the depth-stencil

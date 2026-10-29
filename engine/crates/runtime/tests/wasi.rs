@@ -1,7 +1,9 @@
 //! The part of WASI the runtime supplies itself: the game's and the
 //! reference harnesses' output (`fd_write`), its empty environment
-//! (`environ_sizes_get`, `environ_get`) and its sleeps (`poll_oneoff`, under
-//! `nanosleep`), read and written through checked ranges.
+//! (`environ_sizes_get`, `environ_get`), a command's arguments and standard
+//! input (`args_sizes_get`, `args_get`, `fd_read`) and its sleeps
+//! (`poll_oneoff`, under `nanosleep`), read and written through checked
+//! ranges.
 
 use std::time::{Duration, Instant};
 
@@ -88,6 +90,69 @@ fn the_environment_is_empty() -> Result<(), Error> {
     assert_eq!(game.read(0, 8)?, [0; 8]);
     assert_eq!(game.call_i32("sizes_outside")?, 21);
     assert_eq!(game.call_i32("get")?, 0);
+    Ok(())
+}
+
+/// args_sizes_get(count, size) to 0 and 4, args_get(pointers, strings) to 16
+/// and 32, and fd_read(fd, iovs, count, read): two iovecs at 200 (3 bytes at
+/// 300, 10 at 310), the count read at 8
+const COMMAND: &str = r#"
+(module
+  (import "wasi_snapshot_preview1" "args_sizes_get" (func $sizes (param i32 i32) (result i32)))
+  (import "wasi_snapshot_preview1" "args_get" (func $get (param i32 i32) (result i32)))
+  (import "wasi_snapshot_preview1" "fd_read" (func $read (param i32 i32 i32 i32) (result i32)))
+  (memory (export "memory") 1)
+  (data (i32.const 200) "\2c\01\00\00\03\00\00\00\36\01\00\00\0a\00\00\00")
+  (func (export "sizes") (result i32) (call $sizes (i32.const 0) (i32.const 4)))
+  (func (export "get") (result i32) (call $get (i32.const 16) (i32.const 32)))
+  (func (export "get_outside") (result i32) (call $get (i32.const 16) (i32.const 65534)))
+  (func (export "read") (result i32) (call $read (i32.const 0) (i32.const 200) (i32.const 2) (i32.const 8)))
+  (func (export "read_other") (result i32) (call $read (i32.const 3) (i32.const 200) (i32.const 2) (i32.const 8))))
+"#;
+
+#[test]
+fn a_command_is_given_its_arguments() -> Result<(), Error> {
+    let runtime = Runtime::new(None)?;
+    let mut game = runtime.load(&module(COMMAND))?;
+    game.set_command(&["test.wasm", "case"], Vec::new());
+    assert_eq!(game.call_i32("sizes")?, 0);
+    assert_eq!(game.read(0, 4)?, 2u32.to_le_bytes());
+    assert_eq!(game.read(4, 4)?, 15u32.to_le_bytes());
+    assert_eq!(game.call_i32("get")?, 0);
+    assert_eq!(game.read(16, 4)?, 32u32.to_le_bytes());
+    assert_eq!(game.read(20, 4)?, 42u32.to_le_bytes());
+    assert_eq!(game.read(32, 15)?, b"test.wasm\0case\0");
+    // EFAULT for strings past the memory
+    assert_eq!(game.call_i32("get_outside")?, 21);
+    Ok(())
+}
+
+#[test]
+fn a_command_without_arguments_has_none() -> Result<(), Error> {
+    let runtime = Runtime::new(None)?;
+    let mut game = runtime.load(&module(COMMAND))?;
+    assert_eq!(game.call_i32("sizes")?, 0);
+    assert_eq!(game.read(0, 8)?, [0; 8]);
+    Ok(())
+}
+
+#[test]
+fn fd_read_reads_standard_input_until_its_end() -> Result<(), Error> {
+    let runtime = Runtime::new(None)?;
+    let mut game = runtime.load(&module(COMMAND))?;
+    game.set_command(&["test.wasm"], b"hello world\nbye".to_vec());
+    assert_eq!(game.call_i32("read")?, 0);
+    assert_eq!(game.read(8, 4)?, 13u32.to_le_bytes());
+    assert_eq!(game.read(300, 3)?, b"hel");
+    assert_eq!(game.read(310, 10)?, b"lo world\nb");
+    assert_eq!(game.call_i32("read")?, 0);
+    assert_eq!(game.read(8, 4)?, 2u32.to_le_bytes());
+    assert_eq!(game.read(300, 2)?, b"ye");
+    // at its end, nothing more
+    assert_eq!(game.call_i32("read")?, 0);
+    assert_eq!(game.read(8, 4)?, 0u32.to_le_bytes());
+    // WASI's errno 8, EBADF, for a descriptor that is not standard input
+    assert_eq!(game.call_i32("read_other")?, 8);
     Ok(())
 }
 

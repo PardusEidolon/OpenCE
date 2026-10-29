@@ -1,5 +1,5 @@
 //! The Metal device's render batches (`opence_runtime::batches`): the
-//! game's device (`port/macos/guest/d3d8_metal_device.c`, compiled into
+//! game's device (`port/wasmtime/metal/d3d8_metal_device.c`, compiled into
 //! game.wasm) writes each batch into its memory and rings
 //! `host_render_submit`; the platform copies it out, checks it
 //! (`opence_render`), hands what passed to the app's renderer with a

@@ -30,9 +30,9 @@ These are the practices the project has settled on. They come before
   names. It runs through the CLI and Nix: `nix run .#engine` runs it,
   `nix build .#engine` builds it, and `nix develop` is the shell to work
   in.
-- **Being replaced.** The Rust simulation, `bevy_ecs`, the `net` crate and
-  `port/macos` (the Hypervisor.framework VM) stay until Track A's last
-  phase removes them; do not extend them.
+- **Removed.** The Rust simulation, `bevy_ecs`, the `net` crate and
+  `port/macos` (the Hypervisor.framework VM) were removed by Track A's
+  last phase; do not bring them back.
 
 ## Still in force from `AGENTS.md`
 

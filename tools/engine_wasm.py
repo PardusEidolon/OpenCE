@@ -87,10 +87,10 @@ DATA_FILES_SOURCE = Path("port/wasmtime/data_files.c")
 # (WebAssembly has no page protection, so it hashes pages) and game.wasm's
 # own platform for them
 METAL_SOURCES = [
-    Path("port/macos/guest/d3d8_metal_device.c"),
-    Path("port/macos/guest/d3d8_metal.c"),
-    Path("port/macos/guest/d3d8_metal_post.c"),
-    Path("port/macos/guest/opence_render_writer.c"),
+    Path("port/wasmtime/metal/d3d8_metal_device.c"),
+    Path("port/wasmtime/metal/d3d8_metal.c"),
+    Path("port/wasmtime/metal/d3d8_metal_post.c"),
+    Path("port/wasmtime/metal/opence_render_writer.c"),
     Path("port/linux/src/xbox_textures.c"),
     Path("port/linux/src/d3d8_resources.c"),
     Path("port/linux/src/nv2a_vsh.c"),
@@ -223,7 +223,7 @@ def ragdoll_unit(build: Path) -> Path:
 
 
 def smaa_unit(build: Path, assets: Path = ROOT / SMAA_ASSETS) -> Path:
-    """SMAA's shader and lookup textures (port/macos/guest/d3d8_metal_post.c)
+    """SMAA's shader and lookup textures (port/wasmtime/metal/d3d8_metal_post.c)
     as a unit, laid out as tools/embed_assets.py lays them out: the shader
     as text, each byte past ASCII a space, with a NUL; size 0 for a file the
     checkout lacks. Written only when it changes, so it isn't rebuilt"""
@@ -239,6 +239,54 @@ def smaa_unit(build: Path, assets: Path = ROOT / SMAA_ASSETS) -> Path:
     if not source.exists() or source.read_text() != text:
         source.write_text(text)
     return source
+
+
+def platform_flags(build: Path, include: Path) -> List[str]:
+    """the flags of game.wasm's platform layer (port/linux/src's units)"""
+    prefix = LINUX_DIR / "include" / "halo_linux_prefix.h"
+    common = [*ABI_FLAGS, f"-isystem{include}"]
+    platform = [
+        *common,
+        *("-fno-common" if flag == "-fcommon" else flag for flag in WEB_CODE_FLAGS),
+        "-std=gnu11",
+        "-D_GNU_SOURCE",
+        "-DHALO_LINUX_PLATFORM_LAYER",
+        # WASI has no temporary names (its tmpnam is declared, never
+        # defined): msvc_wide.c's _wtmpnam only needs the buffer's length
+        "-DL_tmpnam=20",
+        "-w",
+        "-include",
+        str(prefix),
+        "-include",
+        str(build / "halo_msvc_semantics.h"),
+        f"-I{LINUX_DIR}/src",
+        f"-I{LINUX_DIR}/include",
+        "-idirafter",
+        str(XDK_INCLUDE),
+    ]
+    return platform
+
+
+def metal_flags(build: Path, include: Path) -> List[str]:
+    """the flags of game.wasm's Metal device and the units beside it
+    (METAL_SOURCES)"""
+    platform = platform_flags(build, include)
+    metal = [
+        *platform,
+        "-DHALO_METAL",
+        "-DHALO_GLES=1",
+        f"-I{os.environ.get('HALO_WASM_GLES_INCLUDE', '')}",
+        "-Iport/android/host",
+        "-Iport/android/include",
+        "-Isource",
+        "-Isource/cseries",
+        f"-I{os.environ.get('HALO_WASM_SDL_INCLUDE', '')}",
+        "-Iport/wasmtime/include",
+        "-Iport/wasmtime/metal",
+        "-Iport/third_party/zlib",
+        "-Iport/android/guest/runtime",
+    ]
+    return metal
 
 
 def units(config: Dict[str, object], build: Path, include: Path) -> List[Tuple[Path, List[str]]]:
@@ -285,46 +333,14 @@ def units(config: Dict[str, object], build: Path, include: Path) -> List[Tuple[P
         result.append((source, list(game)))
     result.append((STB_VORBIS_SOURCE, list(game)))
     result.append((CRT_SOURCE, [*common, "-std=gnu11", "-Wall", "-Werror"]))
-    platform = [
-        *common,
-        *("-fno-common" if flag == "-fcommon" else flag for flag in WEB_CODE_FLAGS),
-        "-std=gnu11",
-        "-D_GNU_SOURCE",
-        "-DHALO_LINUX_PLATFORM_LAYER",
-        # WASI has no temporary names (its tmpnam is declared, never
-        # defined): msvc_wide.c's _wtmpnam only needs the buffer's length
-        "-DL_tmpnam=20",
-        "-w",
-        "-include",
-        str(prefix),
-        "-include",
-        str(build / "halo_msvc_semantics.h"),
-        f"-I{LINUX_DIR}/src",
-        f"-I{LINUX_DIR}/include",
-        "-idirafter",
-        str(XDK_INCLUDE),
-    ]
+    platform = platform_flags(build, include)
     result.append((WIDE_SOURCE, platform))
     result.append((COMMON_SOURCE, platform))
     result.append((PLATFORM_DATA_SOURCE, platform))
     result.append((DSOUND_SOURCE, platform))
     result.append((LOG_SOURCE, platform))
     result.append((DATA_FILES_SOURCE, platform))
-    metal = [
-        *platform,
-        "-DHALO_METAL",
-        "-DHALO_GLES=1",
-        f"-I{os.environ.get('HALO_MACOS_GLES_INCLUDE', '')}",
-        "-Iport/android/host",
-        "-Iport/android/include",
-        "-Isource",
-        "-Isource/cseries",
-        f"-I{os.environ.get('HALO_MACOS_SDL_INCLUDE', '')}",
-        "-Iport/macos/include",
-        "-Iport/macos/guest",
-        "-Iport/third_party/zlib",
-        "-Iport/android/guest/runtime",
-    ]
+    metal = metal_flags(build, include)
     for source in METAL_SOURCES:
         result.append((source, list(metal)))
     result.append((smaa_unit(build).relative_to(ROOT), [*common, "-std=gnu11", "-Wall", "-Werror"]))

@@ -116,17 +116,17 @@ the GPU to finish the work last fenced for a slot */
 void host_gl_fence_frame(unsigned int slot);
 void host_gl_wait_frame(unsigned int slot);
 
-/* ---------- the macOS app's renderer (port/macos/include/opence_render.h) */
+/* ---------- the macOS app's renderer (port/wasmtime/include/opence_render.h) */
 
 /* the doorbell: the host copies out and checks the `size` bytes of render
-batch at guest address `batch` (port/macos/host/host_render.c). The number
+batch at guest address `batch` (the macOS VM host's host_render.c, removed). The number
 of its commands the host refused, or -1 if it refused the batch whole */
 int host_render_submit(unsigned int batch, unsigned int size);
 
-/* the physics bridge (port/macos/include/host_physics.h): the host carries
+/* the physics bridge (port/wasmtime/include/host_physics.h): the host carries
 out the `size` bytes of batch at guest address `batch`, steps its world and
 writes the poses into the `results_size` bytes at `results`
-(port/macos/host/host_physics.c). The number of commands refused, or -1 if
+(the macOS VM host's host_physics.c, removed). The number of commands refused, or -1 if
 it refused the batch whole */
 int host_physics_step(unsigned int batch, unsigned int size, unsigned int results, unsigned int results_size);
 

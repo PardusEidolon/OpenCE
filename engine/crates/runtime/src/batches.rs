@@ -1,13 +1,13 @@
 //! The Metal device's render batches. The game's Direct3D is the Metal
-//! device compiled into game.wasm (`port/macos/guest/d3d8_metal_device.c`),
+//! device compiled into game.wasm (`port/wasmtime/metal/d3d8_metal_device.c`),
 //! which writes its commands into a batch in its own memory
-//! (`port/macos/include/opence_render.h`) and rings `host_render_submit`.
+//! (`port/wasmtime/include/opence_render.h`) and rings `host_render_submit`.
 //! Each batch is copied out, checked by one [`RenderValidator`] that
 //! keeps the objects of the batches before it, and what passed is handed
 //! to the app's renderer ([`RenderSink`]) with a read-only view of the
 //! memory its uploads name, then to the plugins at the render hook. The
 //! answer is how many commands were refused, or -1 for a batch refused
-//! whole, as the VM's host answers (`port/macos/host/host_render.c`).
+//! whole, as the VM's host answered (its `host_render.c`, now removed).
 //!
 //! The renderer answers with the textures it read back ([`Readback`]),
 //! each written into the game's memory only where a ReadTexture of the

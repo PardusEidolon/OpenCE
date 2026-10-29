@@ -1,8 +1,8 @@
 /*
 PHYSICS_JOLT.C
 
-The game's side of the physics bridge (port/macos/include/host_physics.h,
-docs/macos_host.md "Physics"). The game writes a batch of commands in its
+The game's side of the physics bridge (port/wasmtime/include/host_physics.h,
+the macOS VM host, removed). The game writes a batch of commands in its
 own memory and gives it to the host with host_physics_step, which checks
 it, carries it out on its Jolt world, steps the world and writes every
 ragdoll's and body's pose into the results buffer before it returns: one

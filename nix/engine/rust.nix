@@ -45,7 +45,7 @@ rec {
     (root + /engine/fuzz/Cargo.toml)
     (root + /engine/fuzz/fuzz_targets)
     (root + /tools/traces)
-    (root + /port/macos/include/opence_render.h)
+    (root + /port/wasmtime/include/opence_render.h)
     (root + /tools/engine_build.py)
   ];
   commonArgs = {

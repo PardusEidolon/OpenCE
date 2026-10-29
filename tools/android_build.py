@@ -347,8 +347,7 @@ def guest_image_build(
     imports_outputs: List[Path],
     defines: Sequence[str] = (),
 ) -> Path:
-    """The guest image's rules, shared by the Android build and the macOS one
-    (tools/macos_build.py): musl, the game, the platform layer and the guest
+    """The guest image's rules, for the Android build: musl, the game, the platform layer and the guest
     runtime compiled for the ILP32 guest, and linked to <build>/halo_guest.elf.
 
     rule_prefix prefixes the rules (and, in upper case, their descriptions);
@@ -576,9 +575,9 @@ def guest_image_build(
         ]
     )
     if "-DHALO_METAL" in defines:
-        # the physics bridge's format (port/macos/include/host_physics.h),
+        # the physics bridge's format (port/wasmtime/include/host_physics.h),
         # which the port's game units write
-        game_cflags += f" -I{Path('port/macos/include')}"
+        game_cflags += f" -I{Path('port/wasmtime/include')}"
     for source in game_sources(config):
         cflags = game_cflags
         if source.as_posix() == "source/main/main.c":
@@ -622,17 +621,17 @@ def guest_image_build(
     metal = "-DHALO_METAL" in defines
     if metal:
         # the macOS app's renderer: Direct3D on the host's Metal through the
-        # command ring (port/macos/guest), in place of the GL renderer and the
+        # command ring (port/wasmtime/metal), in place of the GL renderer and the
         # passes drawn with it (the high-res HUD's and text's textures and the
         # menus' art are Metal textures: xgpu_metal_rgba_texture, text_hires.c)
-        platform_cflags += f" -I{Path('port/macos/include')}"
+        platform_cflags += f" -I{Path('port/wasmtime/include')}"
         guest_host_only |= {"d3d8_gl.c", "xgpu_post.c"}
     for source in sorted((LINUX_DIR / "src").glob("*.c")):
         if source.name.startswith("posix_") or source.name in guest_host_only:
             continue
         objects.append(guest_object(source, platform_cflags))
     if metal:
-        for source in sorted(Path("port/macos/guest").glob("*.c")):
+        for source in sorted(Path("port/wasmtime/metal").glob("*.c")):
             objects.append(guest_object(source, platform_cflags))
     # the high-res HUD's textures (port/assets/hud; port/linux/src/hud_hires.c)
     for source in hud_assets_build(n, rule_prefix, gen_dir / "hud_hires_assets.c"):

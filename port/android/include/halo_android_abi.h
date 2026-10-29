@@ -65,7 +65,7 @@ struct halo_guest_boot
 	uint32_t page_size;
 };
 
-/* the macOS host's write tracking (port/macos/host/host_watch.c): a table in
+/* the macOS host's write tracking (the macOS VM host's host_watch.c, removed): a table in
 guest memory that the guest shares with host_memory_watch_share and reads
 without asking the host, which writes it. The host write-protects the pages
 of the window in the VM (in its own page size, 16 KB); the first write to a

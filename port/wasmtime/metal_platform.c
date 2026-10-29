@@ -1,11 +1,11 @@
 /*
 METAL_PLATFORM.C
 
-The platform the Metal device (port/macos/guest/d3d8_metal_device.c and the
+The platform the Metal device (port/wasmtime/metal/d3d8_metal_device.c and the
 units beside it) needs inside game.wasm, where the app's Swift renderer
 draws its batches: the drawable's size, the contiguous window's blocks, the
 frame's start for the memory watch, and none of the high-res HUD, text or
-menu art (as port/macos/tests/vm_hires_stubs.c), so that every texture is
+menu art (as the VM's hires stubs did), so that every texture is
 the game's own.
 
 The memory watch is the web build's (port/web/src/web_memory_watch.c),

@@ -256,7 +256,7 @@ def main() -> None:
     # SMAA's shader, as text a GLSL compiler takes (ASCII, ending in a NUL),
     # and its lookup textures (xgpu_post.c); each of size 0 that the
     # checkout does not have. The OpenGL ES renderer has no SMAA; the macOS
-    # app's Metal one (port/macos/guest/d3d8_metal_post.c) has.
+    # app's Metal one (port/wasmtime/metal/d3d8_metal_post.c) has.
     lines.append("#if !defined(HALO_GLES) || defined(HALO_METAL)")
     present = dict(smaa_files())
     for name, symbol in SMAA_FILES:

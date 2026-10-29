@@ -1,5 +1,6 @@
 """Records the native engine's reference movement traces: the reference
-game (build/macos/halo_host, `ninja macos`) hosts bloodgulch headless with
+game (build/macos/halo_host, the VM's, removed in native_port Phase 7, so
+the traces are kept as records) hosted bloodgulch headless with
 no menus while debug.movement_trace plays each script of inputs, and its
 log's "movement trace:" lines (port/linux/game/movement_trace.c), or a
 vehicle script's "vehicle trace:" lines, are written to
@@ -125,7 +126,7 @@ def main() -> int:
     parser.add_argument("scripts", nargs="*", default=list(SCRIPTS + VEHICLE_SCRIPTS))
     arguments = parser.parse_args()
     if not (HOST.is_file() and IMAGE.is_file()):
-        print("needs `ninja macos`", file=sys.stderr)
+        print("needs the VM's build/macos/halo_host (removed: the traces are records)", file=sys.stderr)
         return 1
     TRACES.mkdir(parents=True, exist_ok=True)
     for script in arguments.scripts:

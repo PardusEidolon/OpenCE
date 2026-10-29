@@ -4,12 +4,12 @@ nv2a_psh.c), which OpenCE.app's renderer draws with.
 Every vertex program of the game (source/rasterizer/xbox/
 rasterizer_xbox_vertex_shaders_data.inc), and its per-pixel lighting variant
 where it has one, and pixel shader keys of each of the translators' paths are
-translated in the VM by the guest build's own objects (port/macos/tests/
-vm_nv2a.c), then all compiled by Metal with the renderer's options
-(tools/msl_check.swift). The GLSL the GL builds draw with is written by the
+translated by the translators compiled as game.wasm compiles them, into a
+WASI command run in its runtime (port/wasmtime/tests/nv2a_print.c), then all
+compiled by Metal with the renderer's options (tools/msl_check.swift). The GLSL the GL builds draw with is written by the
 same code: its output must not change with the MSL's.
 
-Needs `ninja macos` in `nix develop`, and a Metal device.
+Needs `nix develop`, and a Metal device.
 """
 
 import os
@@ -25,18 +25,17 @@ import pytest
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
-from tools import macos_guest_image  # noqa: E402
+from tools import engine_wasm, engine_wasm_cc, harness  # noqa: E402
 
-TRANSLATORS = [macos_guest_image.OBJECTS / f"port/linux/src/{name}.o" for name in ("nv2a_vsh", "nv2a_psh", "xgpu_text")]
+TRANSLATORS = [ROOT / f"port/linux/src/{name}.c" for name in ("nv2a_vsh", "nv2a_psh", "xgpu_text")]
+DRIVER = [ROOT / "port/wasmtime/tests/nv2a_print.c", ROOT / "port/wasmtime/tests/nv2a_stubs.c"]
 DATA = ROOT / "source/rasterizer/xbox/rasterizer_xbox_vertex_shaders_data.inc"
 TABLE = ROOT / "source/rasterizer/xbox/rasterizer_xbox_vertex_shaders.c"
 CHECK = ROOT / "tools/msl_check.swift"
 
 pytestmark = [
     pytest.mark.skipif(sys.platform != "darwin" or platform.machine() != "arm64", reason="arm64 macOS only"),
-    pytest.mark.skipif(
-        not macos_guest_image.available() or shutil.which("ninja") is None, reason="needs `ninja macos` in nix develop"
-    ),
+    pytest.mark.skipif(not os.environ.get("HALO_WASM_BUILTINS"), reason="needs nix develop"),
     pytest.mark.skipif(shutil.which("xcrun") is None, reason="needs Xcode's swift"),
 ]
 
@@ -88,29 +87,34 @@ def vertex_programs():
 
 
 @pytest.fixture(scope="module")
-def vm_nv2a(tmp_path_factory):
-    missing = [str(obj) for obj in TRANSLATORS if not obj.is_file()]
-    if missing:
-        pytest.skip("needs `ninja macos`: " + ", ".join(missing))
-    work = tmp_path_factory.mktemp("vm_nv2a")
-    return macos_guest_image.build_guest_image(
-        [ROOT / "port/macos/tests/vm_nv2a.c", ROOT / "port/macos/tests/vm_nv2a_stubs.c"],
-        work,
-        "vm_nv2a",
-        like="port/linux/src/xgpu_text.c",
-        objects=TRANSLATORS,
+def nv2a_print(tmp_path_factory):
+    """the driver and the translators as one WASI command, the translators
+    with game.wasm's flags for them (engine_wasm.metal_flags; wasm_command
+    gives the ABI's own)"""
+    work = tmp_path_factory.mktemp("nv2a_print")
+    engine_wasm.semantics_header(work)
+    include, _ = engine_wasm.wasi_paths(engine_wasm_cc.TARGET)
+    flags = engine_wasm.metal_flags(work, include)[len(engine_wasm.ABI_FLAGS) + 1 :]
+    module = work / "nv2a_print.wasm"
+    run = subprocess.run(
+        engine_wasm_cc.wasm_command([*flags, *map(str, DRIVER + TRANSLATORS)], module),
+        capture_output=True,
+        text=True,
+        cwd=ROOT,
     )
+    assert run.returncode == 0, run.stderr
+    return module
 
 
-def translate(image, folder, *arguments):
-    run = macos_guest_image.run_guest(image, [str(argument) for argument in arguments], folder)
+def translate(module, folder, *arguments):
+    run = harness.process(module, [str(argument) for argument in arguments], capture_output=True, text=True, cwd=folder)
     return run.returncode, run.stdout, run.stderr
 
 
 @pytest.fixture(scope="module")
-def shaders(vm_nv2a, tmp_path_factory):
+def shaders(nv2a_print, tmp_path_factory):
     """{name: (stage, glsl, msl)} of every case"""
-    folder = tmp_path_factory.mktemp("vm_nv2a_run")
+    folder = tmp_path_factory.mktemp("nv2a_print_run")
     cases = {}
     for index, words in vertex_programs():
         hex_words = ["%x" % word for word in words]
@@ -119,28 +123,28 @@ def shaders(vm_nv2a, tmp_path_factory):
             outputs = []
             for language in ("glsl", "msl"):
                 code, out, err = translate(
-                    vm_nv2a, folder, "vertex", language, "%x" % packed, "%x" % present, "unlit", *hex_words
+                    nv2a_print, folder, "vertex", language, "%x" % packed, "%x" % present, "unlit", *hex_words
                 )
                 assert code == 0, f"{name} {language}: {err}"
                 outputs.append(out)
             cases[name] = ("vertex", *outputs)
         outputs = []
         for language in ("glsl", "msl"):
-            code, out, err = translate(vm_nv2a, folder, "vertex", language, "0", "ffff", "lit", *hex_words)
+            code, out, err = translate(nv2a_print, folder, "vertex", language, "0", "ffff", "lit", *hex_words)
             outputs.append(out if code == 0 else None)
         if outputs[1] is not None:
             cases[f"vertex_{index}_lit"] = ("vertex", *outputs)
     for case in PIXEL_CASES:
         outputs = []
         for language in ("glsl", "msl"):
-            code, out, err = translate(vm_nv2a, folder, "pixel", language, case)
+            code, out, err = translate(nv2a_print, folder, "pixel", language, case)
             assert code == 0, f"{case} {language}: {err}"
             outputs.append(out)
         cases[f"pixel_{case}"] = ("fragment", *outputs)
     for stage, mode, sampler in TEXTURE_MODES:
         outputs = []
         for language in ("glsl", "msl"):
-            code, out, err = translate(vm_nv2a, folder, "pixel", language, "mode", stage, "0x%x" % mode, sampler)
+            code, out, err = translate(nv2a_print, folder, "pixel", language, "mode", stage, "0x%x" % mode, sampler)
             assert code == 0, f"mode {stage} {mode:#x} {sampler} {language}: {err}"
             outputs.append(out)
         cases[f"pixel_mode_{stage}_{mode:x}_{sampler}"] = ("fragment", *outputs)
@@ -149,7 +153,7 @@ def shaders(vm_nv2a, tmp_path_factory):
 
 def metal_compile(paths):
     # Xcode's Swift, outside the Nix toolchain, as the app is built
-    # (tools/macos_build.py)
+    # (tools/engine_build.py)
     environment = {
         key: value
         for key, value in os.environ.items()
@@ -267,8 +271,8 @@ def test_metal_refuses_a_mismatched_uniform_layout(shaders, tmp_path):
 
 
 def test_the_renderer_compiles_with_the_checked_options():
-    # tools/msl_check.swift compiles as MetalRenderer.libraryOptions does
-    renderer = (ROOT / "port/macos/app/Sources/OpenCERender/MetalRenderer.swift").read_text()
+    # tools/msl_check.swift compiles as GameRenderer.libraryOptions does
+    renderer = (ROOT / "engine/app/Sources/OpenCEEngineRender/GameRenderer.swift").read_text()
     check = CHECK.read_text()
     options = re.findall(r"options\.(\w+) = (\S+)", check)
     assert len(options) == 3

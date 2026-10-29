@@ -73,6 +73,6 @@
 ## Removed
 - The launcher.
 - The Hypervisor.framework VM (`port/macos`) and the native Rust
-  simulation, once Track A replaces them.
+  simulation (native_port Phase 7).
 - Linux, Windows, Android and browser builds. Their hosts stay in `port/`
   as a reference for what the game expects of its platform.

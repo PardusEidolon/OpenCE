@@ -20,15 +20,16 @@ listed at the end.
 | `engine/app/` | The Swift app: the window, input, Metal, sound and the dev panel |
 | `engine/census/` | The census's data: every function of the original and its class |
 | `engine/fuzz/` | The readers' fuzz targets |
-| `nix/` | The flake's cells (`repo`, `macos`, `engine`) |
+| `nix/` | The flake's cells (`repo`, `engine`) |
 | `tools/` | `engine_build.py`, the reference scripts (`engine_*_reference.py`), the golden frames (`engine_golden.py`), the web build's flags (`web_build.py`, which `game.wasm` starts from) and tests |
-| `port/` | The old ports: `port/macos` (the Hypervisor.framework VM) until Track A removes it; `port/linux`, `port/android`, `port/web` and `port/windows` as reference for what the game expects of its host. `port/third_party/` holds vendored libraries |
+| `port/` | The old ports, kept as reference for what the game expects of its host: `port/linux`, `port/android`, `port/web` and `port/windows`. `port/wasmtime` is `game.wasm`'s platform layer and Metal device. `port/third_party/` holds vendored libraries |
 | `conductor/` | The tracks: plans, specs and the workflow |
 | `docs/` | Design notes: `engine.md`, `census.md`, `retrospective_fork_in_the_road.md`, `custom_edition_caches.md` |
 | `assets/` | Game data for local runs (gitignored) |
 
-Being replaced, and not to be extended: the Rust simulation (`sim`,
-`campaign`, `script`, `physics`, `net`, `bevy_ecs`) and `port/macos`.
+Removed by Track A's last phase: the Rust simulation (`sim`, `campaign`,
+`script`, `physics`, `net`, `bevy_ecs`) and `port/macos`, the
+Hypervisor.framework VM. Do not bring them back.
 
 ## Building
 

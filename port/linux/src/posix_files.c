@@ -17,7 +17,7 @@ the host ABI and _FILE_OFFSET_BITS=64.
 #include "posix.h"
 
 #ifdef __APPLE__
-/* (the macOS host builds this file too, port/macos/host: Darwin names
+/* (the macOS VM host, now removed, built this file too: Darwin names
 struct stat's times differently) */
 #define st_atim st_atimespec
 #define st_mtim st_mtimespec

@@ -63,7 +63,7 @@ NEGATIVE_CONTROLS = {
 
 
 def generated(fault=None):
-    device = read("port/macos/guest/d3d8_metal_device.c")
+    device = read("port/wasmtime/metal/d3d8_metal_device.c")
     xdk = read("port/include/xdk/xdk_pdb.h")
     d3d8 = read("port/include/xdk/xdk_d3d8.h")
     config = "\n".join(enum_with(xdk, member) for member in ENUMS) + "\n"
@@ -80,7 +80,7 @@ def generated(fault=None):
     if fault:
         code = mutated(code, *fault)
     return (
-        ("opence_render.h", read("port/macos/include/opence_render.h")),
+        ("opence_render.h", read("port/wasmtime/include/opence_render.h")),
         ("config.inc", config),
         ("under_test.inc", code + "\n"),
     )

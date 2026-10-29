@@ -10,10 +10,10 @@ Upstream: https://github.com/jrouwe/JoltPhysics, release `v5.6.0`, commit
 
 Tree checksum: `28620a7079e04a38bde6432fb4332137a57e40ce9c3359d45650bc6db1b94081`
 (the SHA-256 of each file's path and SHA-256, in path order, without this
-README), checked by `tools/test_macos_physics.py`.
+README), checked by the VM's physics test (removed with it).
 
 Only the macOS host uses it: the ragdolls and the effects' debris
-(`port/macos/host/physics`, reached through the C interface `physics.h`).
+(the VM host's `physics`, now removed, reached through the C interface `physics.h`).
 It is built as C++17, with `JPH_CROSS_PLATFORM_DETERMINISTIC` and without
 fused multiply-add, and stepped by the calling thread and three of its
 worker threads (`JobSystemThreadPool`) with its deterministic simulation on,

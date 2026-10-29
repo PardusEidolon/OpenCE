@@ -16,7 +16,7 @@ guard let device = MTLCreateSystemDefaultDevice() else {
     print("no Metal device")
     exit(2)
 }
-// (MetalRenderer.libraryOptions)
+// (GameRenderer.libraryOptions)
 let options = MTLCompileOptions()
 options.preserveInvariance = true
 options.mathMode = .safe

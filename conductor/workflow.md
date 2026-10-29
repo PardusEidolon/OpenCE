@@ -106,8 +106,8 @@ All tasks follow a strict lifecycle:
         The automated tests have passed. For manual verification, please follow these steps:
 
         **Manual Verification Steps:**
-        1.  **Build the app with the command:** `nix build .#app`
-        2.  **Open it:** `open result/OpenCE.app`
+        1.  **Build the app with the command:** `nix build .#engine`
+        2.  **Open it:** `open "result/Applications/OpenCE Engine.app"`
         3.  **Confirm that you see:** The main menu at the display's native resolution, with the frame-rate overlay holding 120fps.
         ```
 
@@ -199,7 +199,7 @@ swift-format lint --recursive <swift sources>
 
 ### Finishing a Track
 ```bash
-nix build .#app       # the final .app; must succeed before the track is done
+nix build .#engine    # the final .app; must succeed before the track is done
 ```
 
 ## Testing Requirements

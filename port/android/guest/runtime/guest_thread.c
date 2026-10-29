@@ -6,7 +6,7 @@ Threads for the guest's musl runtime.
 musl finds the current thread's struct pthread through the thread pointer
 register, which in this process belongs to the host's bionic. The guest's
 thread pointer is instead kept by the host per thread (host_get_tp); in the
-macOS host's VM (HALO_GUEST_VM, docs/macos_host.md) the register is the
+macOS host's VM (HALO_GUEST_VM; the VM is removed) the register is the
 guest's own, and holds it, which costs no exit to the host. Either way
 every guest thread is started by the host on a stack inside guest memory
 (host_thread_create), since ILP32 code cannot address a stack above 4 GB.

@@ -34,20 +34,13 @@ in
 
   version = inputs.self.shortRev or inputs.self.dirtyShortRev or "dirty";
 
-  # what tools/macos_build.py takes from the environment. The guest's
-  # compiler is the unwrapped clang: the wrapper's macOS flags would
-  # reach the arm64_32 guest's compiles.
+  # what tools/engine_wasm.py takes from the environment
   buildEnvironment = {
-    HALO_MACOS_GUEST_CC = "${llvm.clang-unwrapped}/bin/clang";
-    HALO_MACOS_LLD = "${llvm.lld}/bin/ld.lld";
-    HALO_MACOS_AR = "${llvm.llvm}/bin/llvm-ar";
-    # (GLES2, GLES3 and KHR: the guest's OpenGL ES declarations)
-    HALO_MACOS_GLES_INCLUDE = "${pkgs.libglvnd.dev}/include";
-    # (the SDL3 the host links and whose headers the guest compiles with:
-    # 3.4.16, as tools/android_build.py's SDL_TAG)
-    HALO_MACOS_SDL_INCLUDE = "${pkgs.sdl3.dev}/include";
-    HALO_MACOS_SDL_LIB = "${pkgs.sdl3}/lib";
-    HALO_MACOS_CODESIGN = "${pkgs.darwin.sigtool}/bin/codesign";
+    # (GLES2, GLES3 and KHR: the OpenGL ES declarations the shader
+    # translators compile with, and SDL3 3.4.16's headers, which the
+    # platform layer's units include: as tools/android_build.py's SDL_TAG)
+    HALO_WASM_GLES_INCLUDE = "${pkgs.libglvnd.dev}/include";
+    HALO_WASM_SDL_INCLUDE = "${pkgs.sdl3.dev}/include";
     # game.wasm (tools/engine_wasm.py): the unwrapped clang, for its wasm32
     # target, wasi-libc for wasm32-wasip1-threads (the game) and for
     # wasm32-wasip1 (the reference harnesses)
@@ -71,9 +64,7 @@ in
     pkgs.cargo-nextest
     pkgs.cargo-mutants
     pkgs.cargo-insta
-    pkgs.rust-cbindgen
     pkgs.cargo-deny
-    pkgs.darwin.sigtool
     # (`nom build`, `nom develop`: nix's builds, as a tree)
     pkgs.nix-output-monitor
   ];
@@ -81,13 +72,6 @@ in
     pkgs.sdl3
     pkgs.apple-sdk_26
   ];
-
-  # the guest's C library, where tools/macos_build.py would download it
-  # (the sandbox has no network)
-  musl = pkgs.fetchurl {
-    url = "https://musl.libc.org/releases/musl-1.2.5.tar.gz";
-    hash = "sha256-qaEYu+hNh2TaDqDSizqz+uhHf8fkCF2QECuFlvx8deQ=";
-  };
 
   # crane with the repository's Rust (the engine's packages and checks)
   craneLib = (inputs.crane.mkLib pkgs).overrideToolchain (_: rust);

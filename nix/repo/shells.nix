@@ -15,7 +15,7 @@ in
       # Xcode component nixpkgs cannot carry: tools/engine_build.py)
       # (and the pre-commit hooks installed: nix/repo/hooks.nix)
       shellHook = hooks.shellHook + ''
-        echo "OpenCE macOS shell: python configure.py && ninja macos"
+        echo "OpenCE: nix run .#engine plays the game; python tools/engine_build.py builds it"
         if ! env -u SDKROOT -u DEVELOPER_DIR /usr/bin/xcrun -sdk macosx metal --version >/dev/null 2>&1; then
           echo "Xcode's Metal toolchain is missing: xcodebuild -downloadComponent MetalToolchain"
         fi

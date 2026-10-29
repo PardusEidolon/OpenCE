@@ -1,7 +1,7 @@
 /*
 PHYSICS_JOLT.H
 
-The game's side of the physics bridge (port/macos/include/host_physics.h):
+The game's side of the physics bridge (port/wasmtime/include/host_physics.h):
 the batch it writes each tick for the host's Jolt world, and the poses it
 reads back. Ragdolls and debris are for show only; nothing here changes
 the game's state.

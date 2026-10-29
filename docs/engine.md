@@ -76,7 +76,7 @@ plugin off the reference traces match as they do without plugins.
 ## Drawing
 
 `game.wasm` keeps the original's rasterizer and draws through a Direct3D 8
-device written for it in C (`port/macos/guest/d3d8_metal_device.c`). The
+device written for it in C (`port/wasmtime/metal/d3d8_metal_device.c`). The
 device writes Metal-shaped commands into batches; the runtime decodes and
 checks each batch, and `GameRenderer` carries it out.
 

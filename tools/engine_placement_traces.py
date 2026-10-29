@@ -1,6 +1,6 @@
 """Records the reference game's placements, for the native engine's
-placement checks: the reference game (build/macos/halo_host, `ninja macos`)
-hosts each stock map headless with no menus (a campaign map as co-op)
+placement checks: the reference game (build/macos/halo_host, the VM's,
+removed in native_port Phase 7, so the traces are kept as records) hosted each stock map headless with no menus (a campaign map as co-op)
 while debug.placement_trace logs every object its scenario places
 (port/linux/game/placement_trace.c), and the "placement trace:" lines are
 written to build/placement_traces/<map>.csv, a row an object, with the
@@ -183,7 +183,7 @@ def main() -> int:
     parser.add_argument("maps", nargs="*", default=list(MULTIPLAYER + CAMPAIGN))
     arguments = parser.parse_args()
     if not (HOST.is_file() and IMAGE.is_file()):
-        print("needs `ninja macos`", file=sys.stderr)
+        print("needs the VM's build/macos/halo_host (removed: the traces are records)", file=sys.stderr)
         return 1
     TRACES.mkdir(parents=True, exist_ok=True)
     for name in arguments.maps:

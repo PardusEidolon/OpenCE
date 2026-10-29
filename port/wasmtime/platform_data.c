@@ -5,7 +5,7 @@ The variables of the Xbox's libraries that the game reads and writes
 directly, not through a call: the input library's device types, whose
 addresses name a kind of device. A variable can't be imported, so these
 live in game.wasm. (Direct3D's render and texture states are the Metal
-device's, port/macos/guest/d3d8_metal_device.c.) The Linux port defines
+device's, port/wasmtime/metal/d3d8_metal_device.c.) The Linux port defines
 the same ones (port/linux/src/xinput_sdl.c), and platform.h includes the
 SDK's headers as its platform layer does.
 */

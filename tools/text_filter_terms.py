@@ -438,12 +438,13 @@ def check(texts):
     the harness builds it"""
     sys.path.insert(0, str(ROOT / "tools"))
     sys.path.insert(0, str(ROOT / "tools" / "harness" / "tests"))
-    from harness import build  # noqa: E402
+    from harness import build, process  # noqa: E402
     from test_text_filter import generated  # noqa: E402
 
     executable = build("text_filter", generated(real=True))
-    result = subprocess.run(
-        [str(executable), "--censor", "1", "1", "1"],
+    result = process(
+        executable,
+        ["--censor", "1", "1", "1"],
         input="\n".join(texts) + "\n",
         capture_output=True,
         text=True,

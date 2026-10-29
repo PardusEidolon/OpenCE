@@ -1,5 +1,5 @@
-//! The renderer's commands (port/macos/include/opence_render.h): the batches
-//! the game's Direct3D 8 device (port/macos/guest/d3d8_metal_device.c,
+//! The renderer's commands (port/wasmtime/include/opence_render.h): the batches
+//! the game's Direct3D 8 device (port/wasmtime/metal/d3d8_metal_device.c,
 //! compiled into game.wasm) writes, decoded and checked before Metal sees
 //! them.
 //!

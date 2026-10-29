@@ -1,6 +1,6 @@
 """display.frame_time (port/linux/game/frame_time.c): the setting exists,
 is off by default, and is in the settings table; the game draws it only
-when it is on (tools/test_macos_frames.py captures it)."""
+when it is on (the golden frames capture it)."""
 
 import re
 from pathlib import Path

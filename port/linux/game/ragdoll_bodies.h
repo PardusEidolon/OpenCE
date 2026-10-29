@@ -2,7 +2,7 @@
 RAGDOLL_BODIES.H
 
 A dead biped's ragdoll as the host's Jolt world builds it
-(port/macos/include/host_physics.h): its parts (one body each, following a
+(port/wasmtime/include/host_physics.h): its parts (one body each, following a
 node of the model), their shapes, masses and joints. Made from the model's
 nodes and the collision model's geometry for each node, and adjusted by
 port/assets/ragdolls/ragdolls.txt.

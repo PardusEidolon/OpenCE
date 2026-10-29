@@ -228,9 +228,8 @@ def bundle(executable: Path, wasm: Path, codesign: str, version: str, app: Path)
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--out", type=Path, default=ROOT / "build" / "engine")
-    # (Apple's: sigtool signs Mach-O files only, not bundles, as
-    # tools/macos_build.py's HALO_MACOS_APP_CODESIGN)
-    parser.add_argument("--codesign", default=os.environ.get("HALO_MACOS_APP_CODESIGN", "/usr/bin/codesign"))
+    # (Apple's: nixpkgs' sigtool signs Mach-O files only, not bundles)
+    parser.add_argument("--codesign", default=os.environ.get("HALO_APP_CODESIGN", "/usr/bin/codesign"))
     parser.add_argument("--version", default="0.1.0")
     parser.add_argument("--test", action="store_true", help="run the package's XCTests instead of making the app")
     parser.add_argument("--filter", help="with --test, only the tests whose names match this")

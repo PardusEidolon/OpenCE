@@ -30,7 +30,7 @@ in
   inherit engine-rust;
 
   # the app around engine-rust. Its Swift is Xcode's, from outside the
-  # store, so it builds without the sandbox as OpenCE.app does
+  # store, so it builds without the sandbox
   engine = pkgs.stdenv.mkDerivation (
     buildEnvironment
     // {

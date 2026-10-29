@@ -504,7 +504,7 @@ int host_sdl_show_toast(const char *message, int duration, int gravity, int x, i
 #ifdef __ANDROID__
 	return SDL_ShowAndroidToast(message, duration, gravity, x, y) ? 1 : 0;
 #else
-	/* (the macOS host, port/macos/host, builds this file too: no toasts) */
+	/* (the macOS VM host, now removed, built this file too: no toasts) */
 	(void)message;
 	(void)duration;
 	(void)gravity;

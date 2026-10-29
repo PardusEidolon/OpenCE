@@ -259,6 +259,6 @@ def test_the_cap_is_the_hosts():
     header = read("port/linux/game/physics_debris.h")
     first = int(re.search(r"#define PHYSICS_DEBRIS_FIRST_ID (\d+)", header)[1])
     most = int(re.search(r"#define PHYSICS_DEBRIS_MAX (\d+)", header)[1])
-    bodies = int(re.search(r"#define HOST_PHYSICS_BODIES_MAX (\d+)", read("port/macos/include/host_physics.h"))[1])
+    bodies = int(re.search(r"#define HOST_PHYSICS_BODIES_MAX (\d+)", read("port/wasmtime/include/host_physics.h"))[1])
     assert first + most - 1 <= bodies
     assert "(1 to %d)" % most in read("port/linux/src/port_config.c")

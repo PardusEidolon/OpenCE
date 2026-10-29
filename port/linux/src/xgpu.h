@@ -307,10 +307,10 @@ struct xgpu_render_target
 struct xgpu_render_target *xgpu_render_target_find(unsigned long data);
 
 #ifdef HALO_METAL
-/* ---------- Metal (port/macos/guest/d3d8_metal.c)
+/* ---------- Metal (port/wasmtime/metal/d3d8_metal.c)
 
 The macOS app's device writes Metal-level commands to the host's ring
-(port/macos/include/opence_render.h) in place of GL calls. Its textures,
+(port/wasmtime/include/opence_render.h) in place of GL calls. Its textures,
 buffers and render targets are ring objects, named by ids the device gives
 out; "GLuint" texture names in the interfaces above are those ids there. */
 
@@ -367,7 +367,7 @@ void xgpu_metal_target_scale(unsigned long width, unsigned long height, BOOL dep
 void xgpu_metal_render_targets_evict(void);
 
 /* display.anti_aliasing's passes in the Metal Shading Language
-(port/macos/guest/d3d8_metal_post.c): FXAA, and SMAA's three */
+(port/wasmtime/metal/d3d8_metal_post.c): FXAA, and SMAA's three */
 enum
 {
 	_metal_post_fxaa,

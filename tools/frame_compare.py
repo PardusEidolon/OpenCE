@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""Compares a captured frame with its approved reference (docs/macos_host.md,
-"Frame captures").
+"""Compares a captured frame with its approved reference (the golden frames,
+docs/engine.md).
 
     python tools/frame_compare.py frame.png reference.png [--difference out.png]
         [--threshold 8] [--fraction 0.005] [--largest 64]

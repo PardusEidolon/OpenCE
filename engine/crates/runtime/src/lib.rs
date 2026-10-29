@@ -22,6 +22,7 @@ use std::sync::{Arc, Mutex, MutexGuard, PoisonError};
 mod audio;
 mod batches;
 pub mod benchmark;
+mod command;
 mod config;
 pub mod control;
 mod controls;
@@ -237,6 +238,8 @@ struct Shared {
     sockets: Mutex<net::Sockets>,
     /// the plugins, called at their hooks
     plugins: plugins::Plugins,
+    /// a command's arguments and standard input
+    command: Mutex<command::Command>,
 }
 
 /// the record the stubs keep, in the store
@@ -444,6 +447,7 @@ pub fn answers(name: &str) -> bool {
     name == PROC_EXIT
         || name == FD_WRITE
         || threads::handler(name).is_some()
+        || command::handler(name).is_some()
         || memory::handler(name).is_some()
         || system::handler(name).is_some()
         || batches::handler(name).is_some()
@@ -540,6 +544,7 @@ impl Runtime {
             let writes = name == FD_WRITE;
             let threads = threads::handler(&name);
             let serves = memory::handler(&name)
+                .or_else(|| command::handler(&name))
                 .or_else(|| system::handler(&name))
                 .or_else(|| batches::handler(&name))
                 .or_else(|| config::handler(&name))
@@ -703,6 +708,7 @@ impl Runtime {
                     batches: Mutex::default(),
                     sockets: Mutex::new(net::Sockets::default()),
                     plugins: plugins::Plugins::default(),
+                    command: Mutex::default(),
                 }),
                 thread: 0,
                 pending: None,
@@ -844,6 +850,19 @@ impl Game {
             Err(Error::Exit(code)) => Ok(code),
             Err(error) => Err(error),
         }
+    }
+
+    /// Gives a command `args` (its own name first) and `stdin`, for
+    /// [`Game::run_command`]: until then it has no arguments and its
+    /// standard input is at its end.
+    pub fn set_command(&mut self, args: &[impl AsRef<[u8]>], stdin: Vec<u8>) {
+        *self
+            .store
+            .data()
+            .shared
+            .command
+            .lock()
+            .unwrap_or_else(PoisonError::into_inner) = command::Command::new(args, stdin);
     }
 
     /// What the module has written to descriptor `fd` with `fd_write`.

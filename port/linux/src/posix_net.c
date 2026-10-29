@@ -31,7 +31,7 @@ with the host ABI.
 #include "posix.h"
 
 #ifdef __APPLE__
-/* The macOS host builds this file too (port/macos/host). Darwin has no
+/* The macOS VM host, now removed, built this file too. Darwin has no
 SOCK_CLOEXEC or SOCK_NONBLOCK flags of socket()'s type, no accept4 and no
 getrandom: they are made of the calls it has. */
 #define SOCK_CLOEXEC 0x10000000

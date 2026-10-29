@@ -120,7 +120,7 @@ def test_negative_control(name):
 
 def test_the_shapes_are_the_hosts():
     """the host's shape numbers, and the ragdolls' the same"""
-    host = read("port/macos/include/host_physics.h")
+    host = read("port/wasmtime/include/host_physics.h")
     draw = read("port/linux/game/physics_draw.c")
     for name, number in re.findall(r"#define (HOST_PHYSICS_SHAPE_\w+) (\d+)", draw):
         assert "#define %s %s" % (name, number) in host

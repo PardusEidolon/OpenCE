@@ -1,4 +1,4 @@
-# The Rust toolchain of the macOS host's runtime (port/macos/runtime). The
+# The Rust toolchain of the engine (engine/Cargo.toml). The
 # Nix flake reads this file (rust-overlay), so `nix develop` and rustup agree.
 # wasm32 is here for the portable crates' check (conductor/tech-stack.md).
 [toolchain]

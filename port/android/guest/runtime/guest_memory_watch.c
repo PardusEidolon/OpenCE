@@ -7,7 +7,7 @@ handling in the Android process, so the tracking itself lives there
 (port/android/host/host_memory.c).
 
 The macOS host's VM (HALO_GUEST_VM) tracks writes in its own page tables
-(port/macos/host/host_watch.c): the guest reads each page's generation from
+(the macOS VM host's host_watch.c, removed): the guest reads each page's generation from
 a table it shares with the host, with no exit, and asks the host only to
 protect pages that are not protected yet, or to forget them.
 */

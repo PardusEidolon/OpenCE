@@ -15,7 +15,7 @@ names in the lists (OpenGL names, which the host resolves at run time, are
 not part of it).
 
 With --svc, for the macOS host, which runs the guest in a VM
-(docs/macos_host.md), each stub instead puts the import's index in w16 and
+(now removed), each stub instead puts the import's index in w16 and
 makes an svc, which the guest's EL1 vector turns into an exit to the host;
 the host returns to the stub's ret. A hostposix_* stub also keeps the errno
 the host leaves in w1 (as Linux's value): it passes it to

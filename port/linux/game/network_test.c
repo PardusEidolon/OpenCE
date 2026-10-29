@@ -36,7 +36,7 @@ about that many seconds in, and a joining machine's player holds the action
 button a second later, to pick it up).
 
 debug.network_test_ragdoll (game.ragdolls' golden frames,
-tools/test_macos_frames.py): that many seconds of frames shown in (a 60th
+the VM's frame test, removed): that many seconds of frames shown in (a 60th
 of a second each, the frames the captures count), a frag grenade's
 explosion (its detonation effect, damage and all) kills a biped of the
 first player's kind standing six metres before the camera, and eight
@@ -807,7 +807,7 @@ static void network_test_debris(
 	}
 }
 
-/* debug.network_test_crowd's scene, the benchmark's (tools/test_macos_benchmark.py):
+/* debug.network_test_crowd's scene, the benchmark's (the VM's benchmark, removed):
 two seconds before its time thirty bipeds of the first player's kind stand
 on the ground in six rows of five, a world unit apart, eight world units
 before the camera; from its time three a tick are shot dead (their shields

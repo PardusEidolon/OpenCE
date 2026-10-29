@@ -245,7 +245,7 @@ fn drawing(length: u32) -> Writer {
 
 fn header_values() -> BTreeMap<String, u32> {
     let mut values = BTreeMap::new();
-    for line in include_str!("../../../../port/macos/include/opence_render.h").lines() {
+    for line in include_str!("../../../../port/wasmtime/include/opence_render.h").lines() {
         let Some(define) = line.strip_prefix("#define OPENCE_RENDER_") else {
             continue;
         };

@@ -1,8 +1,8 @@
 """tools/frame_compare.py: its PNGs and its tolerance, on synthetic images.
 
 A frame matches its reference when few of its pixels differ by more than a
-GPU's rounding, and none by much more (docs/macos_host.md, "Frame
-captures").
+GPU's rounding, and none by much more (the golden frames,
+docs/engine.md).
 """
 
 import struct

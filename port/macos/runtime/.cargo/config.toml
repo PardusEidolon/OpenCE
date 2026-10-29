@@ -1,3 +1,0 @@
-# build products go with the rest of the build's (build/ is not tracked)
-[build]
-target-dir = "../../../build/macos/cargo"

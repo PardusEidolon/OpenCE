@@ -4,7 +4,7 @@
 //! to `halo_audio_output`, which keeps them in a ring and, once the ring
 //! is below its target, answers how many more to mix. The app pulls them
 //! from the ring on Core Audio's thread ([`Speakers`]), as the macOS VM
-//! port's host pulled them from its guest (`port/macos/host/host_audio.c`).
+//! port's host pulled them from its guest (its `host_audio.c`, now removed).
 //!
 //! While nothing pulls (headless, or the device stopped), the ring drains
 //! at the output's rate by the clock, as the Linux port's silent clock

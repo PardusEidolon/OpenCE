@@ -1,12 +1,11 @@
 {
-  # The macOS build (docs/macos_host.md): `nix develop` is the shell to work
-  # in, `nix build .#host` the build that finishes a track. The outputs are
-  # grown with std from the cells in nix/ (each cell a folder, each block a
-  # file in it):
+  # The macOS app (docs/engine.md): `nix develop` is the shell to work in,
+  # `nix build .#engine` builds it and `nix run .#engine` plays it. The
+  # outputs are grown with std from the cells in nix/ (each cell a folder,
+  # each block a file in it):
   #   repo    pkgs, toolchain, shells, formatter, hooks: what the others share
-  #   macos   packages: guest, host, app (the port)
-  #   engine  rust, packages, checks, apps: the new engine, its Rust with crane
-  description = "OpenCE: Halo: Combat Evolved on macOS";
+  #   engine  rust, packages, checks, apps: the app, its Rust with crane
+  description = "OpenCE: the original game's code, played natively on macOS";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
@@ -60,14 +59,8 @@
       }
       {
         packages = std.harvest self [
-          [
-            "macos"
-            "packages"
-          ]
-          [
-            "engine"
-            "packages"
-          ]
+          "engine"
+          "packages"
         ];
         devShells = std.harvest self [
           "repo"
@@ -79,7 +72,7 @@
         ];
       }
       {
-        packages.${system}.default = self.packages.${system}.host;
+        packages.${system}.default = self.packages.${system}.engine;
         apps =
           lib.mapAttrs
             (

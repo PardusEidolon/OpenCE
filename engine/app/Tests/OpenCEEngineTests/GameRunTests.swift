@@ -199,7 +199,7 @@ final class GameRunTests: XCTestCase {
         let sky = drawn.rgb(x: 20, y: 10)
         let grass = drawn.rgb(x: 150, y: 320)
         print("golden frame: sky \(sky), grass \(grass)")
-        let reference = root.appendingPathComponent("port/macos/tests/frames/bloodgulch.png")
+        let reference = root.appendingPathComponent("build/engine/golden/vm_bloodgulch_640x480.png")
         if let vm = CapturedFrame.readPNG(at: reference), let (largest, share) = drawn.difference(from: vm) {
             print("golden frame against the VM's: largest \(largest), \(share * 100)% differ by more than 8")
             // By region: the level (the ground below the horizon, the cliff at the right) is the VM's; the sky's

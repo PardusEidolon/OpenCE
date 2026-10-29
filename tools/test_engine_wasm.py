@@ -230,7 +230,7 @@ def test_the_game_s_units_find_game_wasm_s_own_profile_header_first(tmp_path):
 
 
 def test_the_smaa_unit_defines_each_file_and_its_size(tmp_path):
-    # the Metal device's post-processing (port/macos/guest/d3d8_metal_post.c)
+    # the Metal device's post-processing (port/wasmtime/metal/d3d8_metal_post.c)
     # declares SMAA's shader and lookup textures; here a shader with a byte
     # past ASCII (the Metal compiler is handed it as text), and no textures
     assets = tmp_path / "smaa"
