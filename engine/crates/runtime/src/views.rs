@@ -8,7 +8,8 @@
 //! reader checks what the game's own code asserts or checks
 //! (`data_verify`, `datum_try_and_get`, `cache_get_tag_instance`) and
 //! answers `None` where the game would not accept it, and every range it
-//! reads is checked against the memory's size. [`walk`] is their fuzz
+//! reads is checked against the memory's size; the widget tree's reader
+//! is in [`crate::widgets`]. [`walk`] is their fuzz
 //! target's entry (engine/fuzz, and tests/views.rs on the stable compiler).
 
 use crate::plugins::View;
@@ -320,6 +321,13 @@ pub fn walk(memory: &[u8]) -> usize {
                 view.c_string(address, 64)
                     .is_some_and(|text| !text.is_empty()),
             );
+            found += view
+                .widget_tree(address, word(0) % crate::widgets::LOCAL_PLAYERS)
+                .map_or(0, |tree| {
+                    tree.widgets.len() + usize::from(tree.focus().is_some())
+                });
+            found += usize::from(view.at_the_main_menu(address).is_some());
+            found += view.wide_string(address).map_or(0, |text| text.len());
         }
         found
     })

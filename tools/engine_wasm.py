@@ -164,6 +164,7 @@ EXPORTS = [
     "console_is_active",
     "network_chat_typing",
     "network_chat_keyboard_open",
+    "ui_widget_globals_storage",
 ]
 
 # wasi-libc for each target, as nix develop names it

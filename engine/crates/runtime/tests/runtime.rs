@@ -242,6 +242,12 @@ fn game_wasm_loads_with_a_stub_for_every_import() -> Result<(), Error> {
     for export in ["halo_game_main", "malloc", "free", "_initialize"] {
         assert!(game.has_export(export), "game.wasm has no {export}");
     }
+    // the data the UI plugin reads (source/interface/ui_widget.c's port:)
+    assert!(
+        game.data_export(opence_runtime::widgets::WIDGET_GLOBALS_EXPORT)
+            .is_some_and(|address| address != 0),
+        "game.wasm does not export the widget globals"
+    );
     // its threads are its own: the platform starts each at wasi_thread_start
     // through the game's pthread_create, and answers what they need
     for export in ["pthread_create", "pthread_detach", "wasi_thread_start"] {

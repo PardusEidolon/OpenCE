@@ -23,7 +23,7 @@
 
 use std::collections::VecDeque;
 use std::sync::atomic::{AtomicBool, Ordering};
-use std::sync::{Arc, Mutex, PoisonError};
+use std::sync::{Arc, Mutex, OnceLock, PoisonError};
 use std::time::{Duration, Instant};
 
 use wasmtime::Caller;
@@ -127,19 +127,47 @@ impl Event<'_> {
 /// every read checked against its size.
 pub struct View<'a> {
     space: &'a Space<'a>,
+    /// the addresses of the data the game exports, by name
+    exports: &'a [(String, u32)],
 }
 
 impl<'a> View<'a> {
     /// a view of `space`
     pub(crate) fn of(space: &'a Space<'a>) -> Self {
-        Self { space }
+        Self {
+            space,
+            exports: &[],
+        }
     }
     /// Calls `read` with a view of `memory`, as a plugin would be handed
     /// the game's: for the readers' tests and fuzzing, and for testing a
     /// plugin without a game.
     pub fn over<R>(memory: &mut [u8], read: impl FnOnce(&View<'_>) -> R) -> R {
+        Self::over_with(memory, &[], read)
+    }
+
+    /// As [`View::over`], with `exports` as the data the game exports:
+    /// each name and its address.
+    pub fn over_with<R>(
+        memory: &mut [u8],
+        exports: &[(String, u32)],
+        read: impl FnOnce(&View<'_>) -> R,
+    ) -> R {
         let space = Space::own(memory);
-        read(&View { space: &space })
+        read(&View {
+            space: &space,
+            exports,
+        })
+    }
+
+    /// The address of the data the game exports as `name`
+    /// (tools/engine_wasm.py's EXPORTS), if it exports it.
+    #[must_use]
+    pub fn export(&self, name: &str) -> Option<u32> {
+        self.exports
+            .iter()
+            .find(|(export, _)| export == name)
+            .map(|&(_, address)| address)
     }
 
     /// The memory's size in bytes.
@@ -295,9 +323,27 @@ pub(crate) struct Plugins {
     /// whether any is added: the hooks' one check while none is
     any: AtomicBool,
     state: Mutex<State>,
+    /// the addresses of the data the game exports, set once it is
+    /// instantiated
+    exports: OnceLock<Vec<(String, u32)>>,
 }
 
 impl Plugins {
+    /// keeps the addresses of the data the game exports, for the views;
+    /// the first instance's are kept, as every thread's are the same
+    pub(crate) fn set_exports(&self, exports: Vec<(String, u32)>) {
+        let _ = self.exports.set(exports);
+    }
+
+    /// the address of the data the game exports as `name`
+    pub(crate) fn export(&self, name: &str) -> Option<u32> {
+        self.exports
+            .get()?
+            .iter()
+            .find(|(export, _)| export == name)
+            .map(|&(_, address)| address)
+    }
+
     /// adds `plugin`, after those already added
     pub(crate) fn add(&self, plugin: Box<dyn Plugin>) {
         self.state
@@ -346,7 +392,10 @@ pub(crate) fn fire(caller: &mut Caller<'_, Record>, event: &Event<'_>) -> wasmti
         .any(|entry| entry.plugin.hooks().contains(&hook))
     {
         with_space(caller, |space, _| {
-            let view = View { space: &*space };
+            let view = View {
+                space: &*space,
+                exports: shared.plugins.exports.get().map_or(&[], Vec::as_slice),
+            };
             for entry in &mut state.entries {
                 if entry.plugin.hooks().contains(&hook) {
                     let start = Instant::now();

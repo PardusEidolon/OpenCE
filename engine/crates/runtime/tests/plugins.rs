@@ -18,6 +18,7 @@ const MODULE: &str = r#"
   (import "env" "host_render_submit" (func $submit (param i32 i32) (result i32)))
   (import "env" "halo_audio_output" (func $output (param i32 i32) (result i32)))
   (memory (export "memory") 1)
+  (global (export "ui_widget_globals_storage") i32 (i32.const 256))
   (data (i32.const 16) "game_tick.player_effect\00")
   (data (i32.const 48) "game_tick.ai\00")
   (data (i32.const 64) "game_tick.hud\00")
@@ -319,5 +320,51 @@ fn the_hooks_inputs_from_the_game_never_panic() -> Result<(), Error> {
         let _ = game.call_with("section", &[Val::I32(name)]);
     }
     let _ = seen(&log);
+    Ok(())
+}
+
+/// a plugin that writes down where its view finds the widget globals
+struct Finder(Arc<Mutex<Vec<Option<u32>>>>);
+
+impl Plugin for Finder {
+    fn name(&self) -> &str {
+        "finder"
+    }
+
+    fn hooks(&self) -> &[Hook] {
+        &[Hook::Ui]
+    }
+
+    fn on(&mut self, _event: &Event<'_>, view: &View<'_>) {
+        self.0
+            .lock()
+            .unwrap_or_else(PoisonError::into_inner)
+            .extend([
+                view.export("ui_widget_globals_storage"),
+                view.export("absent"),
+            ]);
+    }
+}
+
+#[test]
+fn a_view_finds_the_data_the_game_exports_by_name() -> Result<(), Error> {
+    let mut game = game()?;
+    assert_eq!(game.data_export("ui_widget_globals_storage"), Some(WORD));
+    assert_eq!(game.data_export("section"), None);
+    let found = Arc::default();
+    game.add_plugin(Box::new(Finder(Arc::clone(&found))));
+    section(&mut game, UI)?;
+    assert_eq!(
+        *found.lock().unwrap_or_else(PoisonError::into_inner),
+        [Some(WORD), None]
+    );
+    // and a view over a memory of the tests' own is given its exports
+    let exports = [("ui_widget_globals_storage".to_string(), 8)];
+    let mut memory = vec![0; 16];
+    assert_eq!(
+        View::over_with(&mut memory, &exports, |view| view
+            .export("ui_widget_globals_storage")),
+        Some(8)
+    );
     Ok(())
 }

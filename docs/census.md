@@ -4803,7 +4803,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `datum_get` | memory/data.c | Ported |  | `tools/engine_data_reference.py` |
 | `data_verify` | memory/data.c | Ported | runtime/src/views.rs:9 | `tools/engine_data_reference.py` |
 | `datum_initialize` | memory/data.c | Ported |  | `tools/engine_data_reference.py` |
-| `data_new` | memory/data.c | Ported | runtime/src/views.rs:193 | `tools/engine_data_reference.py` |
+| `data_new` | memory/data.c | Ported | runtime/src/views.rs:194 | `tools/engine_data_reference.py` |
 | `data_dispose` | memory/data.c | Ported |  | `tools/engine_data_reference.py` |
 | `data_make_invalid` | memory/data.c | Ported |  | `tools/engine_data_reference.py` |
 | `datum_new_at_index` | memory/data.c | Ported |  | `tools/engine_data_reference.py` |
@@ -4811,7 +4811,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `datum_delete` | memory/data.c | Ported |  | `tools/engine_data_reference.py` |
 | `data_delete_all` | memory/data.c | Ported |  | `tools/engine_data_reference.py` |
 | `data_iterator_new` | memory/data.c | Ported |  | `tools/engine_data_reference.py` |
-| `data_iterator_next` | memory/data.c | Ported | runtime/src/views.rs:74 | `tools/engine_data_reference.py` |
+| `data_iterator_next` | memory/data.c | Ported | runtime/src/views.rs:75 | `tools/engine_data_reference.py` |
 | `data_next_index` | memory/data.c | Ported |  | `tools/engine_data_reference.py` |
 | `data_prev_index` | memory/data.c | Compiled |  | compiled into game.wasm |
 | `data_compact` | memory/data.c | Compiled |  | compiled into game.wasm |

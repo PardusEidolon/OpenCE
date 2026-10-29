@@ -37,6 +37,7 @@ mod space;
 mod system;
 mod threads;
 pub mod views;
+pub mod widgets;
 
 use space::Space;
 use wasmtime::{
@@ -740,6 +741,8 @@ impl Runtime {
             .filter(|export| matches!(export.ty(), ExternType::Func(_)))
             .map(|export| export.name().to_string())
             .collect();
+        let data = data_exports(&module, &instance, &mut store);
+        store.data().shared.plugins.set_exports(data);
         Ok(Game {
             store,
             instance,
@@ -754,6 +757,26 @@ impl Drop for Game {
     fn drop(&mut self) {
         self.store.data().shared.threads.close();
     }
+}
+
+/// the data a module exports, each name and its address: the i32 globals
+/// wasm-ld exports for each data symbol `--export`ed
+fn data_exports(
+    module: &Module,
+    instance: &Instance,
+    store: &mut Store<Record>,
+) -> Vec<(String, u32)> {
+    module
+        .exports()
+        .filter(|export| matches!(export.ty(), ExternType::Global(_)))
+        .filter_map(|export| {
+            let global = instance.get_global(&mut *store, export.name())?;
+            match global.get(&mut *store) {
+                Val::I32(address) => Some((export.name().to_string(), address.cast_unsigned())),
+                _ => None,
+            }
+        })
+        .collect()
 }
 
 /// what a failed call means: the game's exit, or a trap
@@ -1122,6 +1145,13 @@ impl Game {
     #[must_use]
     pub fn has_export(&self, name: &str) -> bool {
         self.functions.iter().any(|function| function == name)
+    }
+
+    /// The address of the data the module exports as `name` (an i32
+    /// global, as wasm-ld exports a data symbol), if it exports it.
+    #[must_use]
+    pub fn data_export(&self, name: &str) -> Option<u32> {
+        self.store.data().shared.plugins.export(name)
     }
 
     /// The size of the game's memory in bytes (0 if there is none).
