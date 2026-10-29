@@ -1,0 +1,1 @@
+Task: Phase 1 'Record inputs that play each map to its end, and play them headless through the opence tool'. tools/engine_audit.py drives the app's --audit mode (a fixed schedule for a fixed time, since no scripted input plays a map to its end) and compares runs. 8 pytest tests and pyflakes pass.
