@@ -125,6 +125,65 @@ pub fn state(connection: &mut Connection, out: &mut impl Write) -> Result<(), Er
     Ok(())
 }
 
+/// How long a pressed key is held: past a frame of the game's (which
+/// reads held keys at 60 Hz), so the menus see it go down.
+pub const PRESS: std::time::Duration = std::time::Duration::from_millis(50);
+
+/// Which part of a key's press to send.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum Press {
+    /// Down, held for [`PRESS`], then up.
+    Whole,
+    /// Down only, held until an `Up`.
+    Down,
+    /// Up only.
+    Up,
+}
+
+/// Presses the virtual key `vk` (a Windows key code, 1 to 254).
+pub fn key(connection: &mut Connection, vk: u8, press: Press) -> Result<(), Error> {
+    let mut send = |down: bool| connection.ask(&json!({"request": "key", "vk": vk, "down": down}));
+    match press {
+        Press::Whole => {
+            send(true)?;
+            std::thread::sleep(PRESS);
+            send(false)?;
+        }
+        Press::Down => {
+            send(true)?;
+        }
+        Press::Up => {
+            send(false)?;
+        }
+    }
+    Ok(())
+}
+
+/// Sends a structured request to the game (`pointer`, `click`, `wheel`)
+/// and writes nothing; or with `answer`, writes the reply without its
+/// `ok` (`focus`).
+pub fn drive(
+    connection: &mut Connection,
+    request: &Value,
+    answer: bool,
+    out: &mut impl Write,
+) -> Result<(), Error> {
+    let mut reply = connection.ask(request)?;
+    if answer {
+        if let Some(fields) = reply.as_object_mut() {
+            fields.remove("ok");
+        }
+        writeln!(out, "{reply}")?;
+    }
+    Ok(())
+}
+
+/// Reads a number of the command line, naming `what` when it is not one.
+pub fn number<T: std::str::FromStr>(word: Option<&String>, what: &str) -> Result<T, Error> {
+    word.and_then(|word| word.parse().ok())
+        .ok_or_else(|| Error::Usage(format!("{what} must be a number")))
+}
+
 /// Reads `WIDTHxHEIGHT`.
 pub fn parse_size(size: &str) -> Result<(u32, u32), Error> {
     size.split_once('x')

@@ -143,13 +143,14 @@ fn run(options: &Options) -> Result<(), String> {
     Ok(())
 }
 
-/// Runs the game until it quits, its console answering the control socket.
+/// Runs the game until it quits, its console, keyboard and mouse driven
+/// through the control socket.
 fn control(mut game: Game, path: &Path) -> Result<(), String> {
     if !game.set_setting("debug.telnet_console", "true") {
         return Err("the game has no setting debug.telnet_console".to_owned());
     }
     let listener = control::bind(path).map_err(|error| format!("{}: {error}", path.display()))?;
-    control::serve(listener, game.console());
+    control::serve(listener, control::Driven::of(&mut game));
     eprintln!("opence-game: the control socket is {}", path.display());
     let ran = game
         .call("halo_game_main")

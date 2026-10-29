@@ -12,8 +12,9 @@ The memory watch is the web build's (port/web/src/web_memory_watch.c),
 which hashes pages because WebAssembly has no page protection; its frame
 starts here, when a frame is shown (Present calls
 platform_clock_frame_shown). The window's input is the app's
-(opence_runtime's input imports), so the device's pointer and menu calls
-have nothing to do.
+(opence_runtime's input imports): the menus coming up and going, and the
+menus' pointer, are the runtime's, which keeps the pointer as the Linux
+port's SDL platform does.
 */
 
 #include "platform.h"
@@ -33,6 +34,12 @@ memory module) */
 __attribute__((import_module("env"), import_name("XPhysicalAlloc"))) void *XPhysicalAlloc(unsigned long size,
 	unsigned long physical_address, unsigned long alignment, unsigned long protect);
 __attribute__((import_module("env"), import_name("XPhysicalFree"))) void XPhysicalFree(void *address);
+
+/* the menus coming up or going, and their pointer in the drawable's pixels
+(opence_runtime's input imports) */
+__attribute__((import_module("env"), import_name("host_menus_active"))) void host_menus_active(BOOL active);
+__attribute__((import_module("env"), import_name("host_ui_pointer_read"))) BOOL host_ui_pointer_read(
+	struct platform_ui_pointer *pointer);
 
 /* ---------- the window */
 
@@ -67,18 +74,17 @@ void platform_clock_frame_shown(void)
 
 void platform_menus_set_active(BOOL active)
 {
-	(void)active;
+	host_menus_active(active);
 }
 
 BOOL platform_ui_pointer_read(struct platform_ui_pointer *pointer)
 {
-	(void)pointer;
-	return FALSE;
+	return host_ui_pointer_read(pointer);
 }
 
 void platform_ui_pointer_set_active(BOOL active)
 {
-	(void)active;
+	host_menus_active(active);
 }
 
 /* ---------- the contiguous window */

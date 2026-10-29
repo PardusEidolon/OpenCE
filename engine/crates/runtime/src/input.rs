@@ -310,7 +310,62 @@ pub(crate) struct Input {
     chat_pad: u32,
     chat_held_buttons: u16,
     chat_held_analog: u8,
+    /// the menus' pointer
+    pointer: Pointer,
 }
+
+/// the menus' pointer, as the Linux port keeps it
+/// (`port/linux/src/sdl_platform.c`): where it is on the drawable, in its
+/// pixels, where it was last clicked, and what happened since the game
+/// last read it
+#[derive(Default)]
+struct Pointer {
+    /// the drawable's size, which keeps the pointer on it
+    area: [f32; 2],
+    at: [f32; 2],
+    click: [f32; 2],
+    moved: bool,
+    left_clicks: u32,
+    right_clicks: u32,
+    wheel_steps: i32,
+    /// the wheel's turn short of a whole notch
+    wheel_part: f32,
+    /// whether the window says where the mouse is, so that its motion no
+    /// longer moves the pointer
+    placed: bool,
+}
+
+impl Pointer {
+    /// `at` kept on the drawable
+    fn place(&mut self, at: [f32; 2]) {
+        let keep = |value: f32, size: f32| value.clamp(0.0, (size - 1.0).max(0.0));
+        self.at = [keep(at[0], self.area[0]), keep(at[1], self.area[1])];
+        self.moved = true;
+    }
+
+    /// `struct platform_ui_pointer` as wasm32 lays it out: no touch, so no
+    /// downs
+    fn bytes(&self) -> [u8; POINTER_BYTES] {
+        let mut bytes = [0; POINTER_BYTES];
+        let words = [
+            self.at[0].to_bits(),
+            self.at[1].to_bits(),
+            self.click[0].to_bits(),
+            self.click[1].to_bits(),
+            u32::from(self.moved),
+            self.left_clicks,
+            self.right_clicks,
+            self.wheel_steps.cast_unsigned(),
+        ];
+        for (chunk, word) in bytes.as_chunks_mut::<4>().0.iter_mut().zip(words) {
+            chunk.copy_from_slice(&word.to_le_bytes());
+        }
+        bytes
+    }
+}
+
+/// `struct platform_ui_pointer`'s size on wasm32
+const POINTER_BYTES: usize = 48;
 
 /// `XINPUT_GAMEPAD`, as the game reads it
 #[derive(Default, Clone, Copy)]
@@ -366,27 +421,102 @@ impl Input {
         }
     }
 
-    /// the mouse moving by `dx` and `dy` pixels
+    /// the mouse moving by `dx` and `dy` pixels: in the menus it moves
+    /// the pointer (unless the window says where the mouse is), not the
+    /// view
     pub(crate) fn motion(&mut self, dx: f32, dy: f32) {
+        if self.menus {
+            if !self.pointer.placed {
+                let [x, y] = self.pointer.at;
+                self.pointer.place([x + dx, y + dy]);
+            }
+            return;
+        }
         self.fresh[0] += dx;
         self.fresh[1] += dy;
     }
 
-    /// the mouse's button `button` (SDL's numbers) going down or up
+    /// the window putting the mouse at `x` and `y`, the drawable's pixels
+    /// from its top left: in the menus, the pointer
+    pub(crate) fn position(&mut self, x: f32, y: f32) {
+        self.pointer.placed = true;
+        if self.menus {
+            self.pointer.place([x, y]);
+        }
+    }
+
+    /// the mouse's button `button` (SDL's numbers) going down or up; in the
+    /// menus a press is a click at the pointer, and holds nothing
     pub(crate) fn button(&mut self, button: u8, down: bool) {
         let Some(bit) = 1_u16.checked_shl(u32::from(button)) else {
             return;
         };
-        if down {
-            self.buttons |= bit;
-        } else {
+        if !down {
             self.buttons &= !bit;
+        } else if self.menus {
+            match button {
+                1 => {
+                    self.pointer.left_clicks = self.pointer.left_clicks.saturating_add(1);
+                    self.pointer.click = self.pointer.at;
+                }
+                3 => self.pointer.right_clicks = self.pointer.right_clicks.saturating_add(1),
+                _ => {}
+            }
+        } else {
+            self.buttons |= bit;
         }
     }
 
-    /// the wheel turning by `notches` (up positive)
+    /// the wheel turning by `notches` (up positive); in the menus, whole
+    /// notches step them
     pub(crate) fn wheel(&mut self, notches: f32) {
+        if self.menus {
+            let turned = self.pointer.wheel_part + notches;
+            let steps = turned.trunc();
+            self.pointer.wheel_part = turned - steps;
+            self.pointer.wheel_steps = self.pointer.wheel_steps.saturating_add(steps as i32);
+            return;
+        }
         self.fresh_wheel += notches;
+    }
+
+    /// the drawable's size, which keeps the pointer on it
+    pub(crate) fn set_area(&mut self, width: u32, height: u32) {
+        self.pointer.area = [width as f32, height as f32];
+    }
+
+    /// the menus coming up or going: what the mouse held is let go, and
+    /// coming up the pointer starts in the drawable's middle
+    pub(crate) fn set_menus(&mut self, active: bool) {
+        if active == self.menus {
+            return;
+        }
+        self.menus = active;
+        let area = self.pointer.area;
+        let placed = self.pointer.placed;
+        self.pointer = Pointer {
+            area,
+            placed,
+            ..Pointer::default()
+        };
+        if active {
+            self.pointer.at = [area[0] / 2.0, area[1] / 2.0];
+        }
+        self.buttons = 0;
+        self.fresh = [0.0; 2];
+        self.pending = [0.0; 2];
+        self.fresh_wheel = 0.0;
+    }
+
+    /// the pointer as the game reads it, what happened since taken, and
+    /// whether the menus are up
+    fn read_pointer(&mut self) -> ([u8; POINTER_BYTES], bool) {
+        let bytes = self.pointer.bytes();
+        self.pointer.moved = false;
+        self.pointer.left_clicks = 0;
+        self.pointer.right_clicks = 0;
+        self.pointer.wheel_steps = 0;
+        (bytes, self.menus)
     }
 
     /// the screenshots asked for since the last call
@@ -635,6 +765,8 @@ pub(crate) fn handler(name: &str) -> Option<Handler> {
         "halo_push_to_talk_held" => push_to_talk_held,
         "halo_chat_pad_buttons" => chat_pad_buttons,
         "halo_ui_pointer_update" => ui_pointer_update,
+        "host_menus_active" => menus_active,
+        "host_ui_pointer_read" => ui_pointer_read,
         "halo_linux_touch_look" => touch_look,
         "halo_linux_touch_move" => touch_move,
         "halo_chat_touch_layout" | "halo_linux_touch_aiming" | "halo_scoreboard_pointer_update" => {
@@ -1002,14 +1134,41 @@ fn chat_pad_buttons(
 }
 
 /// `halo_ui_pointer_update(menus_active, &pointer)`: whether the menus are
-/// up; there is no pointer of the Linux port's to give
+/// up; the pointer is the game's Metal device's to give, through
+/// `host_ui_pointer_read`
 fn ui_pointer_update(
     caller: &mut Caller<'_, Record>,
     params: &[Val],
     results: &mut [Val],
 ) -> wasmtime::Result<()> {
-    caller.data().input().menus = arg(params, 0) != 0;
+    menus_active(caller, params, &mut [])?;
     give(results, 0);
+    Ok(())
+}
+
+/// `host_menus_active(active)`: the menus coming up or going
+fn menus_active(
+    caller: &mut Caller<'_, Record>,
+    params: &[Val],
+    _: &mut [Val],
+) -> wasmtime::Result<()> {
+    let (width, height) = caller.data().batches().drawable();
+    let mut input = caller.data().input();
+    input.set_area(width, height);
+    input.set_menus(arg(params, 0) != 0);
+    Ok(())
+}
+
+/// `host_ui_pointer_read(&pointer)`: the menus' pointer, and whether they
+/// are up
+fn ui_pointer_read(
+    caller: &mut Caller<'_, Record>,
+    params: &[Val],
+    results: &mut [Val],
+) -> wasmtime::Result<()> {
+    let (bytes, active) = caller.data().input().read_pointer();
+    write(caller, arg(params, 0), &bytes)?;
+    give(results, u32::from(active));
     Ok(())
 }
 

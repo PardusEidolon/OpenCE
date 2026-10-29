@@ -1027,6 +1027,7 @@ impl Game {
     /// it (`host_drawable_width`); until then, the Xbox's 640 by 480.
     pub fn set_drawable_size(&mut self, width: u32, height: u32) {
         self.store.data().batches().set_drawable_size(width, height);
+        self.store.data().input().set_area(width, height);
     }
 
     /// How many render batches and commands the game has submitted, and
@@ -1058,6 +1059,12 @@ impl Game {
     /// the left, 2 the middle, 3 the right, 4 and on the side buttons.
     pub fn mouse_button(&mut self, button: u8, down: bool) {
         self.store.data().input().button(button, down);
+    }
+
+    /// The window putting the mouse at `x` and `y`, the drawable's pixels
+    /// from its top left: the menus' pointer.
+    pub fn mouse_position(&mut self, x: f32, y: f32) {
+        self.store.data().input().position(x, y);
     }
 
     /// The mouse's wheel turning by `notches`, up positive.

@@ -26,6 +26,8 @@ const MODULE: &str = r#"
   (import "env" "halo_linux_touch_aiming" (func $touch_aiming (param i32) (result i32)))
   (import "env" "halo_push_to_talk_held" (func $talk (result i32)))
   (import "env" "halo_ui_pointer_update" (func $pointer (param i32 i32) (result i32)))
+  (import "env" "host_menus_active" (func $menus (param i32)))
+  (import "env" "host_ui_pointer_read" (func $read_pointer (param i32) (result i32)))
   (import "env" "platform_text_typing" (func $typing (param i32)))
   (import "env" "GetLastError" (func $last_error (result i32)))
   (memory (export "memory") 1)
@@ -55,6 +57,8 @@ const MODULE: &str = r#"
   (func (export "touch_aiming") (param i32) (result i32) (call $touch_aiming (local.get 0)))
   (func (export "talk") (result i32) (call $talk))
   (func (export "pointer") (param i32 i32) (result i32) (call $pointer (local.get 0) (local.get 1)))
+  (func (export "menus") (param i32) (call $menus (local.get 0)))
+  (func (export "read_pointer") (param i32) (result i32) (call $read_pointer (local.get 0)))
   (func (export "typing") (param i32) (call $typing (local.get 0)))
   (func (export "last_error") (result i32) (call $last_error)))
 "#;
@@ -158,6 +162,8 @@ fn the_platform_answers_the_input_imports() {
         "env.halo_linux_touch_aiming",
         "env.halo_push_to_talk_held",
         "env.halo_ui_pointer_update",
+        "env.host_menus_active",
+        "env.host_ui_pointer_read",
         "env.halo_scoreboard_pointer_update",
         "env.halo_chat_pad_buttons",
         "env.halo_chat_touch_layout",
@@ -407,5 +413,262 @@ fn there_are_no_touch_controls() -> Result<(), Error> {
     assert_eq!(call(&mut game, "touch_move", &[0, OUT, OUT + 4])?, 0);
     assert_eq!(bytes::<8>(&game, OUT)?, [0; 8]);
     assert_eq!(call(&mut game, "touch_aiming", &[0])?, 0);
+    Ok(())
+}
+
+/// `struct platform_ui_pointer` as wasm32 lays it out, read at `at`
+#[derive(Debug, PartialEq)]
+struct Pointer {
+    at: [f32; 2],
+    click: [f32; 2],
+    moved: u32,
+    left_clicks: u32,
+    right_clicks: u32,
+    wheel_steps: i32,
+    downs: u32,
+    touch: u32,
+}
+
+/// the pointer the game reads, and whether the menus are up
+fn read_pointer(game: &mut opence_runtime::Game) -> Result<(u32, Pointer), Error> {
+    game.write(u64::from(OUT), &[0xAA; 48])?;
+    let active = call(game, "read_pointer", &[OUT])?;
+    let pointer = Pointer {
+        at: [real(game, OUT)?, real(game, OUT + 4)?],
+        click: [real(game, OUT + 8)?, real(game, OUT + 12)?],
+        moved: word(game, OUT + 16)?,
+        left_clicks: word(game, OUT + 20)?,
+        right_clicks: word(game, OUT + 24)?,
+        wheel_steps: word(game, OUT + 28)?.cast_signed(),
+        downs: word(game, OUT + 32)?,
+        touch: word(game, OUT + 44)?,
+    };
+    // the down's place is left as nothing touched it
+    assert_eq!((real(game, OUT + 36)?, real(game, OUT + 40)?), (0.0, 0.0));
+    Ok((active, pointer))
+}
+
+#[test]
+fn the_menus_coming_up_centre_the_pointer_and_out_of_them_there_is_none() -> Result<(), Error> {
+    let mut game = game()?;
+    let (active, _) = read_pointer(&mut game)?;
+    assert_eq!(active, 0);
+    call(&mut game, "menus", &[1])?;
+    let (active, pointer) = read_pointer(&mut game)?;
+    assert_eq!(active, 1);
+    assert_eq!(
+        pointer,
+        Pointer {
+            at: [320.0, 240.0],
+            click: [0.0, 0.0],
+            moved: 0,
+            left_clicks: 0,
+            right_clicks: 0,
+            wheel_steps: 0,
+            downs: 0,
+            touch: 0,
+        }
+    );
+    // on a drawable of another size, its middle
+    call(&mut game, "menus", &[0])?;
+    game.set_drawable_size(3840, 2160);
+    call(&mut game, "menus", &[1])?;
+    assert_eq!(read_pointer(&mut game)?.1.at, [1920.0, 1080.0]);
+    call(&mut game, "menus", &[0])?;
+    assert_eq!(read_pointer(&mut game)?.0, 0);
+    Ok(())
+}
+
+#[test]
+fn in_the_menus_the_mouse_moves_the_pointer_and_not_the_view() -> Result<(), Error> {
+    let mut game = game()?;
+    let pad = first_controller(&mut game)?;
+    call(&mut game, "menus", &[1])?;
+    game.mouse_motion(10.0, -5.0);
+    call(&mut game, "state", &[pad, STATE])?;
+    assert_eq!(call(&mut game, "look", &[0, OUT, OTHER])?, 0);
+    let (_, pointer) = read_pointer(&mut game)?;
+    assert_eq!((pointer.at, pointer.moved), ([330.0, 235.0], 1));
+    // read once: moved is taken
+    assert_eq!(read_pointer(&mut game)?.1.moved, 0);
+    // kept on the drawable
+    game.mouse_motion(-1000.0, 1000.0);
+    assert_eq!(read_pointer(&mut game)?.1.at, [0.0, 479.0]);
+    Ok(())
+}
+
+#[test]
+fn where_the_window_puts_the_mouse_is_the_pointer() -> Result<(), Error> {
+    let mut game = game()?;
+    call(&mut game, "menus", &[1])?;
+    game.mouse_position(100.0, 50.0);
+    let (_, pointer) = read_pointer(&mut game)?;
+    assert_eq!((pointer.at, pointer.moved), ([100.0, 50.0], 1));
+    // once the window says where, motion no longer moves it
+    game.mouse_motion(10.0, 10.0);
+    assert_eq!(
+        read_pointer(&mut game)?.1,
+        Pointer {
+            moved: 0,
+            ..pointer_at([100.0, 50.0])
+        }
+    );
+    game.mouse_position(9000.0, -3.0);
+    assert_eq!(read_pointer(&mut game)?.1.at, [639.0, 0.0]);
+    Ok(())
+}
+
+fn pointer_at(at: [f32; 2]) -> Pointer {
+    Pointer {
+        at,
+        click: [0.0, 0.0],
+        moved: 1,
+        left_clicks: 0,
+        right_clicks: 0,
+        wheel_steps: 0,
+        downs: 0,
+        touch: 0,
+    }
+}
+
+#[test]
+fn in_the_menus_a_click_is_counted_where_the_pointer_is_and_holds_nothing() -> Result<(), Error> {
+    let mut game = game()?;
+    let pad = first_controller(&mut game)?;
+    call(&mut game, "menus", &[1])?;
+    game.mouse_motion(5.0, 5.0);
+    game.mouse_button(1, true);
+    game.mouse_button(1, false);
+    game.mouse_button(3, true);
+    game.mouse_button(1, true);
+    call(&mut game, "state", &[pad, STATE])?;
+    // the fire binding is not held by a click in the menus
+    assert_eq!(call(&mut game, "actions", &[0])? & FIRE, 0);
+    let (_, pointer) = read_pointer(&mut game)?;
+    assert_eq!(
+        (pointer.left_clicks, pointer.right_clicks, pointer.click),
+        (2, 1, [325.0, 245.0])
+    );
+    let (_, pointer) = read_pointer(&mut game)?;
+    assert_eq!((pointer.left_clicks, pointer.right_clicks), (0, 0));
+    Ok(())
+}
+
+#[test]
+fn in_the_menus_the_wheel_is_counted_in_whole_notches() -> Result<(), Error> {
+    let mut game = game()?;
+    call(&mut game, "menus", &[1])?;
+    game.mouse_wheel(1.5);
+    assert_eq!(read_pointer(&mut game)?.1.wheel_steps, 1);
+    game.mouse_wheel(0.5);
+    assert_eq!(read_pointer(&mut game)?.1.wheel_steps, 1);
+    game.mouse_wheel(-2.0);
+    assert_eq!(read_pointer(&mut game)?.1.wheel_steps, -2);
+    assert_eq!(read_pointer(&mut game)?.1.wheel_steps, 0);
+    Ok(())
+}
+
+#[test]
+fn the_menus_coming_up_drop_what_the_mouse_held() -> Result<(), Error> {
+    let mut game = game()?;
+    let pad = first_controller(&mut game)?;
+    game.mouse_button(1, true);
+    game.mouse_motion(20.0, 0.0);
+    call(&mut game, "menus", &[1])?;
+    call(&mut game, "menus", &[0])?;
+    call(&mut game, "state", &[pad, STATE])?;
+    assert_eq!(call(&mut game, "actions", &[0])? & FIRE, 0);
+    assert_eq!(call(&mut game, "look", &[0, OUT, OTHER])?, 0);
+    Ok(())
+}
+
+#[test]
+fn with_the_menus_up_the_keys_move_about_them() -> Result<(), Error> {
+    let mut game = game()?;
+    let pad = first_controller(&mut game)?;
+    call(&mut game, "menus", &[1])?;
+    call(&mut game, "state", &[pad, STATE])?;
+    game.key(VK_UP, 0, 0, true);
+    call(&mut game, "state", &[pad, STATE])?;
+    assert_eq!(half(&game, BUTTONS)? & DPAD_UP, DPAD_UP);
+    Ok(())
+}
+
+/// the control socket's answer to `line`, as JSON
+fn ask(driven: &opence_runtime::control::Driven, line: &str) -> serde_json::Value {
+    let answered = opence_runtime::control::answer(driven, line);
+    serde_json::from_str(&answered).unwrap_or_default()
+}
+
+#[test]
+fn the_control_socket_puts_the_pointer_and_clicks_where_it_is_told() -> Result<(), Error> {
+    let mut game = game()?;
+    let driven = opence_runtime::control::Driven::of(&mut game);
+    call(&mut game, "menus", &[1])?;
+    let moved = ask(&driven, r#"{"request": "pointer", "x": 100, "y": 50}"#);
+    assert_eq!(moved["ok"], true, "{moved}");
+    assert_eq!(read_pointer(&mut game)?.1.at, [100.0, 50.0]);
+    let clicked = ask(&driven, r#"{"request": "click", "x": 200, "y": 120}"#);
+    assert_eq!(clicked["ok"], true, "{clicked}");
+    let (_, pointer) = read_pointer(&mut game)?;
+    assert_eq!(
+        (pointer.at, pointer.left_clicks, pointer.right_clicks),
+        ([200.0, 120.0], 1, 0)
+    );
+    // the right button, by its number
+    ask(
+        &driven,
+        r#"{"request": "click", "x": 10, "y": 10, "button": 3}"#,
+    );
+    assert_eq!(read_pointer(&mut game)?.1.right_clicks, 1);
+    ask(&driven, r#"{"request": "wheel", "notches": -2}"#);
+    assert_eq!(read_pointer(&mut game)?.1.wheel_steps, -2);
+    Ok(())
+}
+
+#[test]
+fn the_control_socket_holds_a_key_until_it_is_let_go() -> Result<(), Error> {
+    let mut game = game()?;
+    let driven = opence_runtime::control::Driven::of(&mut game);
+    let pad = first_controller(&mut game)?;
+    call(&mut game, "menus", &[1])?;
+    call(&mut game, "state", &[pad, STATE])?;
+    let down = ask(
+        &driven,
+        &format!(r#"{{"request": "key", "vk": {VK_UP}, "down": true}}"#),
+    );
+    assert_eq!(down["ok"], true, "{down}");
+    call(&mut game, "state", &[pad, STATE])?;
+    assert_eq!(half(&game, BUTTONS)? & DPAD_UP, DPAD_UP);
+    ask(
+        &driven,
+        &format!(r#"{{"request": "key", "vk": {VK_UP}, "down": false}}"#),
+    );
+    call(&mut game, "state", &[pad, STATE])?;
+    assert_eq!(half(&game, BUTTONS)? & DPAD_UP, 0);
+    Ok(())
+}
+
+#[test]
+fn the_control_socket_refuses_what_it_cannot_do() -> Result<(), Error> {
+    let mut game = game()?;
+    let driven = opence_runtime::control::Driven::of(&mut game);
+    for line in [
+        r#"{"request": "key", "vk": 38}"#,
+        r#"{"request": "key", "vk": 300, "down": true}"#,
+        r#"{"request": "key", "vk": "up", "down": true}"#,
+        r#"{"request": "pointer", "x": 1}"#,
+        r#"{"request": "pointer", "x": "a", "y": 1}"#,
+        r#"{"request": "click", "x": 1, "y": 1, "button": 0}"#,
+        r#"{"request": "wheel"}"#,
+        r#"{"request": "fly"}"#,
+    ] {
+        let refused = ask(&driven, line);
+        assert_eq!(refused["ok"], false, "{line}: {refused}");
+        assert!(refused["error"].is_string(), "{line}: {refused}");
+    }
+    // the menus' focus, before the game has drawn a screen
+    let focus = ask(&driven, r#"{"request": "focus"}"#);
+    assert_eq!(focus["ok"], false, "{focus}");
     Ok(())
 }

@@ -6,6 +6,7 @@ use std::io::{BufRead, BufReader, Write};
 use std::os::unix::net::UnixListener;
 use std::path::PathBuf;
 use std::process::{Command, Stdio};
+use std::sync::{Arc, Mutex};
 
 use opence_cli::{parse_size, Connection, Error};
 
@@ -18,6 +19,14 @@ struct Standing {
 
 impl Standing {
     fn start(name: &str) -> std::result::Result<Self, Box<dyn std::error::Error>> {
+        Self::answered(name, console)
+    }
+
+    /// A socket answered by `answer`, a thread for each connection.
+    fn answered(
+        name: &str,
+        answer: impl Fn(std::os::unix::net::UnixStream) + Clone + Send + 'static,
+    ) -> std::result::Result<Self, Box<dyn std::error::Error>> {
         let folder = std::env::temp_dir().join(format!("ocl{}{name}", std::process::id()));
         std::fs::create_dir_all(&folder)?;
         let socket = folder.join("c.sock");
@@ -26,7 +35,8 @@ impl Standing {
         std::thread::spawn(move || {
             for stream in listener.incoming() {
                 let Ok(stream) = stream else { continue };
-                std::thread::spawn(move || console(stream));
+                let answer = answer.clone();
+                std::thread::spawn(move || answer(stream));
             }
         });
         Ok(Self { socket })
@@ -68,6 +78,35 @@ fn console(stream: std::os::unix::net::UnixStream) {
         };
         if writeln!(writer, "{reply}").is_err() {
             return;
+        }
+    }
+}
+
+/// The stand-in game's input: every structured request is kept in `heard`
+/// and accepted, and `focus` answers with the main menu.
+fn listening(
+    heard: Arc<Mutex<Vec<serde_json::Value>>>,
+) -> impl Fn(std::os::unix::net::UnixStream) + Clone + Send {
+    move |stream| {
+        let Ok(mut writer) = stream.try_clone() else {
+            return;
+        };
+        for line in BufReader::new(stream).lines() {
+            let Ok(line) = line else { return };
+            let Ok(request) = serde_json::from_str::<serde_json::Value>(&line) else {
+                return;
+            };
+            let reply = if request["request"] == "focus" {
+                serde_json::json!({"ok": true, "screen": "main menu", "widget": "campaign", "selected": 0})
+            } else {
+                serde_json::json!({"ok": true})
+            };
+            if let Ok(mut heard) = heard.lock() {
+                heard.push(request);
+            }
+            if writeln!(writer, "{reply}").is_err() {
+                return;
+            }
         }
     }
 }
@@ -144,5 +183,69 @@ fn the_shell_runs_every_piped_line() -> Result {
     let mut out = Vec::new();
     opence_cli::run(&mut connection, "cheat_all_weapons", false, &mut out)?;
     assert_eq!(String::from_utf8(out)?, "ran cheat_all_weapons\n");
+    Ok(())
+}
+
+#[test]
+fn the_game_is_driven_by_keys_the_pointer_and_clicks() -> Result {
+    let heard = Arc::new(Mutex::new(Vec::new()));
+    let game = Standing::answered("d", listening(Arc::clone(&heard)))?;
+    for arguments in [
+        &["key", "38"][..],
+        &["key", "13", "--down"][..],
+        &["key", "13", "--up"][..],
+        &["pointer", "200", "120.5"][..],
+        &["click", "10", "20"][..],
+        &["click", "10", "20", "--button", "3"][..],
+        &["wheel", "-2"][..],
+    ] {
+        let done = game.opence(arguments)?;
+        assert!(done.status.success(), "{arguments:?} {done:?}");
+        assert_eq!(text(&done), "", "{arguments:?}");
+    }
+    let focus = game.opence(&["focus"])?;
+    assert!(focus.status.success(), "{focus:?}");
+    let reply: serde_json::Value = serde_json::from_str(text(&focus).trim())?;
+    assert_eq!(reply["screen"], "main menu");
+    assert!(reply.get("ok").is_none());
+
+    let Ok(heard) = heard.lock() else {
+        panic!("the stand-in game panicked");
+    };
+    let expected = [
+        serde_json::json!({"request": "key", "vk": 38, "down": true}),
+        serde_json::json!({"request": "key", "vk": 38, "down": false}),
+        serde_json::json!({"request": "key", "vk": 13, "down": true}),
+        serde_json::json!({"request": "key", "vk": 13, "down": false}),
+        serde_json::json!({"request": "pointer", "x": 200.0, "y": 120.5}),
+        serde_json::json!({"request": "click", "x": 10.0, "y": 20.0}),
+        serde_json::json!({"request": "click", "x": 10.0, "y": 20.0, "button": 3}),
+        serde_json::json!({"request": "wheel", "notches": -2}),
+        serde_json::json!({"request": "focus"}),
+    ];
+    assert_eq!(heard.as_slice(), &expected[..]);
+    Ok(())
+}
+
+#[test]
+fn driving_takes_numbers_only() -> Result {
+    let console = Standing::start("e")?;
+    for wrong in [
+        &["key"][..],
+        &["key", "enter"][..],
+        &["key", "0"][..],
+        &["key", "13", "--sideways"][..],
+        &["pointer", "1"][..],
+        &["pointer", "a", "b"][..],
+        &["click", "1", "2", "--button"][..],
+        &["click", "1", "2", "--button", "9"][..],
+        &["wheel"][..],
+        &["wheel", "up"][..],
+        &["focus", "now"][..],
+    ] {
+        assert_eq!(console.opence(wrong)?.status.code(), Some(2), "{wrong:?}");
+    }
+    // (the stand-in console refuses structured requests)
+    assert_eq!(console.opence(&["wheel", "1"])?.status.code(), Some(1));
     Ok(())
 }

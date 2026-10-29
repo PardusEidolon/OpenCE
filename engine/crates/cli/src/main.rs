@@ -9,6 +9,11 @@
 //! opence [--socket PATH] watch [--backlog N]    the log, as it is written
 //! opence [--socket PATH] script FILE            a script's lines, stopping at a failure
 //! opence [--socket PATH] shell                  lines typed (completed by the engine), or read
+//! opence [--socket PATH] key VK [--down | --up]  a key pressed (a Windows key code), or held, or let go
+//! opence [--socket PATH] pointer X Y            the menus' pointer moved, in the window's units
+//! opence [--socket PATH] click X Y [--button N] a click there (1 left, 2 right, 3 middle, 4, 5)
+//! opence [--socket PATH] wheel N                the wheel turned N notches (up is positive)
+//! opence [--socket PATH] focus                  the menu screen shown and its focused widget, as JSON
 //! opence census [--check | --write | --rank | --ratchet] [--record-importer] [--root DIR] the coverage census of the repository
 //! ```
 //!
@@ -24,13 +29,14 @@ use std::path::PathBuf;
 use std::process::ExitCode;
 
 use opence_cli::{
-    complete, frame, parse_size, run, script, shell_lines, state, watch, Connection, Error,
+    complete, drive, frame, key, number, parse_size, run, script, shell_lines, state, watch,
+    Connection, Error, Press,
 };
 use rustyline::completion::{Completer, Pair};
 use rustyline::error::ReadlineError;
 use rustyline::{Context, Editor, Helper, Highlighter, Hinter, Validator};
 
-const USAGE: &str = "usage: opence [--socket PATH] (run [--json] LINE... | state | frame PATH [--size WxH] | watch [--backlog N] | script FILE | shell | census [--check | --write | --rank | --ratchet] [--record-importer] [--root DIR])";
+const USAGE: &str = "usage: opence [--socket PATH] (run [--json] LINE... | state | frame PATH [--size WxH] | watch [--backlog N] | script FILE | shell | key VK [--down | --up] | pointer X Y | click X Y [--button N] | wheel N | focus | census [--check | --write | --rank | --ratchet] [--record-importer] [--root DIR])";
 
 fn main() -> ExitCode {
     let arguments: Vec<String> = std::env::args().skip(1).collect();
@@ -80,6 +86,73 @@ fn start(arguments: &[String]) -> Result<(), Error> {
             )
         }
         "state" => state(&mut Connection::connect(&socket)?, &mut out),
+        "key" => {
+            let vk: u8 = number(rest.first(), "a key")?;
+            if vk == 0 || vk == 0xFF {
+                return Err(Error::Usage("a key is 1 to 254".into()));
+            }
+            let press = match rest.get(1).map(String::as_str) {
+                None => Press::Whole,
+                Some("--down") => Press::Down,
+                Some("--up") => Press::Up,
+                Some(other) => return Err(Error::Usage(format!("key does not take {other}"))),
+            };
+            if rest.len() > 2 {
+                return Err(Error::Usage("key takes one key".into()));
+            }
+            key(&mut Connection::connect(&socket)?, vk, press)
+        }
+        "pointer" | "click" => {
+            let x: f64 = number(rest.first(), "x")?;
+            let y: f64 = number(rest.get(1), "y")?;
+            let mut request = serde_json::json!({"request": subcommand, "x": x, "y": y});
+            match (subcommand.as_str(), &rest[2.min(rest.len())..]) {
+                (_, []) => {}
+                ("click", [flag, button]) if flag == "--button" => {
+                    let button: u8 = number(Some(button), "a button")?;
+                    if !(1..=5).contains(&button) {
+                        return Err(Error::Usage("a button is 1 to 5".into()));
+                    }
+                    request["button"] = serde_json::json!(button);
+                }
+                _ => {
+                    return Err(Error::Usage(format!(
+                        "{subcommand} takes X Y{}",
+                        if subcommand == "click" {
+                            " [--button N]"
+                        } else {
+                            ""
+                        }
+                    )))
+                }
+            }
+            drive(
+                &mut Connection::connect(&socket)?,
+                &request,
+                false,
+                &mut out,
+            )
+        }
+        "wheel" => {
+            let notches: i32 = number(rest.first(), "notches")?;
+            if rest.len() > 1 {
+                return Err(Error::Usage("wheel takes one count".into()));
+            }
+            let request = serde_json::json!({"request": "wheel", "notches": notches});
+            drive(
+                &mut Connection::connect(&socket)?,
+                &request,
+                false,
+                &mut out,
+            )
+        }
+        "focus" => {
+            if !rest.is_empty() {
+                return Err(Error::Usage("focus takes nothing".into()));
+            }
+            let request = serde_json::json!({"request": "focus"});
+            drive(&mut Connection::connect(&socket)?, &request, true, &mut out)
+        }
         "frame" => {
             let path = rest
                 .first()

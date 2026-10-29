@@ -5,6 +5,10 @@
 //! typed at its telnet console does.
 //! The console is one session, so the lines are asked one at a time, in the
 //! order they arrive.
+//!
+//! Structured requests drive the keyboard and mouse as the window would
+//! (`key`, `pointer`, `click`, `wheel`) and read where the menus' focus is
+//! (`focus`), so tests can walk the menus as a player does.
 
 use std::io::{self, BufRead, BufReader, Read, Write};
 use std::os::unix::net::{UnixListener, UnixStream};
@@ -19,7 +23,9 @@ use opence_dev::control::{
 };
 use serde_json::{Map, Value};
 
-use super::Console;
+use super::plugins::{Event, Hook, Plugin, View};
+use super::widgets::WIDGET_GLOBALS_EXPORT;
+use super::{Console, Controls, Game};
 
 /// how long a line is given for its reply
 const REPLY_LIMIT: Duration = Duration::from_secs(5);
@@ -31,17 +37,95 @@ pub fn bind(path: &Path) -> io::Result<UnixListener> {
     bind_private(path)
 }
 
+/// Where the first player's focus was in the menus when the game last
+/// updated them.
+#[derive(Debug, Clone, PartialEq, Eq, Default)]
+pub struct Focus {
+    /// the screen's name, if it has one
+    pub screen: Option<String>,
+    /// the focused widget's name, if it has one
+    pub widget: Option<String>,
+    /// a focused list's selected item, `NONE` as -1
+    pub selected: Option<i16>,
+    /// a focused text box's text
+    pub text: Option<String>,
+}
+
+/// What the control socket drives: the game's console, its keyboard and
+/// mouse, and the menus' focus as the game last had it.
+#[derive(Clone)]
+pub struct Driven {
+    console: Console,
+    controls: Controls,
+    focus: Arc<Mutex<Option<Focus>>>,
+}
+
+impl Driven {
+    /// Takes `game`'s console and controls, and adds the plugin that keeps
+    /// the menus' focus at the end of each UI update.
+    pub fn of(game: &mut Game) -> Self {
+        let focus = Arc::new(Mutex::new(None));
+        game.add_plugin(Box::new(FocusWatch(Arc::clone(&focus))));
+        Self {
+            console: game.console(),
+            controls: game.controls(),
+            focus,
+        }
+    }
+
+    /// The menus' focus as the game last updated them, if it has.
+    #[must_use]
+    pub fn focus(&self) -> Option<Focus> {
+        self.focus
+            .lock()
+            .unwrap_or_else(PoisonError::into_inner)
+            .clone()
+    }
+}
+
+/// Keeps the first player's focus from the widget tree at each UI update.
+struct FocusWatch(Arc<Mutex<Option<Focus>>>);
+
+impl Plugin for FocusWatch {
+    fn name(&self) -> &str {
+        "control socket focus"
+    }
+
+    fn hooks(&self) -> &[Hook] {
+        &[Hook::Ui]
+    }
+
+    fn on(&mut self, _event: &Event<'_>, view: &View<'_>) {
+        let Some(tree) = view
+            .export(WIDGET_GLOBALS_EXPORT)
+            .and_then(|globals| view.widget_tree(globals, 0))
+        else {
+            return;
+        };
+        let focus = tree.widgets.first().map(|screen| {
+            let focused = tree.focus();
+            Focus {
+                screen: screen.name.clone(),
+                widget: focused.and_then(|widget| widget.name.clone()),
+                selected: focused.and_then(|widget| widget.list.as_ref().map(|list| list.selected)),
+                text: focused.and_then(|widget| widget.text.clone()),
+            }
+        });
+        *self.0.lock().unwrap_or_else(PoisonError::into_inner) = focus;
+    }
+}
+
 /// Serves `listener` on a thread of its own, each connection on another,
 /// at most [`MAX_CONNECTIONS`] at once.
-pub fn serve(listener: UnixListener, console: Console) {
-    let asking = Arc::new(Mutex::new(console));
+pub fn serve(listener: UnixListener, driven: Driven) {
+    let asking = Arc::new(Mutex::new(driven));
     let connections = Arc::new(AtomicUsize::new(0));
     let _ = std::thread::Builder::new()
         .name("control".into())
         .spawn(move || accept(&listener, &asking, &connections));
 }
 
-fn accept(listener: &UnixListener, asking: &Arc<Mutex<Console>>, connections: &Arc<AtomicUsize>) {
+fn accept(listener: &UnixListener, asking: &Arc<Mutex<Driven>>, connections: &Arc<AtomicUsize>) {
     for stream in listener.incoming() {
         let Ok(mut stream) = stream else { continue };
         if connections.fetch_add(1, Ordering::AcqRel) >= MAX_CONNECTIONS {
@@ -67,7 +151,7 @@ fn accept(listener: &UnixListener, asking: &Arc<Mutex<Console>>, connections: &A
     }
 }
 
-fn connection(asking: &Mutex<Console>, stream: UnixStream) {
+fn connection(asking: &Mutex<Driven>, stream: UnixStream) {
     let _ = stream.set_write_timeout(Some(WRITE_TIMEOUT));
     let Ok(reading) = stream.try_clone() else {
         return;
@@ -96,8 +180,8 @@ fn connection(asking: &Mutex<Console>, stream: UnixStream) {
             continue;
         }
         let answered = if rate.allow(Instant::now()) {
-            let console = asking.lock().unwrap_or_else(PoisonError::into_inner);
-            answer(&console, line)
+            let driven = asking.lock().unwrap_or_else(PoisonError::into_inner);
+            answer(&driven, line)
         } else {
             refusal(&RequestError::TooFrequent.to_string())
         };
@@ -108,12 +192,15 @@ fn connection(asking: &Mutex<Console>, stream: UnixStream) {
 }
 
 /// Answers one request line: a command line is run on the game's console
-/// and its output returned as `text`; anything else is refused.
-pub fn answer(console: &Console, line: &str) -> String {
+/// and its output returned as `text`; a structured request moves the
+/// keyboard or mouse, or reads the menus' focus; anything else is refused.
+pub fn answer(driven: &Driven, line: &str) -> String {
     match parse_request(line) {
         Err(error) => refusal(&error.to_string()),
-        Ok(Request::Structured(..)) => refusal("the game's console runs command lines only"),
-        Ok(Request::Command(command)) => match console.ask(&command, REPLY_LIMIT) {
+        Ok(Request::Structured(name, fields)) => {
+            structured(driven, &name, &fields).unwrap_or_else(|error| refusal(&error))
+        }
+        Ok(Request::Command(command)) => match driven.console.ask(&command, REPLY_LIMIT) {
             None => refusal("the game's console is not listening yet"),
             Some(output) => {
                 let mut fields = Map::new();
@@ -122,6 +209,85 @@ pub fn answer(console: &Console, line: &str) -> String {
             }
         },
     }
+}
+
+/// Answers a structured request, or says why it cannot.
+fn structured(driven: &Driven, name: &str, fields: &Map<String, Value>) -> Result<String, String> {
+    let controls = &driven.controls;
+    match name {
+        "key" => {
+            let vk = small(fields, "vk", 1..=0xFE)?;
+            let down = fields
+                .get("down")
+                .and_then(Value::as_bool)
+                .ok_or("a key needs \"down\", true or false")?;
+            controls.key(vk, 0, 0, down);
+        }
+        "pointer" => {
+            let [x, y] = [real(fields, "x")?, real(fields, "y")?];
+            controls.mouse_position(x, y);
+        }
+        "click" => {
+            let [x, y] = [real(fields, "x")?, real(fields, "y")?];
+            let button = if fields.contains_key("button") {
+                small(fields, "button", 1..=5)?
+            } else {
+                1
+            };
+            controls.mouse_position(x, y);
+            controls.mouse_button(button, true);
+            controls.mouse_button(button, false);
+        }
+        "wheel" => controls.mouse_wheel(real(fields, "notches")?),
+        "focus" => {
+            let focus = driven
+                .focus()
+                .ok_or("the game has not shown a screen of its menus yet")?;
+            let text = |value: Option<String>| value.map_or(Value::Null, Value::String);
+            let mut answer = Map::new();
+            answer.insert("screen".into(), text(focus.screen));
+            answer.insert("widget".into(), text(focus.widget));
+            answer.insert(
+                "selected".into(),
+                focus.selected.map_or(Value::Null, Value::from),
+            );
+            answer.insert("text".into(), text(focus.text));
+            return Ok(reply(true, answer));
+        }
+        other => return Err(format!("there is no request \"{other}\"")),
+    }
+    Ok(reply(true, Map::new()))
+}
+
+/// The whole number `name` in `fields`, within `range`.
+fn small(
+    fields: &Map<String, Value>,
+    name: &str,
+    range: std::ops::RangeInclusive<u8>,
+) -> Result<u8, String> {
+    fields
+        .get(name)
+        .and_then(Value::as_u64)
+        .and_then(|value| u8::try_from(value).ok())
+        .filter(|value| range.contains(value))
+        .ok_or_else(|| {
+            format!(
+                "\"{name}\" must be a whole number from {} to {}",
+                range.start(),
+                range.end()
+            )
+        })
+}
+
+/// The finite number `name` in `fields`, as the window's `f32`.
+fn real(fields: &Map<String, Value>, name: &str) -> Result<f32, String> {
+    fields
+        .get(name)
+        .and_then(Value::as_f64)
+        // (a pixel or a notch: f32 keeps what a window could say)
+        .map(|value| value as f32)
+        .filter(|value| value.is_finite())
+        .ok_or_else(|| format!("\"{name}\" must be a number"))
 }
 
 /// The console's output as the shell shows it: its lines ended by `\n`,

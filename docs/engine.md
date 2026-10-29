@@ -114,6 +114,21 @@ opence run '(game_speed 2)'   # one line (--json for the data)
 opence shell                  # an interactive shell
 ```
 
+The game's keyboard and mouse are driven through the same socket, so a
+test (or a script) works the menus as a player does:
+
+```sh
+opence key 40                 # a key pressed: down, held 50 ms, up (--down, --up)
+opence pointer 320 200        # the menus' pointer, in the window's units
+opence click 320 200          # a click there (--button 2 for the right one)
+opence wheel -1               # the wheel, a notch down
+opence focus                  # the screen shown and its focused widget, as JSON
+```
+
+A key request names its `down` explicitly: the menus read held keys, so a
+press and release sent together, between two of the game's frames, would
+not be seen. `runtime/tests/menus.rs` drives the real main menu this way.
+
 ## The coverage census
 
 The census (`engine/crates/census`, `opence census`) gives every function

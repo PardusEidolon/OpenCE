@@ -58,6 +58,12 @@ impl Controls {
         self.with(|input| input.button(button, down));
     }
 
+    /// The window putting the mouse at `x` and `y`, the drawable's pixels
+    /// from its top left: the menus' pointer.
+    pub fn mouse_position(&self, x: f32, y: f32) {
+        self.with(|input| input.position(x, y));
+    }
+
     /// The mouse's wheel turning by `notches`, up positive.
     pub fn mouse_wheel(&self, notches: f32) {
         self.with(|input| input.wheel(notches));

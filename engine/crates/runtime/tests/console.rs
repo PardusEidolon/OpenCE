@@ -381,7 +381,7 @@ fn the_control_socket_runs_a_line_on_the_game_s_console() -> Result<(), Error> {
     let path = socket_path("line");
     let control =
         opence_runtime::control::bind(&path).map_err(|error| Error::Setup(error.to_string()))?;
-    opence_runtime::control::serve(control, game.console());
+    opence_runtime::control::serve(control, opence_runtime::control::Driven::of(&mut game));
     let asking = std::thread::spawn(move || -> Option<String> {
         let mut stream = std::os::unix::net::UnixStream::connect(&path).ok()?;
         stream.write_all(b"\"game_speed 2\"\n").ok()?;
@@ -400,10 +400,10 @@ fn the_control_socket_runs_a_line_on_the_game_s_console() -> Result<(), Error> {
 #[test]
 fn the_control_socket_refuses_what_the_console_cannot_run() -> Result<(), Error> {
     // with the console off there is no game to ask; a structured request
-    // has no console line
+    // the socket does not know is refused
     let runtime = Runtime::new(None)?;
-    let game = runtime.load(&module(CONSOLE))?;
-    let console = game.console();
+    let mut game = runtime.load(&module(CONSOLE))?;
+    let driven = opence_runtime::control::Driven::of(&mut game);
     for (request, error) in [
         (
             "\"game_speed 2\"",
@@ -411,10 +411,10 @@ fn the_control_socket_refuses_what_the_console_cannot_run() -> Result<(), Error>
         ),
         (
             "{\"request\": \"state\"}",
-            "the game's console runs command lines only",
+            r#"there is no request \"state\""#,
         ),
     ] {
-        let reply = opence_runtime::control::answer(&console, request);
+        let reply = opence_runtime::control::answer(&driven, request);
         assert_eq!(reply, format!("{{\"error\":\"{error}\",\"ok\":false}}"));
     }
     Ok(())

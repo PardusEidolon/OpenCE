@@ -184,6 +184,8 @@ pub struct WasmGame {
     thread: Mutex<Option<Running>>,
     controls: Controls,
     console: Console,
+    /// the console, keyboard and mouse the control socket drives
+    driven: control::Driven,
     speakers: Speakers,
     /// the game's ticks so far ([`TickCounter`])
     ticks: Arc<AtomicU64>,
@@ -228,6 +230,7 @@ impl WasmGame {
         game.add_plugin(Box::new(TickCounter(Arc::clone(&ticks))));
         let controls = game.controls();
         let console = game.console();
+        let driven = control::Driven::of(&mut game);
         let speakers = game.speakers();
         let seconds = options
             .seconds
@@ -238,6 +241,7 @@ impl WasmGame {
             thread: Mutex::new(None),
             controls,
             console,
+            driven,
             speakers,
             ticks,
         }))
@@ -368,7 +372,8 @@ impl WasmGame {
 
     /// Serves the control socket at `path` (readable by this user alone),
     /// each line a client sends handed to the game's console as `ask`
-    /// does, so the `opence` tool drives the game the app plays.
+    /// does and each structured request to its keyboard and mouse, so the
+    /// `opence` tool drives the game the app plays.
     ///
     /// # Errors
     /// [`WasmGameError::Control`] if the socket cannot be bound there.
@@ -377,7 +382,7 @@ impl WasmGame {
             control::bind(std::path::Path::new(&path)).map_err(|error| WasmGameError::Control {
                 reason: format!("{path}: {error}"),
             })?;
-        control::serve(listener, self.console.clone());
+        control::serve(listener, self.driven.clone());
         Ok(())
     }
 

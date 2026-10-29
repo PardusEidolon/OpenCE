@@ -141,6 +141,11 @@ impl Batches {
         self.validator.set_drawable_size(width, height);
     }
 
+    /// the drawable's size in pixels
+    pub(crate) fn drawable(&self) -> (u32, u32) {
+        self.drawable
+    }
+
     pub(crate) fn counts(&self) -> RenderCounts {
         self.counts
     }
