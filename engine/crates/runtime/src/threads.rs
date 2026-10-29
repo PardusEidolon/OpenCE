@@ -137,7 +137,7 @@ const FRAME_STEP: u64 = 16_666_667;
 const FRAME_DARK: u64 = 100_000_000;
 
 /// `debug.frame_clock` (as `port/linux`'s): from the first frame shown the
-/// clocks step a 60th of a second a frame, whatever the time between them,
+/// game's clocks (`GetTickCount`, `QueryPerformanceCounter`) step a 60th of a second a frame, whatever the time between them,
 /// so that frames captured for tests are the same run to run; while no
 /// frame is shown for more than a tenth of a second they step with the real
 /// time, so that the game's waits end.
@@ -910,7 +910,11 @@ fn since_1970() -> Duration {
 }
 
 /// `clock_time_get(id, precision, time)`: the real time (0) or the
-/// monotonic one (1, and the CPU clocks 2 and 3), in nanoseconds
+/// monotonic one (1, and the CPU clocks 2 and 3), in nanoseconds. The
+/// monotonic clock is the real one even with `debug.frame_clock` on (as in
+/// `port/linux`, where only the game's own clocks follow the frames): the
+/// vertical blanks and the mixer are paced by it, and a blank paced by a
+/// clock that steps only when a frame is shown would hold back the frame.
 fn clock_time_get(
     caller: &mut Caller<'_, Record>,
     params: &[Val],
@@ -918,7 +922,7 @@ fn clock_time_get(
 ) -> wasmtime::Result<()> {
     let nanos = match arg(params, 0) {
         0 => u64::try_from(since_1970().as_nanos()).unwrap_or(u64::MAX),
-        1..=3 => caller.data().shared.threads.elapsed(),
+        1..=3 => caller.data().shared.threads.real(),
         _ => {
             give(results, EINVAL);
             return Ok(());
@@ -974,7 +978,7 @@ fn poll_oneoff(
         give(results, EFAULT);
         return Ok(());
     };
-    let monotonic = caller.data().shared.threads.elapsed();
+    let monotonic = caller.data().shared.threads.real();
     let realtime = u64::try_from(since_1970().as_nanos()).unwrap_or(u64::MAX);
     // the descriptors' events (userdata, type, error), or else the soonest
     // clock's (userdata, nanoseconds to wait)

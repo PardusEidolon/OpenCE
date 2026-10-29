@@ -65,8 +65,8 @@ def test_sound_is_compared_second_by_second_above_the_floor() -> None:
     header = "second\tdbfs\tb63\tb125\n"
     a = audit.parse_tsv(header + "0\t-30.00\t-40\t-41\n1\t-120.00\t-120\t-120\n2\t-20\t-30\t-31\n")
     b = audit.parse_tsv(header + "0\t-31.50\t-40\t-45\n1\t-120.00\t-120\t-120\n")
-    assert audit.sound_difference(a, b) == {"seconds": 2, "dbfs": 1.5, "band": 4.0}
-    assert audit.sound_difference([], b) == {"seconds": 0, "dbfs": 0.0, "band": 0.0}
+    assert audit.sound_difference(a, b) == {"seconds": 2, "dbfs": 1.5, "band": 4.0, "dbfs_at": 0, "band_at": 0}
+    assert audit.sound_difference([], b) == {"seconds": 0, "dbfs": 0.0, "band": 0.0, "dbfs_at": None, "band_at": None}
 
 
 def test_script_events_compare_by_order_and_by_how_far_they_moved() -> None:
@@ -101,4 +101,28 @@ def test_findings_name_each_measure_over_its_threshold() -> None:
     metrics = {"region": 12.5, "dbfs": 0.5, "band": 3.0, "shift": 31, "missing": 1, "extra": 0}
     found = audit.findings("a30", "shipped", metrics, limits)
     assert [finding["measure"] for finding in found] == ["region", "shift", "missing"]
-    assert found[0] == {"map": "a30", "variant": "shipped", "measure": "region", "value": 12.5, "limit": 8.0}
+    assert found[0] == {
+        "map": "a30",
+        "variant": "shipped",
+        "measure": "region",
+        "value": 12.5,
+        "limit": 8.0,
+        "at": "",
+    }
+    # a frame's finding names the frame (its tick) and the region of the 4x4 grid
+    metrics["worst"] = {"frame": "tick_03000.png", "region": 5}
+    assert audit.findings("a30", "shipped", metrics, limits)[0]["at"] == "tick 3000, region 5"
+    # the sound's, the second it was worst at
+    metrics.update(dbfs=2.0, dbfs_at=41)
+    assert audit.findings("a30", "shipped", metrics, limits)[1]["at"] == "second 41"
+
+
+def test_every_run_steps_its_clock_a_frame_at_a_time_so_runs_repeat() -> None:
+    command = audit.audit_command(Path("out"), "a10", "stock", "wake cutscene_x", 150)
+    assert command[1:7] == ["--audit", "out", "--map", "a10", "--seconds", "150"]
+    settings = [command[index + 1] for index, word in enumerate(command) if word == "--setting"]
+    assert settings == ["debug.frame_clock=true", *audit.STOCK]
+    assert command[-2:] == ["--at", f"{audit.CUTSCENE_TICK}:wake cutscene_x"]
+    shipped = audit.audit_command(Path("out"), "a10", "shipped", None, 40)
+    assert "--at" not in shipped
+    assert [word for word in shipped if word.startswith("debug.")] == ["debug.frame_clock=true"]

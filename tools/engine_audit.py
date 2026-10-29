@@ -63,6 +63,9 @@ STOCK = [
     "game.enhanced_animations=false",
 ]
 VARIANTS = {"shipped": [], "stock": STOCK, "stock2": STOCK}
+# every run's: the game's clocks step a 60th of a second a frame shown,
+# whatever the machine's pace, so that two runs of a variant repeat
+EVERY_RUN = ["debug.frame_clock=true"]
 # the measures, in the order findings are listed
 MEASURES = ["region", "dbfs", "band", "shift", "missing", "extra"]
 # the least each threshold may be: a region's mean difference out of 255,
@@ -129,6 +132,7 @@ def sound_difference(a: list[dict[str, str]], b: list[dict[str, str]]) -> dict:
     by_second = {row["second"]: row for row in b}
     seconds = 0
     dbfs = band = 0.0
+    dbfs_at = band_at = None
     for row in a:
         other = by_second.get(row["second"])
         if other is None:
@@ -136,11 +140,16 @@ def sound_difference(a: list[dict[str, str]], b: list[dict[str, str]]) -> dict:
         seconds += 1
         if float(row["dbfs"]) <= SOUND_FLOOR and float(other["dbfs"]) <= SOUND_FLOOR:
             continue
-        dbfs = max(dbfs, abs(float(row["dbfs"]) - float(other["dbfs"])))
+        second = int(float(row["second"]))
+        difference = abs(float(row["dbfs"]) - float(other["dbfs"]))
+        if dbfs_at is None or difference > dbfs:
+            dbfs, dbfs_at = difference, second
         for key in row:
             if key.startswith("b") and key in other:
-                band = max(band, abs(float(row[key]) - float(other[key])))
-    return {"seconds": seconds, "dbfs": round(dbfs, 2), "band": round(band, 2)}
+                difference = abs(float(row[key]) - float(other[key]))
+                if band_at is None or difference > band:
+                    band, band_at = difference, second
+    return {"seconds": seconds, "dbfs": round(dbfs, 2), "band": round(band, 2), "dbfs_at": dbfs_at, "band_at": band_at}
 
 
 def event_difference(a: list[dict[str, str]], b: list[dict[str, str]]) -> dict:
@@ -181,10 +190,27 @@ def thresholds(noise: dict) -> dict:
     return {measure: max(type(FLOORS[measure])(noise.get(measure, 0) * 2), FLOORS[measure]) for measure in MEASURES}
 
 
+def where(measure: str, metrics: dict) -> str:
+    """where a run's measure was worst: a frame's tick and region, or the
+    sound's second"""
+    worst = metrics.get("worst")
+    if measure == "region" and worst:
+        return f"tick {int(worst['frame'].removeprefix('tick_').removesuffix('.png'))}, region {worst['region']}"
+    at = metrics.get(f"{measure}_at")
+    return "" if at is None else f"second {at}"
+
+
 def findings(name: str, variant: str, metrics: dict, limits: dict) -> list[dict]:
-    """each measure of a run that is over its limit"""
+    """each measure of a run that is over its limit, and where"""
     return [
-        {"map": name, "variant": variant, "measure": measure, "value": metrics[measure], "limit": limits[measure]}
+        {
+            "map": name,
+            "variant": variant,
+            "measure": measure,
+            "value": metrics[measure],
+            "limit": limits[measure],
+            "at": where(measure, metrics),
+        }
         for measure in MEASURES
         if measure in metrics and metrics[measure] > limits[measure]
     ]
@@ -237,16 +263,23 @@ def scripts_listing(name: str) -> str:
     return done.stdout if done.returncode == 0 else ""
 
 
+def audit_command(folder: Path, name: str, variant: str, line: str | None, seconds: int) -> list[str]:
+    """the app's command line for a run of `name` as `variant`, with the
+    console `line` (a cutscene) at CUTSCENE_TICK"""
+    command = [str(APP), "--audit", str(folder), "--map", name, "--seconds", str(seconds)]
+    for setting in EVERY_RUN + VARIANTS[variant]:
+        command += ["--setting", setting]
+    if line is not None:
+        command += ["--at", f"{CUTSCENE_TICK}:{line}"]
+    return command
+
+
 def play(name: str, variant: str, line: str | None, seconds: int, again: bool) -> tuple[str, int]:
     folder = OUT / variant / run_name(name, line)
     if (folder / "summary.json").is_file() and not again:
         return str(folder), 0
     folder.mkdir(parents=True, exist_ok=True)
-    command = [str(APP), "--audit", str(folder), "--map", name, "--seconds", str(seconds)]
-    for setting in VARIANTS[variant]:
-        command += ["--setting", setting]
-    if line is not None:
-        command += ["--at", f"{CUTSCENE_TICK}:{line}"]
+    command = audit_command(folder, name, variant, line, seconds)
     with open(folder / "app.log", "w") as log:
         done = subprocess.run(command, cwd=ROOT, stdout=log, stderr=subprocess.STDOUT)
     return str(folder), done.returncode
@@ -297,35 +330,36 @@ def command_bench(arguments: argparse.Namespace) -> int:
 
 def command_compare(_: argparse.Namespace) -> int:
     runs = sorted(path.name for path in (OUT / "shipped").glob("*") if (path / "summary.json").is_file())
+    # each run's own limits, from its two stock runs' spread
     noise: dict = {}
-    for run in runs:
-        if (OUT / "stock2" / run / "summary.json").is_file():
-            spread = compare(OUT / "stock" / run, OUT / "stock2" / run)
-            for measure in MEASURES:
-                noise[measure] = max(noise.get(measure, 0), spread[measure])
-    limits = thresholds(noise)
+    limits: dict = {}
     results = {}
     found: list[dict] = []
     for run in runs:
         if not (OUT / "stock" / run / "summary.json").is_file():
             continue
+        if (OUT / "stock2" / run / "summary.json").is_file():
+            spread = compare(OUT / "stock" / run, OUT / "stock2" / run)
+            noise[run] = {measure: spread[measure] for measure in MEASURES}
+        limits[run] = thresholds(noise.get(run, {}))
         metrics = compare(OUT / "stock" / run, OUT / "shipped" / run)
         summary = json.loads((OUT / "shipped" / run / "summary.json").read_text())
         times = [float(line) for line in (OUT / "shipped" / run / "frame_ms.tsv").read_text().split()]
         metrics.update(ticks=summary["ticks"], refused=summary["refused"], error=summary["error"])
         metrics.update(frame_stats(times))
         results[run] = metrics
-        found += findings(run, "shipped", metrics, limits)
+        found += findings(run, "shipped", metrics, limits[run])
         if summary["error"] or summary["refused"]:
             found.append(
                 {"map": run, "variant": "shipped", "measure": "fault", "value": summary["refused"], "limit": 0}
             )
     (OUT / "compare.json").write_text(json.dumps({"noise": noise, "limits": limits, "runs": results}, indent=1))
     with open(OUT / "findings.tsv", "w") as table:
-        table.write("map\tvariant\tmeasure\tvalue\tlimit\n")
+        table.write("map\tvariant\tmeasure\tvalue\tlimit\tat\n")
         for finding in found:
-            table.write("\t".join(str(finding[key]) for key in ["map", "variant", "measure", "value", "limit"]) + "\n")
-    print(f"{len(results)} runs compared, {len(found)} findings; limits {limits}")
+            keys = ["map", "variant", "measure", "value", "limit", "at"]
+            table.write("\t".join(str(finding.get(key, "")) for key in keys) + "\n")
+    print(f"{len(results)} runs compared, {len(found)} findings")
     return 0
 
 

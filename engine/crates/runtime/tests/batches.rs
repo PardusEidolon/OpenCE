@@ -329,22 +329,34 @@ fn a_texture_read_back_is_written_where_its_command_names() -> Result<(), Error>
     Ok(())
 }
 
-/// a device that also reads the monotonic clock
+/// a device that also reads the game's clock (QueryPerformanceCounter, in
+/// nanoseconds here) and the monotonic one
 const CLOCKED: &str = r#"
 (module
   (import "env" "host_render_submit" (func $submit (param i32 i32) (result i32)))
+  (import "env" "QueryPerformanceCounter" (func $counter (param i32) (result i32)))
   (import "wasi_snapshot_preview1" "clock_time_get" (func $clock (param i32 i64 i32) (result i32)))
   (memory (export "memory") 1)
   (func (export "submit") (param i32 i32) (result i32) (call $submit (local.get 0) (local.get 1)))
-  (func (export "clock") (result i64) (drop (call $clock (i32.const 1) (i64.const 1) (i32.const 0x80))) (i64.load (i32.const 0x80))))
+  (func (export "clock") (result i64) (drop (call $counter (i32.const 0x80))) (i64.mul (i64.load (i32.const 0x80)) (i64.const 100)))
+  (func (export "monotonic") (result i64) (drop (call $clock (i32.const 1) (i64.const 1) (i32.const 0x80))) (i64.load (i32.const 0x80))))
 "#;
 
-fn clock(game: &mut opence_runtime::Game) -> Result<u64, Error> {
-    let results = game.call_with("clock", &[])?;
+fn read_clock(game: &mut opence_runtime::Game, name: &str) -> Result<u64, Error> {
+    let results = game.call_with(name, &[])?;
     Ok(match results.first() {
         Some(Val::I64(value)) => value.cast_unsigned(),
         _ => 0,
     })
+}
+
+fn clock(game: &mut opence_runtime::Game) -> Result<u64, Error> {
+    read_clock(game, "clock")
+}
+
+/// `a - b` within the counter's 100 ns
+fn near(a: u64, b: u64) -> bool {
+    a.abs_diff(b) < 100
 }
 
 /// a 60th of a second, as the frame clock steps
@@ -361,10 +373,10 @@ fn with_the_frame_clock_each_frame_shown_is_a_60th_of_a_second() -> Result<(), E
     for _ in 0..30 {
         submit(&mut game, &present)?;
     }
-    assert_eq!(clock(&mut game)? - start, 30 * STEP);
+    assert!(near(clock(&mut game)? - start, 30 * STEP));
     // a batch that shows nothing does not step it
     submit(&mut game, &batch(&[(op::CREATE_BUFFER, &[1, 64])]))?;
-    assert_eq!(clock(&mut game)? - start, 30 * STEP);
+    assert!(near(clock(&mut game)? - start, 30 * STEP));
     // in the dark for more than a tenth of a second, it steps with the real time
     // (bounded by the time measured, as a loaded machine sleeps longer)
     let before = std::time::Instant::now();
@@ -374,6 +386,27 @@ fn with_the_frame_clock_each_frame_shown_is_a_60th_of_a_second() -> Result<(), E
     assert!(
         dark >= 5 * STEP && dark <= slept + STEP,
         "{dark} after {slept}"
+    );
+    Ok(())
+}
+
+#[test]
+fn with_the_frame_clock_the_monotonic_clock_is_still_the_real_time() -> Result<(), Error> {
+    // (the vertical blanks are paced by it: were they paced by the frame
+    // clock, which steps only when a frame is shown, a game that waits for
+    // a blank before it shows its frame would wait for the dark steps)
+    let mut game = Runtime::new(None)?.load(&module(CLOCKED))?;
+    assert!(game.set_setting("debug.frame_clock", "true"));
+    let present = batch(&[(op::PRESENT, &[])]);
+    submit(&mut game, &present)?;
+    let start = read_clock(&mut game, "monotonic")?;
+    let before = std::time::Instant::now();
+    std::thread::sleep(std::time::Duration::from_millis(50));
+    let moved = read_clock(&mut game, "monotonic")? - start;
+    let slept = u64::try_from(before.elapsed().as_nanos()).unwrap_or(u64::MAX);
+    assert!(
+        moved >= 50_000_000 && moved <= slept + 1_000_000,
+        "{moved} after {slept}"
     );
     Ok(())
 }
