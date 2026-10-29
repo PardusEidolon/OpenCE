@@ -1,0 +1,1 @@
+Task: Phase 2 'Signed distance field fonts from the font tags'. Atlas built from each font tag's glyph fields, packed tallest first, cached by map hash. Census --write marked sound_definition minimum/maximum_distance used (name-match false positive). Workspace tests, Swift 35/0/4, census --check pass.
