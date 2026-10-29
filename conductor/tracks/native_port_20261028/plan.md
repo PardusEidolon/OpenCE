@@ -99,5 +99,5 @@ stops, except A1's go/no-go.
 - [x] Task: Remove the presentation code the plugins replace, and the `net` crate. bf017c10 (the audio crate, the old shaders and ShaderLibrary; `net` went in 73d4fa06)
 - [x] Task: Remove `port/macos` and its VM. 07193494
   - The VM golden frames (made from the user's maps) left the repository; movement and placement trace recorders need the VM and their traces stay as records; `HALO_GUEST_VM` ifdefs in source-adjacent C are left.
-- [ ] Task: The traces as checks that the wasm build matches the native reference.
+- [x] Task: The traces as checks that the wasm build matches the native reference. 3c8edc0d
 - [ ] Task: Conductor - User Manual Verification 'Phase 7: Removals' (Protocol in workflow.md) (automated)
