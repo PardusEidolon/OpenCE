@@ -1,0 +1,1 @@
+Phase 7 'Removals and checks' verification (automated): workspace tests, clippy, census --check, traces --check (63/63), Python tests, harness (709), Swift tests (35, 0 failures), coverage floors (c0584500) and nix flake check pass.
