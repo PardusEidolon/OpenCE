@@ -10,10 +10,10 @@ the design approval, which the user gives.
 - [ ] Task: The user's approval of every screen. (waiting on the user: the drawing against the prototypes, Phase 3 tasks 1, 3 and 4, waits on it)
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Design' (Protocol in workflow.md)
 
-## Phase 2: Reading the game's UI
+## Phase 2: Reading the game's UI [checkpoint: e230b4d1]
 - [x] Task: Read the widget tree from the game's memory through the read-only views; fuzz the reader. fde71a8e
 - [x] Task: Signed distance field fonts from the font tags, built behind the loading screen. 3327ed7d
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Reading the UI' (Protocol in workflow.md) (automated)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Reading the UI' (Protocol in workflow.md) (automated)
 
 ## Phase 3: Drawing and input
 - [ ] Task: Draw the layout at 4K over the background scene; golden frames of the main menu.
