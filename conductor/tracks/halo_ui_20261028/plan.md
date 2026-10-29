@@ -24,6 +24,6 @@ the design approval, which the user gives.
 
 ## Phase 4: The loading screen
 - [ ] Task: Draw the Xbox loading screen at 4K from the original's code.
-- [ ] Task: The chant from the user's xbe, silent without it.
+- [x] Task: The chant from the user's xbe, silent without it. cfdcf9b2
 - [ ] Task: No hitch or black frame into the first frame of the next map.
 - [ ] Task: Conductor - User Manual Verification 'Phase 4: The loading screen' (Protocol in workflow.md) (automated)
