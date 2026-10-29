@@ -75,7 +75,7 @@ stops, except A1's go/no-go.
   - Re-run at Phase 5's end, at real 4K (265b437a draws at the drawable's resolution; the earlier GPU numbers were of a 640×480 frame): 2378 frames, p50 7.022 ms, **p99 9.096 ms**, p99.9 35.7 ms, 3 hitches; the GPU p50 5.434 ms, p99 5.660 ms. The GPU now meets the bar with 2.7 ms to spare; the CPU frame (the game's rasterizer and the device in game.wasm) is still the whole of the miss. Stays blocked.
 - [x] Task: Conductor - User Manual Verification 'Phase 4: Stock rendering' (Protocol in workflow.md) (automated) fcde94ab (the bar stays blocked; the golden frame awaits approval)
 
-## Phase 5: The presentation as plugins (A5)
+## Phase 5: The presentation as plugins (A5) [checkpoint: 7eb3e104]
 - [x] Task: The lighting extended from the original: bakes, probes and ray tracing on the original's lightmaps, shader tags and lights; each switchable to stock. e04beb7d
   - The first extension and its switch: `display.per_pixel_lighting` lights the models for each pixel from the original's own lights (ambient, two distant, two point; nv2a_psh.c `model_lighting`); off, as by default, they are lit at each vertex as on the Xbox. Blood Gulch, 60 s each way: 47 shader libraries made, 0 lit per pixel by default, 3 with the switch on (`tests/lighting.rs`).
   - The bakes, probes and ray tracing build on this in `lighting_original_20261028`, whose phases they are; each goes behind the same kind of switch.
@@ -83,14 +83,14 @@ stops, except A1's go/no-go.
 - [x] Task: The HUD at 4K; the grenade count and every element measured against the original. 4c9426a6 (overlaps 0.976, 0.926, 0.792; the grenade check reads only the console's echo)
 - [x] Task: The first-person rifle and hand where the original puts them. 4c9426a6 (overlap 0.649; the 4K weapon covers 1895 units against 2535)
 - [x] Task: The sound. b57ed742 (game.wasm's mixer heard headless through GameSpeakers; the app's interactive play moves to WasmGame in Phase 7)
-- [ ] Task: Conductor - User Manual Verification 'Phase 5: The presentation' (Protocol in workflow.md) (automated)
+- [x] Task: Conductor - User Manual Verification 'Phase 5: The presentation' (Protocol in workflow.md) (automated)
 
-## Phase 6: What the PC port left out (A6)
+## Phase 6: What the PC port left out (A6) [checkpoint: 352201e5]
 - [x] Task: Catalogue what the Gearbox PC port lost or broke, each with how it is measured. 0220522d
   - `docs/pc_port.md`: 23 effects switched off in turn by the original's `rasterizer_*` globals on Blood Gulch; 9 drawn by those frames and held by `tests/pc_port.rs`, 14 not in them (no flash, camouflage, water or flare in the spawn's view). Gearbox's own behaviours (Chimera's list): five followed, five not yet (they change only listed maps), Lua not followed.
 - [x] Task: Measure and fix each one that falls to the presentation. 0220522d
   - Finding: nothing to fix. What falls to the presentation is the screen (scaled as the GL port, 265b437a, `HudScreenTests`), the sound (dsound_sdl's I3DL2 reverb, occlusion and obstruction, `test_mixer.py`; README corrected) and the draws (every effect's commands drawn, none refused).
-- [ ] Task: Conductor - User Manual Verification 'Phase 6: The PC port' (Protocol in workflow.md) (automated)
+- [x] Task: Conductor - User Manual Verification 'Phase 6: The PC port' (Protocol in workflow.md) (automated)
 
 ## Phase 7: Removals and checks (A7)
 - [x] Task: Reclass the census for the new direction, with its `--check`. 887eef2a
