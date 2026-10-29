@@ -247,3 +247,22 @@ fn the_platform_answers_the_settings() {
     }
     assert!(!answers("env.config_folder"));
 }
+
+#[test]
+fn each_lighting_extension_is_switched_to_stock_by_default() -> Result<(), Error> {
+    let mut settings = Settings::new()?;
+    for name in [
+        "lighting.placed_lights",
+        "lighting.bounce",
+        "lighting.atmosphere",
+        "lighting.shadows",
+        "lighting.reflections",
+    ] {
+        assert_eq!(
+            settings.text("default", name, 64)?,
+            (Some(1), "stock".into()),
+            "{name}"
+        );
+    }
+    Ok(())
+}

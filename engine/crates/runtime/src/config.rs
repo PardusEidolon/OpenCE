@@ -253,6 +253,14 @@ impl Settings {
         }
     }
 
+    /// the setting `name`'s value as the settings file writes it, whatever
+    /// its type, if there is such a setting
+    pub(crate) fn shown(&self, name: &str) -> Option<String> {
+        self.settings
+            .get(name)
+            .map(|setting| text_of(&setting.value))
+    }
+
     /// `config_write`: sets `name` from `text`; whether it was set
     pub(crate) fn write(&mut self, name: &str, text: &str) -> bool {
         if !name.contains('.') || text.len() > LONGEST_VALUE {

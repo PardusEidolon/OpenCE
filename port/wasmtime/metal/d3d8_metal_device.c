@@ -1363,6 +1363,75 @@ static BOOL per_pixel_lighting(void)
 	return device.per_pixel_lighting;
 }
 
+/* ---------- the lighting extensions (lighting.*)
+
+Each extends the original's own lighting and is switched back to stock by
+its setting: "stock" draws as the original does, and the extension's value
+draws it once this device draws that extension. A value that is unknown,
+or not drawn yet, draws stock and says so in the log once, so a switch is
+never off without a word. The settings are read again when they change. */
+
+enum
+{
+	_lighting_placed_lights,
+	_lighting_bounce,
+	_lighting_atmosphere,
+	_lighting_shadows,
+	_lighting_reflections,
+	NUMBER_OF_LIGHTING_EXTENSIONS
+};
+
+static struct
+{
+	const char *setting;
+	/* the value that turns the extension on, and whether it is drawn */
+	const char *extended;
+	BOOL drawn;
+	/* in effect: on, and the setting's text it was read from */
+	BOOL on;
+	char text[32];
+} lighting_extensions[NUMBER_OF_LIGHTING_EXTENSIONS] =
+{
+	{ "lighting.placed_lights", "shadowed", FALSE },
+	{ "lighting.bounce", "baked", FALSE },
+	{ "lighting.atmosphere", "scattering", FALSE },
+	{ "lighting.shadows", "ray_traced", FALSE },
+	{ "lighting.reflections", "ray_traced", FALSE },
+};
+
+static unsigned long lighting_config_serial;
+
+/* reads the switches again if the settings changed: each extension's `on`
+is then whether it is switched on and drawn, stock otherwise */
+static void lighting_read(void)
+{
+	int index;
+
+	if (lighting_config_serial != config_changes() + 1)
+	{
+		lighting_config_serial = config_changes() + 1;
+		for (index = 0; index < NUMBER_OF_LIGHTING_EXTENSIONS; index++)
+		{
+			const char *setting = config_string(lighting_extensions[index].setting);
+			BOOL extended = !strcmp(setting, lighting_extensions[index].extended);
+
+			BOOL first = !lighting_extensions[index].text[0];
+
+			if (!strncmp(setting, lighting_extensions[index].text, sizeof(lighting_extensions[index].text) - 1))
+				continue;
+			strncpy(lighting_extensions[index].text, setting, sizeof(lighting_extensions[index].text) - 1);
+			if (!extended && strcmp(setting, "stock"))
+				platform_log("%s: \"%s\" is unknown, so stock", lighting_extensions[index].setting, setting);
+			else if (extended && !lighting_extensions[index].drawn)
+				platform_log("%s: %s is not drawn by the Metal renderer yet, so stock",
+					lighting_extensions[index].setting, setting);
+			else if (!first || extended)
+				platform_log("%s: %s", lighting_extensions[index].setting, setting);
+			lighting_extensions[index].on = extended && lighting_extensions[index].drawn;
+		}
+	}
+}
+
 static long model_light_register(unsigned long light)
 {
 	return XGPU_VERTEX_CONSTANT_BIAS + (light ? -80 + (long)light : -82);
@@ -1371,6 +1440,8 @@ static long model_light_register(unsigned long light)
 static void pixel_key_build(struct nv2a_pixel_shader_key *key, const struct vertex_shader_object *program)
 {
 	DWORD stage;
+
+	lighting_read();
 
 	memset(key, 0, sizeof(*key));
 	memcpy(key->combiner_state, D3D__RenderState, sizeof(key->combiner_state));

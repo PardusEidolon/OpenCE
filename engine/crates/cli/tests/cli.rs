@@ -83,7 +83,8 @@ fn console(stream: std::os::unix::net::UnixStream) {
 }
 
 /// The stand-in game's input: every structured request is kept in `heard`
-/// and accepted, and `focus` answers with the main menu.
+/// and accepted, `focus` answers with the main menu, and `setting` with
+/// the value it was given, or "stock".
 fn listening(
     heard: Arc<Mutex<Vec<serde_json::Value>>>,
 ) -> impl Fn(std::os::unix::net::UnixStream) + Clone + Send {
@@ -98,6 +99,9 @@ fn listening(
             };
             let reply = if request["request"] == "focus" {
                 serde_json::json!({"ok": true, "screen": "main menu", "widget": "campaign", "selected": 0})
+            } else if request["request"] == "setting" {
+                let value = request.get("value").cloned().unwrap_or("stock".into());
+                serde_json::json!({"ok": true, "name": request["name"], "value": value})
             } else {
                 serde_json::json!({"ok": true})
             };
@@ -242,10 +246,39 @@ fn driving_takes_numbers_only() -> Result {
         &["wheel"][..],
         &["wheel", "up"][..],
         &["focus", "now"][..],
+        &["setting"][..],
+        &["setting", "lighting.bounce", "baked", "now"][..],
     ] {
         assert_eq!(console.opence(wrong)?.status.code(), Some(2), "{wrong:?}");
     }
     // (the stand-in console refuses structured requests)
     assert_eq!(console.opence(&["wheel", "1"])?.status.code(), Some(1));
+    Ok(())
+}
+
+#[test]
+fn a_setting_is_read_or_written_while_the_game_runs() -> Result {
+    let heard = Arc::new(Mutex::new(Vec::new()));
+    let game = Standing::answered("s", listening(Arc::clone(&heard)))?;
+    let read = game.opence(&["setting", "lighting.bounce"])?;
+    assert!(read.status.success(), "{read:?}");
+    let reply: serde_json::Value = serde_json::from_str(text(&read).trim())?;
+    assert_eq!(
+        reply,
+        serde_json::json!({"name": "lighting.bounce", "value": "stock"})
+    );
+    let written = game.opence(&["setting", "lighting.bounce", "baked"])?;
+    let reply: serde_json::Value = serde_json::from_str(text(&written).trim())?;
+    assert_eq!(reply["value"], "baked");
+    let Ok(heard) = heard.lock() else {
+        panic!("the stand-in game panicked");
+    };
+    assert_eq!(
+        heard.as_slice(),
+        &[
+            serde_json::json!({"request": "setting", "name": "lighting.bounce"}),
+            serde_json::json!({"request": "setting", "name": "lighting.bounce", "value": "baked"}),
+        ][..]
+    );
     Ok(())
 }

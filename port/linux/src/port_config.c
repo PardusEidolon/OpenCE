@@ -183,6 +183,25 @@ static const struct config_setting config_settings[] =
 		"of each vertex shows across curved surfaces; false lights each vertex,\n"
 		"as the Xbox does." },
 
+	{ "lighting.placed_lights", _config_string, "\"stock\"", "HALO_LIGHTING_PLACED_LIGHTS", _environment_value, _platform_all,
+		"How the lights the map places (lamps, fires, the lights of vehicles\n"
+		"and weapons) light the world: \"stock\" as the original does; \"shadowed\"\n"
+		"lights each pixel by them and casts their shadows." },
+	{ "lighting.bounce", _config_string, "\"stock\"", "HALO_LIGHTING_BOUNCE", _environment_value, _platform_all,
+		"The light that bounces off the world: \"stock\" is the map's own\n"
+		"lightmaps; \"baked\" adds bounce light baked from the map's lights and\n"
+		"its sky at import." },
+	{ "lighting.atmosphere", _config_string, "\"stock\"", "HALO_LIGHTING_ATMOSPHERE", _environment_value, _platform_all,
+		"The air between the camera and the world: \"stock\" is the map's\n"
+		"fog as the original draws it; \"scattering\" scatters the sun's and the\n"
+		"sky's light in the fog, with the fog's own colour and depths." },
+	{ "lighting.shadows", _config_string, "\"stock\"", "HALO_LIGHTING_SHADOWS", _environment_value, _platform_all,
+		"The shadows of the sun and of moving things: \"stock\" as the original\n"
+		"draws them; \"ray_traced\" traces them against the world." },
+	{ "lighting.reflections", _config_string, "\"stock\"", "HALO_LIGHTING_REFLECTIONS", _environment_value, _platform_all,
+		"What shiny surfaces reflect: \"stock\" is the shader's own cube map;\n"
+		"\"ray_traced\" traces the world they face." },
+
 	{ "audio.enabled", _config_boolean, "true", "HALO_NO_AUDIO", _environment_set_is_false, _platform_all,
 		"Play sound." },
 	{ "audio.volume", _config_real, "1.0", "HALO_VOLUME", _environment_value, _platform_all,

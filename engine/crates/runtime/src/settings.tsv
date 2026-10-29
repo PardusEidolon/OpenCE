@@ -25,6 +25,11 @@ display.scoreboard_team_layout	string	teams	HALO_SCOREBOARD_TEAM_LAYOUT	value
 display.scoreboard_background	boolean	true	HALO_SCOREBOARD_BACKGROUND	value
 display.scoreboard_background_color	string	16, 16, 16, 150	HALO_SCOREBOARD_BACKGROUND_COLOR	value
 display.per_pixel_lighting	boolean	false	HALO_PER_PIXEL_LIGHTING	value
+lighting.placed_lights	string	stock	HALO_LIGHTING_PLACED_LIGHTS	value
+lighting.bounce	string	stock	HALO_LIGHTING_BOUNCE	value
+lighting.atmosphere	string	stock	HALO_LIGHTING_ATMOSPHERE	value
+lighting.shadows	string	stock	HALO_LIGHTING_SHADOWS	value
+lighting.reflections	string	stock	HALO_LIGHTING_REFLECTIONS	value
 audio.enabled	boolean	true	HALO_NO_AUDIO	set_is_false
 audio.volume	real	1.0	HALO_VOLUME	value
 audio.music_volume	real	1.0	HALO_MUSIC_VOLUME	value

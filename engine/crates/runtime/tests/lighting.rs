@@ -4,8 +4,10 @@
 //! nv2a_psh.c `model_lighting`), and off, as it is by default, the models
 //! are lit at each vertex as on the Xbox. Blood Gulch is played for a time
 //! each way, and the shader libraries the device makes are read: off, none
-//! of them lights a pixel; on, some do. Needs game.wasm and the user's maps
-//! (assets/maps); skips itself without them.
+//! of them lights a pixel; on, some do. The lighting extensions'
+//! switches (`lighting.*`) draw stock until each is drawn, and say so in
+//! the game's log, also when one is switched while the game runs. Needs
+//! game.wasm and the user's maps (assets/maps); skips itself without them.
 
 use std::path::PathBuf;
 use std::sync::{Arc, Mutex};
@@ -120,5 +122,59 @@ fn per_pixel_lighting_lights_the_models_from_the_original_lights() -> Result<(),
     };
     assert!(seen.lit > 0, "{seen:?}");
     assert!(seen.lit < seen.made, "{seen:?}");
+    Ok(())
+}
+
+#[test]
+fn a_lighting_extension_not_drawn_yet_draws_stock_and_says_so() -> Result<(), Error> {
+    let root = root();
+    let (Ok(wasm), true) = (
+        std::fs::read(root.join("build/engine/wasm/game.wasm")),
+        root.join("assets/maps/bloodgulch.map").is_file(),
+    ) else {
+        eprintln!("skipped: needs build/engine/wasm/game.wasm and assets/maps/bloodgulch.map");
+        return Ok(());
+    };
+    let saves =
+        std::env::temp_dir().join(format!("opence-lighting-{}-switches", std::process::id()));
+    let _ = std::fs::create_dir_all(&saves);
+    let runtime = Runtime::new(Some(&root.join("build/engine/wasm/cache")))?;
+    let mut game = runtime.load(&wasm)?;
+    game.prepare(&root.join("assets"), &saves, (640, 480))?;
+    assert!(game.set_setting("lighting.bounce", "baked"));
+    assert!(game.set_setting("lighting.shadows", "sideways"));
+    game.set_init_commands("map_name bloodgulch\n");
+    let seen = Arc::new(Mutex::new(Libraries::default()));
+    game.add_plugin(Box::new(Shaders {
+        seen: Arc::clone(&seen),
+    }));
+    // one switched while the game runs, as the control socket would
+    let tuning = game.tuning();
+    let switching = std::thread::spawn(move || {
+        std::thread::sleep(Duration::from_secs(20));
+        tuning.set("lighting.atmosphere", "scattering")
+    });
+    game.set_deadline(Some(Instant::now() + Duration::from_secs(40)));
+    let ran = game.call("halo_game_main");
+    let _ = std::fs::remove_dir_all(&saves);
+    assert!(matches!(ran, Err(Error::Deadline)), "{ran:?}");
+    assert!(switching.join().unwrap_or_default());
+    let log = String::from_utf8_lossy(game.output(2)).into_owned();
+    let lines: Vec<&str> = log
+        .lines()
+        .filter(|line| line.contains("lighting."))
+        .collect();
+    assert_eq!(
+        lines,
+        [
+            "opence: lighting.bounce: baked is not drawn by the Metal renderer yet, so stock",
+            "opence: lighting.shadows: \"sideways\" is unknown, so stock",
+            "opence: lighting.atmosphere: scattering is not drawn by the Metal renderer yet, so stock",
+        ]
+    );
+    // and drawn as stock: no library lights a pixel
+    let seen = seen.lock().map(|seen| *seen).unwrap_or_default();
+    assert!(seen.made > 0, "{seen:?}");
+    assert_eq!(seen.lit, 0, "{seen:?}");
     Ok(())
 }

@@ -8,7 +8,8 @@
 //!
 //! Structured requests drive the keyboard and mouse as the window would
 //! (`key`, `pointer`, `click`, `wheel`) and read where the menus' focus is
-//! (`focus`), so tests can walk the menus as a player does.
+//! (`focus`), so tests can walk the menus as a player does; `setting` reads
+//! a setting, or writes it with `value`, while the game runs.
 
 use std::io::{self, BufRead, BufReader, Read, Write};
 use std::os::unix::net::{UnixListener, UnixStream};
@@ -25,7 +26,7 @@ use serde_json::{Map, Value};
 
 use super::plugins::{Event, Hook, Plugin, View};
 use super::widgets::WIDGET_GLOBALS_EXPORT;
-use super::{Console, Controls, Game};
+use super::{Console, Controls, Game, Tuning};
 
 /// how long a line is given for its reply
 const REPLY_LIMIT: Duration = Duration::from_secs(5);
@@ -57,6 +58,7 @@ pub struct Focus {
 pub struct Driven {
     console: Console,
     controls: Controls,
+    tuning: Tuning,
     focus: Arc<Mutex<Option<Focus>>>,
 }
 
@@ -69,6 +71,7 @@ impl Driven {
         Self {
             console: game.console(),
             controls: game.controls(),
+            tuning: game.tuning(),
             focus,
         }
     }
@@ -252,6 +255,26 @@ fn structured(driven: &Driven, name: &str, fields: &Map<String, Value>) -> Resul
                 focus.selected.map_or(Value::Null, Value::from),
             );
             answer.insert("text".into(), text(focus.text));
+            return Ok(reply(true, answer));
+        }
+        "setting" => {
+            let name = fields
+                .get("name")
+                .and_then(Value::as_str)
+                .ok_or("a setting needs \"name\"")?;
+            let unknown = || format!("there is no setting \"{name}\"");
+            if let Some(value) = fields.get("value") {
+                let text = value
+                    .as_str()
+                    .map_or_else(|| value.to_string(), str::to_owned);
+                if !driven.tuning.set(name, &text) {
+                    return Err(unknown());
+                }
+            }
+            let value = driven.tuning.get(name).ok_or_else(unknown)?;
+            let mut answer = Map::new();
+            answer.insert("name".into(), name.into());
+            answer.insert("value".into(), value.into());
             return Ok(reply(true, answer));
         }
         other => return Err(format!("there is no request \"{other}\"")),

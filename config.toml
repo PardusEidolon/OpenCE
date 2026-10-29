@@ -120,6 +120,31 @@ shield_glow_intensity = "default"
 # brown, tan, maroon or salmon.
 shield_color = "default"
 
+[lighting]
+
+# How the lights the map places (lamps, fires, the lights of vehicles
+# and weapons) light the world: "stock" as the original does; "shadowed"
+# lights each pixel by them and casts their shadows.
+placed_lights = "stock"
+
+# The light that bounces off the world: "stock" is the map's own
+# lightmaps; "baked" adds bounce light baked from the map's lights and
+# its sky at import.
+bounce = "stock"
+
+# The air between the camera and the world: "stock" is the map's
+# fog as the original draws it; "scattering" scatters the sun's and the
+# sky's light in the fog, with the fog's own colour and depths.
+atmosphere = "stock"
+
+# The shadows of the sun and of moving things: "stock" as the original
+# draws them; "ray_traced" traces them against the world.
+shadows = "stock"
+
+# What shiny surfaces reflect: "stock" is the shader's own cube map;
+# "ray_traced" traces the world they face.
+reflections = "stock"
+
 [audio]
 
 # Play sound.

@@ -50,7 +50,7 @@ pub use wasmtime::Val;
 
 pub use audio::{Speakers, SPEAKER_RATE, SPEAKER_TARGET_FRAMES};
 pub use batches::{payload, readback_fits, Readback, RenderCounts, RenderSink};
-pub use controls::{keystroke_flags, virtual_key, Controls};
+pub use controls::{keystroke_flags, virtual_key, Controls, Tuning};
 pub use net::Console;
 pub use profile::{Span, SLEEP};
 
@@ -1103,6 +1103,13 @@ impl Game {
     #[must_use]
     pub fn console(&self) -> Console {
         Console::new(Arc::clone(&self.store.data().shared))
+    }
+
+    /// The game's settings, to read and change from another thread while
+    /// `halo_game_main` keeps this game busy.
+    #[must_use]
+    pub fn tuning(&self) -> Tuning {
+        Tuning::new(Arc::clone(&self.store.data().shared))
     }
 
     /// Sets the game's setting `name` (as `section.key`) to `text`, as the

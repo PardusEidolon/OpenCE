@@ -438,3 +438,46 @@ fn the_platform_answers_the_console_s_imports() {
         assert!(answers(name), "{name}");
     }
 }
+
+#[test]
+fn the_control_socket_reads_and_writes_a_setting_while_the_game_runs() -> Result<(), Error> {
+    let runtime = Runtime::new(None)?;
+    let mut game = runtime.load(&module(CONSOLE))?;
+    let driven = opence_runtime::control::Driven::of(&mut game);
+    let ask = |request: &str| opence_runtime::control::answer(&driven, request);
+    let read = r#"{"request": "setting", "name": "lighting.bounce"}"#;
+    assert_eq!(
+        ask(read),
+        r#"{"name":"lighting.bounce","ok":true,"value":"stock"}"#
+    );
+    assert_eq!(
+        ask(r#"{"request": "setting", "name": "lighting.bounce", "value": "baked"}"#),
+        r#"{"name":"lighting.bounce","ok":true,"value":"baked"}"#
+    );
+    assert_eq!(
+        ask(read),
+        r#"{"name":"lighting.bounce","ok":true,"value":"baked"}"#
+    );
+    // a boolean reads as the settings file writes it
+    assert_eq!(
+        ask(r#"{"request": "setting", "name": "display.per_pixel_lighting"}"#),
+        r#"{"name":"display.per_pixel_lighting","ok":true,"value":"false"}"#
+    );
+    for (request, error) in [
+        (
+            r#"{"request": "setting", "name": "no.such_setting"}"#,
+            r#"there is no setting \"no.such_setting\""#,
+        ),
+        (
+            r#"{"request": "setting", "name": "no.such_setting", "value": "1"}"#,
+            r#"there is no setting \"no.such_setting\""#,
+        ),
+        (r#"{"request": "setting"}"#, r#"a setting needs \"name\""#),
+    ] {
+        assert_eq!(
+            ask(request),
+            format!("{{\"error\":\"{error}\",\"ok\":false}}")
+        );
+    }
+    Ok(())
+}

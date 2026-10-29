@@ -195,3 +195,38 @@ pub fn virtual_key(mac: u16) -> Option<u8> {
     };
     Some(vk)
 }
+
+/// The settings of a running game, to read and change from any thread
+/// while `halo_game_main` keeps the [`crate::Game`] busy: the game sees a
+/// change at its next `config_changes()`, as it sees the settings file's.
+#[derive(Clone)]
+pub struct Tuning {
+    shared: Arc<Shared>,
+}
+
+impl Tuning {
+    pub(crate) fn new(shared: Arc<Shared>) -> Self {
+        Self { shared }
+    }
+
+    /// The setting `name` (as `section.key`) as the settings file writes
+    /// it, if there is such a setting.
+    #[must_use]
+    pub fn get(&self, name: &str) -> Option<String> {
+        self.shared
+            .settings
+            .lock()
+            .unwrap_or_else(PoisonError::into_inner)
+            .shown(name)
+    }
+
+    /// Sets the setting `name` to `text`, as the settings file would have
+    /// it; false if there is no such setting or the text is too long.
+    pub fn set(&self, name: &str, text: &str) -> bool {
+        self.shared
+            .settings
+            .lock()
+            .unwrap_or_else(PoisonError::into_inner)
+            .write(name, text)
+    }
+}
