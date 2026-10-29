@@ -6,7 +6,8 @@ against stock, `census --check` and `nix flake check`. The phases run to
 the end without manual stops, except the user's approval of golden frames.
 
 ## Phase 1: The switches and the measurements
-- [ ] Task: A switch per extension, with stock as a value, in the settings, the dev panel and the `opence` tool.
+- [x] Task: A switch per extension, with stock as a value, in the settings, the dev panel and the `opence` tool. e68ca99a
+  - The native app has no dev panel now: each switch is a `lighting.*` setting, set by the settings file, `--setting`, the control socket's `setting` request and `opence setting`. A value not drawn yet draws stock and says so once in the log.
 - [ ] Task: The sweeps against stock: seams, shadow edges, brightness and colour per region, on every map.
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Switches' (Protocol in workflow.md) (automated)
 
