@@ -1,0 +1,1 @@
+Task: Phase 7 'Remove port/macos and its VM'. Removed the VM, its guest/host, the old Swift app and the flake's macOS cell; renamed the build variables; dropped cbindgen, sigtool and musl. Workspace tests, clippy, census --check, traces, Python tests, harness (709) and Swift tests (35) pass.
