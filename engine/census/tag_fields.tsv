@@ -7260,8 +7260,8 @@ sky_render_model_region	unused	0	byte[36]	-	-	-
 sound_definition	flags	0	unsigned long	read	kept	used
 sound_definition	sound_class	4	short	read	kept	used
 sound_definition	sample_rate	6	short	read	kept	unused
-sound_definition	minimum_distance	8	real	read	kept	unused
-sound_definition	maximum_distance	12	real	read	kept	unused
+sound_definition	minimum_distance	8	real	read	kept	used
+sound_definition	maximum_distance	12	real	read	kept	used
 sound_definition	skip_fraction	16	real	read	kept	unused
 sound_definition	random_pitch_bounds.lower	20	real	read	kept	unused
 sound_definition	random_pitch_bounds.upper	24	real	read	kept	unused

@@ -13,6 +13,7 @@
 //! The widgets live in an arena and are named by [`Id`]; a widget closed is
 //! gone, and its id names nothing again.
 
+pub mod atlas;
 pub mod chant;
 mod draw;
 pub mod loading;

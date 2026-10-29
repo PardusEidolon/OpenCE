@@ -11,5 +11,8 @@ libm.workspace = true
 opence_content.workspace = true
 sha2.workspace = true
 
+[dev-dependencies]
+opence_import.workspace = true
+
 [lints]
 workspace = true

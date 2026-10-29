@@ -1500,8 +1500,6 @@ sky_atmospheric_fog	maximum_density	game.wasm reads it: scenario_get_atmospheric
 sky_atmospheric_fog	start_distance	game.wasm reads it: scenario_get_atmospheric_fog
 sky_atmospheric_fog	opaque_distance	game.wasm reads it: scenario_get_atmospheric_fog
 sound_definition	sample_rate	game.wasm reads it: prioritize_sounds, sound_channel_summary_build, sound_find_best_channel, sound_new_impulse
-sound_definition	minimum_distance	game.wasm reads it: sound_definition_get_minimum_distance
-sound_definition	maximum_distance	game.wasm reads it: sound_definition_get_maximum_distance
 sound_definition	skip_fraction	game.wasm reads it: sound_new_impulse
 sound_definition	random_pitch_bounds.lower	game.wasm reads it: detail_sound_random_offset, looping_sound_new, process_looping_sounds, sound_definition_find_pitch_range_by_pitch, sound_new_impulse, update_potentially_audible_looping_sound
 sound_definition	random_pitch_bounds.upper	game.wasm reads it: detail_sound_random_offset, looping_sound_new, process_looping_sounds, sound_definition_find_pitch_range_by_pitch, sound_new_impulse, update_potentially_audible_looping_sound
