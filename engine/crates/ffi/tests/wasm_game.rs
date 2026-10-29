@@ -163,6 +163,7 @@ fn the_game_runs_on_its_own_thread_and_draws_to_the_target() {
         map: None,
         seconds: None,
         settings: Vec::new(),
+        audit: None,
     });
     let game = match game {
         Ok(game) => game,
@@ -213,6 +214,7 @@ fn a_game_given_seconds_ends_when_they_are_up() {
         map: None,
         seconds: Some(1),
         settings: Vec::new(),
+        audit: None,
     }) {
         Ok(game) => game,
         Err(error) => panic!("{error}"),
@@ -245,6 +247,7 @@ fn forever(folder: &str, settings: &[&str]) -> WasmGameOptions {
         map: None,
         seconds: Some(1),
         settings: settings.iter().map(|&setting| setting.to_owned()).collect(),
+        audit: None,
     }
 }
 

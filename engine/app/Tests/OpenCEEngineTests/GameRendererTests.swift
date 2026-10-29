@@ -173,6 +173,31 @@ final class GameRendererTests: XCTestCase {
         XCTAssertEqual(window.pixels().first, [0, 0, 255, 255])
     }
 
+    func testASnapshotTakesTheFramesItIsAskedForAsTheyWereShown() {
+        // (the second and fourth frames asked for; each a colour of its own)
+        let lock = NSLock()
+        var taken: [(Int, [UInt8])] = []
+        window.snapshot = { presented in
+            guard presented % 2 == 0 else { return nil }
+            return { frame in
+                lock.lock()
+                taken.append((presented, Array(frame.bytes.prefix(4))))
+                lock.unlock()
+            }
+        }
+        let colours: [(Float, Float, Float, Float)] = [(1, 0, 0, 1), (0, 1, 0, 1), (0, 0, 1, 1), (1, 1, 1, 1)]
+        for colour in colours {
+            _ = renderer.submit(
+                frame: RenderFrame(commands: [pass(0, clear: colour), .endPass, .present], data: Data()))
+        }
+        renderer.finish()
+        lock.lock()
+        defer { lock.unlock() }
+        // (BGRA, as the window holds them)
+        XCTAssertEqual(taken.map(\.0), [2, 4])
+        XCTAssertEqual(taken.map(\.1), [[0, 255, 0, 255], [255, 255, 255, 255]])
+    }
+
     func testTheGameSObjectsLastFromFrameToFrame() {
         _ = renderer.submit(frame: RenderFrame(commands: [target(1)], data: Data()))
         let readbacks = renderer.submit(

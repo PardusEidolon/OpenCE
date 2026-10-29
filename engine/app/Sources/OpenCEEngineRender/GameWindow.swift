@@ -68,8 +68,28 @@ public final class OffscreenWindow: RenderWindow, @unchecked Sendable {
     private let lock = NSLock()
     private var presentedFrames = 0
     private var didCapture = false
+    private let device: MTLDevice
+
+    /// Asked at each frame presented, with the count of frames presented
+    /// so far: where to hand that frame, once its commands have finished
+    /// (BGRA, as the window holds it), or nil to let it go. The map
+    /// audit's frames are taken through it.
+    public var snapshot: ((Int) -> ((CapturedFrame) -> Void)?)? {
+        get {
+            lock.lock()
+            defer { lock.unlock() }
+            return snapshotHandler
+        }
+        set {
+            lock.lock()
+            defer { lock.unlock() }
+            snapshotHandler = newValue
+        }
+    }
+    private var snapshotHandler: ((Int) -> ((CapturedFrame) -> Void)?)?
 
     public init?(device: MTLDevice, width: Int, height: Int, capture: Int? = nil) {
+        self.device = device
         let descriptor = MTLTextureDescriptor.texture2DDescriptor(
             pixelFormat: .bgra8Unorm, width: width,
             height: height, mipmapped: false)
@@ -100,6 +120,32 @@ public final class OffscreenWindow: RenderWindow, @unchecked Sendable {
             blit.copy(from: frame.texture, to: captured)
             blit.endEncoding()
             didCapture = true
+        }
+        if let take = snapshotHandler?(presentedFrames) {
+            Self.snapshot(frame.texture, on: device, in: commands, to: take)
+        }
+    }
+
+    /// `texture` copied aside in `commands`, and handed to `take` once they
+    /// have finished.
+    private static func snapshot(
+        _ texture: MTLTexture, on device: MTLDevice, in commands: MTLCommandBuffer,
+        to take: @escaping (CapturedFrame) -> Void
+    ) {
+        let descriptor = MTLTextureDescriptor.texture2DDescriptor(
+            pixelFormat: texture.pixelFormat, width: texture.width, height: texture.height, mipmapped: false)
+        descriptor.storageMode = .shared
+        guard let copy = device.makeTexture(descriptor: descriptor),
+            let blit = commands.timedBlitEncoder("game snapshot")
+        else { return }
+        blit.copy(from: texture, to: copy)
+        blit.endEncoding()
+        commands.addCompletedHandler { _ in
+            let (width, height) = (copy.width, copy.height)
+            var bytes = [UInt8](repeating: 0, count: width * height * 4)
+            copy.getBytes(
+                &bytes, bytesPerRow: width * 4, from: MTLRegionMake2D(0, 0, width, height), mipmapLevel: 0)
+            take(CapturedFrame(width: width, height: height, bytes: bytes))
         }
     }
 

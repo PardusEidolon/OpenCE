@@ -349,3 +349,32 @@ pub fn shell_lines(
     }
     Ok(refused)
 }
+
+/// A map's scripts as `opence scripts MAP` prints them, in the scenario's
+/// order: a line each, its name and when it runs (`startup`, `dormant`,
+/// `continuous`, `static` or `stub`), a tab between.
+///
+/// # Errors
+/// [`Error::Refused`] with the reason when the game would not run them.
+pub fn script_lines(scripts: &opence_content::Scripts) -> Result<Vec<String>, Error> {
+    use opence_content::ScriptKind;
+    if let Some(reason) = &scripts.disabled {
+        return Err(Error::Refused(format!(
+            "the map's scripts do not run: {reason}"
+        )));
+    }
+    Ok(scripts
+        .scripts
+        .iter()
+        .map(|script| {
+            let kind = match script.kind {
+                ScriptKind::Startup => "startup",
+                ScriptKind::Dormant => "dormant",
+                ScriptKind::Continuous => "continuous",
+                ScriptKind::Static => "static",
+                ScriptKind::Stub => "stub",
+            };
+            format!("{}\t{kind}", script.name)
+        })
+        .collect())
+}

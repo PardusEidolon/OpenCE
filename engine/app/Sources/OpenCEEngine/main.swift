@@ -5,7 +5,10 @@
 // plays it with no window, drawn offscreen at --size (640x480 by default),
 // answering the control socket until the game quits. --benchmark SECONDS
 // plays --map (bloodgulch) offscreen at --size (3840x2160 by default) and
-// prints its report.
+// prints its report. --audit DIR plays --map offscreen at --size (640x480)
+// for --seconds (120) by the audit's schedule of keys and mouse, with each
+// --setting section.key=value, and records the run into DIR; each
+// --at TICK:LINE hands LINE to the game's console once TICK is reached.
 import AppKit
 import Metal
 import OpenCEEngineCore
@@ -72,7 +75,7 @@ func benchmark(seconds text: String) -> Never {
         fail("--load-seconds is seconds")
     }
     let map = argument("--map") ?? "bloodgulch"
-    let (game, renderer, saves) = offscreenGame(
+    let (game, renderer, _, saves) = offscreenGame(
         size: size, map: map, seconds: UInt32((load + seconds).rounded(.up)), defaultCache: "build/engine/wasm/cache")
     defer { try? FileManager.default.removeItem(at: saves) }
     let gpu = GPUTimes()
@@ -106,7 +109,7 @@ func benchmark(seconds text: String) -> Never {
 /// game.wasm played with no window (--headless): drawn offscreen at --size
 /// (640x480), answering the control socket until it quits.
 func headless() -> Never {
-    let (game, renderer, saves) = offscreenGame(
+    let (game, renderer, _, saves) = offscreenGame(
         size: sizeArgument("640x480"), map: argument("--map"), seconds: nil,
         defaultCache: supportFolder("wasm"))
     defer { try? FileManager.default.removeItem(at: saves) }
@@ -115,12 +118,129 @@ func headless() -> Never {
     exit(0)
 }
 
+/// Every value of `name` among the arguments, in order.
+func arguments(_ name: String) -> [String] {
+    zip(launchArguments, launchArguments.dropFirst()).filter { $0.0 == name }.map(\.1)
+}
+
+/// A map's audit (--audit DIR): --map played offscreen at --size (640x480)
+/// for --seconds (120), its keys and mouse played by the audit's schedule
+/// and its --setting values set. The engine writes DIR's events.tsv and
+/// sound.tsv; here a frame is kept every 300 ticks as frames/tick_NNNNN.png
+/// (named by the tick it was drawn at), each frame's CPU time in
+/// frame_ms.tsv, and how the run ended in summary.json. Each --at
+/// TICK:LINE (the console on for them) hands LINE to the game's console
+/// once TICK is reached, its answer kept in console.tsv. It exits 3 when
+/// the game stopped with an error.
+func audit(folder: String) -> Never {
+    guard let map = argument("--map") else { fail("--audit needs --map") }
+    guard let seconds = UInt32(argument("--seconds") ?? "120"), seconds > 0 else { fail("--seconds is seconds") }
+    let root = URL(fileURLWithPath: folder).standardizedFileURL
+    let frames = root.appendingPathComponent("frames")
+    do {
+        try FileManager.default.createDirectory(at: frames, withIntermediateDirectories: true)
+    } catch {
+        fail("\(frames.path): \(error)")
+    }
+    let lines = arguments("--at").map { text -> (tick: UInt64, line: String) in
+        let parts = text.split(separator: ":", maxSplits: 1)
+        guard parts.count == 2, let tick = UInt64(parts[0]) else { fail("--at is TICK:LINE, not \(text)") }
+        return (tick, String(parts[1]))
+    }.sorted { $0.tick < $1.tick }
+    let settings = arguments("--setting") + (lines.isEmpty ? [] : ["debug.telnet_console=true"])
+    let (game, renderer, window, saves) = offscreenGame(
+        size: sizeArgument("640x480"), map: map, seconds: seconds, defaultCache: "build/engine/wasm/cache",
+        settings: settings, audit: root.path)
+    defer { try? FileManager.default.removeItem(at: saves) }
+    let kept = FrameKeeper(folder: frames, every: 300)
+    window.snapshot = { _ in kept.take(at: game.ticks()) }
+    guard game.profile() else { fail("game.wasm started before it was profiled") }
+    do {
+        try game.start(target: renderer)
+    } catch {
+        fail("game.wasm: \(error)")
+    }
+    if !lines.isEmpty {
+        let answers = root.appendingPathComponent("console.tsv")
+        FileManager.default.createFile(atPath: answers.path, contents: Data("tick\tline\tanswer\n".utf8))
+        Thread.detachNewThread {
+            guard let file = try? FileHandle(forWritingTo: answers) else { return }
+            file.seekToEndOfFile()
+            for (tick, line) in lines {
+                while game.ticks() < tick { Thread.sleep(forTimeInterval: 0.05) }
+                let answer = game.ask(line: line, milliseconds: 5000) ?? "(no answer)"
+                let flat = answer.replacingOccurrences(of: "\n", with: " ").replacingOccurrences(of: "\t", with: " ")
+                file.write(Data("\(game.ticks())\t\(line)\t\(flat)\n".utf8))
+            }
+        }
+    }
+    let end = game.wait()
+    renderer.finish()
+    let summary: [String: Any] = [
+        "map": map, "seconds": seconds, "error": end.error ?? NSNull(), "timed_out": end.timedOut,
+        "ticks": game.ticks(), "frames": window.presented, "kept": kept.count, "batches": end.batches,
+        "commands": end.commands, "refused": end.refused, "refused_batches": end.refusedBatches,
+        "refused_by_metal": renderer.statistics.refused, "refusals": end.refusals,
+    ]
+    do {
+        try end.frameMs.map { String(format: "%.4f", $0) }.joined(separator: "\n").write(
+            to: root.appendingPathComponent("frame_ms.tsv"), atomically: true, encoding: .utf8)
+        try JSONSerialization.data(withJSONObject: summary, options: [.prettyPrinted, .sortedKeys]).write(
+            to: root.appendingPathComponent("summary.json"))
+    } catch {
+        fail("\(root.path): \(error)")
+    }
+    exit(end.error == nil ? 0 : 3)
+}
+
+/// The audit's frames: one each `every` ticks, written as PNG where it
+/// was drawn.
+final class FrameKeeper: @unchecked Sendable {
+    private let folder: URL
+    private let every: UInt64
+    private let lock = NSLock()
+    private var next: UInt64
+    private var kept = 0
+
+    init(folder: URL, every: UInt64) {
+        self.folder = folder
+        self.every = every
+        next = every
+    }
+
+    /// Where to hand the frame drawn at `tick`, when it is one to keep.
+    func take(at tick: UInt64) -> ((CapturedFrame) -> Void)? {
+        lock.lock()
+        defer { lock.unlock() }
+        guard tick >= next else { return nil }
+        next = (tick / every + 1) * every
+        kept += 1
+        let url = folder.appendingPathComponent(String(format: "tick_%05llu.png", tick))
+        return { frame in
+            do {
+                try frame.writePNG(to: url)
+            } catch {
+                FileHandle.standardError.write(Data("OpenCE Engine: \(url.path): \(error)\n".utf8))
+            }
+        }
+    }
+
+    /// The frames kept so far.
+    var count: Int {
+        lock.lock()
+        defer { lock.unlock() }
+        return kept
+    }
+}
+
 /// game.wasm loaded to draw offscreen at `size`, its saves in a folder of
 /// its own (removed by the caller), and its pipelines from the archive in
-/// the cache (--cache, else `defaultCache`).
+/// the cache (--cache, else `defaultCache`); with `settings` set and, for
+/// an audit, recording into `audit`.
 func offscreenGame(
-    size: (width: Int, height: Int), map: String?, seconds: UInt32?, defaultCache: String
-) -> (WasmGame, GameRenderer, URL) {
+    size: (width: Int, height: Int), map: String?, seconds: UInt32?, defaultCache: String,
+    settings: [String] = [], audit: String? = nil
+) -> (WasmGame, GameRenderer, OffscreenWindow, URL) {
     // (each folder made absolute: Wasmtime's cache takes no relative path)
     let absolute = { (path: String) in URL(fileURLWithPath: path).standardizedFileURL.path }
     let wasm = absolute(argument("--wasm") ?? "build/engine/wasm/game.wasm")
@@ -135,11 +255,12 @@ func offscreenGame(
         let game = try WasmGame(
             options: WasmGameOptions(
                 wasm: wasm, data: absolute(argument("--data") ?? "assets"), saves: saves.path, cache: cache,
-                width: UInt32(size.width), height: UInt32(size.height), map: map, seconds: seconds, settings: []))
+                width: UInt32(size.width), height: UInt32(size.height), map: map, seconds: seconds, settings: settings,
+                audit: audit))
         renderer.archive = PipelineArchive(
             device: device, url: URL(fileURLWithPath: cache).appendingPathComponent("pipelines.metallib"))
         renderer.playing = { game.ticks() > 0 }
-        return (game, renderer, saves)
+        return (game, renderer, window, saves)
     } catch {
         fail("\(wasm): \(error)")
     }
@@ -189,6 +310,10 @@ func benchmarkBaseline(_ url: URL) throws -> BenchmarkReport {
 
 if let seconds = argument("--benchmark") {
     benchmark(seconds: seconds)
+}
+
+if let folder = argument("--audit") {
+    audit(folder: folder)
 }
 
 if CommandLine.arguments.contains("--headless") {

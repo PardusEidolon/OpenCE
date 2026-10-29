@@ -2,12 +2,14 @@
 //!
 //! The app plays game.wasm, the original's own code, through [`game`]
 //! (UniFFI calls; each frame's render commands handed to the app's
-//! renderer), shows the loading screen through [`loading`], and sums up
-//! `--benchmark`'s frame times through [`benchmark`].
+//! renderer), shows the loading screen through [`loading`], sums up
+//! `--benchmark`'s frame times through [`benchmark`], and records a map
+//! audit's run through [`audit`].
 // (the UniFFI scaffolding is unsafe code; this crate is the only one
 // allowed it)
 #![allow(unsafe_code)]
 
+pub mod audit;
 pub mod benchmark;
 pub mod game;
 pub mod loading;

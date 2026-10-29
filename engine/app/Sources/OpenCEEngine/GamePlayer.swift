@@ -99,7 +99,8 @@ final class GamePlayer: NSObject, NSApplicationDelegate {
                 options: WasmGameOptions(
                     wasm: wasm, data: MapLibrary.dataRoot.appendingPathComponent("assets").path,
                     saves: supportFolder("saves"), cache: cache, width: UInt32(max(size.width, 1)),
-                    height: UInt32(max(size.height, 1)), map: argument("--map"), seconds: nil, settings: []))
+                    height: UInt32(max(size.height, 1)), map: argument("--map"), seconds: nil, settings: [], audit: nil)
+            )
         } catch {
             fail("\(wasm): \(error)")
         }

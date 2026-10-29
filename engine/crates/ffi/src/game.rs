@@ -125,6 +125,9 @@ pub struct WasmGameOptions {
     /// settings for the game, each `section.key=value` as the settings
     /// file would have it
     pub settings: Vec<String>,
+    /// the folder to record a map audit's run into ([`crate::audit`]),
+    /// its keys and mouse played by the audit's schedule, or none
+    pub audit: Option<String>,
 }
 
 /// Why the game could not be loaded or started.
@@ -230,6 +233,11 @@ impl WasmGame {
         }
         let ticks = Arc::new(AtomicU64::new(0));
         game.add_plugin(Box::new(TickCounter(Arc::clone(&ticks))));
+        if let Some(folder) = &options.audit {
+            let audit = crate::audit::Audit::new(Path::new(folder), game.controls())
+                .map_err(|error| fail(format!("{folder}: {error}")))?;
+            game.add_plugin(Box::new(audit));
+        }
         let controls = game.controls();
         let console = game.console();
         let driven = control::Driven::of(&mut game);

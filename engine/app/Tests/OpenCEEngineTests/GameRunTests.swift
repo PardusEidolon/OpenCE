@@ -32,7 +32,7 @@ final class GameRunTests: XCTestCase {
             options: WasmGameOptions(
                 wasm: wasm.path, data: root.appendingPathComponent("assets").path, saves: saves.path,
                 cache: root.appendingPathComponent("build/engine/wasm/cache").path, width: 640, height: 480,
-                map: "bloodgulch", seconds: 30, settings: []))
+                map: "bloodgulch", seconds: 30, settings: [], audit: nil))
         try game.start(target: renderer)
         let end = game.wait()
         renderer.finish()
@@ -74,7 +74,7 @@ final class GameRunTests: XCTestCase {
             options: WasmGameOptions(
                 wasm: wasm.path, data: root.appendingPathComponent("assets").path, saves: saves.path,
                 cache: root.appendingPathComponent("build/engine/wasm/cache").path, width: 320, height: 240,
-                map: "bloodgulch", seconds: 25, settings: []))
+                map: "bloodgulch", seconds: 25, settings: [], audit: nil))
         let speakers = game.speakers()
         XCTAssertEqual(speakers.sampleRate(), 48_000)
         try game.start(target: renderer)
@@ -122,7 +122,7 @@ final class GameRunTests: XCTestCase {
                 options: WasmGameOptions(
                     wasm: wasm.path, data: root.appendingPathComponent("assets").path, saves: folder.path,
                     cache: root.appendingPathComponent("build/engine/wasm/cache").path, width: 640, height: 480,
-                    map: "bloodgulch", seconds: 25, settings: []))
+                    map: "bloodgulch", seconds: 25, settings: [], audit: nil))
             renderer.archive = try XCTUnwrap(PipelineArchive(device: device, url: url))
             renderer.playing = { game.ticks() > 0 }
             try game.start(target: renderer)
@@ -173,7 +173,7 @@ final class GameRunTests: XCTestCase {
                 wasm: wasm.path, data: data.path, saves: saves.path,
                 cache: root.appendingPathComponent("build/engine/wasm/cache").path, width: 640, height: 480,
                 map: "bloodgulch", seconds: 240,
-                settings: ["debug.frame_clock=true", "debug.telnet_console=true"]))
+                settings: ["debug.frame_clock=true", "debug.telnet_console=true"], audit: nil))
         try game.start(target: renderer)
         let camera = Thread {
             while !window.hasCaptured {

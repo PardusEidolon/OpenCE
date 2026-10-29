@@ -14,10 +14,11 @@
 //! opence [--socket PATH] click X Y [--button N] a click there (1 left, 2 right, 3 middle, 4, 5)
 //! opence [--socket PATH] wheel N                the wheel turned N notches (up is positive)
 //! opence [--socket PATH] focus                  the menu screen shown and its focused widget, as JSON
+//! opence scripts MAP                          a map's scripts, each with when it runs
 //! opence census [--check | --write | --rank | --ratchet] [--record-importer] [--root DIR] the coverage census of the repository
 //! ```
 //!
-//! `census` needs no engine: it reads the repository (the folder holding
+//! `scripts` and `census` need no engine: it reads the repository (the folder holding
 //! `source/` and `engine/`, found upwards from the current folder).
 //!
 //! It exits 0 when everything succeeded, 1 when the engine refused
@@ -29,14 +30,14 @@ use std::path::PathBuf;
 use std::process::ExitCode;
 
 use opence_cli::{
-    complete, drive, frame, key, number, parse_size, run, script, shell_lines, state, watch,
-    Connection, Error, Press,
+    complete, drive, frame, key, number, parse_size, run, script, script_lines, shell_lines, state,
+    watch, Connection, Error, Press,
 };
 use rustyline::completion::{Completer, Pair};
 use rustyline::error::ReadlineError;
 use rustyline::{Context, Editor, Helper, Highlighter, Hinter, Validator};
 
-const USAGE: &str = "usage: opence [--socket PATH] (run [--json] LINE... | state | frame PATH [--size WxH] | watch [--backlog N] | script FILE | shell | key VK [--down | --up] | pointer X Y | click X Y [--button N] | wheel N | focus | census [--check | --write | --rank | --ratchet] [--record-importer] [--root DIR])";
+const USAGE: &str = "usage: opence [--socket PATH] (run [--json] LINE... | state | frame PATH [--size WxH] | watch [--backlog N] | script FILE | shell | key VK [--down | --up] | pointer X Y | click X Y [--button N] | wheel N | focus | scripts MAP | census [--check | --write | --rank | --ratchet] [--record-importer] [--root DIR])";
 
 fn main() -> ExitCode {
     let arguments: Vec<String> = std::env::args().skip(1).collect();
@@ -215,6 +216,19 @@ fn start(arguments: &[String]) -> Result<(), Error> {
                     count => Err(Error::Refused(format!("{count} lines were refused"))),
                 }
             }
+        }
+        "scripts" => {
+            let [map] = rest else {
+                return Err(Error::Usage("scripts takes a map's file".into()));
+            };
+            let cache = opence_import::Cache::open(std::fs::read(map)?)
+                .map_err(|error| Error::Refused(format!("{map}: {error}")))?;
+            let scripts = opence_import::import_scripts(&cache)
+                .map_err(|error| Error::Refused(format!("{map}: {error}")))?;
+            for line in script_lines(&scripts)? {
+                writeln!(out, "{line}")?;
+            }
+            Ok(())
         }
         "census" => {
             let mut mode = opence_census::Mode::Summary;
