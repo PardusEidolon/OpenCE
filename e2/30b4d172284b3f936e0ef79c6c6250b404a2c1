@@ -1,0 +1,1 @@
+Task: Phase 2 'Reading the game's UI' checkpoint. The widget reader (fde71a8e) and the font atlases (3327ed7d). Workspace tests, Swift tests (35, 0 failures, 4 skipped), 63 of 63 traces, census --check and nix flake check pass.
