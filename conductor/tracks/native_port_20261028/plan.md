@@ -92,7 +92,7 @@ stops, except A1's go/no-go.
   - Finding: nothing to fix. What falls to the presentation is the screen (scaled as the GL port, 265b437a, `HudScreenTests`), the sound (dsound_sdl's I3DL2 reverb, occlusion and obstruction, `test_mixer.py`; README corrected) and the draws (every effect's commands drawn, none refused).
 - [x] Task: Conductor - User Manual Verification 'Phase 6: The PC port' (Protocol in workflow.md) (automated)
 
-## Phase 7: Removals and checks (A7)
+## Phase 7: Removals and checks (A7) [checkpoint: c724c65f]
 - [x] Task: Reclass the census for the new direction, with its `--check`. 887eef2a
   - A function in a file game.wasm compiles (port/linux/port.json) is Compiled; the manifest keeps rules only for the excluded files. 558 Ported, 6985 Compiled, 84 Replaced, 0 Missing, 0 owed. A Ported twin in a compiled file reads its fields as Compiled.
 - [x] Task: Remove the Rust simulation and `bevy_ecs`. 73d4fa06 (the `net` crate went with it)
@@ -100,4 +100,4 @@ stops, except A1's go/no-go.
 - [x] Task: Remove `port/macos` and its VM. 07193494
   - The VM golden frames (made from the user's maps) left the repository; movement and placement trace recorders need the VM and their traces stay as records; `HALO_GUEST_VM` ifdefs in source-adjacent C are left.
 - [x] Task: The traces as checks that the wasm build matches the native reference. 3c8edc0d
-- [ ] Task: Conductor - User Manual Verification 'Phase 7: Removals' (Protocol in workflow.md) (automated)
+- [x] Task: Conductor - User Manual Verification 'Phase 7: Removals' (Protocol in workflow.md) (automated) (coverage floors c0584500; cli 70 to 32 with the removed crates' tests)
