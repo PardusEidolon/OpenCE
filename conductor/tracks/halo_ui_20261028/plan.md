@@ -12,7 +12,7 @@ the design approval, which the user gives.
 
 ## Phase 2: Reading the game's UI
 - [x] Task: Read the widget tree from the game's memory through the read-only views; fuzz the reader. fde71a8e
-- [ ] Task: Signed distance field fonts from the font tags, built behind the loading screen.
+- [x] Task: Signed distance field fonts from the font tags, built behind the loading screen. 3327ed7d
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Reading the UI' (Protocol in workflow.md) (automated)
 
 ## Phase 3: Drawing and input
