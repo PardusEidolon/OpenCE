@@ -1,0 +1,1 @@
+Task: Phase 3 'Keyboard and mouse through the control socket'. Structured key, pointer, click, wheel and focus requests on the control socket and the opence tool; runtime/tests/menus.rs drives the real main menu. Workspace tests, Swift tests (35/0/4 skipped), clippy and census --check pass.
