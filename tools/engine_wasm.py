@@ -149,7 +149,9 @@ ABI_FLAGS = [
 # render and texture states, whose defaults the device writes; and for the
 # input, the device types the game opens and whether its console or chat
 # takes the keys; and the call through which the runtime completes a sound
-# packet, to the stream's callback
+# packet, to the stream's callback; the menus' widgets, which the Halo UI
+# plugin reads; and the loading screen's chant, which the runtime fills from
+# the player's xbe
 EXPORTS = [
     "halo_game_main",
     "malloc",
@@ -165,6 +167,7 @@ EXPORTS = [
     "network_chat_typing",
     "network_chat_keyboard_open",
     "ui_widget_globals_storage",
+    "compressed_monk_tone",
 ]
 
 # wasi-libc for each target, as nix develop names it

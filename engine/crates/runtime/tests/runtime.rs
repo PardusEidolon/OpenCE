@@ -410,3 +410,55 @@ fn preparing_the_game_grows_its_memory_past_the_window() -> Result<(), Error> {
     assert_eq!(game.memory_size(), WINDOW.end);
     Ok(())
 }
+
+const TONED: &str = r#"
+(module
+  (memory (export "memory") 1)
+  (global (export "compressed_monk_tone") i32 (i32.const 1024)))
+"#;
+
+#[test]
+fn the_chant_takes_the_players_tone_or_is_silent() -> Result<(), Error> {
+    use opence_runtime::{TONE_BYTES, TONE_EXPORT};
+
+    let runtime = Runtime::new(None)?;
+    let mut game = runtime.load(&module(TONED))?;
+    assert_eq!(game.data_export(TONE_EXPORT), Some(1024));
+    let tone: [u8; TONE_BYTES] = std::array::from_fn(|index| (index % 251) as u8 + 1);
+    assert!(game.set_tone(Some(&tone))?);
+    assert_eq!(game.read(1024, TONE_BYTES as u64)?, tone);
+    assert!(game.set_tone(None)?);
+    assert!(game
+        .read(1024, TONE_BYTES as u64)?
+        .iter()
+        .all(|&byte| byte == 0));
+    // a module without the chant has nothing to give it
+    let mut plain = runtime.load(&module(CALLER))?;
+    assert!(!plain.set_tone(Some(&tone))?);
+    Ok(())
+}
+
+#[test]
+fn game_wasm_holds_no_tone_of_its_own() -> Result<(), Error> {
+    let Some(wasm) = game_wasm() else {
+        eprintln!("skipped: no build/engine/wasm/game.wasm (python tools/engine_wasm.py)");
+        return Ok(());
+    };
+    let runtime = Runtime::new(None)?;
+    let game = runtime.load(&wasm)?;
+    let address = game.data_export(opence_runtime::TONE_EXPORT);
+    assert!(
+        address.is_some_and(|address| address != 0),
+        "game.wasm does not export the chant's tone"
+    );
+    let tone = game.read(
+        u64::from(address.unwrap_or(0)),
+        opence_runtime::TONE_BYTES as u64,
+    )?;
+    // source/interface/progress_bar.c's port: the tone is the player's xbe's
+    assert!(
+        tone.iter().all(|&byte| byte == 0),
+        "game.wasm carries a tone"
+    );
+    Ok(())
+}

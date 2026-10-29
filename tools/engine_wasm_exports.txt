@@ -4,6 +4,7 @@ XDEVICE_TYPE_DEBUG_KEYBOARD_TABLE: global
 XDEVICE_TYPE_GAMEPAD_TABLE: global
 __indirect_function_table: table
 _initialize: func () -> ()
+compressed_monk_tone: global
 console_is_active: func () -> (i32)
 free: func (i32) -> ()
 halo_game_main: func () -> (i32)

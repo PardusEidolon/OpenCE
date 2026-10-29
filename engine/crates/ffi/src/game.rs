@@ -12,7 +12,7 @@
 //! runtime writes only where the batch's ReadTexture names
 //! ([`opence_runtime::readback_fits`]).
 
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::sync::{Arc, Mutex, PoisonError};
 use std::thread::JoinHandle;
@@ -215,6 +215,8 @@ impl WasmGame {
             (options.width, options.height),
         )
         .map_err(|error| fail(error.to_string()))?;
+        game.set_tone(crate::loading::chant_tone(Path::new(&options.data)).as_ref())
+            .map_err(|error| fail(error.to_string()))?;
         for setting in &options.settings {
             let set = setting
                 .split_once('=')

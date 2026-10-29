@@ -759,6 +759,13 @@ impl Drop for Game {
     }
 }
 
+/// The name game.wasm exports the loading screen's chant by:
+/// `compressed_monk_tone`, its Xbox ADPCM tone ([`Game::set_tone`]).
+pub const TONE_EXPORT: &str = "compressed_monk_tone";
+
+/// The size of the chant's tone: 511 Xbox ADPCM blocks of 36 bytes.
+pub const TONE_BYTES: usize = 18_396;
+
 /// the data a module exports, each name and its address: the i32 globals
 /// wasm-ld exports for each data symbol `--export`ed
 fn data_exports(
@@ -1247,5 +1254,19 @@ impl Game {
         } else {
             Err(self.outside(address, len))
         }
+    }
+    /// Gives the loading screen's chant (progress_bar.c) its tone: the
+    /// one in the player's xbe, or with `None` silence. game.wasm is built
+    /// with none of its own ([`TONE_EXPORT`]); a buffer of silence is
+    /// never mixed. False if the module does not export the tone.
+    ///
+    /// # Errors
+    /// [`Error::OutOfBounds`] if the export is outside the memory.
+    pub fn set_tone(&mut self, tone: Option<&[u8; TONE_BYTES]>) -> Result<bool, Error> {
+        let Some(address) = self.data_export(TONE_EXPORT) else {
+            return Ok(false);
+        };
+        self.write(u64::from(address), tone.unwrap_or(&[0; TONE_BYTES]))?;
+        Ok(true)
     }
 }

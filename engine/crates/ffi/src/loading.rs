@@ -39,6 +39,25 @@ pub fn chant_wave(xbe_path: String, cache_folder: String) -> Option<String> {
     Some(wave.to_string_lossy().into_owned())
 }
 
+/// Where the player's executable is looked for, from the data folder
+/// (`assets/`): in it, and in the dump beside it.
+pub const XBE_PATHS: [&str; 2] = ["default.xbe", "../Haloce_dump/default.xbe"];
+
+/// The chant's tone from the player's executable, found from the `data`
+/// folder ([`XBE_PATHS`]); none without one, and the loading screen is
+/// then silent ([`opence_runtime::Game::set_tone`]).
+pub fn chant_tone(data: &Path) -> Option<[u8; opence_runtime::TONE_BYTES]> {
+    XBE_PATHS
+        .iter()
+        .map(|path| data.join(path))
+        .find_map(|xbe| {
+            if std::fs::metadata(&xbe).ok()?.len() > MAXIMUM_XBE_BYTES {
+                return None;
+            }
+            find_tone(&std::fs::read(&xbe).ok()?)?.try_into().ok()
+        })
+}
+
 /// Where the loading screen is.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, uniffi::Enum)]
 pub enum LoadingStage {
