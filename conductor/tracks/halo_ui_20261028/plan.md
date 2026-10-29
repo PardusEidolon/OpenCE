@@ -15,12 +15,12 @@ the design approval, which the user gives.
 - [x] Task: Signed distance field fonts from the font tags, built behind the loading screen. 3327ed7d
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Reading the UI' (Protocol in workflow.md) (automated)
 
-## Phase 3: Drawing and input
+## Phase 3: Drawing and input [checkpoint: 12d45c9c]
 - [ ] Task: Draw the layout at 4K over the background scene; golden frames of the main menu. (blocked: waits on the user's approval of the Phase 1 prototypes)
 - [x] Task: Keyboard navigation and the mouse mapped onto it, driven by tests through the control socket. d4998cee
 - [ ] Task: Every other screen, each against its approved prototype. (blocked: waits on the user's approval of the Phase 1 prototypes)
 - [ ] Task: The pause menu, the post-game screens and the HUD's text. (blocked: waits on the user's approval of the Phase 1 prototypes)
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Drawing and input' (Protocol in workflow.md) (automated)
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Drawing and input' (Protocol in workflow.md) (automated)
 
 ## Phase 4: The loading screen
 - [ ] Task: Draw the Xbox loading screen at 4K from the original's code.
