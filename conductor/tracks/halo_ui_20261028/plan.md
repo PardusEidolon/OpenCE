@@ -23,7 +23,7 @@ the design approval, which the user gives.
 - [x] Task: Conductor - User Manual Verification 'Phase 3: Drawing and input' (Protocol in workflow.md) (automated)
 
 ## Phase 4: The loading screen
-- [ ] Task: Draw the Xbox loading screen at 4K from the original's code.
+- [x] Task: Draw the Xbox loading screen at 4K from the original's code. 325cd5ff (verifies the C device's existing drawing)
 - [x] Task: The chant from the user's xbe, silent without it. cfdcf9b2
-- [ ] Task: No hitch or black frame into the first frame of the next map.
+- [x] Task: No hitch or black frame into the first frame of the next map. 325cd5ff
 - [ ] Task: Conductor - User Manual Verification 'Phase 4: The loading screen' (Protocol in workflow.md) (automated)
