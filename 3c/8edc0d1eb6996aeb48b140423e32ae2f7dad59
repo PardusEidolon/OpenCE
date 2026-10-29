@@ -1,0 +1,1 @@
+Task: Phase 7 'The traces as checks that the wasm build matches the native reference'. --check fails on unpaired traces; 63 of 63 match; its 13 tests pass.
