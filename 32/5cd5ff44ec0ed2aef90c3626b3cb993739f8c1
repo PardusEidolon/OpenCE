@@ -1,0 +1,1 @@
+Task: Phase 4 'The loading screen at 4K' and 'No hitch'. Verifies existing behaviour: 14 loading frames drawn at 2160, longest gap 135 ms, 0 undrawn; workspace tests pass.
