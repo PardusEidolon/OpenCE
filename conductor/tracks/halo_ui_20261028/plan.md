@@ -22,8 +22,8 @@ the design approval, which the user gives.
 - [ ] Task: The pause menu, the post-game screens and the HUD's text. (blocked: waits on the user's approval of the Phase 1 prototypes)
 - [x] Task: Conductor - User Manual Verification 'Phase 3: Drawing and input' (Protocol in workflow.md) (automated)
 
-## Phase 4: The loading screen
+## Phase 4: The loading screen [checkpoint: e3c631aa]
 - [x] Task: Draw the Xbox loading screen at 4K from the original's code. 325cd5ff (verifies the C device's existing drawing)
 - [x] Task: The chant from the user's xbe, silent without it. cfdcf9b2
 - [x] Task: No hitch or black frame into the first frame of the next map. 325cd5ff
-- [ ] Task: Conductor - User Manual Verification 'Phase 4: The loading screen' (Protocol in workflow.md) (automated)
+- [x] Task: Conductor - User Manual Verification 'Phase 4: The loading screen' (Protocol in workflow.md) (automated)
