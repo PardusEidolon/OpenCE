@@ -97,6 +97,7 @@ stops, except A1's go/no-go.
   - A function in a file game.wasm compiles (port/linux/port.json) is Compiled; the manifest keeps rules only for the excluded files. 558 Ported, 6985 Compiled, 84 Replaced, 0 Missing, 0 owed. A Ported twin in a compiled file reads its fields as Compiled.
 - [x] Task: Remove the Rust simulation and `bevy_ecs`. 73d4fa06 (the `net` crate went with it)
 - [x] Task: Remove the presentation code the plugins replace, and the `net` crate. bf017c10 (the audio crate, the old shaders and ShaderLibrary; `net` went in 73d4fa06)
-- [ ] Task: Remove `port/macos` and its VM.
+- [x] Task: Remove `port/macos` and its VM. 07193494
+  - The VM golden frames (made from the user's maps) left the repository; movement and placement trace recorders need the VM and their traces stay as records; `HALO_GUEST_VM` ifdefs in source-adjacent C are left.
 - [ ] Task: The traces as checks that the wasm build matches the native reference.
 - [ ] Task: Conductor - User Manual Verification 'Phase 7: Removals' (Protocol in workflow.md) (automated)
