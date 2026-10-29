@@ -96,7 +96,7 @@ stops, except A1's go/no-go.
 - [x] Task: Reclass the census for the new direction, with its `--check`. 887eef2a
   - A function in a file game.wasm compiles (port/linux/port.json) is Compiled; the manifest keeps rules only for the excluded files. 558 Ported, 6985 Compiled, 84 Replaced, 0 Missing, 0 owed. A Ported twin in a compiled file reads its fields as Compiled.
 - [x] Task: Remove the Rust simulation and `bevy_ecs`. 73d4fa06 (the `net` crate went with it)
-- [ ] Task: Remove the presentation code the plugins replace, and the `net` crate.
+- [x] Task: Remove the presentation code the plugins replace, and the `net` crate. bf017c10 (the audio crate, the old shaders and ShaderLibrary; `net` went in 73d4fa06)
 - [ ] Task: Remove `port/macos` and its VM.
 - [ ] Task: The traces as checks that the wasm build matches the native reference.
 - [ ] Task: Conductor - User Manual Verification 'Phase 7: Removals' (Protocol in workflow.md) (automated)
