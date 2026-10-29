@@ -2,6 +2,7 @@
 """Checks every reference trace against the wasm build.
 
     nix develop -c python3 tools/engine_wasm_traces.py [--only NAME] [--json PATH]
+    nix develop -c python3 tools/engine_wasm_traces.py --check
     nix develop -c python3 tools/engine_wasm_traces.py --speed FOLDER
 
 Each tools/engine_*_reference.py compiles the functions it traces from
@@ -10,6 +11,10 @@ This runs each script's --check with CC set to tools/engine_wasm_cc.py, so
 the same functions are built for wasm32 with the game's ABI and run in the
 game's runtime (opence-wasm), and reports which traces match. A script that
 passes here traces the same in game.wasm as natively.
+
+--check is the gate: every script runs, and it fails if any trace differs,
+or if a script has no trace in tools/traces or a trace there no script
+(engine_NAME_reference.py records traces/NAME_reference.txt).
 
 --speed also builds each harness natively and times both runs, one script
 at a time, and writes FOLDER/speed.json: per script, the native run less an
@@ -46,6 +51,16 @@ def scripts(only: Optional[str] = None) -> List[Path]:
     if only:
         found = [script for script in found if only in script.name]
     return found
+
+
+def unpaired(tools: Path = ROOT / "tools") -> List[str]:
+    """each script without its trace in tools/traces, and each trace there
+    without its script, as a line saying so"""
+    names = {path.name[len("engine_") : -len(".py")] for path in tools.glob("engine_*_reference.py")}
+    traces = {path.name[: -len(".txt")] for path in (tools / "traces").glob("*_reference.txt")}
+    lines = [f"engine_{name}.py has no trace (traces/{name}.txt)" for name in sorted(names - traces)]
+    lines += [f"traces/{name}.txt has no script (engine_{name}.py)" for name in sorted(traces - names)]
+    return lines
 
 
 def build_runner() -> Path:
@@ -117,9 +132,18 @@ def main(arguments: Optional[List[str]] = None) -> int:
     parser.add_argument("--json", type=Path, help="write the results here")
     parser.add_argument("--jobs", type=int, help="scripts at once (all the cores; one with --speed)")
     parser.add_argument("--speed", type=Path, help="time the native and wasm runs into this folder")
+    parser.add_argument("--check", action="store_true", help="every trace, each paired with its script")
     options = parser.parse_args(arguments)
+    if options.check and (options.only or options.speed):
+        parser.error("--check runs every trace, without --only or --speed")
     if not os.environ.get("HALO_WASM_BUILTINS"):
         raise SystemExit("engine_wasm_traces: run inside nix develop")
+    if options.check:
+        lost = unpaired()
+        for line in lost:
+            print(line)
+        if lost:
+            return 1
     env = environment(build_runner())
     jobs = options.jobs or (1 if options.speed else os.cpu_count() or 4)
     if options.speed:

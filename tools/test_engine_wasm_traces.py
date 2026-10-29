@@ -119,3 +119,45 @@ def test_the_driver_finds_every_reference_script():
 @pytest.mark.skipif(not os.environ.get("HALO_WASM_BUILTINS"), reason="needs nix develop's wasm toolchain")
 def test_a_trace_matches_in_the_wasm_build():
     assert engine_wasm_traces.main(["--only", "facing_reference"]) == 0
+
+
+def test_every_script_has_its_trace_and_every_trace_its_script():
+    assert engine_wasm_traces.unpaired() == []
+
+
+def test_the_check_names_a_trace_without_a_script_and_a_script_without_a_trace(tmp_path):
+    (tmp_path / "traces").mkdir()
+    (tmp_path / "engine_facing_reference.py").write_text("")
+    (tmp_path / "engine_wind_reference.py").write_text("")
+    (tmp_path / "traces" / "facing_reference.txt").write_text("")
+    (tmp_path / "traces" / "orphan_reference.txt").write_text("")
+    assert engine_wasm_traces.unpaired(tmp_path) == [
+        "engine_wind_reference.py has no trace (traces/wind_reference.txt)",
+        "traces/orphan_reference.txt has no script (engine_orphan_reference.py)",
+    ]
+
+
+def test_check_fails_before_running_anything_when_a_trace_is_unpaired(monkeypatch, capsys):
+    monkeypatch.setenv("HALO_WASM_BUILTINS", "builtins.a")
+    monkeypatch.setattr(engine_wasm_traces, "unpaired", lambda tools=None: ["traces/x_reference.txt has no script"])
+    monkeypatch.setattr(engine_wasm_traces, "build_runner", lambda: pytest.fail("built the runner"))
+    assert engine_wasm_traces.main(["--check"]) == 1
+    assert "traces/x_reference.txt has no script" in capsys.readouterr().out
+
+
+def test_check_runs_every_script_and_fails_when_one_differs(monkeypatch):
+    monkeypatch.setenv("HALO_WASM_BUILTINS", "builtins.a")
+    monkeypatch.setattr(engine_wasm_traces, "unpaired", lambda tools=None: [])
+    monkeypatch.setattr(engine_wasm_traces, "build_runner", lambda: Path("runner"))
+    monkeypatch.setattr(engine_wasm_traces, "environment", lambda runner: {})
+    ran = []
+
+    def check(script, env):
+        ran.append(script.name)
+        return {"script": script.name, "passed": "facing" not in script.name, "seconds": 0.0, "detail": "differs"}
+
+    monkeypatch.setattr(engine_wasm_traces, "check", check)
+    assert engine_wasm_traces.main(["--check"]) == 1
+    assert sorted(ran) == [script.name for script in engine_wasm_traces.scripts()]
+    with pytest.raises(SystemExit):
+        engine_wasm_traces.main(["--check", "--only", "facing"])

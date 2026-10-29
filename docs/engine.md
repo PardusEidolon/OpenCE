@@ -19,7 +19,7 @@ python3 tools/engine_wasm.py   # game.wasm alone
 python3 tools/engine_build.py --out build/engine --test   # the app and its Swift tests
 cd engine && cargo test --release --workspace             # the Rust tests
 cd engine && cargo clippy --release --workspace --all-targets -- -D warnings
-python3 tools/engine_wasm_traces.py   # game.wasm against every reference trace
+python3 tools/engine_wasm_traces.py --check   # game.wasm against every reference trace
 ```
 
 Run the commands after the `nix` ones in `nix develop`. Tests that need
