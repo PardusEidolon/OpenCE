@@ -1,0 +1,1 @@
+Task: Phase 7 'Remove the presentation code the plugins replace, and the net crate'. Removed the audio crate, engine/app/Shaders, ShaderLibrary.swift and cbindgen.toml (net went in 73d4fa06). Census rewritten (35 functions cited). Workspace tests, clippy, census --check, traces, Python and Swift tests (35, 0 failures) pass.
