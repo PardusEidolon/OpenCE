@@ -23,8 +23,8 @@ random flags, and up to three HUDs on the unit and on each seat. The unit's
 weapon slots hold random object indices or none, and the weapon asked for
 may be none.
 
-The trace is written to engine/crates/sim/tests/unit_tables_reference.txt,
-which engine/crates/sim/tests/unit_tables_reference.rs reads.
+The trace is written to tools/traces/unit_tables_reference.txt, which
+tools/engine_wasm_traces.py checks game.wasm against.
 """
 
 import argparse
@@ -38,7 +38,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from harness import function, read  # noqa: E402
 
-OUTPUT = ROOT / "engine" / "crates" / "sim" / "tests" / "unit_tables_reference.txt"
+OUTPUT = ROOT / "tools" / "traces" / "unit_tables_reference.txt"
 
 FAKE_WORLD = r"""
 #include <stdio.h>

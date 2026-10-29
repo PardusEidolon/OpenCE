@@ -22,8 +22,8 @@ records the effect each device starts. A machine is placed by
 device_machines.c's own `machine_place`, which copies its placed flags. The co-op client check
 answers that the devices are this machine's.
 
-The trace is written to engine/crates/campaign/tests/devices_reference.txt,
-which engine/crates/campaign/tests/devices_reference.rs reads.
+The trace is written to tools/traces/devices_reference.txt, which
+tools/engine_wasm_traces.py checks game.wasm against.
 """
 
 import argparse
@@ -37,7 +37,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from harness import enum_with, function, read, structure  # noqa: E402
 
-OUTPUT = ROOT / "engine" / "crates" / "campaign" / "tests" / "devices_reference.txt"
+OUTPUT = ROOT / "tools" / "traces" / "devices_reference.txt"
 
 FAKE_WORLD = r"""
 #include <stdio.h>

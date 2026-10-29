@@ -14,8 +14,8 @@ it: steady frames of common displays, jittered ones, stalls of up to two
 seconds and frames of nothing. The film's and the network's caps, the
 server's time and what each tick does are left out.
 
-The trace is written to engine/crates/sim/tests/game_time_reference.txt,
-which engine/crates/sim/tests/game_time_reference.rs reads.
+The trace is written to tools/traces/game_time_reference.txt, which
+tools/engine_wasm_traces.py checks game.wasm against.
 """
 
 import argparse
@@ -29,7 +29,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from harness import enum_with, function, read, structure  # noqa: E402
 
-OUTPUT = ROOT / "engine" / "crates" / "sim" / "tests" / "game_time_reference.txt"
+OUTPUT = ROOT / "tools" / "traces" / "game_time_reference.txt"
 
 FAKE_WORLD = r"""
 #include <math.h>

@@ -13,7 +13,7 @@ are drawn from a fixed generator (some none, some past the names, many the
 same). Each name is given the kind and the index of the placement that
 names it last, the kinds in the game's order.
 
-The trace is written to engine/crates/import/tests/object_names_reference.txt,
+The trace is written to tools/traces/object_names_reference.txt,
 which engine/crates/import/tests/object_names_reference.rs reads.
 """
 
@@ -28,7 +28,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from harness import function, read  # noqa: E402
 
-OUTPUT = ROOT / "engine" / "crates" / "import" / "tests" / "object_names_reference.txt"
+OUTPUT = ROOT / "tools" / "traces" / "object_names_reference.txt"
 
 FAKE_WORLD = r"""
 #include <stdio.h>

@@ -11,8 +11,8 @@ source/math/random_math.c), found by name as tools/harness finds them, and
 compiled for this machine against a small fake world: one item on one plane
 through the origin (the structure's one surface), whose ground point marker is the item's own frame. Each
 case prints the item after every tick. The table is written to
-engine/crates/sim/tests/item_reference.txt, which
-engine/crates/sim/tests/item_reference.rs reads.
+tools/traces/item_reference.txt, which
+tools/engine_wasm_traces.py checks game.wasm against.
 """
 
 import argparse
@@ -26,7 +26,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from harness import function, read  # noqa: E402
 
-OUTPUT = ROOT / "engine" / "crates" / "sim" / "tests" / "item_reference.txt"
+OUTPUT = ROOT / "tools" / "traces" / "item_reference.txt"
 
 ITEM_FUNCTIONS = [
     "item_rested_surface_index",

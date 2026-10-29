@@ -16,7 +16,7 @@ plane (with indices the map does not have among them).
 the palette entry it is handed, which is what the trace records for each
 cluster at points on both sides of its plane.
 
-The trace is written to engine/crates/import/tests/wind_weather_reference.txt,
+The trace is written to tools/traces/wind_weather_reference.txt,
 which engine/crates/import/src/level/wind_weather_reference.rs reads.
 """
 
@@ -31,7 +31,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from harness import function, read  # noqa: E402
 
-OUTPUT = ROOT / "engine" / "crates" / "import" / "tests" / "wind_weather_reference.txt"
+OUTPUT = ROOT / "tools" / "traces" / "wind_weather_reference.txt"
 
 SCENARIO_FUNCTIONS = ["scenario_fog_region_get_fog_index", "scenario_get_fog_region_index"]
 WIND_FUNCTIONS = ["scenario_get_current", "scenario_get_wind"]

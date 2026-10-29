@@ -20,8 +20,8 @@ queue stepping once a tick as `game_engine_update` steps it. Ting (the last
 sound), which nothing plays and the queue's flags do not reach, is left
 out.
 
-The trace is written to engine/crates/sim/tests/announcer_reference.txt,
-which engine/crates/sim/tests/announcer_reference.rs reads.
+The trace is written to tools/traces/announcer_reference.txt, which
+tools/engine_wasm_traces.py checks game.wasm against.
 """
 
 import argparse
@@ -36,7 +36,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from harness import enum_with, function, read, structure  # noqa: E402
 
-OUTPUT = ROOT / "engine" / "crates" / "sim" / "tests" / "announcer_reference.txt"
+OUTPUT = ROOT / "tools" / "traces" / "announcer_reference.txt"
 
 SOUND_FUNCTIONS = [
     "_game_engine_play_multiplayer_sound",

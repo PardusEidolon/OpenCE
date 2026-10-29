@@ -22,8 +22,8 @@ killer is credited) and each team is an ally of itself only. The players are add
 tick. A dead player's respawn timer counts down a game tick at a time, as
 `game_engine_update`'s does, and a player is killed only while alive.
 
-The trace is written to engine/crates/sim/tests/game_engine_reference.txt,
-which engine/crates/sim/tests/game_engine_reference.rs reads.
+The trace is written to tools/traces/game_engine_reference.txt, which
+tools/engine_wasm_traces.py checks game.wasm against.
 """
 
 import argparse
@@ -37,7 +37,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from harness import function, read, structure  # noqa: E402
 
-OUTPUT = ROOT / "engine" / "crates" / "sim" / "tests" / "game_engine_reference.txt"
+OUTPUT = ROOT / "tools" / "traces" / "game_engine_reference.txt"
 
 ENGINE_FUNCTIONS = [
     "game_engine_has_teams",

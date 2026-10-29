@@ -67,6 +67,22 @@ def test_the_swift_contract_tests_pass(app: Path, tmp_path: Path) -> None:
     )
 
 
+def test_the_tests_build_only_the_files_git_tracks(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    package = tmp_path / "app"
+    (package / "Tests").mkdir(parents=True)
+    (package / "Package.swift").write_text("// package\n")
+    (package / "Tests" / "Kept.swift").write_text("// kept\n")
+    subprocess.run(["git", "init", "-q"], cwd=package, check=True)
+    subprocess.run(["git", "add", "."], cwd=package, check=True)
+    # (a test file of the checkout's own, never added)
+    (package / "Tests" / "ZZMine.swift").write_text("// mine\n")
+    monkeypatch.setattr(engine_build, "PACKAGE", package)
+    copy = engine_build.tracked_package(tmp_path / "out")
+    assert (copy / "Package.swift").is_file()
+    assert (copy / "Tests" / "Kept.swift").is_file()
+    assert not (copy / "Tests" / "ZZMine.swift").exists()
+
+
 def test_the_dependencies_licences_are_permissive() -> None:
     if shutil.which("cargo-deny") is None:
         pytest.skip("needs nix develop's cargo-deny")

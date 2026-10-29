@@ -11,7 +11,7 @@ The functions are source/sound/sound_definitions.c's
 (`sound_scale_value`, `sound_scale_random_value`), found by name as
 tools/harness finds them, with source/math/random_math.c's seeded numbers,
 and compiled for this machine against a small fake world. The table is
-written to engine/crates/audio/tests/sound_choice_reference.txt, which
+written to tools/traces/sound_choice_reference.txt, which
 engine/crates/audio/tests/sound_choice_reference.rs reads.
 """
 
@@ -26,7 +26,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from harness import function, read, structure  # noqa: E402
 
-OUTPUT = ROOT / "engine" / "crates" / "audio" / "tests" / "sound_choice_reference.txt"
+OUTPUT = ROOT / "tools" / "traces" / "sound_choice_reference.txt"
 
 DEFINITION_FUNCTIONS = [
     "sound_definition_find_pitch_range_by_pitch",

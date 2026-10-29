@@ -7,8 +7,8 @@ the engine's to match.
 
 The function is source/units/bipeds.c's `biped_start_landing`, compiled for
 this machine against a small fake world. The table is written to
-engine/crates/physics/tests/biped_landing_reference.txt, which
-engine/crates/physics/tests/biped_landing_reference.rs reads.
+tools/traces/biped_landing_reference.txt, which
+tools/engine_wasm_traces.py checks game.wasm against.
 """
 
 import argparse
@@ -22,7 +22,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from harness import function, read  # noqa: E402
 
-OUTPUT = ROOT / "engine" / "crates" / "physics" / "tests" / "biped_landing_reference.txt"
+OUTPUT = ROOT / "tools" / "traces" / "biped_landing_reference.txt"
 
 WORLD = r"""
 #include <stdio.h>

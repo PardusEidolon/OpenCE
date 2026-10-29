@@ -349,6 +349,23 @@ fn a_trace_names_the_use_of_a_field_the_census_cannot_follow() -> Result<(), Fai
 }
 
 #[test]
+fn a_trace_without_a_file_marks_its_field_unused() -> Result<(), Failure> {
+    let records = read_dump(DUMP);
+    let mut marked = marks(&records, &reads(C, &names(&records), &BTreeMap::new()));
+    for mark in &mut marked {
+        mark.importer = true;
+        mark.engine = Engine::Untraced;
+    }
+    // (no Rust code reads it: game.wasm's own reader does)
+    let traces = read_traces("thing_part\tmass\t-\tgame.wasm\n")?;
+    let problems = trace(&mut marked, &traces, |_: &str| None);
+    assert!(problems.is_empty(), "{problems:?}");
+    let mass = marked.iter().find(|m| m.path == "mass").map(|m| m.engine);
+    assert_eq!(mass, Some(Engine::Unused));
+    Ok(())
+}
+
+#[test]
 fn each_unused_field_has_its_reason() {
     let records = read_dump(DUMP);
     let by_function = readers(C, &names(&records), &BTreeMap::new());

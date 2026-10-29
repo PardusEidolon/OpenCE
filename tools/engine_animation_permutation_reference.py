@@ -13,8 +13,8 @@ graph's last and a run that ends before the last weight is reached, its
 random draw replaced by the number the trace asks with. Each list is asked
 from each first animation (and indices the graph does not have) at numbers
 from 0 to 1, on its weights and between them. The table is written to
-engine/crates/sim/tests/animation_permutation_reference.txt, which
-engine/crates/sim/tests/animation_permutation_reference.rs reads.
+tools/traces/animation_permutation_reference.txt, which
+tools/engine_wasm_traces.py checks game.wasm against.
 """
 
 import argparse
@@ -28,7 +28,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from harness import function, read  # noqa: E402
 
-OUTPUT = ROOT / "engine" / "crates" / "sim" / "tests" / "animation_permutation_reference.txt"
+OUTPUT = ROOT / "tools" / "traces" / "animation_permutation_reference.txt"
 
 FAKE_WORLD = r"""
 #include <stdio.h>

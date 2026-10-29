@@ -12,8 +12,8 @@ source/interface/first_person_weapons.c's, found by name as tools/harness
 finds them, and compiled for this machine against a small fake world: one
 weapon whose type, overheated flag, magazine and animation graph each case
 sets. The table is written to
-engine/crates/sim/tests/first_person_reference.txt, which
-engine/crates/sim/tests/first_person_reference.rs reads.
+tools/traces/first_person_reference.txt, which
+tools/engine_wasm_traces.py checks game.wasm against.
 """
 
 import argparse
@@ -27,7 +27,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from harness import enum_with, function, read  # noqa: E402
 
-OUTPUT = ROOT / "engine" / "crates" / "sim" / "tests" / "first_person_reference.txt"
+OUTPUT = ROOT / "tools" / "traces" / "first_person_reference.txt"
 
 FUNCTIONS = [
     "first_person_weapon_state_from_weapon_message",

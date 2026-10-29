@@ -1,23 +1,23 @@
-# structure	field	file (from engine/crates/)	use: text the file must hold (opence census --check checks it)
-continuous_damage_effect_definition	damage.material_modifiers	sim/src/damage.rs	effect.material_modifiers.get(kind)
-damage_definition	material_modifiers	sim/src/damage.rs	effect.material_modifiers.get(kind)
-damage_effect_definition	damage.material_modifiers	sim/src/damage.rs	effect.material_modifiers.get(kind)
+# structure	field	file (from engine/crates/)	use: text the file must hold (opence census --check checks it); a file of - says no Rust code uses it, game.wasm's own reader does
 fog_definition	flags	import/src/level.rs	palette_water.get(entry)
 hud_globals_definition	waypoint.arrows.count	import/src/script.rs	WAYPOINT_ARROWS,
 hud_globals_definition	waypoint.arrows.address	import/src/script.rs	WAYPOINT_ARROWS,
 hud_waypoint_definition	arrows.count	import/src/script.rs	WAYPOINT_ARROWS,
 hud_waypoint_definition	arrows.address	import/src/script.rs	WAYPOINT_ARROWS,
-item_collection_definition	spawn_time	sim/src/game.rs	item_respawn_period(placement.spawn_seconds)
 scenario	hs_source_files.count	import/src/script.rs	SOURCE_FILES_OFFSET, "source files"
-scenario_biped_datum	permutation.region_permutations	ffi/src/lib.rs	region_permutations(&level.models[model], permutation)
-scenario_conversation_line_view	dialogue	campaign/src/conversations.rs	line.dialogue.get(variant)
-scenario_conversation_participant_view	dialogue_variants	campaign/src/conversations.rs	participant.variants
-scenario_netgame_equipment	spawn_time	sim/src/game.rs	item_respawn_period(placement.spawn_seconds)
-scenario_object_name	runtime_scenario_datum_index	campaign/src/lib.rs	campaign.object_placements.get(name)
-scenario_object_permutation	region_permutations	ffi/src/lib.rs	region_permutations(&level.models[model], permutation)
-scenario_weapon_datum	permutation.region_permutations	ffi/src/lib.rs	region_permutations(&level.models[model], permutation)
-structure_lens_flare	lens_flare.group_tag	ffi/src/camera.rs	for flare in &level.lens_flares
-structure_lens_flare	lens_flare.index	ffi/src/camera.rs	for flare in &level.lens_flares
-trigger_firing_effect	effects	sim/src/player.rs	trigger.firing_effect.clone()
-unit_hud_reference	hud.group_tag	ffi/src/hud.rs	unit.unit_hud.as_ref()
-unit_hud_reference	hud.index	ffi/src/hud.rs	unit.unit_hud.as_ref()
+continuous_damage_effect_definition	damage.material_modifiers	-	game.wasm
+damage_definition	material_modifiers	-	game.wasm
+damage_effect_definition	damage.material_modifiers	-	game.wasm
+item_collection_definition	spawn_time	-	game.wasm
+scenario_netgame_equipment	spawn_time	-	game.wasm
+scenario_conversation_line_view	dialogue	-	game.wasm
+scenario_conversation_participant_view	dialogue_variants	-	game.wasm
+scenario_object_name	runtime_scenario_datum_index	-	game.wasm
+scenario_biped_datum	permutation.region_permutations	-	game.wasm
+scenario_object_permutation	region_permutations	-	game.wasm
+scenario_weapon_datum	permutation.region_permutations	-	game.wasm
+structure_lens_flare	lens_flare.group_tag	import/src/level.rs	bsp.lens_flares.iter().flatten()
+structure_lens_flare	lens_flare.index	import/src/level.rs	bsp.lens_flares.iter().flatten()
+trigger_firing_effect	effects	import/src/level.rs	trigger.firing_effect.as_ref()
+unit_hud_reference	hud.group_tag	import/src/hud.rs	&object.unit_hud
+unit_hud_reference	hud.index	import/src/hud.rs	&object.unit_hud

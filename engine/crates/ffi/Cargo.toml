@@ -1,6 +1,6 @@
 [package]
 name = "opence_ffi"
-description = "The contract between the engine and the Swift app: UniFFI calls and the per-frame snapshot"
+description = "The contract between the engine and the Swift app: game.wasm played through UniFFI calls"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
@@ -17,42 +17,23 @@ name = "uniffi-bindgen"
 path = "src/bin/uniffi-bindgen.rs"
 required-features = ["bindgen"]
 
-[[bench]]
-# a frame of devgulch's stations: the release build's measure (LTO and
-# PGO were measured on it)
-name = "frame"
-harness = false
-
 [features]
 bindgen = ["uniffi/cli"]
 
 [dependencies]
 mimalloc.workspace = true
-stats_alloc.workspace = true
-opence_sim.workspace = true
-opence_audio.workspace = true
-opence_bake.workspace = true
-opence_campaign.workspace = true
-opence_content.workspace = true
-opence_import.workspace = true
-opence_net.workspace = true
-opence_dev.workspace = true
-opence_script.workspace = true
+# (the loading screen's chant and model)
 opence_ui.workspace = true
 # (the original game, run as game.wasm, and its render batches)
 opence_runtime.workspace = true
 opence_render.workspace = true
-serde_json = "1"
+# (the control socket's default path, the opence tool's)
+opence_dev.workspace = true
 libm.workspace = true
-rustc-hash.workspace = true
-bytemuck.workspace = true
 thiserror.workspace = true
 uniffi.workspace = true
-serde = { version = "1", features = ["derive"] }
-toml = "0.9"
 
 [dev-dependencies]
-divan.workspace = true
 # (the tests' small modules, written as text)
 wat = "1"
 

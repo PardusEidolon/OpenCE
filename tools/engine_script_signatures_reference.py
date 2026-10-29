@@ -14,8 +14,8 @@ rest in the array after it (laid out together on the Xbox, not on this
 machine), so each is read from where its definition puts it. The parse and
 evaluate procedures are stand-ins: only the signatures are recorded.
 
-The trace is written to engine/crates/campaign/tests/script_signatures_reference.txt,
-which engine/crates/campaign/tests/script_signatures_reference.rs reads.
+The trace is written to tools/traces/script_signatures_reference.txt, which
+tools/engine_wasm_traces.py checks game.wasm against.
 """
 
 import argparse
@@ -30,7 +30,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from harness import enum_with, read, structure  # noqa: E402
 
-OUTPUT = ROOT / "engine" / "crates" / "campaign" / "tests" / "script_signatures_reference.txt"
+OUTPUT = ROOT / "tools" / "traces" / "script_signatures_reference.txt"
 
 FAKE_WORLD = r"""
 #include <stddef.h>

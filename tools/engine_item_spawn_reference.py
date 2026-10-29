@@ -18,8 +18,8 @@ starts), the game type has its map's weapons, and no biped lies dead: the
 purge's dead bipeds and `can_delete_item`'s flags are the units' and the
 flags' own.
 
-The trace is written to engine/crates/sim/tests/item_spawn_reference.txt,
-which engine/crates/sim/tests/item_spawn_reference.rs reads.
+The trace is written to tools/traces/item_spawn_reference.txt, which
+tools/engine_wasm_traces.py checks game.wasm against.
 """
 
 import argparse
@@ -33,7 +33,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from harness import function, read  # noqa: E402
 
-OUTPUT = ROOT / "engine" / "crates" / "sim" / "tests" / "item_spawn_reference.txt"
+OUTPUT = ROOT / "tools" / "traces" / "item_spawn_reference.txt"
 
 RANDOM_FUNCTIONS = ["seed_random", "seed_random_range"]
 ENGINE_FUNCTIONS = [

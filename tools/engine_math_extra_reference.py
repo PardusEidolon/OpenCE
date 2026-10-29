@@ -14,8 +14,8 @@ The functions are source/math/real_math.c's `vector3d_from_euler_angles2d`,
 `matrix4x3_rotation_from_angles` and source/rasterizer/rasterizer_geometry.c's
 `uncompress_int32_to_real_vector3d`, with real_math.h's inline helpers,
 compiled for this machine against a small fake world. The table is written
-to engine/crates/sim/tests/math_extra_reference.txt, which
-engine/crates/sim/tests/math_extra_reference.rs reads.
+to tools/traces/math_extra_reference.txt, which
+tools/engine_wasm_traces.py checks game.wasm against.
 """
 
 import argparse
@@ -29,7 +29,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from harness import function, inline, read  # noqa: E402
 
-OUTPUT = ROOT / "engine" / "crates" / "sim" / "tests" / "math_extra_reference.txt"
+OUTPUT = ROOT / "tools" / "traces" / "math_extra_reference.txt"
 
 INLINE_FUNCTIONS = ["set_real_point3d", "sine", "cosine", "square_root"]
 

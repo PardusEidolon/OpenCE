@@ -64,20 +64,21 @@ fn citations_come_from_src_comments_and_swift_but_not_tests_or_the_census() -> R
 }
 
 #[test]
-fn the_engine_cites_at_least_the_reference_maps_functions() -> Result<(), Failure> {
+fn the_runtime_cites_the_functions_it_stands_beside() -> Result<(), Failure> {
     let Some(root) = common::repository() else {
         eprintln!("skipped: no source/");
         return Ok(());
     };
     let original = Original::read(&root.join("source"))?;
     let found = collect(&root.join("engine"), &original.names())?;
-    // (the reference map held 159 when the census replaced it, from the
-    // ported crates alone; the census reads every crate and the Swift)
-    assert!(found.len() >= 159, "only {} cited", found.len());
+    // (the reference map held 159 when the census replaced it; game.wasm
+    // now runs the original's own code, and the runtime that hosts it
+    // still cites what it stands beside)
+    assert!(found.len() >= 20, "only {} cited", found.len());
     for name in [
-        "unit_find_nearby_seat",
-        "actor_action_try_to_dive",
-        "unit_start_animation_impulse",
+        "cache_get_tag_instance",
+        "system_malloc",
+        "physical_memory_verify",
     ] {
         assert!(found.contains_key(name), "{name} is not cited");
     }

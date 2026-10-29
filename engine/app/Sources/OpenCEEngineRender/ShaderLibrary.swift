@@ -9,6 +9,17 @@ import CryptoKit
 import Foundation
 import Metal
 
+/// A linked library that could not be loaded.
+public enum ShaderLibraryError: Error, CustomStringConvertible {
+    case shaders(String)
+
+    public var description: String {
+        switch self {
+        case .shaders(let message): "the shaders: \(message)"
+        }
+    }
+}
+
 public enum ShaderLibrary {
     private static let state = LinkedShaders()
 
@@ -62,7 +73,7 @@ public enum ShaderLibrary {
         do {
             library = try device.makeLibrary(URL: url)
         } catch {
-            throw LevelRendererError.shaders("\(url.lastPathComponent): \(error.localizedDescription)")
+            throw ShaderLibraryError.shaders("\(url.lastPathComponent): \(error.localizedDescription)")
         }
         let listed = (try? String(contentsOf: url.appendingPathExtension("sources"), encoding: .utf8)) ?? ""
         let hashes = Set(listed.split(separator: "\n").compactMap { $0.split(separator: " ").first.map(String.init) })

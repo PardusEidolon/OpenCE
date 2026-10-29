@@ -12,7 +12,7 @@ use opence_content::object::ObjectKind;
 use opence_import::level::object_names;
 use opence_import::{Cache, GroupTag};
 
-const REFERENCE: &str = include_str!("object_names_reference.txt");
+const REFERENCE: &str = include_str!("../../../../tools/traces/object_names_reference.txt");
 
 type Failure = Box<dyn std::error::Error>;
 

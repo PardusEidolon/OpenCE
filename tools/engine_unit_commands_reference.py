@@ -17,8 +17,8 @@ weapon that may be none, a custom animation playing or not at any frame of
 it, and vehicles whose seats are labelled from a few names, with riders in
 some of them and object lists holding some of the riders.
 
-The trace is written to engine/crates/campaign/tests/unit_commands_reference.txt,
-which engine/crates/campaign/tests/unit_commands_reference.rs reads.
+The trace is written to tools/traces/unit_commands_reference.txt, which
+tools/engine_wasm_traces.py checks game.wasm against.
 """
 
 import argparse
@@ -32,7 +32,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from harness import function, read  # noqa: E402
 
-OUTPUT = ROOT / "engine" / "crates" / "campaign" / "tests" / "unit_commands_reference.txt"
+OUTPUT = ROOT / "tools" / "traces" / "unit_commands_reference.txt"
 
 FAKE_WORLD = r"""
 #include <stdio.h>

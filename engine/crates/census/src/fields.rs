@@ -666,11 +666,17 @@ pub struct Trace {
     pub structure: String,
     /// The field's path in it.
     pub path: String,
-    /// The file that uses it, from `engine/crates/`.
+    /// The file that uses it, from `engine/crates/`, or [`NO_FILE`] where
+    /// no Rust code does.
     pub file: String,
     /// The text of the use in that file.
     pub uses: String,
 }
+
+/// A trace's file where no Rust code uses its field: game.wasm's own
+/// reader does, and the field is marked unused (which [`gaps`] lets stand
+/// only when a reader of it is compiled).
+pub const NO_FILE: &str = "-";
 
 /// `field_traces.tsv` read: a line for each field, its structure, path,
 /// file and use.
@@ -698,7 +704,7 @@ pub fn read_traces(text: &str) -> Result<Vec<Trace>, Error> {
 }
 
 /// Marks each untraced field `traces` names used, where the text of its
-/// file (`text`) holds its use; the problems are the traces whose use is
+/// file (`text`) holds its use, or unused, where its file is [`NO_FILE`]; the problems are the traces whose use is
 /// not there, that name a field the census traces itself, or that name no
 /// kept field.
 pub fn trace(
@@ -717,6 +723,7 @@ pub fn trace(
             Some(mark) if mark.engine != Engine::Untraced => {
                 problems.push(format!("{name} needs no trace: the census traces it"));
             }
+            Some(mark) if t.file == NO_FILE => mark.engine = Engine::Unused,
             Some(mark) => {
                 if text(&t.file).is_some_and(|text| text.contains(&t.uses)) {
                     mark.engine = Engine::Used;

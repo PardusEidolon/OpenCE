@@ -9,7 +9,7 @@ the engine's classes to match.
 The table and the functions are sound_classes.c's, compiled for this machine
 against the shared fake world (tools/harness/world.py), with a stand-in for
 the game state's allocator. The trace is written to
-engine/crates/audio/tests/sound_class_reference.txt, which
+tools/traces/sound_class_reference.txt, which
 engine/crates/audio/tests/sound_class_reference.rs reads.
 """
 
@@ -24,7 +24,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from harness import enum_with, function, read, structure, world  # noqa: E402
 
-OUTPUT = ROOT / "engine" / "crates" / "audio" / "tests" / "sound_class_reference.txt"
+OUTPUT = ROOT / "tools" / "traces" / "sound_class_reference.txt"
 
 # sound_classes.c's functions, each defined before its first use
 FUNCTIONS = [

@@ -163,15 +163,11 @@ impl Census {
         let scripts: BTreeSet<&String> = self.traced.values().collect();
         for script in scripts {
             let file = format!("{}.txt", script.strip_prefix("engine_").unwrap_or(script));
-            let found = std::fs::read_dir(engine.root.join("crates"))
-                .into_iter()
-                .flatten()
-                .flatten()
-                .any(|folder| folder.path().join("tests").join(&file).is_file());
-            if !found {
-                self.problems.push(format!(
-                    "{script}'s trace ({file}) is not in any crate's tests"
-                ));
+            // (the engine's root is the repository's engine/)
+            let traces = engine.root.join("../tools/traces");
+            if !traces.join(&file).is_file() {
+                self.problems
+                    .push(format!("{script}'s trace ({file}) is not in tools/traces"));
             }
         }
     }

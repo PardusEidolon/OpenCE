@@ -13,8 +13,8 @@ The other vector helpers are written here as real_math.h writes them.
 The values are drawn at random, with values on the ends of a pin's range,
 reversed and empty ranges, and unit and stretched axes among them.
 
-The trace is written to engine/crates/sim/tests/physics_math_reference.txt,
-which engine/crates/sim/tests/physics_math_reference.rs reads.
+The trace is written to tools/traces/physics_math_reference.txt, which
+tools/engine_wasm_traces.py checks game.wasm against.
 """
 
 import argparse
@@ -28,7 +28,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from harness import function, read  # noqa: E402
 
-OUTPUT = ROOT / "engine" / "crates" / "sim" / "tests" / "physics_math_reference.txt"
+OUTPUT = ROOT / "tools" / "traces" / "physics_math_reference.txt"
 
 FAKE_WORLD = r"""
 #include <stdio.h>

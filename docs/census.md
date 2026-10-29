@@ -82,7 +82,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `scale_vector3d` | ai/action_charge.c | Ported |  | `tools/engine_math_reference.py` |
 | `magnitude3d` | ai/action_charge.c | Ported |  | `tools/engine_item_reference.py` |
 | `normalize3d` | ai/action_charge.c | Ported |  | `tools/engine_item_reference.py` |
-| `dot_product3d` | ai/action_charge.c | Ported | sim/src/vehicle.rs:828 | `tools/engine_handle_action_reference.py` |
+| `dot_product3d` | ai/action_charge.c | Ported |  | `tools/engine_handle_action_reference.py` |
 | `subtract_vectors3d` | ai/action_charge.c | Ported |  | `tools/engine_physics_math_reference.py` |
 | `real_random` | ai/action_charge.c | Ported |  | `tools/engine_cause_damage_reference.py` |
 | `collision_test_line` | ai/action_charge.c | Compiled |  | compiled into game.wasm |
@@ -240,7 +240,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `actor_action_set_default_state` | ai/actions.c | Compiled |  | compiled into game.wasm |
 | `actor_action_handle_initial_action` | ai/actions.c | Compiled |  | compiled into game.wasm |
 | `actor_action_handle_pending_command_list` | ai/actions.c | Compiled |  | compiled into game.wasm |
-| `actor_action_handle_surprise` | ai/actions.c | Compiled | sim/src/ai_impulse.rs:6 | compiled into game.wasm |
+| `actor_action_handle_surprise` | ai/actions.c | Compiled |  | compiled into game.wasm |
 | `actor_action_handle_panic_transition` | ai/actions.c | Compiled |  | compiled into game.wasm |
 | `actor_action_handle_berserking_from_attached_projectiles` | ai/actions.c | Compiled |  | compiled into game.wasm |
 | `actor_action_handle_vehicle_entry` | ai/actions.c | Compiled |  | compiled into game.wasm |
@@ -255,7 +255,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `actor_action_try_to_throw_grenade` | ai/actions.c | Compiled |  | compiled into game.wasm |
 | `actor_action_consider_grenade` | ai/actions.c | Compiled |  | compiled into game.wasm |
 | `actor_action_try_to_evade` | ai/actions.c | Compiled |  | compiled into game.wasm |
-| `actor_action_try_to_dive` | ai/actions.c | Compiled | sim/src/ai_impulse.rs:5 | compiled into game.wasm |
+| `actor_action_try_to_dive` | ai/actions.c | Compiled |  | compiled into game.wasm |
 | `actors_searching_same_position` | ai/actions.c | Compiled |  | compiled into game.wasm |
 | `actor_pursuit_find_nearby_actors` | ai/actions.c | Compiled |  | compiled into game.wasm |
 | `actor_action_handle_berserk_transition` | ai/actions.c | Compiled |  | compiled into game.wasm |
@@ -289,8 +289,8 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `actor_combat_find_grenade_target` | ai/actor_combat.c | Compiled |  | compiled into game.wasm |
 | `actor_combat_check_collateral_damage` | ai/actor_combat.c | Compiled |  | compiled into game.wasm |
 | `actor_combat_plan_grenade_trajectory` | ai/actor_combat.c | Compiled |  | compiled into game.wasm |
-| `valid_realcmp` | ai/actor_combat.c | Ported | sim/src/unit_aiming.rs:308 | `tools/engine_unit_aiming_bounds_reference.py` |
-| `valid_real_normal3d` | ai/actor_combat.c | Ported | sim/src/unit_aiming.rs:314 | `tools/engine_unit_aiming_bounds_reference.py` |
+| `valid_realcmp` | ai/actor_combat.c | Ported |  | `tools/engine_unit_aiming_bounds_reference.py` |
+| `valid_real_normal3d` | ai/actor_combat.c | Ported |  | `tools/engine_unit_aiming_bounds_reference.py` |
 | `actor_combat_allow_special_fire_situation` | ai/actor_combat.c | Compiled |  | compiled into game.wasm |
 | `actor_aim_projectile` | ai/actor_combat.c | Compiled |  | compiled into game.wasm |
 | `actor_start_burst` | ai/actor_combat.c | Compiled |  | compiled into game.wasm |
@@ -320,7 +320,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `firing_position_compute_line_of_sight` | ai/actor_firing_position.c | Compiled |  | compiled into game.wasm |
 | `firing_position_forced_evaluation` | ai/actor_firing_position.c | Compiled |  | compiled into game.wasm |
 | `actor_nearby_firing_positions` | ai/actor_firing_position.c | Compiled |  | compiled into game.wasm |
-| `actor_select_firing_position` | ai/actor_firing_position.c | Compiled | campaign/src/actors.rs:541 | compiled into game.wasm |
+| `actor_select_firing_position` | ai/actor_firing_position.c | Compiled |  | compiled into game.wasm |
 | `actor_active_select_firing_position` | ai/actor_firing_position.c | Compiled |  | compiled into game.wasm |
 | `actor_change_firing_position` | ai/actor_firing_position.c | Compiled |  | compiled into game.wasm |
 | `pre_evaluator_attack` | ai/actor_firing_position.c | Compiled |  | compiled into game.wasm |
@@ -419,7 +419,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `actor_perception_qsort_compare_optional_props` | ai/actor_perception.c | Compiled |  | compiled into game.wasm |
 | `actor_perception_create_orphan_from_friend` | ai/actor_perception.c | Compiled |  | compiled into game.wasm |
 | `actor_perception_assess_suicide_danger` | ai/actor_perception.c | Compiled |  | compiled into game.wasm |
-| `actor_perception_update` | ai/actor_perception.c | Compiled | campaign/src/actors.rs:510 | compiled into game.wasm |
+| `actor_perception_update` | ai/actor_perception.c | Compiled |  | compiled into game.wasm |
 | `actor_stimulus_clear` | ai/actor_stimulus.c | Compiled |  | compiled into game.wasm |
 | `actor_stimulus_combat` | ai/actor_stimulus.c | Compiled |  | compiled into game.wasm |
 | `actor_stimulus_surprise` | ai/actor_stimulus.c | Compiled |  | compiled into game.wasm |
@@ -522,7 +522,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `actor_unit_control_throw_grenade` | ai/actors.c | Compiled |  | compiled into game.wasm |
 | `actor_unit_control_exact_facing` | ai/actors.c | Compiled |  | compiled into game.wasm |
 | `actor_unit_control_stop_animation_impulse` | ai/actors.c | Compiled |  | compiled into game.wasm |
-| `actor_new` | ai/actors.c | Compiled | campaign/src/actors.rs:307 | compiled into game.wasm |
+| `actor_new` | ai/actors.c | Compiled |  | compiled into game.wasm |
 | `actor_customize_unit` | ai/actors.c | Compiled |  | compiled into game.wasm |
 | `actor_set_dormant` | ai/actors.c | Compiled |  | compiled into game.wasm |
 | `actor_swarm_component_setup` | ai/actors.c | Compiled |  | compiled into game.wasm |
@@ -530,34 +530,34 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `actor_delete` | ai/actors.c | Compiled |  | compiled into game.wasm |
 | `actor_swarm_cache_new` | ai/actors.c | Compiled |  | compiled into game.wasm |
 | `actor_get_running_blind_vector` | ai/actors.c | Compiled |  | compiled into game.wasm |
-| `actor_kill` | ai/actors.c | Compiled | campaign/src/actors.rs:395 | compiled into game.wasm |
+| `actor_kill` | ai/actors.c | Compiled |  | compiled into game.wasm |
 | `actor_died` | ai/actors.c | Compiled |  | compiled into game.wasm |
 | `actor_swarm_unit_died` | ai/actors.c | Compiled |  | compiled into game.wasm |
 | `actor_braindead` | ai/actors.c | Compiled |  | compiled into game.wasm |
 | `actor_handle_unit_effect` | ai/actors.c | Compiled |  | compiled into game.wasm |
 | `actor_set_active` | ai/actors.c | Compiled |  | compiled into game.wasm |
 | `actor_swarm_attach_unit` | ai/actors.c | Compiled |  | compiled into game.wasm |
-| `actor_erase` | ai/actors.c | Compiled | campaign/src/actors.rs:385 | compiled into game.wasm |
+| `actor_erase` | ai/actors.c | Compiled |  | compiled into game.wasm |
 | `actor_randomly_control_unit` | ai/actors.c | Compiled |  | compiled into game.wasm |
 | `actor_general_update` | ai/actors.c | Compiled |  | compiled into game.wasm |
 | `actors_handle_unit_effect` | ai/actors.c | Compiled |  | compiled into game.wasm |
 | `actor_unit_control` | ai/actors.c | Compiled |  | compiled into game.wasm |
 | `actor_attach_unit` | ai/actors.c | Compiled |  | compiled into game.wasm |
-| `actor_update` | ai/actors.c | Compiled | campaign/src/actors.rs:600 | compiled into game.wasm |
+| `actor_update` | ai/actors.c | Compiled |  | compiled into game.wasm |
 | `actor_create_for_unit` | ai/actors.c | Compiled |  | compiled into game.wasm |
-| `actor_place` | ai/actors.c | Compiled | campaign/src/actors.rs:306 | compiled into game.wasm |
+| `actor_place` | ai/actors.c | Compiled |  | compiled into game.wasm |
 | `actors_spawn_from_unit` | ai/actors.c | Compiled |  | compiled into game.wasm |
-| `actors_update` | ai/actors.c | Compiled | campaign/src/actors.rs:403 | compiled into game.wasm |
+| `actors_update` | ai/actors.c | Compiled |  | compiled into game.wasm |
 | `ai_initialize` | ai/ai.c | Compiled |  | compiled into game.wasm |
 | `ai_dispose` | ai/ai.c | Compiled |  | compiled into game.wasm |
 | `ai_dispose_from_old_map` | ai/ai.c | Compiled |  | compiled into game.wasm |
-| `ai_place` | ai/ai.c | Compiled | campaign/src/actors.rs:221 | compiled into game.wasm |
+| `ai_place` | ai/ai.c | Compiled |  | compiled into game.wasm |
 | `ai_globals_ai_active` | ai/ai.c | Compiled |  | compiled into game.wasm |
 | `ai_globals_dialogue_triggers_enabled` | ai/ai.c | Compiled |  | compiled into game.wasm |
 | `ai_globals_grenades_enabled` | ai/ai.c | Compiled |  | compiled into game.wasm |
 | `ai_get_major_upgrade_chance` | ai/ai.c | Compiled |  | compiled into game.wasm |
 | `ai_adjust_damage` | ai/ai.c | Compiled |  | compiled into game.wasm |
-| `ai_erase` | ai/ai.c | Compiled | campaign/src/ai.rs:223 | compiled into game.wasm |
+| `ai_erase` | ai/ai.c | Compiled |  | compiled into game.wasm |
 | `ai_release_inactive_swarms` | ai/ai.c | Compiled |  | compiled into game.wasm |
 | `compare_potentially_releasable_entities` | ai/ai.c | Compiled |  | compiled into game.wasm |
 | `ai_find_inactive_encounters` | ai/ai.c | Compiled |  | compiled into game.wasm |
@@ -582,7 +582,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `ai_reconnect_to_structure_bsp` | ai/ai.c | Compiled |  | compiled into game.wasm |
 | `ai_get_race_from_team_index` | ai/ai.c | Compiled |  | compiled into game.wasm |
 | `ai_initialize_for_new_map` | ai/ai.c | Compiled |  | compiled into game.wasm |
-| `ai_update` | ai/ai.c | Compiled | campaign/src/actors.rs:403 | compiled into game.wasm |
+| `ai_update` | ai/ai.c | Compiled |  | compiled into game.wasm |
 | `ai_consider_major_upgrade` | ai/ai.c | Compiled |  | compiled into game.wasm |
 | `ai_find_line_of_fire_friend_pills` | ai/ai.c | Compiled |  | compiled into game.wasm |
 | `ai_place_pending_mounted_weapons` | ai/ai.c | Compiled |  | compiled into game.wasm |
@@ -614,20 +614,20 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `actor_communication_team` | ai/ai_communication.c | Compiled |  | compiled into game.wasm |
 | `ai_communication_look_secondary_at_unit` | ai/ai_communication.c | Compiled |  | compiled into game.wasm |
 | `ai_communication_look_secondary_at_object` | ai/ai_communication.c | Compiled |  | compiled into game.wasm |
-| `ai_conversation_status` | ai/ai_communication.c | Compiled | campaign/src/conversations.rs:19 | compiled into game.wasm |
-| `ai_conversation_line` | ai/ai_communication.c | Compiled | campaign/src/conversations.rs:36 | compiled into game.wasm |
+| `ai_conversation_status` | ai/ai_communication.c | Compiled |  | compiled into game.wasm |
+| `ai_conversation_line` | ai/ai_communication.c | Compiled |  | compiled into game.wasm |
 | `ai_conversation_advance` | ai/ai_communication.c | Compiled | content/src/campaign.rs:103 | compiled into game.wasm |
 | `ai_conversation_finish` | ai/ai_communication.c | Compiled |  | compiled into game.wasm |
 | `ai_conversation_new` | ai/ai_communication.c | Compiled |  | compiled into game.wasm |
 | `ai_conversation_line_begin` | ai/ai_communication.c | Compiled |  | compiled into game.wasm |
-| `ai_conversation_line_perform` | ai/ai_communication.c | Compiled | campaign/src/conversations.rs:241 | compiled into game.wasm |
+| `ai_conversation_line_perform` | ai/ai_communication.c | Compiled |  | compiled into game.wasm |
 | `ai_conversation_line_end` | ai/ai_communication.c | Compiled |  | compiled into game.wasm |
 | `actor_reset_idle_vocalization_timer` | ai/ai_communication.c | Compiled |  | compiled into game.wasm |
 | `actor_communication_update` | ai/ai_communication.c | Compiled |  | compiled into game.wasm |
 | `ai_communication_handle_received_looking` | ai/ai_communication.c | Compiled |  | compiled into game.wasm |
 | `ai_communication_update_speech_timers` | ai/ai_communication.c | Compiled |  | compiled into game.wasm |
 | `ai_communication_get_player_rating` | ai/ai_communication.c | Compiled |  | compiled into game.wasm |
-| `ai_conversation_stop` | ai/ai_communication.c | Compiled | campaign/src/conversations.rs:349 | compiled into game.wasm |
+| `ai_conversation_stop` | ai/ai_communication.c | Compiled |  | compiled into game.wasm |
 | `ai_conversation_actor_deleted` | ai/ai_communication.c | Compiled |  | compiled into game.wasm |
 | `ai_conversation_unit_died` | ai/ai_communication.c | Compiled |  | compiled into game.wasm |
 | `ai_conversation_find_participant` | ai/ai_communication.c | Compiled |  | compiled into game.wasm |
@@ -636,11 +636,11 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `ai_communication_actor_talk_weight` | ai/ai_communication.c | Compiled |  | compiled into game.wasm |
 | `ai_communication_find_specific_actor_to_talk` | ai/ai_communication.c | Compiled |  | compiled into game.wasm |
 | `ai_communication_find_global_actor_to_talk` | ai/ai_communication.c | Compiled |  | compiled into game.wasm |
-| `ai_conversation_begin` | ai/ai_communication.c | Compiled | campaign/src/conversations.rs:117 | compiled into game.wasm |
+| `ai_conversation_begin` | ai/ai_communication.c | Compiled |  | compiled into game.wasm |
 | `ai_communication_find_actor_to_reply_to_player` | ai/ai_communication.c | Compiled |  | compiled into game.wasm |
 | `ai_communication_finished` | ai/ai_communication.c | Compiled |  | compiled into game.wasm |
 | `ai_conversation` | ai/ai_communication.c | Compiled | content/src/campaign.rs:63 | compiled into game.wasm |
-| `ai_conversation_update` | ai/ai_communication.c | Compiled | campaign/src/conversations.rs:170 | compiled into game.wasm |
+| `ai_conversation_update` | ai/ai_communication.c | Compiled |  | compiled into game.wasm |
 | `ai_communication_event` | ai/ai_communication.c | Compiled |  | compiled into game.wasm |
 | `ai_profile_initialize` | ai/ai_profile.c | Compiled |  | compiled into game.wasm |
 | `ai_profile_dispose` | ai/ai_profile.c | Compiled |  | compiled into game.wasm |
@@ -842,9 +842,9 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `encounter_attach_actor` | ai/encounters.c | Compiled |  | compiled into game.wasm |
 | `encounter_update_status` | ai/encounters.c | Compiled |  | compiled into game.wasm |
 | `encounters_update_dirty_status` | ai/encounters.c | Compiled |  | compiled into game.wasm |
-| `encounter_create` | ai/encounters.c | Compiled | campaign/src/actors.rs:265 | compiled into game.wasm |
+| `encounter_create` | ai/encounters.c | Compiled |  | compiled into game.wasm |
 | `encounters_test_activation` | ai/encounters.c | Compiled |  | compiled into game.wasm |
-| `encounters_create_for_new_map` | ai/encounters.c | Compiled | campaign/src/actors.rs:264 | compiled into game.wasm |
+| `encounters_create_for_new_map` | ai/encounters.c | Compiled |  | compiled into game.wasm |
 | `encounters_update` | ai/encounters.c | Compiled |  | compiled into game.wasm |
 | `paths_initialize` | ai/path.c | Compiled |  | compiled into game.wasm |
 | `paths_dispose` | ai/path.c | Compiled |  | compiled into game.wasm |
@@ -1566,7 +1566,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `is_still_bored` | camera/bored_camera.c | Compiled |  | compiled into game.wasm |
 | `real_local_random_range` | camera/bored_camera.c | Ported |  | `tools/engine_particle_reference.py` |
 | `valid_real_vector3d` | camera/bored_camera.c | Compiled |  | compiled into game.wasm |
-| `valid_real_vector3d_axes2` | camera/bored_camera.c | Ported | sim/src/unit_aiming.rs:320 | `tools/engine_unit_aiming_bounds_reference.py` |
+| `valid_real_vector3d_axes2` | camera/bored_camera.c | Ported |  | `tools/engine_unit_aiming_bounds_reference.py` |
 | `bored_camera_update` | camera/bored_camera.c | Compiled |  | compiled into game.wasm |
 | `scripted_camera_enable` | camera/camera_scripting.c | Compiled |  | compiled into game.wasm |
 | `scripted_camera_set_animation` | camera/camera_scripting.c | Compiled |  | compiled into game.wasm |
@@ -1580,11 +1580,11 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `scripted_camera_next_camera_point` | camera/camera_scripting.c | Compiled |  | compiled into game.wasm |
 | `scripted_camera_object_relative_to` | camera/camera_scripting.c | Compiled |  | compiled into game.wasm |
 | `scripted_camera_time` | camera/camera_scripting.c | Compiled |  | compiled into game.wasm |
-| `scripted_camera_update` | camera/camera_scripting.c | Compiled | campaign/src/cinematic.rs:122 | compiled into game.wasm |
+| `scripted_camera_update` | camera/camera_scripting.c | Compiled |  | compiled into game.wasm |
 | `player_has_allies` | camera/dead_camera.c | Compiled |  | compiled into game.wasm |
 | `player_get_next_player_with_a_unit` | camera/dead_camera.c | Compiled |  | compiled into game.wasm |
-| `dead_camera_new` | camera/dead_camera.c | Compiled | sim/src/dead_camera.rs:46 | compiled into game.wasm |
-| `dead_camera_update` | camera/dead_camera.c | Compiled | sim/src/lib.rs:1454 | compiled into game.wasm |
+| `dead_camera_new` | camera/dead_camera.c | Compiled |  | compiled into game.wasm |
+| `dead_camera_update` | camera/dead_camera.c | Compiled |  | compiled into game.wasm |
 | `director_get` | camera/director.c | Compiled |  | compiled into game.wasm |
 | `director_initialize` | camera/director.c | Compiled |  | compiled into game.wasm |
 | `director_dispose` | camera/director.c | Compiled |  | compiled into game.wasm |
@@ -1595,7 +1595,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `director_set_mode` | camera/director.c | Compiled |  | compiled into game.wasm |
 | `director_save_camera` | camera/director.c | Compiled |  | compiled into game.wasm |
 | `director_get_perspective` | camera/director.c | Compiled |  | compiled into game.wasm |
-| `director_desired_perspective` | camera/director.c | Compiled | sim/src/seats.rs:1238 | compiled into game.wasm |
+| `director_desired_perspective` | camera/director.c | Compiled |  | compiled into game.wasm |
 | `director_set_camera` | camera/director.c | Compiled |  | compiled into game.wasm |
 | `director_initialize_variables` | camera/director.c | Compiled |  | compiled into game.wasm |
 | `director_process_variables` | camera/director.c | Compiled |  | compiled into game.wasm |
@@ -1645,11 +1645,11 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `following_camera_new` | camera/following_camera.c | Compiled |  | compiled into game.wasm |
 | `unit_camera_get` | camera/following_camera.c | Compiled |  | compiled into game.wasm |
 | `arcsine` | camera/following_camera.c | Ported |  | `tools/engine_math_reference.py` |
-| `uniform_cubic_spline` | camera/following_camera.c | Ported | sim/src/player.rs:1696 | `tools/engine_wind_reference.py` |
+| `uniform_cubic_spline` | camera/following_camera.c | Ported |  | `tools/engine_wind_reference.py` |
 | `uniform_cubic_spline_vector3d` | camera/following_camera.c | Ported |  | `tools/engine_wind_reference.py` |
-| `camera_track_splut` | camera/following_camera.c | Compiled | sim/src/player.rs:1662 | compiled into game.wasm |
+| `camera_track_splut` | camera/following_camera.c | Compiled |  | compiled into game.wasm |
 | `following_camera_deterministic` | camera/following_camera.c | Compiled |  | compiled into game.wasm |
-| `following_camera_update` | camera/following_camera.c | Compiled | sim/src/player.rs:788 | compiled into game.wasm |
+| `following_camera_update` | camera/following_camera.c | Compiled |  | compiled into game.wasm |
 | `observer_get` | camera/observer.c | Compiled |  | compiled into game.wasm |
 | `observer_initialize` | camera/observer.c | Compiled |  | compiled into game.wasm |
 | `observer_clear` | camera/observer.c | Compiled |  | compiled into game.wasm |
@@ -1661,12 +1661,12 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `observer_update_accelerations` | camera/observer.c | Compiled |  | compiled into game.wasm |
 | `observer_update_velocities` | camera/observer.c | Compiled |  | compiled into game.wasm |
 | `observer_obsolete_position` | camera/observer.c | Compiled |  | compiled into game.wasm |
-| `observer_up_from_forward` | camera/observer.c | Compiled | sim/src/dead_camera.rs:95 | compiled into game.wasm |
+| `observer_up_from_forward` | camera/observer.c | Compiled |  | compiled into game.wasm |
 | `observer_collision_test_with_t` | camera/observer.c | Compiled |  | compiled into game.wasm |
 | `observer_collision_test_differential` | camera/observer.c | Compiled |  | compiled into game.wasm |
 | `observer_update_command` | camera/observer.c | Compiled |  | compiled into game.wasm |
 | `observer_set_camera` | camera/observer.c | Compiled |  | compiled into game.wasm |
-| `observer_update_polynomial` | camera/observer.c | Compiled | sim/src/dead_camera.rs:9 | compiled into game.wasm |
+| `observer_update_polynomial` | camera/observer.c | Compiled |  | compiled into game.wasm |
 | `observer_apply_rotational_displacement` | camera/observer.c | Compiled |  | compiled into game.wasm |
 | `observer_update_positions` | camera/observer.c | Compiled |  | compiled into game.wasm |
 | `observer_rotational_displacement` | camera/observer.c | Compiled |  | compiled into game.wasm |
@@ -1675,7 +1675,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `observer_postcheck` | camera/observer.c | Compiled |  | compiled into game.wasm |
 | `observer_update_displacements` | camera/observer.c | Compiled |  | compiled into game.wasm |
 | `observer_pass_time` | camera/observer.c | Compiled |  | compiled into game.wasm |
-| `observer_update` | camera/observer.c | Compiled | sim/src/player.rs:759 | compiled into game.wasm |
+| `observer_update` | camera/observer.c | Compiled |  | compiled into game.wasm |
 | `orbiting_camera_new` | camera/orbiting_camera.c | Compiled |  | compiled into game.wasm |
 | `orbiting_camera_update` | camera/orbiting_camera.c | Compiled |  | compiled into game.wasm |
 | `static_camera_new` | camera/static_camera.c | Compiled |  | compiled into game.wasm |
@@ -1890,7 +1890,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `render_debug_recording` | cutscene/recorded_animations.c | Compiled |  | compiled into game.wasm |
 | `recorded_animations_initialize_for_new_map` | cutscene/recorded_animations.c | Compiled |  | compiled into game.wasm |
 | `recorded_animation_kill` | cutscene/recorded_animations.c | Compiled |  | compiled into game.wasm |
-| `recorded_animation_play_internal` | cutscene/recorded_animations.c | Compiled | campaign/src/units.rs:157 | compiled into game.wasm |
+| `recorded_animation_play_internal` | cutscene/recorded_animations.c | Compiled |  | compiled into game.wasm |
 | `recorded_animation_get_time_left` | cutscene/recorded_animations.c | Compiled |  | compiled into game.wasm |
 | `recorded_animation_play` | cutscene/recorded_animations.c | Compiled |  | compiled into game.wasm |
 | `recorded_animation_play_and_delete` | cutscene/recorded_animations.c | Compiled |  | compiled into game.wasm |
@@ -1923,43 +1923,43 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `machines_dispose` | devices/device_machines.c | Compiled |  | compiled into game.wasm |
 | `machines_initialize_for_new_map` | devices/device_machines.c | Compiled |  | compiled into game.wasm |
 | `machines_dispose_from_old_map` | devices/device_machines.c | Compiled |  | compiled into game.wasm |
-| `machine_place` | devices/device_machines.c | Ported | campaign/src/devices.rs:219 | `tools/engine_devices_reference.py` |
+| `machine_place` | devices/device_machines.c | Ported |  | `tools/engine_devices_reference.py` |
 | `machine_new` | devices/device_machines.c | Compiled |  | compiled into game.wasm |
 | `machine_delete` | devices/device_machines.c | Compiled |  | compiled into game.wasm |
 | `machine_bumped` | devices/device_machines.c | Compiled |  | compiled into game.wasm |
 | `machine_try_to_open_with_damage` | devices/device_machines.c | Compiled |  | compiled into game.wasm |
-| `machine_update` | devices/device_machines.c | Compiled | campaign/src/devices.rs:414 | compiled into game.wasm |
+| `machine_update` | devices/device_machines.c | Compiled |  | compiled into game.wasm |
 | `devices_initialize` | devices/devices.c | Compiled |  | compiled into game.wasm |
 | `devices_dispose` | devices/devices.c | Compiled |  | compiled into game.wasm |
 | `devices_dispose_from_old_map` | devices/devices.c | Compiled |  | compiled into game.wasm |
-| `device_new` | devices/devices.c | Ported | campaign/src/devices.rs:218 | `tools/engine_devices_reference.py` |
-| `device_export_function_values` | devices/devices.c | Compiled | sim/src/device_animation.rs:5 | compiled into game.wasm |
-| `device_preprocess_node_orientations` | devices/devices.c | Compiled | sim/src/device_animation.rs:6 | compiled into game.wasm |
+| `device_new` | devices/devices.c | Ported |  | `tools/engine_devices_reference.py` |
+| `device_export_function_values` | devices/devices.c | Compiled |  | compiled into game.wasm |
+| `device_preprocess_node_orientations` | devices/devices.c | Compiled |  | compiled into game.wasm |
 | `device_get_position` | devices/devices.c | Ported |  | `tools/engine_devices_reference.py` |
 | `device_get_power` | devices/devices.c | Ported |  | `tools/engine_devices_reference.py` |
 | `device_set_never_appears_locked` | devices/devices.c | Ported |  | `tools/engine_devices_reference.py` |
-| `device_group_set_actual_value` | devices/devices.c | Ported | campaign/src/devices.rs:321 | `tools/engine_devices_reference.py` |
+| `device_group_set_actual_value` | devices/devices.c | Ported |  | `tools/engine_devices_reference.py` |
 | `device_one_sided_set` | devices/devices.c | Ported |  | `tools/engine_devices_reference.py` |
 | `device_operates_automatically_set` | devices/devices.c | Ported |  | `tools/engine_devices_reference.py` |
-| `device_group_change_only_once_more_set` | devices/devices.c | Ported | campaign/src/devices.rs:341 | `tools/engine_devices_reference.py` |
-| `device_group_get_value` | devices/devices.c | Ported | campaign/src/devices.rs:288 | `tools/engine_devices_reference.py` |
+| `device_group_change_only_once_more_set` | devices/devices.c | Ported |  | `tools/engine_devices_reference.py` |
+| `device_group_get_value` | devices/devices.c | Ported |  | `tools/engine_devices_reference.py` |
 | `device_touched` | devices/devices.c | Compiled |  | compiled into game.wasm |
 | `device_can_change_position` | devices/devices.c | Compiled |  | compiled into game.wasm |
 | `device_effect_new` | devices/devices.c | Compiled |  | compiled into game.wasm |
-| `device_group_new` | devices/devices.c | Ported | campaign/src/devices.rs:142 | `tools/engine_devices_reference.py` |
-| `device_group_delete` | devices/devices.c | Ported | campaign/src/devices.rs:168 | `tools/engine_devices_reference.py` |
-| `create_initial_device_groups` | devices/devices.c | Ported | campaign/src/devices.rs:131 | `tools/engine_devices_reference.py` |
+| `device_group_new` | devices/devices.c | Ported |  | `tools/engine_devices_reference.py` |
+| `device_group_delete` | devices/devices.c | Ported |  | `tools/engine_devices_reference.py` |
+| `create_initial_device_groups` | devices/devices.c | Ported |  | `tools/engine_devices_reference.py` |
 | `devices_initialize_for_new_map` | devices/devices.c | Ported |  | `tools/engine_devices_reference.py` |
-| `device_delete` | devices/devices.c | Ported | campaign/src/devices.rs:280 | `tools/engine_devices_reference.py` |
-| `device_update` | devices/devices.c | Compiled | campaign/src/devices.rs:414 | compiled into game.wasm |
+| `device_delete` | devices/devices.c | Ported |  | `tools/engine_devices_reference.py` |
+| `device_update` | devices/devices.c | Compiled |  | compiled into game.wasm |
 | `device_render_debug` | devices/devices.c | Compiled |  | compiled into game.wasm |
-| `device_group_set_desired_value` | devices/devices.c | Ported | campaign/src/devices.rs:296 | `tools/engine_devices_reference.py` |
-| `device_set_actual_position` | devices/devices.c | Ported | campaign/src/devices.rs:361 | `tools/engine_devices_reference.py` |
-| `device_add_scenario_information` | devices/devices.c | Ported | campaign/src/devices.rs:219 | `tools/engine_devices_reference.py` |
+| `device_group_set_desired_value` | devices/devices.c | Ported |  | `tools/engine_devices_reference.py` |
+| `device_set_actual_position` | devices/devices.c | Ported |  | `tools/engine_devices_reference.py` |
+| `device_add_scenario_information` | devices/devices.c | Ported |  | `tools/engine_devices_reference.py` |
 | `device_frontfacing` | devices/devices.c | Compiled |  | compiled into game.wasm |
-| `device_set_desired_position` | devices/devices.c | Ported | campaign/src/devices.rs:350 | `tools/engine_devices_reference.py` |
-| `device_set_power` | devices/devices.c | Ported | campaign/src/devices.rs:371 | `tools/engine_devices_reference.py` |
-| `device_group_change` | devices/devices.c | Ported | campaign/src/devices.rs:296 | `tools/engine_devices_reference.py` |
+| `device_set_desired_position` | devices/devices.c | Ported |  | `tools/engine_devices_reference.py` |
+| `device_set_power` | devices/devices.c | Ported |  | `tools/engine_devices_reference.py` |
+| `device_group_change` | devices/devices.c | Ported |  | `tools/engine_devices_reference.py` |
 
 ## `dialogs`
 
@@ -1989,7 +1989,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 
 | Function | File | Class | Engine | Evidence |
 | --- | --- | --- | --- | --- |
-| `contrail_scale_value` | effects/contrails.c | Compiled | ffi/src/particles/contrails.rs:32 | compiled into game.wasm |
+| `contrail_scale_value` | effects/contrails.c | Compiled |  | compiled into game.wasm |
 | `contrails_initialize_for_new_map` | effects/contrails.c | Compiled |  | compiled into game.wasm |
 | `contrails_dispose_from_old_map` | effects/contrails.c | Compiled |  | compiled into game.wasm |
 | `contrails_dispose` | effects/contrails.c | Compiled |  | compiled into game.wasm |
@@ -2000,11 +2000,11 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `contrail_verify` | effects/contrails.c | Compiled |  | compiled into game.wasm |
 | `local_random_range` | effects/contrails.c | Ported |  | `tools/engine_particle_reference.py` |
 | `local_random_vector_in_cone3d` | effects/contrails.c | Ported |  | `tools/engine_random_reference.py` |
-| `contrail_scale_random_value` | effects/contrails.c | Compiled | ffi/src/particles/contrails.rs:42 | compiled into game.wasm |
+| `contrail_scale_random_value` | effects/contrails.c | Compiled |  | compiled into game.wasm |
 | `contrails_initialize` | effects/contrails.c | Compiled |  | compiled into game.wasm |
-| `contrail_next_frame` | effects/contrails.c | Compiled | ffi/src/particles/contrails.rs:252 | compiled into game.wasm |
-| `contrail_add_points` | effects/contrails.c | Compiled | ffi/src/particles/contrails.rs:298 | compiled into game.wasm |
-| `contrail_update_points` | effects/contrails.c | Compiled | ffi/src/particles/contrails.rs:122 | compiled into game.wasm |
+| `contrail_next_frame` | effects/contrails.c | Compiled |  | compiled into game.wasm |
+| `contrail_add_points` | effects/contrails.c | Compiled |  | compiled into game.wasm |
+| `contrail_update_points` | effects/contrails.c | Compiled |  | compiled into game.wasm |
 | `contrail_new` | effects/contrails.c | Compiled |  | compiled into game.wasm |
 | `contrail_owner_collision` | effects/contrails.c | Compiled |  | compiled into game.wasm |
 | `contrails_update` | effects/contrails.c | Compiled |  | compiled into game.wasm |
@@ -2022,7 +2022,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `projection_from_vector3d` | effects/decals.c | Compiled |  | compiled into game.wasm |
 | `projection_sign_from_vector3d` | effects/decals.c | Compiled |  | compiled into game.wasm |
 | `project_point2d` | effects/decals.c | Compiled |  | compiled into game.wasm |
-| `triple_product3d` | effects/decals.c | Compiled | sim/src/vehicle_animation.rs:73 | compiled into game.wasm |
+| `triple_product3d` | effects/decals.c | Compiled |  | compiled into game.wasm |
 | `plane2d_from_points` | effects/decals.c | Compiled |  | compiled into game.wasm |
 | `plane3d_from_point_and_normal` | effects/decals.c | Compiled |  | compiled into game.wasm |
 | `plane3d_negate` | effects/decals.c | Compiled |  | compiled into game.wasm |
@@ -2034,13 +2034,13 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `decal_insert` | effects/decals.c | Compiled |  | compiled into game.wasm |
 | `decals_reconnect_to_structure_bsp` | effects/decals.c | Compiled |  | compiled into game.wasm |
 | `decals_disconnect_from_structure_bsp` | effects/decals.c | Compiled |  | compiled into game.wasm |
-| `decals_update` | effects/decals.c | Compiled | ffi/src/dynamic_decals.rs:4 | compiled into game.wasm |
+| `decals_update` | effects/decals.c | Compiled |  | compiled into game.wasm |
 | `decals_delete_permanent_from_cluster` | effects/decals.c | Compiled |  | compiled into game.wasm |
 | `decal_delete` | effects/decals.c | Compiled |  | compiled into game.wasm |
 | `decal_projection_create` | effects/decals.c | Compiled |  | compiled into game.wasm |
 | `decal_clip_to_surface` | effects/decals.c | Compiled |  | compiled into game.wasm |
-| `decal_new_from_collision` | effects/decals.c | Compiled | ffi/src/decals.rs:179 | compiled into game.wasm |
-| `decal_new` | effects/decals.c | Compiled | ffi/src/decals.rs:144 | compiled into game.wasm |
+| `decal_new_from_collision` | effects/decals.c | Compiled |  | compiled into game.wasm |
+| `decal_new` | effects/decals.c | Compiled |  | compiled into game.wasm |
 | `effects_initialize` | effects/effects.c | Compiled |  | compiled into game.wasm |
 | `effects_initialize_for_new_map` | effects/effects.c | Compiled |  | compiled into game.wasm |
 | `effects_dispose_from_old_map` | effects/effects.c | Compiled |  | compiled into game.wasm |
@@ -2080,10 +2080,10 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `effect_new_looping` | effects/effects.c | Compiled |  | compiled into game.wasm |
 | `effect_new_from_object` | effects/effects.c | Compiled |  | compiled into game.wasm |
 | `effect_new_attached_from_markers` | effects/effects.c | Compiled |  | compiled into game.wasm |
-| `effect_new_unattached_from_markers` | effects/effects.c | Compiled | sim/src/effects.rs:64 | compiled into game.wasm |
+| `effect_new_unattached_from_markers` | effects/effects.c | Compiled |  | compiled into game.wasm |
 | `effects_update` | effects/effects.c | Compiled |  | compiled into game.wasm |
 | `material_effect_visible` | effects/material_effects.c | Compiled |  | compiled into game.wasm |
-| `material_effect_new` | effects/material_effects.c | Compiled | ffi/src/sound_events.rs:210 | compiled into game.wasm |
+| `material_effect_new` | effects/material_effects.c | Compiled |  | compiled into game.wasm |
 | `material_effect_new_from_point` | effects/material_effects.c | Compiled |  | compiled into game.wasm |
 | `particle_systems_initialize` | effects/particle_systems.c | Compiled |  | compiled into game.wasm |
 | `particle_systems_initialize_for_new_map` | effects/particle_systems.c | Compiled |  | compiled into game.wasm |
@@ -2124,12 +2124,12 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `valid_real_argb_color` | effects/particles.c | Compiled |  | compiled into game.wasm |
 | `particle_effect_new` | effects/particles.c | Compiled |  | compiled into game.wasm |
 | `particle_die` | effects/particles.c | Ported |  | `tools/engine_particle_reference.py` |
-| `particle_next_sequence` | effects/particles.c | Ported | ffi/src/particle_life.rs:5 | `tools/engine_particle_reference.py` |
-| `particle_next_frame` | effects/particles.c | Ported | ffi/src/particle_life.rs:6 | `tools/engine_particle_reference.py` |
-| `particle_update_frame_time` | effects/particles.c | Ported | ffi/src/particle_life.rs:6 | `tools/engine_particle_reference.py` |
-| `particle_update_physics` | effects/particles.c | Compiled | ffi/src/particles.rs:502 | compiled into game.wasm |
-| `particle_new` | effects/particles.c | Ported | ffi/src/particle_life.rs:2 | `tools/engine_particle_reference.py` |
-| `particles_update` | effects/particles.c | Ported | ffi/src/particle_life.rs:7 | `tools/engine_particle_reference.py` |
+| `particle_next_sequence` | effects/particles.c | Ported |  | `tools/engine_particle_reference.py` |
+| `particle_next_frame` | effects/particles.c | Ported |  | `tools/engine_particle_reference.py` |
+| `particle_update_frame_time` | effects/particles.c | Ported |  | `tools/engine_particle_reference.py` |
+| `particle_update_physics` | effects/particles.c | Compiled |  | compiled into game.wasm |
+| `particle_new` | effects/particles.c | Ported |  | `tools/engine_particle_reference.py` |
+| `particles_update` | effects/particles.c | Ported |  | `tools/engine_particle_reference.py` |
 | `player_effect_get` | effects/player_effects.c | Compiled |  | compiled into game.wasm |
 | `player_effect_initialize` | effects/player_effects.c | Compiled |  | compiled into game.wasm |
 | `player_effect_dispose` | effects/player_effects.c | Compiled |  | compiled into game.wasm |
@@ -2225,7 +2225,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `game_tick` | game/game.c | Ported | runtime/src/benchmark.rs:6 | `tools/engine_game_tick_reference.py` |
 | `game_options_new` | game/game.c | Compiled |  | compiled into game.wasm |
 | `game_options_verify` | game/game.c | Compiled |  | compiled into game.wasm |
-| `game_initial_pulse` | game/game.c | Ported | sim/src/game.rs:863 | `tools/engine_game_engine_reference.py` |
+| `game_initial_pulse` | game/game.c | Ported |  | `tools/engine_game_engine_reference.py` |
 | `game_set_players_are_double_speed` | game/game.c | Compiled |  | compiled into game.wasm |
 | `game_players_are_double_speed` | game/game.c | Compiled |  | compiled into game.wasm |
 | `game_difficulty_level_set` | game/game.c | Compiled |  | compiled into game.wasm |
@@ -2233,10 +2233,10 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `game_difficulty_level_get_ignore_easy` | game/game.c | Compiled |  | compiled into game.wasm |
 | `game_set_game_variant` | game/game.c | Compiled |  | compiled into game.wasm |
 | `game_set_game_engine_index` | game/game.c | Compiled |  | compiled into game.wasm |
-| `game_all_quiet` | game/game.c | Ported | sim/src/safety.rs:1 | `tools/engine_safety_reference.py` |
-| `game_safe_to_save` | game/game.c | Ported | sim/src/safety.rs:2 | `tools/engine_safety_reference.py` |
-| `game_safe_to_speak` | game/game.c | Ported | sim/src/safety.rs:2 | `tools/engine_safety_reference.py` |
-| `game_is_cooperative` | game/game.c | Ported | sim/src/safety.rs:54 | `tools/engine_safety_reference.py` |
+| `game_all_quiet` | game/game.c | Ported |  | `tools/engine_safety_reference.py` |
+| `game_safe_to_save` | game/game.c | Ported |  | `tools/engine_safety_reference.py` |
+| `game_safe_to_speak` | game/game.c | Ported |  | `tools/engine_safety_reference.py` |
+| `game_is_cooperative` | game/game.c | Ported |  | `tools/engine_safety_reference.py` |
 | `set_random_seed` | game/game.c | Ported |  | `tools/engine_cause_damage_reference.py` |
 | `game_load` | game/game.c | Compiled |  | compiled into game.wasm |
 | `game_initialize_for_new_map` | game/game.c | Compiled |  | compiled into game.wasm |
@@ -2257,14 +2257,14 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `game_allegiance_remove` | game/game_allegiance.c | Compiled |  | compiled into game.wasm |
 | `game_allegiance_incident` | game/game_allegiance.c | Compiled |  | compiled into game.wasm |
 | `game_globals_get_weapon` | game/game_engine.c | Compiled |  | compiled into game.wasm |
-| `game_engine_get_team_score` | game/game_engine.c | Ported | sim/src/game.rs:348 | `tools/engine_game_engine_reference.py` |
+| `game_engine_get_team_score` | game/game_engine.c | Ported |  | `tools/engine_game_engine_reference.py` |
 | `linear_to_non_linear_alpha` | game/game_engine.c | Compiled |  | compiled into game.wasm |
 | `game_engine_dispose` | game/game_engine.c | Compiled |  | compiled into game.wasm |
 | `initialize_player_multiplayer_data` | game/game_engine.c | Ported |  | `tools/engine_game_engine_reference.py` |
 | `game_engine_build_lighting` | game/game_engine.c | Compiled |  | compiled into game.wasm |
 | `game_engine_dispose_from_old_map` | game/game_engine.c | Compiled |  | compiled into game.wasm |
 | `game_engine_game_ending` | game/game_engine.c | Compiled |  | compiled into game.wasm |
-| `game_engine_game_starting` | game/game_engine.c | Ported | sim/src/game.rs:863 | `tools/engine_announcer_reference.py` |
+| `game_engine_game_starting` | game/game_engine.c | Ported |  | `tools/engine_announcer_reference.py` |
 | `players_in_game` | game/game_engine.c | Ported |  | `tools/engine_game_end_reference.py` |
 | `game_engine_statistics_append` | game/game_engine.c | Compiled |  | compiled into game.wasm |
 | `game_engine_handle_client_message` | game/game_engine.c | Compiled |  | compiled into game.wasm |
@@ -2280,10 +2280,10 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `find_closest_player_callback` | game/game_engine.c | Compiled |  | compiled into game.wasm |
 | `game_engine_post_rasterize_objects` | game/game_engine.c | Compiled |  | compiled into game.wasm |
 | `can_delete_item` | game/game_engine.c | Compiled |  | compiled into game.wasm |
-| `game_engine_update_purge` | game/game_engine.c | Ported | sim/src/game.rs:623 | `tools/engine_item_spawn_reference.py` |
+| `game_engine_update_purge` | game/game_engine.c | Ported |  | `tools/engine_item_spawn_reference.py` |
 | `update_weapon_inventory` | game/game_engine.c | Compiled |  | compiled into game.wasm |
 | `game_engine_update_weapons` | game/game_engine.c | Compiled |  | compiled into game.wasm |
-| `item_collection_get_total` | game/game_engine.c | Ported | sim/src/game.rs:635 | `tools/engine_item_spawn_reference.py` |
+| `item_collection_get_total` | game/game_engine.c | Ported |  | `tools/engine_item_spawn_reference.py` |
 | `game_engine_load_stage` | game/game_engine.c | Compiled |  | compiled into game.wasm |
 | `game_engine_playlist_begin` | game/game_engine.c | Compiled |  | compiled into game.wasm |
 | `game_engine_get_current_stage` | game/game_engine.c | Compiled |  | compiled into game.wasm |
@@ -2300,7 +2300,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `game_engine_force_single_screen` | game/game_engine.c | Compiled |  | compiled into game.wasm |
 | `get_blink_alpha` | game/game_engine.c | Compiled |  | compiled into game.wasm |
 | `game_engine_press_start_to_begin` | game/game_engine.c | Compiled |  | compiled into game.wasm |
-| `nearby_vehicle` | game/game_engine.c | Ported | sim/src/game.rs:677 | `tools/engine_spawn_reference.py` |
+| `nearby_vehicle` | game/game_engine.c | Ported |  | `tools/engine_spawn_reference.py` |
 | `game_engine_rasterize_message` | game/game_engine.c | Compiled |  | compiled into game.wasm |
 | `game_engine_picking_up` | game/game_engine.c | Compiled |  | compiled into game.wasm |
 | `goal_matches_player` | game/game_engine.c | Compiled |  | compiled into game.wasm |
@@ -2336,14 +2336,14 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `netgame_flag_verify_no_team_duplicates` | game/game_engine.c | Compiled |  | compiled into game.wasm |
 | `netgame_flag_verify_team_range` | game/game_engine.c | Compiled |  | compiled into game.wasm |
 | `game_engine_playlist_next` | game/game_engine.c | Compiled |  | compiled into game.wasm |
-| `build_game_variant_slayer` | game/game_engine.c | Ported | sim/src/game.rs:73 | `tools/engine_game_variant_reference.py` |
+| `build_game_variant_slayer` | game/game_engine.c | Ported |  | `tools/engine_game_variant_reference.py` |
 | `build_game_variant_slayer_pro` | game/game_engine.c | Compiled |  | compiled into game.wasm |
 | `build_game_variant_elimination` | game/game_engine.c | Compiled |  | compiled into game.wasm |
 | `build_game_variant_phantoms` | game/game_engine.c | Compiled |  | compiled into game.wasm |
 | `build_game_variant_endurance` | game/game_engine.c | Compiled |  | compiled into game.wasm |
 | `build_game_variant_rockets` | game/game_engine.c | Compiled |  | compiled into game.wasm |
 | `build_game_variant_snipers` | game/game_engine.c | Compiled |  | compiled into game.wasm |
-| `build_game_variant_team_slayer` | game/game_engine.c | Ported | sim/src/game.rs:88 | `tools/engine_game_variant_reference.py` |
+| `build_game_variant_team_slayer` | game/game_engine.c | Ported |  | `tools/engine_game_variant_reference.py` |
 | `build_game_variant_oddball` | game/game_engine.c | Compiled |  | compiled into game.wasm |
 | `build_game_variant_team_oddball` | game/game_engine.c | Compiled |  | compiled into game.wasm |
 | `build_game_variant_reverse_tag` | game/game_engine.c | Compiled |  | compiled into game.wasm |
@@ -2354,7 +2354,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `build_game_variant_king_pro` | game/game_engine.c | Compiled |  | compiled into game.wasm |
 | `build_game_variant_crazy_king` | game/game_engine.c | Compiled |  | compiled into game.wasm |
 | `build_game_variant_team_king` | game/game_engine.c | Compiled |  | compiled into game.wasm |
-| `build_game_variant_ctf` | game/game_engine.c | Ported | sim/src/game.rs:99 | `tools/engine_game_variant_reference.py` |
+| `build_game_variant_ctf` | game/game_engine.c | Ported |  | `tools/engine_game_variant_reference.py` |
 | `build_game_variant_ctf_pro` | game/game_engine.c | Compiled |  | compiled into game.wasm |
 | `build_game_variant_invasion` | game/game_engine.c | Compiled |  | compiled into game.wasm |
 | `build_game_variant_iron_ctf` | game/game_engine.c | Compiled |  | compiled into game.wasm |
@@ -2370,7 +2370,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `game_engine_weapon_fired` | game/game_engine.c | Compiled |  | compiled into game.wasm |
 | `test_any_gamepad_button` | game/game_engine.c | Compiled |  | compiled into game.wasm |
 | `ticks_to_unicode_time_string` | game/game_engine.c | Compiled |  | compiled into game.wasm |
-| `game_engine_flag_reset` | game/game_engine.c | Ported | sim/src/game.rs:229 | `tools/engine_ctf_reference.py` |
+| `game_engine_flag_reset` | game/game_engine.c | Ported |  | `tools/engine_ctf_reference.py` |
 | `game_engine_variant_cleanup` | game/game_engine.c | Compiled |  | compiled into game.wasm |
 | `game_engine_allow_pause` | game/game_engine.c | Compiled |  | compiled into game.wasm |
 | `game_engine_predict_resources` | game/game_engine.c | Compiled |  | compiled into game.wasm |
@@ -2379,9 +2379,9 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `game_engine_allow_integrated_lights` | game/game_engine.c | Compiled |  | compiled into game.wasm |
 | `game_engine_force_autopickup` | game/game_engine.c | Compiled |  | compiled into game.wasm |
 | `game_engine_initialize` | game/game_engine.c | Compiled |  | compiled into game.wasm |
-| `multiple_teams_alive` | game/game_engine.c | Ported | sim/src/game.rs:593 | `tools/engine_game_end_reference.py` |
+| `multiple_teams_alive` | game/game_engine.c | Ported |  | `tools/engine_game_end_reference.py` |
 | `team_has_players` | game/game_engine.c | Compiled |  | compiled into game.wasm |
-| `game_engine_should_end_game` | game/game_engine.c | Ported | sim/src/game.rs:590 | `tools/engine_game_end_reference.py` |
+| `game_engine_should_end_game` | game/game_engine.c | Ported |  | `tools/engine_game_end_reference.py` |
 | `adjust_score_for_ranking` | game/game_engine.c | Compiled |  | compiled into game.wasm |
 | `populate_statistic_buffer` | game/game_engine.c | Compiled |  | compiled into game.wasm |
 | `game_engine_get_player_place` | game/game_engine.c | Compiled |  | compiled into game.wasm |
@@ -2390,10 +2390,10 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `find_closest_player_index` | game/game_engine.c | Compiled |  | compiled into game.wasm |
 | `internal_rasterize_target_name` | game/game_engine.c | Compiled |  | compiled into game.wasm |
 | `internal_rasterize_score` | game/game_engine.c | Compiled |  | compiled into game.wasm |
-| `random_item` | game/game_engine.c | Ported | sim/src/game.rs:643 | `tools/engine_item_spawn_reference.py` |
+| `random_item` | game/game_engine.c | Ported |  | `tools/engine_item_spawn_reference.py` |
 | `game_engine_get_type` | game/game_engine.c | Compiled |  | compiled into game.wasm |
 | `match_game_type` | game/game_engine.c | Ported | content/src/level.rs:464 | `tools/engine_spawn_reference.py` |
-| `game_engine_update_item_spawn` | game/game_engine.c | Ported | sim/src/game.rs:629 | `tools/engine_item_spawn_reference.py` |
+| `game_engine_update_item_spawn` | game/game_engine.c | Ported |  | `tools/engine_item_spawn_reference.py` |
 | `game_engine_update_player_no_shield` | game/game_engine.c | Compiled |  | compiled into game.wasm |
 | `game_engine_update_player_always_invis` | game/game_engine.c | Compiled |  | compiled into game.wasm |
 | `game_engine_update_non_deterministic` | game/game_engine.c | Compiled |  | compiled into game.wasm |
@@ -2410,10 +2410,10 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `game_engine_postspawn_player_update` | game/game_engine.c | Compiled |  | compiled into game.wasm |
 | `game_engine_get_damage_multiplier` | game/game_engine.c | Compiled |  | compiled into game.wasm |
 | `game_engine_update_teleporter` | game/game_engine.c | Compiled |  | compiled into game.wasm |
-| `game_engine_get_distance_rating_for_spawn` | game/game_engine.c | Ported | sim/src/game.rs:688 | `tools/engine_spawn_reference.py` |
-| `game_engine_get_friendly_bonus` | game/game_engine.c | Ported | sim/src/game.rs:725 | `tools/engine_spawn_reference.py` |
-| `default_starting_location_rate_function` | game/game_engine.c | Ported | sim/src/game.rs:744 | `tools/engine_spawn_reference.py` |
-| `game_engine_get_starting_location_rating` | game/game_engine.c | Ported | sim/src/game.rs:743 | `tools/engine_spawn_reference.py` |
+| `game_engine_get_distance_rating_for_spawn` | game/game_engine.c | Ported |  | `tools/engine_spawn_reference.py` |
+| `game_engine_get_friendly_bonus` | game/game_engine.c | Ported |  | `tools/engine_spawn_reference.py` |
+| `default_starting_location_rate_function` | game/game_engine.c | Ported |  | `tools/engine_spawn_reference.py` |
+| `game_engine_get_starting_location_rating` | game/game_engine.c | Ported |  | `tools/engine_spawn_reference.py` |
 | `game_engine_get_variant_by_name` | game/game_engine.c | Compiled |  | compiled into game.wasm |
 | `game_engine_remap_equipment` | game/game_engine.c | Compiled |  | compiled into game.wasm |
 | `game_engine_remap_object_definition` | game/game_engine.c | Compiled |  | compiled into game.wasm |
@@ -2426,12 +2426,12 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `netgame_verify_equipment` | game/game_engine.c | Compiled |  | compiled into game.wasm |
 | `game_engine_verify_current_map` | game/game_engine.c | Compiled |  | compiled into game.wasm |
 | `game_engine_playlist_initialize` | game/game_engine.c | Compiled |  | compiled into game.wasm |
-| `game_engine_initialize_for_new_map` | game/game_engine.c | Ported | sim/src/game.rs:871 | `tools/engine_announcer_reference.py` |
-| `game_engine_player_added` | game/game_engine.c | Ported | sim/src/game.rs:290 | `tools/engine_game_engine_reference.py` |
+| `game_engine_initialize_for_new_map` | game/game_engine.c | Ported |  | `tools/engine_announcer_reference.py` |
+| `game_engine_player_added` | game/game_engine.c | Ported |  | `tools/engine_game_engine_reference.py` |
 | `game_engine_generate_title_string` | game/game_engine.c | Compiled |  | compiled into game.wasm |
 | `game_engine_post_rasterize_post_game` | game/game_engine.c | Compiled |  | compiled into game.wasm |
-| `game_engine_update` | game/game_engine.c | Compiled | sim/src/game.rs:951 | compiled into game.wasm |
-| `game_engine_player_killed` | game/game_engine.c | Ported | sim/src/game.rs:377 | `tools/engine_game_engine_reference.py` |
+| `game_engine_update` | game/game_engine.c | Compiled |  | compiled into game.wasm |
+| `game_engine_player_killed` | game/game_engine.c | Ported |  | `tools/engine_game_engine_reference.py` |
 | `game_engine_nonplayer_post_rasterize` | game/game_engine.c | Compiled |  | compiled into game.wasm |
 | `game_engine_rasterize_in_game_score` | game/game_engine.c | Compiled |  | compiled into game.wasm |
 | `game_engine_post_rasterize_in_game` | game/game_engine.c | Compiled |  | compiled into game.wasm |
@@ -2443,7 +2443,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `ctf_engine_dispose_from_old_map` | game/game_engine_ctf.c | Compiled |  | compiled into game.wasm |
 | `ctf_engine_player_added` | game/game_engine_ctf.c | Compiled |  | compiled into game.wasm |
 | `ctf_engine_game_ending` | game/game_engine_ctf.c | Compiled |  | compiled into game.wasm |
-| `ctf_engine_game_starting` | game/game_engine_ctf.c | Ported | sim/src/announcer.rs:167 | `tools/engine_announcer_reference.py` |
+| `ctf_engine_game_starting` | game/game_engine_ctf.c | Ported |  | `tools/engine_announcer_reference.py` |
 | `ctf_engine_statistics_append` | game/game_engine_ctf.c | Compiled |  | compiled into game.wasm |
 | `ctf_engine_handle_client_message` | game/game_engine_ctf.c | Compiled |  | compiled into game.wasm |
 | `ctf_engine_handle_server_message` | game/game_engine_ctf.c | Compiled |  | compiled into game.wasm |
@@ -2452,16 +2452,16 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `ctf_award_capture` | game/game_engine_ctf.c | Ported |  | `tools/engine_ctf_reference.py` |
 | `ctf_flag_failure_sound` | game/game_engine_ctf.c | Ported |  | `tools/engine_ctf_reference.py` |
 | `ctf_find_flag_carrier` | game/game_engine_ctf.c | Ported |  | `tools/engine_ctf_reference.py` |
-| `ctf_engine_allow_pick_up` | game/game_engine_ctf.c | Ported | sim/src/game.rs:477 | `tools/engine_ctf_reference.py` |
+| `ctf_engine_allow_pick_up` | game/game_engine_ctf.c | Ported |  | `tools/engine_ctf_reference.py` |
 | `ctf_engine_player_damaged_player` | game/game_engine_ctf.c | Compiled |  | compiled into game.wasm |
-| `ctf_engine_player_killed_player` | game/game_engine_ctf.c | Compiled | sim/src/game.rs:378 | compiled into game.wasm |
+| `ctf_engine_player_killed_player` | game/game_engine_ctf.c | Compiled |  | compiled into game.wasm |
 | `ctf_engine_display_score` | game/game_engine_ctf.c | Compiled |  | compiled into game.wasm |
 | `ctf_engine_prespawn_player_update` | game/game_engine_ctf.c | Compiled |  | compiled into game.wasm |
 | `ctf_state_message_update_warning` | game/game_engine_ctf.c | Compiled |  | compiled into game.wasm |
 | `ctf_sound_update_warning` | game/game_engine_ctf.c | Ported |  | `tools/engine_ctf_reference.py` |
 | `ctf_set_flag_warning` | game/game_engine_ctf.c | Ported |  | `tools/engine_ctf_reference.py` |
 | `ctf_weapon_drop` | game/game_engine_ctf.c | Compiled |  | compiled into game.wasm |
-| `ctf_get_score` | game/game_engine_ctf.c | Ported | sim/src/game.rs:348 | `tools/engine_ctf_reference.py` |
+| `ctf_get_score` | game/game_engine_ctf.c | Ported |  | `tools/engine_ctf_reference.py` |
 | `ctf_test_flag` | game/game_engine_ctf.c | Ported |  | `tools/engine_spawn_reference.py` |
 | `ctf_get_score_string` | game/game_engine_ctf.c | Compiled |  | compiled into game.wasm |
 | `ctf_get_score_header_string` | game/game_engine_ctf.c | Compiled |  | compiled into game.wasm |
@@ -2469,11 +2469,11 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `ctf_engine_initialize_for_new_map` | game/game_engine_ctf.c | Compiled |  | compiled into game.wasm |
 | `ctf_reset_flag` | game/game_engine_ctf.c | Ported |  | `tools/engine_ctf_reference.py` |
 | `ctf_player_drop_flag` | game/game_engine_ctf.c | Ported |  | `tools/engine_ctf_reference.py` |
-| `ctf_position_near_flag` | game/game_engine_ctf.c | Ported | sim/src/game.rs:236 | `tools/engine_ctf_reference.py` |
-| `ctf_engine_player_update` | game/game_engine_ctf.c | Ported | sim/src/game.rs:476 | `tools/engine_ctf_reference.py` |
-| `ctf_engine_weapon_update` | game/game_engine_ctf.c | Ported | sim/src/game.rs:476 | `tools/engine_ctf_reference.py` |
-| `ctf_engine_update` | game/game_engine_ctf.c | Ported | sim/src/game.rs:446 | `tools/engine_ctf_reference.py` |
-| `ctf_weapon_pickup` | game/game_engine_ctf.c | Ported | sim/src/game.rs:477 | `tools/engine_ctf_reference.py` |
+| `ctf_position_near_flag` | game/game_engine_ctf.c | Ported |  | `tools/engine_ctf_reference.py` |
+| `ctf_engine_player_update` | game/game_engine_ctf.c | Ported |  | `tools/engine_ctf_reference.py` |
+| `ctf_engine_weapon_update` | game/game_engine_ctf.c | Ported |  | `tools/engine_ctf_reference.py` |
+| `ctf_engine_update` | game/game_engine_ctf.c | Ported |  | `tools/engine_ctf_reference.py` |
+| `ctf_weapon_pickup` | game/game_engine_ctf.c | Ported |  | `tools/engine_ctf_reference.py` |
 | `ctf_engine_starting_location_rating` | game/game_engine_ctf.c | Ported |  | `tools/engine_spawn_reference.py` |
 | `king_engine_dispose` | game/game_engine_king.c | Compiled |  | compiled into game.wasm |
 | `point3d_to_point2d` | game/game_engine_king.c | Compiled |  | compiled into game.wasm |
@@ -2481,7 +2481,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `king_engine_dispose_from_old_map` | game/game_engine_king.c | Compiled |  | compiled into game.wasm |
 | `king_engine_player_added` | game/game_engine_king.c | Compiled |  | compiled into game.wasm |
 | `king_engine_game_ending` | game/game_engine_king.c | Compiled |  | compiled into game.wasm |
-| `king_engine_game_starting` | game/game_engine_king.c | Ported | sim/src/announcer.rs:167 | `tools/engine_announcer_reference.py` |
+| `king_engine_game_starting` | game/game_engine_king.c | Ported |  | `tools/engine_announcer_reference.py` |
 | `king_engine_statistics_append` | game/game_engine_king.c | Compiled |  | compiled into game.wasm |
 | `king_engine_handle_client_message` | game/game_engine_king.c | Compiled |  | compiled into game.wasm |
 | `king_engine_handle_server_message` | game/game_engine_king.c | Compiled |  | compiled into game.wasm |
@@ -2506,15 +2506,15 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `king_engine_update` | game/game_engine_king.c | Compiled |  | compiled into game.wasm |
 | `_game_engine_play_multiplayer_sound` | game/game_engine_multiplayer_sounds.c | Ported |  | `tools/engine_announcer_reference.py` |
 | `push_queued_sound` | game/game_engine_multiplayer_sounds.c | Ported |  | `tools/engine_announcer_reference.py` |
-| `game_engine_update_multiplayer_sound` | game/game_engine_multiplayer_sounds.c | Ported | sim/src/announcer.rs:147 | `tools/engine_announcer_reference.py` |
-| `get_sound_length_in_ticks` | game/game_engine_multiplayer_sounds.c | Ported | sim/src/announcer.rs:65 | `tools/engine_announcer_reference.py` |
-| `game_engine_play_multiplayer_sound` | game/game_engine_multiplayer_sounds.c | Ported | sim/src/announcer.rs:125 | `tools/engine_announcer_reference.py` |
-| `game_engine_intialize_queued_sounds` | game/game_engine_multiplayer_sounds.c | Ported | sim/src/announcer.rs:112 | `tools/engine_announcer_reference.py` |
+| `game_engine_update_multiplayer_sound` | game/game_engine_multiplayer_sounds.c | Ported |  | `tools/engine_announcer_reference.py` |
+| `get_sound_length_in_ticks` | game/game_engine_multiplayer_sounds.c | Ported |  | `tools/engine_announcer_reference.py` |
+| `game_engine_play_multiplayer_sound` | game/game_engine_multiplayer_sounds.c | Ported |  | `tools/engine_announcer_reference.py` |
+| `game_engine_intialize_queued_sounds` | game/game_engine_multiplayer_sounds.c | Ported |  | `tools/engine_announcer_reference.py` |
 | `oddball_engine_dispose` | game/game_engine_oddball.c | Compiled |  | compiled into game.wasm |
 | `oddball_engine_dispose_from_old_map` | game/game_engine_oddball.c | Compiled |  | compiled into game.wasm |
 | `oddball_engine_player_added` | game/game_engine_oddball.c | Compiled |  | compiled into game.wasm |
 | `oddball_engine_game_ending` | game/game_engine_oddball.c | Compiled |  | compiled into game.wasm |
-| `oddball_engine_game_starting` | game/game_engine_oddball.c | Ported | sim/src/announcer.rs:168 | `tools/engine_announcer_reference.py` |
+| `oddball_engine_game_starting` | game/game_engine_oddball.c | Ported |  | `tools/engine_announcer_reference.py` |
 | `oddball_engine_statistics_append` | game/game_engine_oddball.c | Compiled |  | compiled into game.wasm |
 | `oddball_engine_handle_client_message` | game/game_engine_oddball.c | Compiled |  | compiled into game.wasm |
 | `oddball_engine_handle_server_message` | game/game_engine_oddball.c | Compiled |  | compiled into game.wasm |
@@ -2588,27 +2588,27 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `slayer_engine_dispose` | game/game_engine_slayer.c | Compiled |  | compiled into game.wasm |
 | `slayer_engine_initialize_for_new_map` | game/game_engine_slayer.c | Compiled |  | compiled into game.wasm |
 | `slayer_engine_dispose_from_old_map` | game/game_engine_slayer.c | Compiled |  | compiled into game.wasm |
-| `slayer_engine_player_added` | game/game_engine_slayer.c | Ported | sim/src/game.rs:290 | `tools/engine_game_engine_reference.py` |
+| `slayer_engine_player_added` | game/game_engine_slayer.c | Ported |  | `tools/engine_game_engine_reference.py` |
 | `slayer_engine_game_ending` | game/game_engine_slayer.c | Compiled |  | compiled into game.wasm |
-| `slayer_engine_game_starting` | game/game_engine_slayer.c | Ported | sim/src/announcer.rs:166 | `tools/engine_announcer_reference.py` |
+| `slayer_engine_game_starting` | game/game_engine_slayer.c | Ported |  | `tools/engine_announcer_reference.py` |
 | `slayer_engine_statistics_append` | game/game_engine_slayer.c | Compiled |  | compiled into game.wasm |
 | `slayer_engine_handle_client_message` | game/game_engine_slayer.c | Compiled |  | compiled into game.wasm |
 | `slayer_engine_handle_server_message` | game/game_engine_slayer.c | Compiled |  | compiled into game.wasm |
 | `slayer_engine_pregame_post_rasterize` | game/game_engine_slayer.c | Compiled |  | compiled into game.wasm |
 | `slayer_engine_post_rasterize` | game/game_engine_slayer.c | Compiled |  | compiled into game.wasm |
-| `slayer_engine_update` | game/game_engine_slayer.c | Ported | sim/src/game.rs:446 | `tools/engine_game_engine_reference.py` |
+| `slayer_engine_update` | game/game_engine_slayer.c | Ported |  | `tools/engine_game_engine_reference.py` |
 | `slayer_engine_allow_pick_up` | game/game_engine_slayer.c | Compiled |  | compiled into game.wasm |
 | `slayer_engine_player_damaged_player` | game/game_engine_slayer.c | Compiled |  | compiled into game.wasm |
 | `update_speed_for_score` | game/game_engine_slayer.c | Compiled |  | compiled into game.wasm |
 | `slayer_engine_adjust_score` | game/game_engine_slayer.c | Ported |  | `tools/engine_game_engine_reference.py` |
 | `slayer_engine_prespawn_player_update` | game/game_engine_slayer.c | Compiled |  | compiled into game.wasm |
-| `slayer_get_score` | game/game_engine_slayer.c | Ported | sim/src/game.rs:348 | `tools/engine_game_engine_reference.py` |
+| `slayer_get_score` | game/game_engine_slayer.c | Ported |  | `tools/engine_game_engine_reference.py` |
 | `slayer_test_flag` | game/game_engine_slayer.c | Ported |  | `tools/engine_spawn_reference.py` |
 | `slayer_get_score_string` | game/game_engine_slayer.c | Compiled |  | compiled into game.wasm |
 | `slayer_get_score_header_string` | game/game_engine_slayer.c | Compiled |  | compiled into game.wasm |
 | `slayer_get_team_score_string` | game/game_engine_slayer.c | Compiled |  | compiled into game.wasm |
 | `find_next_target` | game/game_engine_slayer.c | Compiled |  | compiled into game.wasm |
-| `slayer_engine_player_killed_player` | game/game_engine_slayer.c | Ported | sim/src/game.rs:377 | `tools/engine_game_engine_reference.py` |
+| `slayer_engine_player_killed_player` | game/game_engine_slayer.c | Ported |  | `tools/engine_game_engine_reference.py` |
 | `slayer_engine_display_score` | game/game_engine_slayer.c | Compiled |  | compiled into game.wasm |
 | `slayer_player_update` | game/game_engine_slayer.c | Compiled |  | compiled into game.wasm |
 | `stub_engine_dispose` | game/game_engine_stub.c | Compiled |  | compiled into game.wasm |
@@ -2633,7 +2633,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `game_statistics_start` | game/game_statistics.c | Compiled |  | compiled into game.wasm |
 | `game_statistics_stop` | game/game_statistics.c | Compiled |  | compiled into game.wasm |
 | `game_statistics_record_damage` | game/game_statistics.c | Compiled |  | compiled into game.wasm |
-| `game_statistics_record_kill` | game/game_statistics.c | Ported | sim/src/game.rs:379 | `tools/engine_game_engine_reference.py` |
+| `game_statistics_record_kill` | game/game_statistics.c | Ported |  | `tools/engine_game_engine_reference.py` |
 | `game_time_initialized` | game/game_time.c | Compiled |  | compiled into game.wasm |
 | `game_time_initialize` | game/game_time.c | Compiled |  | compiled into game.wasm |
 | `game_time_initialize_for_new_map` | game/game_time.c | Compiled |  | compiled into game.wasm |
@@ -2653,7 +2653,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `game_time_statistics_new` | game/game_time.c | Compiled |  | compiled into game.wasm |
 | `game_time_statistics_frame` | game/game_time.c | Compiled |  | compiled into game.wasm |
 | `game_time_start` | game/game_time.c | Compiled |  | compiled into game.wasm |
-| `game_time_update` | game/game_time.c | Ported | sim/src/clock.rs:2 | `tools/engine_game_time_reference.py` |
+| `game_time_update` | game/game_time.c | Ported |  | `tools/engine_game_time_reference.py` |
 | `player_control_get` | game/player_control.c | Compiled |  | compiled into game.wasm |
 | `player_control_initialize` | game/player_control.c | Compiled |  | compiled into game.wasm |
 | `player_control_dispose` | game/player_control.c | Compiled |  | compiled into game.wasm |
@@ -2698,10 +2698,10 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `player_control_get_facing_angles` | game/player_control.c | Compiled |  | compiled into game.wasm |
 | `player_control_get_facing_direction` | game/player_control.c | Compiled |  | compiled into game.wasm |
 | `player_control_set_desired_weapon` | game/player_control.c | Compiled |  | compiled into game.wasm |
-| `player_control_modify_desired_angles` | game/player_control.c | Ported | sim/src/facing.rs:2 | `tools/engine_facing_reference.py` |
+| `player_control_modify_desired_angles` | game/player_control.c | Ported |  | `tools/engine_facing_reference.py` |
 | `player_control_initialize_for_new_map` | game/player_control.c | Compiled |  | compiled into game.wasm |
-| `handle_one_player_input` | game/player_control.c | Compiled | sim/src/player.rs:584 | compiled into game.wasm |
-| `player_control_update` | game/player_control.c | Compiled | sim/src/player.rs:584 | compiled into game.wasm |
+| `handle_one_player_input` | game/player_control.c | Compiled |  | compiled into game.wasm |
+| `player_control_update` | game/player_control.c | Compiled |  | compiled into game.wasm |
 | `player_control_permanent_impulse` | game/player_control.c | Compiled |  | compiled into game.wasm |
 | `update_server_add_player` | game/player_queues_new.c | Compiled |  | compiled into game.wasm |
 | `update_client_new` | game/player_queues_new.c | Compiled |  | compiled into game.wasm |
@@ -2772,7 +2772,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `players_compute_combined_pvs` | game/players.c | Compiled |  | compiled into game.wasm |
 | `players_compute_local_player_count` | game/players.c | Compiled |  | compiled into game.wasm |
 | `player_examine_nearby_unit` | game/players.c | Compiled |  | compiled into game.wasm |
-| `unit_should_autopick_weapon` | game/players.c | Ported | sim/src/pickup.rs:6 | `tools/engine_pickup_reference.py` |
+| `unit_should_autopick_weapon` | game/players.c | Ported |  | `tools/engine_pickup_reference.py` |
 | `player_reset_action_result` | game/players.c | Compiled |  | compiled into game.wasm |
 | `player_handle_weapon_swap` | game/players.c | Compiled |  | compiled into game.wasm |
 | `player_over_shield_screen_effect` | game/players.c | Compiled |  | compiled into game.wasm |
@@ -2784,15 +2784,15 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `players_handle_deleted_object` | game/players.c | Compiled |  | compiled into game.wasm |
 | `random_direction3d` | game/players.c | Ported |  | `tools/engine_random_reference.py` |
 | `valid_real_vector2d` | game/players.c | Compiled |  | compiled into game.wasm |
-| `player_new` | game/players.c | Compiled | sim/src/lib.rs:772 | compiled into game.wasm |
+| `player_new` | game/players.c | Compiled |  | compiled into game.wasm |
 | `player_add_equipment` | game/players.c | Compiled |  | compiled into game.wasm |
 | `player_aiming_vector_from_facing` | game/players.c | Compiled |  | compiled into game.wasm |
 | `player_teleport_internal` | game/players.c | Compiled |  | compiled into game.wasm |
 | `player_teleport` | game/players.c | Compiled |  | compiled into game.wasm |
-| `find_best_starting_location_index` | game/players.c | Ported | sim/src/game.rs:771 | `tools/engine_spawn_reference.py` |
-| `player_spawn` | game/players.c | Compiled | sim/src/game.rs:317 | compiled into game.wasm |
+| `find_best_starting_location_index` | game/players.c | Ported |  | `tools/engine_spawn_reference.py` |
+| `player_spawn` | game/players.c | Compiled |  | compiled into game.wasm |
 | `player_set_action_result` | game/players.c | Compiled |  | compiled into game.wasm |
-| `player_handle_action` | game/players.c | Ported | sim/src/seats.rs:805 | `tools/engine_handle_action_reference.py` |
+| `player_handle_action` | game/players.c | Ported |  | `tools/engine_handle_action_reference.py` |
 | `player_handle_powerup` | game/players.c | Compiled |  | compiled into game.wasm |
 | `player_handle_powerup_minor` | game/players.c | Compiled |  | compiled into game.wasm |
 | `player_update_powerups` | game/players.c | Compiled |  | compiled into game.wasm |
@@ -2804,10 +2804,10 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `player_examine_nearby_vehicle` | game/players.c | Compiled |  | compiled into game.wasm |
 | `player_examine_nearby_device` | game/players.c | Compiled |  | compiled into game.wasm |
 | `player_handle_powerup_equipment` | game/players.c | Compiled |  | compiled into game.wasm |
-| `players_update_before_game` | game/players.c | Compiled | sim/src/lib.rs:401 | compiled into game.wasm |
-| `player_examine_nearby_item` | game/players.c | Ported | sim/src/pickup.rs:2 | `tools/engine_pickup_reference.py` |
-| `player_examine_nearby_objects` | game/players.c | Compiled | sim/src/hud.rs:318 | compiled into game.wasm |
-| `players_update_after_game` | game/players.c | Compiled | campaign/src/lib.rs:475 | compiled into game.wasm |
+| `players_update_before_game` | game/players.c | Compiled |  | compiled into game.wasm |
+| `player_examine_nearby_item` | game/players.c | Ported |  | `tools/engine_pickup_reference.py` |
+| `player_examine_nearby_objects` | game/players.c | Compiled |  | compiled into game.wasm |
+| `players_update_after_game` | game/players.c | Compiled |  | compiled into game.wasm |
 | `game_set_game_variant_options` | game/game.c | Compiled |  | compiled into game.wasm |
 | `game_variant_options_get` | game/game.c | Compiled |  | compiled into game.wasm |
 | `game_allegiance_set_teams` | game/game_allegiance.c | Compiled |  | compiled into game.wasm |
@@ -3413,7 +3413,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `hs_parse_inspect` | hs/hs_compile.c | Compiled |  | compiled into game.wasm |
 | `hs_parse_object_cast_up` | hs/hs_compile.c | Compiled |  | compiled into game.wasm |
 | `hs_parse_debug_string` | hs/hs_compile.c | Compiled |  | compiled into game.wasm |
-| `hs_compile_expression` | hs/hs_compile.c | Compiled | script/src/console.rs:166 | compiled into game.wasm |
+| `hs_compile_expression` | hs/hs_compile.c | Compiled |  | compiled into game.wasm |
 | `hs_compile` | hs/hs_compile.c | Compiled |  | compiled into game.wasm |
 | `hs_compile_finish` | hs/hs_compile.c | Compiled |  | compiled into game.wasm |
 | `hs_compile_dispose` | hs/hs_compile.c | Compiled |  | compiled into game.wasm |
@@ -3470,7 +3470,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `hs_stack_push` | hs/hs_runtime.c | Compiled |  | compiled into game.wasm |
 | `hs_stack_pop` | hs/hs_runtime.c | Compiled |  | compiled into game.wasm |
 | `hs_stack_allocate` | hs/hs_runtime.c | Compiled |  | compiled into game.wasm |
-| `hs_wake` | hs/hs_runtime.c | Compiled | script/src/lib.rs:469 | compiled into game.wasm |
+| `hs_wake` | hs/hs_runtime.c | Compiled |  | compiled into game.wasm |
 | `hs_find_thread_by_script` | hs/hs_runtime.c | Compiled |  | compiled into game.wasm |
 | `hs_find_thread_by_name` | hs/hs_runtime.c | Compiled |  | compiled into game.wasm |
 | `hs_long_to_boolean` | hs/hs_runtime.c | Ported |  | `tools/engine_script_cast_reference.py` |
@@ -3487,7 +3487,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `hs_object_to_object_list` | hs/hs_runtime.c | Ported |  | `tools/engine_script_cast_reference.py` |
 | `hs_object_type_can_cast` | hs/hs_runtime.c | Ported |  | `tools/engine_script_cast_reference.py` |
 | `hs_can_cast` | hs/hs_runtime.c | Ported | import/src/script_tables.rs:881 | `tools/engine_script_cast_reference.py` |
-| `hs_cast` | hs/hs_runtime.c | Ported | script/src/value.rs:88 | `tools/engine_script_cast_reference.py` |
+| `hs_cast` | hs/hs_runtime.c | Ported |  | `tools/engine_script_cast_reference.py` |
 | `hs_global_reconcile_read` | hs/hs_runtime.c | Compiled |  | compiled into game.wasm |
 | `hs_global_reconcile_write` | hs/hs_runtime.c | Compiled |  | compiled into game.wasm |
 | `script_error` | hs/hs_runtime.c | Compiled |  | compiled into game.wasm |
@@ -3495,30 +3495,30 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `hs_wake_by_name` | hs/hs_runtime.c | Compiled |  | compiled into game.wasm |
 | `render_debug_scripting` | hs/hs_runtime.c | Compiled |  | compiled into game.wasm |
 | `render_debug_trigger_volumes` | hs/hs_runtime.c | Compiled |  | compiled into game.wasm |
-| `hs_return` | hs/hs_runtime.c | Compiled | script/src/lib.rs:227 | compiled into game.wasm |
-| `hs_global_evaluate` | hs/hs_runtime.c | Compiled | script/src/lib.rs:979 | compiled into game.wasm |
+| `hs_return` | hs/hs_runtime.c | Compiled |  | compiled into game.wasm |
+| `hs_global_evaluate` | hs/hs_runtime.c | Compiled |  | compiled into game.wasm |
 | `hs_evaluate_wake` | hs/hs_runtime.c | Compiled |  | compiled into game.wasm |
-| `hs_evaluate` | hs/hs_runtime.c | Compiled | script/src/lib.rs:609 | compiled into game.wasm |
+| `hs_evaluate` | hs/hs_runtime.c | Compiled |  | compiled into game.wasm |
 | `hs_script_evaluate` | hs/hs_runtime.c | Compiled |  | compiled into game.wasm |
-| `hs_arguments_evaluate` | hs/hs_runtime.c | Compiled | script/src/lib.rs:609 | compiled into game.wasm |
+| `hs_arguments_evaluate` | hs/hs_runtime.c | Compiled |  | compiled into game.wasm |
 | `hs_macro_function_evaluate` | hs/hs_runtime.c | Compiled |  | compiled into game.wasm |
-| `hs_evaluate_begin` | hs/hs_runtime.c | Compiled | script/src/lib.rs:728 | compiled into game.wasm |
-| `hs_evaluate_begin_random` | hs/hs_runtime.c | Compiled | script/src/lib.rs:728 | compiled into game.wasm |
-| `hs_evaluate_if` | hs/hs_runtime.c | Compiled | script/src/lib.rs:729 | compiled into game.wasm |
-| `hs_evaluate_set` | hs/hs_runtime.c | Compiled | script/src/lib.rs:729 | compiled into game.wasm |
-| `hs_evaluate_logical` | hs/hs_runtime.c | Compiled | script/src/lib.rs:729 | compiled into game.wasm |
-| `hs_evaluate_arithmetic` | hs/hs_runtime.c | Compiled | script/src/lib.rs:730 | compiled into game.wasm |
-| `hs_evaluate_equality` | hs/hs_runtime.c | Compiled | script/src/lib.rs:730 | compiled into game.wasm |
-| `hs_evaluate_inequality` | hs/hs_runtime.c | Compiled | script/src/lib.rs:731 | compiled into game.wasm |
-| `hs_evaluate_sleep` | hs/hs_runtime.c | Compiled | script/src/lib.rs:890 | compiled into game.wasm |
-| `hs_evaluate_sleep_until` | hs/hs_runtime.c | Compiled | script/src/lib.rs:927 | compiled into game.wasm |
-| `hs_evaluate_inspect` | hs/hs_runtime.c | Compiled | script/src/lib.rs:731 | compiled into game.wasm |
+| `hs_evaluate_begin` | hs/hs_runtime.c | Compiled |  | compiled into game.wasm |
+| `hs_evaluate_begin_random` | hs/hs_runtime.c | Compiled |  | compiled into game.wasm |
+| `hs_evaluate_if` | hs/hs_runtime.c | Compiled |  | compiled into game.wasm |
+| `hs_evaluate_set` | hs/hs_runtime.c | Compiled |  | compiled into game.wasm |
+| `hs_evaluate_logical` | hs/hs_runtime.c | Compiled |  | compiled into game.wasm |
+| `hs_evaluate_arithmetic` | hs/hs_runtime.c | Compiled |  | compiled into game.wasm |
+| `hs_evaluate_equality` | hs/hs_runtime.c | Compiled |  | compiled into game.wasm |
+| `hs_evaluate_inequality` | hs/hs_runtime.c | Compiled |  | compiled into game.wasm |
+| `hs_evaluate_sleep` | hs/hs_runtime.c | Compiled |  | compiled into game.wasm |
+| `hs_evaluate_sleep_until` | hs/hs_runtime.c | Compiled |  | compiled into game.wasm |
+| `hs_evaluate_inspect` | hs/hs_runtime.c | Compiled |  | compiled into game.wasm |
 | `hs_evaluate_object_cast_up` | hs/hs_runtime.c | Compiled |  | compiled into game.wasm |
 | `hs_evaluate_debug_string` | hs/hs_runtime.c | Compiled |  | compiled into game.wasm |
-| `hs_thread_main` | hs/hs_runtime.c | Compiled | script/src/lib.rs:571 | compiled into game.wasm |
-| `hs_runtime_initialize_for_new_map` | hs/hs_runtime.c | Compiled | script/src/lib.rs:307 | compiled into game.wasm |
-| `hs_runtime_update` | hs/hs_runtime.c | Compiled | script/src/lib.rs:395 | compiled into game.wasm |
-| `hs_runtime_evaluate` | hs/hs_runtime.c | Compiled | script/src/lib.rs:478 | compiled into game.wasm |
+| `hs_thread_main` | hs/hs_runtime.c | Compiled |  | compiled into game.wasm |
+| `hs_runtime_initialize_for_new_map` | hs/hs_runtime.c | Compiled |  | compiled into game.wasm |
+| `hs_runtime_update` | hs/hs_runtime.c | Compiled |  | compiled into game.wasm |
+| `hs_runtime_evaluate` | hs/hs_runtime.c | Compiled |  | compiled into game.wasm |
 | `hs_syntax_data_byte_swap` | hs/hs_scenario_definitions.c | Compiled |  | compiled into game.wasm |
 | `reference_list_new` | hs/object_lists.c | Compiled |  | compiled into game.wasm |
 | `reference_list_get_next_datum_index` | hs/object_lists.c | Compiled |  | compiled into game.wasm |
@@ -3543,7 +3543,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `hs_compile_and_evaluate_command` | hs/hs.c | Compiled |  | compiled into game.wasm |
 | `skip_whitespace` | hs/hs_compile.c | Compiled |  | compiled into game.wasm |
 | `hs_runtime_waiting_on_call` | hs/hs_runtime.c | Compiled |  | compiled into game.wasm |
-| `hs_type_default_value` | hs/hs_runtime.c | Compiled | script/src/value.rs:33 | compiled into game.wasm |
+| `hs_type_default_value` | hs/hs_runtime.c | Compiled |  | compiled into game.wasm |
 
 ## `input`
 
@@ -3610,7 +3610,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `scripted_show_hud_help_text` | interface/hud.c | Compiled |  | compiled into game.wasm |
 | `hud_update` | interface/hud.c | Compiled |  | compiled into game.wasm |
 | `get_object_icon_text_index` | interface/hud.c | Compiled |  | compiled into game.wasm |
-| `hud_show_action_response` | interface/hud.c | Compiled | ffi/src/hud_text.rs:52 | compiled into game.wasm |
+| `hud_show_action_response` | interface/hud.c | Compiled |  | compiled into game.wasm |
 | `hud_get_item_string` | interface/hud.c | Compiled |  | compiled into game.wasm |
 | `hud_picked_up_grenade` | interface/hud.c | Compiled |  | compiled into game.wasm |
 | `hud_picked_up_ammunition` | interface/hud.c | Compiled |  | compiled into game.wasm |
@@ -3627,27 +3627,27 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `check_stack_buffer` | interface/hud_draw.c | Compiled |  | compiled into game.wasm |
 | `hud_draw_multitexture_overlay_get_current_weapon_definition` | interface/hud_draw.c | Compiled |  | compiled into game.wasm |
 | `hud_globals_get_scale` | interface/hud_draw.c | Compiled |  | compiled into game.wasm |
-| `hud_retrieve_bitmap_and_bounding_rect` | interface/hud_draw.c | Ported | ffi/src/hud/sprite_reference.rs:4 | `tools/engine_hud_sprite_reference.py` |
+| `hud_retrieve_bitmap_and_bounding_rect` | interface/hud_draw.c | Ported |  | `tools/engine_hud_sprite_reference.py` |
 | `hud_multitexture_overlay_blend_function` | interface/hud_draw.c | Compiled |  | compiled into game.wasm |
 | `hud_draw_multitexture_overlay` | interface/hud_draw.c | Compiled |  | compiled into game.wasm |
 | `fast_ftol_C` | interface/hud_draw.c | Compiled |  | compiled into game.wasm |
 | `real_argb_color_to_pixel32` | interface/hud_draw.c | Compiled |  | compiled into game.wasm |
 | `real_rgb_color_to_pixel32` | interface/hud_draw.c | Compiled |  | compiled into game.wasm |
 | `real_alpha_intensity_to_pixel32` | interface/hud_draw.c | Compiled |  | compiled into game.wasm |
-| `hud_calculate_point` | interface/hud_draw.c | Compiled | ffi/src/hud.rs:168 | compiled into game.wasm |
+| `hud_calculate_point` | interface/hud_draw.c | Compiled |  | compiled into game.wasm |
 | `get_flash_duration` | interface/hud_draw.c | Compiled |  | compiled into game.wasm |
-| `get_flash_color` | interface/hud_draw.c | Compiled | ffi/src/hud.rs:180 | compiled into game.wasm |
+| `get_flash_color` | interface/hud_draw.c | Compiled |  | compiled into game.wasm |
 | `hud_multitexture_overlays_follow_zoom` | interface/hud_draw.c | Compiled |  | compiled into game.wasm |
 | `hud_number_shows_only_when_zoomed` | interface/hud_draw.c | Compiled |  | compiled into game.wasm |
 | `hud_zoomed_layout_begin` | interface/hud_draw.c | Compiled |  | compiled into game.wasm |
 | `hud_draw_bitmap_direct` | interface/hud_draw.c | Compiled |  | compiled into game.wasm |
-| `hud_draw_meter` | interface/hud_draw.c | Compiled | ffi/src/hud.rs:316 | compiled into game.wasm |
-| `hud_draw_numbers` | interface/hud_draw.c | Compiled | ffi/src/hud.rs:357 | compiled into game.wasm |
+| `hud_draw_meter` | interface/hud_draw.c | Compiled |  | compiled into game.wasm |
+| `hud_draw_numbers` | interface/hud_draw.c | Compiled |  | compiled into game.wasm |
 | `hud_draw_bitmap` | interface/hud_draw.c | Compiled |  | compiled into game.wasm |
-| `hud_draw_static_element` | interface/hud_draw.c | Compiled | ffi/src/hud.rs:298 | compiled into game.wasm |
+| `hud_draw_static_element` | interface/hud_draw.c | Compiled |  | compiled into game.wasm |
 | `hud_draw_weapon_overlays` | interface/hud_draw.c | Compiled |  | compiled into game.wasm |
 | `render_state_text` | interface/hud_messaging.c | Compiled |  | compiled into game.wasm |
-| `render_state_bitmap` | interface/hud_messaging.c | Compiled | ffi/src/hud.rs:257 | compiled into game.wasm |
+| `render_state_bitmap` | interface/hud_messaging.c | Compiled |  | compiled into game.wasm |
 | `hud_messaging_initialize` | interface/hud_messaging.c | Compiled |  | compiled into game.wasm |
 | `hud_messaging_initialize_for_new_map` | interface/hud_messaging.c | Compiled |  | compiled into game.wasm |
 | `hud_messaging_dispose_from_old_map` | interface/hud_messaging.c | Compiled |  | compiled into game.wasm |
@@ -3681,7 +3681,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `hud_print_message` | interface/hud_messaging.c | Compiled |  | compiled into game.wasm |
 | `hud_add_item_message` | interface/hud_messaging.c | Compiled |  | compiled into game.wasm |
 | `hud_broadcast_team_message` | interface/hud_messaging.c | Compiled |  | compiled into game.wasm |
-| `hud_messaging_update` | interface/hud_messaging.c | Compiled | ffi/src/hud_text.rs:53 | compiled into game.wasm |
+| `hud_messaging_update` | interface/hud_messaging.c | Compiled |  | compiled into game.wasm |
 | `find_nav_point` | interface/hud_nav_points.c | Compiled |  | compiled into game.wasm |
 | `get_nav_point_datum` | interface/hud_nav_points.c | Compiled |  | compiled into game.wasm |
 | `hud_initialize_nav_points` | interface/hud_nav_points.c | Compiled |  | compiled into game.wasm |
@@ -3736,7 +3736,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `hud_render_damage_indicators` | interface/hud_unit.c | Compiled |  | compiled into game.wasm |
 | `hud_tick_shield` | interface/hud_unit.c | Compiled |  | compiled into game.wasm |
 | `hud_update_unit` | interface/hud_unit.c | Compiled |  | compiled into game.wasm |
-| `hud_render_unit_interface` | interface/hud_unit.c | Compiled | ffi/src/hud.rs:82 | compiled into game.wasm |
+| `hud_render_unit_interface` | interface/hud_unit.c | Compiled |  | compiled into game.wasm |
 | `hud_initialize_weapon_interface` | interface/hud_weapon.c | Compiled |  | compiled into game.wasm |
 | `hud_initialize_weapon_interface_for_new_map` | interface/hud_weapon.c | Compiled |  | compiled into game.wasm |
 | `hud_dispose_weapon_interface_from_old_map` | interface/hud_weapon.c | Compiled |  | compiled into game.wasm |
@@ -3745,7 +3745,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `get_hud_state` | interface/hud_weapon.c | Compiled |  | compiled into game.wasm |
 | `get_crosshair_state` | interface/hud_weapon.c | Compiled |  | compiled into game.wasm |
 | `play_weapon_hud_sounds` | interface/hud_weapon.c | Compiled |  | compiled into game.wasm |
-| `render_grenade_hud` | interface/hud_weapon.c | Compiled | ffi/src/hud.rs:623 | compiled into game.wasm |
+| `render_grenade_hud` | interface/hud_weapon.c | Compiled |  | compiled into game.wasm |
 | `strip_path_name` | interface/hud_weapon.c | Compiled |  | compiled into game.wasm |
 | `hud_update_weapon_local_player` | interface/hud_weapon.c | Compiled |  | compiled into game.wasm |
 | `hud_fix_weapon_data` | interface/hud_weapon.c | Compiled |  | compiled into game.wasm |
@@ -3757,7 +3757,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `tiny_point2d_get` | interface/motion_sensor.c | Compiled |  | compiled into game.wasm |
 | `blip_type_get` | interface/motion_sensor.c | Compiled |  | compiled into game.wasm |
 | `motion_sensor_blip_set_type_and_size` | interface/motion_sensor.c | Compiled |  | compiled into game.wasm |
-| `blip_size_get` | interface/motion_sensor.c | Compiled | sim/src/hud.rs:67 | compiled into game.wasm |
+| `blip_size_get` | interface/motion_sensor.c | Compiled |  | compiled into game.wasm |
 | `get_motion_sensor_data` | interface/motion_sensor.c | Compiled |  | compiled into game.wasm |
 | `motion_sensor_initialize` | interface/motion_sensor.c | Compiled |  | compiled into game.wasm |
 | `motion_sensor_dispose` | interface/motion_sensor.c | Compiled |  | compiled into game.wasm |
@@ -3766,8 +3766,8 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `should_track_object` | interface/motion_sensor.c | Compiled |  | compiled into game.wasm |
 | `blip_begin` | interface/motion_sensor.c | Compiled |  | compiled into game.wasm |
 | `should_draw_object` | interface/motion_sensor.c | Compiled |  | compiled into game.wasm |
-| `render_blip` | interface/motion_sensor.c | Compiled | sim/src/hud.rs:171 | compiled into game.wasm |
-| `motion_sensor_update` | interface/motion_sensor.c | Compiled | sim/src/hud.rs:122 | compiled into game.wasm |
+| `render_blip` | interface/motion_sensor.c | Compiled |  | compiled into game.wasm |
+| `motion_sensor_update` | interface/motion_sensor.c | Compiled |  | compiled into game.wasm |
 | `update_motion_sensor` | interface/motion_sensor.c | Compiled |  | compiled into game.wasm |
 | `render_motion_sensor` | interface/motion_sensor.c | Compiled |  | compiled into game.wasm |
 | `motion_sensor_draw_screen` | interface/motion_sensor.c | Compiled |  | compiled into game.wasm |
@@ -3787,33 +3787,33 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `first_person_weapons_dispose_from_old_map` | interface/first_person_weapons.c | Compiled |  | compiled into game.wasm |
 | `first_person_weapon_set_visibility` | interface/first_person_weapons.c | Compiled |  | compiled into game.wasm |
 | `first_person_weapon_predict` | interface/first_person_weapons.c | Compiled |  | compiled into game.wasm |
-| `first_person_weapon_start_interpolation` | interface/first_person_weapons.c | Ported | sim/src/first_person_states.rs:543 | `tools/engine_first_person_reference.py` |
-| `first_person_weapon_set_state` | interface/first_person_weapons.c | Ported | sim/src/first_person_states.rs:197 | `tools/engine_first_person_reference.py` |
-| `first_person_weapon_animation_fits` | interface/first_person_weapons.c | Compiled | sim/src/first_person.rs:88 | compiled into game.wasm |
-| `first_person_weapon_build_node_matrices` | interface/first_person_weapons.c | Compiled | sim/src/first_person.rs:160 | compiled into game.wasm |
-| `first_person_weapon_message` | interface/first_person_weapons.c | Ported | sim/src/first_person_states.rs:633 | `tools/engine_first_person_reference.py` |
-| `first_person_weapon_switch_weapons` | interface/first_person_weapons.c | Compiled | sim/src/first_person_states.rs:616 | compiled into game.wasm |
+| `first_person_weapon_start_interpolation` | interface/first_person_weapons.c | Ported |  | `tools/engine_first_person_reference.py` |
+| `first_person_weapon_set_state` | interface/first_person_weapons.c | Ported |  | `tools/engine_first_person_reference.py` |
+| `first_person_weapon_animation_fits` | interface/first_person_weapons.c | Compiled |  | compiled into game.wasm |
+| `first_person_weapon_build_node_matrices` | interface/first_person_weapons.c | Compiled |  | compiled into game.wasm |
+| `first_person_weapon_message` | interface/first_person_weapons.c | Ported |  | `tools/engine_first_person_reference.py` |
+| `first_person_weapon_switch_weapons` | interface/first_person_weapons.c | Compiled |  | compiled into game.wasm |
 | `first_person_weapon_new_unit` | interface/first_person_weapons.c | Compiled |  | compiled into game.wasm |
-| `first_person_weapon_next_state` | interface/first_person_weapons.c | Ported | sim/src/first_person_states.rs:686 | `tools/engine_first_person_reference.py` |
+| `first_person_weapon_next_state` | interface/first_person_weapons.c | Ported |  | `tools/engine_first_person_reference.py` |
 | `first_person_weapon_draw` | interface/first_person_weapons.c | Compiled |  | compiled into game.wasm |
 | `first_person_weapon_get_local_index` | interface/first_person_weapons.c | Compiled |  | compiled into game.wasm |
 | `first_person_weapon_get_marker_by_name` | interface/first_person_weapons.c | Compiled |  | compiled into game.wasm |
 | `first_person_weapon_center_flashlight` | interface/first_person_weapons.c | Compiled |  | compiled into game.wasm |
 | `first_person_weapon_adjust_light` | interface/first_person_weapons.c | Compiled |  | compiled into game.wasm |
 | `first_person_weapon_get_node_matrix` | interface/first_person_weapons.c | Compiled |  | compiled into game.wasm |
-| `first_person_weapon_update` | interface/first_person_weapons.c | Compiled | sim/src/first_person_states.rs:751 | compiled into game.wasm |
-| `model_build_remapping_table_for_animation_graph` | interface/first_person_weapons.c | Compiled | sim/src/first_person.rs:75 | compiled into game.wasm |
+| `first_person_weapon_update` | interface/first_person_weapons.c | Compiled |  | compiled into game.wasm |
+| `model_build_remapping_table_for_animation_graph` | interface/first_person_weapons.c | Compiled |  | compiled into game.wasm |
 | `first_person_weapon_render_update` | interface/first_person_weapons.c | Compiled |  | compiled into game.wasm |
 | `first_person_weapon_get_marker_by_name_render` | interface/first_person_weapons.c | Compiled |  | compiled into game.wasm |
 | `weapon_play_first_person_weapon_sound` | interface/first_person_weapons.c | Compiled |  | compiled into game.wasm |
-| `first_person_weapon_state_from_weapon_message` | interface/first_person_weapons.c | Ported | sim/src/first_person_states.rs:315 | `tools/engine_first_person_reference.py` |
-| `first_person_animation_type_from_weapon_state` | interface/first_person_weapons.c | Ported | sim/src/first_person_states.rs:166 | `tools/engine_first_person_reference.py` |
+| `first_person_weapon_state_from_weapon_message` | interface/first_person_weapons.c | Ported |  | `tools/engine_first_person_reference.py` |
+| `first_person_animation_type_from_weapon_state` | interface/first_person_weapons.c | Ported |  | `tools/engine_first_person_reference.py` |
 | `model_remap_node_matrices_to_match_animation_graph` | interface/first_person_weapons.c | Compiled |  | compiled into game.wasm |
 | `first_person_weapon_message_from_unit` | interface/first_person_weapons.c | Compiled |  | compiled into game.wasm |
 | `first_person_weapon_message_from_weapon` | interface/first_person_weapons.c | Compiled |  | compiled into game.wasm |
 | `first_person_weapon_get` | interface/first_person_weapons.c | Compiled |  | compiled into game.wasm |
 | `first_person_weapon_index_from_weapon_index` | interface/first_person_weapons.c | Compiled |  | compiled into game.wasm |
-| `first_person_weapons_update` | interface/first_person_weapons.c | Compiled | sim/src/lib.rs:1319 | compiled into game.wasm |
+| `first_person_weapons_update` | interface/first_person_weapons.c | Compiled |  | compiled into game.wasm |
 | `interface_initialize` | interface/interface.c | Compiled |  | compiled into game.wasm |
 | `interface_dispose_from_old_map` | interface/interface.c | Compiled |  | compiled into game.wasm |
 | `interface_dispose` | interface/interface.c | Compiled |  | compiled into game.wasm |
@@ -3975,7 +3975,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `display_error_when_main_menu_loaded` | interface/ui_widget.c | Compiled |  | compiled into game.wasm |
 | `display_error_deferred` | interface/ui_widget.c | Compiled |  | compiled into game.wasm |
 | `display_error_abort_to_dashboard_deferred` | interface/ui_widget.c | Compiled |  | compiled into game.wasm |
-| `ui_start_main_menu_music` | interface/ui_widget.c | Compiled | ffi/src/ui_host.rs:62 | compiled into game.wasm |
+| `ui_start_main_menu_music` | interface/ui_widget.c | Compiled |  | compiled into game.wasm |
 | `ui_stop_main_menu_music` | interface/ui_widget.c | Compiled |  | compiled into game.wasm |
 | `ui_main_menu_music_active` | interface/ui_widget.c | Compiled |  | compiled into game.wasm |
 | `ui_widgets_disable_pause_game` | interface/ui_widget.c | Compiled |  | compiled into game.wasm |
@@ -4075,14 +4075,14 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `network_game_server_allow_game_start` | interface/ui_widget_event_handler_functions.c | Compiled |  | compiled into game.wasm |
 | `disable_widget_if_no_xdemos` | interface/ui_widget_event_handler_functions.c | Compiled |  | compiled into game.wasm |
 | `pop_history_stack_once` | interface/ui_widget_event_handler_functions.c | Compiled |  | compiled into game.wasm |
-| `begin_music_fade_out` | interface/ui_widget_event_handler_functions.c | Compiled | ffi/src/ui_host.rs:651 | compiled into game.wasm |
+| `begin_music_fade_out` | interface/ui_widget_event_handler_functions.c | Compiled |  | compiled into game.wasm |
 | `solo_level_dispose_list` | interface/ui_widget_event_handler_functions.c | Compiled |  | compiled into game.wasm |
 | `start_new_game` | interface/ui_widget_event_handler_functions.c | Compiled |  | compiled into game.wasm |
 | `multiplayer_profiles_list_dispose` | interface/ui_widget_event_handler_functions.c | Compiled |  | compiled into game.wasm |
 | `player_profiles_list_dispose` | interface/ui_widget_event_handler_functions.c | Compiled |  | compiled into game.wasm |
 | `player_profile_color_picker_menu_dispose` | interface/ui_widget_event_handler_functions.c | Compiled |  | compiled into game.wasm |
 | `network_game_server_list_initialize` | interface/ui_widget_event_handler_functions.c | Compiled |  | compiled into game.wasm |
-| `main_menu_initialize` | interface/ui_widget_event_handler_functions.c | Compiled | ffi/src/ui_host.rs:651 | compiled into game.wasm |
+| `main_menu_initialize` | interface/ui_widget_event_handler_functions.c | Compiled |  | compiled into game.wasm |
 | `delete_playlist_profile_final` | interface/ui_widget_event_handler_functions.c | Compiled |  | compiled into game.wasm |
 | `player_wants_to_join_multiplayer_game` | interface/ui_widget_event_handler_functions.c | Compiled |  | compiled into game.wasm |
 | `playlist_profile_change_name` | interface/ui_widget_event_handler_functions.c | Compiled |  | compiled into game.wasm |
@@ -4232,8 +4232,8 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `temporary_hud_draw` | interface/hud.c | Compiled |  | compiled into game.wasm |
 | `hud_zoomed_layout_end` | interface/hud_draw.c | Compiled |  | compiled into game.wasm |
 | `hud_draw_bitmap_with_meter` | interface/hud_draw.c | Compiled |  | compiled into game.wasm |
-| `get_sprite_clip_rect` | interface/hud_draw.c | Ported | ffi/src/hud/sprite_reference.rs:4 | `tools/engine_hud_sprite_reference.py` |
-| `hud_calculate_bitmap_bounds` | interface/hud_draw.c | Compiled | ffi/src/hud.rs:206 | compiled into game.wasm |
+| `get_sprite_clip_rect` | interface/hud_draw.c | Ported |  | `tools/engine_hud_sprite_reference.py` |
+| `hud_calculate_bitmap_bounds` | interface/hud_draw.c | Compiled |  | compiled into game.wasm |
 | `xbox_demos_available` | interface/marketing_and_strategic_business_development.c | Compiled |  | compiled into game.wasm |
 | `xbox_demos_launch` | interface/marketing_and_strategic_business_development.c | Compiled |  | compiled into game.wasm |
 | `xbox_dashboard_launch` | interface/marketing_and_strategic_business_development.c | Compiled |  | compiled into game.wasm |
@@ -4284,7 +4284,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | Function | File | Class | Engine | Evidence |
 | --- | --- | --- | --- | --- |
 | `equipment_place` | items/equipment.c | Compiled | import/src/level.rs:1046 | compiled into game.wasm |
-| `equipment_handle_pickup` | items/equipment.c | Compiled | sim/src/player.rs:1253 | compiled into game.wasm |
+| `equipment_handle_pickup` | items/equipment.c | Compiled |  | compiled into game.wasm |
 | `equipment_definition_handle_pickup` | items/equipment.c | Compiled |  | compiled into game.wasm |
 | `garbage_update` | items/garbage.c | Compiled |  | compiled into game.wasm |
 | `garbage_new` | items/garbage.c | Compiled |  | compiled into game.wasm |
@@ -4300,12 +4300,12 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `item_in_unit_inventory` | items/items.c | Compiled |  | compiled into game.wasm |
 | `item_get_position_even_if_in_inventory` | items/items.c | Compiled |  | compiled into game.wasm |
 | `item_detonate` | items/items.c | Compiled |  | compiled into game.wasm |
-| `item_adjust_for_angular_velocity_change` | items/items.c | Ported | sim/src/item_physics.rs:393 | `tools/engine_item_reference.py` |
+| `item_adjust_for_angular_velocity_change` | items/items.c | Ported |  | `tools/engine_item_reference.py` |
 | `valid_real_vector3d_axes3` | items/items.c | Compiled |  | compiled into game.wasm |
 | `valid_real_matrix4x3` | items/items.c | Compiled |  | compiled into game.wasm |
-| `item_accelerate` | items/items.c | Ported | sim/src/forces.rs:211 | `tools/engine_item_reference.py` |
-| `item_align_to_normal_and_point` | items/items.c | Ported | sim/src/item_physics.rs:376 | `tools/engine_item_reference.py` |
-| `item_update` | items/items.c | Ported | sim/src/game.rs:229 | `tools/engine_item_reference.py` |
+| `item_accelerate` | items/items.c | Ported |  | `tools/engine_item_reference.py` |
+| `item_align_to_normal_and_point` | items/items.c | Ported |  | `tools/engine_item_reference.py` |
+| `item_update` | items/items.c | Ported |  | `tools/engine_item_reference.py` |
 | `projectiles_initialize` | items/projectiles.c | Compiled |  | compiled into game.wasm |
 | `projectiles_initialize_for_new_map` | items/projectiles.c | Compiled |  | compiled into game.wasm |
 | `projectiles_dispose_from_old_map` | items/projectiles.c | Compiled |  | compiled into game.wasm |
@@ -4319,10 +4319,10 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `projectile_estimate_time_to_target` | items/projectiles.c | Compiled |  | compiled into game.wasm |
 | `dangerous_projectiles_near_player` | items/projectiles.c | Compiled |  | compiled into game.wasm |
 | `projectile_handle_deleted_object` | items/projectiles.c | Compiled |  | compiled into game.wasm |
-| `projectile_calculate_deceleration_from_distances` | items/projectiles.c | Ported | sim/src/projectile.rs:737 | `tools/engine_projectile_deceleration_reference.py` |
+| `projectile_calculate_deceleration_from_distances` | items/projectiles.c | Ported |  | `tools/engine_projectile_deceleration_reference.py` |
 | `projectile_adjust_for_angular_velocity_change` | items/projectiles.c | Compiled |  | compiled into game.wasm |
 | `projectile_export_function_values` | items/projectiles.c | Compiled |  | compiled into game.wasm |
-| `projectile_calculate_deceleration` | items/projectiles.c | Ported | sim/src/projectile.rs:3 | `tools/engine_projectile_deceleration_reference.py` |
+| `projectile_calculate_deceleration` | items/projectiles.c | Ported |  | `tools/engine_projectile_deceleration_reference.py` |
 | `projectile_handle_parent_destroyed` | items/projectiles.c | Compiled |  | compiled into game.wasm |
 | `random_vector_in_cone3d` | items/projectiles.c | Ported |  | `tools/engine_random_reference.py` |
 | `projectile_aim_ballistic` | items/projectiles.c | Compiled |  | compiled into game.wasm |
@@ -4331,11 +4331,11 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `projectile_set_action` | items/projectiles.c | Compiled |  | compiled into game.wasm |
 | `projectile_effect_new` | items/projectiles.c | Compiled |  | compiled into game.wasm |
 | `projectile_collision_test_line` | items/projectiles.c | Compiled |  | compiled into game.wasm |
-| `projectile_detonate` | items/projectiles.c | Compiled | sim/src/effects.rs:178 | compiled into game.wasm |
+| `projectile_detonate` | items/projectiles.c | Compiled |  | compiled into game.wasm |
 | `projectile_new` | items/projectiles.c | Compiled |  | compiled into game.wasm |
 | `projectile_accelerate` | items/projectiles.c | Compiled |  | compiled into game.wasm |
-| `projectile_collision` | items/projectiles.c | Compiled | sim/src/effects.rs:177 | compiled into game.wasm |
-| `projectile_update` | items/projectiles.c | Compiled | sim/src/projectile.rs:71 | compiled into game.wasm |
+| `projectile_collision` | items/projectiles.c | Compiled |  | compiled into game.wasm |
+| `projectile_update` | items/projectiles.c | Compiled |  | compiled into game.wasm |
 | `weapon_definition_get_damage_potential` | items/weapon_definitions.c | Compiled |  | compiled into game.wasm |
 | `animation_convert_frame_to_pal` | items/weapons.c | Compiled |  | compiled into game.wasm |
 | `animation_key_frame_index` | items/weapons.c | Compiled |  | compiled into game.wasm |
@@ -4360,15 +4360,15 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `weapon_get_first_person_animation_time` | items/weapons.c | Compiled |  | compiled into game.wasm |
 | `weapon_overcharged` | items/weapons.c | Compiled |  | compiled into game.wasm |
 | `weapon_precache_projectile_trails` | items/weapons.c | Compiled |  | compiled into game.wasm |
-| `weapon_magazine_finish_reload` | items/weapons.c | Compiled | sim/src/weapon.rs:584 | compiled into game.wasm |
+| `weapon_magazine_finish_reload` | items/weapons.c | Compiled |  | compiled into game.wasm |
 | `weapon_magazine_start_chamber` | items/weapons.c | Compiled |  | compiled into game.wasm |
 | `weapon_magazine_finish_chamber` | items/weapons.c | Compiled |  | compiled into game.wasm |
 | `weapon_trigger_fully_charged` | items/weapons.c | Compiled |  | compiled into game.wasm |
 | `weapon_trigger_idle` | items/weapons.c | Compiled |  | compiled into game.wasm |
 | `weapon_trigger_locked` | items/weapons.c | Compiled |  | compiled into game.wasm |
-| `weapon_trigger_recover` | items/weapons.c | Compiled | sim/src/weapon.rs:489 | compiled into game.wasm |
+| `weapon_trigger_recover` | items/weapons.c | Compiled |  | compiled into game.wasm |
 | `weapon_trigger_finish_tracking` | items/weapons.c | Compiled |  | compiled into game.wasm |
-| `weapon_magazine_start_reload` | items/weapons.c | Compiled | sim/src/weapon.rs:224 | compiled into game.wasm |
+| `weapon_magazine_start_reload` | items/weapons.c | Compiled |  | compiled into game.wasm |
 | `weapon_state_next` | items/weapons.c | Compiled |  | compiled into game.wasm |
 | `weapon_trigger_get` | items/weapons.c | Compiled |  | compiled into game.wasm |
 | `weapon_magazine_get` | items/weapons.c | Compiled |  | compiled into game.wasm |
@@ -4381,9 +4381,9 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `weapon_set_total_rounds` | items/weapons.c | Compiled |  | compiled into game.wasm |
 | `power` | items/weapons.c | Ported |  | `tools/engine_math_reference.py` |
 | `random` | items/weapons.c | Ported |  | `tools/engine_random_reference.py` |
-| `weapon_new` | items/weapons.c | Compiled | sim/src/weapon.rs:170 | compiled into game.wasm |
+| `weapon_new` | items/weapons.c | Compiled |  | compiled into game.wasm |
 | `weapon_delete` | items/weapons.c | Compiled |  | compiled into game.wasm |
-| `weapon_export_function_values` | items/weapons.c | Compiled | sim/src/functions.rs:156 | compiled into game.wasm |
+| `weapon_export_function_values` | items/weapons.c | Compiled |  | compiled into game.wasm |
 | `weapon_handle_potential_inventory_item` | items/weapons.c | Compiled |  | compiled into game.wasm |
 | `weapon_owner_update` | items/weapons.c | Compiled |  | compiled into game.wasm |
 | `weapon_build_weapon_interface_state` | items/weapons.c | Compiled |  | compiled into game.wasm |
@@ -4393,29 +4393,29 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `weapon_get_field_of_view` | items/weapons.c | Compiled |  | compiled into game.wasm |
 | `weapon_prevents_melee_attack` | items/weapons.c | Compiled |  | compiled into game.wasm |
 | `weapon_get_projectile_owner_object_index` | items/weapons.c | Compiled |  | compiled into game.wasm |
-| `weapon_trigger_can_fire_again` | items/weapons.c | Compiled | sim/src/weapon.rs:424 | compiled into game.wasm |
+| `weapon_trigger_can_fire_again` | items/weapons.c | Compiled |  | compiled into game.wasm |
 | `weapon_magazine_idle` | items/weapons.c | Compiled |  | compiled into game.wasm |
 | `weapon_effect_looping_new` | items/weapons.c | Compiled |  | compiled into game.wasm |
 | `weapon_detonate` | items/weapons.c | Compiled |  | compiled into game.wasm |
 | `weapon_trigger_change_state` | items/weapons.c | Compiled |  | compiled into game.wasm |
 | `weapon_state_key_frame` | items/weapons.c | Compiled |  | compiled into game.wasm |
 | `weapon_magazine_state_interruptable` | items/weapons.c | Compiled |  | compiled into game.wasm |
-| `weapon_effect_new` | items/weapons.c | Compiled | sim/src/lib.rs:601 | compiled into game.wasm |
+| `weapon_effect_new` | items/weapons.c | Compiled |  | compiled into game.wasm |
 | `weapon_reset` | items/weapons.c | Compiled |  | compiled into game.wasm |
 | `weapon_state_interruptable` | items/weapons.c | Compiled |  | compiled into game.wasm |
 | `weapon_set_current_amount` | items/weapons.c | Compiled |  | compiled into game.wasm |
-| `weapon_ready` | items/weapons.c | Compiled | sim/src/weapon.rs:208 | compiled into game.wasm |
+| `weapon_ready` | items/weapons.c | Compiled |  | compiled into game.wasm |
 | `weapon_put_away` | items/weapons.c | Compiled |  | compiled into game.wasm |
 | `weapon_aim` | items/weapons.c | Compiled |  | compiled into game.wasm |
 | `weapon_stop_reload` | items/weapons.c | Compiled |  | compiled into game.wasm |
 | `weapon_set_state` | items/weapons.c | Compiled |  | compiled into game.wasm |
 | `projectile_distribute` | items/weapons.c | Compiled |  | compiled into game.wasm |
 | `trigger_create_projectiles` | items/weapons.c | Compiled |  | compiled into game.wasm |
-| `weapon_trigger_fire` | items/weapons.c | Compiled | sim/src/weapon.rs:496 | compiled into game.wasm |
-| `weapon_trigger_begin_firing` | items/weapons.c | Compiled | sim/src/weapon.rs:440 | compiled into game.wasm |
+| `weapon_trigger_fire` | items/weapons.c | Compiled |  | compiled into game.wasm |
+| `weapon_trigger_begin_firing` | items/weapons.c | Compiled |  | compiled into game.wasm |
 | `weapon_trigger_overload` | items/weapons.c | Compiled |  | compiled into game.wasm |
-| `weapon_trigger_release_charge` | items/weapons.c | Compiled | sim/src/weapon.rs:466 | compiled into game.wasm |
-| `weapon_update` | items/weapons.c | Compiled | sim/src/weapon.rs:2 | compiled into game.wasm |
+| `weapon_trigger_release_charge` | items/weapons.c | Compiled |  | compiled into game.wasm |
+| `weapon_update` | items/weapons.c | Compiled |  | compiled into game.wasm |
 | `item_rested_surface_index` | items/items.c | Ported |  | `tools/engine_item_reference.py` |
 | `item_rested_surface` | items/items.c | Ported |  | `tools/engine_item_reference.py` |
 | `item_set_rested_surface` | items/items.c | Ported |  | `tools/engine_item_reference.py` |
@@ -4532,7 +4532,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `halt_and_catch_fire` | main/main.c | Compiled |  | compiled into game.wasm |
 | `main_loop_of_death` | main/main.c | Compiled |  | compiled into game.wasm |
 | `main_update_time` | main/main.c | Compiled |  | compiled into game.wasm |
-| `main_loop` | main/main.c | Compiled | ffi/src/lib.rs:1134 | compiled into game.wasm |
+| `main_loop` | main/main.c | Compiled |  | compiled into game.wasm |
 | `debug_keys_initialize` | main/debug_keys.c | Compiled |  | compiled into game.wasm |
 | `debug_keys_dispose` | main/debug_keys.c | Compiled |  | compiled into game.wasm |
 | `debug_keys_update` | main/debug_keys.c | Compiled |  | compiled into game.wasm |
@@ -4561,9 +4561,9 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `plane2d_distance_to_point` | math/geometry.c | Compiled |  | compiled into game.wasm |
 | `vector_intersect_plane2d` | math/geometry.c | Compiled |  | compiled into game.wasm |
 | `vector_intersect_plane3d` | math/geometry.c | Compiled |  | compiled into game.wasm |
-| `subdivide_triangle` | math/geometry.c | Ported | sim/src/random.rs:178 | `tools/engine_math_reference.py` |
+| `subdivide_triangle` | math/geometry.c | Ported |  | `tools/engine_math_reference.py` |
 | `build_torus` | math/geometry.c | Compiled |  | compiled into game.wasm |
-| `get_face_vertex` | math/geometry.c | Ported | sim/src/random.rs:193 | `tools/engine_math_reference.py` |
+| `get_face_vertex` | math/geometry.c | Ported |  | `tools/engine_math_reference.py` |
 | `convex_hull2d` | math/geometry.c | Compiled |  | compiled into game.wasm |
 | `convex_hull2d_verify` | math/geometry.c | Compiled |  | compiled into game.wasm |
 | `convex_hull2d_test_circle` | math/geometry.c | Compiled |  | compiled into game.wasm |
@@ -4581,11 +4581,11 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `convex_hull3d` | math/geometry.c | Compiled |  | compiled into game.wasm |
 | `convex_hull3d_test_point` | math/geometry.c | Compiled |  | compiled into game.wasm |
 | `convex_hull3d_test_vector` | math/geometry.c | Compiled |  | compiled into game.wasm |
-| `get_edge_vertex` | math/geometry.c | Ported | sim/src/random.rs:224 | `tools/engine_math_reference.py` |
+| `get_edge_vertex` | math/geometry.c | Ported |  | `tools/engine_math_reference.py` |
 | `convex_hull2d_intersect` | math/geometry.c | Compiled |  | compiled into game.wasm |
-| `calculate_vertex` | math/geometry.c | Ported | sim/src/random.rs:255 | `tools/engine_math_reference.py` |
+| `calculate_vertex` | math/geometry.c | Ported |  | `tools/engine_math_reference.py` |
 | `points_dimension2d` | math/geometry.c | Compiled |  | compiled into game.wasm |
-| `geosphere_new` | math/geometry.c | Ported | sim/src/random.rs:5 | `tools/engine_math_reference.py` |
+| `geosphere_new` | math/geometry.c | Ported |  | `tools/engine_math_reference.py` |
 | `matrix4x3_identity` | math/matrix_math.c | Compiled |  | compiled into game.wasm |
 | `matrix4x3_transpose` | math/matrix_math.c | Compiled |  | compiled into game.wasm |
 | `matrix4x3_inverse` | math/matrix_math.c | Ported |  | `tools/engine_vehicle_physics_reference.py` |
@@ -4594,40 +4594,40 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `matrix4x3_rotation_from_axis_and_angle` | math/matrix_math.c | Ported |  | `tools/engine_vehicle_physics_reference.py` |
 | `matrix4x3_rotation_from_quaternion` | math/matrix_math.c | Ported |  | `tools/engine_animation_reference.py` |
 | `matrix4x3_from_point_and_quaternion` | math/matrix_math.c | Ported |  | `tools/engine_model_reference.py` |
-| `matrix4x3_from_orientation` | math/matrix_math.c | Ported | sim/src/animation.rs:104 | `tools/engine_animation_reference.py` |
+| `matrix4x3_from_orientation` | math/matrix_math.c | Ported |  | `tools/engine_animation_reference.py` |
 | `matrix4x3_to_point_and_vectors` | math/matrix_math.c | Compiled |  | compiled into game.wasm |
 | `matrix4x3_transform_point` | math/matrix_math.c | Ported |  | `tools/engine_collision_reference.py` |
 | `matrix4x3_transform_vector` | math/matrix_math.c | Ported |  | `tools/engine_vehicle_physics_reference.py` |
-| `matrix4x3_transform_normal` | math/matrix_math.c | Ported | sim/src/animation.rs:169 | `tools/engine_math_reference.py` |
+| `matrix4x3_transform_normal` | math/matrix_math.c | Ported |  | `tools/engine_math_reference.py` |
 | `matrix4x3_inverse_transform_point` | math/matrix_math.c | Ported |  | `tools/engine_scenario_reference.py` |
 | `matrix4x3_inverse_transform_vector` | math/matrix_math.c | Ported |  | `tools/engine_vehicle_physics_reference.py` |
-| `matrix4x3_inverse_transform_normal` | math/matrix_math.c | Ported | sim/src/animation_blend.rs:178 | `tools/engine_math_reference.py` |
-| `matrix4x3_multiply` | math/matrix_math.c | Ported | sim/src/animation.rs:131 | `tools/engine_animation_reference.py` |
+| `matrix4x3_inverse_transform_normal` | math/matrix_math.c | Ported |  | `tools/engine_math_reference.py` |
+| `matrix4x3_multiply` | math/matrix_math.c | Ported |  | `tools/engine_animation_reference.py` |
 | `matrix3x3_determinant` | math/matrix_math.c | Compiled |  | compiled into game.wasm |
 | `matrix3x3_transpose` | math/matrix_math.c | Ported |  | `tools/engine_vehicle_physics_reference.py` |
 | `matrix3x3_inverse` | math/matrix_math.c | Compiled |  | compiled into game.wasm |
 | `matrix3x3_from_axis_and_angle` | math/matrix_math.c | Compiled |  | compiled into game.wasm |
-| `matrix3x3_multiply` | math/matrix_math.c | Ported | sim/src/vehicle.rs:934 | `tools/engine_vehicle_physics_reference.py` |
+| `matrix3x3_multiply` | math/matrix_math.c | Ported |  | `tools/engine_vehicle_physics_reference.py` |
 | `matrix3x3_transform_vector` | math/matrix_math.c | Compiled |  | compiled into game.wasm |
 | `matrix4x3_rotation_from_vectors` | math/matrix_math.c | Ported |  | `tools/engine_animation_reference.py` |
-| `matrix4x3_rotation_from_angles` | math/matrix_math.c | Ported | sim/src/objects.rs:400 | `tools/engine_math_extra_reference.py` |
+| `matrix4x3_rotation_from_angles` | math/matrix_math.c | Ported |  | `tools/engine_math_extra_reference.py` |
 | `matrix4x3_rotation_to_angles` | math/matrix_math.c | Compiled |  | compiled into game.wasm |
 | `matrix4x3_rotation_to_quaternion` | math/matrix_math.c | Ported |  | `tools/engine_vehicle_physics_reference.py` |
-| `matrix4x3_from_point_and_vectors` | math/matrix_math.c | Ported | sim/src/animation.rs:93 | `tools/engine_animation_reference.py` |
+| `matrix4x3_from_point_and_vectors` | math/matrix_math.c | Ported |  | `tools/engine_animation_reference.py` |
 | `vector_from_matrices4x3` | math/matrix_math.c | Compiled |  | compiled into game.wasm |
 | `matrix4x3_transform_plane` | math/matrix_math.c | Compiled |  | compiled into game.wasm |
 | `matrix4x3_inverse_transform_plane` | math/matrix_math.c | Compiled |  | compiled into game.wasm |
 | `matrix3x3_from_forward_and_up` | math/matrix_math.c | Ported |  | `tools/engine_vehicle_physics_reference.py` |
-| `matrix3x3_rotation_to_quaternion` | math/matrix_math.c | Ported | sim/src/vehicle.rs:966 | `tools/engine_vehicle_physics_reference.py` |
+| `matrix3x3_rotation_to_quaternion` | math/matrix_math.c | Ported |  | `tools/engine_vehicle_physics_reference.py` |
 | `valid_real_plane3d` | math/matrix_math.c | Compiled |  | compiled into game.wasm |
 | `matrix4x3_from_plane` | math/matrix_math.c | Compiled |  | compiled into game.wasm |
 | `periodic_functions_dispose` | math/periodic_functions.c | Compiled |  | compiled into game.wasm |
-| `periodic_function_evaluate` | math/periodic_functions.c | Ported | sim/src/periodic.rs:165 | `tools/engine_cause_damage_reference.py` |
-| `transition_function_evaluate` | math/periodic_functions.c | Ported | sim/src/damage.rs:37 | `tools/engine_cause_damage_reference.py` |
+| `periodic_function_evaluate` | math/periodic_functions.c | Ported |  | `tools/engine_cause_damage_reference.py` |
+| `transition_function_evaluate` | math/periodic_functions.c | Ported |  | `tools/engine_cause_damage_reference.py` |
 | `@periodic_function_build_variable_period_x_table` | math/periodic_functions.c | Compiled |  | compiled into game.wasm |
-| `transition_function_build_table` | math/periodic_functions.c | Ported | sim/src/periodic.rs:199 | `tools/engine_cause_damage_reference.py` |
-| `periodic_function_build_table` | math/periodic_functions.c | Ported | sim/src/periodic.rs:93 | `tools/engine_cause_damage_reference.py` |
-| `periodic_functions_initialize` | math/periodic_functions.c | Ported | sim/src/periodic.rs:45 | `tools/engine_cause_damage_reference.py` |
+| `transition_function_build_table` | math/periodic_functions.c | Ported |  | `tools/engine_cause_damage_reference.py` |
+| `periodic_function_build_table` | math/periodic_functions.c | Ported |  | `tools/engine_cause_damage_reference.py` |
+| `periodic_functions_initialize` | math/periodic_functions.c | Ported |  | `tools/engine_cause_damage_reference.py` |
 | `factorial` | math/probability.c | Compiled |  | compiled into game.wasm |
 | `permutations` | math/probability.c | Compiled |  | compiled into game.wasm |
 | `combinations` | math/probability.c | Compiled |  | compiled into game.wasm |
@@ -4643,13 +4643,13 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `random_math_initialize` | math/random_math.c | Compiled |  | compiled into game.wasm |
 | `random_math_dispose` | math/random_math.c | Compiled |  | compiled into game.wasm |
 | `real_seed_random` | math/random_math.c | Ported | audio/src/choice.rs:30 | `tools/engine_cause_damage_reference.py` |
-| `real_seed_random_range` | math/random_math.c | Ported | ffi/src/decals.rs:126 | `tools/engine_math_reference.py` |
+| `real_seed_random_range` | math/random_math.c | Ported |  | `tools/engine_math_reference.py` |
 | `seed_random` | math/random_math.c | Ported | audio/src/choice.rs:24 | `tools/engine_cause_damage_reference.py` |
 | `seed_random_range` | math/random_math.c | Ported | audio/src/choice.rs:36 | `tools/engine_cause_damage_reference.py` |
 | `direction3d_from_table` | math/random_math.c | Ported |  | `tools/engine_math_reference.py` |
-| `seed_random_direction3d` | math/random_math.c | Ported | sim/src/random.rs:55 | `tools/engine_random_reference.py` |
+| `seed_random_direction3d` | math/random_math.c | Ported |  | `tools/engine_random_reference.py` |
 | `seed_random_orientation` | math/random_math.c | Compiled |  | compiled into game.wasm |
-| `seed_random_vector_in_cone3d` | math/random_math.c | Ported | sim/src/random.rs:66 | `tools/engine_math_reference.py` |
+| `seed_random_vector_in_cone3d` | math/random_math.c | Ported |  | `tools/engine_math_reference.py` |
 | `vector_tree_new` | math/vector_tree.c | Compiled |  | compiled into game.wasm |
 | `vector_tree_delete` | math/vector_tree.c | Compiled |  | compiled into game.wasm |
 | `vectors_equal` | math/vector_tree.c | Compiled |  | compiled into game.wasm |
@@ -4678,7 +4678,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `bit_vector_or` | math/integer_math.c | Compiled |  | compiled into game.wasm |
 | `bit_vector_not` | math/integer_math.c | Compiled |  | compiled into game.wasm |
 | `scale_rectangle2d` | math/integer_math.c | Compiled |  | compiled into game.wasm |
-| `periodic_function_build_variable_period_x_table` | math/periodic_functions.c | Ported | sim/src/periodic.rs:73 | `tools/engine_cause_damage_reference.py` |
+| `periodic_function_build_variable_period_x_table` | math/periodic_functions.c | Ported |  | `tools/engine_cause_damage_reference.py` |
 | `magnitude_squared3d_right_associated` | math/real_math.c | Compiled |  | compiled into game.wasm |
 | `real_math_initialize` | math/real_math.c | Compiled |  | compiled into game.wasm |
 | `real_math_dispose` | math/real_math.c | Compiled |  | compiled into game.wasm |
@@ -4686,15 +4686,15 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `perpendicular2d` | math/real_math.c | Compiled |  | compiled into game.wasm |
 | `perpendicular3d` | math/real_math.c | Ported |  | `tools/engine_unit_hands_reference.py` |
 | `perpendicular4d` | math/real_math.c | Compiled |  | compiled into game.wasm |
-| `rotate_vector_about_axis` | math/real_math.c | Ported | ffi/src/sprite.rs:102 | `tools/engine_item_reference.py` |
+| `rotate_vector_about_axis` | math/real_math.c | Ported |  | `tools/engine_item_reference.py` |
 | `vectors_interpolate` | math/real_math.c | Compiled |  | compiled into game.wasm |
 | `points_interpolate` | math/real_math.c | Ported |  | `tools/engine_animation_reference.py` |
 | `scalars_interpolate` | math/real_math.c | Ported |  | `tools/engine_animation_reference.py` |
 | `scalars_interpolate_and_clamp_0_to_1` | math/real_math.c | Compiled |  | compiled into game.wasm |
 | `component_vectors_from_normal3d` | math/real_math.c | Ported |  | `tools/engine_physics_math_reference.py` |
 | `component_vectors_from_direction3d` | math/real_math.c | Compiled |  | compiled into game.wasm |
-| `quaternions_multiply` | math/real_math.c | Ported | sim/src/animation.rs:221 | `tools/engine_animation_reference.py` |
-| `quaternions_interpolate` | math/real_math.c | Ported | sim/src/animation.rs:208 | `tools/engine_animation_reference.py` |
+| `quaternions_multiply` | math/real_math.c | Ported |  | `tools/engine_animation_reference.py` |
+| `quaternions_interpolate` | math/real_math.c | Ported |  | `tools/engine_animation_reference.py` |
 | `quaternion_transform_point` | math/real_math.c | Ported |  | `tools/engine_item_reference.py` |
 | `vectors3d_from_euler_angles3d` | math/real_math.c | Compiled |  | compiled into game.wasm |
 | `fast_vector_intersects_sphere` | math/real_math.c | Ported |  | `tools/engine_collision_reference.py` |
@@ -4728,27 +4728,27 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `fast_normalize2d` | math/real_math.c | Compiled |  | compiled into game.wasm |
 | `fast_normalize3d` | math/real_math.c | Compiled |  | compiled into game.wasm |
 | `cross_product_magnitude3d` | math/real_math.c | Compiled |  | compiled into game.wasm |
-| `dequantize_byte_to_real` | math/real_math.c | Ported | sim/src/vehicle_animation.rs:189 | `tools/engine_math_extra_reference.py` |
-| `quantize_real_to_byte_lower_bound` | math/real_math.c | Ported | sim/src/vehicle_animation.rs:171 | `tools/engine_math_extra_reference.py` |
+| `dequantize_byte_to_real` | math/real_math.c | Ported |  | `tools/engine_math_extra_reference.py` |
+| `quantize_real_to_byte_lower_bound` | math/real_math.c | Ported |  | `tools/engine_math_extra_reference.py` |
 | `quantize_real_to_byte_upper_bound` | math/real_math.c | Compiled |  | compiled into game.wasm |
 | `quantize_real_to_byte_rectangle3d` | math/real_math.c | Compiled |  | compiled into game.wasm |
 | `signed_angle_between_vectors2d` | math/real_math.c | Compiled |  | compiled into game.wasm |
 | `angle_between_vectors2d` | math/real_math.c | Compiled |  | compiled into game.wasm |
-| `angle_between_vectors3d` | math/real_math.c | Ported | sim/src/vehicle.rs:1114 | `tools/engine_math_reference.py` |
+| `angle_between_vectors3d` | math/real_math.c | Ported |  | `tools/engine_math_reference.py` |
 | `angle_between_normals3d` | math/real_math.c | Compiled |  | compiled into game.wasm |
-| `yaw_vectors` | math/real_math.c | Ported | sim/src/vehicle.rs:893 | `tools/engine_vehicle_physics_reference.py` |
-| `pitch_vectors` | math/real_math.c | Ported | sim/src/vehicle.rs:903 | `tools/engine_vehicle_physics_reference.py` |
+| `yaw_vectors` | math/real_math.c | Ported |  | `tools/engine_vehicle_physics_reference.py` |
+| `pitch_vectors` | math/real_math.c | Ported |  | `tools/engine_vehicle_physics_reference.py` |
 | `fast_normals_interpolate` | math/real_math.c | Compiled |  | compiled into game.wasm |
 | `normals_interpolate` | math/real_math.c | Compiled |  | compiled into game.wasm |
 | `pin_normal_to_cone3d` | math/real_math.c | Compiled |  | compiled into game.wasm |
 | `reflect_vector3d` | math/real_math.c | Compiled |  | compiled into game.wasm |
 | `refract_vector3d` | math/real_math.c | Compiled |  | compiled into game.wasm |
-| `quaternion_normalize` | math/real_math.c | Ported | sim/src/animation.rs:190 | `tools/engine_animation_reference.py` |
+| `quaternion_normalize` | math/real_math.c | Ported |  | `tools/engine_animation_reference.py` |
 | `quaternion_from_angle_and_vector` | math/real_math.c | Compiled |  | compiled into game.wasm |
-| `quaternion_to_angle_and_vector` | math/real_math.c | Ported | sim/src/vehicle.rs:1003 | `tools/engine_vehicle_physics_reference.py` |
-| `quaternions_interpolate_and_normalize` | math/real_math.c | Ported | sim/src/animation.rs:202 | `tools/engine_animation_reference.py` |
+| `quaternion_to_angle_and_vector` | math/real_math.c | Ported |  | `tools/engine_vehicle_physics_reference.py` |
+| `quaternions_interpolate_and_normalize` | math/real_math.c | Ported |  | `tools/engine_animation_reference.py` |
 | `orientations_interpolate` | math/real_math.c | Compiled |  | compiled into game.wasm |
-| `euler_angles2d_from_vector3d` | math/real_math.c | Ported | sim/src/animation_blend.rs:179 | `tools/engine_math_reference.py` |
+| `euler_angles2d_from_vector3d` | math/real_math.c | Ported |  | `tools/engine_math_reference.py` |
 | `vector3d_from_angle` | math/real_math.c | Compiled |  | compiled into game.wasm |
 | `vector3d_from_euler_angles2d` | math/real_math.c | Ported | content/src/level.rs:375 | `tools/engine_math_extra_reference.py` |
 | `point_in_pill2d` | math/real_math.c | Compiled |  | compiled into game.wasm |
@@ -4761,7 +4761,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `angular_accelerate_to_position` | math/real_math.c | Compiled |  | compiled into game.wasm |
 | `accelerate_to_velocity3d` | math/real_math.c | Compiled |  | compiled into game.wasm |
 | `accerate_to_position3d` | math/real_math.c | Compiled |  | compiled into game.wasm |
-| `accelerate_to_position` | math/real_math.c | Ported | sim/src/device_animation.rs:3 | `tools/engine_math_extra_reference.py` |
+| `accelerate_to_position` | math/real_math.c | Ported |  | `tools/engine_math_extra_reference.py` |
 | `accelerate_to_velocity` | math/real_math.c | Compiled |  | compiled into game.wasm |
 | `valid_real_sine_cosine` | math/real_math.c | Compiled |  | compiled into game.wasm |
 | `set_real_point3d` | math/real_math.h | Ported |  | `tools/engine_animation_reference.py` |
@@ -4807,12 +4807,12 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `data_dispose` | memory/data.c | Ported |  | `tools/engine_data_reference.py` |
 | `data_make_invalid` | memory/data.c | Ported |  | `tools/engine_data_reference.py` |
 | `datum_new_at_index` | memory/data.c | Ported |  | `tools/engine_data_reference.py` |
-| `datum_new` | memory/data.c | Ported | ffi/src/particles/slots.rs:3 | `tools/engine_data_reference.py` |
+| `datum_new` | memory/data.c | Ported |  | `tools/engine_data_reference.py` |
 | `datum_delete` | memory/data.c | Ported |  | `tools/engine_data_reference.py` |
 | `data_delete_all` | memory/data.c | Ported |  | `tools/engine_data_reference.py` |
 | `data_iterator_new` | memory/data.c | Ported |  | `tools/engine_data_reference.py` |
 | `data_iterator_next` | memory/data.c | Ported | runtime/src/views.rs:74 | `tools/engine_data_reference.py` |
-| `data_next_index` | memory/data.c | Ported | ffi/src/particles/slots.rs:4 | `tools/engine_data_reference.py` |
+| `data_next_index` | memory/data.c | Ported |  | `tools/engine_data_reference.py` |
 | `data_prev_index` | memory/data.c | Compiled |  | compiled into game.wasm |
 | `data_compact` | memory/data.c | Compiled |  | compiled into game.wasm |
 | `data_make_valid` | memory/data.c | Ported |  | `tools/engine_data_reference.py` |
@@ -5017,42 +5017,42 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `build_damage_animation_index` | models/model_animations.c | Compiled | content/src/object.rs:522 | compiled into game.wasm |
 | `animation_get_x_offsets` | models/model_animations.c | Compiled |  | compiled into game.wasm |
 | `animation_set_frame_size` | models/model_animations.c | Compiled |  | compiled into game.wasm |
-| `quaternion_decompress_8byte` | models/model_animations.c | Ported | sim/src/animation.rs:260 | `tools/engine_animation_reference.py` |
-| `quaternion_decompress_6byte` | models/model_animations.c | Ported | sim/src/animation.rs:272 | `tools/engine_animation_reference.py` |
+| `quaternion_decompress_8byte` | models/model_animations.c | Ported |  | `tools/engine_animation_reference.py` |
+| `quaternion_decompress_6byte` | models/model_animations.c | Ported |  | `tools/engine_animation_reference.py` |
 | `quaternion_decompress_6byte_renormalized` | models/model_animations.c | Compiled |  | compiled into game.wasm |
 | `quaternion_compress_8byte` | models/model_animations.c | Compiled |  | compiled into game.wasm |
 | `quaternion_compress_6byte` | models/model_animations.c | Compiled |  | compiled into game.wasm |
-| `animation_graph_node_matrices_from_orientations` | models/model_animations.c | Ported | sim/src/animation.rs:1146 | `tools/engine_animation_reference.py` |
-| `interpolate_node_orientations` | models/model_animations.c | Ported | sim/src/animation.rs:1122 | `tools/engine_animation_reference.py` |
+| `animation_graph_node_matrices_from_orientations` | models/model_animations.c | Ported |  | `tools/engine_animation_reference.py` |
+| `interpolate_node_orientations` | models/model_animations.c | Ported |  | `tools/engine_animation_reference.py` |
 | `animation_graph_get_animation_by_name` | models/model_animations.c | Compiled |  | compiled into game.wasm |
-| `animation_keyframe_search` | models/model_animations.c | Ported | sim/src/animation.rs:522 | `tools/engine_animation_reference.py` |
+| `animation_keyframe_search` | models/model_animations.c | Ported |  | `tools/engine_animation_reference.py` |
 | `animation_frame_get_xy_translation` | models/model_animations.c | Compiled |  | compiled into game.wasm |
-| `animation_choose_random_permutation_internal` | models/model_animations.c | Ported | sim/src/animation.rs:1227 | `tools/engine_animation_permutation_reference.py` |
+| `animation_choose_random_permutation_internal` | models/model_animations.c | Ported |  | `tools/engine_animation_permutation_reference.py` |
 | `inverse_kinematics_adjust_matrices` | models/model_animations.c | Compiled |  | compiled into game.wasm |
-| `animation_get_keyframe_rotation` | models/model_animations.c | Ported | sim/src/animation.rs:448 | `tools/engine_animation_reference.py` |
+| `animation_get_keyframe_rotation` | models/model_animations.c | Ported |  | `tools/engine_animation_reference.py` |
 | `animation_get_keyframe_translation` | models/model_animations.c | Ported |  | `tools/engine_animation_reference.py` |
 | `animation_get_keyframe_scale` | models/model_animations.c | Ported |  | `tools/engine_animation_reference.py` |
-| `animation_update_internal` | models/model_animations.c | Compiled | sim/src/animation.rs:1252 | compiled into game.wasm |
-| `animation_get_node_orientations` | models/model_animations.c | Ported | sim/src/animation.rs:694 | `tools/engine_animation_reference.py` |
-| `replacement_animation_apply` | models/model_animations.c | Ported | sim/src/animation.rs:726 | `tools/engine_animation_reference.py` |
-| `overlay_animation_apply` | models/model_animations.c | Ported | sim/src/animation.rs:739 | `tools/engine_animation_reference.py` |
-| `overlay_animation_apply_scaled` | models/model_animations.c | Ported | sim/src/animation.rs:844 | `tools/engine_animation_reference.py` |
-| `overlay_animation_apply_continuous` | models/model_animations.c | Ported | sim/src/animation.rs:880 | `tools/engine_animation_reference.py` |
-| `overlay_animation_apply_continuous_scaled` | models/model_animations.c | Compiled | sim/src/animation.rs:893 | compiled into game.wasm |
-| `aiming_screen_apply` | models/model_animations.c | Ported | sim/src/animation.rs:762 | `tools/engine_animation_reference.py` |
+| `animation_update_internal` | models/model_animations.c | Compiled |  | compiled into game.wasm |
+| `animation_get_node_orientations` | models/model_animations.c | Ported |  | `tools/engine_animation_reference.py` |
+| `replacement_animation_apply` | models/model_animations.c | Ported |  | `tools/engine_animation_reference.py` |
+| `overlay_animation_apply` | models/model_animations.c | Ported |  | `tools/engine_animation_reference.py` |
+| `overlay_animation_apply_scaled` | models/model_animations.c | Ported |  | `tools/engine_animation_reference.py` |
+| `overlay_animation_apply_continuous` | models/model_animations.c | Ported |  | `tools/engine_animation_reference.py` |
+| `overlay_animation_apply_continuous_scaled` | models/model_animations.c | Compiled |  | compiled into game.wasm |
+| `aiming_screen_apply` | models/model_animations.c | Ported |  | `tools/engine_animation_reference.py` |
 | `animation_get_root_matrix` | models/model_animations.c | Compiled |  | compiled into game.wasm |
 | `animation_get_root_velocity` | models/model_animations.c | Compiled |  | compiled into game.wasm |
 | `render_model_parts` | models/models.c | Compiled |  | compiled into game.wasm |
 | `model_interpolate_node_orientations` | models/models.c | Compiled |  | compiled into game.wasm |
-| `model_get_node_orientations` | models/models.c | Ported | sim/src/animation.rs:683 | `tools/engine_animation_reference.py` |
+| `model_get_node_orientations` | models/models.c | Ported |  | `tools/engine_animation_reference.py` |
 | `model_get_node_matrices` | models/models.c | Compiled |  | compiled into game.wasm |
-| `model_node_matrices_from_orientations` | models/models.c | Ported | sim/src/seats/model_reference.rs:2 | `tools/engine_model_reference.py` |
-| `model_find_marker` | models/models.c | Ported | sim/src/seats/model_reference.rs:3 | `tools/engine_model_reference.py` |
+| `model_node_matrices_from_orientations` | models/models.c | Ported |  | `tools/engine_model_reference.py` |
+| `model_find_marker` | models/models.c | Ported |  | `tools/engine_model_reference.py` |
 | `model_get_default_inverse_matrix` | models/models.c | Compiled |  | compiled into game.wasm |
 | `model_find_node` | models/models.c | Compiled |  | compiled into game.wasm |
 | `model_geometry_part_build_tangent_matrices` | models/models.c | Compiled |  | compiled into game.wasm |
-| `render_model` | models/models.c | Compiled | ffi/src/render_model.rs:67 | compiled into game.wasm |
-| `model_get_marker_by_name` | models/models.c | Ported | sim/src/seats/model_reference.rs:3 | `tools/engine_model_reference.py` |
+| `render_model` | models/models.c | Compiled |  | compiled into game.wasm |
+| `model_get_marker_by_name` | models/models.c | Ported |  | `tools/engine_model_reference.py` |
 | `model_build_tangent_matrices` | models/models.c | Compiled |  | compiled into game.wasm |
 | `model_geometry_fix_transparent_part_links` | models/models.c | Compiled |  | compiled into game.wasm |
 
@@ -5440,10 +5440,10 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `damage_initialize_for_new_map` | objects/damage.c | Compiled |  | compiled into game.wasm |
 | `damage_dispose_from_old_map` | objects/damage.c | Compiled |  | compiled into game.wasm |
 | `damage_render_debug` | objects/damage.c | Compiled |  | compiled into game.wasm |
-| `object_initialize_vitality` | objects/damage.c | Ported | sim/src/damage.rs:113 | `tools/engine_unit_vitality_reference.py` |
+| `object_initialize_vitality` | objects/damage.c | Ported |  | `tools/engine_unit_vitality_reference.py` |
 | `object_get_maximum_body_vitality` | objects/damage.c | Compiled |  | compiled into game.wasm |
 | `object_get_maximum_shield_vitality` | objects/damage.c | Compiled |  | compiled into game.wasm |
-| `damage_data_new` | objects/damage.c | Ported | sim/src/unit_flaming.rs:74 | `tools/engine_unit_flaming_reference.py` |
+| `damage_data_new` | objects/damage.c | Ported |  | `tools/engine_unit_flaming_reference.py` |
 | `object_restore_body` | objects/damage.c | Compiled |  | compiled into game.wasm |
 | `object_double_charge_shield` | objects/damage.c | Compiled |  | compiled into game.wasm |
 | `object_destroy_notify_children` | objects/damage.c | Compiled |  | compiled into game.wasm |
@@ -5456,18 +5456,18 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `object_permutation_shield_regions` | objects/damage.c | Compiled |  | compiled into game.wasm |
 | `object_get_actual_body_vitality` | objects/damage.c | Compiled |  | compiled into game.wasm |
 | `object_get_actual_shield_vitality` | objects/damage.c | Compiled |  | compiled into game.wasm |
-| `object_deplete_shield` | objects/damage.c | Ported | sim/src/damage.rs:94 | `tools/engine_unit_vitality_reference.py` |
-| `object_damage_shield` | objects/damage.c | Ported | sim/src/damage.rs:259 | `tools/engine_cause_damage_reference.py` |
-| `object_damage_aftermath` | objects/damage.c | Compiled | sim/src/forces.rs:2 | compiled into game.wasm |
+| `object_deplete_shield` | objects/damage.c | Ported |  | `tools/engine_unit_vitality_reference.py` |
+| `object_damage_shield` | objects/damage.c | Ported |  | `tools/engine_cause_damage_reference.py` |
+| `object_damage_aftermath` | objects/damage.c | Compiled |  | compiled into game.wasm |
 | `damage_effect_new_at_location` | objects/damage.c | Compiled |  | compiled into game.wasm |
 | `render_debug_object_damage` | objects/damage.c | Compiled |  | compiled into game.wasm |
-| `object_deplete_body` | objects/damage.c | Ported | sim/src/damage.rs:101 | `tools/engine_unit_vitality_reference.py` |
+| `object_deplete_body` | objects/damage.c | Ported |  | `tools/engine_unit_vitality_reference.py` |
 | `object_destroy` | objects/damage.c | Compiled |  | compiled into game.wasm |
 | `object_destroy_region` | objects/damage.c | Compiled |  | compiled into game.wasm |
-| `object_damage_body` | objects/damage.c | Ported | sim/src/damage.rs:259 | `tools/engine_cause_damage_reference.py` |
-| `object_cause_damage` | objects/damage.c | Ported | sim/src/damage.rs:258 | `tools/engine_cause_damage_reference.py` |
+| `object_damage_body` | objects/damage.c | Ported |  | `tools/engine_cause_damage_reference.py` |
+| `object_cause_damage` | objects/damage.c | Ported |  | `tools/engine_cause_damage_reference.py` |
 | `object_damage_update` | objects/damage.c | Compiled |  | compiled into game.wasm |
-| `area_of_effect_cause_damage_to_object` | objects/damage.c | Compiled | sim/src/damage.rs:5 | compiled into game.wasm |
+| `area_of_effect_cause_damage_to_object` | objects/damage.c | Compiled |  | compiled into game.wasm |
 | `area_of_effect_cause_damage` | objects/damage.c | Compiled |  | compiled into game.wasm |
 | `object_deleted_procs_call` | objects/object_deleted_procs.c | Compiled |  | compiled into game.wasm |
 | `texture_cache_bitmap_load` | objects/object_lights.c | Compiled |  | compiled into game.wasm |
@@ -5541,9 +5541,9 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `object_definition_index_to_object_type` | objects/object_types.c | Compiled |  | compiled into game.wasm |
 | `scenario_get_object_type_scenario_datums` | objects/object_types.c | Compiled |  | compiled into game.wasm |
 | `scenario_get_object_type_scenario_palette` | objects/object_types.c | Compiled |  | compiled into game.wasm |
-| `object_types_disconnect_from_structure_bsp` | objects/object_types.c | Compiled | sim/src/objects.rs:469 | compiled into game.wasm |
-| `object_types_place_objects` | objects/object_types.c | Compiled | sim/src/objects.rs:314 | compiled into game.wasm |
-| `object_types_place_all` | objects/object_types.c | Compiled | sim/src/objects.rs:381 | compiled into game.wasm |
+| `object_types_disconnect_from_structure_bsp` | objects/object_types.c | Compiled |  | compiled into game.wasm |
+| `object_types_place_objects` | objects/object_types.c | Compiled |  | compiled into game.wasm |
+| `object_types_place_all` | objects/object_types.c | Compiled |  | compiled into game.wasm |
 | `object_names_postprocess` | objects/object_types.c | Ported | content/src/campaign.rs:16 | `tools/engine_object_names_reference.py` |
 | `object_types_reconnect_to_structure_bsp` | objects/object_types.c | Compiled |  | compiled into game.wasm |
 | `object_type_synchronize` | objects/object_types.c | Compiled |  | compiled into game.wasm |
@@ -5552,7 +5552,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `scenery_dispose_from_old_map` | objects/scenery.c | Compiled |  | compiled into game.wasm |
 | `scenery_dispose` | objects/scenery.c | Compiled |  | compiled into game.wasm |
 | `scenery_place` | objects/scenery.c | Compiled |  | compiled into game.wasm |
-| `scenery_new` | objects/scenery.c | Compiled | sim/src/animation.rs:1368 | compiled into game.wasm |
+| `scenery_new` | objects/scenery.c | Compiled |  | compiled into game.wasm |
 | `scenery_delete` | objects/scenery.c | Compiled |  | compiled into game.wasm |
 | `scenery_update` | objects/scenery.c | Compiled |  | compiled into game.wasm |
 | `scenery_animation_start_private` | objects/scenery.c | Compiled |  | compiled into game.wasm |
@@ -5619,10 +5619,10 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `object_set_visibility` | objects/objects.c | Compiled |  | compiled into game.wasm |
 | `object_get_velocities` | objects/objects.c | Compiled |  | compiled into game.wasm |
 | `object_get_location` | objects/objects.c | Compiled |  | compiled into game.wasm |
-| `object_start_interpolation` | objects/objects.c | Compiled | campaign/src/units.rs:57 | compiled into game.wasm |
+| `object_start_interpolation` | objects/objects.c | Compiled |  | compiled into game.wasm |
 | `object_offset_interpolation` | objects/objects.c | Compiled |  | compiled into game.wasm |
 | `object_permute_region` | objects/objects.c | Compiled |  | compiled into game.wasm |
-| `object_get_function_value` | objects/objects.c | Compiled | ffi/src/particles/contrails.rs:56 | compiled into game.wasm |
+| `object_get_function_value` | objects/objects.c | Compiled |  | compiled into game.wasm |
 | `objects_in_clusters_by_indices` | objects/objects.c | Compiled |  | compiled into game.wasm |
 | `object_index_from_name_index` | objects/objects.c | Compiled |  | compiled into game.wasm |
 | `objects_disconnect_from_structure_bsp` | objects/objects.c | Compiled |  | compiled into game.wasm |
@@ -5630,7 +5630,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `object_pvs_activate` | objects/objects.c | Compiled |  | compiled into game.wasm |
 | `objects_scripting_set_scale` | objects/objects.c | Compiled |  | compiled into game.wasm |
 | `object_delete_initial_recursive` | objects/objects.c | Compiled |  | compiled into game.wasm |
-| `object_delete` | objects/objects.c | Compiled | campaign/src/lib.rs:265 | compiled into game.wasm |
+| `object_delete` | objects/objects.c | Compiled |  | compiled into game.wasm |
 | `object_reconnect_to_map` | objects/objects.c | Compiled |  | compiled into game.wasm |
 | `object_get_node_matrix` | objects/objects.c | Compiled |  | compiled into game.wasm |
 | `object_get_marker_by_name` | objects/objects.c | Compiled |  | compiled into game.wasm |
@@ -5643,21 +5643,21 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `objects_in_sphere` | objects/objects.c | Compiled |  | compiled into game.wasm |
 | `objects_reconnect_to_structure_bsp` | objects/objects.c | Compiled |  | compiled into game.wasm |
 | `objects_paparazzi` | objects/objects.c | Compiled |  | compiled into game.wasm |
-| `object_export_function_values` | objects/objects.c | Compiled | sim/src/functions.rs:228 | compiled into game.wasm |
-| `object_compute_node_matrices` | objects/objects.c | Compiled | sim/src/player.rs:811 | compiled into game.wasm |
+| `object_export_function_values` | objects/objects.c | Compiled |  | compiled into game.wasm |
+| `object_compute_node_matrices` | objects/objects.c | Compiled |  | compiled into game.wasm |
 | `object_postprocess_node_matrices` | objects/objects.c | Compiled |  | compiled into game.wasm |
-| `object_choose_random_change_colors` | objects/objects.c | Compiled | ffi/src/lib.rs:512 | compiled into game.wasm |
+| `object_choose_random_change_colors` | objects/objects.c | Compiled |  | compiled into game.wasm |
 | `objects_scripting_detach` | objects/objects.c | Compiled |  | compiled into game.wasm |
 | `object_render_debug` | objects/objects.c | Compiled |  | compiled into game.wasm |
 | `attachments_new` | objects/objects.c | Compiled |  | compiled into game.wasm |
 | `object_set_position` | objects/objects.c | Compiled |  | compiled into game.wasm |
 | `object_translate` | objects/objects.c | Compiled |  | compiled into game.wasm |
-| `object_new` | objects/objects.c | Compiled | ffi/src/effects.rs:117 | compiled into game.wasm |
+| `object_new` | objects/objects.c | Compiled |  | compiled into game.wasm |
 | `object_attach_to_node` | objects/objects.c | Compiled |  | compiled into game.wasm |
 | `object_force_inside_bsp` | objects/objects.c | Compiled |  | compiled into game.wasm |
 | `object_update` | objects/objects.c | Compiled |  | compiled into game.wasm |
 | `object_compute_node_matrices_recursive` | objects/objects.c | Compiled |  | compiled into game.wasm |
-| `object_new_from_scenario` | objects/objects.c | Compiled | sim/src/objects.rs:362 | compiled into game.wasm |
+| `object_new_from_scenario` | objects/objects.c | Compiled |  | compiled into game.wasm |
 | `object_attach_to_marker` | objects/objects.c | Compiled |  | compiled into game.wasm |
 | `object_new_by_name` | objects/objects.c | Compiled | import/src/level.rs:1097 | compiled into game.wasm |
 | `objects_scripting_attach` | objects/objects.c | Compiled |  | compiled into game.wasm |
@@ -5688,7 +5688,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `object_create_attachments` | objects/objects.c | Compiled |  | compiled into game.wasm |
 | `object_delete_attachments` | objects/objects.c | Compiled |  | compiled into game.wasm |
 | `object_delete_recursive` | objects/objects.c | Compiled |  | compiled into game.wasm |
-| `object_compute_function_values` | objects/objects.c | Compiled | sim/src/functions.rs:1 | compiled into game.wasm |
+| `object_compute_function_values` | objects/objects.c | Compiled |  | compiled into game.wasm |
 | `object_compute_change_colors` | objects/objects.c | Compiled |  | compiled into game.wasm |
 | `placeholder_initialize` | objects/placeholder_definitions.c | Compiled |  | compiled into game.wasm |
 | `placeholder_initialize_for_new_map` | objects/placeholder_definitions.c | Compiled |  | compiled into game.wasm |
@@ -5775,30 +5775,30 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `collision_move_point` | physics/collisions.c | Compiled |  | compiled into game.wasm |
 | `collision_move_pill` | physics/collisions.c | Compiled |  | compiled into game.wasm |
 | `collision_move_sphere` | physics/collisions.c | Compiled |  | compiled into game.wasm |
-| `pin_fraction` | physics/physics.c | Ported | sim/src/vehicle.rs:713 | `tools/engine_physics_math_reference.py` |
+| `pin_fraction` | physics/physics.c | Ported |  | `tools/engine_physics_math_reference.py` |
 | `physics_get_features_in_sphere` | physics/physics.c | Compiled |  | compiled into game.wasm |
-| `get_material_type` | physics/physics.c | Compiled | physics/src/ground.rs:3 | compiled into game.wasm |
+| `get_material_type` | physics/physics.c | Compiled |  | compiled into game.wasm |
 | `render_debug_physics` | physics/physics.c | Compiled |  | compiled into game.wasm |
 | `physics_instance_new` | physics/physics.c | Compiled |  | compiled into game.wasm |
 | `physics_test_point` | physics/physics.c | Compiled |  | compiled into game.wasm |
 | `physics_test_vector` | physics/physics.c | Compiled |  | compiled into game.wasm |
 | `compute_ground_plane` | physics/physics.c | Compiled |  | compiled into game.wasm |
-| `friction_evaluate` | physics/physics.c | Ported | sim/src/vehicle.rs:1543 | `tools/engine_physics_math_reference.py` |
+| `friction_evaluate` | physics/physics.c | Ported |  | `tools/engine_physics_math_reference.py` |
 | `physics_compute_new` | physics/physics.c | Compiled |  | compiled into game.wasm |
-| `physics_compute_biped_collision` | physics/physics.c | Compiled | sim/src/seats.rs:344 | compiled into game.wasm |
+| `physics_compute_biped_collision` | physics/physics.c | Compiled |  | compiled into game.wasm |
 | `physics_compute_vehicle_collision` | physics/physics.c | Compiled |  | compiled into game.wasm |
 | `physics_compute_unit_collisions` | physics/physics.c | Compiled |  | compiled into game.wasm |
 | `rotate_vectors3d_by_angular_velocity` | physics/physics.c | Compiled |  | compiled into game.wasm |
 | `physics_update_new` | physics/physics.c | Compiled |  | compiled into game.wasm |
 | `physics_update_old` | physics/physics.c | Compiled |  | compiled into game.wasm |
 | `physics_update` | physics/physics.c | Compiled |  | compiled into game.wasm |
-| `physics_variable_position_update` | physics/physics_variables.c | Ported | sim/src/physics_variables.rs:89 | `tools/engine_physics_variable_reference.py` |
-| `physics_variable_speed_update` | physics/physics_variables.c | Ported | sim/src/physics_variables.rs:31 | `tools/engine_physics_variable_reference.py` |
-| `physics_variable_speed_update_seek` | physics/physics_variables.c | Ported | sim/src/physics_variables.rs:62 | `tools/engine_physics_variable_reference.py` |
-| `physics_variable_update` | physics/physics_variables.c | Ported | sim/src/physics_variables.rs:21 | `tools/engine_physics_variable_reference.py` |
-| `physics_variable_position_get_seek_direction` | physics/physics_variables.c | Ported | sim/src/physics_variables.rs:108 | `tools/engine_physics_variable_reference.py` |
-| `physics_variable_position_update_seek` | physics/physics_variables.c | Ported | sim/src/physics_variables.rs:121 | `tools/engine_physics_variable_reference.py` |
-| `physics_variable_update_seek` | physics/physics_variables.c | Ported | sim/src/physics_variables.rs:148 | `tools/engine_physics_variable_reference.py` |
+| `physics_variable_position_update` | physics/physics_variables.c | Ported |  | `tools/engine_physics_variable_reference.py` |
+| `physics_variable_speed_update` | physics/physics_variables.c | Ported |  | `tools/engine_physics_variable_reference.py` |
+| `physics_variable_speed_update_seek` | physics/physics_variables.c | Ported |  | `tools/engine_physics_variable_reference.py` |
+| `physics_variable_update` | physics/physics_variables.c | Ported |  | `tools/engine_physics_variable_reference.py` |
+| `physics_variable_position_get_seek_direction` | physics/physics_variables.c | Ported |  | `tools/engine_physics_variable_reference.py` |
+| `physics_variable_position_update_seek` | physics/physics_variables.c | Ported |  | `tools/engine_physics_variable_reference.py` |
+| `physics_variable_update_seek` | physics/physics_variables.c | Ported |  | `tools/engine_physics_variable_reference.py` |
 | `breakable_surface_plane_distance` | physics/breakable_surfaces.c | Compiled |  | compiled into game.wasm |
 | `breakable_surface_get` | physics/breakable_surfaces.c | Compiled |  | compiled into game.wasm |
 | `breakable_surfaces_initialize` | physics/breakable_surfaces.c | Compiled |  | compiled into game.wasm |
@@ -5846,8 +5846,8 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `collision_cluster_fog_plane` | physics/collisions.c | Compiled |  | compiled into game.wasm |
 | `point_physics_initialize_for_new_map` | physics/point_physics.c | Compiled |  | compiled into game.wasm |
 | `point_physics_dispose_from_old_map` | physics/point_physics.c | Compiled |  | compiled into game.wasm |
-| `point_physics_definition_get_mass` | physics/point_physics.c | Ported | sim/src/point_physics.rs:44 | `tools/engine_physics_math_reference.py` |
-| `point_physics_update` | physics/point_physics.c | Compiled | sim/src/point_physics.rs:1 | compiled into game.wasm |
+| `point_physics_definition_get_mass` | physics/point_physics.c | Ported |  | `tools/engine_physics_math_reference.py` |
+| `point_physics_update` | physics/point_physics.c | Compiled |  | compiled into game.wasm |
 | `point_physics_definition_interpolate` | physics/point_physics.c | Compiled |  | compiled into game.wasm |
 | `render_debug_point_physics` | physics/point_physics.c | Compiled |  | compiled into game.wasm |
 
@@ -6550,7 +6550,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `rasterizer_lens_flare_submit` | rasterizer/rasterizer_lights.c | Compiled |  | compiled into game.wasm |
 | `rasterizer_lens_flare_submit_for_cluster` | rasterizer/rasterizer_lights.c | Compiled | import/src/level.rs:1679 | compiled into game.wasm |
 | `rasterizer_lens_flares_submit_occlusion_tests` | rasterizer/rasterizer_lights.c | Compiled |  | compiled into game.wasm |
-| `rasterizer_lens_flares_draw` | rasterizer/rasterizer_lights.c | Compiled | ffi/src/camera.rs:3 | compiled into game.wasm |
+| `rasterizer_lens_flares_draw` | rasterizer/rasterizer_lights.c | Compiled |  | compiled into game.wasm |
 | `lock_rasterizer_text_data` | rasterizer/rasterizer_text.c | Compiled |  | compiled into game.wasm |
 | `unlock_rasterizer_text_data` | rasterizer/rasterizer_text.c | Compiled |  | compiled into game.wasm |
 | `rasterizer_text_cache_initialize` | rasterizer/rasterizer_text.c | Compiled |  | compiled into game.wasm |
@@ -6657,7 +6657,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `render_camera_new` | render/render_cameras.c | Compiled |  | compiled into game.wasm |
 | `render_camera_hack_frustum_z` | render/render_cameras.c | Compiled |  | compiled into game.wasm |
 | `render_camera_build_frustum_bounds` | render/render_cameras.c | Compiled |  | compiled into game.wasm |
-| `render_frustum_sphere_diameter_in_pixels` | render/render_cameras.c | Ported | ffi/src/render_model/size_reference.rs:3 | `tools/engine_render_size_reference.py` |
+| `render_frustum_sphere_diameter_in_pixels` | render/render_cameras.c | Ported |  | `tools/engine_render_size_reference.py` |
 | `render_frustum_cube_view_fraction` | render/render_cameras.c | Compiled |  | compiled into game.wasm |
 | `render_frustum_get_projection_bounds` | render/render_cameras.c | Compiled |  | compiled into game.wasm |
 | `render_camera_view_to_screen` | render/render_cameras.c | Compiled |  | compiled into game.wasm |
@@ -6674,7 +6674,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `render_camera_debug_frustum` | render/render_cameras.c | Compiled |  | compiled into game.wasm |
 | `render_camera_mirror` | render/render_cameras.c | Compiled |  | compiled into game.wasm |
 | `render_camera_build_frustum` | render/render_cameras.c | Compiled |  | compiled into game.wasm |
-| `contrail_fade` | render/render_contrails.c | Ported | ffi/src/particles/contrails/fade_reference.rs:2 | `tools/engine_render_size_reference.py` |
+| `contrail_fade` | render/render_contrails.c | Ported |  | `tools/engine_render_size_reference.py` |
 | `render_contrail` | render/render_contrails.c | Compiled |  | compiled into game.wasm |
 | `render_contrails` | render/render_contrails.c | Compiled |  | compiled into game.wasm |
 | `render_contrails_ground_mapped` | render/render_contrails.c | Compiled |  | compiled into game.wasm |
@@ -6752,8 +6752,8 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `build_sprite_get_group` | render/render_sprite.c | Compiled |  | compiled into game.wasm |
 | `build_sprites_begin` | render/render_sprite.c | Compiled |  | compiled into game.wasm |
 | `build_sprites_end` | render/render_sprite.c | Compiled |  | compiled into game.wasm |
-| `build_sprite_compute_basis` | render/render_sprite.c | Ported | ffi/src/sprite.rs:1 | `tools/engine_sprite_reference.py` |
-| `build_sprite_compute_vertex_fade` | render/render_sprite.c | Ported | ffi/src/sprite.rs:2 | `tools/engine_sprite_reference.py` |
+| `build_sprite_compute_basis` | render/render_sprite.c | Ported |  | `tools/engine_sprite_reference.py` |
+| `build_sprite_compute_vertex_fade` | render/render_sprite.c | Ported |  | `tools/engine_sprite_reference.py` |
 | `build_sprite` | render/render_sprite.c | Compiled |  | compiled into game.wasm |
 | `build_sprite_rotational` | render/render_sprite.c | Compiled |  | compiled into game.wasm |
 | `triangle_strip_iterator_new` | render/triangle_strips.c | Compiled |  | compiled into game.wasm |
@@ -6771,8 +6771,8 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `game_state_dispose` | saved games/game_state.c | Compiled |  | compiled into game.wasm |
 | `game_state_initialize_for_new_map` | saved games/game_state.c | Compiled |  | compiled into game.wasm |
 | `game_state_dispose_from_old_map` | saved games/game_state.c | Compiled |  | compiled into game.wasm |
-| `game_state_save` | saved games/game_state.c | Compiled | campaign/src/checkpoint.rs:61 | compiled into game.wasm |
-| `game_state_revert` | saved games/game_state.c | Compiled | campaign/src/checkpoint.rs:87 | compiled into game.wasm |
+| `game_state_save` | saved games/game_state.c | Compiled |  | compiled into game.wasm |
+| `game_state_revert` | saved games/game_state.c | Compiled |  | compiled into game.wasm |
 | `game_state_save_to_persistent_storage` | saved games/game_state.c | Compiled |  | compiled into game.wasm |
 | `game_state_test_persistent_storage` | saved games/game_state.c | Compiled |  | compiled into game.wasm |
 | `game_state_save_core` | saved games/game_state.c | Compiled |  | compiled into game.wasm |
@@ -6951,15 +6951,15 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `scenario_get_fog_region_index` | scenario/scenario.c | Ported |  | `tools/engine_wind_weather_reference.py` |
 | `scenario_location_underwater` | scenario/scenario.c | Compiled |  | compiled into game.wasm |
 | `scenario_location_water_depth` | scenario/scenario.c | Compiled | content/src/level.rs:752 | compiled into game.wasm |
-| `scenario_get_sound_environment` | scenario/scenario.c | Ported | ffi/src/sound_world/sound_environment_reference.rs:5 | `tools/engine_sound_environment_reference.py` |
+| `scenario_get_sound_environment` | scenario/scenario.c | Ported |  | `tools/engine_sound_environment_reference.py` |
 | `interpolate_real_rgb_color` | scenario/scenario.c | Compiled |  | compiled into game.wasm |
 | `scenario_get_atmospheric_fog` | scenario/scenario.c | Compiled |  | compiled into game.wasm |
-| `wind_dispose_from_old_map` | scenario/wind.c | Ported | ffi/src/particles/wind/wind_reference.rs:7 | `tools/engine_wind_reference.py` |
-| `wind_variance_get` | scenario/wind.c | Ported | ffi/src/particles/wind/wind_reference.rs:2 | `tools/engine_wind_reference.py` |
-| `wind_update` | scenario/wind.c | Ported | ffi/src/particles/wind/wind_reference.rs:2 | `tools/engine_wind_reference.py` |
-| `scenario_get_current_from_weather_palette` | scenario/wind.c | Ported | ffi/src/particles/wind/wind_reference.rs:3 | `tools/engine_wind_reference.py` |
-| `wind_variance_initialize` | scenario/wind.c | Ported | ffi/src/particles/wind/wind_reference.rs:2 | `tools/engine_wind_reference.py` |
-| `wind_initialize_for_new_map` | scenario/wind.c | Ported | ffi/src/particles/wind/wind_reference.rs:8 | `tools/engine_wind_reference.py` |
+| `wind_dispose_from_old_map` | scenario/wind.c | Ported |  | `tools/engine_wind_reference.py` |
+| `wind_variance_get` | scenario/wind.c | Ported |  | `tools/engine_wind_reference.py` |
+| `wind_update` | scenario/wind.c | Ported |  | `tools/engine_wind_reference.py` |
+| `scenario_get_current_from_weather_palette` | scenario/wind.c | Ported |  | `tools/engine_wind_reference.py` |
+| `wind_variance_initialize` | scenario/wind.c | Ported |  | `tools/engine_wind_reference.py` |
+| `wind_initialize_for_new_map` | scenario/wind.c | Ported |  | `tools/engine_wind_reference.py` |
 | `scenario_get_current` | scenario/wind.c | Ported | import/src/level/wind_weather_reference.rs:2 | `tools/engine_wind_weather_reference.py` |
 | `scenario_get_wind` | scenario/wind.c | Ported | import/src/level/wind_weather_reference.rs:2 | `tools/engine_wind_weather_reference.py` |
 | `scenario_get_water_current` | scenario/wind.c | Compiled |  | compiled into game.wasm |
@@ -7030,8 +7030,8 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `game_looping_sound_new` | sound/game_sound.c | Compiled |  | compiled into game.wasm |
 | `game_looping_sound_delete` | sound/game_sound.c | Compiled |  | compiled into game.wasm |
 | `unattached_impulse_sound_new` | sound/game_sound.c | Compiled |  | compiled into game.wasm |
-| `unspatialized_impulse_sound_new` | sound/game_sound.c | Compiled | sim/src/player.rs:1305 | compiled into game.wasm |
-| `scripted_sound_time` | sound/game_sound.c | Compiled | campaign/src/sounds.rs:181 | compiled into game.wasm |
+| `unspatialized_impulse_sound_new` | sound/game_sound.c | Compiled |  | compiled into game.wasm |
+| `scripted_sound_time` | sound/game_sound.c | Compiled |  | compiled into game.wasm |
 | `scripted_sound_stop` | sound/game_sound.c | Compiled |  | compiled into game.wasm |
 | `scripted_foley_predict` | sound/game_sound.c | Compiled |  | compiled into game.wasm |
 | `scripted_looping_sound_set_scale` | sound/game_sound.c | Compiled |  | compiled into game.wasm |
@@ -7051,7 +7051,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `scripted_sound_new` | sound/game_sound.c | Compiled |  | compiled into game.wasm |
 | `scripted_looping_sound_stop` | sound/game_sound.c | Compiled |  | compiled into game.wasm |
 | `game_sound_update` | sound/game_sound.c | Compiled |  | compiled into game.wasm |
-| `compute_sound_obstruction` | sound/game_sound.c | Ported | ffi/src/sound_world/sound_obstruction_reference.rs:3 | `tools/engine_sound_obstruction_reference.py` |
+| `compute_sound_obstruction` | sound/game_sound.c | Ported |  | `tools/engine_sound_obstruction_reference.py` |
 | `scripted_looping_sound_start` | sound/game_sound.c | Compiled |  | compiled into game.wasm |
 | `compress_ima_adpcm_audio_data` | sound/ima_adpcm.c | Compiled |  | compiled into game.wasm |
 | `decompress_ima_adpcm_audio_data` | sound/ima_adpcm.c | Compiled |  | compiled into game.wasm |
@@ -7522,35 +7522,35 @@ docs/engine.md's "The coverage census" says what each class needs.
 
 | Function | File | Class | Engine | Evidence |
 | --- | --- | --- | --- | --- |
-| `biped_limp_noodle_get_max_relaxation_iterations` | units/biped_limp_noodle.c | Ported | sim/src/unit_life.rs:135 | `tools/engine_unit_life_reference.py` |
+| `biped_limp_noodle_get_max_relaxation_iterations` | units/biped_limp_noodle.c | Ported |  | `tools/engine_unit_life_reference.py` |
 | `biped_limp_noodle_valid_joint_rotation` | units/biped_limp_noodle.c | Compiled |  | compiled into game.wasm |
 | `biped_limp_noodle_move_relax_and_constrain_positions` | units/biped_limp_noodle.c | Compiled |  | compiled into game.wasm |
 | `validate_real_vector3d_axes3` | units/biped_limp_noodle.c | Compiled |  | compiled into game.wasm |
 | `biped_limp_noodle_adjust_orientations` | units/biped_limp_noodle.c | Compiled |  | compiled into game.wasm |
 | `biped_limp_noodle_relax_nodes_onto_environment` | units/biped_limp_noodle.c | Compiled |  | compiled into game.wasm |
-| `animation_left_foot_frame_index` | units/bipeds.c | Ported | sim/src/unit_questions.rs:101 | `tools/engine_unit_questions_reference.py` |
-| `animation_right_foot_frame_index` | units/bipeds.c | Ported | sim/src/unit_questions.rs:101 | `tools/engine_unit_questions_reference.py` |
-| `bipeds_initialize` | units/bipeds.c | Ported | sim/src/unit_life.rs:6 | `tools/engine_unit_life_reference.py` |
+| `animation_left_foot_frame_index` | units/bipeds.c | Ported |  | `tools/engine_unit_questions_reference.py` |
+| `animation_right_foot_frame_index` | units/bipeds.c | Ported |  | `tools/engine_unit_questions_reference.py` |
+| `bipeds_initialize` | units/bipeds.c | Ported |  | `tools/engine_unit_life_reference.py` |
 | `bipeds_initialize_for_new_map` | units/bipeds.c | Ported |  | `tools/engine_unit_life_reference.py` |
 | `bipeds_dispose_from_old_map` | units/bipeds.c | Ported |  | `tools/engine_unit_life_reference.py` |
 | `bipeds_dispose` | units/bipeds.c | Ported |  | `tools/engine_unit_life_reference.py` |
 | `biped_place` | units/bipeds.c | Compiled |  | compiled into game.wasm |
 | `biped_delete` | units/bipeds.c | Ported |  | `tools/engine_unit_life_reference.py` |
 | `biped_reset` | units/bipeds.c | Compiled |  | compiled into game.wasm |
-| `biped_disconnect_from_structure_bsp` | units/bipeds.c | Ported | sim/src/unit_life.rs:97 | `tools/engine_unit_life_reference.py` |
+| `biped_disconnect_from_structure_bsp` | units/bipeds.c | Ported |  | `tools/engine_unit_life_reference.py` |
 | `biped_get_physics_pill` | units/bipeds.c | Compiled |  | compiled into game.wasm |
-| `biped_stop_melee_attack` | units/bipeds.c | Ported | sim/src/unit_life.rs:104 | `tools/engine_unit_life_reference.py` |
-| `biped_start_limp_body_physics` | units/bipeds.c | Compiled | sim/src/unit_states.rs:456 | compiled into game.wasm |
-| `biped_stop_limp_body_physics` | units/bipeds.c | Ported | sim/src/unit_questions.rs:196 | `tools/engine_unit_questions_reference.py` |
+| `biped_stop_melee_attack` | units/bipeds.c | Ported |  | `tools/engine_unit_life_reference.py` |
+| `biped_start_limp_body_physics` | units/bipeds.c | Compiled |  | compiled into game.wasm |
+| `biped_stop_limp_body_physics` | units/bipeds.c | Ported |  | `tools/engine_unit_questions_reference.py` |
 | `biped_bumped_object` | units/bipeds.c | Compiled |  | compiled into game.wasm |
 | `biped_falling_damage` | units/bipeds.c | Ported |  | `tools/engine_biped_fall_reference.py` |
 | `biped_start_landing` | units/bipeds.c | Ported |  | `tools/engine_biped_landing_reference.py` |
-| `biped_flying_through_air` | units/bipeds.c | Ported | sim/src/unit_life.rs:72 | `tools/engine_unit_life_reference.py` |
+| `biped_flying_through_air` | units/bipeds.c | Ported |  | `tools/engine_unit_life_reference.py` |
 | `biped_apply_rotation` | units/bipeds.c | Compiled |  | compiled into game.wasm |
 | `biped_falling_danger` | units/bipeds.c | Compiled |  | compiled into game.wasm |
 | `biped_adjust_placement` | units/bipeds.c | Compiled |  | compiled into game.wasm |
 | `biped_export_function_values` | units/bipeds.c | Compiled |  | compiled into game.wasm |
-| `biped_get_sight_position` | units/bipeds.c | Ported | sim/src/unit_questions.rs:147 | `tools/engine_unit_questions_reference.py` |
+| `biped_get_sight_position` | units/bipeds.c | Ported |  | `tools/engine_unit_questions_reference.py` |
 | `biped_get_autoaim_pill` | units/bipeds.c | Compiled |  | compiled into game.wasm |
 | `biped_fix_position` | units/bipeds.c | Compiled |  | compiled into game.wasm |
 | `biped_render_debug` | units/bipeds.c | Compiled |  | compiled into game.wasm |
@@ -7561,33 +7561,33 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `biped_vehicle_speech` | units/bipeds.c | Compiled |  | compiled into game.wasm |
 | `biped_jump` | units/bipeds.c | Compiled |  | compiled into game.wasm |
 | `biped_update_dead` | units/bipeds.c | Compiled |  | compiled into game.wasm |
-| `biped_make_footstep` | units/bipeds.c | Compiled | ffi/src/sound_events.rs:97 | compiled into game.wasm |
+| `biped_make_footstep` | units/bipeds.c | Compiled |  | compiled into game.wasm |
 | `biped_try_to_make_footsteps` | units/bipeds.c | Compiled |  | compiled into game.wasm |
 | `biped_find_nearby_support_surface` | units/bipeds.c | Compiled |  | compiled into game.wasm |
 | `biped_verify_object_vectors` | units/bipeds.c | Compiled |  | compiled into game.wasm |
 | `biped_update_airborne` | units/bipeds.c | Compiled |  | compiled into game.wasm |
-| `biped_update_landing` | units/bipeds.c | Compiled | sim/src/lib.rs:1763 | compiled into game.wasm |
+| `biped_update_landing` | units/bipeds.c | Compiled |  | compiled into game.wasm |
 | `biped_update_slipping` | units/bipeds.c | Compiled |  | compiled into game.wasm |
 | `biped_update_jumping` | units/bipeds.c | Compiled |  | compiled into game.wasm |
 | `biped_build_flying_axes` | units/bipeds.c | Compiled |  | compiled into game.wasm |
-| `biped_update_physics` | units/bipeds.c | Compiled | sim/src/player.rs:598 | compiled into game.wasm |
+| `biped_update_physics` | units/bipeds.c | Compiled |  | compiled into game.wasm |
 | `biped_snap_facing` | units/bipeds.c | Compiled |  | compiled into game.wasm |
 | `biped_new` | units/bipeds.c | Compiled |  | compiled into game.wasm |
 | `biped_preprocess_node_orientations` | units/bipeds.c | Compiled |  | compiled into game.wasm |
-| `biped_accelerate` | units/bipeds.c | Compiled | sim/src/forces.rs:213 | compiled into game.wasm |
-| `biped_update_turning` | units/bipeds.c | Compiled | sim/src/unit_states.rs:789 | compiled into game.wasm |
+| `biped_accelerate` | units/bipeds.c | Compiled |  | compiled into game.wasm |
+| `biped_update_turning` | units/bipeds.c | Compiled |  | compiled into game.wasm |
 | `biped_update_moving` | units/bipeds.c | Compiled |  | compiled into game.wasm |
 | `biped_check_discard` | units/bipeds.c | Compiled |  | compiled into game.wasm |
-| `biped_update` | units/bipeds.c | Compiled | sim/src/unit_animator.rs:1 | compiled into game.wasm |
-| `dialogue_get_vocalization_name` | units/dialogue_definitions.c | Ported | sim/src/unit_dialogue.rs:239 | `tools/engine_unit_tables_reference.py` |
-| `dialogue_get_vocalization_type_by_name` | units/dialogue_definitions.c | Ported | sim/src/unit_dialogue.rs:246 | `tools/engine_unit_tables_reference.py` |
-| `unit_definition_get_active_hud_index` | units/unit_definitions.c | Ported | sim/src/unit_definition.rs:26 | `tools/engine_unit_tables_reference.py` |
-| `unit_definition_get_seat_active_hud_index` | units/unit_definitions.c | Ported | sim/src/unit_definition.rs:27 | `tools/engine_unit_tables_reference.py` |
+| `biped_update` | units/bipeds.c | Compiled |  | compiled into game.wasm |
+| `dialogue_get_vocalization_name` | units/dialogue_definitions.c | Ported |  | `tools/engine_unit_tables_reference.py` |
+| `dialogue_get_vocalization_type_by_name` | units/dialogue_definitions.c | Ported |  | `tools/engine_unit_tables_reference.py` |
+| `unit_definition_get_active_hud_index` | units/unit_definitions.c | Ported |  | `tools/engine_unit_tables_reference.py` |
+| `unit_definition_get_seat_active_hud_index` | units/unit_definitions.c | Ported |  | `tools/engine_unit_tables_reference.py` |
 | `unit_test_speech` | units/unit_dialogue.c | Compiled |  | compiled into game.wasm |
-| `unit_is_speaking` | units/unit_dialogue.c | Ported | sim/src/unit_life.rs:112 | `tools/engine_unit_life_reference.py` |
+| `unit_is_speaking` | units/unit_dialogue.c | Ported |  | `tools/engine_unit_life_reference.py` |
 | `unit_dialogue_determine_variant` | units/unit_dialogue.c | Compiled |  | compiled into game.wasm |
-| `unit_get_speech_priority_name` | units/unit_dialogue.c | Ported | sim/src/unit_dialogue.rs:251 | `tools/engine_unit_tables_reference.py` |
-| `unit_get_speech_priority_by_name` | units/unit_dialogue.c | Ported | sim/src/unit_dialogue.rs:260 | `tools/engine_unit_tables_reference.py` |
+| `unit_get_speech_priority_name` | units/unit_dialogue.c | Ported |  | `tools/engine_unit_tables_reference.py` |
+| `unit_get_speech_priority_by_name` | units/unit_dialogue.c | Ported |  | `tools/engine_unit_tables_reference.py` |
 | `unit_describe_speech` | units/unit_dialogue.c | Compiled |  | compiled into game.wasm |
 | `unit_lose_speech` | units/unit_dialogue.c | Compiled |  | compiled into game.wasm |
 | `unit_speak` | units/unit_dialogue.c | Compiled |  | compiled into game.wasm |
@@ -7597,210 +7597,210 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `unit_find_dialogue_variant` | units/unit_dialogue.c | Compiled |  | compiled into game.wasm |
 | `unit_dialogue_setup` | units/unit_dialogue.c | Compiled |  | compiled into game.wasm |
 | `unit_dialogue_update` | units/unit_dialogue.c | Compiled |  | compiled into game.wasm |
-| `unit_scripting_set_maximum_vitality` | units/unit_scripting_commands.c | Ported | campaign/src/units.rs:136 | `tools/engine_unit_vitality_reference.py` |
+| `unit_scripting_set_maximum_vitality` | units/unit_scripting_commands.c | Ported |  | `tools/engine_unit_vitality_reference.py` |
 | `units_scripting_set_maximum_vitality` | units/unit_scripting_commands.c | Compiled |  | compiled into game.wasm |
 | `unit_scripting_set_current_vitality` | units/unit_scripting_commands.c | Compiled |  | compiled into game.wasm |
 | `units_scripting_set_current_vitality` | units/unit_scripting_commands.c | Compiled |  | compiled into game.wasm |
-| `unit_scripting_get_health` | units/unit_scripting_commands.c | Ported | sim/src/damage.rs:153 | `tools/engine_unit_vitality_reference.py` |
-| `unit_scripting_get_shield` | units/unit_scripting_commands.c | Ported | sim/src/damage.rs:163 | `tools/engine_unit_vitality_reference.py` |
-| `unit_scripting_get_grenade_count` | units/unit_scripting_commands.c | Ported | campaign/src/units.rs:279 | `tools/engine_unit_commands_reference.py` |
-| `unit_scripting_impervious` | units/unit_scripting_commands.c | Ported | campaign/src/units.rs:240 | `tools/engine_unit_commands_reference.py` |
-| `unit_scripting_start_user_animation_list` | units/unit_scripting_commands.c | Ported | campaign/src/units.rs:318 | `tools/engine_unit_vitality_reference.py` |
-| `unit_scripting_has_weapon` | units/unit_scripting_commands.c | Ported | sim/src/unit_inventory.rs:290 | `tools/engine_unit_control_reference.py` |
-| `unit_scripting_has_weapon_readied` | units/unit_scripting_commands.c | Ported | campaign/src/units.rs:265 | `tools/engine_unit_commands_reference.py` |
+| `unit_scripting_get_health` | units/unit_scripting_commands.c | Ported |  | `tools/engine_unit_vitality_reference.py` |
+| `unit_scripting_get_shield` | units/unit_scripting_commands.c | Ported |  | `tools/engine_unit_vitality_reference.py` |
+| `unit_scripting_get_grenade_count` | units/unit_scripting_commands.c | Ported |  | `tools/engine_unit_commands_reference.py` |
+| `unit_scripting_impervious` | units/unit_scripting_commands.c | Ported |  | `tools/engine_unit_commands_reference.py` |
+| `unit_scripting_start_user_animation_list` | units/unit_scripting_commands.c | Ported |  | `tools/engine_unit_vitality_reference.py` |
+| `unit_scripting_has_weapon` | units/unit_scripting_commands.c | Ported |  | `tools/engine_unit_control_reference.py` |
+| `unit_scripting_has_weapon_readied` | units/unit_scripting_commands.c | Ported |  | `tools/engine_unit_commands_reference.py` |
 | `units_initialize` | units/units.c | Compiled |  | compiled into game.wasm |
 | `units_initialize_for_new_map` | units/units.c | Compiled |  | compiled into game.wasm |
 | `units_dispose_from_old_map` | units/units.c | Ported |  | `tools/engine_unit_life_reference.py` |
 | `units_dispose` | units/units.c | Ported |  | `tools/engine_unit_life_reference.py` |
-| `unit_kill` | units/units.c | Compiled | script/src/lib.rs:508 | compiled into game.wasm |
-| `unit_kill_silent` | units/units.c | Ported | sim/src/unit_life.rs:52 | `tools/engine_unit_life_reference.py` |
-| `unit_kill_no_statistics` | units/units.c | Ported | sim/src/unit_life.rs:47 | `tools/engine_unit_life_reference.py` |
-| `unit_delete` | units/units.c | Ported | sim/src/unit_life.rs:6 | `tools/engine_unit_life_reference.py` |
-| `units_update` | units/units.c | Compiled | sim/src/lib.rs:400 | compiled into game.wasm |
+| `unit_kill` | units/units.c | Compiled |  | compiled into game.wasm |
+| `unit_kill_silent` | units/units.c | Ported |  | `tools/engine_unit_life_reference.py` |
+| `unit_kill_no_statistics` | units/units.c | Ported |  | `tools/engine_unit_life_reference.py` |
+| `unit_delete` | units/units.c | Ported |  | `tools/engine_unit_life_reference.py` |
+| `units_update` | units/units.c | Compiled |  | compiled into game.wasm |
 | `unit_export_function_values` | units/units.c | Compiled |  | compiled into game.wasm |
 | `unit_persistent_control` | units/units.c | Compiled |  | compiled into game.wasm |
-| `unit_get_seat_entrance_point` | units/units.c | Compiled | sim/src/seats.rs:63 | compiled into game.wasm |
+| `unit_get_seat_entrance_point` | units/units.c | Compiled |  | compiled into game.wasm |
 | `unit_get_melee_range_and_ticks` | units/units.c | Compiled |  | compiled into game.wasm |
-| `unit_get_animation_frames_remaining` | units/units.c | Ported | sim/src/unit_questions.rs:95 | `tools/engine_unit_questions_reference.py` |
-| `unit_euler_axis_doplan` | units/units.c | Ported | sim/src/unit_aiming.rs:163 | `tools/engine_unit_aiming_plan_reference.py` |
-| `unit_get_zoom_level` | units/units.c | Ported | sim/src/unit_inventory.rs:217 | `tools/engine_unit_inventory_reference.py` |
-| `unit_animation_state_interruptable` | units/units.c | Ported | sim/src/unit_states.rs:220 | `tools/engine_unit_state_reference.py` |
-| `unit_animation_busy` | units/units.c | Ported | sim/src/unit_states.rs:242 | `tools/engine_unit_control_reference.py` |
-| `unit_animation_overlay_action_loops` | units/units.c | Ported | sim/src/unit_states.rs:292 | `tools/engine_unit_state_reference.py` |
-| `unit_animation_state_loops` | units/units.c | Ported | sim/src/unit_states.rs:266 | `tools/engine_unit_state_reference.py` |
+| `unit_get_animation_frames_remaining` | units/units.c | Ported |  | `tools/engine_unit_questions_reference.py` |
+| `unit_euler_axis_doplan` | units/units.c | Ported |  | `tools/engine_unit_aiming_plan_reference.py` |
+| `unit_get_zoom_level` | units/units.c | Ported |  | `tools/engine_unit_inventory_reference.py` |
+| `unit_animation_state_interruptable` | units/units.c | Ported |  | `tools/engine_unit_state_reference.py` |
+| `unit_animation_busy` | units/units.c | Ported |  | `tools/engine_unit_control_reference.py` |
+| `unit_animation_overlay_action_loops` | units/units.c | Ported |  | `tools/engine_unit_state_reference.py` |
+| `unit_animation_state_loops` | units/units.c | Ported |  | `tools/engine_unit_state_reference.py` |
 | `unit_animation_weapon_ik` | units/units.c | Compiled |  | compiled into game.wasm |
 | `unit_animation_vehicle_ik` | units/units.c | Compiled |  | compiled into game.wasm |
-| `unit_animation_aiming_screen` | units/units.c | Compiled | sim/src/animation_blend.rs:167 | compiled into game.wasm |
-| `unit_animation_state_get_aiming_screen_index` | units/units.c | Ported | sim/src/unit_states.rs:314 | `tools/engine_unit_state_reference.py` |
-| `unit_animation_state_can_be_entered_without_animation` | units/units.c | Ported | sim/src/unit_states.rs:205 | `tools/engine_unit_state_reference.py` |
-| `unit_animation_compute_interpolation_frame_count` | units/units.c | Ported | sim/src/unit_states.rs:300 | `tools/engine_unit_state_reference.py` |
+| `unit_animation_aiming_screen` | units/units.c | Compiled |  | compiled into game.wasm |
+| `unit_animation_state_get_aiming_screen_index` | units/units.c | Ported |  | `tools/engine_unit_state_reference.py` |
+| `unit_animation_state_can_be_entered_without_animation` | units/units.c | Ported |  | `tools/engine_unit_state_reference.py` |
+| `unit_animation_compute_interpolation_frame_count` | units/units.c | Ported |  | `tools/engine_unit_state_reference.py` |
 | `unit_animation_start_action` | units/units.c | Compiled |  | compiled into game.wasm |
 | `unit_animation_start_overlay_action` | units/units.c | Compiled |  | compiled into game.wasm |
 | `unit_can_enter_seat` | units/units.c | Compiled |  | compiled into game.wasm |
 | `unit_impulse` | units/units.c | Compiled |  | compiled into game.wasm |
 | `unit_handle_weapon_state_change` | units/units.c | Compiled |  | compiled into game.wasm |
 | `unit_record_damage` | units/units.c | Compiled |  | compiled into game.wasm |
-| `unit_test_spawning` | units/units.c | Ported | sim/src/unit_hands.rs:243 | `tools/engine_unit_hands_reference.py` |
-| `unit_destroy` | units/units.c | Compiled | sim/src/unit_states.rs:453 | compiled into game.wasm |
-| `unit_get_head_position` | units/units.c | Ported | sim/src/unit_questions.rs:89 | `tools/engine_unit_questions_reference.py` |
-| `unit_get_camera_position` | units/units.c | Compiled | sim/src/seats.rs:71 | compiled into game.wasm |
+| `unit_test_spawning` | units/units.c | Ported |  | `tools/engine_unit_hands_reference.py` |
+| `unit_destroy` | units/units.c | Compiled |  | compiled into game.wasm |
+| `unit_get_head_position` | units/units.c | Ported |  | `tools/engine_unit_questions_reference.py` |
+| `unit_get_camera_position` | units/units.c | Compiled |  | compiled into game.wasm |
 | `unit_estimate_position` | units/units.c | Compiled |  | compiled into game.wasm |
-| `unit_get_center_of_mass` | units/units.c | Ported | sim/src/unit_questions.rs:91 | `tools/engine_unit_questions_reference.py` |
-| `unit_animation_impulse_get_index` | units/units.c | Compiled | sim/src/ai_impulse.rs:3 | compiled into game.wasm |
-| `unit_can_play_animation_impulse` | units/units.c | Compiled | sim/src/ai_impulse.rs:3 | compiled into game.wasm |
-| `unit_test_animation_impulse` | units/units.c | Compiled | sim/src/ai_impulse.rs:131 | compiled into game.wasm |
-| `unit_get_aiming_unit_index` | units/units.c | Ported | sim/src/unit_questions.rs:24 | `tools/engine_unit_questions_reference.py` |
-| `unit_get_aiming_vector` | units/units.c | Ported | sim/src/unit_aiming.rs:277 | `tools/engine_unit_aiming_bounds_reference.py` |
-| `unit_get_looking_vector` | units/units.c | Ported | sim/src/unit_aiming.rs:282 | `tools/engine_unit_aiming_bounds_reference.py` |
-| `unit_get_facing_vector` | units/units.c | Ported | sim/src/unit_aiming.rs:272 | `tools/engine_unit_aiming_bounds_reference.py` |
-| `unit_inventory_next_grenade` | units/units.c | Ported | sim/src/unit_inventory.rs:133 | `tools/engine_unit_inventory_reference.py` |
-| `unit_controllable` | units/units.c | Ported | sim/src/unit_control.rs:57 | `tools/engine_unit_control_reference.py` |
-| `unit_set_controllable` | units/units.c | Ported | sim/src/unit_control.rs:62 | `tools/engine_unit_control_reference.py` |
-| `unit_set_possessed` | units/units.c | Ported | sim/src/unit_control.rs:67 | `tools/engine_unit_control_reference.py` |
-| `unit_is_busy` | units/units.c | Ported | sim/src/unit_states.rs:242 | `tools/engine_unit_control_reference.py` |
+| `unit_get_center_of_mass` | units/units.c | Ported |  | `tools/engine_unit_questions_reference.py` |
+| `unit_animation_impulse_get_index` | units/units.c | Compiled |  | compiled into game.wasm |
+| `unit_can_play_animation_impulse` | units/units.c | Compiled |  | compiled into game.wasm |
+| `unit_test_animation_impulse` | units/units.c | Compiled |  | compiled into game.wasm |
+| `unit_get_aiming_unit_index` | units/units.c | Ported |  | `tools/engine_unit_questions_reference.py` |
+| `unit_get_aiming_vector` | units/units.c | Ported |  | `tools/engine_unit_aiming_bounds_reference.py` |
+| `unit_get_looking_vector` | units/units.c | Ported |  | `tools/engine_unit_aiming_bounds_reference.py` |
+| `unit_get_facing_vector` | units/units.c | Ported |  | `tools/engine_unit_aiming_bounds_reference.py` |
+| `unit_inventory_next_grenade` | units/units.c | Ported |  | `tools/engine_unit_inventory_reference.py` |
+| `unit_controllable` | units/units.c | Ported |  | `tools/engine_unit_control_reference.py` |
+| `unit_set_controllable` | units/units.c | Ported |  | `tools/engine_unit_control_reference.py` |
+| `unit_set_possessed` | units/units.c | Ported |  | `tools/engine_unit_control_reference.py` |
+| `unit_is_busy` | units/units.c | Ported |  | `tools/engine_unit_control_reference.py` |
 | `unit_scripting_set_emotion_animation` | units/units.c | Compiled |  | compiled into game.wasm |
-| `unit_scripting_suspended` | units/units.c | Compiled | sim/src/lib.rs:1205 | compiled into game.wasm |
-| `unit_scripting_can_blink` | units/units.c | Ported | sim/src/unit_control.rs:94 | `tools/engine_unit_seats_reference.py` |
-| `unit_scripting_doesnt_drop_items` | units/units.c | Ported | sim/src/unit_control.rs:123 | `tools/engine_unit_requests_reference.py` |
-| `unit_scripting_vehicle_test_seat_list` | units/units.c | Ported | campaign/src/units.rs:457 | `tools/engine_unit_commands_reference.py` |
-| `unit_scripting_vehicle_test_seat` | units/units.c | Ported | sim/src/unit_definition.rs:50 | `tools/engine_unit_seats_reference.py` |
-| `unit_scripting_unit_riders` | units/units.c | Ported | sim/src/unit_control.rs:149 | `tools/engine_unit_seats_reference.py` |
-| `unit_scripting_unit_driver` | units/units.c | Ported | sim/src/unit_control.rs:139 | `tools/engine_unit_seats_reference.py` |
-| `unit_scripting_unit_gunner` | units/units.c | Ported | sim/src/unit_control.rs:139 | `tools/engine_unit_seats_reference.py` |
+| `unit_scripting_suspended` | units/units.c | Compiled |  | compiled into game.wasm |
+| `unit_scripting_can_blink` | units/units.c | Ported |  | `tools/engine_unit_seats_reference.py` |
+| `unit_scripting_doesnt_drop_items` | units/units.c | Ported |  | `tools/engine_unit_requests_reference.py` |
+| `unit_scripting_vehicle_test_seat_list` | units/units.c | Ported |  | `tools/engine_unit_commands_reference.py` |
+| `unit_scripting_vehicle_test_seat` | units/units.c | Ported |  | `tools/engine_unit_seats_reference.py` |
+| `unit_scripting_unit_riders` | units/units.c | Ported |  | `tools/engine_unit_seats_reference.py` |
+| `unit_scripting_unit_driver` | units/units.c | Ported |  | `tools/engine_unit_seats_reference.py` |
+| `unit_scripting_unit_gunner` | units/units.c | Ported |  | `tools/engine_unit_seats_reference.py` |
 | `unit_shield_sapping_update` | units/units.c | Compiled |  | compiled into game.wasm |
 | `units_debug_get_next_unit` | units/units.c | Compiled |  | compiled into game.wasm |
 | `units_debug_get_closest_unit` | units/units.c | Compiled |  | compiled into game.wasm |
 | `unit_debug_ninja_rope` | units/units.c | Compiled |  | compiled into game.wasm |
 | `unit_set_user_animation` | units/units.c | Compiled |  | compiled into game.wasm |
-| `any_unit_is_dangerous` | units/units.c | Ported | sim/src/unit_questions.rs:41 | `tools/engine_unit_questions_reference.py` |
+| `any_unit_is_dangerous` | units/units.c | Ported |  | `tools/engine_unit_questions_reference.py` |
 | `unit_can_see_point` | units/units.c | Compiled |  | compiled into game.wasm |
-| `unit_driven_by_ai` | units/units.c | Ported | sim/src/unit_control.rs:170 | `tools/engine_unit_control_reference.py` |
-| `unit_gunned_by_ai` | units/units.c | Ported | sim/src/unit_control.rs:170 | `tools/engine_unit_control_reference.py` |
-| `unit_set_desired_flashlight_state` | units/units.c | Ported | sim/src/unit_control.rs:74 | `tools/engine_unit_control_reference.py` |
-| `unit_get_current_flashlight_state` | units/units.c | Ported | sim/src/unit_control.rs:84 | `tools/engine_unit_control_reference.py` |
-| `unit_detach_from_parent` | units/units.c | Compiled | sim/src/vehicle_animation.rs:337 | compiled into game.wasm |
-| `unit_seat_filled` | units/units.c | Ported | sim/src/unit_control.rs:179 | `tools/engine_unit_control_reference.py` |
-| `unit_seat_is_driver` | units/units.c | Ported | sim/src/unit_definition.rs:14 | `tools/engine_unit_tables_reference.py` |
-| `unit_seat_is_gunner` | units/units.c | Ported | sim/src/unit_definition.rs:15 | `tools/engine_unit_tables_reference.py` |
-| `unit_seat_allow_noncombatants` | units/units.c | Ported | sim/src/unit_definition.rs:15 | `tools/engine_unit_tables_reference.py` |
+| `unit_driven_by_ai` | units/units.c | Ported |  | `tools/engine_unit_control_reference.py` |
+| `unit_gunned_by_ai` | units/units.c | Ported |  | `tools/engine_unit_control_reference.py` |
+| `unit_set_desired_flashlight_state` | units/units.c | Ported |  | `tools/engine_unit_control_reference.py` |
+| `unit_get_current_flashlight_state` | units/units.c | Ported |  | `tools/engine_unit_control_reference.py` |
+| `unit_detach_from_parent` | units/units.c | Compiled |  | compiled into game.wasm |
+| `unit_seat_filled` | units/units.c | Ported |  | `tools/engine_unit_control_reference.py` |
+| `unit_seat_is_driver` | units/units.c | Ported |  | `tools/engine_unit_tables_reference.py` |
+| `unit_seat_is_gunner` | units/units.c | Ported |  | `tools/engine_unit_tables_reference.py` |
+| `unit_seat_allow_noncombatants` | units/units.c | Ported |  | `tools/engine_unit_tables_reference.py` |
 | `unit_update_driver_and_gunner` | units/units.c | Compiled |  | compiled into game.wasm |
-| `unit_get_current_equipment` | units/units.c | Ported | sim/src/unit_life.rs:122 | `tools/engine_unit_life_reference.py` |
-| `unit_add_grenade_to_inventory` | units/units.c | Ported | sim/src/unit_items.rs:156 | `tools/engine_unit_items_reference.py` |
-| `unit_add_grenade_type_to_inventory` | units/units.c | Ported | sim/src/unit_inventory.rs:164 | `tools/engine_unit_inventory_reference.py` |
-| `unit_add_equipment_to_inventory` | units/units.c | Ported | sim/src/unit_items.rs:184 | `tools/engine_unit_items_reference.py` |
-| `unit_delete_current_equipment` | units/units.c | Ported | sim/src/unit_life.rs:128 | `tools/engine_unit_questions_reference.py` |
-| `unit_delete_all_weapons` | units/units.c | Ported | sim/src/unit_items.rs:138 | `tools/engine_unit_items_reference.py` |
-| `unit_has_weapon_definition_index` | units/units.c | Ported | sim/src/unit_inventory.rs:182 | `tools/engine_unit_control_reference.py` |
-| `unit_first_free_weapon_index` | units/units.c | Ported | sim/src/unit_inventory.rs:156 | `tools/engine_unit_inventory_reference.py` |
+| `unit_get_current_equipment` | units/units.c | Ported |  | `tools/engine_unit_life_reference.py` |
+| `unit_add_grenade_to_inventory` | units/units.c | Ported |  | `tools/engine_unit_items_reference.py` |
+| `unit_add_grenade_type_to_inventory` | units/units.c | Ported |  | `tools/engine_unit_inventory_reference.py` |
+| `unit_add_equipment_to_inventory` | units/units.c | Ported |  | `tools/engine_unit_items_reference.py` |
+| `unit_delete_current_equipment` | units/units.c | Ported |  | `tools/engine_unit_questions_reference.py` |
+| `unit_delete_all_weapons` | units/units.c | Ported |  | `tools/engine_unit_items_reference.py` |
+| `unit_has_weapon_definition_index` | units/units.c | Ported |  | `tools/engine_unit_control_reference.py` |
+| `unit_first_free_weapon_index` | units/units.c | Ported |  | `tools/engine_unit_inventory_reference.py` |
 | `unit_get_weapon_count` | units/units.c | Ported |  | `tools/engine_pickup_reference.py` |
-| `unit_approve_weapon_pickup` | units/units.c | Ported | sim/src/pickup.rs:69 | `tools/engine_pickup_reference.py` |
-| `unit_get_grenade_count` | units/units.c | Ported | sim/src/unit_inventory.rs:197 | `tools/engine_unit_inventory_reference.py` |
-| `unit_get_current_grenade_type` | units/units.c | Ported | sim/src/unit_inventory.rs:204 | `tools/engine_unit_inventory_reference.py` |
-| `unit_throw_grenade_move_to_hand` | units/units.c | Ported | sim/src/unit_hands.rs:199 | `tools/engine_unit_hands_reference.py` |
-| `unit_throw_grenade_release` | units/units.c | Compiled | sim/src/player.rs:1017 | compiled into game.wasm |
-| `unit_seat_update` | units/units.c | Compiled | sim/src/vehicle_animation.rs:5 | compiled into game.wasm |
-| `base_seat_label_get` | units/units.c | Ported | sim/src/unit_states.rs:367 | `tools/engine_unit_inventory_reference.py` |
-| `seat_label_to_base_seat_index` | units/units.c | Ported | sim/src/unit_states.rs:372 | `tools/engine_unit_inventory_reference.py` |
-| `base_weapon_label_get` | units/units.c | Ported | sim/src/unit_states.rs:364 | `tools/engine_unit_inventory_reference.py` |
+| `unit_approve_weapon_pickup` | units/units.c | Ported |  | `tools/engine_pickup_reference.py` |
+| `unit_get_grenade_count` | units/units.c | Ported |  | `tools/engine_unit_inventory_reference.py` |
+| `unit_get_current_grenade_type` | units/units.c | Ported |  | `tools/engine_unit_inventory_reference.py` |
+| `unit_throw_grenade_move_to_hand` | units/units.c | Ported |  | `tools/engine_unit_hands_reference.py` |
+| `unit_throw_grenade_release` | units/units.c | Compiled |  | compiled into game.wasm |
+| `unit_seat_update` | units/units.c | Compiled |  | compiled into game.wasm |
+| `base_seat_label_get` | units/units.c | Ported |  | `tools/engine_unit_inventory_reference.py` |
+| `seat_label_to_base_seat_index` | units/units.c | Ported |  | `tools/engine_unit_inventory_reference.py` |
+| `base_weapon_label_get` | units/units.c | Ported |  | `tools/engine_unit_inventory_reference.py` |
 | `unit_set_animation` | units/units.c | Compiled |  | compiled into game.wasm |
-| `unit_animation_update` | units/units.c | Compiled | ffi/src/sound_events.rs:71 | compiled into game.wasm |
+| `unit_animation_update` | units/units.c | Compiled |  | compiled into game.wasm |
 | `unit_refresh_illumination` | units/units.c | Compiled |  | compiled into game.wasm |
-| `unit_get_weapon` | units/units.c | Ported | sim/src/unit_inventory.rs:85 | `tools/engine_unit_hands_reference.py` |
-| `unit_drop_item` | units/units.c | Ported | sim/src/unit_hands.rs:166 | `tools/engine_unit_hands_reference.py` |
-| `unit_drop_grenades` | units/units.c | Ported | sim/src/unit_items.rs:238 | `tools/engine_unit_items_reference.py` |
-| `unit_drop_inventory_weapons` | units/units.c | Ported | sim/src/unit_items.rs:218 | `tools/engine_unit_items_reference.py` |
+| `unit_get_weapon` | units/units.c | Ported |  | `tools/engine_unit_hands_reference.py` |
+| `unit_drop_item` | units/units.c | Ported |  | `tools/engine_unit_hands_reference.py` |
+| `unit_drop_grenades` | units/units.c | Ported |  | `tools/engine_unit_items_reference.py` |
+| `unit_drop_inventory_weapons` | units/units.c | Ported |  | `tools/engine_unit_items_reference.py` |
 | `unit_handle_region_destroyed` | units/units.c | Compiled |  | compiled into game.wasm |
-| `unit_melee_sound` | units/units.c | Compiled | sim/src/player.rs:1184 | compiled into game.wasm |
+| `unit_melee_sound` | units/units.c | Compiled |  | compiled into game.wasm |
 | `unit_cause_continuous_melee_damage` | units/units.c | Compiled |  | compiled into game.wasm |
-| `unit_set_enterable_by_player` | units/units.c | Ported | sim/src/unit_control.rs:52 | `tools/engine_unit_requests_reference.py` |
-| `unit_set_emotion` | units/units.c | Ported | sim/src/unit_scripting.rs:14 | `tools/engine_unit_requests_reference.py` |
-| `unit_aim_without_turning` | units/units.c | Ported | sim/src/unit_control.rs:131 | `tools/engine_unit_aiming_bounds_reference.py` |
-| `unit_get_custom_animation_time` | units/units.c | Ported | campaign/src/units.rs:362 | `tools/engine_unit_commands_reference.py` |
-| `unit_is_playing_custom_animation` | units/units.c | Ported | sim/src/unit_aiming.rs:385 | `tools/engine_unit_aiming_bounds_reference.py` |
+| `unit_set_enterable_by_player` | units/units.c | Ported |  | `tools/engine_unit_requests_reference.py` |
+| `unit_set_emotion` | units/units.c | Ported |  | `tools/engine_unit_requests_reference.py` |
+| `unit_aim_without_turning` | units/units.c | Ported |  | `tools/engine_unit_aiming_bounds_reference.py` |
+| `unit_get_custom_animation_time` | units/units.c | Ported |  | `tools/engine_unit_commands_reference.py` |
+| `unit_is_playing_custom_animation` | units/units.c | Ported |  | `tools/engine_unit_aiming_bounds_reference.py` |
 | `unit_start_user_animation` | units/units.c | Compiled |  | compiled into game.wasm |
-| `unit_set_mouth_aperture` | units/units.c | Ported | sim/src/unit_control.rs:163 | `tools/engine_unit_control_reference.py` |
-| `unit_inventory_get_must_be_readied_weapon` | units/units.c | Ported | sim/src/unit_inventory.rs:210 | `tools/engine_unit_inventory_reference.py` |
-| `unit_has_weapon` | units/units.c | Ported | sim/src/unit_inventory.rs:188 | `tools/engine_unit_tables_reference.py` |
-| `unit_has_weapon_with_flag` | units/units.c | Ported | sim/src/unit_inventory.rs:182 | `tools/engine_unit_inventory_reference.py` |
-| `unit_start_running_blindly` | units/units.c | Ported | sim/src/unit_flaming.rs:111 | `tools/engine_unit_flaming_reference.py` |
-| `unit_stop_running_blindly` | units/units.c | Ported | sim/src/unit_control.rs:89 | `tools/engine_unit_control_reference.py` |
-| `unit_flame_to_death` | units/units.c | Ported | sim/src/unit_flaming.rs:163 | `tools/engine_unit_flaming_reference.py` |
-| `unit_flying_through_air` | units/units.c | Ported | sim/src/unit_life.rs:79 | `tools/engine_unit_life_reference.py` |
-| `unit_euler_axis_buildplan` | units/units.c | Ported | sim/src/unit_aiming.rs:58 | `tools/engine_unit_aiming_plan_reference.py` |
-| `unit_euler_axis_couple` | units/units.c | Ported | sim/src/unit_aiming.rs:209 | `tools/engine_unit_aiming_plan_reference.py` |
-| `unit_set_or_test_seat_and_weapon_label` | units/units.c | Compiled | sim/src/animation.rs:1396 | compiled into game.wasm |
+| `unit_set_mouth_aperture` | units/units.c | Ported |  | `tools/engine_unit_control_reference.py` |
+| `unit_inventory_get_must_be_readied_weapon` | units/units.c | Ported |  | `tools/engine_unit_inventory_reference.py` |
+| `unit_has_weapon` | units/units.c | Ported |  | `tools/engine_unit_tables_reference.py` |
+| `unit_has_weapon_with_flag` | units/units.c | Ported |  | `tools/engine_unit_inventory_reference.py` |
+| `unit_start_running_blindly` | units/units.c | Ported |  | `tools/engine_unit_flaming_reference.py` |
+| `unit_stop_running_blindly` | units/units.c | Ported |  | `tools/engine_unit_control_reference.py` |
+| `unit_flame_to_death` | units/units.c | Ported |  | `tools/engine_unit_flaming_reference.py` |
+| `unit_flying_through_air` | units/units.c | Ported |  | `tools/engine_unit_life_reference.py` |
+| `unit_euler_axis_buildplan` | units/units.c | Ported |  | `tools/engine_unit_aiming_plan_reference.py` |
+| `unit_euler_axis_couple` | units/units.c | Ported |  | `tools/engine_unit_aiming_plan_reference.py` |
+| `unit_set_or_test_seat_and_weapon_label` | units/units.c | Compiled |  | compiled into game.wasm |
 | `unit_adjust_projectile_ray` | units/units.c | Compiled |  | compiled into game.wasm |
 | `unit_render_debug` | units/units.c | Compiled |  | compiled into game.wasm |
-| `unit_animation_set_state` | units/units.c | Compiled | sim/src/unit_states.rs:3 | compiled into game.wasm |
-| `unit_abort_animation` | units/units.c | Ported | sim/src/unit_scripting.rs:37 | `tools/engine_unit_requests_reference.py` |
-| `unit_find_nearby_seat` | units/units.c | Compiled | sim/src/seats.rs:4 | compiled into game.wasm |
-| `unit_clip_to_aiming_bounds` | units/units.c | Ported | sim/src/unit_aiming.rs:331 | `tools/engine_unit_aiming_bounds_reference.py` |
-| `unit_inventory_get_weapon` | units/units.c | Ported | sim/src/unit_inventory.rs:85 | `tools/engine_unit_hands_reference.py` |
-| `unit_set_actively_controlled` | units/units.c | Ported | sim/src/unit_control.rs:103 | `tools/engine_unit_seats_reference.py` |
-| `vehicle_scripting_find_available_seats` | units/units.c | Ported | sim/src/unit_definition.rs:103 | `tools/engine_unit_seats_reference.py` |
-| `unit_open` | units/units.c | Ported | sim/src/unit_scripting.rs:45 | `tools/engine_unit_requests_reference.py` |
-| `unit_close` | units/units.c | Ported | sim/src/unit_scripting.rs:46 | `tools/engine_unit_requests_reference.py` |
-| `unit_overcharged` | units/units.c | Ported | sim/src/unit_inventory.rs:233 | `tools/engine_unit_seats_reference.py` |
+| `unit_animation_set_state` | units/units.c | Compiled |  | compiled into game.wasm |
+| `unit_abort_animation` | units/units.c | Ported |  | `tools/engine_unit_requests_reference.py` |
+| `unit_find_nearby_seat` | units/units.c | Compiled |  | compiled into game.wasm |
+| `unit_clip_to_aiming_bounds` | units/units.c | Ported |  | `tools/engine_unit_aiming_bounds_reference.py` |
+| `unit_inventory_get_weapon` | units/units.c | Ported |  | `tools/engine_unit_hands_reference.py` |
+| `unit_set_actively_controlled` | units/units.c | Ported |  | `tools/engine_unit_seats_reference.py` |
+| `vehicle_scripting_find_available_seats` | units/units.c | Ported |  | `tools/engine_unit_seats_reference.py` |
+| `unit_open` | units/units.c | Ported |  | `tools/engine_unit_requests_reference.py` |
+| `unit_close` | units/units.c | Ported |  | `tools/engine_unit_requests_reference.py` |
+| `unit_overcharged` | units/units.c | Ported |  | `tools/engine_unit_seats_reference.py` |
 | `unit_set_seat` | units/units.c | Compiled |  | compiled into game.wasm |
 | `units_set_desired_flashlight_state` | units/units.c | Compiled |  | compiled into game.wasm |
-| `unit_get_seat_label` | units/units.c | Ported | sim/src/unit_definition.rs:39 | `tools/engine_unit_questions_reference.py` |
-| `unit_drop_current_equipment` | units/units.c | Ported | sim/src/unit_items.rs:209 | `tools/engine_unit_items_reference.py` |
-| `unit_can_use_weapon` | units/units.c | Ported | sim/src/unit_items.rs:106 | `tools/engine_unit_hands_reference.py` |
-| `unit_approve_weapon_swap` | units/units.c | Ported | sim/src/pickup.rs:10 | `tools/engine_pickup_reference.py` |
-| `unit_weapon_next_index` | units/units.c | Ported | sim/src/unit_inventory.rs:91 | `tools/engine_unit_hands_reference.py` |
-| `unit_drop_current_weapon` | units/units.c | Ported | sim/src/unit_flaming.rs:49 | `tools/engine_unit_items_reference.py` |
-| `unit_get_current_weapon_label` | units/units.c | Ported | sim/src/unit_inventory.rs:239 | `tools/engine_unit_seats_reference.py` |
-| `scripting_set_magic_base_seat` | units/units.c | Ported | sim/src/unit_scripting.rs:82 | `tools/engine_unit_requests_reference.py` |
-| `unit_scripting_set_seat` | units/units.c | Ported | sim/src/unit_scripting.rs:74 | `tools/engine_unit_requests_reference.py` |
+| `unit_get_seat_label` | units/units.c | Ported |  | `tools/engine_unit_questions_reference.py` |
+| `unit_drop_current_equipment` | units/units.c | Ported |  | `tools/engine_unit_items_reference.py` |
+| `unit_can_use_weapon` | units/units.c | Ported |  | `tools/engine_unit_hands_reference.py` |
+| `unit_approve_weapon_swap` | units/units.c | Ported |  | `tools/engine_pickup_reference.py` |
+| `unit_weapon_next_index` | units/units.c | Ported |  | `tools/engine_unit_hands_reference.py` |
+| `unit_drop_current_weapon` | units/units.c | Ported |  | `tools/engine_unit_items_reference.py` |
+| `unit_get_current_weapon_label` | units/units.c | Ported |  | `tools/engine_unit_seats_reference.py` |
+| `scripting_set_magic_base_seat` | units/units.c | Ported |  | `tools/engine_unit_requests_reference.py` |
+| `unit_scripting_set_seat` | units/units.c | Ported |  | `tools/engine_unit_requests_reference.py` |
 | `unit_handle_deleted_object` | units/units.c | Compiled |  | compiled into game.wasm |
-| `unit_cause_melee_damage` | units/units.c | Compiled | sim/src/unit_states.rs:450 | compiled into game.wasm |
+| `unit_cause_melee_damage` | units/units.c | Compiled |  | compiled into game.wasm |
 | `unit_cause_player_melee_damage` | units/units.c | Compiled |  | compiled into game.wasm |
-| `unit_stop_custom_animation` | units/units.c | Ported | sim/src/unit_scripting.rs:28 | `tools/engine_unit_commands_reference.py` |
-| `unit_custom_animation_at_frame` | units/units.c | Compiled | sim/src/animation.rs:1479 | compiled into game.wasm |
-| `unit_align_facing` | units/units.c | Ported | sim/src/unit_aiming.rs:299 | `tools/engine_unit_aiming_bounds_reference.py` |
-| `unit_start_flaming_to_death` | units/units.c | Ported | sim/src/unit_flaming.rs:140 | `tools/engine_unit_flaming_reference.py` |
-| `unit_running_blind` | units/units.c | Ported | sim/src/unit_flaming.rs:191 | `tools/engine_unit_flaming_reference.py` |
-| `unit_vectors_are_valid` | units/units.c | Ported | sim/src/unit_aiming.rs:288 | `tools/engine_unit_aiming_bounds_reference.py` |
+| `unit_stop_custom_animation` | units/units.c | Ported |  | `tools/engine_unit_commands_reference.py` |
+| `unit_custom_animation_at_frame` | units/units.c | Compiled |  | compiled into game.wasm |
+| `unit_align_facing` | units/units.c | Ported |  | `tools/engine_unit_aiming_bounds_reference.py` |
+| `unit_start_flaming_to_death` | units/units.c | Ported |  | `tools/engine_unit_flaming_reference.py` |
+| `unit_running_blind` | units/units.c | Ported |  | `tools/engine_unit_flaming_reference.py` |
+| `unit_vectors_are_valid` | units/units.c | Ported |  | `tools/engine_unit_aiming_bounds_reference.py` |
 | `unit_verify_vectors` | units/units.c | Compiled |  | compiled into game.wasm |
 | `unit_control` | units/units.c | Compiled |  | compiled into game.wasm |
-| `unit_preprocess_node_orientations` | units/units.c | Compiled | sim/src/animation_blend.rs:5 | compiled into game.wasm |
+| `unit_preprocess_node_orientations` | units/units.c | Compiled |  | compiled into game.wasm |
 | `unit_postprocess_node_matrices` | units/units.c | Compiled |  | compiled into game.wasm |
 | `unit_euler_aiming_update` | units/units.c | Compiled |  | compiled into game.wasm |
 | `unit_has_animation_to_enter_seat` | units/units.c | Compiled |  | compiled into game.wasm |
-| `unit_update_animation` | units/units.c | Compiled | sim/src/unit_animator.rs:1 | compiled into game.wasm |
-| `unit_unzoom` | units/units.c | Ported | sim/src/unit_inventory.rs:253 | `tools/engine_unit_seats_reference.py` |
-| `unit_get_zoom_magnification` | units/units.c | Ported | sim/src/unit_inventory.rs:228 | `tools/engine_unit_seats_reference.py` |
-| `unit_integrated_night_vision_is_active` | units/units.c | Ported | sim/src/unit_inventory.rs:245 | `tools/engine_unit_seats_reference.py` |
+| `unit_update_animation` | units/units.c | Compiled |  | compiled into game.wasm |
+| `unit_unzoom` | units/units.c | Ported |  | `tools/engine_unit_seats_reference.py` |
+| `unit_get_zoom_magnification` | units/units.c | Ported |  | `tools/engine_unit_seats_reference.py` |
+| `unit_integrated_night_vision_is_active` | units/units.c | Ported |  | `tools/engine_unit_seats_reference.py` |
 | `unit_ping_animation` | units/units.c | Compiled |  | compiled into game.wasm |
-| `unit_start_animation_impulse` | units/units.c | Compiled | sim/src/ai_impulse.rs:4 | compiled into game.wasm |
-| `unit_inventory_next_weapon` | units/units.c | Ported | sim/src/unit_inventory.rs:91 | `tools/engine_unit_inventory_reference.py` |
+| `unit_start_animation_impulse` | units/units.c | Compiled |  | compiled into game.wasm |
+| `unit_inventory_next_weapon` | units/units.c | Ported |  | `tools/engine_unit_inventory_reference.py` |
 | `unit_melee_attack_begin` | units/units.c | Compiled |  | compiled into game.wasm |
 | `unit_leap_begin` | units/units.c | Compiled |  | compiled into game.wasm |
-| `unit_unsuspecting` | units/units.c | Ported | sim/src/unit_questions.rs:80 | `tools/engine_unit_questions_reference.py` |
-| `unit_add_weapon_to_inventory` | units/units.c | Ported | sim/src/unit_items.rs:294 | `tools/engine_unit_items_reference.py` |
-| `unit_ready_desired_weapon` | units/units.c | Ported | sim/src/unit_hands.rs:112 | `tools/engine_unit_hands_reference.py` |
+| `unit_unsuspecting` | units/units.c | Ported |  | `tools/engine_unit_questions_reference.py` |
+| `unit_add_weapon_to_inventory` | units/units.c | Ported |  | `tools/engine_unit_items_reference.py` |
+| `unit_ready_desired_weapon` | units/units.c | Ported |  | `tools/engine_unit_hands_reference.py` |
 | `unit_throw_grenade_begin` | units/units.c | Compiled |  | compiled into game.wasm |
 | `scripting_magic_melee_attack` | units/units.c | Compiled |  | compiled into game.wasm |
 | `unit_impact_melee_damage` | units/units.c | Compiled |  | compiled into game.wasm |
 | `unit_place` | units/units.c | Compiled |  | compiled into game.wasm |
-| `unit_solo_player_integrated_night_vision_is_active` | units/units.c | Ported | sim/src/unit_inventory.rs:272 | `tools/engine_unit_seats_reference.py` |
-| `unit_add_initial_weapons` | units/units.c | Ported | sim/src/unit_items.rs:349 | `tools/engine_unit_items_reference.py` |
-| `unit_adjust_for_seat_change` | units/units.c | Ported | sim/src/unit_hands.rs:155 | `tools/engine_unit_hands_reference.py` |
-| `unit_new` | units/units.c | Compiled | sim/src/objects.rs:247 | compiled into game.wasm |
-| `unit_enter_seat` | units/units.c | Compiled | sim/src/unit_states.rs:591 | compiled into game.wasm |
-| `unit_exit_seat_end` | units/units.c | Compiled | sim/src/lib.rs:582 | compiled into game.wasm |
+| `unit_solo_player_integrated_night_vision_is_active` | units/units.c | Ported |  | `tools/engine_unit_seats_reference.py` |
+| `unit_add_initial_weapons` | units/units.c | Ported |  | `tools/engine_unit_items_reference.py` |
+| `unit_adjust_for_seat_change` | units/units.c | Ported |  | `tools/engine_unit_hands_reference.py` |
+| `unit_new` | units/units.c | Compiled |  | compiled into game.wasm |
+| `unit_enter_seat` | units/units.c | Compiled |  | compiled into game.wasm |
+| `unit_exit_seat_end` | units/units.c | Compiled |  | compiled into game.wasm |
 | `unit_died` | units/units.c | Compiled |  | compiled into game.wasm |
 | `unit_scripting_enter_vehicle` | units/units.c | Compiled |  | compiled into game.wasm |
 | `vehicle_scripting_load_magic` | units/units.c | Compiled |  | compiled into game.wasm |
-| `unit_try_and_exit_seat` | units/units.c | Compiled | sim/src/unit_states.rs:623 | compiled into game.wasm |
-| `unit_update` | units/units.c | Compiled | sim/src/lib.rs:423 | compiled into game.wasm |
+| `unit_try_and_exit_seat` | units/units.c | Compiled |  | compiled into game.wasm |
+| `unit_update` | units/units.c | Compiled |  | compiled into game.wasm |
 | `unit_damage_aftermath` | units/units.c | Compiled |  | compiled into game.wasm |
 | `vehicle_scripting_unload` | units/units.c | Compiled |  | compiled into game.wasm |
 | `unit_scripting_exit_vehicle` | units/units.c | Compiled |  | compiled into game.wasm |
 | `vehicles_initialize` | units/vehicles.c | Ported |  | `tools/engine_unit_life_reference.py` |
 | `vehicles_initialize_for_new_map` | units/vehicles.c | Ported |  | `tools/engine_unit_life_reference.py` |
 | `vehicles_dispose_from_old_map` | units/vehicles.c | Ported |  | `tools/engine_unit_life_reference.py` |
-| `vehicles_dispose` | units/vehicles.c | Ported | sim/src/unit_life.rs:6 | `tools/engine_unit_life_reference.py` |
+| `vehicles_dispose` | units/vehicles.c | Ported |  | `tools/engine_unit_life_reference.py` |
 | `vehicle_place` | units/vehicles.c | Compiled |  | compiled into game.wasm |
 | `vehicle_delete` | units/vehicles.c | Ported |  | `tools/engine_unit_life_reference.py` |
 | `vehicle_causes_collision_damage` | units/vehicles.c | Compiled |  | compiled into game.wasm |
@@ -7808,36 +7808,36 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `vehicle_parse_update` | units/vehicles.c | Compiled |  | compiled into game.wasm |
 | `vehicle_hover` | units/vehicles.c | Compiled |  | compiled into game.wasm |
 | `compute_airborne_ticks` | units/vehicles.c | Ported |  | `tools/engine_vehicle_physics_reference.py` |
-| `vehicle_is_flipped` | units/vehicles.c | Ported | sim/src/vehicle.rs:69 | `tools/engine_vehicle_physics_reference.py` |
+| `vehicle_is_flipped` | units/vehicles.c | Ported |  | `tools/engine_vehicle_physics_reference.py` |
 | `update_alien_fighter_physics_new` | units/vehicles.c | Ported |  | `tools/engine_vehicle_physics_reference.py` |
 | `set_real_quaternion` | units/vehicles.c | Ported |  | `tools/engine_animation_reference.py` |
 | `vehicle_reset` | units/vehicles.c | Compiled |  | compiled into game.wasm |
-| `vehicle_new` | units/vehicles.c | Compiled | sim/src/objects.rs:345 | compiled into game.wasm |
-| `vehicle_preprocess_node_orientations` | units/vehicles.c | Compiled | sim/src/vehicle_animation.rs:3 | compiled into game.wasm |
-| `vehicle_accelerate` | units/vehicles.c | Compiled | sim/src/forces.rs:212 | compiled into game.wasm |
+| `vehicle_new` | units/vehicles.c | Compiled |  | compiled into game.wasm |
+| `vehicle_preprocess_node_orientations` | units/vehicles.c | Compiled |  | compiled into game.wasm |
+| `vehicle_accelerate` | units/vehicles.c | Compiled |  | compiled into game.wasm |
 | `vehicle_render_debug` | units/vehicles.c | Compiled |  | compiled into game.wasm |
 | `vehicle_find_pathfinding_surface_index` | units/vehicles.c | Compiled |  | compiled into game.wasm |
 | `update_alien_fighter_physics_old` | units/vehicles.c | Ported |  | `tools/engine_vehicle_physics_reference.py` |
 | `slowly_stop_vehicle` | units/vehicles.c | Ported |  | `tools/engine_vehicle_physics_reference.py` |
 | `compute_acceleration` | units/vehicles.c | Ported |  | `tools/engine_vehicle_physics_reference.py` |
-| `create_ghost_effect` | units/vehicles.c | Compiled | sim/src/seats.rs:1281 | compiled into game.wasm |
-| `create_pelican_effect` | units/vehicles.c | Compiled | sim/src/seats.rs:1282 | compiled into game.wasm |
-| `vehicle_dot_product3d_test` | units/vehicles.c | Ported | sim/src/unit_questions.rs:210 | `tools/engine_unit_questions_reference.py` |
+| `create_ghost_effect` | units/vehicles.c | Compiled |  | compiled into game.wasm |
+| `create_pelican_effect` | units/vehicles.c | Compiled |  | compiled into game.wasm |
+| `vehicle_dot_product3d_test` | units/vehicles.c | Ported |  | `tools/engine_unit_questions_reference.py` |
 | `update_human_plane_physics` | units/vehicles.c | Compiled |  | compiled into game.wasm |
-| `update_suspension` | units/vehicles.c | Compiled | sim/src/vehicle_animation.rs:4 | compiled into game.wasm |
+| `update_suspension` | units/vehicles.c | Compiled |  | compiled into game.wasm |
 | `create_crashing_effects` | units/vehicles.c | Compiled |  | compiled into game.wasm |
 | `update_turret_physics` | units/vehicles.c | Compiled |  | compiled into game.wasm |
 | `create_slipping_effects` | units/vehicles.c | Ported |  | `tools/engine_vehicle_slip_reference.py` |
 | `update_human_tank_physics` | units/vehicles.c | Ported |  | `tools/engine_vehicle_physics_reference.py` |
-| `vehicle_export_function_values` | units/vehicles.c | Ported | sim/src/functions.rs:222 | `tools/engine_vehicle_function_reference.py` |
-| `vehicle_moving_near_any_player` | units/vehicles.c | Ported | sim/src/unit_questions.rs:216 | `tools/engine_unit_questions_reference.py` |
+| `vehicle_export_function_values` | units/vehicles.c | Ported |  | `tools/engine_vehicle_function_reference.py` |
+| `vehicle_moving_near_any_player` | units/vehicles.c | Ported |  | `tools/engine_unit_questions_reference.py` |
 | `vehicle_stuck` | units/vehicles.c | Compiled |  | compiled into game.wasm |
 | `vehicle_cross_product3d_target` | units/vehicles.c | Ported |  | `tools/engine_vehicle_physics_reference.py` |
 | `vehicle_dot_product3d_target` | units/vehicles.c | Ported |  | `tools/engine_vehicle_physics_reference.py` |
 | `vehicle_triple_product3d_target` | units/vehicles.c | Ported |  | `tools/engine_vehicle_physics_reference.py` |
 | `vehicle_update` | units/vehicles.c | Compiled |  | compiled into game.wasm |
 | `unit_animation_enhanced` | units/units.c | Compiled |  | compiled into game.wasm |
-| `unarmed_melee_weapon_definition_index` | units/units.c | Ported | sim/src/unit_inventory.rs:283 | `tools/engine_unit_seats_reference.py` |
+| `unarmed_melee_weapon_definition_index` | units/units.c | Ported |  | `tools/engine_unit_seats_reference.py` |
 | `unit_grenade_throw_ease` | units/units.c | Compiled |  | compiled into game.wasm |
 | `unit_weapon_class_base_animation` | units/units.c | Compiled |  | compiled into game.wasm |
 | `unit_animation_pose_at_phase` | units/units.c | Compiled |  | compiled into game.wasm |

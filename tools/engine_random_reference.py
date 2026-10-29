@@ -12,8 +12,8 @@ seeds (`get_global_random_seed_address`, `get_global_local_random_seed_address`,
 built by source/math/geometry.c's `geosphere_new`, as
 tools/engine_math_reference.py builds it, and compiled for this machine
 against a small fake world. The trace is written to
-engine/crates/sim/tests/random_reference.txt, which
-engine/crates/sim/tests/random_reference.rs reads.
+tools/traces/random_reference.txt, which
+tools/engine_wasm_traces.py checks game.wasm against.
 """
 
 import argparse
@@ -28,7 +28,7 @@ sys.path.insert(0, str(ROOT / "tools"))
 import engine_math_reference as math_reference  # noqa: E402
 from harness import enum_with, function, inline, read, structure  # noqa: E402
 
-OUTPUT = ROOT / "engine" / "crates" / "sim" / "tests" / "random_reference.txt"
+OUTPUT = ROOT / "tools" / "traces" / "random_reference.txt"
 
 # random_math.c's seeds and seeded numbers
 RANDOM_FUNCTIONS = [

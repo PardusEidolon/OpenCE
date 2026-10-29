@@ -6,7 +6,7 @@
 
 use opence_content::TriggerVolume;
 
-const REFERENCE: &str = include_str!("scenario_reference.txt");
+const REFERENCE: &str = include_str!("../../../../tools/traces/scenario_reference.txt");
 
 type Failure = Box<dyn std::error::Error>;
 

@@ -166,7 +166,7 @@ pub struct AnimatedColor {
     pub on_color: [f32; 3],
     /// The colour at zero.
     pub off_color: [f32; 3],
-    /// The periodic function (`opence_sim::periodic::function`).
+    /// The periodic function (the original's `periodic_function`).
     pub function: i16,
     /// Its period in seconds.
     pub period: f32,

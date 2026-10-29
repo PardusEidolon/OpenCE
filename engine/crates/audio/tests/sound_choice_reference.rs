@@ -10,7 +10,7 @@ use opence_content::{
     Group, Sound, SoundCompression, SoundModifiers, SoundPermutation, SoundPitchRange, TagRef,
 };
 
-const REFERENCE: &str = include_str!("sound_choice_reference.txt");
+const REFERENCE: &str = include_str!("../../../../tools/traces/sound_choice_reference.txt");
 
 type Failure = Box<dyn std::error::Error>;
 

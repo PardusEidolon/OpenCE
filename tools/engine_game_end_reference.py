@@ -15,8 +15,8 @@ The engine has no lives and no odd man out, and no one quits, so the fake
 `game_engine_player_is_out_of_lives` and `game_engine_player_is_odd_man_out`
 say no and no player has quit: every player counts as in the game.
 
-The trace is written to engine/crates/sim/tests/game_end_reference.txt,
-which engine/crates/sim/tests/game_end_reference.rs reads.
+The trace is written to tools/traces/game_end_reference.txt, which
+tools/engine_wasm_traces.py checks game.wasm against.
 """
 
 import argparse
@@ -30,7 +30,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from harness import function, read  # noqa: E402
 
-OUTPUT = ROOT / "engine" / "crates" / "sim" / "tests" / "game_end_reference.txt"
+OUTPUT = ROOT / "tools" / "traces" / "game_end_reference.txt"
 
 FUNCTIONS = ["players_in_game", "multiple_teams_alive", "game_engine_should_end_game"]
 

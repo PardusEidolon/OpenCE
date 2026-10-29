@@ -15,8 +15,8 @@ compiled for this machine against a small fake world. The game works in the
 camera's space; the fake world takes each case there from the world, as
 render_cameras.c's frustum does, and brings the axes back, so the reference
 is in the world's. The table is written to
-engine/crates/ffi/tests/sprite_reference.txt, which
-engine/crates/ffi/tests/sprite_reference.rs reads.
+tools/traces/sprite_reference.txt, which
+tools/engine_wasm_traces.py checks game.wasm against.
 """
 
 import argparse
@@ -30,7 +30,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from harness import enum_with, function, inline, read  # noqa: E402
 
-OUTPUT = ROOT / "engine" / "crates" / "ffi" / "tests" / "sprite_reference.txt"
+OUTPUT = ROOT / "tools" / "traces" / "sprite_reference.txt"
 
 SPRITE_FUNCTIONS = ["build_sprite_compute_basis", "build_sprite_compute_vertex_fade"]
 

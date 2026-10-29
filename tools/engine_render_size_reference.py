@@ -16,7 +16,7 @@ small fake world: frustums of a range of fields of view and heights, spheres
 before, behind and at the eye, and strips at points facing each way under
 each fade mode with and without the slow fade. A camera on the strip's
 point (its fade divides by zero) is not asked. The table is written to
-engine/crates/ffi/tests/render_size_reference.txt, which
+tools/traces/render_size_reference.txt, which
 ffi/src/render_model.rs's and ffi/src/particles/contrails.rs's reference
 tests read.
 """
@@ -32,7 +32,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from harness import enum_with, function, inline, read  # noqa: E402
 
-OUTPUT = ROOT / "engine" / "crates" / "ffi" / "tests" / "render_size_reference.txt"
+OUTPUT = ROOT / "tools" / "traces" / "render_size_reference.txt"
 
 INLINE_FUNCTIONS = [
     "tangent",

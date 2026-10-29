@@ -9,25 +9,23 @@ let package = Package(
     name: "OpenCEEngine",
     platforms: [.macOS(.v26)],
     targets: [
-        // the ffi crate's C declarations: UniFFI's and opence_snapshot.h (generated)
+        // the crates' C declarations: UniFFI's (generated)
         .systemLibrary(name: "opence_ffiFFI", path: "Sources/opence_ffiFFI"),
         // the ffi crate's Swift bindings (generated)
         .target(name: "OpenCEEngineCore", dependencies: ["opence_ffiFFI"],
                 // (as uniffi-bindgen writes it, for Swift 5's checks)
                 swiftSettings: [.swiftLanguageMode(.v5)]),
-        // the app's side of the contract: the engine and its snapshots
+        // the app's side of the contract: the game's input and sound, and the user's maps
         .target(name: "OpenCEEngineKit", dependencies: ["OpenCEEngineCore", "OpenCEEngineRender", "opence_ffiFFI"]),
         // the window: its Metal layer, display link, mouse capture and keys
         .target(name: "OpenCEEngineWindow"),
-        // the renderer: the level's buffers, textures and passes, and frame capture
+        // the renderer: game.wasm's render batches on Metal, and the benchmark
         .target(name: "OpenCEEngineRender", dependencies: ["OpenCEEngineCore", "opence_ffiFFI"]),
-        // the menus: their models, and their SwiftUI views over the Metal view
-        .target(name: "OpenCEEngineMenu", dependencies: ["OpenCEEngineCore", "OpenCEEngineKit", "OpenCEEngineRender"]),
         .executableTarget(name: "OpenCEEngine",
                           dependencies: ["OpenCEEngineKit", "OpenCEEngineWindow", "OpenCEEngineRender",
-                                         "OpenCEEngineMenu", "opence_ffiFFI"]),
+                                         "opence_ffiFFI"]),
         .testTarget(name: "OpenCEEngineTests",
                     dependencies: ["OpenCEEngineKit", "OpenCEEngineCore", "opence_ffiFFI", "OpenCEEngineWindow",
-                                   "OpenCEEngineRender", "OpenCEEngineMenu"]),
+                                   "OpenCEEngineRender"]),
     ]
 )

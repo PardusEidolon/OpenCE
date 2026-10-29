@@ -4,14 +4,9 @@
 [floors]
 audio = 96.0
 bake = 95.0
-campaign = 86.0
 cli = 70.0
 content = 96.0
 dev = 96.0
 ffi = 93.0
 import = 94.0
-net = 94.0
-physics = 92.0
-script = 89.0
-sim = 94.0
 ui = 92.0

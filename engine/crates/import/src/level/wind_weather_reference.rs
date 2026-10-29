@@ -9,7 +9,7 @@
 
 use super::{wind_weather, FogRegion};
 
-const REFERENCE: &str = include_str!("../../tests/wind_weather_reference.txt");
+const REFERENCE: &str = include_str!("../../../../../tools/traces/wind_weather_reference.txt");
 
 type Failure = Box<dyn std::error::Error>;
 

@@ -27,8 +27,8 @@ a flag, anywhere), one step on each axis a tick, so that the engine can
 walk them the same way; they die now and then, dropping what they carry,
 and come back a while later.
 
-The trace is written to engine/crates/sim/tests/ctf_reference.txt, which
-engine/crates/sim/tests/ctf_reference.rs reads.
+The trace is written to tools/traces/ctf_reference.txt, which
+tools/engine_wasm_traces.py checks game.wasm against.
 """
 
 import argparse
@@ -42,7 +42,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from harness import function, read  # noqa: E402
 
-OUTPUT = ROOT / "engine" / "crates" / "sim" / "tests" / "ctf_reference.txt"
+OUTPUT = ROOT / "tools" / "traces" / "ctf_reference.txt"
 
 CTF_FUNCTIONS = [
     "ctf_set_flag_warning",

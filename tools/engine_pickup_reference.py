@@ -19,8 +19,8 @@ set to (adding it, or swapping it for the one in its hands), or nothing.
 The ammunition, grenades and powerups taken, the seat's weapon labels and
 the action's priority over the other objects within reach are left out.
 
-The trace is written to engine/crates/sim/tests/pickup_reference.txt, which
-engine/crates/sim/tests/pickup_reference.rs reads.
+The trace is written to tools/traces/pickup_reference.txt, which
+tools/engine_wasm_traces.py checks game.wasm against.
 """
 
 import argparse
@@ -34,7 +34,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from harness import function, read  # noqa: E402
 
-OUTPUT = ROOT / "engine" / "crates" / "sim" / "tests" / "pickup_reference.txt"
+OUTPUT = ROOT / "tools" / "traces" / "pickup_reference.txt"
 
 FAKE_WORLD = r"""
 #include <stdio.h>

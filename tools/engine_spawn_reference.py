@@ -24,8 +24,8 @@ game to the next. Capture the Flag is not played as assault (the engine has
 no such option), and the objects a sphere touches are the fake world's own:
 those whose bounding sphere comes within its radius, in order.
 
-The trace is written to engine/crates/sim/tests/spawn_reference.txt, which
-engine/crates/sim/tests/spawn_reference.rs reads.
+The trace is written to tools/traces/spawn_reference.txt, which
+tools/engine_wasm_traces.py checks game.wasm against.
 """
 
 import argparse
@@ -39,7 +39,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from harness import function, inline, read  # noqa: E402
 
-OUTPUT = ROOT / "engine" / "crates" / "sim" / "tests" / "spawn_reference.txt"
+OUTPUT = ROOT / "tools" / "traces" / "spawn_reference.txt"
 
 MATH_INLINES = [
     "square_root",

@@ -1,6 +1,6 @@
 //! The reference traces: the `tools/engine_*_reference.py` scripts, which
 //! compile functions of `source/` with clang against a small fake world
-//! and record what they do (`engine/crates/*/tests/<name>_reference.txt`).
+//! and record what they do (`tools/traces/<name>_reference.txt`).
 //!
 //! The scripts stay in Python, since they drive clang. The census asks
 //! each for the C it compiles (its `source_file()`), takes the functions

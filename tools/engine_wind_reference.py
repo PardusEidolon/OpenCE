@@ -14,8 +14,8 @@ machine against a small fake world: a BSP whose weather palette has three
 entries (two winds and one without), and the random draws the game takes
 from its seeds replaced by a recorded sequence of directions and coins,
 which the trace prints so that the engine can be handed the same ones. The
-table is written to engine/crates/ffi/tests/wind_reference.txt, which
-ffi/src/particles/wind/wind_reference.rs reads.
+table is written to tools/traces/wind_reference.txt, which
+tools/engine_wasm_traces.py checks game.wasm against.
 """
 
 import argparse
@@ -29,7 +29,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from harness import function, inline, read  # noqa: E402
 
-OUTPUT = ROOT / "engine" / "crates" / "ffi" / "tests" / "wind_reference.txt"
+OUTPUT = ROOT / "tools" / "traces" / "wind_reference.txt"
 
 INLINE_FUNCTIONS = [
     "sine",

@@ -16,8 +16,8 @@ between) and the player anywhere around it, and records the approach the
 game gives the vehicle. The other actions (a device touched, a powerup
 swapped, a seat entered) are stand-ins that say they ran.
 
-The trace is written to engine/crates/sim/tests/handle_action_reference.txt,
-which engine/crates/sim/tests/handle_action_reference.rs reads.
+The trace is written to tools/traces/handle_action_reference.txt, which
+tools/engine_wasm_traces.py checks game.wasm against.
 """
 
 import argparse
@@ -31,7 +31,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from harness import enum_with, function, inline, read  # noqa: E402
 
-OUTPUT = ROOT / "engine" / "crates" / "sim" / "tests" / "handle_action_reference.txt"
+OUTPUT = ROOT / "tools" / "traces" / "handle_action_reference.txt"
 
 FAKE_WORLD = r"""
 #include <math.h>

@@ -19,8 +19,8 @@ nothing and above, and vitality set to below nothing, nothing, its maximum
 and between. An animation list is a few objects, some of them not units,
 each of which would start its animation or not.
 
-The trace is written to engine/crates/campaign/tests/unit_vitality_reference.txt,
-which engine/crates/campaign/tests/unit_vitality_reference.rs reads.
+The trace is written to tools/traces/unit_vitality_reference.txt, which
+tools/engine_wasm_traces.py checks game.wasm against.
 """
 
 import argparse
@@ -34,7 +34,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from harness import function, read  # noqa: E402
 
-OUTPUT = ROOT / "engine" / "crates" / "campaign" / "tests" / "unit_vitality_reference.txt"
+OUTPUT = ROOT / "tools" / "traces" / "unit_vitality_reference.txt"
 
 FAKE_WORLD = r"""
 #include <stdio.h>

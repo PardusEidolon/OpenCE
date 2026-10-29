@@ -29,8 +29,8 @@ answer from small formulas the engine's test repeats.
 Floats are printed as their bits, so that the engine's must be the same
 float, not only print the same.
 
-The trace is written to engine/crates/sim/tests/unit_seats_reference.txt,
-which engine/crates/sim/tests/unit_seats_reference.rs reads.
+The trace is written to tools/traces/unit_seats_reference.txt, which
+tools/engine_wasm_traces.py checks game.wasm against.
 """
 
 import argparse
@@ -44,7 +44,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from harness import enum_with, function, read  # noqa: E402
 
-OUTPUT = ROOT / "engine" / "crates" / "sim" / "tests" / "unit_seats_reference.txt"
+OUTPUT = ROOT / "tools" / "traces" / "unit_seats_reference.txt"
 
 FAKE_WORLD = r"""
 #include <ctype.h>

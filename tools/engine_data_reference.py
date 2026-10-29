@@ -10,8 +10,8 @@ The functions are source/memory/data.c's (`datum_new`, `datum_delete`,
 and objects.c's header table (`object_header_new`, `object_header_delete`),
 compiled for this machine against the shared fake world (tools/harness/world.py).
 The table holds the retail game's 2048 objects. The trace is written to
-engine/crates/sim/tests/data_reference.txt, which
-engine/crates/sim/tests/data_reference.rs reads.
+tools/traces/data_reference.txt, which
+tools/engine_wasm_traces.py checks game.wasm against.
 """
 
 import argparse
@@ -25,7 +25,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from harness import world  # noqa: E402
 
-OUTPUT = ROOT / "engine" / "crates" / "sim" / "tests" / "data_reference.txt"
+OUTPUT = ROOT / "tools" / "traces" / "data_reference.txt"
 
 MAIN = r"""
 #define OBJECTS 2048

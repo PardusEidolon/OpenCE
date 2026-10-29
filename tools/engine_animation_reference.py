@@ -10,8 +10,8 @@ are the decompilation's, found by name as tools/harness finds them, and
 compiled for this machine against a small fake world with fused
 multiply-add off, as every build of the game is. The animations are made
 up here, not a map's, so the reference is the project's own. It is written
-to engine/crates/sim/tests/animation_reference.txt, which
-engine/crates/sim/tests/animation_reference.rs reads.
+to tools/traces/animation_reference.txt, which
+tools/engine_wasm_traces.py checks game.wasm against.
 """
 
 import argparse
@@ -26,7 +26,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from harness import function, inline, read, structure  # noqa: E402
 
-OUTPUT = ROOT / "engine" / "crates" / "sim" / "tests" / "animation_reference.txt"
+OUTPUT = ROOT / "tools" / "traces" / "animation_reference.txt"
 
 MATH_FUNCTIONS = [
     (

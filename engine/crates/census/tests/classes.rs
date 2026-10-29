@@ -113,7 +113,7 @@ fn tree(name: &str, manifest: &str) -> Tree {
         .with("engine/crates/sim/src/units.rs", SIM)
         .with("engine/crates/sim/tests/loop_reference.rs", "")
         .with("engine/crates/sim/tests/units.rs", "")
-        .with("engine/crates/sim/tests/unit_reference.txt", "")
+        .with("tools/traces/unit_reference.txt", "")
         .with("engine/app/Sources/Render/Frame.swift", "")
         .with("engine/census/census.toml", manifest)
         .with(
@@ -492,10 +492,7 @@ fn the_check_mode_fails_with_the_problems() {
 #[test]
 fn a_traced_script_without_its_trace_is_a_problem() -> Result<(), Failure> {
     let tree = tree("trace-file", GOOD);
-    std::fs::remove_file(
-        tree.root()
-            .join("engine/crates/sim/tests/unit_reference.txt"),
-    )?;
+    std::fs::remove_file(tree.root().join("tools/traces/unit_reference.txt"))?;
     let found = Census::read(tree.root())?.problems();
     assert!(
         has(&found, "engine_unit_reference's trace (unit_reference.txt)"),

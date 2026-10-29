@@ -16,8 +16,8 @@ facing each way, and markers in the order the tools sort them, on nodes
 the model has and does not have, asked for by names in any case and names
 the model does not have. A marker is asked for without the object's
 region permutations, as the engine asks, and unmirrored. The table is
-written to engine/crates/sim/tests/model_reference.txt, which
-sim/src/seats/model_reference.rs reads.
+written to tools/traces/model_reference.txt, which
+tools/engine_wasm_traces.py checks game.wasm against.
 """
 
 import argparse
@@ -31,7 +31,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from harness import enum_with, function, inline, read, structure  # noqa: E402
 
-OUTPUT = ROOT / "engine" / "crates" / "sim" / "tests" / "model_reference.txt"
+OUTPUT = ROOT / "tools" / "traces" / "model_reference.txt"
 
 MATRIX_FUNCTIONS = [
     "matrix4x3_rotation_from_quaternion",

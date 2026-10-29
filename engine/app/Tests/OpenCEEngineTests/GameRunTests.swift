@@ -8,9 +8,14 @@ import OpenCEEngineCore
 import OpenCEEngineRender
 import XCTest
 
+/// The repository's root, five folders above this file.
+let repositoryRoot = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
+    .deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
+    .deletingLastPathComponent()
+
 final class GameRunTests: XCTestCase {
     func testBloodGulchIsDrawnHeadless() throws {
-        let root = StockLevel.root
+        let root = repositoryRoot
         let wasm = root.appendingPathComponent("build/engine/wasm/game.wasm")
         let map = root.appendingPathComponent("assets/maps/bloodgulch.map")
         let files = FileManager.default
@@ -52,7 +57,7 @@ final class GameRunTests: XCTestCase {
     /// Blood Gulch heard headless: its mixed sound pulled from game.wasm's speakers as the audio device
     /// would pull it, a 48th of a second at a time, and not silent once the level plays.
     func testBloodGulchIsHeardHeadless() throws {
-        let root = StockLevel.root
+        let root = repositoryRoot
         let wasm = root.appendingPathComponent("build/engine/wasm/game.wasm")
         let files = FileManager.default
         guard files.fileExists(atPath: wasm.path) else { throw XCTSkip("no build/engine/wasm/game.wasm") }
@@ -97,7 +102,7 @@ final class GameRunTests: XCTestCase {
     /// The pipeline archive across two runs of Blood Gulch: the first compiles each pipeline into it, the
     /// second, in play, finds every one there and never waits on Metal's compiler.
     func testASecondRunOfBloodGulchCompilesNoPipelineInPlay() throws {
-        let root = StockLevel.root
+        let root = repositoryRoot
         let wasm = root.appendingPathComponent("build/engine/wasm/game.wasm")
         let files = FileManager.default
         guard files.fileExists(atPath: wasm.path) else { throw XCTSkip("no build/engine/wasm/game.wasm") }
@@ -140,7 +145,7 @@ final class GameRunTests: XCTestCase {
     /// 60th of a second a frame (debug.frame_clock). Written to build/engine/golden, never approved here, and
     /// measured against the VM's reference.
     func testBloodGulchGoldenFrameIsDrawnThroughWasm() throws {
-        let root = StockLevel.root
+        let root = repositoryRoot
         let wasm = root.appendingPathComponent("build/engine/wasm/game.wasm")
         let maps = root.appendingPathComponent("assets/maps")
         let files = FileManager.default

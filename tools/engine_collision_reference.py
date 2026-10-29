@@ -17,8 +17,8 @@ in front of each; each leaf's bsp2d references name the room's surfaces and
 its own pillar face. Lines, spheres and moving spheres are cast from
 anywhere in the room (some from in the pillar, or outside the slanted
 walls), in any direction, of any length and radius. The table is written to
-engine/crates/physics/tests/collision_reference.txt, which
-physics/src/collision_reference.rs reads.
+tools/traces/collision_reference.txt, which
+tools/engine_wasm_traces.py checks game.wasm against.
 """
 
 import argparse
@@ -36,7 +36,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from harness import enum_with, function, read  # noqa: E402
 
-OUTPUT = ROOT / "engine" / "crates" / "physics" / "tests" / "collision_reference.txt"
+OUTPUT = ROOT / "tools" / "traces" / "collision_reference.txt"
 
 # The headers collision_bsp.c includes that would bring in the rest of the
 # game, as the little they give it.

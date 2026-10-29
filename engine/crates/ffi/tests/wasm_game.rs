@@ -269,6 +269,36 @@ fn a_game_without_its_console_answers_nothing() {
     assert_eq!(game.ask("debug_camera_load".to_owned(), 100), None);
 }
 
+#[test]
+fn the_game_s_control_socket_hands_its_lines_to_the_console() {
+    use std::io::{BufRead, BufReader, Write};
+    let game = match WasmGame::new(forever("wasm_game_control", &[])) {
+        Ok(game) => game,
+        Err(error) => panic!("{error}"),
+    };
+    // (a short path: a socket's is at most 104 bytes)
+    let path = std::env::temp_dir().join(format!("opence-wasm-{}.sock", std::process::id()));
+    assert_eq!(game.listen(path.display().to_string()), Ok(()));
+    let reply = (|| -> Option<String> {
+        let mut stream = std::os::unix::net::UnixStream::connect(&path).ok()?;
+        stream.write_all(b"\"game_speed 2\"\n").ok()?;
+        let mut reply = String::new();
+        BufReader::new(stream).read_line(&mut reply).ok()?;
+        Some(reply)
+    })();
+    let _ = std::fs::remove_file(&path);
+    // (this game has no console, so the line is refused as the shell shows it)
+    assert_eq!(
+        reply.as_deref(),
+        Some("{\"error\":\"the game's console is not listening yet\",\"ok\":false}\n")
+    );
+    // a path that cannot be bound is the caller's error
+    assert!(matches!(
+        game.listen("/no/such/folder/opence.sock".to_owned()),
+        Err(WasmGameError::Control { .. })
+    ));
+}
+
 /// a game whose main ends three ticks (the section a tick ends with)
 const TICKING: &str = r#"
 (module

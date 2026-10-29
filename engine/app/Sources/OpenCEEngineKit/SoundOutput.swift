@@ -1,7 +1,6 @@
-// The level's sounds: an AVAudioSourceNode pulls a mix, interleaved stereo,
-// on the audio thread, from the engine (engine/crates/ffi/src/audio.rs) or
-// from game.wasm's own mixer (GameSpeakers). Without an output device the
-// game is silent.
+// The game's sounds: an AVAudioSourceNode pulls game.wasm's own mix
+// (GameSpeakers), interleaved stereo, on the audio thread. Without an
+// output device the game is silent.
 import AVFoundation
 import Foundation
 import OpenCEEngineCore
@@ -9,11 +8,6 @@ import OpenCEEngineCore
 public final class SoundOutput {
     private let engine = AVAudioEngine()
     private var node: AVAudioSourceNode?
-
-    /// An output of `output`'s mix; it starts playing at once.
-    public convenience init(output: AudioOutput) {
-        self.init(rate: Double(output.sampleRate())) { output.pull(frames: $0) }
-    }
 
     /// An output of game.wasm's mix; it starts playing at once.
     public convenience init(speakers: GameSpeakers) {

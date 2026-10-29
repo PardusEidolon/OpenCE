@@ -5,7 +5,7 @@
 // layer, whose drawable follows the window's size; GameInput hands it the
 // keys, the mouse and the wheel, and SoundOutput plays its mix. The app
 // quits when the game does. Escape is the game's; Command-Escape lets the
-// mouse go.
+// mouse go. --control (or --socket PATH) serves the control socket.
 import AppKit
 import Metal
 import OpenCEEngineCore
@@ -107,6 +107,7 @@ final class GamePlayer: NSObject, NSApplicationDelegate {
             device: device, url: URL(fileURLWithPath: cache).appendingPathComponent("pipelines.metallib"))
         renderer.playing = { game.ticks() > 0 }
         self.game = game
+        listen(game)
         input = GameInput(game: game)
         view.keyFilter = { [weak self] event in
             // (Command-Escape is the window's: it lets the mouse go)

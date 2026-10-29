@@ -10,8 +10,8 @@ the game's seed by `periodic_functions_initialize`, then read by
 `periodic_function_evaluate` and `transition_function_evaluate`) and
 source/math/random_math.c's `seed_random_range`, found by name as
 tools/harness finds them, and compiled for this machine against a small fake
-world. The table is written to engine/crates/sim/tests/periodic_reference.txt,
-which engine/crates/sim/tests/periodic_reference.rs reads.
+world. The table is written to tools/traces/periodic_reference.txt, which
+tools/engine_wasm_traces.py checks game.wasm against.
 """
 
 import argparse
@@ -25,7 +25,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from harness import enum_with, function, inline, read  # noqa: E402
 
-OUTPUT = ROOT / "engine" / "crates" / "sim" / "tests" / "periodic_reference.txt"
+OUTPUT = ROOT / "tools" / "traces" / "periodic_reference.txt"
 
 PERIODIC_FUNCTIONS = [
     "periodic_function_build_variable_period_x_table",

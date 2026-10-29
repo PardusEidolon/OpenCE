@@ -29,8 +29,8 @@ flies, one that doesn't) are random, as are its surfaces, its melee ticks,
 its unit's speech priority and its equipment, and the biped asked of may
 be none where the game allows it.
 
-The trace is written to engine/crates/sim/tests/unit_life_reference.txt,
-which engine/crates/sim/tests/unit_life_reference.rs reads.
+The trace is written to tools/traces/unit_life_reference.txt, which
+tools/engine_wasm_traces.py checks game.wasm against.
 """
 
 import argparse
@@ -44,7 +44,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from harness import enum_with, function, read  # noqa: E402
 
-OUTPUT = ROOT / "engine" / "crates" / "sim" / "tests" / "unit_life_reference.txt"
+OUTPUT = ROOT / "tools" / "traces" / "unit_life_reference.txt"
 
 FAKE_WORLD = r"""
 #include <stdio.h>

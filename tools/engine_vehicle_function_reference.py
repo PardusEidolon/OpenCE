@@ -9,8 +9,8 @@ The function is source/units/vehicles.c's `vehicle_export_function_values`
 (with source/math/real_math.c's `component_vectors_from_normal3d`), found by
 name as tools/harness finds them, and compiled for this machine against a
 small fake world that holds one vehicle and its definition. The table is
-written to engine/crates/sim/tests/vehicle_function_reference.txt, which
-engine/crates/sim/tests/vehicle_function_reference.rs reads.
+written to tools/traces/vehicle_function_reference.txt, which
+tools/engine_wasm_traces.py checks game.wasm against.
 """
 
 import argparse
@@ -24,7 +24,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from harness import enum_with, function, read  # noqa: E402
 
-OUTPUT = ROOT / "engine" / "crates" / "sim" / "tests" / "vehicle_function_reference.txt"
+OUTPUT = ROOT / "tools" / "traces" / "vehicle_function_reference.txt"
 
 FAKE_WORLD = r"""
 #include <math.h>

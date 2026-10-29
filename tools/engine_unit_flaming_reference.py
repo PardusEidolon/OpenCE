@@ -26,8 +26,8 @@ which kills the unit or not) is written down in order.
 Asserts and the game's silent error are compiled out, as in the released
 game.
 
-The trace is written to engine/crates/sim/tests/unit_flaming_reference.txt,
-which engine/crates/sim/tests/unit_flaming_reference.rs reads.
+The trace is written to tools/traces/unit_flaming_reference.txt, which
+tools/engine_wasm_traces.py checks game.wasm against.
 """
 
 import argparse
@@ -42,7 +42,7 @@ sys.path.insert(0, str(ROOT / "tools"))
 import engine_random_reference as random_reference  # noqa: E402
 from harness import enum_with, function, read  # noqa: E402
 
-OUTPUT = ROOT / "engine" / "crates" / "sim" / "tests" / "unit_flaming_reference.txt"
+OUTPUT = ROOT / "tools" / "traces" / "unit_flaming_reference.txt"
 
 # the random trace's fake world, with no game engine running
 SEEDED_WORLD = r"""

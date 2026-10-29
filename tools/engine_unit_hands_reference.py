@@ -27,8 +27,8 @@ make a grenade, spawn actors) is written down in order.
 
 Asserts are compiled out, as in the released game.
 
-The trace is written to engine/crates/sim/tests/unit_hands_reference.txt,
-which engine/crates/sim/tests/unit_hands_reference.rs reads.
+The trace is written to tools/traces/unit_hands_reference.txt, which
+tools/engine_wasm_traces.py checks game.wasm against.
 """
 
 import argparse
@@ -43,7 +43,7 @@ sys.path.insert(0, str(ROOT / "tools"))
 import engine_random_reference as random_reference  # noqa: E402
 from harness import enum_with, function, inline, read  # noqa: E402
 
-OUTPUT = ROOT / "engine" / "crates" / "sim" / "tests" / "unit_hands_reference.txt"
+OUTPUT = ROOT / "tools" / "traces" / "unit_hands_reference.txt"
 
 # the random trace's fake world, with a game engine that may be running
 SEEDED_WORLD = r"""

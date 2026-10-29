@@ -14,8 +14,8 @@ Each run turns the look by mouse-sized steps, quick flicks and turns of
 several whole turns. A seat's yaw limits, a camera's pitch limits and the
 look levelled in a moving vehicle are left out.
 
-The trace is written to engine/crates/sim/tests/facing_reference.txt, which
-engine/crates/sim/tests/facing_reference.rs reads.
+The trace is written to tools/traces/facing_reference.txt, which
+tools/engine_wasm_traces.py checks game.wasm against.
 """
 
 import argparse
@@ -29,7 +29,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from harness import function, read  # noqa: E402
 
-OUTPUT = ROOT / "engine" / "crates" / "sim" / "tests" / "facing_reference.txt"
+OUTPUT = ROOT / "tools" / "traces" / "facing_reference.txt"
 
 FAKE_WORLD = r"""
 #include <math.h>

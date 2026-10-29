@@ -18,8 +18,8 @@ clusters (and out of them), whose palettes have environments of any
 priority, entries without a tag, and indices past their ends. The
 scenario has no fog: the engine's has none (a fog's environment is the
 scenario's track). The table is written to
-engine/crates/ffi/tests/sound_environment_reference.txt, which
-ffi/src/sound_world/sound_environment_reference.rs reads.
+tools/traces/sound_environment_reference.txt, which
+tools/engine_wasm_traces.py checks game.wasm against.
 """
 
 import argparse
@@ -34,7 +34,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from harness import constant, function, read, structure  # noqa: E402
 
-OUTPUT = ROOT / "engine" / "crates" / "ffi" / "tests" / "sound_environment_reference.txt"
+OUTPUT = ROOT / "tools" / "traces" / "sound_environment_reference.txt"
 
 FAKE_WORLD = r"""
 #include <stdio.h>

@@ -14,8 +14,8 @@ small fake world: three bitmaps, one without sequences, one whose
 sequences are runs of images, sprites and neither, and one of sprites
 alone and a run without a first image, asked for each sequence from below
 the first to past the last and each frame from 0 to past the last. The table is written to
-engine/crates/ffi/tests/hud_sprite_reference.txt, which
-ffi/src/hud/sprite_reference.rs reads.
+tools/traces/hud_sprite_reference.txt, which
+tools/engine_wasm_traces.py checks game.wasm against.
 """
 
 import argparse
@@ -29,7 +29,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from harness import function, read, structure  # noqa: E402
 
-OUTPUT = ROOT / "engine" / "crates" / "ffi" / "tests" / "hud_sprite_reference.txt"
+OUTPUT = ROOT / "tools" / "traces" / "hud_sprite_reference.txt"
 
 FAKE_WORLD = r"""
 #include <stdio.h>

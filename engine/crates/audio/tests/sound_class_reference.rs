@@ -6,7 +6,7 @@
 
 use opence_audio::{class, ClassGains, SOUND_CLASS_COUNT};
 
-const REFERENCE: &str = include_str!("sound_class_reference.txt");
+const REFERENCE: &str = include_str!("../../../../tools/traces/sound_class_reference.txt");
 
 type Failure = Box<dyn std::error::Error>;
 

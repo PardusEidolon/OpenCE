@@ -12,8 +12,8 @@ masks, compiled for this machine against the shared fake world
 (tools/harness/world.py), with stand-ins for the object lists and the
 scenario's object names. A string is a long in the game (a 32-bit pointer),
 so here it is an index into a small table of strings. The trace is written
-to engine/crates/script/tests/script_cast_reference.txt, which
-engine/crates/script/tests/script_cast_reference.rs reads.
+to tools/traces/script_cast_reference.txt, which
+tools/engine_wasm_traces.py checks game.wasm against.
 """
 
 import argparse
@@ -27,7 +27,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from harness import enum_with, function, read, world  # noqa: E402
 
-OUTPUT = ROOT / "engine" / "crates" / "script" / "tests" / "script_cast_reference.txt"
+OUTPUT = ROOT / "tools" / "traces" / "script_cast_reference.txt"
 
 # hs_runtime.c's casting procedures, each defined before the table
 PROCEDURES = [

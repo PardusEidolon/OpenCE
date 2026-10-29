@@ -15,8 +15,8 @@ The functions are source/units/vehicles.c's `update_human_jeep_physics`,
 `slowly_stop_vehicle` and (of each vehicle before) `vehicle_is_flipped`,
 with the maths of source/math/, compiled for this machine against a
 small fake world whose physics_update records what it is handed. The table is written to
-engine/crates/sim/tests/vehicle_physics_reference.txt, which
-engine/crates/sim/tests/vehicle_physics_reference.rs reads.
+tools/traces/vehicle_physics_reference.txt, which
+tools/engine_wasm_traces.py checks game.wasm against.
 """
 
 import argparse
@@ -30,7 +30,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from harness import function, inline, read  # noqa: E402
 
-OUTPUT = ROOT / "engine" / "crates" / "sim" / "tests" / "vehicle_physics_reference.txt"
+OUTPUT = ROOT / "tools" / "traces" / "vehicle_physics_reference.txt"
 
 INLINE_FUNCTIONS = [
     "sine",

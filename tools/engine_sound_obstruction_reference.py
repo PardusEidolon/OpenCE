@@ -14,8 +14,8 @@ fake world: two BSPs of 20 clusters, with distances of any byte and any
 visible sets, the second with visible sets for only some of its clusters;
 a camera and a source in any of their clusters or outside them, any
 distance apart, with the line between them blocked or clear. The table is
-written to engine/crates/ffi/tests/sound_obstruction_reference.txt, which
-ffi/src/sound_world/sound_obstruction_reference.rs reads.
+written to tools/traces/sound_obstruction_reference.txt, which
+tools/engine_wasm_traces.py checks game.wasm against.
 """
 
 import argparse
@@ -29,7 +29,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from harness import constant, function, read  # noqa: E402
 
-OUTPUT = ROOT / "engine" / "crates" / "ffi" / "tests" / "sound_obstruction_reference.txt"
+OUTPUT = ROOT / "tools" / "traces" / "sound_obstruction_reference.txt"
 
 FAKE_WORLD = r"""
 #include <stdio.h>

@@ -17,8 +17,8 @@ The hits are drawn at random: shields whole, failing and empty, heads and
 bodies, friends and foes, the unsuspecting, the side effects, and the
 damage effect's and the resistance's flags that the engine reads.
 
-The trace is written to engine/crates/sim/tests/cause_damage_reference.txt,
-which engine/crates/sim/tests/cause_damage_reference.rs reads.
+The trace is written to tools/traces/cause_damage_reference.txt, which
+tools/engine_wasm_traces.py checks game.wasm against.
 """
 
 import argparse
@@ -33,7 +33,7 @@ sys.path.insert(0, str(ROOT / "tools"))
 import engine_periodic_reference as periodic  # noqa: E402
 from harness import function, read  # noqa: E402
 
-OUTPUT = ROOT / "engine" / "crates" / "sim" / "tests" / "cause_damage_reference.txt"
+OUTPUT = ROOT / "tools" / "traces" / "cause_damage_reference.txt"
 
 FAKE_WORLD = r"""
 

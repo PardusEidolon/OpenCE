@@ -161,15 +161,19 @@ fn play(wasm: &[u8], off: Option<&str>) -> Result<Frames, Error> {
     Ok(frames)
 }
 
-/// the draws and vertices over the frames both runs drew
-fn totals(stock: &Frames, off: &Frames) -> ((u64, u64), (u64, u64)) {
-    let frames = stock.len().min(off.len());
-    let sum = |run: &Frames| {
-        run.iter()
-            .take(frames)
-            .fold((0, 0), |(draws, drawn), (d, v)| (draws + d, drawn + v))
-    };
-    (sum(stock), sum(off))
+/// the mean draws and vertices a frame of play draws: the frames from the
+/// first that draws at least `threshold` (the loading screen's frames
+/// before it draw a few, and each run reaches play at a different frame)
+fn per_frame(run: &Frames, threshold: u64) -> (f64, f64) {
+    let play: Vec<_> = run
+        .iter()
+        .skip_while(|(draws, _)| *draws < threshold)
+        .collect();
+    let frames = play.len().max(1) as f64;
+    let (draws, drawn) = play
+        .iter()
+        .fold((0, 0), |(draws, drawn), (d, v)| (draws + d, drawn + v));
+    (draws as f64 / frames, drawn as f64 / frames)
 }
 
 #[test]
@@ -207,22 +211,34 @@ fn each_effect_blood_gulch_draws_draws_less_with_its_switch_off() -> Result<(), 
         stock.iter().any(|(draws, _)| *draws > 0),
         "the stock run drew nothing"
     );
-    let mut table = String::from("global\tframes\tdraws on\tdraws off\tdrawn on\tdrawn off\n");
+    let threshold = stock.iter().map(|(draws, _)| *draws).max().unwrap_or(0) / 2;
+    let (draws_on, drawn_on) = per_frame(&stock, threshold);
+    let off: Vec<_> = played
+        .iter()
+        .skip(1)
+        .filter_map(|(off, frames)| off.map(|global| (global, per_frame(frames, threshold))))
+        .collect();
+    // (a switched-off run draws a little more a frame than the stock one,
+    // the console echoing its init command, so each is measured against the
+    // median switched-off run: most effects Blood Gulch does not draw)
+    let mut each: Vec<f64> = off.iter().map(|(_, (draws, _))| *draws).collect();
+    each.sort_by(f64::total_cmp);
+    let median = each.get(each.len() / 2).copied().unwrap_or(draws_on);
+    let mut table = String::from("global\tdraws on\tdraws off\tdrawn on\tdrawn off\n");
+    let _ = writeln!(
+        table,
+        "(median off)\t{draws_on:.2}\t{median:.2}\t{drawn_on:.0}\t"
+    );
     let mut less = Vec::new();
-    for (off, frames) in played.iter().skip(1) {
-        let Some(global) = off else { continue };
-        let ((draws_on, drawn_on), (draws_off, drawn_off)) = totals(&stock, frames);
+    for (global, (draws_off, drawn_off)) in &off {
         let _ = writeln!(
             table,
-            "{global}\t{}\t{draws_on}\t{draws_off}\t{drawn_on}\t{drawn_off}",
-            stock.len().min(frames.len())
+            "{global}\t{draws_on:.2}\t{draws_off:.2}\t{drawn_on:.0}\t{drawn_off:.0}"
         );
-        // a switched-off run draws a few more than the stock one (about 43
-        // draws over the run, the console echoing the init command), so an
-        // effect counts as drawn when switching it off saves at least half a
-        // draw a frame
-        let frames = stock.len().min(frames.len()) as u64;
-        if draws_on >= draws_off + frames / 2 {
+        // (a frame of play draws the same each run to a hundredth of a draw,
+        // so an effect counts as drawn when switching it off saves at least
+        // half a draw a frame)
+        if median >= draws_off + 0.5 {
             less.push(*global);
         }
     }

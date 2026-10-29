@@ -21,8 +21,8 @@ use std::time::{Duration, Instant};
 use opence_render::{Command, DecodedBatch};
 use opence_runtime::plugins::{Event, Hook, Plugin, View};
 use opence_runtime::{
-    keystroke_flags, payload, virtual_key, Console, Controls, Game, Readback, RenderSink, Runtime,
-    Speakers, SPEAKER_RATE,
+    control, keystroke_flags, payload, virtual_key, Console, Controls, Game, Readback, RenderSink,
+    Runtime, Speakers, SPEAKER_RATE,
 };
 
 /// One render batch as the renderer carries it out: the commands that
@@ -139,6 +139,12 @@ pub enum WasmGameError {
     /// the game has already been started
     #[error("the game has already been started")]
     Started,
+    /// the control socket could not be bound
+    #[error("the control socket could not be bound: {reason}")]
+    Control {
+        /// what went wrong
+        reason: String,
+    },
 }
 
 /// How the game ended, and what it drew.
@@ -358,6 +364,21 @@ impl WasmGame {
     pub fn ask(&self, line: String, milliseconds: u32) -> Option<String> {
         self.console
             .ask(&line, Duration::from_millis(u64::from(milliseconds)))
+    }
+
+    /// Serves the control socket at `path` (readable by this user alone),
+    /// each line a client sends handed to the game's console as `ask`
+    /// does, so the `opence` tool drives the game the app plays.
+    ///
+    /// # Errors
+    /// [`WasmGameError::Control`] if the socket cannot be bound there.
+    pub fn listen(&self, path: String) -> Result<(), WasmGameError> {
+        let listener =
+            control::bind(std::path::Path::new(&path)).map_err(|error| WasmGameError::Control {
+                reason: format!("{path}: {error}"),
+            })?;
+        control::serve(listener, self.console.clone());
+        Ok(())
     }
 
     /// The game's ticks so far: none while it loads or sits at its menus.

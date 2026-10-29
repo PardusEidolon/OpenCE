@@ -11,8 +11,8 @@ world (tools/harness/world.py), with each system it updates a stand-in that
 says its name (and the seconds it was given), over a tick of each kind of
 game: alone, with the players at double speed, as a client of the
 distributed netcode, and as a client of network co-op. The trace is written
-to engine/crates/sim/tests/game_tick_reference.txt, which
-engine/crates/sim/tests/game_tick_reference.rs reads.
+to tools/traces/game_tick_reference.txt, which
+tools/engine_wasm_traces.py checks game.wasm against.
 """
 
 import argparse
@@ -26,7 +26,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from harness import function, read, world  # noqa: E402
 
-OUTPUT = ROOT / "engine" / "crates" / "sim" / "tests" / "game_tick_reference.txt"
+OUTPUT = ROOT / "tools" / "traces" / "game_tick_reference.txt"
 
 # the systems game_tick updates, each a stand-in that says its name
 UPDATES = [

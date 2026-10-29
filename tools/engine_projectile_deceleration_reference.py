@@ -14,8 +14,8 @@ timer left at a random value to show where the game leaves it alone. The
 definitions draw their speeds and damage ranges at random, with equal
 speeds, empty ranges and ranges that start at the muzzle among them.
 
-The trace is written to engine/crates/sim/tests/projectile_deceleration_reference.txt,
-which engine/crates/sim/tests/projectile_deceleration_reference.rs reads.
+The trace is written to tools/traces/projectile_deceleration_reference.txt, which
+tools/engine_wasm_traces.py checks game.wasm against.
 """
 
 import argparse
@@ -29,7 +29,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from harness import function, read  # noqa: E402
 
-OUTPUT = ROOT / "engine" / "crates" / "sim" / "tests" / "projectile_deceleration_reference.txt"
+OUTPUT = ROOT / "tools" / "traces" / "projectile_deceleration_reference.txt"
 
 FAKE_WORLD = r"""
 #include <stdio.h>

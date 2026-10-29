@@ -29,8 +29,8 @@ here.
 
 Asserts are compiled out, as in the released game.
 
-The trace is written to engine/crates/sim/tests/unit_items_reference.txt,
-which engine/crates/sim/tests/unit_items_reference.rs reads.
+The trace is written to tools/traces/unit_items_reference.txt, which
+tools/engine_wasm_traces.py checks game.wasm against.
 """
 
 import argparse
@@ -44,7 +44,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from harness import enum_with, function, read  # noqa: E402
 
-OUTPUT = ROOT / "engine" / "crates" / "sim" / "tests" / "unit_items_reference.txt"
+OUTPUT = ROOT / "tools" / "traces" / "unit_items_reference.txt"
 
 FAKE_WORLD = r"""
 #include <stdio.h>

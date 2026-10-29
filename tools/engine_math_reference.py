@@ -15,8 +15,8 @@ source/math/random_math.c's seeded numbers and
 one-operation helpers, which the engine leaves to glam and libm, run over
 vectors of their own), found by name as tools/harness finds them, and
 compiled for this machine against a small fake world. The table is written
-to engine/crates/sim/tests/math_reference.txt, which
-engine/crates/sim/tests/math_reference.rs reads.
+to tools/traces/math_reference.txt, which
+tools/engine_wasm_traces.py checks game.wasm against.
 """
 
 import argparse
@@ -30,7 +30,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from harness import enum_with, function, inline, read, structure  # noqa: E402
 
-OUTPUT = ROOT / "engine" / "crates" / "sim" / "tests" / "math_reference.txt"
+OUTPUT = ROOT / "tools" / "traces" / "math_reference.txt"
 
 REAL_MATH_FUNCTIONS = ["angle_between_vectors3d", "euler_angles2d_from_vector3d", "rotate_vector_about_axis"]
 

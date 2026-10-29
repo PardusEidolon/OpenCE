@@ -10,8 +10,8 @@ The functions (`unit_animation_state_interruptable`, `..._loops`,
 aiming screen of each state and whether an overlay action loops) are
 source/units/units.c's, found by name as tools/harness finds them, and
 compiled for this machine against a small fake world. The table is written
-to engine/crates/sim/tests/unit_state_reference.txt, which
-engine/crates/sim/tests/unit_state_reference.rs reads.
+to tools/traces/unit_state_reference.txt, which
+tools/engine_wasm_traces.py checks game.wasm against.
 """
 
 import argparse
@@ -25,7 +25,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from harness import enum_with, function, read  # noqa: E402
 
-OUTPUT = ROOT / "engine" / "crates" / "sim" / "tests" / "unit_state_reference.txt"
+OUTPUT = ROOT / "tools" / "traces" / "unit_state_reference.txt"
 
 FUNCTIONS = [
     "unit_animation_state_interruptable",

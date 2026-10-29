@@ -18,8 +18,8 @@ puts the particle at rest or moves it off by a fixed pattern of its own,
 which draws nothing from the local seed. Every particle is seen, so none is
 deleted for going unrendered.
 
-The trace is written to engine/crates/ffi/tests/particle_reference.txt,
-which engine/crates/ffi/tests/particle_reference.rs reads.
+The trace is written to tools/traces/particle_reference.txt, which
+tools/engine_wasm_traces.py checks game.wasm against.
 """
 
 import argparse
@@ -33,7 +33,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from harness import enum_with, function, inline, read  # noqa: E402
 
-OUTPUT = ROOT / "engine" / "crates" / "ffi" / "tests" / "particle_reference.txt"
+OUTPUT = ROOT / "tools" / "traces" / "particle_reference.txt"
 
 RANDOM_FUNCTIONS = ["seed_random", "seed_random_range", "real_seed_random", "real_seed_random_range"]
 LOCAL_RANDOM_FUNCTIONS = ["local_random", "local_random_range", "real_local_random_range"]

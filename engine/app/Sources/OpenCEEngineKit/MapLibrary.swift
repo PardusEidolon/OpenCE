@@ -63,14 +63,6 @@ public enum MapLibrary {
         return ["maps", "custom_maps"].map { root.appendingPathComponent("assets/\($0)", isDirectory: true) }
     }
 
-    /// The folders the settings name, each empty one the data root's
-    /// under `root`.
-    public static func folders(data: DataSettings, root: URL) -> [URL] {
-        zip([data.mapsFolder, data.customMapsFolder], folders(named: nil, root: root)).map { set, stock in
-            set.isEmpty ? stock : URL(fileURLWithPath: set, isDirectory: true)
-        }
-    }
-
     /// The test maps' names, which the engine makes when they are loaded:
     /// devgulch from the first folder's bloodgulch.map, holding every
     /// definition of its other maps, and devmap's galleries of them.

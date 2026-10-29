@@ -13,8 +13,8 @@ a fake world whose eight dangers (`ai_enemies_can_see_player`,
 a number, all 256 of them, and whose `player_spawn_count` runs from none to
 four. How the game decides each danger is left out.
 
-The trace is written to engine/crates/sim/tests/safety_reference.txt, which
-engine/crates/sim/tests/safety_reference.rs reads.
+The trace is written to tools/traces/safety_reference.txt, which
+tools/engine_wasm_traces.py checks game.wasm against.
 """
 
 import argparse
@@ -28,7 +28,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from harness import function, read  # noqa: E402
 
-OUTPUT = ROOT / "engine" / "crates" / "sim" / "tests" / "safety_reference.txt"
+OUTPUT = ROOT / "tools" / "traces" / "safety_reference.txt"
 
 # The dangers, by their bit in the trace's number.
 DANGERS = [

@@ -14,8 +14,8 @@ drawn from a fixed seed (with zeros, equal limits and targets at and past
 the limits among them), as the vehicles' speeds, slides and turns use them.
 Each line is one call, with what it was given and what it left.
 
-The trace is written to engine/crates/sim/tests/physics_variable_reference.txt,
-which engine/crates/sim/tests/physics_variable_reference.rs reads.
+The trace is written to tools/traces/physics_variable_reference.txt, which
+tools/engine_wasm_traces.py checks game.wasm against.
 """
 
 import argparse
@@ -29,7 +29,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from harness import function, read, structure  # noqa: E402
 
-OUTPUT = ROOT / "engine" / "crates" / "sim" / "tests" / "physics_variable_reference.txt"
+OUTPUT = ROOT / "tools" / "traces" / "physics_variable_reference.txt"
 
 FUNCTIONS = [
     "physics_variable_position_get_seek_direction",

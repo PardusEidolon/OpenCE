@@ -208,9 +208,31 @@ def check_shaders(out: Path) -> Path:
     return metallib
 
 
-def swift(command: str, library: Path, out: Path, metallib: Path, extra: tuple[str, ...] = ()) -> Path:
+def tracked_package(out: Path) -> Path:
+    """A copy of the package's files git tracks, in `out` (the tests build
+    it, so that test files of the checkout's own that git does not track are
+    left out); the whole folder but its .build where git cannot say."""
+    copy = out / "package"
+    shutil.rmtree(copy, ignore_errors=True)
+    listed = subprocess.run(
+        ["git", "ls-files", "-z", "--", "."], cwd=PACKAGE, capture_output=True, text=True, check=False
+    )
+    if listed.returncode != 0:
+        shutil.copytree(PACKAGE, copy, ignore=shutil.ignore_patterns(".build"))
+        return copy
+    for name in filter(None, listed.stdout.split("\0")):
+        source = PACKAGE / name
+        if source.is_file():
+            (copy / name).parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(source, copy / name)
+    return copy
+
+
+def swift(
+    command: str, library: Path, out: Path, metallib: Path, extra: tuple[str, ...] = (), package: Path = PACKAGE
+) -> Path:
     """Runs swift build or swift test with Xcode's Swift (nixpkgs' cannot
-    link against the macOS 26 SDK); returns the build folder."""
+    link against the macOS 26 SDK) on `package`; returns the build folder."""
     scratch = out / "swift"
     # (the tests load the linked shaders from here, ShaderLibrary.swift)
     environment = {**xcode_environment(), "OPENCE_METALLIB": str(metallib)}
@@ -224,7 +246,7 @@ def swift(command: str, library: Path, out: Path, metallib: Path, extra: tuple[s
             "--quiet",
             "--disable-sandbox",
             "--package-path",
-            str(PACKAGE),
+            str(package),
             "--scratch-path",
             str(scratch),
             "--cache-path",
@@ -338,7 +360,9 @@ def main() -> None:
     swift_bindings(rust)
     library = rust / "lib" / LIBRARY
     if arguments.test:
-        swift("test", library, out, metallib, ("--filter", arguments.filter) if arguments.filter else ())
+        package = tracked_package(out)
+        swift_bindings(rust, package)
+        swift("test", library, out, metallib, ("--filter", arguments.filter) if arguments.filter else (), package)
         return
     executable = swift("build", library, out, metallib) / EXECUTABLE
     wasm = arguments.wasm.resolve() if arguments.wasm else engine_wasm.build(os.cpu_count() or 4)

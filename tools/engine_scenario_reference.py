@@ -12,7 +12,7 @@ The function is source/scenario/scenario.c's
 compiled for this machine against a small fake world: a scenario of
 trigger volumes, half of them oriented, tested at points near, inside and
 on their faces, and at an index the scenario does not have. The table is
-written to engine/crates/content/tests/scenario_reference.txt, which
+written to tools/traces/scenario_reference.txt, which
 engine/crates/content/tests/scenario_reference.rs reads.
 """
 
@@ -27,7 +27,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 from harness import function, inline, read  # noqa: E402
 
-OUTPUT = ROOT / "engine" / "crates" / "content" / "tests" / "scenario_reference.txt"
+OUTPUT = ROOT / "tools" / "traces" / "scenario_reference.txt"
 
 INLINE_FUNCTIONS = ["set_real_point3d", "cross_product3d"]
 

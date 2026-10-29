@@ -30,12 +30,10 @@ let
 in
 rec {
   # the workspace, without the Swift app, the census's manifest and the
-  # fuzzing workspace (but
-  # with its manifest and targets, which the importer's fuzz smoke test
-  # reads), and what its builds read outside it: Jolt and the physics
-  # wrapper (the physics crate's build.rs), the ragdolls' overrides (the
-  # sim's include_str!), the render batch's header (the render crate's
-  # tests' include_str!) and the build script
+  # fuzzing workspace (but with its manifest and targets, which the
+  # importer's fuzz smoke test reads), and what its builds read outside
+  # it: the reference traces (the tests' include_str!), the render batch's
+  # header (the render crate's tests' include_str!) and the build script
   commonFiles = fs.unions [
     (fs.difference (root + /engine) (
       fs.unions [
@@ -46,10 +44,8 @@ rec {
     ))
     (root + /engine/fuzz/Cargo.toml)
     (root + /engine/fuzz/fuzz_targets)
-    (root + /port/third_party/jolt)
-    (root + /port/macos/host/physics)
+    (root + /tools/traces)
     (root + /port/macos/include/opence_render.h)
-    (root + /port/assets/ragdolls/ragdolls.txt)
     (root + /tools/engine_build.py)
   ];
   commonArgs = {
@@ -73,7 +69,9 @@ rec {
 
   # the tests' source: the workspace's, and what the census's tests read
   # (engine/crates/census): the original's C and headers, the app's Swift,
-  # the census's manifest and the docs it writes; only the tests check is built from it, so the
+  # the census's manifest and the docs it writes, and what game.wasm
+  # compiles (port/linux/port.json) with the stand-in the manifest names;
+  # only the tests check is built from it, so the
   # packages do not build again when these change
   testArgs = commonArgs // {
     src = fs.toSource {
@@ -84,6 +82,8 @@ rec {
         (root + /engine/app/Sources)
         (root + /engine/census)
         (root + /docs)
+        (root + /port/linux/port.json)
+        (root + /port/linux/game/tiff_file.c)
       ];
     };
   };
