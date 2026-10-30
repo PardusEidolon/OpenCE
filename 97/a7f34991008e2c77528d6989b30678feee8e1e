@@ -1,0 +1,1 @@
+Task: Phase 3 'Fixing the findings' (frame clock). The frame clock starts on a whole millisecond and steps in exact threes, in the dark too; two new tests pass, as do the workspace's tests. No measured change in a30/b30 on its own.
