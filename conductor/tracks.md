@@ -20,5 +20,5 @@ what became of each in [./archive/README.md](./archive/README.md).
 - [~] **Track: The map and cutscene audit: every map and cutscene played headless against stock, fixed and iterated until clean**
   *Link: [./tracks/map_audit_20261028/](./tracks/map_audit_20261028/)*
 
-- [ ] **Track: The lighting extended from the original's own lightmaps, shader tags and lights, each switchable to stock and measured against it**
+- [~] **Track: The lighting extended from the original's own lightmaps, shader tags and lights, each switchable to stock and measured against it**
   *Link: [./tracks/lighting_original_20261028/](./tracks/lighting_original_20261028/)*
