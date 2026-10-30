@@ -60,7 +60,7 @@ struct vertex_library
 {
 	struct vertex_library *next;
 	unsigned long packed_mask, present_mask;
-	BOOL lit;
+	BOOL lit, shadowed;
 	unsigned int library;
 };
 
@@ -135,6 +135,11 @@ static struct
 	/* a 1x1 texture for stages the shader samples without one */
 	unsigned int blank_texture;
 	unsigned long frame;
+	/* port: the light pass's light was found among rasterizer_lights (its
+	position written to the light constant), and the frame (+1) whose depth
+	was last copied for the shadowed light passes */
+	BOOL shadow_light;
+	unsigned long shadow_copied_frame;
 } device;
 
 static float dword_to_float(DWORD value)
@@ -707,6 +712,12 @@ void WINAPI D3DDevice_GetVertexShaderSize(DWORD handle, UINT *size)
 	*size = object ? object->instruction_count : 0;
 }
 
+/* port: the constant the light passes (rasterizer_dx8's) write their
+light's position to, D3D's -81 */
+#define SHADOW_LIGHT_CONSTANT 15
+
+static BOOL light_placed(const float *position);
+
 void WINAPI D3DDevice_SetVertexShaderConstant(INT reg, CONST void *constant_data, DWORD constant_count)
 {
 	long first = reg + XGPU_VERTEX_CONSTANT_BIAS;
@@ -716,6 +727,8 @@ void WINAPI D3DDevice_SetVertexShaderConstant(INT reg, CONST void *constant_data
 	if (first + (long)constant_count > XGPU_VERTEX_CONSTANT_COUNT)
 		constant_count = XGPU_VERTEX_CONSTANT_COUNT - first;
 	constants_store((unsigned long)first, constant_data, constant_count);
+	if (first <= SHADOW_LIGHT_CONSTANT && first + (long)constant_count > SHADOW_LIGHT_CONSTANT)
+		device.shadow_light = light_placed(device.constants[SHADOW_LIGHT_CONSTANT]);
 }
 
 /* the program that runs: the one loaded at the selected address, else the
@@ -1080,7 +1093,8 @@ enum
 	_sent_blend_color,
 	_sent_texture0,
 	_sent_sampler0 = _sent_texture0 + D3DTSS_MAXSTAGES,
-	NUMBER_OF_SENT = _sent_sampler0 + D3DTSS_MAXSTAGES
+	_sent_shadow_texture = _sent_sampler0 + D3DTSS_MAXSTAGES,
+	NUMBER_OF_SENT
 };
 
 static struct
@@ -1146,6 +1160,21 @@ static BOOL light_sendable(const float *words)
 		if (words[index] < 0.0f || words[index] > 1.0f)
 			return FALSE;
 	return words[12] >= 0.0f;
+}
+
+/* whether a position is one of the frame's lights': the light pass being
+drawn is then that light's */
+static BOOL light_placed(const float *position)
+{
+	long count = rasterizer_lights.light_count;
+	long index;
+
+	if (count > OPENCE_RENDER_MAX_LIGHTS)
+		count = OPENCE_RENDER_MAX_LIGHTS;
+	for (index = 0; index < count; index++)
+		if (!memcmp(rasterizer_lights.lights[index].words, position, 3 * sizeof(*position)))
+			return TRUE;
+	return FALSE;
 }
 
 static void lights_send(void)
@@ -1450,7 +1479,7 @@ static struct
 	char text[32];
 } lighting_extensions[NUMBER_OF_LIGHTING_EXTENSIONS] =
 {
-	{ "lighting.placed_lights", "shadowed", FALSE },
+	{ "lighting.placed_lights", "shadowed", TRUE },
 	{ "lighting.bounce", "baked", FALSE },
 	{ "lighting.atmosphere", "scattering", FALSE },
 	{ "lighting.shadows", "ray_traced", FALSE },
@@ -1810,20 +1839,22 @@ static BOOL streams_setup(struct draw_streams *streams, const struct vertex_shad
 /* ---------- a draw's state */
 
 static unsigned int vertex_library_get(struct vertex_shader_object *program, unsigned long packed, unsigned long present,
-	BOOL lit)
+	BOOL lit, BOOL shadowed)
 {
 	struct vertex_library *library;
 
 	for (library = program->libraries; library; library = library->next)
-		if (library->packed_mask == packed && library->present_mask == present && library->lit == lit)
+		if (library->packed_mask == packed && library->present_mask == present && library->lit == lit &&
+			library->shadowed == shadowed)
 			return library->library;
 	if (!(library = calloc(1, sizeof(*library))))
 		return 0;
 	library->packed_mask = packed;
 	library->present_mask = present;
 	library->lit = lit;
+	library->shadowed = shadowed;
 	library->library = library_create(nv2a_vertex_shader_to_msl(program->instructions, program->instruction_count,
-		packed, present, lit ? &program->lighting : NULL));
+		packed, present, lit ? &program->lighting : NULL, shadowed));
 	library->next = program->libraries;
 	program->libraries = library;
 	if (!library->library)
@@ -1880,6 +1911,70 @@ static void pipeline_send(unsigned int pipeline)
 }
 
 /* everything a draw of these streams needs sent; FALSE to leave it out */
+/* port: whether the draw is a placed light's pass (rasterizer_dx8's: its
+light's position in the light constant, drawn on the surfaces' depth with
+EQUAL, no depth written and added to what is there) with
+lighting.placed_lights shadowed, into a pass with depth */
+static BOOL light_pass_shadowed(void)
+{
+	return lighting_extensions[_lighting_placed_lights].on && device.shadow_light && device.pass_depth &&
+		D3D__RenderState[D3DRS_ZFUNC] == D3DCMP_EQUAL && !D3D__RenderState[D3DRS_ZWRITEENABLE] &&
+		D3D__RenderState[D3DRS_ALPHABLENDENABLE] && D3D__RenderState[D3DRS_DESTBLEND] == D3DBLEND_ONE;
+}
+
+/* port: the copy of the open pass's depth the shadowed light passes march
+through, made once a frame before the first of them (the light passes
+draw no depth, so one copy holds for all of them); the pass is ended for
+the copy and begun again by the caller. 0 if it cannot be made. */
+static unsigned int shadow_depth_copy(void)
+{
+	static unsigned int copy;
+	static unsigned long copy_width, copy_height;
+	unsigned int *fields;
+
+	if (copy && device.shadow_copied_frame == device.frame + 1 && copy_width == device.pass_width &&
+		copy_height == device.pass_height)
+		return copy;
+	if (!copy || copy_width != device.pass_width || copy_height != device.pass_height)
+	{
+		if (copy)
+			xgpu_metal_destroy(OPENCE_RENDER_OBJECT_TEXTURE, copy);
+		copy = xgpu_metal_new_id(OPENCE_RENDER_OBJECT_TEXTURE);
+		fields = copy ? xgpu_metal_command(OPENCE_RENDER_OP_CREATE_TEXTURE, OPENCE_RENDER_CREATE_TEXTURE_WORDS) : NULL;
+		if (!fields)
+		{
+			copy = 0;
+			return 0;
+		}
+		fields[0] = copy;
+		fields[1] = OPENCE_RENDER_TEXTURE_2D;
+		fields[2] = OPENCE_RENDER_FORMAT_DEPTH32F_STENCIL8;
+		fields[3] = (unsigned int)device.pass_width;
+		fields[4] = (unsigned int)device.pass_height;
+		fields[5] = 1;
+		fields[6] = 1;
+		/* (the host makes depth textures only as targets) */
+		fields[7] = OPENCE_RENDER_USAGE_SAMPLED | OPENCE_RENDER_USAGE_RENDER_TARGET;
+		fields[8] = 1;
+		copy_width = device.pass_width;
+		copy_height = device.pass_height;
+	}
+	{
+		unsigned int depth = device.pass_depth;
+
+		pass_end();
+		if (!(fields = xgpu_metal_command(OPENCE_RENDER_OP_COPY_TEXTURE, OPENCE_RENDER_COPY_TEXTURE_WORDS)))
+			return 0;
+		memset(fields, 0, (OPENCE_RENDER_COPY_TEXTURE_WORDS - 1) * sizeof(*fields));
+		fields[0] = depth;
+		fields[5] = copy;
+		fields[10] = (unsigned int)copy_width;
+		fields[11] = (unsigned int)copy_height;
+	}
+	device.shadow_copied_frame = device.frame + 1;
+	return copy;
+}
+
 static BOOL draw_prepare(const struct draw_streams *streams)
 {
 	struct vertex_shader_object *program = current_program();
@@ -1888,7 +1983,7 @@ static BOOL draw_prepare(const struct draw_streams *streams)
 	struct nv2a_vertex_uniforms *vertex;
 	unsigned int textures[D3DTSS_MAXSTAGES], samplers[D3DTSS_MAXSTAGES];
 	unsigned int vertex_library, fragment_library, pipeline, fields[4];
-	unsigned int index;
+	unsigned int index, shadow_texture = 0;
 	float blend_color[4];
 
 	if (!program || !program->instructions)
@@ -1900,10 +1995,16 @@ static BOOL draw_prepare(const struct draw_streams *streams)
 	textures_prepare(&key, &pixel, textures, samplers);
 	if (!pass_ensure())
 		return FALSE;
+	if (light_pass_shadowed())
+	{
+		if (!(shadow_texture = shadow_depth_copy()) || !pass_ensure())
+			return FALSE;
+		key.shadowed = TRUE;
+	}
 	pixel_key_finish(&key);
 	pixel_uniforms_build(&pixel);
 	vertex_library = vertex_library_get(program, streams->packed_mask, streams->present_mask,
-		key.per_pixel_lighting != 0);
+		key.per_pixel_lighting != 0, key.shadowed);
 	fragment_library = fragment_library_get(&key);
 	if (!vertex_library || !fragment_library)
 		return FALSE;
@@ -1930,6 +2031,13 @@ static BOOL draw_prepare(const struct draw_streams *streams)
 		command_send(_sent_texture0 + (int)index, OPENCE_RENDER_OP_SET_TEXTURE, 4, fields);
 		fields[2] = samplers[index];
 		command_send(_sent_sampler0 + (int)index, OPENCE_RENDER_OP_SET_SAMPLER, 4, fields);
+	}
+	if (shadow_texture)
+	{
+		fields[0] = OPENCE_RENDER_STAGE_FRAGMENT;
+		fields[1] = XGPU_SHADOW_DEPTH_TEXTURE;
+		fields[2] = shadow_texture;
+		command_send(_sent_shadow_texture, OPENCE_RENDER_OP_SET_TEXTURE, 4, fields);
 	}
 	for (index = 0; index < streams->layout_count; index++)
 		command_send(-1, OPENCE_RENDER_OP_SET_VERTEX_BUFFER, 4, streams->buffers[index]);
@@ -2769,6 +2877,7 @@ void WINAPI D3DDevice_Present(CONST RECT *source_rectangle, CONST RECT *destinat
 		pass_end();
 		back_buffer_blit();
 		lights_send();
+		device.shadow_light = FALSE;
 		xgpu_metal_command(OPENCE_RENDER_OP_PRESENT, OPENCE_RENDER_PRESENT_WORDS);
 		xgpu_metal_flush();
 		xgpu_metal_begin_frame();

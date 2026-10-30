@@ -6,10 +6,11 @@ with game.wasm's flags into a WASI command and run in its runtime
 (opence-wasm) on known programs (tools/test_nv2a_msl.py): each prints the
 shader it writes.
 
-	nv2a_print vertex glsl|msl <packed mask> <present mask> lit|unlit <word>...
+	nv2a_print vertex glsl|msl <packed mask> <present mask> lit|unlit|shadowed <word>...
 		the vertex program of these instruction words (hex, after the
 		program's header), its attributes in the masks (hex); lit: with the
-		lighting nv2a_vertex_shader_lighting finds (exit 3 if none)
+		lighting nv2a_vertex_shader_lighting finds (exit 3 if none);
+		shadowed: for a shadowed light pass (MSL only)
 	nv2a_print pixel glsl|msl <case>
 		one of the pixel shader keys below
 	nv2a_print pixel glsl|msl mode <stage> <mode> <sampler>
@@ -172,6 +173,14 @@ static int pixel_case(const char *name, struct nv2a_pixel_shader_key *key)
 		multiply(key, 0, INPUT(V0, 0, 0), INPUT(ZERO, 0, INVERT));
 		key->source_blend = 3;
 	}
+	else if (!strcmp(name, "shadowed"))
+	{
+		/* a dynamic light's pass: the light's texture added where the depth
+		is the frame's */
+		set_mode(key, 0, 0x01, _xgpu_sampler_2d);
+		multiply(key, 0, INPUT(T0, 0, 0), INPUT(V0, 0, 0));
+		key->shadowed = 1;
+	}
 	else if (!strcmp(name, "count_samples"))
 	{
 		multiply(key, 0, INPUT(V0, 0, 0), INPUT(ZERO, 0, INVERT));
@@ -222,7 +231,7 @@ int main(int argc, char **argv)
 		unsigned long count = (unsigned long)(argc - 6) / 4, index;
 		DWORD *instructions = calloc(count * 4 + 4, sizeof(DWORD));
 		struct nv2a_vertex_lighting lighting;
-		BOOL lit = !strcmp(argv[5], "lit");
+		BOOL lit = !strcmp(argv[5], "lit"), shadowed = !strcmp(argv[5], "shadowed");
 
 		for (index = 0; index < count * 4; index++)
 			instructions[index] = (DWORD)strtoul(argv[6 + index], NULL, 16);
@@ -232,7 +241,7 @@ int main(int argc, char **argv)
 			return 3;
 		}
 		source = msl ?
-			nv2a_vertex_shader_to_msl(instructions, count, packed, present, lit ? &lighting : NULL) :
+			nv2a_vertex_shader_to_msl(instructions, count, packed, present, lit ? &lighting : NULL, shadowed) :
 			nv2a_vertex_shader_to_glsl(instructions, count, packed, lit ? &lighting : NULL);
 	}
 	else if (!strcmp(argv[1], "pixel"))

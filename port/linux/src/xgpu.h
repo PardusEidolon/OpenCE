@@ -120,10 +120,13 @@ vertex_main, its attributes those whose bit is set in
 present_attribute_mask ([[attribute(N)]], packed as above), the others read
 from the uniforms' attributes; the uniforms are struct
 nv2a_vertex_uniforms, in vertex buffer 29 (the last of the ring's 30).
+Shadowed, the clip positions of the vertex and of the dynamic light the
+program draws (its position in c[-81], the world to clip matrix in
+c[-96..-93]) go to the pixel shader too (nv2a_pixel_shader_key shadowed).
 Returns a malloc'd string. */
 char *nv2a_vertex_shader_to_msl(const DWORD *instructions, unsigned long instruction_count,
 	unsigned long packed_attribute_mask, unsigned long present_attribute_mask,
-	const struct nv2a_vertex_lighting *lighting);
+	const struct nv2a_vertex_lighting *lighting, BOOL shadowed);
 
 /* the Metal vertex shader's uniforms, laid out as its nv2a_vertex_uniforms
 (which checks its size against this one's) */
@@ -192,7 +195,16 @@ struct nv2a_pixel_shader_key
 	blend of a constant color factor with a constant alpha one, as the
 	meters' (shader_transparent_meter) */
 	unsigned char source_blend;
+	/* a pass of the dynamic lights (rasterizer_lights) drawn shadowed
+	(lighting.placed_lights shadowed, Metal only): the light reaches the
+	pixel only where the frame's depth, a copy of it in texture
+	XGPU_SHADOW_DEPTH_TEXTURE, has nothing between them (the vertex shader's
+	nv2a_vertex_shader_to_msl shadowed) */
+	unsigned char shadowed;
 };
+
+/* the fragment texture the shadowed light passes read the depth from */
+#define XGPU_SHADOW_DEPTH_TEXTURE 4
 
 char *nv2a_pixel_shader_to_glsl(const struct nv2a_pixel_shader_key *key);
 

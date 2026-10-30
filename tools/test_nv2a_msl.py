@@ -59,6 +59,7 @@ PIXEL_CASES = [
     "meter",
     "blend",
     "count_samples",
+    "shadowed",
 ]
 
 # (stage, PSTextureModes' mode, sampler): every mode, each with the samplers
@@ -134,6 +135,10 @@ def shaders(nv2a_print, tmp_path_factory):
             outputs.append(out if code == 0 else None)
         if outputs[1] is not None:
             cases[f"vertex_{index}_lit"] = ("vertex", *outputs)
+        # the shadowed light passes' (MSL only: the GL builds draw none)
+        code, out, err = translate(nv2a_print, folder, "vertex", "msl", "0", "ffff", "shadowed", *hex_words)
+        assert code == 0, f"vertex {index} shadowed: {err}"
+        cases[f"vertex_{index}_shadowed"] = ("vertex", None, out)
     for case in PIXEL_CASES:
         outputs = []
         for language in ("glsl", "msl"):
@@ -189,7 +194,7 @@ def write(folder, shaders):
 
 
 def test_every_program_was_translated(shaders):
-    vertex = [name for name in shaders if name.startswith("vertex_") and not name.endswith("_lit")]
+    vertex = [name for name in shaders if name.startswith("vertex_") and not name.endswith(("_lit", "_shadowed"))]
     assert len(vertex) == len(vertex_programs()) * len(ATTRIBUTES) == 67 * len(ATTRIBUTES)
     # the game's four model lighting programs (rasterizer_xbox_vertex_shaders_
     # initialize.c names them to halo_vertex_shader_lighting), which the
@@ -239,6 +244,16 @@ def test_the_paths_are_translated_to_metal(shaders):
     # an absent attribute reads its constant; a packed one is unpacked
     assert "[[attribute(1)]]" not in msl["vertex_0_0_1"] and "u.attributes[1]" in msl["vertex_0_0_1"]
     assert "uint v2_packed [[attribute(2)]]" in msl["vertex_0_c_1f"]
+    # the shadowed light passes: the vertex's and the light's clip positions
+    # to the pixel shader, which steps between them through the depth copy
+    for name in ("vertex_0_shadowed", "vertex_9_shadowed"):
+        assert "[[user(xShadowFrom)]]" in msl[name] and "[[user(xShadowTo)]]" in msl[name], name
+        assert "c[15].xyz" in msl[name] and "dot(c[3], light)" in msl[name], name
+    assert "depth2d<float> shadow_depth [[texture(4)]]" in msl["pixel_shadowed"]
+    assert "shadow_visibility(shadow_depth, input.xShadowFrom, input.xShadowTo)" in msl["pixel_shadowed"]
+    for name, source in msl.items():
+        if not name.endswith("shadowed"):
+            assert "xShadow" not in source and "shadow_depth" not in source, name
 
 
 def test_the_glsl_is_unchanged(shaders):

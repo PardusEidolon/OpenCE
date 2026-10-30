@@ -587,6 +587,58 @@ world position the vertex program hands on and the same constants
 terms, clamped where the programs clamp them. The diffuse alpha, which the
 programs write apart (0, or planar fog's), is kept. */
 
+/* how much of a dynamic light reaches the pixel (key shadowed): the line
+from the pixel to the light, both in Metal's clip space, is stepped through
+the frame's depth; where a step is behind what the depth holds there, by
+more than the depth's error and less than a thickness (so that an object
+well in front of the line does not shadow it), the light is blocked. Steps
+off the screen or behind the camera say nothing. The first step is past the
+pixel's own surface and the last short of the light's. Distances are in
+clip w, which is world units (3.048 m) in front of the camera: the depth
+held at a step is put back into w by the projection the line itself is in,
+z/w = a + b/w. */
+static void shadow_visibility(struct xgpu_text *text)
+{
+	xgpu_text_append(text,
+		"constexpr sampler shadow_sampler(coord::normalized, filter::nearest, address::clamp_to_edge);\n"
+		"float shadow_visibility(depth2d<float> depth, float4 from, float4 to)\n"
+		"{\n"
+		"\tconst int steps = 24;\n"
+		"\tconst float thickness = 0.6;\n"
+		"\tif (from.w <= 0.01)\n"
+		"\t\treturn 1.0;\n"
+		"\tfloat4 near = mix(from, to, 0.05);\n"
+		"\tfloat inverse = 1.0 / from.w - 1.0 / max(near.w, 0.01);\n"
+		"\tbool linear = near.w > 0.01 && abs(inverse) > 1e-6;\n"
+		"\tfloat b = linear ? (from.z / from.w - near.z / near.w) / inverse : 0.0;\n"
+		"\tfloat a = from.z / from.w - b / from.w;\n"
+		"\tfor (int step = 1; step < steps; step++)\n"
+		"\t{\n"
+		"\t\tfloat4 at = mix(from, to, float(step) / float(steps) * 0.95);\n"
+		"\t\tif (at.w <= 0.01)\n"
+		"\t\t\tbreak;\n"
+		"\t\tfloat3 ndc = at.xyz / at.w;\n"
+		"\t\tfloat2 uv = float2(ndc.x * 0.5 + 0.5, 0.5 - ndc.y * 0.5);\n"
+		"\t\tif (any(uv < 0.0) || any(uv > 1.0) || ndc.z < 0.0 || ndc.z > 1.0)\n"
+		"\t\t\tbreak;\n"
+		"\t\tfloat held = depth.sample(shadow_sampler, uv);\n"
+		"\t\tfloat error = 0.01 + 0.002 * at.w;\n"
+		"\t\tif (!linear)\n"
+		"\t\t{\n"
+		"\t\t\tif (held < ndc.z - 1e-4)\n"
+		"\t\t\t\treturn 0.0;\n"
+		"\t\t\tcontinue;\n"
+		"\t\t}\n"
+		"\t\tif (abs(held - a) < 1e-7)\n"
+		"\t\t\tcontinue;\n"
+		"\t\tfloat behind = at.w - b / (held - a);\n"
+		"\t\tif (behind > error && behind < thickness + error)\n"
+		"\t\t\treturn 0.0;\n"
+		"\t}\n"
+		"\treturn 1.0;\n"
+		"}\n");
+}
+
 static void model_lighting(struct xgpu_text *text, BOOL point_lights, BOOL msl)
 {
 	int light;
@@ -680,6 +732,8 @@ static void msl_declarations(struct xgpu_text *text, const struct nv2a_pixel_sha
 		xgpu_text_append(text, "\tfloat4 xWorldNormal [[user(xWorldNormal)]];\n");
 	if (key->per_pixel_lighting == 2)
 		xgpu_text_append(text, "\tfloat3 xWorldPosition [[user(xWorldPosition)]];\n");
+	if (key->shadowed)
+		xgpu_text_append(text, "\tfloat4 xShadowFrom [[user(xShadowFrom)]];\n\tfloat4 xShadowTo [[user(xShadowTo)]];\n");
 	xgpu_text_append(text,
 		"};\n"
 		"struct nv2a_fragment_out\n"
@@ -690,6 +744,8 @@ static void msl_declarations(struct xgpu_text *text, const struct nv2a_pixel_sha
 		sample_mask ? "\tuint sample_mask [[sample_mask]];\n" : "");
 	if (key->per_pixel_lighting)
 		model_lighting(text, key->per_pixel_lighting == 2, TRUE);
+	if (key->shadowed)
+		shadow_visibility(text);
 	xgpu_text_append(text, "%s", shader_functions);
 	xgpu_text_append(text, "fragment nv2a_fragment_out fragment_main(nv2a_fragment_in input [[stage_in]],\n"
 		"\tconstant nv2a_pixel_uniforms &u [[buffer(0)]]");
@@ -703,6 +759,8 @@ static void msl_declarations(struct xgpu_text *text, const struct nv2a_pixel_sha
 				types[key->sampler_type[stage]], stage, stage, stage, stage);
 		}
 	}
+	if (key->shadowed)
+		xgpu_text_append(text, ",\n\tdepth2d<float> shadow_depth [[texture(%d)]]", XGPU_SHADOW_DEPTH_TEXTURE);
 	xgpu_text_append(text, ")\n{\n\tnv2a_fragment_out output;\n");
 	if (sample_mask)
 		xgpu_text_append(text, "\toutput.sample_mask = 0xffffffffu;\n");
@@ -889,6 +947,9 @@ body:
 	if (key->count_samples && !msl)
 		xgpu_text_append(&text, "\tatomicCounterIncrement(visible_samples);\n");
 #endif
+	/* the light passes add their light: what is shadowed adds none */
+	if (key->shadowed && msl)
+		xgpu_text_append(&text, "\tresult.rgb *= shadow_visibility(shadow_depth, input.xShadowFrom, input.xShadowTo);\n");
 	if (key->source_blend)
 	{
 		static const char *const factors[] =

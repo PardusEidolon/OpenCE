@@ -395,7 +395,7 @@ static const char shader_functions[] =
 /* the outputs, the uniforms and the attributes of the MSL, and its
 vertex_main up to the program's body */
 static void msl_declarations(struct xgpu_text *text, unsigned long packed_attribute_mask,
-	unsigned long present_attribute_mask, const struct nv2a_vertex_lighting *lighting)
+	unsigned long present_attribute_mask, const struct nv2a_vertex_lighting *lighting, BOOL shadowed)
 {
 	static const char *const outputs[] = { "xD0", "xD1", "xB0", "xB1", "xT0", "xT1", "xT2", "xT3" };
 	unsigned long index;
@@ -429,6 +429,9 @@ static void msl_declarations(struct xgpu_text *text, unsigned long packed_attrib
 		xgpu_text_append(text, "\tfloat4 xWorldNormal [[user(xWorldNormal)]];\n");
 	if (lighting && lighting->lights == 2)
 		xgpu_text_append(text, "\tfloat3 xWorldPosition [[user(xWorldPosition)]];\n");
+	/* (the pixel shader's shadow_visibility) */
+	if (shadowed)
+		xgpu_text_append(text, "\tfloat4 xShadowFrom [[user(xShadowFrom)]];\n\tfloat4 xShadowTo [[user(xShadowTo)]];\n");
 	xgpu_text_append(text, "};\n");
 	if (present_attribute_mask)
 	{
@@ -471,14 +474,14 @@ static void msl_declarations(struct xgpu_text *text, unsigned long packed_attrib
 
 static char *vertex_shader(const DWORD *instructions, unsigned long instruction_count,
 	unsigned long packed_attribute_mask, unsigned long present_attribute_mask,
-	const struct nv2a_vertex_lighting *lighting, BOOL msl)
+	const struct nv2a_vertex_lighting *lighting, BOOL shadowed, BOOL msl)
 {
 	struct xgpu_text text = { 0 };
 	unsigned long index;
 
 	if (msl)
 	{
-		msl_declarations(&text, packed_attribute_mask, present_attribute_mask, lighting);
+		msl_declarations(&text, packed_attribute_mask, present_attribute_mask, lighting, shadowed);
 	}
 	else
 	{
@@ -678,6 +681,18 @@ static char *vertex_shader(const DWORD *instructions, unsigned long instruction_
 			xgpu_text_append(&text, "\toutput.xWorldNormal = xWorldNormal;\n");
 		if (lighting && lighting->lights == 2)
 			xgpu_text_append(&text, "\toutput.xWorldPosition = xWorldPosition;\n");
+		/* the light's clip position by the world to clip rows (rasterizer_
+		set_frustum_z), converted to Metal's as the vertex's is above: the
+		conversion is linear, so the pixel shader can step from one to the
+		other through clip space */
+		if (shadowed)
+			xgpu_text_append(&text,
+				"\toutput.xShadowFrom = position;\n"
+				"\tvec4 light = vec4(c[%d].xyz, 1.0);\n"
+				"\tvec4 light_clip = vec4(dot(c[0], light), dot(c[1], light), dot(c[2], light), dot(c[3], light));\n"
+				"\toutput.xShadowTo = vec4((light_clip.xyz * c[%d].xyz + (c[%d].xyz + vec3(0.5 + screen_offset, 0.5, 0.0)\n"
+				"\t\t- viewport_offset.xyz) * light_clip.w) / scale, light_clip.w);\n",
+				XGPU_VERTEX_CONSTANT_BIAS - 81, XGPU_VERTEX_CONSTANT_BIAS - 38, XGPU_VERTEX_CONSTANT_BIAS - 37);
 		xgpu_text_append(&text, "\treturn output;\n}\n");
 		return text.buffer;
 	}
@@ -706,13 +721,13 @@ static char *vertex_shader(const DWORD *instructions, unsigned long instruction_
 char *nv2a_vertex_shader_to_glsl(const DWORD *instructions, unsigned long instruction_count,
 	unsigned long packed_attribute_mask, const struct nv2a_vertex_lighting *lighting)
 {
-	return vertex_shader(instructions, instruction_count, packed_attribute_mask, 0, lighting, FALSE);
+	return vertex_shader(instructions, instruction_count, packed_attribute_mask, 0, lighting, FALSE, FALSE);
 }
 
 char *nv2a_vertex_shader_to_msl(const DWORD *instructions, unsigned long instruction_count,
 	unsigned long packed_attribute_mask, unsigned long present_attribute_mask,
-	const struct nv2a_vertex_lighting *lighting)
+	const struct nv2a_vertex_lighting *lighting, BOOL shadowed)
 {
 	return vertex_shader(instructions, instruction_count, packed_attribute_mask, present_attribute_mask,
-		lighting, TRUE);
+		lighting, shadowed, TRUE);
 }
