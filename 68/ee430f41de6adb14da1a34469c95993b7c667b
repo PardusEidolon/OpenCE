@@ -1,0 +1,1 @@
+Task: Phase 1 'The sweeps against stock'. Seams, shadow edges, brightness and colour per region on every map; 161 runs, 51 findings (noise: the switches still draw stock); pytest 5/5 pass.
