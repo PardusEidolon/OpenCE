@@ -4801,7 +4801,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `data_initialize` | memory/data.c | Ported |  | `tools/engine_data_reference.py` |
 | `datum_try_and_get` | memory/data.c | Ported | runtime/src/views.rs:9 | `tools/engine_data_reference.py` |
 | `datum_get` | memory/data.c | Ported |  | `tools/engine_data_reference.py` |
-| `data_verify` | memory/data.c | Ported | runtime/src/views.rs:9 | `tools/engine_data_reference.py` |
+| `data_verify` | memory/data.c | Ported | ffi/src/audit.rs:33 | `tools/engine_data_reference.py` |
 | `datum_initialize` | memory/data.c | Ported |  | `tools/engine_data_reference.py` |
 | `data_new` | memory/data.c | Ported | runtime/src/views.rs:194 | `tools/engine_data_reference.py` |
 | `data_dispose` | memory/data.c | Ported |  | `tools/engine_data_reference.py` |

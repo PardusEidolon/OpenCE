@@ -6,7 +6,11 @@
 //!   array (hs_runtime.c) as it starts and ends, by tick;
 //! - `sound.tsv`: each second of the mixed sound from the map's first tick,
 //!   its loudness in dBFS and its energy in octave bands from 63 Hz to
-//!   16 kHz.
+//!   16 kHz;
+//! - `state.tsv`: a hash of the game state each tick, the whole and then
+//!   each of its data arrays (named `name@address`), so that two runs of a
+//!   map that part can be told apart at the first tick and array they
+//!   differ in.
 //!
 //! The frames are taken by the app, which draws them. The game's random
 //! seed is fixed, so two runs of a map differ only by the timing of their
@@ -25,6 +29,49 @@ use opence_runtime::{Controls, SPEAKER_RATE};
 /// (`long script_index`), after its 16-bit identifier and a flags byte
 const THREAD_TYPE: u32 = 2;
 const THREAD_SCRIPT: u32 = 4;
+
+/// `'d@t@'`, the signature `data_verify` checks, at a data array header's
+/// +40 (memory/data.h)
+const DATA_SIGNATURE: u32 = 0x6440_7440;
+const SIGNATURE_AT: u32 = 40;
+/// a data array header's bytes hashed with its datums: as far as its data
+/// pointer
+const HEADER_SIZE: u32 = 56;
+
+/// The addresses of the data array headers in `bytes` whose signature is
+/// on a word, which are read from `base` (a word's address): candidates
+/// only, which [`View::data_array`] checks.
+#[must_use]
+pub fn signed_headers(bytes: &[u8], base: u32) -> Vec<u32> {
+    bytes
+        .as_chunks::<4>()
+        .0
+        .iter()
+        .enumerate()
+        .filter(|(_, word)| u32::from_le_bytes(**word) == DATA_SIGNATURE)
+        .filter_map(|(index, _)| {
+            // (a header starts in the bytes read)
+            let offset = u32::try_from(index * 4).ok()?.checked_sub(SIGNATURE_AT)?;
+            base.checked_add(offset)
+        })
+        .collect()
+}
+
+/// A hash of `bytes` (FxHash's step, a word at a time, then the tail and
+/// the length): fast enough for the whole game state each tick, and
+/// changed by any byte that changes.
+#[must_use]
+pub fn state_hash(bytes: &[u8]) -> u64 {
+    const SEED: u64 = 0x517c_c1b7_2722_0a95;
+    let step = |hash: u64, word: u64| (hash.rotate_left(5) ^ word).wrapping_mul(SEED);
+    let (words, tail) = bytes.as_chunks::<8>();
+    let hash = words
+        .iter()
+        .fold(0, |hash, word| step(hash, u64::from_le_bytes(*word)));
+    let mut last = [0_u8; 8];
+    last[..tail.len()].copy_from_slice(tail);
+    step(step(hash, u64::from_le_bytes(last)), bytes.len() as u64)
+}
 
 /// the octave bands' centres, in hertz
 pub const BANDS: [f64; 9] = [
@@ -324,6 +371,9 @@ pub struct Audit {
     loudness: Loudness,
     events: Option<std::io::BufWriter<std::fs::File>>,
     sound: Option<std::io::BufWriter<std::fs::File>>,
+    /// the game state's data arrays, found at the first tick
+    arrays: Option<Vec<u32>>,
+    state: Option<std::io::BufWriter<std::fs::File>>,
 }
 
 /// a file of the folder with its header written, or none if it cannot be
@@ -355,6 +405,12 @@ impl Audit {
             loudness: Loudness::default(),
             events: Some(events),
             sound: Some(sound),
+            arrays: None,
+            // (its header is written at the first tick, once its arrays are
+            // found)
+            state: std::fs::File::create(folder.join("state.tsv"))
+                .ok()
+                .map(std::io::BufWriter::new),
         })
     }
 
@@ -394,6 +450,49 @@ impl Audit {
             .collect()
     }
 
+    /// the line of `state.tsv` for this tick, after its header if this is
+    /// the first
+    fn state(&mut self, view: &View<'_>) -> Vec<String> {
+        let Some(memory) = view.bytes(GAME_STATE_ADDRESS, GAME_STATE_SIZE) else {
+            return Vec::new();
+        };
+        let mut lines = Vec::new();
+        let arrays = match &self.arrays {
+            Some(arrays) => arrays.clone(),
+            None => {
+                let arrays: Vec<(u32, String)> = signed_headers(&memory, GAME_STATE_ADDRESS)
+                    .into_iter()
+                    .filter_map(|address| Some((address, view.data_array(address)?.name)))
+                    .collect();
+                let mut header = "tick\tstate".to_owned();
+                for (address, name) in &arrays {
+                    let _ = write!(header, "\t{name}@{address:08x}");
+                }
+                lines.push(header);
+                let arrays: Vec<u32> = arrays.into_iter().map(|(address, _)| address).collect();
+                self.arrays = Some(arrays.clone());
+                arrays
+            }
+        };
+        let mut line = format!("{}\t{:016x}", self.tick, state_hash(&memory));
+        for address in arrays {
+            let hash = view.data_array(address).and_then(|array| {
+                let length = u32::from(array.size) * u32::from(array.count);
+                let mut bytes = view.bytes(address, HEADER_SIZE)?;
+                bytes.extend(view.bytes(array.data, length)?);
+                Some(state_hash(&bytes))
+            });
+            match hash {
+                Some(hash) => {
+                    let _ = write!(line, "\t{hash:016x}");
+                }
+                None => line.push_str("\t-"),
+            }
+        }
+        lines.push(line);
+        lines
+    }
+
     fn drive(&mut self) {
         let (held, turn) = schedule(self.tick);
         for ((vk, ascii, now), (_, _, was)) in keys(held).into_iter().zip(keys(self.held)) {
@@ -420,10 +519,19 @@ impl Audit {
                 self.events = None;
             }
         }
+        let lines = self.state(view);
+        if let Some(state) = &mut self.state {
+            if lines.iter().any(|line| writeln!(state, "{line}").is_err()) {
+                self.state = None;
+            }
+        }
         self.tick += 1;
         // (flushed each second, so that a run cut short keeps what it saw)
         if self.tick.is_multiple_of(60) {
-            for file in [&mut self.events, &mut self.sound].into_iter().flatten() {
+            for file in [&mut self.events, &mut self.sound, &mut self.state]
+                .into_iter()
+                .flatten()
+            {
                 let _ = file.flush();
             }
         }
@@ -446,7 +554,10 @@ impl Audit {
 
 impl Drop for Audit {
     fn drop(&mut self) {
-        for file in [&mut self.events, &mut self.sound].into_iter().flatten() {
+        for file in [&mut self.events, &mut self.sound, &mut self.state]
+            .into_iter()
+            .flatten()
+        {
             let _ = file.flush();
         }
     }

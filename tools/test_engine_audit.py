@@ -78,6 +78,19 @@ def test_script_events_compare_by_order_and_by_how_far_they_moved() -> None:
     assert audit.event_difference(lost, a)["extra"] == 2
 
 
+def test_two_runs_part_at_the_first_tick_their_state_differs() -> None:
+    header = "tick\tstate\tobjects@81a00000\tactor@81a10000\n"
+    a = audit.parse_tsv(header + "0\taa\t01\t02\n1\tab\t01\t03\n2\tac\t04\t05\n")
+    b = audit.parse_tsv(header + "0\taa\t01\t02\n1\tbb\t01\t09\n2\tbc\t07\t05\n")
+    assert audit.state_difference(a, b) == {"parted": 1, "arrays": ["actor@81a10000"], "ticks": 2}
+    # (the same, as far as the shorter run went)
+    assert audit.state_difference(a, a[:2]) == {"parted": None, "arrays": [], "ticks": 2}
+    # (the whole differs where no array does: the state outside them)
+    c = audit.parse_tsv(header + "0\tff\t01\t02\n")
+    assert audit.state_difference(a, c) == {"parted": 0, "arrays": [], "ticks": 1}
+    assert audit.state_difference([], b) == {"parted": None, "arrays": [], "ticks": 0}
+
+
 def test_frame_times_skip_the_load_and_give_percentiles() -> None:
     times = [1693.6] + [10.0] * 98 + [30.0]
     stats = audit.frame_stats(times, skip=1)

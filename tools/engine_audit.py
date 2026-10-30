@@ -170,6 +170,19 @@ def event_difference(a: list[dict[str, str]], b: list[dict[str, str]]) -> dict:
     return {"missing": len(left) - matched, "extra": len(right) - matched, "shift": shift}
 
 
+def state_difference(a: list[dict[str, str]], b: list[dict[str, str]]) -> dict:
+    """the first tick two runs' game states differ at (state.tsv), and the
+    data arrays that differ then: none named where only the state outside
+    them does"""
+    ticks = 0
+    for row, other in zip(a, b):
+        ticks += 1
+        if row.get("state") != other.get("state"):
+            arrays = [key for key in row if key not in ("tick", "state") and row[key] != other.get(key)]
+            return {"parted": int(row["tick"]), "arrays": arrays, "ticks": ticks}
+    return {"parted": None, "arrays": [], "ticks": ticks}
+
+
 def percentile(values: list[float], fraction: float) -> float:
     """the nearest-rank percentile of values, sorted"""
     if not values:

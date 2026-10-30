@@ -7,7 +7,8 @@ use std::collections::BTreeMap;
 use std::path::Path;
 
 use opence_ffi::audit::{
-    schedule, thread_events, Audit, ConsoleLines, Held, Loudness, Thread, BANDS,
+    schedule, signed_headers, state_hash, thread_events, Audit, ConsoleLines, Held, Loudness,
+    Thread, BANDS,
 };
 use opence_runtime::plugins::{Event, Plugin, View};
 
@@ -27,6 +28,36 @@ fn threads_that_end_and_start_are_written_by_tick() {
         ]
     );
     assert!(thread_events(91, &now, &now).is_empty());
+}
+
+#[test]
+fn data_array_headers_are_found_by_their_signature() {
+    // ('d@t@' at a header's +40, little-endian, on a word)
+    let mut bytes = vec![0_u8; 256];
+    bytes[40..44].copy_from_slice(&0x6440_7440_u32.to_le_bytes());
+    bytes[140..144].copy_from_slice(&0x6440_7440_u32.to_le_bytes());
+    // (one off a word is not a header, and one too near the start has none)
+    bytes[201..205].copy_from_slice(&0x6440_7440_u32.to_le_bytes());
+    bytes[8..12].copy_from_slice(&0x6440_7440_u32.to_le_bytes());
+    assert_eq!(signed_headers(&bytes, 0x1000), [0x1000, 0x1064]);
+}
+
+#[test]
+fn the_state_hash_sees_each_byte_and_its_place() {
+    let bytes: Vec<u8> = (0..=255).collect();
+    let hash = state_hash(&bytes);
+    assert_eq!(hash, state_hash(&bytes));
+    for at in [0, 7, 8, 200, 255] {
+        let mut changed = bytes.clone();
+        changed[at] ^= 1;
+        assert_ne!(state_hash(&changed), hash, "byte {at}");
+    }
+    let mut swapped = bytes.clone();
+    swapped.swap(0, 8);
+    assert_ne!(state_hash(&swapped), hash);
+    // (a tail shorter than a word counts too)
+    assert_ne!(state_hash(&bytes[..13]), state_hash(&bytes[..12]));
+    assert_ne!(state_hash(&[0; 3]), state_hash(&[0; 2]));
 }
 
 /// a second of a sine at `hertz` with `amplitude`, interleaved stereo
@@ -169,6 +200,17 @@ fn a_run_of_the_first_map_records_its_scripts_and_its_sound() -> Result<(), open
         "{events}"
     );
     assert!(sound.lines().count() > 5, "{sound}");
+    // and the game state is hashed each tick, its script threads' array
+    // among its columns
+    let state = std::fs::read_to_string(folder.join("state.tsv")).unwrap_or_default();
+    let header = state.lines().next().unwrap_or_default();
+    assert!(header.starts_with("tick\tstate\t"), "{header}");
+    assert!(header.contains("hs thread@"), "{header}");
+    assert!(
+        state.lines().count() > 60,
+        "{} lines",
+        state.lines().count()
+    );
     assert!(
         sound
             .lines()
