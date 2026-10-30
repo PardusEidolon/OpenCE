@@ -12,14 +12,14 @@ the end without manual stops, except the user's approval of golden frames.
   - 161 runs over 23 maps, none failed; 51 findings, all on switches that still draw stock, so they are run-to-run noise (map_audit Phase 3 fixes the determinism first).
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Switches' (Protocol in workflow.md) (automated)
 
-## Phase 2: Placed lights
+## Phase 2: Placed lights [checkpoint: 63456f2b]
 - [x] Task: Read the placed and dynamic lights from the map. 9edea209
     - Placed and dynamic lights both go through rasterizer_lights; game.wasm sends them as LIGHTS (op 30) before PRESENT. Idle Blood Gulch submits 0 lights.
 - [x] Task: Their shadows and light on the world and the models. 89e2d9a0
     - Design: screen-space shadows in the world's diffuse light pass (the world is not kept for shadow maps). The pass writes its light (position, 0.5/radius) to vertex constants -81..-77; the device matches that against rasterizer_lights, and for that pass's draws (lighting.placed_lights=shadowed) the vertex program passes its world position on, the host copies the depth once per frame before the first such draw, and the fragment shader marches from the pixel toward the light through that depth (world to clip by the pass's own matrix), scaling the additive light by what is lit. Measured on c10 (up to 7 lights, 877 of 1053 frames lit in 40 s).
     - Checked: one depth copy per lit frame and a shadow bind for each (885 of 1068 frames, tests/placed_lights.rs); the c10 sweep refuses nothing, and placed_lights against stock (brightness 3.87, seams 1094) is within stock2's noise (2.22, 1025).
     - Not shown: a visible shadow. In 150 s of c10, a build with the light passes forced dark matches stock within noise up to tick 2100 (mean |Δ| ≤ 3.0, ≤ 5.6% of pixels); after tick 2400, stock and stock2 drift apart by 24–74% of pixels, so those frames measure nothing. The kept frames show no surface the dynamic lights visibly light, so whether the shadows darken the right part is unmeasured; it needs a scene with a strong placed light (a station in devgulch).
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Placed lights' (Protocol in workflow.md) (automated)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Placed lights' (Protocol in workflow.md) (automated)
 
 ## Phase 3: Bounce and probes
 - [ ] Task: Bake bounce light and probes from the lightmaps and lights, behind the loading screen, cached by the map's hash.
