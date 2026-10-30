@@ -1,0 +1,1 @@
+Task: Phase 3 'Fixing the findings' (console lines on the game tick). The audit's console lines are handed over on their own tick; stock and stock2 start cutscenes on the same tick. Workspace tests, Swift tests (36, 4 skipped) and ffi audit tests pass.
