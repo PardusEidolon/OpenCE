@@ -1,0 +1,1 @@
+Task: Phase 3 'Fixing and iterating' (map_audit). Gates: 63/63 traces, census 0 Missing, audit pytest 10 passed, nix flake check pass (run after 89e2d9a0; no code changed since, only plans). Audit rerun: 228 runs, 0 failed.
