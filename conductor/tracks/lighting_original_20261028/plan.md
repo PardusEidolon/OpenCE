@@ -31,7 +31,8 @@ the end without manual stops, except the user's approval of golden frames.
 - [x] Task: Conductor - User Manual Verification 'Phase 3: Bounce and probes' (Protocol in workflow.md) (automated)
 
 ## Phase 4: The sky and atmosphere
-- [ ] Task: Fog and sky from the map's tags with scattering, matched to the original's colours.
+- [x] Task: Fog and sky from the map's tags with scattering, matched to the original's colours. f6cbf0cf
+  - 23 runs, none failed; colour shifts are the intended tint; d20 loses 19.46% of its edges under dense fog (for review); the sky stays stock.
 - [ ] Task: Conductor - User Manual Verification 'Phase 4: Atmosphere' (Protocol in workflow.md) (automated)
 
 ## Phase 5: Ray tracing
