@@ -126,3 +126,15 @@ def test_every_run_steps_its_clock_a_frame_at_a_time_so_runs_repeat() -> None:
     shipped = audit.audit_command(Path("out"), "a10", "shipped", None, 40)
     assert "--at" not in shipped
     assert [word for word in shipped if word.startswith("debug.")] == ["debug.frame_clock=true"]
+
+
+def test_a_run_played_again_starts_from_an_empty_folder(tmp_path: Path) -> None:
+    # (a frame kept at another tick by the last run would be compared as if
+    # this run had drawn it)
+    folder = tmp_path / "stock" / "a30"
+    (folder / "frames").mkdir(parents=True)
+    (folder / "frames" / "tick_03001.png").write_bytes(b"old")
+    (folder / "summary.json").write_text("{}")
+    audit.empty_folder(folder)
+    assert folder.is_dir()
+    assert list(folder.iterdir()) == []

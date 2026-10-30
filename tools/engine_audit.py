@@ -25,6 +25,7 @@ import concurrent.futures
 import difflib
 import json
 import math
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -274,11 +275,18 @@ def audit_command(folder: Path, name: str, variant: str, line: str | None, secon
     return command
 
 
+def empty_folder(folder: Path) -> None:
+    """a run's folder made empty for it: what the last run kept (a frame at
+    another tick) would otherwise be compared as this run's"""
+    shutil.rmtree(folder, ignore_errors=True)
+    folder.mkdir(parents=True)
+
+
 def play(name: str, variant: str, line: str | None, seconds: int, again: bool) -> tuple[str, int]:
     folder = OUT / variant / run_name(name, line)
     if (folder / "summary.json").is_file() and not again:
         return str(folder), 0
-    folder.mkdir(parents=True, exist_ok=True)
+    empty_folder(folder)
     command = audit_command(folder, name, variant, line, seconds)
     with open(folder / "app.log", "w") as log:
         done = subprocess.run(command, cwd=ROOT, stdout=log, stderr=subprocess.STDOUT)
