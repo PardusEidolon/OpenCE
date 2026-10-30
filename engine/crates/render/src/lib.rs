@@ -95,6 +95,10 @@ pub mod op {
     pub const PRESENT: u32 = 28;
     /// `OPENCE_RENDER_OP_WRITE_BUFFER`
     pub const WRITE_BUFFER: u32 = 29;
+    /// `OPENCE_RENDER_OP_LIGHTS`
+    pub const LIGHTS: u32 = 30;
+    /// `OPENCE_RENDER_LIGHT_WORDS`: the words of each light after the count
+    pub const LIGHT_WORDS: u32 = 13;
 
     /// Each op's name in the header and its size in words.
     pub const SIZES: &[(u32, &str, u32)] = &[
@@ -127,6 +131,7 @@ pub mod op {
         (GENERATE_MIPMAPS, "GENERATE_MIPMAPS", 2),
         (PRESENT, "PRESENT", 1),
         (WRITE_BUFFER, "WRITE_BUFFER", 5),
+        (LIGHTS, "LIGHTS", 2),
     ];
 
     /// The size in words of a command of `op` (its fixed part).
@@ -169,6 +174,8 @@ pub const MAX_TEXTURE_DEPTH: u32 = 2048;
 pub const MAX_TEXTURE_LEVELS: u32 = 15;
 /// `OPENCE_RENDER_MAX_BYTES`
 pub const MAX_BYTES: u32 = 4096;
+/// `OPENCE_RENDER_MAX_LIGHTS`
+pub const MAX_LIGHTS: u32 = 128;
 /// `OPENCE_RENDER_BUFFER_SLOTS`
 pub const BUFFER_SLOTS: u32 = 30;
 /// `OPENCE_RENDER_TEXTURE_SLOTS`
@@ -214,6 +221,8 @@ const HEADER_CONSTANTS: &[(&str, u32)] = &[
     ("MAX_TEXTURE_DEPTH", MAX_TEXTURE_DEPTH),
     ("MAX_TEXTURE_LEVELS", MAX_TEXTURE_LEVELS),
     ("MAX_BYTES", MAX_BYTES),
+    ("MAX_LIGHTS", MAX_LIGHTS),
+    ("LIGHT_WORDS", op::LIGHT_WORDS),
     ("BUFFER_SLOTS", BUFFER_SLOTS),
     ("TEXTURE_SLOTS", TEXTURE_SLOTS),
     ("SAMPLER_SLOTS", SAMPLER_SLOTS),
@@ -674,6 +683,39 @@ impl IndexType {
 
 // ---------- the commands, as checked
 
+/// A dynamic light the game submitted for the frame
+/// (`rasterizer_light_submit_parameters`, without its definition).
+#[derive(Clone, Copy, PartialEq, Debug, uniffi::Record)]
+pub struct Light {
+    /// where it is, in world units
+    pub position: Point,
+    /// the way it faces
+    pub forward: Point,
+    /// its up
+    pub up: Point,
+    /// its colour, each channel 0 to 1
+    pub color: Point,
+    /// how far it reaches, in world units
+    pub radius: f32,
+}
+
+/// Three floats: a point, a direction or a colour.
+#[derive(Clone, Copy, PartialEq, Debug, uniffi::Record)]
+pub struct Point {
+    /// the first
+    pub x: f32,
+    /// the second
+    pub y: f32,
+    /// the third
+    pub z: f32,
+}
+
+impl From<[f32; 3]> for Point {
+    fn from([x, y, z]: [f32; 3]) -> Self {
+        Self { x, y, z }
+    }
+}
+
 /// A pipeline's blending.
 #[derive(Clone, Copy, PartialEq, Eq, Debug, uniffi::Record)]
 pub struct Blend {
@@ -1118,6 +1160,11 @@ pub enum Command {
     },
     /// `OPENCE_RENDER_OP_PRESENT`
     Present,
+    /// `OPENCE_RENDER_OP_LIGHTS`
+    Lights {
+        /// the frame's lights, in the order the game submitted them
+        lights: Vec<Light>,
+    },
     /// As UploadBuffer, but copied when it is read rather than in the GPU's
     /// order (the guest's promise: nothing before it in the frame reads the
     /// range).
@@ -1473,7 +1520,7 @@ impl RenderValidator {
     ) -> Result<Option<Command>, RenderError> {
         let expected = op::words(code).ok_or(RenderError::UnknownOp)?;
         let words = fields.len() as u32 + 1;
-        let listed = matches!(code, op::CREATE_PIPELINE | op::SET_BYTES);
+        let listed = matches!(code, op::CREATE_PIPELINE | op::SET_BYTES | op::LIGHTS);
         if words < expected || (!listed && words != expected) {
             return Err(RenderError::Size { words, expected });
         }
@@ -1501,6 +1548,7 @@ impl RenderValidator {
                 | op::READ_TEXTURE
                 | op::GENERATE_MIPMAPS
                 | op::PRESENT
+                | op::LIGHTS
         );
         if inside && self.pass.is_none() {
             return Err(RenderError::OutsidePass);
@@ -1614,6 +1662,7 @@ impl RenderValidator {
                     bytes,
                 }
             }
+            op::LIGHTS => lights(f)?,
             op::SET_TEXTURE => {
                 let stage = read("stage", f[0], Stage::from_word)?;
                 slot(f[1], TEXTURE_SLOTS)?;
@@ -2602,6 +2651,53 @@ fn finite(field: &str, word: u32) -> Result<f32, RenderError> {
         return Err(float(field));
     }
     Ok(number)
+}
+
+/// LIGHTS's fields: a count of at most MAX_LIGHTS, then that many lights,
+/// every number finite, each colour channel 0 to 1 and each radius at least 0.
+fn lights(fields: &[u32]) -> Result<Command, RenderError> {
+    let count = fields[0];
+    if count > MAX_LIGHTS {
+        return Err(value("light count", count));
+    }
+    let words = fields.len() as u32 + 1;
+    let expected = 2 + count * op::LIGHT_WORDS;
+    if words != expected {
+        return Err(RenderError::Size { words, expected });
+    }
+    let three = |field: &str, words: &[u32]| -> Result<Point, RenderError> {
+        Ok(Point {
+            x: finite(field, words[0])?,
+            y: finite(field, words[1])?,
+            z: finite(field, words[2])?,
+        })
+    };
+    let lights = fields[1..]
+        .as_chunks::<{ op::LIGHT_WORDS as usize }>()
+        .0
+        .iter()
+        .map(|words| {
+            let color = three("light colour", &words[9..12])?;
+            if [color.x, color.y, color.z]
+                .iter()
+                .any(|channel| !(0.0..=1.0).contains(channel))
+            {
+                return Err(float("light colour"));
+            }
+            let radius = finite("light radius", words[12])?;
+            if radius < 0.0 {
+                return Err(float("light radius"));
+            }
+            Ok(Light {
+                position: three("light position", &words[0..3])?,
+                forward: three("light forward", &words[3..6])?,
+                up: three("light up", &words[6..9])?,
+                color,
+                radius,
+            })
+        })
+        .collect::<Result<_, _>>()?;
+    Ok(Command::Lights { lights })
 }
 
 fn slot(slot: u32, slots: u32) -> Result<(), RenderError> {

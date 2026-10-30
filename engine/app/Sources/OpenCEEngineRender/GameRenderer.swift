@@ -141,6 +141,9 @@ public final class GameRenderer: RenderTarget, @unchecked Sendable {
     private var render: MTLRenderCommandEncoder?
     private var pass: Pass?
     private var windowFrame: WindowFrame?
+    /// The dynamic lights the game submitted for the last frame, for the
+    /// lighting extensions; stock drawing does not read them.
+    private(set) var frameLights: [Light] = []
 
     public init?(device: MTLDevice, window: RenderWindow) {
         guard let queue = device.makeCommandQueue() else { return nil }
@@ -418,6 +421,9 @@ public final class GameRenderer: RenderTarget, @unchecked Sendable {
         case let .writeBuffer(id, offset, _, _):
             guard let bytes else { return false }
             return write(id, Int(offset), bytes)
+        case let .lights(lights):
+            frameLights = lights
+            return true
         case .present:
             endBlit()
             guard let commands = ensureCommands() else { return false }

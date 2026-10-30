@@ -1428,3 +1428,75 @@ fn vertex_formats_have_their_sizes() {
         assert_eq!(format.size(), size, "{format:?}");
     }
 }
+
+/// a light's words: position, forward, up, colour and radius
+fn light_words(position: [f32; 3], color: [f32; 3], radius: f32) -> Vec<u32> {
+    let mut words: Vec<u32> = position.iter().map(|value| value.to_bits()).collect();
+    words.extend([0.0f32, 1.0, 0.0, 0.0, 0.0, 1.0].map(f32::to_bits));
+    words.extend(color.map(f32::to_bits));
+    words.push(radius.to_bits());
+    words
+}
+
+#[test]
+fn the_frames_lights_are_read_with_their_count() {
+    let mut fields = vec![2];
+    fields.extend(light_words([1.0, 2.0, 3.0], [1.0, 0.5, 0.0], 4.0));
+    fields.extend(light_words([-5.0, 0.0, 9.5], [0.0, 0.0, 1.0], 0.25));
+    let batch = decode(
+        &mut validator(),
+        Writer::new()
+            .command(op::LIGHTS, &fields)
+            .command(op::LIGHTS, &[0])
+            .command(op::PRESENT, &[]),
+    );
+    assert!(errors(&batch).is_empty(), "{:?}", errors(&batch));
+    let light = |position: [f32; 3], color: [f32; 3], radius: f32| Light {
+        position: position.into(),
+        forward: [0.0, 1.0, 0.0].into(),
+        up: [0.0, 0.0, 1.0].into(),
+        color: color.into(),
+        radius,
+    };
+    assert_eq!(
+        batch.commands,
+        [
+            Command::Lights {
+                lights: vec![
+                    light([1.0, 2.0, 3.0], [1.0, 0.5, 0.0], 4.0),
+                    light([-5.0, 0.0, 9.5], [0.0, 0.0, 1.0], 0.25),
+                ]
+            },
+            Command::Lights { lights: vec![] },
+            Command::Present,
+        ]
+    );
+}
+
+#[test]
+fn lights_that_are_not_lights_are_refused() {
+    let mut too_many = vec![MAX_LIGHTS + 1];
+    for _ in 0..=MAX_LIGHTS {
+        too_many.extend(light_words([0.0; 3], [1.0; 3], 1.0));
+    }
+    let mut short = vec![2];
+    short.extend(light_words([0.0; 3], [1.0; 3], 1.0));
+    let mut bright = vec![1];
+    bright.extend(light_words([0.0; 3], [1.5, 0.0, 0.0], 1.0));
+    let mut not_a_number = vec![1];
+    not_a_number.extend(light_words([f32::NAN, 0.0, 0.0], [1.0; 3], 1.0));
+    let mut negative = vec![1];
+    negative.extend(light_words([0.0; 3], [1.0; 3], -1.0));
+    let batch = decode(
+        &mut validator(),
+        Writer::new()
+            .command(op::LIGHTS, &too_many)
+            .command(op::LIGHTS, &short)
+            .command(op::LIGHTS, &bright)
+            .command(op::LIGHTS, &not_a_number)
+            .command(op::LIGHTS, &negative)
+            .command(op::PRESENT, &[]),
+    );
+    assert_eq!(batch.commands, [Command::Present]);
+    assert_eq!(errors(&batch).len(), 5, "{:?}", errors(&batch));
+}

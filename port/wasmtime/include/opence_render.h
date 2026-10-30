@@ -156,6 +156,12 @@ length: a region written to guest memory once the GPU has drawn it */
 /* the window's frame is shown */
 #define OPENCE_RENDER_OP_PRESENT 28
 #define OPENCE_RENDER_PRESENT_WORDS 1
+/* count, then for each light its position (3 floats), forward (3), up (3),
+colour (3, each 0 to 1) and radius: the dynamic lights the game submitted
+for the frame (rasterizer_lights), sent before PRESENT */
+#define OPENCE_RENDER_OP_LIGHTS 30
+#define OPENCE_RENDER_LIGHTS_WORDS 2
+#define OPENCE_RENDER_LIGHT_WORDS 13
 
 /* ---------- limits */
 
@@ -172,6 +178,7 @@ length: a region written to guest memory once the GPU has drawn it */
 #define OPENCE_RENDER_MAX_TEXTURE_DEPTH 2048
 #define OPENCE_RENDER_MAX_TEXTURE_LEVELS 15
 #define OPENCE_RENDER_MAX_BYTES 4096 /* SET_BYTES */
+#define OPENCE_RENDER_MAX_LIGHTS 128 /* LIGHTS: MAXIMUM_LIGHTS_PER_WINDOW */
 #define OPENCE_RENDER_BUFFER_SLOTS 30
 #define OPENCE_RENDER_TEXTURE_SLOTS 16
 #define OPENCE_RENDER_SAMPLER_SLOTS 16

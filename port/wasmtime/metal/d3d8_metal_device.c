@@ -1118,6 +1118,64 @@ static void bytes_send(unsigned int stage, unsigned int slot, const void *data, 
 	memcpy(fields + 3, data, length);
 }
 
+/* port: the game's dynamic lights for the frame, read through a mirror of
+source/rasterizer/rasterizer_lights.h's layout (the device does not include
+the game's headers): a count, then 128 lights of a definition pointer and 13
+floats. The count is clamped, and only finite lights with colours in 0..1
+and a radius of at least 0 are sent, so the host's check never refuses one. */
+struct light_mirror
+{
+	void *definition;
+	float words[OPENCE_RENDER_LIGHT_WORDS];
+};
+
+extern struct
+{
+	long light_count;
+	struct light_mirror lights[OPENCE_RENDER_MAX_LIGHTS];
+} rasterizer_lights;
+
+static BOOL light_sendable(const float *words)
+{
+	int index;
+
+	for (index = 0; index < OPENCE_RENDER_LIGHT_WORDS; index++)
+		if (!isfinite(words[index]))
+			return FALSE;
+	for (index = 9; index < 12; index++)
+		if (words[index] < 0.0f || words[index] > 1.0f)
+			return FALSE;
+	return words[12] >= 0.0f;
+}
+
+static void lights_send(void)
+{
+	long count = rasterizer_lights.light_count;
+	unsigned int sendable = 0;
+	unsigned int *fields;
+	long index;
+
+	if (count < 0)
+		count = 0;
+	if (count > OPENCE_RENDER_MAX_LIGHTS)
+		count = OPENCE_RENDER_MAX_LIGHTS;
+	for (index = 0; index < count; index++)
+		sendable += light_sendable(rasterizer_lights.lights[index].words);
+	fields = xgpu_metal_command(OPENCE_RENDER_OP_LIGHTS,
+		OPENCE_RENDER_LIGHTS_WORDS + sendable * OPENCE_RENDER_LIGHT_WORDS);
+	if (!fields)
+		return;
+	fields[0] = sendable;
+	fields++;
+	for (index = 0; index < count; index++)
+	{
+		if (!light_sendable(rasterizer_lights.lights[index].words))
+			continue;
+		memcpy(fields, rasterizer_lights.lights[index].words, sizeof(rasterizer_lights.lights[index].words));
+		fields += OPENCE_RENDER_LIGHT_WORDS;
+	}
+}
+
 static void pass_end(void)
 {
 	if (device.in_pass)
@@ -2710,6 +2768,7 @@ void WINAPI D3DDevice_Present(CONST RECT *source_rectangle, CONST RECT *destinat
 	{
 		pass_end();
 		back_buffer_blit();
+		lights_send();
 		xgpu_metal_command(OPENCE_RENDER_OP_PRESENT, OPENCE_RENDER_PRESENT_WORDS);
 		xgpu_metal_flush();
 		xgpu_metal_begin_frame();
