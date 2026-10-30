@@ -23,7 +23,7 @@ stops.
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Comparing' (Protocol in workflow.md) (automated)
 
 ## Phase 3: Fixing and iterating
-- [ ] Task: Trace each finding to its cause and fix it, each with a failing test first.
+- [x] Task: Trace each finding to its cause and fix it, each with a failing test first. 7c9b0d5d 97a7f349 46a606e6 (console lines on the game tick; frame clock on whole ms in threes; a run played again starts empty)
 - [ ] Task: Run every map and cutscene again until they pass, or list what remains with its reason.
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Fixing' (Protocol in workflow.md) (automated)
 
