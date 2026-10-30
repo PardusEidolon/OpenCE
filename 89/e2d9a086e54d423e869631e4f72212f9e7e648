@@ -1,0 +1,1 @@
+Task: Phase 2 'Their shadows and light on the world and the models'. Shadowed light passes through a once-a-frame depth copy; placed_lights tests (2), shader pytest, workspace and Swift tests pass. No visible shadow measured on c10 yet (recorded in the plan).
