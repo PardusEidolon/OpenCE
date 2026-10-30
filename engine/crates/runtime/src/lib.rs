@@ -460,6 +460,12 @@ pub fn answers(name: &str) -> bool {
         || files::service(name).is_some()
 }
 
+/// The folder in the cache that holds Wasmtime's compiled modules: a folder
+/// of its own, because Wasmtime's cleanup deletes the files it does not
+/// know, and the host keeps others in the cache (the bakes, the binary
+/// archive).
+pub const COMPILED_FOLDER: &str = "compiled";
+
 /// Wasmtime, set up for the game
 pub struct Runtime {
     engine: Engine,
@@ -467,7 +473,8 @@ pub struct Runtime {
 }
 
 impl Runtime {
-    /// A runtime that caches compiled modules in `cache` (none if `None`).
+    /// A runtime that caches compiled modules in `cache` (none if `None`),
+    /// in its [`COMPILED_FOLDER`].
     ///
     /// # Errors
     /// [`Error::Setup`] if Wasmtime or its cache cannot be set up.
@@ -486,7 +493,7 @@ impl Runtime {
         let cache = match cache {
             Some(folder) => {
                 let mut settings = CacheConfig::new();
-                settings.with_directory(folder);
+                settings.with_directory(folder.join(COMPILED_FOLDER));
                 Some(Cache::new(settings).map_err(|error| Error::Setup(format!("{error:#}")))?)
             }
             None => None,

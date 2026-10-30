@@ -19,6 +19,7 @@
 
 use opence_content::level::Level;
 use opence_content::pack::FORMAT_VERSION;
+use rayon::prelude::*;
 
 use crate::bvh::{Bvh, Ray};
 use crate::chart::{Atlas, BakePoint, Chart};
@@ -28,6 +29,7 @@ use crate::mood::{self, PageMood, StockPage};
 use crate::probe::{self, ProbeGrid, REFLECTION_SIZE};
 use crate::scene::Scene;
 use crate::seam::{self, Seam, SeamStep};
+use crate::trace::{Random, Tracer};
 
 /// The baker's version: raised with any change to what it makes.
 pub const BAKE_VERSION: u32 = 10;
@@ -165,6 +167,24 @@ pub struct BakedPage {
     pub irradiance: Vec<u16>,
     /// Each texel's light direction and directionality: four bytes.
     pub directions: Vec<u8>,
+}
+
+impl BakedPage {
+    /// Its texels as the level shader takes a stock page's: each channel
+    /// [`mood::shown`] (carried on past 1), alpha 1, as four little-endian
+    /// half floats a texel.
+    pub fn shown_texels(&self) -> Vec<u8> {
+        self.irradiance
+            .as_chunks::<4>()
+            .0
+            .iter()
+            .flat_map(|&[r, g, b, _]| {
+                let shown = [r, g, b].map(|channel| half(mood::shown(from_half(channel))));
+                [shown[0], shown[1], shown[2], half(1.0)]
+            })
+            .flat_map(u16::to_le_bytes)
+            .collect()
+    }
 }
 
 /// The sun of a BSP's baked light.
@@ -359,6 +379,45 @@ impl BakePlan {
     /// The reflection probes' texels' points.
     pub fn reflection_points(&self) -> Vec<BakePoint> {
         probe::reflection_points(&self.reflections)
+    }
+
+    /// The tracer's light at each of the atlas's points, from
+    /// [`BakeSettings::lightmap_samples`] paths each: its irradiance and
+    /// occlusion, and its direction and directionality, as
+    /// [`Self::finish`] takes them. Each point has its own seed, so the
+    /// light is the same however rayon splits the points.
+    pub fn trace_lightmaps(&self) -> (Vec<[f32; 4]>, Vec<[f32; 4]>) {
+        let bvh = Bvh::build(&self.scene.triangles);
+        let tracer = Tracer {
+            scene: &self.scene,
+            bvh: &bvh,
+            occlusion_distance: self.settings.occlusion_distance,
+        };
+        self.atlas
+            .points
+            .par_iter()
+            .enumerate()
+            .map(|(index, point)| {
+                let mut random = Random::new(self.key ^ index as u64);
+                let light = tracer.irradiance_over(
+                    point.position,
+                    point.normal,
+                    point.footprint,
+                    self.settings.lightmap_samples,
+                    &mut random,
+                );
+                let [r, g, b] = light.irradiance;
+                let [x, y, z] = light.direction;
+                ([r, g, b, light.occlusion], [x, y, z, light.directionality])
+            })
+            .unzip()
+    }
+
+    /// The lightmap pages baked: [`Self::trace_lightmaps`] then
+    /// [`Self::finish`], with no probes (they are dark).
+    pub fn bake_lightmaps(&self) -> BakedLighting {
+        let (irradiance, directions) = self.trace_lightmaps();
+        self.finish(&irradiance, &directions, &[], &[])
     }
 
     /// The baked light from the tracer's results: for the atlas's points,
@@ -1093,5 +1152,55 @@ mod tests {
         // missing results are dark
         let dark = plan.finish(&[], &[], &[], &[]);
         assert!(dark.probes.iter().all(|half| *half == 0));
+    }
+
+    #[test]
+    fn the_lightmap_points_are_traced_the_same_each_time() {
+        let mut plan = devmap_plan(BakeSettings {
+            lightmap_samples: 4,
+            ..BakeSettings::default()
+        });
+        let [low, high] = plan.scene.bounds;
+        let middle: [f32; 3] = std::array::from_fn(|axis| (low[axis] + high[axis]) / 2.0);
+        for normal in [[0.0, 0.0, 1.0], [1.0, 0.0, 0.0]] {
+            plan.atlas.points.push(BakePoint {
+                position: middle,
+                normal,
+                footprint: 0.1,
+            });
+        }
+        let (irradiance, directions) = plan.trace_lightmaps();
+        assert_eq!((irradiance.len(), directions.len()), (2, 2));
+        let bits = |light: &[[f32; 4]]| -> Vec<[u32; 4]> {
+            light.iter().map(|texel| texel.map(f32::to_bits)).collect()
+        };
+        let (again, _) = plan.trace_lightmaps();
+        assert_eq!(bits(&irradiance), bits(&again));
+    }
+
+    #[test]
+    fn a_page_is_shown_as_the_stock_pages_hold_their_light() {
+        let pi = std::f32::consts::PI;
+        let page = BakedPage {
+            page: 0,
+            width: 1,
+            height: 1,
+            irradiance: [pi, 0.0, pi * 4.0, 0.25].map(half).to_vec(),
+            directions: vec![0; 4],
+        };
+        let texels = page.shown_texels();
+        assert_eq!(texels.len(), 8);
+        let channel = |index: usize| {
+            from_half(u16::from_le_bytes([
+                texels[index * 2],
+                texels[index * 2 + 1],
+            ]))
+        };
+        assert!((channel(0) - 1.0).abs() < 1e-3, "{}", channel(0));
+        assert_eq!(channel(1), 0.0);
+        // (carried on past 1)
+        assert!(channel(2) > 1.5, "{}", channel(2));
+        // (the occlusion is not the stock pages' alpha)
+        assert_eq!(channel(3), 1.0);
     }
 }

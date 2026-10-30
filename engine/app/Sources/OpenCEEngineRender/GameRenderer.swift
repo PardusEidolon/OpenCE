@@ -424,6 +424,9 @@ public final class GameRenderer: RenderTarget, @unchecked Sendable {
         case let .lights(lights):
             frameLights = lights
             return true
+        case .lightmapPage:
+            // the sink has already put the baked page in its place
+            return true
         case .present:
             endBlit()
             guard let commands = ensureCommands() else { return false }

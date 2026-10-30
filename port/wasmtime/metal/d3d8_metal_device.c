@@ -140,7 +140,13 @@ static struct
 	was last copied for the shadowed light passes */
 	BOOL shadow_light;
 	unsigned long shadow_copied_frame;
+	/* port: the texture last bound as a lightmap page, and that page
+	(structure_render_lightmap_page) */
+	D3DBaseTexture *lightmap_texture;
+	long lightmap_page;
 } device;
+
+extern long structure_render_lightmap_page;
 
 static float dword_to_float(DWORD value)
 {
@@ -513,6 +519,12 @@ void WINAPI D3DDevice_SetTexture(DWORD stage, D3DBaseTexture *texture)
 {
 	if (stage < D3DTSS_MAXSTAGES)
 		device.textures[stage] = texture;
+	/* the texture bound while the game binds a lightmap is that page */
+	if (texture && structure_render_lightmap_page != -1) /* (NONE) */
+	{
+		device.lightmap_texture = texture;
+		device.lightmap_page = structure_render_lightmap_page;
+	}
 }
 
 void WINAPI D3DDevice_SetPalette(DWORD stage, D3DPalette *palette)
@@ -1094,6 +1106,7 @@ enum
 	_sent_texture0,
 	_sent_sampler0 = _sent_texture0 + D3DTSS_MAXSTAGES,
 	_sent_shadow_texture = _sent_sampler0 + D3DTSS_MAXSTAGES,
+	_sent_lightmap_page,
 	NUMBER_OF_SENT
 };
 
@@ -1480,7 +1493,7 @@ static struct
 } lighting_extensions[NUMBER_OF_LIGHTING_EXTENSIONS] =
 {
 	{ "lighting.placed_lights", "shadowed", TRUE },
-	{ "lighting.bounce", "baked", FALSE },
+	{ "lighting.bounce", "baked", TRUE },
 	{ "lighting.atmosphere", "scattering", FALSE },
 	{ "lighting.shadows", "ray_traced", FALSE },
 	{ "lighting.reflections", "ray_traced", FALSE },
@@ -1515,6 +1528,30 @@ static void lighting_read(void)
 			else if (!first || extended)
 				platform_log("%s: %s", lighting_extensions[index].setting, setting);
 			lighting_extensions[index].on = extended && lighting_extensions[index].drawn;
+		}
+	}
+}
+
+/* lighting.bounce baked: names the stage's texture that holds the lightmap
+page, so the host draws its bake of the page in its place */
+static void lightmap_page_name(const unsigned int *textures)
+{
+	DWORD stage;
+
+	if (!lighting_extensions[_lighting_bounce].on || !device.lightmap_texture)
+		return;
+	for (stage = 0; stage < D3DTSS_MAXSTAGES; stage++)
+	{
+		if (device.textures[stage] == device.lightmap_texture && textures[stage] &&
+			textures[stage] != device.blank_texture)
+		{
+			unsigned int fields[3];
+
+			fields[0] = textures[stage];
+			fields[1] = (unsigned int)(device.lightmap_page >> 16) & 0xffff;
+			fields[2] = (unsigned int)device.lightmap_page & 0xffff;
+			command_send(_sent_lightmap_page, OPENCE_RENDER_OP_LIGHTMAP_PAGE, OPENCE_RENDER_LIGHTMAP_PAGE_WORDS, fields);
+			return;
 		}
 	}
 }
@@ -2001,6 +2038,7 @@ static BOOL draw_prepare(const struct draw_streams *streams)
 			return FALSE;
 		key.shadowed = TRUE;
 	}
+	lightmap_page_name(textures);
 	pixel_key_finish(&key);
 	pixel_uniforms_build(&pixel);
 	vertex_library = vertex_library_get(program, streams->packed_mask, streams->present_mask,

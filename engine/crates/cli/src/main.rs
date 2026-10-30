@@ -31,14 +31,14 @@ use std::path::PathBuf;
 use std::process::ExitCode;
 
 use opence_cli::{
-    complete, drive, frame, key, number, parse_size, run, script, script_lines, shell_lines, state,
-    watch, Connection, Error, Press,
+    bake_level, complete, drive, frame, key, number, parse_size, run, script, script_lines,
+    shell_lines, state, watch, Connection, Error, Press,
 };
 use rustyline::completion::{Completer, Pair};
 use rustyline::error::ReadlineError;
 use rustyline::{Context, Editor, Helper, Highlighter, Hinter, Validator};
 
-const USAGE: &str = "usage: opence [--socket PATH] (run [--json] LINE... | state | frame PATH [--size WxH] | watch [--backlog N] | script FILE | shell | key VK [--down | --up] | pointer X Y | click X Y [--button N] | wheel N | focus | setting NAME [VALUE] | scripts MAP | census [--check | --write | --rank | --ratchet] [--record-importer] [--root DIR])";
+const USAGE: &str = "usage: opence [--socket PATH] (run [--json] LINE... | state | frame PATH [--size WxH] | watch [--backlog N] | script FILE | shell | key VK [--down | --up] | pointer X Y | click X Y [--button N] | wheel N | focus | setting NAME [VALUE] | scripts MAP | bake MAP [--data DIR] [--cache DIR] [--samples N] | census [--check | --write | --rank | --ratchet] [--record-importer] [--root DIR])";
 
 fn main() -> ExitCode {
     let arguments: Vec<String> = std::env::args().skip(1).collect();
@@ -299,6 +299,45 @@ fn start(arguments: &[String]) -> Result<(), Error> {
                 }
                 Err(error) => Err(Error::Io(io::Error::other(error.to_string()))),
             }
+        }
+        "bake" => {
+            let mut words = rest.iter();
+            let map = words
+                .next()
+                .ok_or_else(|| Error::Usage("bake needs a map's name".into()))?;
+            let (mut data, mut cache, mut samples) = (None, None, 64);
+            while let Some(word) = words.next() {
+                match word.as_str() {
+                    "--data" => data = words.next().map(PathBuf::from),
+                    "--cache" => cache = words.next().map(PathBuf::from),
+                    "--samples" => samples = number(words.next(), "--samples")?,
+                    other => return Err(Error::Usage(format!("bake does not take {other}"))),
+                }
+            }
+            let data = match data {
+                Some(data) => data,
+                None => repository()?.join("assets"),
+            };
+            // (the headless game's cache; the app's is its support folder's)
+            let cache = match cache {
+                Some(cache) => cache,
+                None => repository()?.join("build/engine/wasm/cache"),
+            };
+            let map_file = data.join("maps").join(format!("{map}.map"));
+            let loaded = opence_import::load_level(&map_file, &cache.join("import"))
+                .map_err(|error| Error::Refused(format!("{}: {error}", map_file.display())))?;
+            let started = std::time::Instant::now();
+            let written = bake_level(&loaded.level, map, &cache.join("bake"), samples)?;
+            for path in &written {
+                writeln!(out, "{}", path.display())?;
+            }
+            writeln!(
+                out,
+                "baked {} BSPs at {samples} paths a texel in {:.1} s",
+                written.len(),
+                started.elapsed().as_secs_f64()
+            )?;
+            Ok(())
         }
         other => Err(Error::Usage(format!("no subcommand {other}"))),
     }

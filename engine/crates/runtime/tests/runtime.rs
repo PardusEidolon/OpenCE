@@ -212,6 +212,25 @@ fn the_compiled_module_is_cached_and_used_again() -> Result<(), Error> {
     Ok(())
 }
 
+#[test]
+fn wasmtime_keeps_to_a_folder_of_its_own_in_the_cache() -> Result<(), Error> {
+    // (its cleanup deletes files it does not know, such as the bakes and
+    // the binary archive the host keeps beside it)
+    let folder = cache("own");
+    Runtime::new(Some(&folder))?.load(&module(CALLER))?;
+    let names: Vec<String> = std::fs::read_dir(&folder)
+        .map(|entries| {
+            entries
+                .flatten()
+                .map(|entry| entry.file_name().to_string_lossy().into_owned())
+                .collect()
+        })
+        .unwrap_or_default();
+    assert_eq!(names, [opence_runtime::COMPILED_FOLDER]);
+    let _ = std::fs::remove_dir_all(&folder);
+    Ok(())
+}
+
 /// game.wasm, where tools/engine_wasm.py builds it
 fn game_wasm() -> Option<Vec<u8>> {
     let root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../..");

@@ -1500,3 +1500,28 @@ fn lights_that_are_not_lights_are_refused() {
     assert_eq!(batch.commands, [Command::Present]);
     assert_eq!(errors(&batch).len(), 5, "{:?}", errors(&batch));
 }
+
+#[test]
+fn a_lightmap_page_names_an_existing_texture() {
+    let batch = decode(
+        &mut validator(),
+        Writer::new()
+            .texture(7, RGBA8, 256, 128, 1, SAMPLED)
+            .command(op::LIGHTMAP_PAGE, &[7, 1, 3])
+            .command(op::LIGHTMAP_PAGE, &[9, 0, 0])
+            .command(op::LIGHTMAP_PAGE, &[7, 0])
+            .command(op::PRESENT, &[]),
+    );
+    assert_eq!(errors(&batch).len(), 2, "{:?}", errors(&batch));
+    assert_eq!(
+        batch.commands[1..],
+        [
+            Command::LightmapPage {
+                texture: 7,
+                bsp: 1,
+                page: 3
+            },
+            Command::Present,
+        ]
+    );
+}

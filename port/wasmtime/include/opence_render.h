@@ -162,6 +162,11 @@ for the frame (rasterizer_lights), sent before PRESENT */
 #define OPENCE_RENDER_OP_LIGHTS 30
 #define OPENCE_RENDER_LIGHTS_WORDS 2
 #define OPENCE_RENDER_LIGHT_WORDS 13
+/* texture, bsp, page: the texture is the game's lightmap page `page` of
+structure bsp `bsp` (the bitmap's index in the bsp's lightmap group), so the
+host can draw its own bake of that page in its place (lighting.bounce) */
+#define OPENCE_RENDER_OP_LIGHTMAP_PAGE 31
+#define OPENCE_RENDER_LIGHTMAP_PAGE_WORDS 4
 
 /* ---------- limits */
 

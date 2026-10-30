@@ -378,3 +378,64 @@ pub fn script_lines(scripts: &opence_content::Scripts) -> Result<Vec<String>, Er
         })
         .collect())
 }
+
+/// `opence bake`: bakes each of `level`'s BSPs' lightmaps at `samples`
+/// paths a texel into `folder` ([`write_bake`]), where the game reads them
+/// (`lighting.bounce=baked`). A BSP with no lightmap pages is left out.
+/// Answers the files written, BSP by BSP.
+///
+/// # Errors
+/// [`Error::Io`] if the folder cannot be written.
+pub fn bake_level(
+    level: &opence_content::Level,
+    map: &str,
+    folder: &Path,
+    samples: u32,
+) -> Result<Vec<PathBuf>, Error> {
+    use opence_bake::{BakePlan, BakeSettings};
+    let settings = BakeSettings {
+        lightmap_samples: samples,
+        ..BakeSettings::default()
+    };
+    let mut written = Vec::new();
+    for bsp in 0..level.structure_bsps.len() {
+        let Some(plan) = BakePlan::of(level, bsp, settings) else {
+            continue;
+        };
+        if plan.atlas.points.is_empty() {
+            continue;
+        }
+        written.push(write_bake(folder, map, bsp, &plan.bake_lightmaps())?);
+    }
+    Ok(written)
+}
+
+/// Writes `baked`, BSP `bsp` of `map`'s bake, into `folder` as
+/// `<map>.bsp<N>.<key>.bake`, and removes that BSP's older bakes. The file
+/// is written beside its name and then renamed, so the game never reads
+/// half of one. Answers its path.
+///
+/// # Errors
+/// [`Error::Io`] if the folder cannot be written.
+pub fn write_bake(
+    folder: &Path,
+    map: &str,
+    bsp: usize,
+    baked: &opence_bake::BakedLighting,
+) -> Result<PathBuf, Error> {
+    std::fs::create_dir_all(folder)?;
+    let name = opence_bake::BakedLighting::file_name(map, bsp, baked.key);
+    let prefix = format!("{map}.bsp{bsp}.");
+    for entry in std::fs::read_dir(folder)? {
+        let old = entry?.file_name();
+        let old = old.to_string_lossy();
+        if old.starts_with(&prefix) && old.ends_with(".bake") && *old != name {
+            std::fs::remove_file(folder.join(&*old))?;
+        }
+    }
+    let path = folder.join(&name);
+    let partial = folder.join(format!("{name}.partial"));
+    std::fs::write(&partial, baked.encode())?;
+    std::fs::rename(&partial, &path)?;
+    Ok(path)
+}

@@ -10,6 +10,7 @@
 #![allow(unsafe_code)]
 
 pub mod audit;
+pub mod bakes;
 pub mod benchmark;
 pub mod game;
 pub mod loading;

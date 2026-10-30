@@ -24,8 +24,11 @@
 
 use rustc_hash::FxHashMap;
 
+mod baked;
 #[cfg(test)]
 mod tests;
+
+pub use baked::{BakedPages, BakedTexture, FIRST_BAKED_TEXTURE};
 
 /// `OPENCE_RENDER_MAGIC`
 pub const MAGIC: u32 = 0x4252_434f;
@@ -97,6 +100,8 @@ pub mod op {
     pub const WRITE_BUFFER: u32 = 29;
     /// `OPENCE_RENDER_OP_LIGHTS`
     pub const LIGHTS: u32 = 30;
+    /// `OPENCE_RENDER_OP_LIGHTMAP_PAGE`
+    pub const LIGHTMAP_PAGE: u32 = 31;
     /// `OPENCE_RENDER_LIGHT_WORDS`: the words of each light after the count
     pub const LIGHT_WORDS: u32 = 13;
 
@@ -132,6 +137,7 @@ pub mod op {
         (PRESENT, "PRESENT", 1),
         (WRITE_BUFFER, "WRITE_BUFFER", 5),
         (LIGHTS, "LIGHTS", 2),
+        (LIGHTMAP_PAGE, "LIGHTMAP_PAGE", 4),
     ];
 
     /// The size in words of a command of `op` (its fixed part).
@@ -1165,6 +1171,15 @@ pub enum Command {
         /// the frame's lights, in the order the game submitted them
         lights: Vec<Light>,
     },
+    /// `OPENCE_RENDER_OP_LIGHTMAP_PAGE`: the texture holds a lightmap page
+    LightmapPage {
+        /// the texture's id
+        texture: u32,
+        /// the structure bsp's index
+        bsp: u32,
+        /// the bitmap's index in the bsp's lightmap group
+        page: u32,
+    },
     /// As UploadBuffer, but copied when it is read rather than in the GPU's
     /// order (the guest's promise: nothing before it in the frame reads the
     /// range).
@@ -1663,6 +1678,14 @@ impl RenderValidator {
                 }
             }
             op::LIGHTS => lights(f)?,
+            op::LIGHTMAP_PAGE => {
+                self.texture(f[0])?;
+                Command::LightmapPage {
+                    texture: f[0],
+                    bsp: f[1],
+                    page: f[2],
+                }
+            }
             op::SET_TEXTURE => {
                 let stage = read("stage", f[0], Stage::from_word)?;
                 slot(f[1], TEXTURE_SLOTS)?;

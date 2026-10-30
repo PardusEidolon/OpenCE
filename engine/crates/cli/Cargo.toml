@@ -11,6 +11,8 @@ name = "opence"
 path = "src/main.rs"
 
 [dependencies]
+# (`opence bake`: each BSP's lightmaps, baked at import)
+opence_bake.workspace = true
 opence_census.workspace = true
 opence_content.workspace = true
 opence_dev.workspace = true

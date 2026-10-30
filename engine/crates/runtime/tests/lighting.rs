@@ -126,7 +126,7 @@ fn per_pixel_lighting_lights_the_models_from_the_original_lights() -> Result<(),
 }
 
 #[test]
-fn a_lighting_extension_not_drawn_yet_draws_stock_and_says_so() -> Result<(), Error> {
+fn the_lighting_switches_say_what_they_draw() -> Result<(), Error> {
     let root = root();
     let (Ok(wasm), true) = (
         std::fs::read(root.join("build/engine/wasm/game.wasm")),
@@ -167,12 +167,13 @@ fn a_lighting_extension_not_drawn_yet_draws_stock_and_says_so() -> Result<(), Er
     assert_eq!(
         lines,
         [
-            "opence: lighting.bounce: baked is not drawn by the Metal renderer yet, so stock",
+            "opence: lighting.bounce: baked",
             "opence: lighting.shadows: \"sideways\" is unknown, so stock",
             "opence: lighting.atmosphere: scattering is not drawn by the Metal renderer yet, so stock",
         ]
     );
-    // and drawn as stock: no library lights a pixel
+    // and no shader library lights a pixel (the bake swaps lightmap pages,
+    // not shaders)
     let seen = seen.lock().map(|seen| *seen).unwrap_or_default();
     assert!(seen.made > 0, "{seen:?}");
     assert_eq!(seen.lit, 0, "{seen:?}");

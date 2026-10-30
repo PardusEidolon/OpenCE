@@ -19,7 +19,7 @@ use std::thread::JoinHandle;
 use std::time::{Duration, Instant};
 
 use crate::audit::ConsoleLines;
-use opence_render::{Command, DecodedBatch};
+use opence_render::{BakedPages, BakedTexture, Command, DecodedBatch};
 use opence_runtime::plugins::{Event, Hook, Plugin, View};
 use opence_runtime::{
     control, keystroke_flags, payload, virtual_key, Console, Controls, Game, Readback, RenderSink,
@@ -54,8 +54,9 @@ pub trait RenderTarget: Send + Sync {
     fn submit(&self, frame: RenderFrame) -> Vec<RenderReadback>;
 }
 
-/// The runtime's sink for a [`RenderTarget`].
-struct TargetSink(Arc<dyn RenderTarget>);
+/// The runtime's sink for a [`RenderTarget`], with the baked lightmaps
+/// drawn in place of the game's, if there are any.
+struct TargetSink(Arc<dyn RenderTarget>, BakedPages);
 
 impl RenderSink for TargetSink {
     fn submit(&mut self, batch: &DecodedBatch, memory: &View<'_>) -> Vec<Readback> {
@@ -64,10 +65,12 @@ impl RenderSink for TargetSink {
         let Some(data) = payload(batch, memory) else {
             return Vec::new();
         };
-        let frame = RenderFrame {
-            commands: batch.commands.clone(),
-            data,
+        let (commands, data) = if self.1.is_empty() {
+            (batch.commands.clone(), data)
+        } else {
+            self.1.apply(batch.commands.clone(), data)
         };
+        let frame = RenderFrame { commands, data };
         self.0
             .submit(frame)
             .into_iter()
@@ -82,7 +85,27 @@ impl RenderSink for TargetSink {
 /// The runtime's render sink that hands each batch to `target`.
 #[must_use]
 pub fn render_sink(target: Arc<dyn RenderTarget>) -> Box<dyn RenderSink> {
-    Box::new(TargetSink(target))
+    baked_render_sink(target, Vec::new())
+}
+
+/// The runtime's render sink that hands each batch to `target`, `pages`
+/// drawn in place of the game's lightmap pages they match.
+#[must_use]
+pub fn baked_render_sink(
+    target: Arc<dyn RenderTarget>,
+    pages: Vec<BakedTexture>,
+) -> Box<dyn RenderSink> {
+    Box::new(TargetSink(target, BakedPages::new(pages)))
+}
+
+/// Whether `settings` (each `name=text`) draw the baked lightmaps: the
+/// last `lighting.bounce` given is `baked`.
+fn bakes_drawn(settings: &[String]) -> bool {
+    settings
+        .iter()
+        .filter_map(|setting| setting.split_once('='))
+        .rfind(|(name, _)| *name == "lighting.bounce")
+        .is_some_and(|(_, text)| text == "baked")
 }
 
 /// Counts the game's ticks (none while it loads or sits at its menus, so
@@ -222,6 +245,9 @@ pub struct WasmGame {
     ticks: Arc<AtomicU64>,
     /// the console lines waiting for their ticks ([`TickCounter`])
     lines: Arc<Mutex<ConsoleLines>>,
+    /// the baked lightmap pages, until it is started
+    /// (`lighting.bounce=baked`)
+    baked: Mutex<Vec<BakedTexture>>,
 }
 
 #[uniffi::export]
@@ -261,6 +287,12 @@ impl WasmGame {
         if let Some(map) = &options.map {
             game.set_init_commands(&format!("map_name {map}\n"));
         }
+        let baked = match (&options.map, &cache) {
+            (Some(map), Some(cache)) if bakes_drawn(&options.settings) => {
+                crate::bakes::baked_textures(cache, map)
+            }
+            _ => Vec::new(),
+        };
         let ticks = Arc::new(AtomicU64::new(0));
         let lines = Arc::new(Mutex::new(ConsoleLines::default()));
         game.add_plugin(Box::new(TickCounter {
@@ -291,6 +323,7 @@ impl WasmGame {
             speakers,
             ticks,
             lines,
+            baked: Mutex::new(baked),
         }))
     }
 
@@ -306,7 +339,8 @@ impl WasmGame {
             .unwrap_or_else(PoisonError::into_inner)
             .take()
             .ok_or(WasmGameError::Started)?;
-        game.set_render_sink(render_sink(target));
+        let baked = std::mem::take(&mut *self.baked.lock().unwrap_or_else(PoisonError::into_inner));
+        game.set_render_sink(baked_render_sink(target, baked));
         game.set_deadline(self.seconds.map(|seconds| Instant::now() + seconds));
         let thread = std::thread::Builder::new()
             .name("game".to_owned())
@@ -487,5 +521,30 @@ impl GameSpeakers {
         let mut samples = vec![0.0; frames * 2];
         self.0.pull(&mut samples);
         samples
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn settings(texts: &[&str]) -> Vec<String> {
+        texts.iter().map(|&text| text.to_owned()).collect()
+    }
+
+    #[test]
+    fn the_bakes_are_drawn_only_when_the_last_bounce_setting_asks() {
+        assert!(bakes_drawn(&settings(&["lighting.bounce=baked"])));
+        assert!(!bakes_drawn(&settings(&[])));
+        assert!(!bakes_drawn(&settings(&["lighting.bounce=stock"])));
+        assert!(!bakes_drawn(&settings(&[
+            "lighting.bounce=baked",
+            "lighting.bounce=stock"
+        ])));
+        assert!(bakes_drawn(&settings(&[
+            "video.ultra=on",
+            "lighting.bounce=baked"
+        ])));
+        assert!(!bakes_drawn(&settings(&["lighting.bouncebaked"])));
     }
 }
