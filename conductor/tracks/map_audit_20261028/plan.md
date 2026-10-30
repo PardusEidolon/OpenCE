@@ -14,13 +14,13 @@ stops.
   - Under `build/engine/audit` (local only): a frame each 300 ticks, `sound.tsv` from the first tick, `events.tsv`, `frame_ms.tsv`, `summary.json`.
 - [x] Task: Conductor - User Manual Verification 'Phase 1: The runs' (Protocol in workflow.md) (automated)
 
-## Phase 2: Comparing with stock
+## Phase 2: Comparing with stock [checkpoint: 262bbe06]
 - [x] Task: Play the same inputs with the stock rendering and sound. 420fd7a7
     - Every map and cutscene played three times on the frame clock: stock, stock2 and shipped (76 runs each).
 - [x] Task: Image differences per region, the sound's loudness and spectrum, the script events in order; thresholds set from repeated stock runs. 2919dc00
 - [x] Task: List the findings with their map, tick, frames and measurement. 420fd7a7
     - 20 findings over 13 runs (build/engine/audit/findings.tsv, local only): 5 region, 9 loudness, 5 band, 1 event shift.
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Comparing' (Protocol in workflow.md) (automated)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Comparing' (Protocol in workflow.md) (automated)
 
 ## Phase 3: Fixing and iterating
 - [ ] Task: Trace each finding to its cause and fix it, each with a failing test first.
