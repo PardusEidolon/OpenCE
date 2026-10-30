@@ -22,7 +22,9 @@ the end without manual stops, except the user's approval of golden frames.
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Placed lights' (Protocol in workflow.md) (automated)
 
 ## Phase 3: Bounce and probes
-- [ ] Task: Bake bounce light and probes from the lightmaps and lights, behind the loading screen, cached by the map's hash.
+- [ ] Task: Bake bounce light and probes from the lightmaps and lights, behind the loading screen, cached by the map's hash. **Blocked.**
+    - Measured (30 Oct, M1 Max, release, rayon over the atlas's points with `Tracer::irradiance_over`, 64 paths a texel, BSP 0): bloodgulch 94 098 texels 3.0 s; d40 131 655, 12.8 s; a30 1.20 M, ~43 s; c10 1.55 M, ~156 s. At the default 512 paths that is ~3 min (a30) to ~21 min (c10) a BSP: too slow behind a loading screen, so the bake belongs at import. The GPU tracer that made it quick went with the removed engine.
+    - Not built: the way into the game's drawing. The lightmap is bound at texture stage 2 by `_rasterizer_environment_lightmap_begin` (rasterizer_xbox_environment.c), but the device has no map from the game's bitmap uploads to the bake's pages, and the baked pages are HDR halves where the stock pages are 8-bit with the shader's own scale. Needed: a `port:` hook naming the page as it is bound, an import-time bake writing the cache, and the device substituting the page under `lighting.bounce=baked`.
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Bounce and probes' (Protocol in workflow.md) (automated)
 
 ## Phase 4: The sky and atmosphere
