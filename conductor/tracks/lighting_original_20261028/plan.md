@@ -36,9 +36,11 @@ the end without manual stops, except the user's approval of golden frames.
 - [x] Task: Conductor - User Manual Verification 'Phase 4: Atmosphere' (Protocol in workflow.md) (automated)
 
 ## Phase 5: Ray tracing
-- [ ] Task: Ray traced shadows and reflections, with the rasterized fallback chosen by the quality setting.
-- [ ] Task: p99 ≤ 8.33 ms at 4K ultra on every map.
-- [ ] Task: Conductor - User Manual Verification 'Phase 5: Ray tracing' (Protocol in workflow.md) (automated)
+- [ ] Task: Ray traced shadows and reflections, with the rasterized fallback chosen by the quality setting. (blocked: the budget, 0edf037b)
+  - Measured on the M1 Max (p99): at 4K, shadows 2.43–2.64 ms and reflections 4.09–4.79 ms (53k–214k triangles); at half resolution, 0.64–0.73 and 1.16–1.33 ms. The GPU's headroom at 4K ultra is 2.67 ms, so only half-res shadows fit, and only once the CPU frame meets the bar. Drawing them also needs a G-buffer pass and the BSP and objects built host-side. Both switches stay on their logged rasterized fallback ("ray_traced is not drawn by the Metal renderer yet, so stock").
+- [ ] Task: p99 ≤ 8.33 ms at 4K ultra on every map. (blocked: native_port's CPU frame)
+  - The GPU meets it (p99 5.66 ms); the CPU frame misses it: multiplayer 8.79–11.29 ms, campaign 11.13–34.33 ms (native_port Phase 4's measurements).
+- [x] Task: Conductor - User Manual Verification 'Phase 5: Ray tracing' (Protocol in workflow.md) (automated) (both tasks blocked, with their data; the ray budget tests pass)
 
 ## Phase 6: The report
 - [ ] Task: The user's approval of the golden frames.
