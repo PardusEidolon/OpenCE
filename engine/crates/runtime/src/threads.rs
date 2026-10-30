@@ -154,11 +154,41 @@ struct FrameClock {
 }
 
 impl FrameClock {
-    /// the steps taken in the dark since the last frame shown, at `now`
+    /// a clock on from a first frame shown at `now`, which it counts from
+    /// the whole millisecond before (the fraction past it is chance, and
+    /// would move the 16 and 17 ms steps of a 60th onto other frames)
+    fn starting(now: u64) -> Self {
+        let start = now - now % 1_000_000;
+        Self {
+            on: Some(true),
+            start,
+            steps: 0,
+            shown_at: now,
+        }
+    }
+
+    /// the steps taken in the dark since the last frame shown, at `now`:
+    /// whole threes of them, so that play goes on from the same third of
+    /// the clock's 50 ms cycle however long the dark lasted
     fn dark_steps(&self, now: u64) -> u64 {
         now.saturating_sub(self.shown_at)
             .checked_sub(FRAME_DARK)
-            .map_or(0, |dark| dark / FRAME_STEP)
+            .map_or(0, |dark| dark / FRAME_STEP / 3 * 3)
+    }
+
+    /// a frame shown at `now`
+    fn shown(&mut self, now: u64) {
+        let steps = self.dark_steps(now) + 1;
+        self.steps = self.steps.saturating_add(steps);
+        self.shown_at = now;
+    }
+
+    /// the clock's nanoseconds at `now`: a 60th of a second a step, taken
+    /// exactly (50 ms each three) so that the steps do not drift
+    fn at(&self, now: u64) -> u64 {
+        let steps = self.steps.saturating_add(self.dark_steps(now));
+        self.start
+            .saturating_add(steps.saturating_mul(50_000_000) / 3)
     }
 }
 
@@ -370,8 +400,7 @@ impl Threads {
         if clock.on != Some(true) {
             return now;
         }
-        let steps = clock.steps.saturating_add(clock.dark_steps(now));
-        clock.start.saturating_add(steps.saturating_mul(FRAME_STEP))
+        clock.at(now)
     }
 
     /// a frame was shown: steps the frame clock, which the first frame
@@ -384,19 +413,16 @@ impl Threads {
             .unwrap_or_else(PoisonError::into_inner);
         match clock.on {
             None => {
-                let on = on();
-                *clock = FrameClock {
-                    on: Some(on),
-                    start: now,
-                    steps: 0,
-                    shown_at: now,
+                *clock = if on() {
+                    FrameClock::starting(now)
+                } else {
+                    FrameClock {
+                        on: Some(false),
+                        ..FrameClock::default()
+                    }
                 };
             }
-            Some(true) => {
-                let steps = clock.dark_steps(now) + 1;
-                clock.steps = clock.steps.saturating_add(steps);
-                clock.shown_at = now;
-            }
+            Some(true) => clock.shown(now),
             Some(false) => {}
         }
     }
@@ -1127,6 +1153,44 @@ mod tests {
         assert_eq!(civil_from_days(11_016), (2000, 2, 29));
         assert_eq!(civil_from_days(11_017), (2000, 3, 1));
         assert_eq!(civil_from_days(20_754), (2026, 10, 28));
+    }
+
+    /// the clock's milliseconds after each of `frames` frames shown a
+    /// 60th of a second apart, from `start`
+    fn milliseconds(start: u64, frames: u64) -> Vec<u64> {
+        let mut clock = FrameClock::starting(start);
+        (1..=frames)
+            .map(|frame| {
+                let now = start + frame * FRAME_STEP;
+                clock.shown(now);
+                clock.at(now) / 1_000_000
+            })
+            .collect()
+    }
+
+    #[test]
+    fn the_frame_clock_steps_alike_whatever_the_fraction_of_its_start() {
+        // (a real start's fraction of a millisecond is chance; were it kept,
+        // the 16 and 17 ms steps of a 60th would fall on other frames)
+        let early = milliseconds(5_000_001, 30);
+        let late = milliseconds(5_999_999, 30);
+        assert_eq!(early, late);
+        let steps: Vec<u64> = early.windows(2).map(|pair| pair[1] - pair[0]).collect();
+        let (threes, _) = steps.as_chunks::<3>();
+        assert!(threes.iter().all(|three| three.iter().sum::<u64>() == 50));
+    }
+
+    #[test]
+    fn a_frame_clock_in_the_dark_keeps_its_steps_in_threes() {
+        // (however long a load lasts, play resumes on the same third of
+        // the clock's 50 ms cycle)
+        for dark in [FRAME_DARK + 1, FRAME_DARK + FRAME_STEP, 3 * FRAME_DARK + 7] {
+            let mut clock = FrameClock::starting(0);
+            clock.shown(FRAME_STEP);
+            let steps = clock.steps;
+            clock.shown(FRAME_STEP + dark);
+            assert_eq!((clock.steps - steps - 1) % 3, 0, "dark {dark}");
+        }
     }
 
     #[test]
