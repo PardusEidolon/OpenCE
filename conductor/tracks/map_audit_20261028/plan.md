@@ -31,5 +31,7 @@ stops.
 - [x] Task: Conductor - User Manual Verification 'Phase 3: Fixing' (Protocol in workflow.md) (automated)
 
 ## Phase 4: The report
-- [ ] Task: Write the report from the data: the findings, their causes and fixes, what remains, and p99 per map.
+- [x] Task: Write the report from the data: the findings, their causes and fixes, what remains, and p99 per map.
+    - Written to `build/engine/audit/report.md` (local only, as the spec asks). 228 runs, 0 failed; 93 findings, all explained (70 the stale bundle, 23 the shipped enhancements); stock and stock2 part after ~40 s, cause not traced.
+    - p99 at 3840×2160, 30 s a map: no map meets 8.33 ms. Multiplayer 8.79 (prisoner) to 11.29 ms (chillout), bloodgulch 9.11; campaign 11.13 (d40) to 34.33 ms (b30), a30 22.05, c10 19.51.
 - [ ] Task: Conductor - User Manual Verification 'Phase 4: The report' (Protocol in workflow.md) (automated)
