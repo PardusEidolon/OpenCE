@@ -5,12 +5,12 @@ automated checks: the workspace tests, golden frames, the measurements
 against stock, `census --check` and `nix flake check`. The phases run to
 the end without manual stops, except the user's approval of golden frames.
 
-## Phase 1: The switches and the measurements
+## Phase 1: The switches and the measurements [checkpoint: 2e2a3ac6]
 - [x] Task: A switch per extension, with stock as a value, in the settings, the dev panel and the `opence` tool. e68ca99a
   - The native app has no dev panel now: each switch is a `lighting.*` setting, set by the settings file, `--setting`, the control socket's `setting` request and `opence setting`. A value not drawn yet draws stock and says so once in the log.
 - [x] Task: The sweeps against stock: seams, shadow edges, brightness and colour per region, on every map. 68ee430f
   - 161 runs over 23 maps, none failed; 51 findings, all on switches that still draw stock, so they are run-to-run noise (map_audit Phase 3 fixes the determinism first).
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Switches' (Protocol in workflow.md) (automated)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Switches' (Protocol in workflow.md) (automated)
 
 ## Phase 2: Placed lights
 - [x] Task: Read the placed and dynamic lights from the map. 9edea209
