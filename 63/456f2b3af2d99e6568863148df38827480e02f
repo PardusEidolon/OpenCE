@@ -1,0 +1,1 @@
+Phase 2 'Placed lights' verified: workspace and Swift tests, 63/63 traces, census (0 owe evidence), audit pytest 10 passed, nix flake check pass. Shadows: plumbing verified, no visible shadow measured on c10.
