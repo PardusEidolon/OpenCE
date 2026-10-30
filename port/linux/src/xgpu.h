@@ -201,6 +201,13 @@ struct nv2a_pixel_shader_key
 	XGPU_SHADOW_DEPTH_TEXTURE, has nothing between them (the vertex shader's
 	nv2a_vertex_shader_to_msl shadowed) */
 	unsigned char shadowed;
+	/* the fog scattered by its colour (lighting.atmosphere scattering, Metal
+	only): each channel is let through as the transmittance to a power
+	weighted by the fog's colour, clamp(3 F / sum F, 0.25, 4), so grey fog
+	is stock. 1: the final combiner's fog lerp (its A the transmittance, its
+	C the fog colour); 2: the world's fog pass, which also writes the
+	transmittance as the second blend source, the destination's factor */
+	unsigned char scattering;
 };
 
 /* the fragment texture the shadowed light passes read the depth from */

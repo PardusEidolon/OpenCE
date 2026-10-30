@@ -103,6 +103,20 @@ static int pixel_case(const char *name, struct nv2a_pixel_shader_key *key)
 		key->fog_enable = 1;
 		key->fog_table_mode = D3DFOG_LINEAR;
 	}
+	else if (!strcmp(name, "fog_scattering"))
+	{
+		pixel_case("fog", key);
+		key->scattering = 1;
+	}
+	else if (!strcmp(name, "fog_pass") || !strcmp(name, "fog_pass_scattering"))
+	{
+		/* the world's fog pass (rasterizer_xbox_environment_fog.c): rgb =
+		r0 * (1 - r1.a) + r1 * (1 - v0), alpha 1 - r0.a, premultiplied */
+		multiply(key, 0, INPUT(V0, 0, 0), INPUT(ZERO, 0, INVERT));
+		key->combiner_state[D3DRS_PSFINALCOMBINERINPUTSABCD] = 0x0C3D000F;
+		key->combiner_state[D3DRS_PSFINALCOMBINERINPUTSEFG] = 0x0D243C00;
+		key->scattering = name[8] ? 2 : 0;
+	}
 	else if (!strcmp(name, "fog_exp2"))
 	{
 		multiply(key, 0, INPUT(V0, 0, 0), INPUT(C0, 0, SIGNED));

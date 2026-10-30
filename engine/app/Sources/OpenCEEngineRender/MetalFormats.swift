@@ -79,6 +79,8 @@ extension BlendFactor {
         case .oneMinusBlendColor: .oneMinusBlendColor
         case .blendAlpha: .blendAlpha
         case .oneMinusBlendAlpha: .oneMinusBlendAlpha
+        case .source1Color: .source1Color
+        case .oneMinusSource1Color: .oneMinusSource1Color
         }
     }
 }

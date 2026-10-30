@@ -429,6 +429,10 @@ word_enum! {
         BlendAlpha = 14 => "BLEND_BLEND_ALPHA",
         /// `OPENCE_RENDER_BLEND_ONE_MINUS_BLEND_ALPHA`
         OneMinusBlendAlpha = 15 => "BLEND_ONE_MINUS_BLEND_ALPHA",
+        /// `OPENCE_RENDER_BLEND_SOURCE1_COLOR`: the fragment's second colour
+        Source1Color = 16 => "BLEND_SOURCE1_COLOR",
+        /// `OPENCE_RENDER_BLEND_ONE_MINUS_SOURCE1_COLOR`
+        OneMinusSource1Color = 17 => "BLEND_ONE_MINUS_SOURCE1_COLOR",
     }
 }
 

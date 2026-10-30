@@ -169,7 +169,7 @@ fn the_lighting_switches_say_what_they_draw() -> Result<(), Error> {
         [
             "opence: lighting.bounce: baked",
             "opence: lighting.shadows: \"sideways\" is unknown, so stock",
-            "opence: lighting.atmosphere: scattering is not drawn by the Metal renderer yet, so stock",
+            "opence: lighting.atmosphere: scattering",
         ]
     );
     // and no shader library lights a pixel (the bake swaps lightmap pages,

@@ -739,8 +739,9 @@ static void msl_declarations(struct xgpu_text *text, const struct nv2a_pixel_sha
 		"struct nv2a_fragment_out\n"
 		"{\n"
 		"\tfloat4 color [[color(0)]];\n"
-		"%s"
+		"%s%s"
 		"};\n",
+		key->scattering == 2 ? "\tfloat4 transmittance [[color(0), index(1)]];\n" : "",
 		sample_mask ? "\tuint sample_mask [[sample_mask]];\n" : "");
 	if (key->per_pixel_lighting)
 		model_lighting(text, key->per_pixel_lighting == 2, TRUE);
@@ -905,7 +906,15 @@ body:
 		final_input(&text, final_abcd & 0xff, FALSE);
 		xgpu_text_append(&text, ";\n\tfloat fG = ");
 		final_input(&text, (final_efg >> 8) & 0xff, TRUE);
-		xgpu_text_append(&text, ";\n\tvec4 result = vec4(fA * fB + (1.0 - fA) * fC + fD, fG);\n");
+		xgpu_text_append(&text, ";\n");
+		/* port: the fog let through by its colour (lighting.atmosphere) */
+		if (key->scattering == 1 && msl)
+		{
+			xgpu_text_append(&text,
+				"\tvec3 fog_weight = clamp(3.0 * fC / max(fC.r + fC.g + fC.b, 1.0e-4), 0.25, 4.0);\n"
+				"\tfA = pow(max(fA, vec3(1.0e-30)), fog_weight);\n");
+		}
+		xgpu_text_append(&text, "\tvec4 result = vec4(fA * fB + (1.0 - fA) * fC + fD, fG);\n");
 	}
 
 	if (key->coverage_alpha)
@@ -950,6 +959,19 @@ body:
 	/* the light passes add their light: what is shadowed adds none */
 	if (key->shadowed && msl)
 		xgpu_text_append(&text, "\tresult.rgb *= shadow_visibility(shadow_depth, input.xShadowFrom, input.xShadowTo);\n");
+	/* port: the world's fog pass, premultiplied (its alpha the fog's
+	amount), let through by its colour; the transmittance is the blend's
+	second source, which the destination is multiplied by */
+	if (key->scattering == 2 && msl)
+	{
+		xgpu_text_append(&text,
+			"\tfloat fog_amount = clamp(result.a, 0.0, 1.0);\n"
+			"\tvec3 fog_in = clamp(result.rgb, 0.0, 1.0) / max(fog_amount, 1.0e-4);\n"
+			"\tvec3 fog_weight = clamp(3.0 * fog_in / max(fog_in.r + fog_in.g + fog_in.b, 1.0e-4), 0.25, 4.0);\n"
+			"\tvec3 fog_through = pow(max(vec3(1.0 - fog_amount), vec3(1.0e-30)), fog_weight);\n"
+			"\tresult.rgb = (1.0 - fog_through) * fog_in;\n"
+			"\toutput.transmittance = vec4(fog_through, 1.0);\n");
+	}
 	if (key->source_blend)
 	{
 		static const char *const factors[] =

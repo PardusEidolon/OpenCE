@@ -265,6 +265,9 @@ host can draw its own bake of that page in its place (lighting.bounce) */
 #define OPENCE_RENDER_BLEND_ONE_MINUS_BLEND_COLOR 13
 #define OPENCE_RENDER_BLEND_BLEND_ALPHA 14
 #define OPENCE_RENDER_BLEND_ONE_MINUS_BLEND_ALPHA 15
+/* the fragment's second colour (dual-source blending: index(1)) */
+#define OPENCE_RENDER_BLEND_SOURCE1_COLOR 16
+#define OPENCE_RENDER_BLEND_ONE_MINUS_SOURCE1_COLOR 17
 
 /* blend operations */
 #define OPENCE_RENDER_BLEND_ADD 1

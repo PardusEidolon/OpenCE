@@ -60,6 +60,9 @@ PIXEL_CASES = [
     "blend",
     "count_samples",
     "shadowed",
+    "fog_scattering",
+    "fog_pass",
+    "fog_pass_scattering",
 ]
 
 # (stage, PSTextureModes' mode, sampler): every mode, each with the samplers
@@ -254,6 +257,30 @@ def test_the_paths_are_translated_to_metal(shaders):
     for name, source in msl.items():
         if not name.endswith("shadowed"):
             assert "xShadow" not in source and "shadow_depth" not in source, name
+
+
+def test_the_fog_scatters_by_its_colour_with_lighting_atmosphere(shaders):
+    msl = {name: source for name, (_, _, source) in shaders.items()}
+    # lighting.atmosphere scattering: the fog's transmittance raised to a
+    # power for each channel, from the fog colour's share of its sum (grey
+    # fog a power of one: stock), in the final combiner where it blends the
+    # fog colour in by a scalar
+    scattered = msl["pixel_fog_scattering"]
+    assert "vec3 fog_weight = clamp(3.0 * fC / max(fC.r + fC.g + fC.b, 1.0e-4), 0.25, 4.0);" in scattered
+    assert "fA = pow(max(fA, vec3(1.0e-30)), fog_weight);" in scattered
+    # and in the world's fog pass, premultiplied and blended by its alpha,
+    # through the second source of a dual-source blend
+    pass_scattered = msl["pixel_fog_pass_scattering"]
+    assert "float4 transmittance [[color(0), index(1)]];" in pass_scattered
+    assert "output.transmittance = vec4(fog_through, 1.0);" in pass_scattered
+    for name, source in msl.items():
+        if not name.endswith("_scattering"):
+            assert "fog_weight" not in source and "index(1)" not in source, name
+    # the GL builds draw it stock
+    for name in ("pixel_fog_scattering", "pixel_fog_pass_scattering"):
+        _, glsl, _ = shaders[name]
+        assert "fog_weight" not in glsl, name
+    assert shaders["pixel_fog_pass_scattering"][1] == shaders["pixel_fog_pass"][1]
 
 
 def test_the_glsl_is_unchanged(shaders):

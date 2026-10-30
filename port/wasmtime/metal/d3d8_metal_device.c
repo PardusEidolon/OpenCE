@@ -1494,7 +1494,7 @@ static struct
 {
 	{ "lighting.placed_lights", "shadowed", TRUE },
 	{ "lighting.bounce", "baked", TRUE },
-	{ "lighting.atmosphere", "scattering", FALSE },
+	{ "lighting.atmosphere", "scattering", TRUE },
 	{ "lighting.shadows", "ray_traced", FALSE },
 	{ "lighting.reflections", "ray_traced", FALSE },
 };
@@ -1561,6 +1561,31 @@ static long model_light_register(unsigned long light)
 	return XGPU_VERTEX_CONSTANT_BIAS + (light ? -80 + (long)light : -82);
 }
 
+/* port: how the draw's fog is let through by its colour
+(lighting.atmosphere scattering; nv2a_pixel_shader_key scattering): 2 for
+the world's fog pass (premultiplied, blended ONE, INVSRCALPHA: its final
+combiner the fog's colour times the amount, alpha the amount), 1 for a
+final combiner whose A is an alpha and whose C is the fog's colour (the FOG
+register, or final constant 0 where it holds the fog colour), else 0 */
+static unsigned char fog_scattering(void)
+{
+	DWORD abcd = D3D__RenderState[D3DRS_PSFINALCOMBINERINPUTSABCD];
+	DWORD c = (abcd >> 8) & 0x0f;
+
+	if (!lighting_extensions[_lighting_atmosphere].on)
+		return 0;
+	if (D3D__RenderState[D3DRS_ALPHABLENDENABLE] && D3D__RenderState[D3DRS_SRCBLEND] == D3DBLEND_ONE &&
+		D3D__RenderState[D3DRS_DESTBLEND] == D3DBLEND_INVSRCALPHA && abcd == 0x0C3D000F &&
+		D3D__RenderState[D3DRS_PSFINALCOMBINERINPUTSEFG] == 0x0D243C00)
+		return 2;
+	if (!(abcd & 0x10000000) || (abcd & 0x00e00000) || ((abcd >> 8) & 0xe0))
+		return 0;
+	if (c == 3 || (c == 1 && !((D3D__RenderState[D3DRS_PSFINALCOMBINERCONSTANT0] ^
+		D3D__RenderState[D3DRS_FOGCOLOR]) & 0xffffff)))
+		return 1;
+	return 0;
+}
+
 static void pixel_key_build(struct nv2a_pixel_shader_key *key, const struct vertex_shader_object *program)
 {
 	DWORD stage;
@@ -1591,6 +1616,7 @@ static void pixel_key_finish(struct nv2a_pixel_shader_key *key)
 	key->coverage_alpha &= D3D__RenderState[D3DRS_ALPHABLENDENABLE] &&
 		D3D__RenderState[D3DRS_SRCBLEND] == D3DBLEND_CONSTANTCOLOR && D3D__RenderState[D3DRS_DESTBLEND] == D3DBLEND_SRCALPHA;
 	key->point_threshold &= key->coverage_alpha;
+	key->scattering = fog_scattering();
 }
 
 static void pixel_uniforms_build(struct nv2a_pixel_uniforms *uniforms)
@@ -1911,7 +1937,7 @@ static unsigned int fragment_library_get(const struct nv2a_pixel_shader_key *key
 /* the pipeline of two libraries, the device's blending and these streams
 (NULL for none), drawn into the open pass */
 static unsigned int pipeline_get(unsigned int vertex, unsigned int fragment, const struct draw_streams *streams,
-	BOOL blend, unsigned int mask)
+	BOOL blend, unsigned int mask, BOOL transmitted)
 {
 	unsigned int fields[PIPELINE_WORDS];
 	unsigned int words = 17, index;
@@ -1929,6 +1955,10 @@ static unsigned int pipeline_get(unsigned int vertex, unsigned int fragment, con
 	fields[10] = fields[7];
 	fields[11] = fields[8];
 	fields[12] = fields[9];
+	/* port: the fog pass's colour lets through what is there by its second
+	source, its transmittance (lighting.atmosphere scattering); alpha stock */
+	if (blend && transmitted)
+		fields[8] = OPENCE_RENDER_BLEND_SOURCE1_COLOR;
 	fields[13] = mask;
 	if (streams)
 	{
@@ -2047,7 +2077,7 @@ static BOOL draw_prepare(const struct draw_streams *streams)
 	if (!vertex_library || !fragment_library)
 		return FALSE;
 	pipeline = pipeline_get(vertex_library, fragment_library, streams, D3D__RenderState[D3DRS_ALPHABLENDENABLE] != 0,
-		write_mask(D3D__RenderState[D3DRS_COLORWRITEENABLE]));
+		write_mask(D3D__RenderState[D3DRS_COLORWRITEENABLE]), key.scattering == 2);
 	if (!pipeline)
 		return FALSE;
 	pipeline_send(pipeline);
@@ -2623,7 +2653,7 @@ textures named, through the channels of the mask */
 static void post_draw(unsigned int library, const unsigned int *textures, unsigned int texture_count,
 	unsigned int mask, const long *corners)
 {
-	unsigned int pipeline = pipeline_get(library, library, NULL, FALSE, mask);
+	unsigned int pipeline = pipeline_get(library, library, NULL, FALSE, mask, FALSE);
 	unsigned int fields[3], index, *draw;
 
 	if (!pipeline)
@@ -2766,7 +2796,7 @@ static void clear_quad(long left, long top, long right, long bottom, unsigned in
 	unsigned int library = inline_library(&clear_library, clear_source);
 	unsigned int pipeline;
 
-	if (!library || !(pipeline = pipeline_get(library, library, NULL, FALSE, mask)))
+	if (!library || !(pipeline = pipeline_get(library, library, NULL, FALSE, mask, FALSE)))
 		return;
 	memcpy(uniforms.color, rgba, sizeof(uniforms.color));
 	uniforms.depth = z;
@@ -2867,7 +2897,7 @@ static void back_buffer_blit(void)
 		!pass_begin(0, 0, (unsigned long)window_width, (unsigned long)window_height, OPENCE_RENDER_LOAD_CLEAR))
 		return;
 	if (!(pipeline = pipeline_get(library, library, NULL, FALSE, OPENCE_RENDER_WRITE_RED | OPENCE_RENDER_WRITE_GREEN |
-		OPENCE_RENDER_WRITE_BLUE | OPENCE_RENDER_WRITE_ALPHA)))
+		OPENCE_RENDER_WRITE_BLUE | OPENCE_RENDER_WRITE_ALPHA, FALSE)))
 		return;
 	memset(fields, 0, sizeof(fields));
 	fields[1] = OPENCE_RENDER_FILTER_LINEAR;
