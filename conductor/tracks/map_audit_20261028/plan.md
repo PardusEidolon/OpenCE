@@ -15,9 +15,11 @@ stops.
 - [x] Task: Conductor - User Manual Verification 'Phase 1: The runs' (Protocol in workflow.md) (automated)
 
 ## Phase 2: Comparing with stock
-- [ ] Task: Play the same inputs with the stock rendering and sound.
-- [ ] Task: Image differences per region, the sound's loudness and spectrum, the script events in order; thresholds set from repeated stock runs.
-- [ ] Task: List the findings with their map, tick, frames and measurement.
+- [x] Task: Play the same inputs with the stock rendering and sound. 420fd7a7
+    - Every map and cutscene played three times on the frame clock: stock, stock2 and shipped (76 runs each).
+- [x] Task: Image differences per region, the sound's loudness and spectrum, the script events in order; thresholds set from repeated stock runs. 2919dc00
+- [x] Task: List the findings with their map, tick, frames and measurement. 420fd7a7
+    - 20 findings over 14 runs (build/engine/audit/findings.tsv, local only): 4 region, 9 loudness, 6 band, 1 event shift.
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Comparing' (Protocol in workflow.md) (automated)
 
 ## Phase 3: Fixing and iterating
