@@ -8,8 +8,8 @@ The four tracks, in order. **Bold** marks what needs you.
 |---|---|---|
 | native_port | every phase run; [~] | **the 4K bar is missed (p99 9.198 ms)** |
 | halo_ui | every phase run; [~] | **approve Phase 1's canvas (v43)** |
-| map_audit | every phase run; [~] | **accept or chase the stock/stock2 split** |
-| lighting_original | Phases 1–2 done; Phase 3 blocked | **how to bake (import or GPU)** |
+| map_audit | every phase run; [~] | split traced: effects only, accepted |
+| lighting_original | every phase run; Phase 5 blocked | **golden frames; d20's fog** |
 
 ## Needs your decision
 
@@ -32,6 +32,13 @@ The four tracks, in order. **Bold** marks what needs you.
    disagrees with it. Check both.
 7. **`compressed_monk_tone[18396]`** is left out of the wasm build by a
    `port:` change; native builds of source/ still have it.
+8. **d20's fog loses 19.46% of its edges** with
+   `lighting.atmosphere=scattering` (dense coloured fog, exponent up to 4).
+   Keep it, or narrow the clamp (0.5–2 would cut it).
+9. **a30's placed-light shadows** darken two regions (brightness 10.5,
+   colour 13.9 at tick 300). Accept or tune.
+10. **The 4K CPU frame is unchanged.** I didn't get to it this run.
+    Ray tracing waits on it too.
 
 ## Rules changed (pre-approved wording; revise freely)
 
@@ -112,9 +119,13 @@ Then 07193494 (Track A's last phase):
   - 70 `fault`: a stale audit bundle refused one command a frame; the
     rebuilt one refuses 0.
   - 23 region/sound: shipped's enhancements against stock, as expected.
-- **What remains:** stock and stock2 part after ~40 s of free play (a30 up
-  to 213/255, c20 128, b40 insertion_b spikes; a10 stays 0). Cause not
-  traced. 59 of 76 runs have stock noise above the 4/255 floor.
+- **The stock/stock2 split, traced** (e78cb83e): `state.tsv` hashes the
+  game state and each data array every tick. Over 2069 ticks of a30,
+  gameplay state (objects, actors, players, encounters, scripts) never
+  parts. Only the effects arrays do: particles at tick 426, contrails at
+  781, decals at 805 and lights at 1991. Rendered frames step them, as in
+  the original, so the split is accepted. 59 of 76 runs have stock noise
+  above the 4/255 floor, so their thresholds are loose.
 - Phase 4 (bd7d4744, checkpoint dd0f29c0): the report is local only, at
   `build/engine/audit/report.md` (the spec keeps reports off the repo).
 - p99 at 4K: prisoner 8.79, ratrace 8.93, bloodgulch 9.11, hangemhigh
@@ -141,16 +152,26 @@ Then 07193494 (Track A's last phase):
     drift apart in free play (24–74% of pixels). Measuring it needs a
     strong placed light: a devgulch station.
 - Phase 2 checkpoint 63456f2b.
-- **Phase 3 (bounce and probes) is blocked** (7520bf1a):
-  - The CPU bake is too slow for a loading screen. At 64 paths a texel,
-    one BSP takes 3 s (bloodgulch) to ~156 s (c10). At the default 512
-    that's ~21 min for c10. The GPU tracer went with the removed engine.
-    The bake has to run at import instead.
-  - There's no hook yet to swap a baked page into the game's stage-2
-    lightmap bind. The baked pages are HDR halves; the stock pages are
-    8-bit.
-- **Phases 4–6 not started:** atmosphere, ray tracing and the report.
-  Phase 5's 4K bar is also blocked by native_port's CPU frame.
+- Phase 3 (b10ec6fe, checkpoint 91232839): `lighting.bounce=baked` draws
+  lightmaps baked by `opence bake` at import (the CPU bake is too slow for
+  a loading screen: c10 takes ~21 min at 512 paths a texel). The baked
+  pages replace the game's stage-2 lightmap pages.
+- Phase 4 (f6cbf0cf, checkpoint 3b18456e): `lighting.atmosphere=scattering`
+  filters fog per channel by its own colour. The sweep had 23 runs, none
+  failed. The colour shifts are the intended tint. d20 is listed above.
+  The sky stays stock, and there's no sun phase term.
+- **Phase 5 is blocked** (budget measured in 0edf037b). p99 on the M1 Max:
+
+  | | Shadows | Reflections |
+  |---|---|---|
+  | 4K | 2.43–2.64 ms | 4.09–4.79 ms |
+  | half resolution | 0.64–0.73 ms | 1.16–1.33 ms |
+
+  The GPU has 2.67 ms of headroom at 4K, so only half-res shadows would
+  fit, and only once the CPU frame meets the bar. Both `ray_traced`
+  switches log their fallback to stock.
+- Phase 6: the report is local only, at `build/engine/lighting/report.md`.
+  The golden-frame approval is yours.
 
 ## Tooling notes
 
@@ -160,5 +181,5 @@ Then 07193494 (Track A's last phase):
 - The control socket needs a 0700 folder of its own.
 - The views fuzz target pulls wasmtime into the fuzz lock.
 - devgulch (fbd99c83): the stations need a cache writer.
-- Swift: 36 tests, 0 failures, 4 skipped. Your `ZZ*Tests.swift` files no
+- Swift: 38 tests, 0 failures, 4 skipped. Your `ZZ*Tests.swift` files no
   longer compile; I left them untouched.
