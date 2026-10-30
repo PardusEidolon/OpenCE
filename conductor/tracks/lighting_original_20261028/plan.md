@@ -13,7 +13,8 @@ the end without manual stops, except the user's approval of golden frames.
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Switches' (Protocol in workflow.md) (automated)
 
 ## Phase 2: Placed lights
-- [ ] Task: Read the placed and dynamic lights from the map.
+- [x] Task: Read the placed and dynamic lights from the map. 9edea209
+    - Placed and dynamic lights both go through rasterizer_lights; game.wasm sends them as LIGHTS (op 30) before PRESENT. Idle Blood Gulch submits 0 lights.
 - [ ] Task: Their shadows and light on the world and the models.
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Placed lights' (Protocol in workflow.md) (automated)
 
