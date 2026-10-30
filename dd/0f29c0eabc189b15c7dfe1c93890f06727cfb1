@@ -1,0 +1,1 @@
+Phase 4 (report): traces 63/63, census --check, audit pytest 10, nix flake check pass; no code changed since 89e2d9a0 (workspace and Swift tests passed there). Report local; no map meets p99 8.33 ms at 4K.
