@@ -30,10 +30,10 @@ the end without manual stops, except the user's approval of golden frames.
     - Left: probes are not baked (the models still draw stock); the 64-path bake's noise and the 266–514 seam pixels are unexamined; only `--setting` turns it on for the loader; a map change in a session keeps the old pages (the size check guards partly).
 - [x] Task: Conductor - User Manual Verification 'Phase 3: Bounce and probes' (Protocol in workflow.md) (automated)
 
-## Phase 4: The sky and atmosphere
+## Phase 4: The sky and atmosphere [checkpoint: 3b18456e]
 - [x] Task: Fog and sky from the map's tags with scattering, matched to the original's colours. f6cbf0cf
   - 23 runs, none failed; colour shifts are the intended tint; d20 loses 19.46% of its edges under dense fog (for review); the sky stays stock.
-- [ ] Task: Conductor - User Manual Verification 'Phase 4: Atmosphere' (Protocol in workflow.md) (automated)
+- [x] Task: Conductor - User Manual Verification 'Phase 4: Atmosphere' (Protocol in workflow.md) (automated)
 
 ## Phase 5: Ray tracing
 - [ ] Task: Ray traced shadows and reflections, with the rasterized fallback chosen by the quality setting.
