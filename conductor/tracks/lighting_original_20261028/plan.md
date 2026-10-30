@@ -21,14 +21,14 @@ the end without manual stops, except the user's approval of golden frames.
     - Not shown: a visible shadow. In 150 s of c10, a build with the light passes forced dark matches stock within noise up to tick 2100 (mean |Δ| ≤ 3.0, ≤ 5.6% of pixels); after tick 2400, stock and stock2 drift apart by 24–74% of pixels, so those frames measure nothing. The kept frames show no surface the dynamic lights visibly light, so whether the shadows darken the right part is unmeasured; it needs a scene with a strong placed light (a station in devgulch).
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Placed lights' (Protocol in workflow.md) (automated)
 
-## Phase 3: Bounce and probes
+## Phase 3: Bounce and probes [checkpoint: 91232839]
 - [x] Task: Bake bounce light and probes from the lightmaps and lights, behind the loading screen, cached by the map's hash. b10ec6fe (lightmaps baked at import; probes not baked yet)
     - Measured (30 Oct, M1 Max, release, rayon over the atlas's points with `Tracer::irradiance_over`, 64 paths a texel, BSP 0): bloodgulch 94 098 texels 3.0 s; d40 131 655, 12.8 s; a30 1.20 M, ~43 s; c10 1.55 M, ~156 s. At the default 512 paths that is ~3 min (a30) to ~21 min (c10) a BSP: too slow behind a loading screen, so the bake belongs at import. The GPU tracer that made it quick went with the removed engine.
     - Not built: the way into the game's drawing. The lightmap is bound at texture stage 2 by `_rasterizer_environment_lightmap_begin` (rasterizer_xbox_environment.c), but the device has no map from the game's bitmap uploads to the bake's pages, and the baked pages are HDR halves where the stock pages are 8-bit with the shader's own scale. Needed: a `port:` hook naming the page as it is bound, an import-time bake writing the cache, and the device substituting the page under `lighting.bounce=baked`.
     - Built (b10ec6fe): `opence bake MAP` bakes each BSP at import into `<cache>/bake` (the default chosen: at import, not behind the loading screen). The game names each page as it binds it (LIGHTMAP_PAGE, op 31, `port:` in structure_render.c); the render sink swaps the bind for the bake's page when it is a whole multiple of the stock size (the bake draws at twice it). Wasmtime's modules moved to `<cache>/compiled`, as its cleanup deleted the bakes.
     - Measured, bloodgulch 640×480, baked against stock: 0 refused; tick 300 brightness by region up to +16.0, colour up to 11.1, seams 266; tick 600 the shadowed lower left +25.2 to +31.7, colour 15.3, seams 514. By eye the shadowed foreground lifts and its edge softens; cliffs and sky barely change.
     - Left: probes are not baked (the models still draw stock); the 64-path bake's noise and the 266–514 seam pixels are unexamined; only `--setting` turns it on for the loader; a map change in a session keeps the old pages (the size check guards partly).
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Bounce and probes' (Protocol in workflow.md) (automated)
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Bounce and probes' (Protocol in workflow.md) (automated)
 
 ## Phase 4: The sky and atmosphere
 - [ ] Task: Fog and sky from the map's tags with scattering, matched to the original's colours.
