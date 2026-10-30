@@ -43,6 +43,6 @@ the end without manual stops, except the user's approval of golden frames.
 - [x] Task: Conductor - User Manual Verification 'Phase 5: Ray tracing' (Protocol in workflow.md) (automated) (both tasks blocked, with their data; the ray budget tests pass)
 
 ## Phase 6: The report
-- [ ] Task: The user's approval of the golden frames.
-- [ ] Task: Write the report from the data.
-- [ ] Task: Conductor - User Manual Verification 'Phase 6: The report' (Protocol in workflow.md) (automated)
+- [ ] Task: The user's approval of the golden frames. (waits on the user: frames in build/engine/golden/)
+- [x] Task: Write the report from the data. (local only: build/engine/lighting/report.md, from the sweep's 115 sweeps over 23 maps)
+- [x] Task: Conductor - User Manual Verification 'Phase 6: The report' (Protocol in workflow.md) (automated) (the report is written; the approval is the user's)
