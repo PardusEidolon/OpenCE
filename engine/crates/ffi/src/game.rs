@@ -18,6 +18,7 @@ use std::sync::{Arc, Mutex, PoisonError};
 use std::thread::JoinHandle;
 use std::time::{Duration, Instant};
 
+use crate::audit::ConsoleLines;
 use opence_render::{Command, DecodedBatch};
 use opence_runtime::plugins::{Event, Hook, Plugin, View};
 use opence_runtime::{
@@ -84,9 +85,16 @@ pub fn render_sink(target: Arc<dyn RenderTarget>) -> Box<dyn RenderSink> {
     Box::new(TargetSink(target))
 }
 
-/// Counts the game's ticks: none while it loads or sits at its menus, so
-/// the app can tell loading from play.
-struct TickCounter(Arc<AtomicU64>);
+/// Counts the game's ticks (none while it loads or sits at its menus, so
+/// the app can tell loading from play), and hands the console each line
+/// scheduled for a tick as that tick is reached.
+struct TickCounter {
+    ticks: Arc<AtomicU64>,
+    console: Console,
+    lines: Arc<Mutex<ConsoleLines>>,
+    /// whether the console's greeting is still to be dropped
+    greeted: bool,
+}
 
 impl Plugin for TickCounter {
     fn name(&self) -> &str {
@@ -98,7 +106,27 @@ impl Plugin for TickCounter {
     }
 
     fn on(&mut self, _: &Event<'_>, _: &View<'_>) {
-        self.0.fetch_add(1, Ordering::Relaxed);
+        let tick = self.ticks.fetch_add(1, Ordering::Relaxed) + 1;
+        let mut lines = self.lines.lock().unwrap_or_else(PoisonError::into_inner);
+        if lines.is_empty() {
+            return;
+        }
+        // (connected on the first tick, so that the greeting has come
+        // before the first line falls due)
+        if !self.console.connected() {
+            self.greeted = !self.console.connect();
+        }
+        let due = lines.due(tick);
+        if due.is_empty() {
+            return;
+        }
+        if !self.greeted {
+            let _ = self.console.take_output();
+            self.greeted = true;
+        }
+        for line in due {
+            self.console.send_line(&line);
+        }
     }
 }
 
@@ -192,6 +220,8 @@ pub struct WasmGame {
     speakers: Speakers,
     /// the game's ticks so far ([`TickCounter`])
     ticks: Arc<AtomicU64>,
+    /// the console lines waiting for their ticks ([`TickCounter`])
+    lines: Arc<Mutex<ConsoleLines>>,
 }
 
 #[uniffi::export]
@@ -232,7 +262,13 @@ impl WasmGame {
             game.set_init_commands(&format!("map_name {map}\n"));
         }
         let ticks = Arc::new(AtomicU64::new(0));
-        game.add_plugin(Box::new(TickCounter(Arc::clone(&ticks))));
+        let lines = Arc::new(Mutex::new(ConsoleLines::default()));
+        game.add_plugin(Box::new(TickCounter {
+            ticks: Arc::clone(&ticks),
+            console: game.console(),
+            lines: Arc::clone(&lines),
+            greeted: false,
+        }));
         if let Some(folder) = &options.audit {
             let audit = crate::audit::Audit::new(Path::new(folder), game.controls())
                 .map_err(|error| fail(format!("{folder}: {error}")))?;
@@ -254,6 +290,7 @@ impl WasmGame {
             driven,
             speakers,
             ticks,
+            lines,
         }))
     }
 
@@ -378,6 +415,24 @@ impl WasmGame {
     pub fn ask(&self, line: String, milliseconds: u32) -> Option<String> {
         self.console
             .ask(&line, Duration::from_millis(u64::from(milliseconds)))
+    }
+
+    /// Hands the game's console `line` (`debug.telnet_console` on) when
+    /// the game reaches `tick`, on the game's own thread, so that it
+    /// falls on that tick in every run; [`WasmGame::answer`] gives what
+    /// the game writes back.
+    pub fn schedule(&self, tick: u64, line: String) {
+        self.lines
+            .lock()
+            .unwrap_or_else(PoisonError::into_inner)
+            .add(tick, line);
+    }
+
+    /// What the console writes back, once it pauses, within
+    /// `milliseconds`: the answer to a [`WasmGame::schedule`]d line.
+    pub fn answer(&self, milliseconds: u32) -> String {
+        self.console
+            .answer(Duration::from_millis(u64::from(milliseconds)))
     }
 
     /// Serves the control socket at `path` (readable by this user alone),

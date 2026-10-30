@@ -283,6 +283,34 @@ fn keys(held: Held) -> [(u8, u8, bool); 5] {
     ]
 }
 
+/// The console lines a run hands the game, each on the tick it names: the
+/// game's own tick, so that a cutscene woken at tick 60 starts on the
+/// same tick in every run, however fast the frames come.
+#[derive(Debug, Default)]
+pub struct ConsoleLines(BTreeMap<u64, Vec<String>>);
+
+impl ConsoleLines {
+    /// Hands `line` to the console at `tick`, after those already given
+    /// for it.
+    pub fn add(&mut self, tick: u64, line: String) {
+        self.0.entry(tick).or_default().push(line);
+    }
+
+    /// The lines due by `tick`, in tick order and then the order given,
+    /// taken from those waiting.
+    pub fn due(&mut self, tick: u64) -> Vec<String> {
+        let later = self.0.split_off(&(tick.saturating_add(1)));
+        let due = std::mem::replace(&mut self.0, later);
+        due.into_values().flatten().collect()
+    }
+
+    /// Whether no line is waiting.
+    #[must_use]
+    pub fn is_empty(&self) -> bool {
+        self.0.is_empty()
+    }
+}
+
 /// The audit's plugin: it applies [`schedule`] through the game's
 /// controls each tick, and writes `events.tsv` and `sound.tsv` into its
 /// folder as it goes.

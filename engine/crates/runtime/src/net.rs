@@ -330,6 +330,13 @@ impl Console {
         Some(self.reply(started, limit))
     }
 
+    /// What the game writes back, once it pauses, within `limit`: the
+    /// answer to a line handed over by [`Console::send_line`].
+    #[must_use]
+    pub fn answer(&self, limit: Duration) -> String {
+        self.reply(Instant::now(), limit)
+    }
+
     /// what the game writes until it pauses after its first output, or
     /// `limit` from `started` passes, or the game closes its end
     fn reply(&self, started: Instant, limit: Duration) -> String {

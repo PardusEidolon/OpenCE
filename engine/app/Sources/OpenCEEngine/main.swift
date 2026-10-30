@@ -155,6 +155,9 @@ func audit(folder: String) -> Never {
     let kept = FrameKeeper(folder: frames, every: 300)
     window.snapshot = { _ in kept.take(at: game.ticks()) }
     guard game.profile() else { fail("game.wasm started before it was profiled") }
+    // (the game hands each line to its console on the line's own tick; the
+    // thread below only writes down the answers)
+    for (tick, line) in lines { game.schedule(tick: tick, line: line) }
     do {
         try game.start(target: renderer)
     } catch {
@@ -167,10 +170,13 @@ func audit(folder: String) -> Never {
             guard let file = try? FileHandle(forWritingTo: answers) else { return }
             file.seekToEndOfFile()
             for (tick, line) in lines {
-                while game.ticks() < tick { Thread.sleep(forTimeInterval: 0.05) }
-                let answer = game.ask(line: line, milliseconds: 5000) ?? "(no answer)"
-                let flat = answer.replacingOccurrences(of: "\n", with: " ").replacingOccurrences(of: "\t", with: " ")
-                file.write(Data("\(game.ticks())\t\(line)\t\(flat)\n".utf8))
+                while game.ticks() < tick { Thread.sleep(forTimeInterval: 0.01) }
+                let answer = game.answer(milliseconds: 5000)
+                let flat =
+                    answer.isEmpty
+                    ? "(no answer)"
+                    : answer.replacingOccurrences(of: "\n", with: " ").replacingOccurrences(of: "\t", with: " ")
+                file.write(Data("\(tick)\t\(line)\t\(flat)\n".utf8))
             }
         }
     }

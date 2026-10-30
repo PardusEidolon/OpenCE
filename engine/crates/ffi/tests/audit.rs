@@ -6,7 +6,9 @@
 use std::collections::BTreeMap;
 use std::path::Path;
 
-use opence_ffi::audit::{schedule, thread_events, Audit, Held, Loudness, Thread, BANDS};
+use opence_ffi::audit::{
+    schedule, thread_events, Audit, ConsoleLines, Held, Loudness, Thread, BANDS,
+};
 use opence_runtime::plugins::{Event, Plugin, View};
 
 #[test]
@@ -74,6 +76,23 @@ fn each_second_of_sound_is_its_loudness_and_its_octave_bands() {
     // silence is the floor
     let silent = loudness.feed(&vec![0.0; 96_000]);
     assert_eq!(columns(&silent[0])[..2], [1.0, -120.0]);
+}
+
+#[test]
+fn console_lines_fall_due_on_their_own_tick_in_the_order_given() {
+    let mut lines = ConsoleLines::default();
+    lines.add(60, "wake b".into());
+    lines.add(30, "wake a".into());
+    lines.add(60, "wake c".into());
+    assert!(lines.due(29).is_empty());
+    assert_eq!(lines.due(30), ["wake a"]);
+    assert!(lines.due(30).is_empty());
+    assert!(lines.due(59).is_empty());
+    assert_eq!(lines.due(60), ["wake b", "wake c"]);
+    assert!(lines.is_empty());
+    // a line whose tick has passed falls due on the next tick asked for
+    lines.add(10, "late".into());
+    assert_eq!(lines.due(61), ["late"]);
 }
 
 #[test]
