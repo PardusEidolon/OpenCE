@@ -1,0 +1,8 @@
+# cargo nextest's profiles for the workspace (tools/engine_build.py's test
+# step runs them with --cargo-profile test-opt)
+
+[profile.default]
+# (a test that runs game.wasm for a minute is slow, not stuck)
+slow-timeout = { period = "60s", terminate-after = 10 }
+fail-fast = false
+

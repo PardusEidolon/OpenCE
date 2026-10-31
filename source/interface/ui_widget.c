@@ -1488,7 +1488,9 @@ static wchar_t const *ui_widget_port_error_pending_text = NULL;
 static wchar_t const *ui_widget_port_error_text = NULL;
 static struct widget_instance *ui_widget_port_error_text_box = NULL;
 
-static struct ui_widget_bss_prefix ui_widget_globals_storage;
+/* port: not static, so game.wasm exports it for the UI plugin's read-only
+   view of the widget tree (tools/engine_wasm.py EXPORTS) */
+struct ui_widget_bss_prefix ui_widget_globals_storage;
 
 #define string_data ui_widget_globals_storage.string_data
 #define widget_globals ui_widget_globals_storage.widget_globals
