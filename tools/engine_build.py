@@ -30,8 +30,6 @@ import shutil
 import subprocess
 from pathlib import Path
 
-import engine_wasm
-
 ROOT = Path(__file__).resolve().parent.parent
 ENGINE = ROOT / "engine"
 PACKAGE = ENGINE / "app"
@@ -264,7 +262,14 @@ def main() -> None:
         swift("test", library, out, ("--filter", arguments.filter) if arguments.filter else (), package)
         return
     executable = swift("build", library, out) / EXECUTABLE
-    wasm = arguments.wasm.resolve() if arguments.wasm else engine_wasm.build(os.cpu_count() or 4)
+    if arguments.wasm:
+        wasm = arguments.wasm.resolve()
+    else:
+        # imported here: --rust-only runs in crane's source, which has only
+        # this script of tools/, not engine_wasm and the build scripts it reads
+        import engine_wasm
+
+        wasm = engine_wasm.build(os.cpu_count() or 4)
     bundle(executable, wasm, arguments.codesign, arguments.version, out / f"{APP_NAME}.app")
 
 
