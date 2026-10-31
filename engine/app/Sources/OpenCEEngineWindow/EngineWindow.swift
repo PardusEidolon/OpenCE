@@ -135,11 +135,13 @@ public final class EngineWindowController {
         view.onKey = { [weak self] code, down in self?.key(code, down) }
         view.onMouseButton = { [weak self] code, down in self?.mouseButton(code, down) }
         view.onMotion = { [weak self] dx, dy in
-            // (AppKit's motion only without a raw mouse, and down positive)
+            // (AppKit's motion only without a raw mouse; it is down positive
+            // already, as the game takes it)
             guard let self, !self.rawMouse.available else { return }
-            self.moved(dx: dx, dy: -dy)
+            self.moved(dx: dx, dy: dy)
         }
-        rawMouse.onMotion = { [weak self] dx, dy in self?.moved(dx: dx, dy: dy) }
+        // (the raw mouse is up positive, so its y turns over for the game)
+        rawMouse.onMotion = { [weak self] dx, dy in self?.moved(dx: dx, dy: -dy) }
         for (name, event) in [
             (NSWindow.didBecomeKeyNotification, MouseCapture.Event.focused),
             (NSWindow.didResignKeyNotification, .unfocused),
@@ -200,8 +202,8 @@ public final class EngineWindowController {
         keys.releaseAll()
     }
 
-    /// The mouse's raw motion since the last call (nothing while it is not
-    /// captured).
+    /// The mouse's raw motion since the last call, right and down positive
+    /// as the game takes it (nothing while it is not captured).
     public func takeMouseMotion() -> (dx: Double, dy: Double) {
         motion.take()
     }

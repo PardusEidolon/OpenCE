@@ -180,6 +180,21 @@ final class EngineWindowTests: XCTestCase {
         return event
     }
 
+    /// A mouse moving by `deltaY` points, down positive as AppKit gives it.
+    func mouseEvent(_ type: NSEvent.EventType, deltaY: Int64) -> NSEvent {
+        guard
+            let moved = CGEvent(
+                mouseEventSource: nil, mouseType: .mouseMoved, mouseCursorPosition: .zero,
+                mouseButton: .left),
+            type == .mouseMoved
+        else {
+            preconditionFailure("no mouse event")
+        }
+        moved.setIntegerValueField(.mouseEventDeltaY, value: deltaY)
+        guard let event = NSEvent(cgEvent: moved) else { preconditionFailure("no mouse event") }
+        return event
+    }
+
     func post(_ name: Notification.Name) {
         NotificationCenter.default.post(name: name, object: controller.window)
     }
@@ -246,6 +261,16 @@ final class EngineWindowTests: XCTestCase {
         XCTAssertEqual(pointer.changes, 4)
     }
 
+    func testTheMouseMovingUpIsNegativeAsTheGameTakesIt() {
+        // (the game's motion is right and down, as the PC's; GCMouse's is up)
+        post(NSWindow.didBecomeKeyNotification)
+        mouse.move(0, 4)
+        XCTAssertTrue(controller.takeMouseMotion() == (0, -4))
+        mouse.available = false
+        controller.window.engineView.mouseMoved(with: mouseEvent(.mouseMoved, deltaY: -3))
+        XCTAssertTrue(controller.takeMouseMotion() == (0, -3))
+    }
+
     func testRawMotionCountsOnlyWhileCaptured() {
         mouse.move(5, 5)
         XCTAssertTrue(controller.takeMouseMotion() == (0, 0))
@@ -254,7 +279,7 @@ final class EngineWindowTests: XCTestCase {
         mouse.move(0.5, 2)
         // (AppKit's accelerated motion is not used while a raw mouse is there)
         controller.window.engineView.mouseMoved(with: mouseEvent(.mouseMoved))
-        XCTAssertTrue(controller.takeMouseMotion() == (3.5, 1))
+        XCTAssertTrue(controller.takeMouseMotion() == (3.5, -1))
         XCTAssertTrue(controller.takeMouseMotion() == (0, 0))
         key(KeyCode.escape, down: true)
         mouse.move(7, 7)
