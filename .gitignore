@@ -38,3 +38,8 @@ dist/
 Haloce_dump
 target**
 .pre-commit-config.yaml
+
+# Local files, kept out of the repository
+.vscode/
+docs/assessments/
+engine/app/Tests/OpenCEEngineTests/ZZ*Tests.swift
