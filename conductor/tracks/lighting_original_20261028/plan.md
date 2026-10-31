@@ -46,3 +46,8 @@ the end without manual stops, except the user's approval of golden frames.
 - [ ] Task: The user's approval of the golden frames. (waits on the user: frames in build/engine/golden/)
 - [x] Task: Write the report from the data. (local only: build/engine/lighting/report.md, from the sweep's 115 sweeps over 23 maps)
 - [x] Task: Conductor - User Manual Verification 'Phase 6: The report' (Protocol in workflow.md) (automated) (the report is written; the approval is the user's)
+
+## Phase 7: Findings (the user's, 2026-10-31)
+- [ ] Task: The assault rifle's front barrel casing is shadowed unevenly in first person; measure it against stock and fix it.
+- [ ] Task: Lens flares are not hidden behind walls; the original's flare occlusion, measured against stock.
+- [ ] Task: Conductor - User Manual Verification 'Phase 7: Findings' (Protocol in workflow.md) (automated)

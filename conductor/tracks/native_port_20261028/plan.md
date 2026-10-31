@@ -101,3 +101,14 @@ stops, except A1's go/no-go.
   - The VM golden frames (made from the user's maps) left the repository; movement and placement trace recorders need the VM and their traces stay as records; `HALO_GUEST_VM` ifdefs in source-adjacent C are left.
 - [x] Task: The traces as checks that the wasm build matches the native reference. 3c8edc0d
 - [x] Task: Conductor - User Manual Verification 'Phase 7: Removals' (Protocol in workflow.md) (automated) (coverage floors c0584500; cli 70 to 32 with the removed crates' tests)
+
+## Phase 8: On screen (the user's findings, 2026-10-31)
+- [ ] Task: A check that every import in `tools/engine_wasm_imports.txt` has a real handler or is listed as deliberately stubbed; it fails on any other import the zero stub answers.
+  - Found by analysis: `halo_interpolation_enabled`, `platform_display_apply`, `platform_display_resolutions` and `platform_window_sizes` are answered by the zero stub.
+- [ ] Task: Native 4K, not upscaled: the app hands the drawable's size to the game (`Runtime::set_drawable_size`, never called today, so the game sees 640×480 and draws 4:3); the size follows a resize and full screen; `screen_mode_choose` chooses again when it changes. Golden frames at 3840×2160 with no bars.
+- [ ] Task: Smooth animation: answer `halo_interpolation_enabled` from `display.interpolation`, so `main.c` stops throttling to 30 fps and `render_interpolation` runs. Measured: frames per second and the motion between frames at 60 Hz.
+- [ ] Task: The mouse: the original's sensitivity curve and smoothing, measured against it, with sensitivity as a setting and a control socket command.
+- [ ] Task: The cursor shown in menus and hidden and captured in play, driven by `host_menus_active`.
+- [ ] Task: The dev shell: find why it no longer appears, and restore it, with a test that opens it through the control socket.
+- [ ] Task: Rerun the bar at real 4K once the drawable is the game's (the earlier p99 figures may have been taken at a 640×480 frame).
+- [ ] Task: Conductor - User Manual Verification 'Phase 8: On screen' (Protocol in workflow.md) (automated)
